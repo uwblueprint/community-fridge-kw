@@ -1,7 +1,5 @@
 import { resolve } from "path";
-
 import { Sequelize } from "sequelize-typescript";
-
 
 /* eslint-disable-next-line import/prefer-default-export */
 export const testSql = new Sequelize(

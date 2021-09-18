@@ -1,5 +1,4 @@
 import { snakeCase } from "lodash";
-
 import User from "../../../models/user.model";
 import UserService from "../userService";
 
@@ -28,7 +27,6 @@ jest.mock("firebase-admin", () => {
   });
   return { auth };
 });
-
 
 describe("pg userService", () => {
   let userService: UserService;
