@@ -10,7 +10,7 @@ export type UserDTO = {
   email: string;
   firstName: string;
   lastName: string;
-  phoneNumber: number;
+  phoneNumber: string;
   firebaseUUID: string;
   role: string;
 };

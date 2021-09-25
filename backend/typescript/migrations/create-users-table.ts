@@ -18,7 +18,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       allowNull: true,
     },
     phone_number: {
-      type: DataType.NUMBER,
+      type: DataType.STRING,
       allowNull: true,
     },
     firebase_uuid: {
