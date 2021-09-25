@@ -55,8 +55,6 @@ docker-compose up --build
 
 The backend runs at `http://localhost:5000` and the frontend runs at `http://localhost:3000`.
 
-## Set up from scratch
-
 If you are running into issues and want to build docker image and containers from start, run the following commands
 
 1. If containers are running, stop them
