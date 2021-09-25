@@ -8,6 +8,7 @@ export const up: Migration = async ({ context: sequelize }) => {
       type: DataType.INTEGER,
       allowNull: false,
       primaryKey: true,
+      unique: true,
     },
     donor_id: {
       type: DataType.STRING,
