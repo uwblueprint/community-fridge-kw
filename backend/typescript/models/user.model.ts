@@ -21,6 +21,6 @@ export default class User extends Model {
   @Column({ type: DataType.UUID })
   firebase_uuid!: string;
 
-  @Column({ type: DataType.ENUM("User", "Admin") })
+  @Column({ type: DataType.ENUM("User", "Admin", "Donor") })
   role!: Role;
 }
