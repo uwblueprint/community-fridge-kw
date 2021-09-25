@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table } from "sequelize-typescript";
-import { Role } from "../types";
+import { Status } from "../types";
 
 @Table({ tableName: "scheduling" })
 export default class Scheduling extends Model {
@@ -25,7 +25,7 @@ export default class Scheduling extends Model {
   end_time!: Date;
 
   @Column({ type: DataType.ENUM("Rejected", "Approved", "Pending") })
-  status!: boolean;
+  status!: Status;
 
   @Column({ type: DataType.BOOLEAN })
   volunteer_needed!: boolean;

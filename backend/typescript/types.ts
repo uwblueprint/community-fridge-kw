@@ -1,4 +1,5 @@
 export type Role = "User" | "Admin";
+export type Status = "Approved" | "Pending" | "Rejected";
 
 export type Token = {
   accessToken: string;
