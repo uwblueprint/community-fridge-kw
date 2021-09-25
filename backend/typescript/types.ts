@@ -7,10 +7,12 @@ export type Token = {
 
 export type UserDTO = {
   id: string;
+  email: string;
   firstName: string;
   lastName: string;
-  email: string;
-  role: Role;
+  phoneNumber: number;
+  firebaseUUID: string;
+  role: string;
 };
 
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };

@@ -3,6 +3,12 @@ import { Role } from "../types";
 
 @Table({ tableName: "users" })
 export default class User extends Model {
+  @Column({ type: DataType.STRING})
+  id!: number;
+
+  @Column({ type: DataType.STRING })
+  email!: string;
+
   @Column({ type: DataType.STRING })
   first_name!: string;
 
@@ -10,7 +16,10 @@ export default class User extends Model {
   last_name!: string;
 
   @Column({ type: DataType.STRING })
-  auth_id!: string;
+  phone_number!: string;
+
+  @Column({ type: DataType.STRING })
+  firebase_uuid!: string;
 
   @Column({ type: DataType.ENUM("User", "Admin") })
   role!: Role;
