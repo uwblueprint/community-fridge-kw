@@ -14,10 +14,6 @@ export const up: Migration = async ({ context: sequelize }) => {
       type: DataType.STRING,
       allowNull: false,
     },
-    auth_id: {
-      type: DataType.STRING,
-      allowNull: false,
-    },
     description: {
       type: DataType.STRING,
       allowNull: true,
@@ -38,12 +34,12 @@ export const up: Migration = async ({ context: sequelize }) => {
       type: DataType.ENUM("Rejected", "Approved", "Pending"),
       allowNull: false,
     },
-    volunteer_needed: {
-      type: DataType.BOOLEAN,
+    volunteers_needed: {
+      type: DataType.INTEGER,
       allowNull: false,
     },
-    volunteer_id: {
-      type: DataType.INTEGER,
+    volunteer_ids: {
+      type: DataType.ARRAY(DataType.INTEGER),
       allowNull: true,
     },
     notes: {

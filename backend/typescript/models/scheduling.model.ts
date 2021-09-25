@@ -11,9 +11,6 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.INTEGER })
   donor_id!: string;
 
-  @Column({ type: DataType.STRING })
-  auth_id!: string;
-
   @Column({ type: DataType.TEXT })
   description!: string | null;
 
@@ -29,11 +26,11 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.ENUM("Rejected", "Approved", "Pending") })
   status!: Status;
 
-  @Column({ type: DataType.BOOLEAN })
-  volunteer_needed!: boolean;
-
   @Column({ type: DataType.INTEGER })
-  volunteer_id!: number | null;
+  volunteers_needed!: number;
+
+  @Column({ type: DataType.ARRAY(DataType.INTEGER) })
+  volunteer_ids!: number[] | null;
 
   @Column({ type: DataType.TEXT })
   notes!: string | null;
