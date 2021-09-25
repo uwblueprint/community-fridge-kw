@@ -64,7 +64,7 @@ docker-compose down
 
 2. Delete the docker volume
 ```bash
-docker-volume ls  ## find the docker image name
+docker-volume ls  ## find the docker volume name
 
 docker volume rm <volume-name>   
 ```
