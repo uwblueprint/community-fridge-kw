@@ -1,5 +1,6 @@
 # Community Fridge KW
 
+Web platform for [Community Fridge KW Donor](https://www.instagram.com/communityfridgekw/?hl=en) Scheduling!
 
 ## Stack Choices
 **Backend Language:** TypeScript (Express.js on Node.js)<br>
@@ -15,6 +16,7 @@ The provided frontend is a React application written in TypeScript.
 * 👷 [Getting Started](#getting-started-internal-tools-developers)
   * ✔️ [Prerequisites](#prerequisites)
   * ⚙️ [Set up](#set-up)
+  * [Running Migrations](#running-migrations)
 * 🧰 [Useful Commands](#useful-commands)
   * ℹ️ [Get Names & Statuses of Running Containers](#get-names--statuses-of-running-containers)
   * 💽 [Accessing PostgreSQL Database](#accessing-postgresql-database)
@@ -51,7 +53,54 @@ Note: Vault is not configured yet. You have to manually create .env file (one in
 docker-compose up --build
 ```
 
-The backend runs at http://localhost:5000 and the frontend runs at http://localhost:3000.
+The backend runs at `http://localhost:5000` and the frontend runs at `http://localhost:3000`.
+
+## Set up from scratch
+
+If you are running into issues and want to build docker image and containers from start, run the following commands
+
+1. If containers are running, stop them
+```bash
+docker-compose down
+```
+
+2. Delete the docker volume
+```bash
+docker-volume ls  ## find the docker image name
+
+docker volume rm <volume-name>   
+```
+
+3. Run the application by building it again
+```bash
+docker-compose up --build
+```
+
+## Running Migrations
+
+1. Run both the TypeScript backend and database containers, you can use 
+```bash
+docker-compose up
+```
+2. `cd` into the backend/typescript folder
+```bash
+cd backend/typescript
+```
+
+3. Run a bash shell in the TypeScript backend container
+```bash
+# get container name
+$ docker ps
+# run a bash shell
+$ docker exec -it community-fridge-kw_ts-backend_1 /bin/bash  # For our project, typescript backend container name is community-fridge-kw_ts-backend_1. If you want to run a different container, replace community-fridge-kw_ts-backend_1 with the appropriate container name
+```
+
+4. Ensure you have migration files in the migrations folder
+
+5. Run the following command
+```bash
+node migrate up
+```
 
 
 ## Useful Commands
@@ -65,10 +114,10 @@ docker ps
 
 ```bash
 # run a bash shell in the container
-docker exec -it <container-name> /bin/bash
+docker exec -it community-fridge-kw_db_1 /bin/bash
 
 # in container now
-psql -U postgres -d starter-code-v2
+psql -U postgres -d community-fridge-kw
 
 # in postgres shell, some common commands:
 # display all table names
@@ -126,7 +175,7 @@ git push -f
 
 ### Commits
 * Commits should be atomic (guideline: the commit is self-contained; a reviewer could make sense of it even if they viewed the commit diff in isolation)
-* Please follow the commitlint guidelines
+* Please follow the [commitlint](https://www.conventionalcommits.org/en/v1.0.0/) guidelines for writing descriptive commits
 * Trivial commits (e.g. fixing a typo in the previous commit, formatting changes) should be squashed or fixup'd into the last non-trivial commit
 
 ```bash
