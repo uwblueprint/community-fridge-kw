@@ -48,6 +48,9 @@ vault kv get -format=json kv/community-fridge-kw | python update_secret_files.py
 
 Note: Vault is not configured yet. You have to manually create .env file (one in the root dir, other one in frontend dir).
 ```
+
+Community Fridge's Vault path: `kv/community-fridge-kw`
+
 3. Run the application
 ```bash
 docker-compose up --build
