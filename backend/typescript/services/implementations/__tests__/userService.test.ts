@@ -28,7 +28,7 @@ jest.mock("firebase-admin", () => {
   return { auth };
 });
 
-describe("pg userService", () => {
+describe.skip("pg userService", () => {
   let userService: UserService;
 
   beforeEach(async () => {
