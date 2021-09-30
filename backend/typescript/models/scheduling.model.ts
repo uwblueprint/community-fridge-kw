@@ -3,9 +3,7 @@ import { Status } from "../types";
 
 @Table({ tableName: "scheduling" })
 export default class Scheduling extends Model {
-  @Column({ type: DataType.INTEGER })
-  @Unique 
-  @PrimaryKey
+  @Column({ type: DataType.INTEGER, primaryKey: true })
   id!: number;
 
   @Column({ type: DataType.INTEGER })
