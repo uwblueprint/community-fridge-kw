@@ -3,7 +3,6 @@ import IUserService from "../interfaces/userService";
 import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
 import logger from "../../utilities/logger";
 import User from "../../models/user.model";
-import { StringLiteralLike } from "typescript";
 
 const Logger = logger(__filename);
 
@@ -49,7 +48,7 @@ class UserService implements IUserService {
       if (!user) {
         throw new Error(`userId with authID ${firebaseUser.uid} not found.`);
       }
-    } catch (error) {
+    } catch (error: any) {
       Logger.error(`Failed to get user. Reason = ${error.message}`);
       throw error;
     }
@@ -135,7 +134,7 @@ class UserService implements IUserService {
           };
         }),
       );
-    } catch (error) {
+    } catch (error: any) {
       Logger.error(`Failed to get users. Reason = ${error.message}`);
       throw error;
     }
@@ -184,7 +183,7 @@ class UserService implements IUserService {
 
         throw postgresError;
       }
-    } catch (error) {
+    } catch (error: any) {
       Logger.error(`Failed to create user. Reason = ${error.message}`);
       throw error;
     }
@@ -242,7 +241,7 @@ class UserService implements IUserService {
               where: { id: userId },
             },
           );
-        } catch (postgresError) {
+        } catch (postgresError: any) {
           const errorMessage = [
             "Failed to rollback Postgres user update after Firebase user update failure. Reason =",
             postgresError.message,
@@ -254,7 +253,7 @@ class UserService implements IUserService {
 
         throw error;
       }
-    } catch (error) {
+    } catch (error: any) {
       Logger.error(`Failed to update user. Reason = ${error.message}`);
       throw error;
     }

@@ -22,5 +22,5 @@ export default class User extends Model {
   role!: Role;
 
   @Column({ type: DataTypes.STRING })
-  phoneNumber!: StringLiteralLike;
+  phoneNumber!: string;
 }
