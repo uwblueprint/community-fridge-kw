@@ -30,6 +30,23 @@ export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
 
+export type SchedulingDTO = {
+  id: number;
+  donorId: number;
+  description: string | null;
+  quantity: number | null;
+  startTime: Date;
+  endTime: Date;
+  status: Status;
+  volunteersNeeded: number;
+  volunteerIds: number[];
+  notes: string | null;
+}
+
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id|volunteerIds|status">;
+
+export type UpdateSchedulingDTO = Omit<SchedulingDTO, "id|donorId">
+
 export type Letters = "A" | "B" | "C" | "D";
 
 export type NodemailerConfig = {
