@@ -1,5 +1,5 @@
-export type Role = "User" | "Admin";
 export type Status = "Approved" | "Pending" | "Rejected";
+export type Role = "User" | "Admin" | "Volunteer" | "Donor";
 
 export type DonorRole = "LocalBusiness" | "IndividualDonor";
 
@@ -14,6 +14,7 @@ export type UserDTO = {
   lastName: string;
   email: string;
   role: Role;
+  phoneNumber: string;
 };
 
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };

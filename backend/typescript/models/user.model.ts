@@ -1,4 +1,6 @@
 import { Column, DataType, Model, Table, HasOne } from "sequelize-typescript";
+import { DataTypes } from "sequelize/types";
+import { StringLiteralLike } from "typescript";
 import { Role } from "../types";
 import Donor from "./donor.model";
 
@@ -16,6 +18,9 @@ export default class User extends Model {
   @Column({ type: DataType.STRING })
   auth_id!: string;
 
-  @Column({ type: DataType.ENUM("User", "Admin") })
+  @Column({ type: DataType.ENUM("User", "Admin", "Volunteer", "Donor") })
   role!: Role;
+
+  @Column({ type: DataTypes.STRING })
+  phoneNumber!: StringLiteralLike;
 }
