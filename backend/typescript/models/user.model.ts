@@ -1,6 +1,5 @@
 import { Column, DataType, Model, Table, HasOne } from "sequelize-typescript";
 import { DataTypes } from "sequelize/types";
-import { StringLiteralLike } from "typescript";
 import { Role } from "../types";
 import Donor from "./donor.model";
 
@@ -22,5 +21,5 @@ export default class User extends Model {
   role!: Role;
 
   @Column({ type: DataTypes.STRING })
-  phoneNumber!: string;
+  phone_number!: string;
 }

@@ -31,7 +31,7 @@ class UserService implements IUserService {
       lastName: user.last_name,
       email: firebaseUser.email ?? "",
       role: user.role,
-      phoneNumber: user.phoneNumber,
+      phoneNumber: user.phone_number,
     };
   }
 
@@ -59,7 +59,7 @@ class UserService implements IUserService {
       lastName: user.last_name,
       email: firebaseUser.email ?? "",
       role: user.role,
-      phoneNumber: user.phoneNumber,
+      phoneNumber: user.phone_number,
     };
   }
 
@@ -130,7 +130,7 @@ class UserService implements IUserService {
             lastName: user.last_name,
             email: firebaseUser.email ?? "",
             role: user.role,
-            phoneNumber: user.phoneNumber,
+            phoneNumber: user.phone_number,
           };
         }),
       );
@@ -167,6 +167,7 @@ class UserService implements IUserService {
           last_name: user.lastName,
           auth_id: firebaseUser.uid,
           role: user.role,
+          phone_number: user.phoneNumber,
         });
       } catch (postgresError) {
         try {
@@ -194,7 +195,7 @@ class UserService implements IUserService {
       lastName: newUser.last_name,
       email: firebaseUser.email ?? "",
       role: newUser.role,
-      phoneNumber: newUser.phoneNumber,
+      phoneNumber: newUser.phone_number,
     };
   }
 
@@ -236,6 +237,7 @@ class UserService implements IUserService {
               first_name: oldUser.first_name,
               last_name: oldUser.last_name,
               role: oldUser.role,
+              phone_number: oldUser.phone_number,
             },
             {
               where: { id: userId },
@@ -295,6 +297,7 @@ class UserService implements IUserService {
             last_name: deletedUser.last_name,
             auth_id: deletedUser.auth_id,
             role: deletedUser.role,
+            phone_number: deletedUser.phone_number,
           });
         } catch (postgresError: any) {
           const errorMessage = [
@@ -347,6 +350,7 @@ class UserService implements IUserService {
             last_name: deletedUser.last_name,
             auth_id: deletedUser.auth_id,
             role: deletedUser.role,
+            phone_number: deletedUser.phone_number,
           });
         } catch (postgresError: any) {
           const errorMessage = [
