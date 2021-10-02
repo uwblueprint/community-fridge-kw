@@ -1,5 +1,7 @@
 export type Role = "User" | "Admin";
 
+export type DonorRole = "LocalBusiness" | "IndividualDonor";
+
 export type Token = {
   accessToken: string;
   refreshToken: string;
