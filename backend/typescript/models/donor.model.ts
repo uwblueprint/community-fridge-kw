@@ -23,8 +23,3 @@ export default class Donor extends Model {
   @Column({ type: DataType.BOOLEAN })
   recurring_donation!: boolean;
 }
-
-
-// Step 1: Create a user
-// Step 2: Take the user id => that will be the foreign key (user_id) => create a donor
-// Step 3: Validate donor creation
