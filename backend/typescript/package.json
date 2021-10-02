@@ -10,8 +10,8 @@
     "fix": "eslint . --ext .ts,.js --fix"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "UW Blueprint and Contributors",
+  "license": "MIT",
   "dependencies": {
     "@types/graphql-upload": "^8.0.6",
     "@types/json2csv": "^5.0.3",
