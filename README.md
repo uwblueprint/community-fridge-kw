@@ -130,11 +130,6 @@ SELECT * FROM <table-name>;
 ```
 
 ### Linting & Formatting
-Python backend:
-```bash
-docker exec -it <container-name> /bin/bash -c "black ."
-```
-
 TypeScript backend and frontend:
 ```bash
 # linting & formatting warnings only
@@ -145,11 +140,6 @@ docker exec -it <container-name> /bin/bash -c "yarn fix"
 ```
 
 ### Running Tests
-Python backend:
-```bash
-docker exec -it <container-name> /bin/bash -c "pip install -e . && pytest"
-```
-
 TypeScript backend and frontend:
 ```bash
 docker exec -it <container-name> /bin/bash -c "yarn test"
@@ -182,7 +172,7 @@ git push -f
 ```bash
 # last commit contained a typo, fixed now
 git add .
-git commit -m "Fix typo"
+git commit -m "docs: ReadMe typo"
 
 # fixup into previous commit through interactive rebase
 # x in HEAD~x refers to the last x commits you want to view
@@ -193,7 +183,6 @@ git rebase -i HEAD~2
 git push -f
 ```
 
-* Commit messages and PR names are descriptive and written in **imperative tense**<sup>1</sup>. The first word should be capitalized. E.g. "Create user REST endpoints", not "Created user REST endpoints"
 * PRs can contain multiple commits, they do not need to be squashed together before merging as long as each commit is atomic. Our repo is configured to only allow squash commits to `main` so the entire PR will appear as 1 commit on `main`, but the individual commits are preserved when viewing the PR.
 
 ---

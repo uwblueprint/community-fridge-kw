@@ -1,7 +1,7 @@
 {
   "name": "typescript-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend services for Community Fridge KW",
   "main": "server.ts",
   "scripts": {
     "test": "jest --runInBand --forceExit --detectOpenHandles",

@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "description": "Frontend UI for Community Fridge KW",
   "author": "UW Blueprint and Contributors",
   "license": "MIT",
   "dependencies": {
