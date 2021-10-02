@@ -57,7 +57,7 @@ describe.skip("pg userService", () => {
     const res = await userService.getUsers();
 
     res.forEach((user: UserDTO, i) => {
-      expect(user).toContainEqual(testUsers[i])
+      expect(user).toContainEqual(testUsers[i]);
     });
   });
 });
