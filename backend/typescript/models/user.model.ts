@@ -18,6 +18,4 @@ export default class User extends Model {
 
   @Column({ type: DataType.ENUM("User", "Admin") })
   role!: Role;
-
-
 }
