@@ -35,6 +35,7 @@ export type SchedulingDTO = {
   donorId: number;
   description: string | null;
   quantity: number | null;
+  pickupLocation: string | null;
   startTime: Date;
   endTime: Date;
   status: Status;
@@ -43,9 +44,9 @@ export type SchedulingDTO = {
   notes: string | null;
 }
 
-export type CreateSchedulingDTO = Omit<SchedulingDTO, "id|volunteerIds|status">;
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id"|"volunteerIds">;
 
-export type UpdateSchedulingDTO = Omit<SchedulingDTO, "id|donorId">
+export type UpdateSchedulingDTO = Partial<Omit<SchedulingDTO, "id"|"donorId">>
 
 export type Letters = "A" | "B" | "C" | "D";
 

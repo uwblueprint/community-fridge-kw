@@ -2,6 +2,7 @@ import ISchedulingService from "../interfaces/schedulingService";
 import { Status, SchedulingDTO, CreateSchedulingDTO, UpdateSchedulingDTO } from "../../types";
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
+import { snakeCase } from "lodash";
 
 const Logger = logger(__filename);
 
@@ -29,6 +30,7 @@ class SchedulingService implements ISchedulingService {
       donorId: scheduling.donor_id,
       description: scheduling.description,
       quantity: scheduling.quantity,
+      pickupLocation: scheduling.pickup_location,
       startTime: scheduling.start_time,
       endTime: scheduling.end_time,
       status: scheduling.status,
@@ -41,19 +43,20 @@ class SchedulingService implements ISchedulingService {
   async getSchedulingsByDonorId(donorId: number): Promise<Array<SchedulingDTO>>{
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
-      const schedulings: Array<SchedulingDTO> = await Scheduling.findAll({where: {donorId: donorId}});
-      
-      schedulingDtos = schedulings.map( scheduling => {
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({where: {donorId: donorId}});
+
+      schedulingDtos = schedulings.map(scheduling => {
         return {
             id: scheduling.id,
-            donorId: scheduling.donorId,
+            donorId: scheduling.donor_id,
             description: scheduling.description,
             quantity: scheduling.quantity,
-            startTime: scheduling.startTime,
-            endTime: scheduling.endTime,
+            pickupLocation: scheduling.pickup_location,
+            startTime: scheduling.start_time,
+            endTime: scheduling.end_time,
             status: scheduling.status,
-            volunteersNeeded: scheduling.volunteersNeeded,
-            volunteerIds: scheduling.volunteerIds,
+            volunteersNeeded: scheduling.volunteers_needed,
+            volunteerIds: [],
             notes: scheduling.notes,
         }
       });
@@ -66,7 +69,7 @@ class SchedulingService implements ISchedulingService {
   }
 
   async getSchedulings(): Promise<Array<SchedulingDTO>>{
-    let schedulingDtos: Array<SchedulingDTO> = []; 
+    let schedulingDtos: Array<SchedulingDTO> = [];
     try {
       const schedulings: Array<Scheduling> = await Scheduling.findAll();
       schedulingDtos = schedulings.map(scheduling => {
@@ -75,12 +78,13 @@ class SchedulingService implements ISchedulingService {
           donorId: scheduling.donor_id,
           description: scheduling.description,
           quantity: scheduling.quantity,
+          pickupLocation: scheduling.pickup_location,
           startTime: scheduling.start_time,
           endTime: scheduling.end_time,
           status: scheduling.status,
           volunteersNeeded: scheduling.volunteers_needed,
           volunteerIds: [],
-          notes: scheduling.notes, 
+          notes: scheduling.notes,
         }
       });
 
@@ -99,62 +103,88 @@ class SchedulingService implements ISchedulingService {
         donor_id: scheduling.donorId,
         description: scheduling.description,
         quantity: scheduling.quantity,
+        pickup_location: scheduling.pickupLocation,
         start_time: scheduling.startTime,
         end_time: scheduling.endTime,
         status: "Pending",
-        volunteersNeeded: scheduling.volunteersNeeded,
+        volunteers_needed: scheduling.volunteersNeeded,
         notes: scheduling.notes,
       });
     } catch (error) {
       Logger.error(`Failed to create scheduling. Reason = ${error.message}`);
       throw error
     }
-    
+
     return {
       id: newScheduling.id,
       donorId: newScheduling.donor_id,
       description: newScheduling.description,
       quantity: newScheduling.quantity,
+      pickupLocation: newScheduling.pickup_location,
       startTime: newScheduling.start_time,
       endTime: newScheduling.end_time,
       status: newScheduling.status,
       volunteersNeeded: newScheduling.volunteers_needed,
-      volunteerIds: newScheduling.volunteer_ids,
-      notes: newScheduling.notes, 
+      volunteerIds: [],
+      notes: newScheduling.notes,
     }
   }
 
 /* TODOs:
- - check for which fields were updated rather than update everything 
  - determine which fields can be updated
  - handle case when times are updated (change status to pending?)
+ - handle case when UpdateSchedulingDTO only contains fields to update (all others would be set to null?)
  */
   async updateSchedulingById(schedulingId: number, scheduling: UpdateSchedulingDTO): Promise<SchedulingDTO>{
     try {
-        const updateResult = await Scheduling.updateResult(
-            {
-                description: scheduling.description,
-                quantity: scheduling.quantity,
-                startTime: scheduling.startTime,
-                endTime: scheduling.endTime,
-                volunteersNeeded: scheduling.volunteersNeeded,
-                notes: scheduling.notes,
-            },
-            {
-                where: { id: schedulingId },
-                returning: true,
+        const updatesSnakeCase: Record<string, any> = {};
+        Object.entries(scheduling).forEach(([key, value]) => {
+          updatesSnakeCase[snakeCase(key)] = value;
+        })
+        const updateResult = await Scheduling.update(
+            updatesSnakeCase, {
+              where: { id: schedulingId },
+              returning: true,
             }
         );
-        /* Linna left off here */
         if ( updateResult[0] < 1 ) {
             throw new Error(`schedulingId ${schedulingId} not found.`);
         }
+        const updatedScheduling = updateResult[1][0]
+        return {
+          id: updatedScheduling.id,
+          donorId: updatedScheduling.donor_id,
+          description: updatedScheduling.description,
+          quantity: updatedScheduling.quantity,
+          pickupLocation: updatedScheduling.pickup_location,
+          startTime: updatedScheduling.start_time,
+          endTime: updatedScheduling.end_time,
+          status: updatedScheduling.status,
+          volunteersNeeded: updatedScheduling.volunteers_needed,
+          volunteerIds: [],
+          notes: updatedScheduling.notes,
+        };
     } catch (error) {
-        
+      Logger.error(`Failed to update scheduling. Reason = ${error.message}`);
+      throw error;
     }
   }
 
   async deleteSchedulingById(id: number): Promise<void>{
-
+    try {
+      const numDestroyed = await Scheduling.destroy({
+        where: { id: id },
+      });
+      if (numDestroyed <= 0) {
+        throw new Error(
+          `scheduling with id ${id} was not deleted.`,
+        );
+      }
+    } catch (error) {
+      Logger.error(`Failed to delete scheduling. Reason = ${error.message}`);
+      throw error;
+    }
   }
 }
+
+export default SchedulingService;
