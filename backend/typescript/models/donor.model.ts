@@ -21,5 +21,8 @@ export default class Donor extends Model {
   instagram_link?: string;
 
   @Column({ type: DataType.BOOLEAN })
-  recurring_donation?: boolean;
+  recurring_donor?: boolean;
+
+  @Column({ type: DataType.STRING })
+  business_name?: string;
 }
