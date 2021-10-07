@@ -1,6 +1,8 @@
 export type Role = "User" | "Admin";
 export type Status = "Approved" | "Pending" | "Rejected";
 
+export type DonorRole = "LocalBusiness" | "IndividualDonor";
+
 export type Token = {
   accessToken: string;
   refreshToken: string;
