@@ -15,11 +15,11 @@ export default class Donor extends Model {
   donor_type!: DonorRole;
 
   @Column({ type: DataType.STRING })
-  facebook_link!: string;
+  facebook_link?: string;
 
   @Column({ type: DataType.STRING })
-  instagram_link!: string;
+  instagram_link?: string;
 
   @Column({ type: DataType.BOOLEAN })
-  recurring_donation!: boolean;
+  recurring_donation?: boolean;
 }
