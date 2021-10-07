@@ -2,6 +2,9 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "description": "Frontend UI for Community Fridge KW",
+  "author": "UW Blueprint and Contributors",
+  "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.3.16",
     "@rjsf/bootstrap-4": "^2.5.1",
