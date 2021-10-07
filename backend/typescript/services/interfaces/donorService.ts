@@ -48,13 +48,6 @@ interface IDonorService {
    * @throws Error if donor deletion fails
    */
   deleteDonorById(donorId: string): Promise<void>;
-
-  /**
-   * Delete a donor by email
-   * @param email donor's email
-   * @throws Error if donor deletion fails
-   */
-  deleteDonorByEmail(email: string): Promise<void>;
 }
 
 export default IDonorService;

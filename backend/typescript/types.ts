@@ -17,7 +17,8 @@ export type UserDTO = {
   phoneNumber: string;
 };
 
-export type DonorDTO = UserDTO & {
+export type DonorDTO = {
+  donorId: number;
   donorType: DonorRole;
   facebookLink?: string;
   instagramLink?: string;

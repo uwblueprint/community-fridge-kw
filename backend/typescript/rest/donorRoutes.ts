@@ -14,29 +14,19 @@ const donorService: IDonorService = new DonorService();
 
 /* Get all donors */
 donorRouter.get("/", async (req, res) => {
+  const { userId } = req.query;
+  const contentType = req.headers["content-type"];
   try {
-    const { userId } = req.query;
-    const contentType = req.headers["content-type"];
-
-    try {
-      const users = await donorService.getDonors();
-      await sendResponseByMimeType<DonorDTO>(res, 200, contentType, users);
-    } catch (error) {
-      await sendResponseByMimeType(res, 500, contentType, [
-        {
-          error: error.message,
-        },
-      ]);
-    }
-    return;
-    
-
-
-
+    const users = await donorService.getDonors();
+    await sendResponseByMimeType<DonorDTO>(res, 200, contentType, users);
+  } catch (error) {
+    await sendResponseByMimeType(res, 500, contentType, [
+      {
+        error: error.message,
+      },
+    ]);
   }
-  catch {
-
-  }
+  return;
 });
 
 /* Get donor by ID */
@@ -75,13 +65,31 @@ donorRouter.get("/:id", async (req, res) => {
 });
 
 /* Update a donor */
-donorRouter.put("/:id", async (req, res) => {
-
+donorRouter.put("/:donorId", async (req, res) => {
+  try {
+    const updatedDonor = await donorService.updateDonorById(req.params.donorId, {
+      donorId: req.body.donorId,
+      donorType: req.body.donorType,
+      facebookLink: req.body.facebookLink,
+      instagramLink: req.body.instagramLink,
+      recurringDonor: req.body.recurringDonor,
+      businessName: req.body.businessName
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 /* Delete a donor */
-donorRouter.delete("/:id", async (req, res) => {
+donorRouter.delete("/:donorId", async (req, res) => {
+  const { donorId } = req.params;
 
+  try {
+    await donorService.deleteDonorById(donorId);
+    res.status(204).send();
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
 });
 
 export default donorRouter;
