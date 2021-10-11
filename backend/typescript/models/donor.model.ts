@@ -1,6 +1,7 @@
 import { Column, DataType, Model, Table, ForeignKey, BelongsTo, AllowNull } from "sequelize-typescript";
 import { DonorRole } from "../types"
 import User from "./user.model"
+import { UserDTO } from "../types";
 
 @Table({ tableName: "donors" })
 export default class Donor extends Model {
@@ -10,7 +11,7 @@ export default class Donor extends Model {
   user_id!: number;
 
   @BelongsTo(() => User)
-  user!: User;
+  user!: UserDTO;
 
   @AllowNull(false)
   @Column({ type: DataType.ENUM("LocalBusiness", "IndividualDonor") })
