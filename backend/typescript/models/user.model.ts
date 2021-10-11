@@ -1,11 +1,11 @@
 import { Column, DataType, Model, Table, HasOne } from "sequelize-typescript";
-import { Role } from "../types";
+import { DonorDTO, Role } from "../types";
 import Donor from "./donor.model";
 
 @Table({ tableName: "users" })
 export default class User extends Model {
-  @HasOne(() => Donor, 'user_id')
-  donor!: Donor;
+  @HasOne(() => Donor, "user_id")
+  donor!: DonorDTO;
 
   @Column({ type: DataType.STRING })
   first_name!: string;

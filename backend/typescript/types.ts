@@ -16,6 +16,15 @@ export type UserDTO = {
   role: Role;
 };
 
+export type DonorDTO = {
+  donorId: number;
+  donorType: DonorRole;
+  facebookLink?: string;
+  instagramLink?: string;
+  recurringDonor?: boolean;
+  businessName?: string;
+}
+
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
 export type UpdateUserDTO = Omit<UserDTO, "id">;
@@ -23,6 +32,10 @@ export type UpdateUserDTO = Omit<UserDTO, "id">;
 export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
+
+export type CreateDonorDTO = Omit<DonorDTO, "id">; // fix this
+
+export type UpdateDonorDTO = Omit<DonorDTO, "id">;
 
 export type Letters = "A" | "B" | "C" | "D";
 
