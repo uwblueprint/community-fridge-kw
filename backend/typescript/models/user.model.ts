@@ -5,7 +5,7 @@ import {
   Table,
   AllowNull,
 } from "sequelize-typescript";
-import { DataTypes } from "sequelize/types";
+import { DataTypes } from "sequelize";
 import { Role } from "../types";
 
 @Table({ tableName: "users" })
