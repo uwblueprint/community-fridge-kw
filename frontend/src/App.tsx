@@ -24,6 +24,7 @@ import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherCo
 import sampleContextReducer from "./reducers/SampleContextReducer";
 import { AuthenticatedUser } from "./types/AuthTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
+import customTheme from "./theme/index"
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -43,11 +44,11 @@ const App = (): React.ReactElement => {
   );
 
   return (
-    <ChakraProvider>
-      <SampleContext.Provider value={sampleContext}>
-        <SampleContextDispatcherContext.Provider
-          value={dispatchSampleContextUpdate}
-        >
+    <ChakraProvider theme={customTheme}>
+    <SampleContext.Provider value={sampleContext}>
+      <SampleContextDispatcherContext.Provider
+        value={dispatchSampleContextUpdate}
+      >
           <AuthContext.Provider
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
