@@ -22,9 +22,9 @@ import SampleContext, {
 } from "./contexts/SampleContext";
 import SampleContextDispatcherContext from "./contexts/SampleContextDispatcherContext";
 import sampleContextReducer from "./reducers/SampleContextReducer";
+import customTheme from "./theme/index";
 import { AuthenticatedUser } from "./types/AuthTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
-import customTheme from "./theme/index"
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
