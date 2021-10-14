@@ -17,6 +17,10 @@ export type UserDTO = {
   phoneNumber: string;
 };
 
+export type VolunteerDTO = {
+  user_id: string;
+};
+
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
 export type UpdateUserDTO = Omit<UserDTO, "id">;

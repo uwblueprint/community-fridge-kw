@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table, ForeignKey, BelongsTo, AllowNull } from "sequelize-typescript";
-
+import { UserDTO } from "../types";
 import User from "./user.model"
 
 @Table({ tableName: "volunteers" })
@@ -10,5 +10,5 @@ export default class Volunteer extends Model {
     user_id!: number;
 
     @BelongsTo(() => User)
-    user!: User;
+    user!: UserDTO;
 }
