@@ -18,6 +18,7 @@ export type UserDTO = {
 };
 
 export type VolunteerDTO = {
+  id: string;
   user_id: string;
 };
 
