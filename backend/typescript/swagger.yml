@@ -291,6 +291,8 @@ paths:
                     type: string
                   role:
                     type: string
+                  phoneNumber:
+                    type: string
         '500':
           description: Invalid request
   
@@ -335,6 +337,8 @@ paths:
                   email:
                     type: string
                   role:
+                    type: string
+                  phoneNumber:
                     type: string
         '500':
           description: Invalid request
@@ -440,7 +444,7 @@ paths:
                 items:
                   type: object
                   required:
-                      - id, firstName, lastName, email, role
+                      - id, firstName, lastName, email, role, phoneNumber
                   properties:
                     id:
                       type: string
@@ -451,6 +455,8 @@ paths:
                     email:
                       type: string
                     role:
+                      type: string
+                    phoneNumber:
                       type: string
         '400':
           description: Cannot query by both user and email
@@ -473,7 +479,7 @@ paths:
             schema:
               type: object
               required:
-                - firstName, lastName, role, email
+                - firstName, lastName, role, email, phoneNumber
               properties:
                 firstName:
                   type: string
@@ -481,9 +487,12 @@ paths:
                   type: string
                 role:
                   type: string
-                  enum: ["User", "Admin"]
+                  enum: ["User", "Admin", "Volunteer", "Donor"]
                 email:
                   type: string
+                phoneNumber:
+                  type: string
+
       responses:
         '201':
           description: Successfully created a new user
@@ -492,7 +501,7 @@ paths:
               schema:
                 type: object
                 required:
-                    - id, firstName, lastName, email, role
+                    - id, firstName, lastName, email, role, phoneNumber
                 properties:
                   id:
                     type: string
@@ -503,6 +512,8 @@ paths:
                   email:
                     type: string
                   role:
+                    type: string
+                  phoneNumber:
                     type: string
         '401':
           description: Unauthorized
@@ -563,7 +574,7 @@ paths:
             schema:
               type: object
               required:
-                - firstName, lastName, role, email
+                - firstName, lastName, role, email, phoneNumber
               properties:
                 firstName:
                   type: string
@@ -574,6 +585,8 @@ paths:
                   enum: ["User", "Admin"]
                 email:
                   type: string
+                phoneNumber:
+                  type: string
       responses:
         '200':
           description: Successfully updated user
@@ -582,7 +595,7 @@ paths:
               schema:
                 type: object
                 required:
-                    - id, firstName, lastName, email, role
+                    - id, firstName, lastName, email, role, phoneNumber
                 properties:
                   id:
                     type: string
@@ -593,6 +606,8 @@ paths:
                   email:
                     type: string
                   role:
+                    type: string
+                  phoneNumber:
                     type: string
         '401':
           description: Unauthorized

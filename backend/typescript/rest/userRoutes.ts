@@ -40,7 +40,7 @@ userRouter.get("/", async (req, res) => {
     try {
       const users = await userService.getUsers();
       await sendResponseByMimeType<UserDTO>(res, 200, contentType, users);
-    } catch (error) {
+    } catch (error: any) {
       await sendResponseByMimeType(res, 500, contentType, [
         {
           error: error.message,
@@ -59,7 +59,7 @@ userRouter.get("/", async (req, res) => {
       try {
         const user = await userService.getUserById(userId);
         res.status(200).json(user);
-      } catch (error) {
+      } catch (error: any) {
         res.status(500).json({ error: error.message });
       }
     }
@@ -75,7 +75,7 @@ userRouter.get("/", async (req, res) => {
       try {
         const user = await userService.getUserByEmail(email);
         res.status(200).json(user);
-      } catch (error) {
+      } catch (error: any) {
         res.status(500).json({ error: error.message });
       }
     }
@@ -90,13 +90,14 @@ userRouter.post("/", createUserDtoValidator, async (req, res) => {
       lastName: req.body.lastName,
       email: req.body.email,
       role: req.body.role,
+      phoneNumber: req.body.phoneNumber,
       password: req.body.password,
     });
 
     await authService.sendEmailVerificationLink(req.body.email);
 
     res.status(201).json(newUser);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -109,9 +110,10 @@ userRouter.put("/:userId", updateUserDtoValidator, async (req, res) => {
       lastName: req.body.lastName,
       email: req.body.email,
       role: req.body.role,
+      phoneNumber: req.body.phoneNumber,
     });
     res.status(200).json(updatedUser);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -134,7 +136,7 @@ userRouter.delete("/", async (req, res) => {
       try {
         await userService.deleteUserById(userId);
         res.status(204).send();
-      } catch (error) {
+      } catch (error: any) {
         res.status(500).json({ error: error.message });
       }
     }
@@ -150,7 +152,7 @@ userRouter.delete("/", async (req, res) => {
       try {
         await userService.deleteUserByEmail(email);
         res.status(204).send();
-      } catch (error) {
+      } catch (error: any) {
         res.status(500).json({ error: error.message });
       }
     }

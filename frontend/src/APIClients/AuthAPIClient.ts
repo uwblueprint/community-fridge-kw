@@ -1,8 +1,3 @@
-import {
-  FetchResult,
-  MutationFunctionOptions,
-  OperationVariables,
-} from "@apollo/client";
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
 import { AuthenticatedUser } from "../types/AuthTypes";
 import baseAPIClient from "./BaseAPIClient";
@@ -10,7 +5,6 @@ import {
   getLocalStorageObjProperty,
   setLocalStorageObjProperty,
 } from "../utils/LocalStorageUtils";
-
 
 const login = async (
   email: string,
@@ -65,12 +59,13 @@ const register = async (
   firstName: string,
   lastName: string,
   email: string,
+  phoneNumber: string,
   password: string,
 ): Promise<AuthenticatedUser> => {
   try {
     const { data } = await baseAPIClient.post(
       "/auth/register",
-      { firstName, lastName, email, password },
+      { firstName, lastName, email, phoneNumber, password },
       { withCredentials: true },
     );
     localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(data));
@@ -116,4 +111,11 @@ const refresh = async (): Promise<boolean> => {
   }
 };
 
-export default { login, logout, loginWithGoogle, register, resetPassword, refresh };
+export default {
+  login,
+  logout,
+  loginWithGoogle,
+  register,
+  resetPassword,
+  refresh,
+};

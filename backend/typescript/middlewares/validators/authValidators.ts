@@ -39,6 +39,9 @@ export const registerRequestValidator = async (
   if (!validatePrimitive(req.body.password, "string")) {
     return res.status(400).send(getApiValidationError("password", "string"));
   }
+  if (!validatePrimitive(req.body.password, "string")) {
+    return res.status(400).send(getApiValidationError("phoneNumber", "string"));
+  }
 
   return next();
 };

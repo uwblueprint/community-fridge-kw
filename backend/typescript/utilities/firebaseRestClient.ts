@@ -34,6 +34,7 @@ type OAuthSignInResponse = {
   firstName: string;
   lastName: string;
   fullName: string;
+  phoneNumber: string;
   displayName: string;
   photoUrl: string;
   idToken: string;

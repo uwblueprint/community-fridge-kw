@@ -11,6 +11,7 @@ const Signup = (): React.ReactElement => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
   const onSignupClick = async () => {
@@ -18,6 +19,7 @@ const Signup = (): React.ReactElement => {
       firstName,
       lastName,
       email,
+      phoneNumber,
       password,
     );
     setAuthenticatedUser(user);
@@ -53,6 +55,14 @@ const Signup = (): React.ReactElement => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="username@domain.com"
+          />
+        </div>
+        <div>
+          <input
+            type="phone number"
+            value={phoneNumber}
+            onChange={(event) => setPhoneNumber(event.target.value)}
+            placeholder="123-456-7890"
           />
         </div>
         <div>

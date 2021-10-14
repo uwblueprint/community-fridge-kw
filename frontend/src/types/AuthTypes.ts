@@ -3,8 +3,9 @@ export type AuthenticatedUser = {
   firstName: string;
   lastName: string;
   email: string;
-  role: "Admin" | "User";
+  role: "Admin" | "User" | "Donor" | "Volunteer";
   accessToken: string;
+  phoneNumber: string;
 } | null;
 
 export type DecodedJWT =
