@@ -26,6 +26,8 @@ export type DonorDTO = {
   businessName?: string;
 }
 
+export type UserDonorDTO = UserDTO & DonorDTO;
+
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
 export type UpdateUserDTO = Omit<UserDTO, "id">;

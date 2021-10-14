@@ -1,7 +1,7 @@
 import { Router } from "express";
 import DonorService from "../services/implementations/donorService";
 import IDonorService from "../services/interfaces/donorService";
-import { DonorDTO } from "../types";
+import { UserDonorDTO, DonorDTO } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const donorRouter: Router = Router();
@@ -15,7 +15,7 @@ donorRouter.get("/", async (req, res) => {
   const contentType = req.headers["content-type"];
   try {
     const donors = await donorService.getDonors();
-    await sendResponseByMimeType<DonorDTO>(res, 200, contentType, donors);
+    await sendResponseByMimeType<UserDonorDTO>(res, 200, contentType, donors);
   } catch (error) {
     await sendResponseByMimeType(res, 500, contentType, [
       {
@@ -28,8 +28,9 @@ donorRouter.get("/", async (req, res) => {
 
 /* Get donor by ID */
 donorRouter.get("/:donorId", async (req, res) => {
-  const { donorId } = req.query;
+  const { donorId } = req.params;
   const contentType = req.headers["content-type"];
+
 
   if (!donorId) {
     await sendResponseByMimeType(res, 400, contentType, [

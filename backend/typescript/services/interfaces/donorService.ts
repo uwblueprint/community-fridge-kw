@@ -1,7 +1,7 @@
 import {
   DonorDTO,
-  CreateDonorDTO,
-  UpdateDonorDTO
+  UpdateDonorDTO,
+  UserDonorDTO
 } from "../../types"
 
 interface IDonorService {
@@ -12,7 +12,7 @@ interface IDonorService {
    * @returns a DonorDTO with donor's information
    * @throws Error if donor retrieval fails
    */
-  getDonorById(donorId: string): Promise<DonorDTO>;
+  getDonorById(donorId: string): Promise<UserDonorDTO>;
 
 
   /**
@@ -20,7 +20,7 @@ interface IDonorService {
    * @returns array of DonorDTOs
    * @throws Error if donors retrieval fails
    */
-  getDonors(): Promise<Array<DonorDTO>>;
+  getDonors(): Promise<Array<UserDonorDTO>>;
 
   /**
    * Update a donor.
