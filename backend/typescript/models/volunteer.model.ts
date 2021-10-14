@@ -1,14 +1,22 @@
-import { Column, DataType, Model, Table, ForeignKey, BelongsTo, AllowNull } from "sequelize-typescript";
+import {
+  Column,
+  DataType,
+  Model,
+  Table,
+  ForeignKey,
+  BelongsTo,
+  AllowNull,
+} from "sequelize-typescript";
 import { UserDTO } from "../types";
-import User from "./user.model"
+import User from "./user.model";
 
 @Table({ tableName: "volunteers" })
 export default class Volunteer extends Model {
-    @ForeignKey(() => User)
-    @AllowNull(false)
-    @Column({ type: DataType.INTEGER })
-    user_id!: number;
+  @ForeignKey(() => User)
+  @AllowNull(false)
+  @Column({ type: DataType.INTEGER })
+  user_id!: number;
 
-    @BelongsTo(() => User)
-    user!: UserDTO;
+  @BelongsTo(() => User)
+  user!: UserDTO;
 }
