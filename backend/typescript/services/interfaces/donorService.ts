@@ -23,16 +23,6 @@ interface IDonorService {
   getDonors(): Promise<Array<DonorDTO>>;
 
   /**
-   * Create a donor
-   * @param donor the donor to be created
-   * @returns a DonorDTO with the created donor's information
-   * @throws Error if donor creation fails
-   */
-  createDonor(
-    donor: CreateDonorDTO
-  ): Promise<DonorDTO>;
-
-  /**
    * Update a donor.
    * Note: the password cannot be updated using this method, use IAuthService.resetPassword instead
    * @param donorId donor's id

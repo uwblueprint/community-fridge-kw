@@ -14,8 +14,8 @@ const donorService: IDonorService = new DonorService();
 donorRouter.get("/", async (req, res) => {
   const contentType = req.headers["content-type"];
   try {
-    const users = await donorService.getDonors();
-    await sendResponseByMimeType<DonorDTO>(res, 200, contentType, users);
+    const donors = await donorService.getDonors();
+    await sendResponseByMimeType<DonorDTO>(res, 200, contentType, donors);
   } catch (error) {
     await sendResponseByMimeType(res, 500, contentType, [
       {
@@ -27,67 +27,34 @@ donorRouter.get("/", async (req, res) => {
 });
 
 /* Get donor by ID */
-donorRouter.get("/:id", async (req, res) => {
-  const { userId, email } = req.query;
+donorRouter.get("/:donorId", async (req, res) => {
+  const { donorId } = req.query;
   const contentType = req.headers["content-type"];
 
-  if (userId && email) {
+  if (!donorId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot query by both userId and email.",
+        error: "Cannot query by missing donorId.",
       },
     ]);
     return;
   }
 
-  if (!userId) {
-    await sendResponseByMimeType(res, 400, contentType, [
-      {
-        error: "Cannot query by missing userId.",
-      },
-    ]);
-    return;
-  }
-
-  // if (!userId && !email) {
-  //   await sendResponseByMimeType(res, 400, contentType, [
-  //     {
-  //       error: "Cannot query by missing userId and email.",
-  //     },
-  //   ]);
-  //   return;
-  // }
-
-  if (userId) {
-    if (typeof userId !== "string") {
+  if (donorId) {
+    if (typeof donorId !== "string") {
       res
         .status(400)
-        .json({ error: "userId query parameter must be a string." });
+        .json({ error: "donorId query parameter must be a string." });
     } else {
       try {
-        const user = await donorService.getDonorById(userId);
-        res.status(200).json(user);
-      } catch (error) {
+        const donor = await donorService.getDonorById(donorId);
+        res.status(200).json(donor);
+      } catch (error: any) {
         res.status(500).json({ error: error.message });
       }
     }
     return;
   }
-
-  // if (email) {
-  //   if (typeof email !== "string") {
-  //     res
-  //       .status(400)
-  //       .json({ error: "email query parameter must be a string." });
-  //   } else {
-  //     try {
-  //       const user = await donprService.getDonorByEmail(email);
-  //       res.status(200).json(user);
-  //     } catch (error) {
-  //       res.status(500).json({ error: error.message });
-  //     }
-  //   }
-  // }
 });
 
 /* Update a donor */
@@ -104,7 +71,7 @@ donorRouter.put("/:donorId", async (req, res) => {
         businessName: req.body.businessName,
       },
     );
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -116,8 +83,8 @@ donorRouter.delete("/:donorId", async (req, res) => {
   try {
     await donorService.deleteDonorById(donorId);
     res.status(204).send();
-  } catch (e) {
-    res.status(500).send(e.message);
+  } catch (error: any) {
+    res.status(500).send(error.message);
   }
 });
 

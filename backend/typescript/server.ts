@@ -7,6 +7,7 @@ import YAML from "yamljs";
 
 import sequelize from "./models";
 import authRouter from "./rest/authRoutes";
+import donorRouter from "./rest/donorRoutes";
 import entityRouter from "./rest/entityRoutes";
 import userRouter from "./rest/userRoutes";
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter);
 app.use("/entities", entityRouter);
+app.use("/donors", donorRouter);
 app.use("/users", userRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

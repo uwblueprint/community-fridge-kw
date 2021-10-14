@@ -94,7 +94,7 @@ class DonorService implements IDonorService {
     };
   }
 
-  async deleteDonorById(donorId: string): Promise<DonorDTO> {
+  async deleteDonorById(donorId: string): Promise<void> {
     try {
       const deletedRole: Donor | null = await Donor.findByPk(Number(donorId));
 
