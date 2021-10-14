@@ -45,10 +45,10 @@ const App = (): React.ReactElement => {
 
   return (
     <ChakraProvider theme={customTheme}>
-    <SampleContext.Provider value={sampleContext}>
-      <SampleContextDispatcherContext.Provider
-        value={dispatchSampleContextUpdate}
-      >
+      <SampleContext.Provider value={sampleContext}>
+        <SampleContextDispatcherContext.Provider
+          value={dispatchSampleContextUpdate}
+        >
           <AuthContext.Provider
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
