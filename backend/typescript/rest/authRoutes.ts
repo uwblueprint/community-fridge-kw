@@ -36,7 +36,7 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
       })
       .status(200)
       .json(rest);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -49,6 +49,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       lastName: req.body.lastName,
       email: req.body.email,
       role: "User",
+      phoneNumber: req.body.phoneNumber,
       password: req.body.password,
     });
 
@@ -68,7 +69,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       })
       .status(200)
       .json(rest);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -86,7 +87,7 @@ authRouter.post("/refresh", async (req, res) => {
       })
       .status(200)
       .json({ accessToken: token.accessToken });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
@@ -99,7 +100,7 @@ authRouter.post(
     try {
       await authService.revokeTokens(req.params.userId);
       res.status(204).send();
-    } catch (error) {
+    } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   },
@@ -113,7 +114,7 @@ authRouter.post(
     try {
       await authService.resetPassword(req.params.email);
       res.status(204).send();
-    } catch (error) {
+    } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   },
