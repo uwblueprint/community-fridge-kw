@@ -1,5 +1,5 @@
 import {
-  DonorDTO, UpdateDonorDTO, UserDonorDTO, UserDTO
+  DonorDTO, UpdateDonorDTO, UserDonorDTO, UserDTO, CreateDonorDTO
 } from "../../types"
 import IDonorService from "../interfaces/donorService";
 import logger from "../../utilities/logger";
@@ -10,20 +10,15 @@ const Logger = logger(__filename);
 
 class DonorService implements IDonorService {
 
-  async getDonorById(donorId: string): Promise<UserDonorDTO> {
+  async getDonorById(id: string): Promise<UserDonorDTO> {
     let donor: Donor | null;
     let user: User | null;
     
     try {
-      donor = await Donor.findOne(
-        {
-          where: { user_id: Number(donorId) },
-          include: User
-        }
-      );
+      donor = await Donor.findByPk(Number(id), { include: User });
 
       if (!donor) {
-        throw new Error(`donorId ${donorId} not found.`)
+        throw new Error(`id ${id} not found.`)
       }
 
       user = donor.user;
@@ -37,13 +32,13 @@ class DonorService implements IDonorService {
     }
 
     return {
-      id: String(donor.user_id),
+      id: String(donor.id),
       firstName: user.first_name,
       lastName: user.last_name,
       email: "",
       role: user.role,
       phoneNumber: user.phone_number,
-      donorId: donor.user_id,
+      userId: String(donor.user_id),
       donorType: donor.donor_type,
       facebookLink: donor.facebook_link,
       instagramLink: donor.instagram_link,
@@ -66,13 +61,13 @@ class DonorService implements IDonorService {
           }
           
           return {
-            id: String(donor.user_id),
+            id: String(donor.id),
             firstName: user.first_name,
             lastName: user.last_name,
             email: "",
             role: user.role,
             phoneNumber: user.phone_number,
-            donorId: donor.user_id,
+            userId: String(donor.user_id),
             donorType: donor.donor_type,
             facebookLink: donor.facebook_link,
             instagramLink: donor.instagram_link,
@@ -89,7 +84,7 @@ class DonorService implements IDonorService {
     return userDonorDTOs;
   }
 
-  async updateDonorById(donorId: string, donor: UpdateDonorDTO): Promise<void> {
+  async updateDonorById(id: string, donor: UpdateDonorDTO): Promise<void> {
     try {
       const updateResult = await Donor.update(
         {
@@ -100,14 +95,14 @@ class DonorService implements IDonorService {
           business_name: donor.businessName
         },
         {
-          where: { user_id: donorId },
+          where: { id: id },
           returning: true,
         },
       );
 
       // check number of rows affected
       if (updateResult[0] < 1) {
-        throw new Error(`donorId ${donorId} not found.`);
+        throw new Error(`id ${id} not found.`);
       }
       
     } catch (error) {
@@ -116,25 +111,52 @@ class DonorService implements IDonorService {
     }
   }
 
-  async deleteDonorById(donorId: string): Promise<void> {
+  async deleteDonorById(id: string): Promise<void> {
     try {
-      const deletedRole: Donor | null = await Donor.findOne({ where: { user_id: Number(donorId) } });
+      const deletedRole: Donor | null = await Donor.findByPk(Number(id));
 
       if (!deletedRole) {
-        throw new Error(`donorid ${donorId} not found.`);
+        throw new Error(`id ${id} not found.`);
       }
 
       const numDestroyed: number = await Donor.destroy({
-        where: { user_id: donorId },
+        where: { id: id },
       });
 
       if (numDestroyed <= 0) {
-        throw new Error(`donorId ${donorId} was not deleted in Postgres.`);
+        throw new Error(`id ${id} was not deleted in Postgres.`);
       }
     } catch (error) {
       Logger.error(`Failed to delete donor. Reason = ${error.message}`);
       throw error;
     }
+  }
+
+  async createDonor(donor: CreateDonorDTO): Promise<DonorDTO> {
+    let newDonor: Donor;
+    
+    try {
+      newDonor = await Donor.create({
+        user_id: donor.userId,
+        donor_type: donor.donorType,
+        facebook_link: donor.facebookLink,
+        instagram_link: donor.instagramLink,
+        recurring_donor: donor.recurringDonor,
+        business_name: donor.businessName
+      });
+    } catch (postgresError) {
+      throw postgresError;
+    }
+
+    return {
+      id: newDonor.id,
+      userId: String(newDonor.user_id),
+      donorType: newDonor.donor_type,
+      facebookLink: newDonor.facebook_link,
+      instagramLink: newDonor.instagram_link,
+      recurringDonor: newDonor.recurring_donor,
+      businessName: newDonor.business_name
+    };
   }
 }
 

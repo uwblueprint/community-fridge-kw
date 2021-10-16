@@ -18,7 +18,8 @@ export type UserDTO = {
 };
 
 export type DonorDTO = {
-  donorId: number;
+  id: string;
+  userId: string;
   donorType: DonorRole;
   facebookLink?: string;
   instagramLink?: string;
@@ -28,10 +29,12 @@ export type DonorDTO = {
 
 export type VolunteerDTO = {
   id: string;
-  user_id: string;
+  userId: string;
 };
 
 export type UserDonorDTO = UserDTO & DonorDTO;
+
+export type CreateDonorDTO = Omit<DonorDTO, "id">;
 
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 

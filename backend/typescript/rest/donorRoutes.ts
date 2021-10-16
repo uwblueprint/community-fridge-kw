@@ -27,28 +27,27 @@ donorRouter.get("/", async (req, res) => {
 });
 
 /* Get donor by ID */
-donorRouter.get("/:donorId", async (req, res) => {
-  const { donorId } = req.params;
+donorRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
   const contentType = req.headers["content-type"];
 
-
-  if (!donorId) {
+  if (!id) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot query by missing donorId.",
+        error: "Cannot query by missing id.",
       },
     ]);
     return;
   }
 
-  if (donorId) {
-    if (typeof donorId !== "string") {
+  if (id) {
+    if (typeof id !== "string") {
       res
         .status(400)
-        .json({ error: "donorId query parameter must be a string." });
+        .json({ error: "id query parameter must be a string." });
     } else {
       try {
-        const donor = await donorService.getDonorById(donorId);
+        const donor = await donorService.getDonorById(id);
         res.status(200).json(donor);
       } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -59,12 +58,12 @@ donorRouter.get("/:donorId", async (req, res) => {
 });
 
 /* Update a donor */
-donorRouter.put("/:donorId", async (req, res) => {
+donorRouter.put("/:id", async (req, res) => {
   try {
     const updatedDonor = await donorService.updateDonorById(
-      req.params.donorId,
+      req.params.id,
       {
-        donorId: req.body.donorId,
+        userId: req.body.userId,
         donorType: req.body.donorType,
         facebookLink: req.body.facebookLink,
         instagramLink: req.body.instagramLink,
@@ -80,11 +79,11 @@ donorRouter.put("/:donorId", async (req, res) => {
 });
 
 /* Delete a donor */
-donorRouter.delete("/:donorId", async (req, res) => {
-  const { donorId } = req.params;
+donorRouter.delete("/:id", async (req, res) => {
+  const { id } = req.params;
 
   try {
-    await donorService.deleteDonorById(donorId);
+    await donorService.deleteDonorById(id);
     res.status(204).send();
   } catch (error: any) {
     res.status(500).send(error.message);
