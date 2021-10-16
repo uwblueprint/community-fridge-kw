@@ -1,3 +1,4 @@
+import { Box, Button, Input } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import {
   GoogleLogin,
@@ -40,34 +41,36 @@ const Login = (): React.ReactElement => {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <Box style={{ textAlign: "center" }}>
       <h1>Login</h1>
       <form>
-        <div>
-          <input
-            type="email"
+        <Box>
+          <Input
+            w="20%"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="username@domain.com"
           />
-        </div>
-        <div>
-          <input
-            type="password"
+        </Box>
+        <Box>
+          <Input
+            w="20%"
+            mt="2"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="password"
           />
-        </div>
-        <div>
-          <button
-            className="btn btn-primary"
-            type="button"
+        </Box>
+        <Box>
+          <Button
+            m="2"
             onClick={onLogInClick}
+            colorScheme="blue"
+            variant="solid"
           >
             Log In
-          </button>
-        </div>
+          </Button>
+        </Box>
         <GoogleLogin
           clientId={process.env.REACT_APP_OAUTH_CLIENT_ID || ""}
           buttonText="Login with Google"
@@ -79,20 +82,22 @@ const Login = (): React.ReactElement => {
               window.alert(response);
             }
           }}
+          style={{ width: "20%" }}
           // eslint-disable-next-line no-alert
           onFailure={(error) => window.alert(error)}
         />
       </form>
-      <div>
-        <button
-          className="btn btn-primary"
-          type="button"
+      <Box>
+        <Button
+          mt="2"
+          colorScheme="blue"
+          variant="solid"
           onClick={onSignUpClick}
         >
           Sign Up
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

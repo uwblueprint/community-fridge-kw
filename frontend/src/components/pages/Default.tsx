@@ -1,21 +1,20 @@
+import { Container, Stack } from "@chakra-ui/react";
 import React from "react";
 
 import Logout from "../auth/Logout";
 import RefreshCredentials from "../auth/RefreshCredentials";
 import ResetPassword from "../auth/ResetPassword";
 
-
 const Default = (): React.ReactElement => {
   return (
-    <div style={{ textAlign: "center", paddingTop: "20px" }}>
+    <Container centerContent>
       <h1>Community Fridge KW</h1>
-      <div className="btn-group" style={{ paddingRight: "10px" }}>
+      <Stack spacing={3} direction="row" align="center">
         <Logout />
         <RefreshCredentials />
         <ResetPassword />
-      </div>
-      <div style={{ height: "2rem" }} />
-    </div>
+      </Stack>
+    </Container>
   );
 };
 

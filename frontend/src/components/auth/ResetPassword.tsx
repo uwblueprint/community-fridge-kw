@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import React, { useContext } from "react";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
@@ -11,13 +12,9 @@ const ResetPassword = (): React.ReactElement => {
   };
 
   return (
-    <button
-      type="button"
-      className="btn btn-primary"
-      onClick={onResetPasswordClick}
-    >
+    <Button variant="solid" colorScheme="blue" onClick={onResetPasswordClick}>
       Reset Password
-    </button>
+    </Button>
   );
 };
 
