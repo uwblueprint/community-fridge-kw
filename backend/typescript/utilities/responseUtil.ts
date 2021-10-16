@@ -8,10 +8,6 @@ export const sendResponseByMimeType = async <T>(
   contentType: string | undefined,
   rawData: Readonly<T> | ReadonlyArray<T> | Readable,
 ): Promise<Response> => {
-  if (contentType === "text/csv") {
-    // const csvText = await generateCSV<T>({ data: rawData });
-    // return res.status(responseCode).type("text/csv").send(csvText);
-  }
   if (contentType === "application/json" || contentType === undefined) {
     return res.status(responseCode).json(rawData);
   }
