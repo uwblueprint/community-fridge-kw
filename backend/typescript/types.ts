@@ -24,7 +24,12 @@ export type DonorDTO = {
   instagramLink?: string;
   recurringDonor?: boolean;
   businessName?: string;
-}
+};
+
+export type VolunteerDTO = {
+  id: string;
+  user_id: string;
+};
 
 export type UserDonorDTO = UserDTO & DonorDTO;
 
