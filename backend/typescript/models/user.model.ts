@@ -22,6 +22,10 @@ export default class User extends Model {
   auth_id!: string;
 
   @AllowNull(false)
+  @Column({ type: DataType.STRING })
+  email!: string;
+
+  @AllowNull(false)
   @Column({ type: DataType.ENUM("User", "Admin", "Volunteer", "Donor") })
   role!: Role;
 

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { donorDtoValidator } from "../middlewares/validators/donorValidator";
 import DonorService from "../services/implementations/donorService";
 import IDonorService from "../services/interfaces/donorService";
 import { UserDonorDTO, DonorDTO } from "../types";
@@ -6,9 +7,6 @@ import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const donorRouter: Router = Router();
 const donorService: IDonorService = new DonorService();
-
-/* Create a donor */
-// donorRouter.post()
 
 /* Get all donors */
 donorRouter.get("/", async (req, res) => {
@@ -58,9 +56,9 @@ donorRouter.get("/:id", async (req, res) => {
 });
 
 /* Update a donor */
-donorRouter.put("/:id", async (req, res) => {
+donorRouter.put("/:id", donorDtoValidator, async (req, res) => {
   try {
-    const updatedDonor = await donorService.updateDonorById(
+    await donorService.updateDonorById(
       req.params.id,
       {
         userId: req.body.userId,
