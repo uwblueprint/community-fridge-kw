@@ -16,6 +16,6 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
   ],
   rules: {
-    "prettier/prettier": ["error", { endOfLine: "auto" }],
+    "prettier/prettier": ["warning", { endOfLine: "auto" }],
   },
 };

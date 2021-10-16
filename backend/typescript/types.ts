@@ -18,7 +18,7 @@ export type UserDTO = {
 };
 
 export type VolunteerDTO = {
-  id: string;
+  volunteerId: number;
   user_id: string;
 };
 
@@ -29,6 +29,10 @@ export type UpdateUserDTO = Omit<UserDTO, "id">;
 export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
+
+export type UserVolunteerDTO = UserDTO & VolunteerDTO;
+
+export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
 
 export type Letters = "A" | "B" | "C" | "D";
 
