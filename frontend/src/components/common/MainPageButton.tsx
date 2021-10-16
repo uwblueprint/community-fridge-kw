@@ -9,7 +9,7 @@ const MainPageButton = (): React.ReactElement => {
   const navigateTo = () => history.push(HOME_PAGE);
   return (
     <>
-      <Button onClick={navigateTo} colorScheme="blue" align="center">
+      <Button onClick={navigateTo} colorScheme="blackAlpha" align="center">
         Go Back
       </Button>
     </>

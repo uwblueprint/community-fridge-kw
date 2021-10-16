@@ -15,7 +15,7 @@ const Logout = (): React.ReactElement => {
   };
 
   return (
-    <Button colorScheme="blue" onClick={onLogOutClick}>
+    <Button colorScheme="blackAlpha" onClick={onLogOutClick}>
       Log Out
     </Button>
   );

@@ -15,7 +15,7 @@ const RefreshCredentials = (): React.ReactElement => {
   };
 
   return (
-    <Button colorScheme="blue" variant="solid" onClick={onRefreshClick}>
+    <Button colorScheme="blackAlpha" variant="solid" onClick={onRefreshClick}>
       Refresh Credentials
     </Button>
   );

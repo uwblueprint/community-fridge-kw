@@ -1,4 +1,4 @@
-import { Container, Stack } from "@chakra-ui/react";
+import { Container, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
 import Logout from "../auth/Logout";
@@ -8,7 +8,9 @@ import ResetPassword from "../auth/ResetPassword";
 const Default = (): React.ReactElement => {
   return (
     <Container centerContent>
-      <h1>Community Fridge KW</h1>
+      <Text mb="4" textStyle="heading">
+        Community Fridge KW
+      </Text>
       <Stack spacing={3} direction="row" align="center">
         <Logout />
         <RefreshCredentials />

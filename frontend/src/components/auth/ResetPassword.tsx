@@ -12,7 +12,11 @@ const ResetPassword = (): React.ReactElement => {
   };
 
   return (
-    <Button variant="solid" colorScheme="blue" onClick={onResetPasswordClick}>
+    <Button
+      variant="solid"
+      colorScheme="blackAlpha"
+      onClick={onResetPasswordClick}
+    >
       Reset Password
     </Button>
   );

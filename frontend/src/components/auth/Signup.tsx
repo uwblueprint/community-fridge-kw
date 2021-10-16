@@ -1,10 +1,13 @@
 import {
+  Box,
   Button,
   Center,
+  FormControl,
   Input,
   InputGroup,
   InputRightElement,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
@@ -41,38 +44,40 @@ const Signup = (): React.ReactElement => {
   return (
     <Center>
       <Stack w="20%">
-        <h1>Signup</h1>
-        <form>
-          <div>
+        <Text mt="2" textStyle="heading">
+          Signup
+        </Text>
+        <FormControl>
+          <Box>
             <Input
               value={firstName}
               onChange={(event) => setFirstName(event.target.value)}
               placeholder="First Name"
             />
-          </div>
-          <div>
+          </Box>
+          <Box>
             <Input
               value={lastName}
               onChange={(event) => setLastName(event.target.value)}
               placeholder="Last Name"
             />
-          </div>
-          <div>
+          </Box>
+          <Box>
             <Input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="username@domain.com"
             />
-          </div>
-          <div>
+          </Box>
+          <Box>
             <Input
               type="tel"
               value={phoneNumber}
               onChange={(event) => setPhoneNumber(event.target.value)}
               placeholder="123-456-7890"
             />
-          </div>
-          <div>
+          </Box>
+          <Box>
             <InputGroup size="md">
               <Input
                 pr="4.5rem"
@@ -90,18 +95,18 @@ const Signup = (): React.ReactElement => {
                 </Button>
               </InputRightElement>
             </InputGroup>
-          </div>
-          <div>
+          </Box>
+          <Box>
             <Button
               mt="2"
-              colorScheme="blue"
+              colorScheme="blackAlpha"
               variant="solid"
               onClick={onSignupClick}
             >
               Sign Up
             </Button>
-          </div>
-        </form>
+          </Box>
+        </FormControl>
       </Stack>
     </Center>
   );

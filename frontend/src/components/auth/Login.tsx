@@ -1,4 +1,4 @@
-import { Box, Button, Input } from "@chakra-ui/react";
+import { Box, Button, FormControl, Input, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import {
   GoogleLogin,
@@ -41,9 +41,11 @@ const Login = (): React.ReactElement => {
   }
 
   return (
-    <Box style={{ textAlign: "center" }}>
-      <h1>Login</h1>
-      <form>
+    <Box textAlign="center">
+      <Text mt="2" textStyle="heading">
+        Login
+      </Text>
+      <FormControl>
         <Box>
           <Input
             w="20%"
@@ -65,7 +67,7 @@ const Login = (): React.ReactElement => {
           <Button
             m="2"
             onClick={onLogInClick}
-            colorScheme="blue"
+            colorScheme="blackAlpha"
             variant="solid"
           >
             Log In
@@ -86,11 +88,11 @@ const Login = (): React.ReactElement => {
           // eslint-disable-next-line no-alert
           onFailure={(error) => window.alert(error)}
         />
-      </form>
+      </FormControl>
       <Box>
         <Button
           mt="2"
-          colorScheme="blue"
+          colorScheme="blackAlpha"
           variant="solid"
           onClick={onSignUpClick}
         >
