@@ -1,5 +1,4 @@
 import {
-  DonorDTO,
   UpdateDonorDTO,
   UserDonorDTO
 } from "../../types"
@@ -9,7 +8,7 @@ interface IDonorService {
   /**
    * Get donor associated with id
    * @param donorId donors's id
-   * @returns a DonorDTO with donor's information
+   * @returns a UserDonorDTO with donor's information
    * @throws Error if donor retrieval fails
    */
   getDonorById(donorId: string): Promise<UserDonorDTO>;
@@ -17,7 +16,7 @@ interface IDonorService {
 
   /**
    * Get all donor information (possibly paginated in the future)
-   * @returns array of DonorDTOs
+   * @returns array of UserDonorDTO
    * @throws Error if donors retrieval fails
    */
   getDonors(): Promise<Array<UserDonorDTO>>;
@@ -27,10 +26,9 @@ interface IDonorService {
    * Note: the password cannot be updated using this method, use IAuthService.resetPassword instead
    * @param donorId donor's id
    * @param donor the donor to be updated
-   * @returns a DonorDTO with the updated donor's information
    * @throws Error if donor update fails
    */
-  updateDonorById(donorId: string, donor: UpdateDonorDTO): Promise<DonorDTO>;
+  updateDonorById(donorId: string, donor: UpdateDonorDTO): Promise<void>;
 
   /**
    * Delete a donor by id

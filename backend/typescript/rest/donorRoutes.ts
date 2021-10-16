@@ -72,6 +72,8 @@ donorRouter.put("/:donorId", async (req, res) => {
         businessName: req.body.businessName,
       },
     );
+
+    res.status(201).send();
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

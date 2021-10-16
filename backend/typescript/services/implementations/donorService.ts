@@ -15,7 +15,13 @@ class DonorService implements IDonorService {
     let user: User | null;
     
     try {
-      donor = await Donor.findByPk(Number(donorId), { include: User });
+      donor = await Donor.findOne(
+        {
+          where: { user_id: Number(donorId) },
+          include: User
+        }
+      );
+
       if (!donor) {
         throw new Error(`donorId ${donorId} not found.`)
       }
@@ -83,22 +89,18 @@ class DonorService implements IDonorService {
     return userDonorDTOs;
   }
 
-  async updateDonorById(donorId: string, donor: UpdateDonorDTO): Promise<DonorDTO> {
-    
-    console.log(donor);
-    console.log(donorId)
-
+  async updateDonorById(donorId: string, donor: UpdateDonorDTO): Promise<void> {
     try {
       const updateResult = await Donor.update(
         {
-          donorType: donor.donorType,
-          facebookLink: donor.facebookLink,
-          instagramLink: donor.instagramLink,
-          recurringDonor: donor.recurringDonor,
-          businessName: donor.businessName
+          donor_type: donor.donorType,
+          facebook_link: donor.facebookLink,
+          instagram_link: donor.instagramLink,
+          recurring_donor: donor.recurringDonor,
+          business_name: donor.businessName
         },
         {
-          where: { id: donorId },
+          where: { user_id: donorId },
           returning: true,
         },
       );
@@ -112,27 +114,18 @@ class DonorService implements IDonorService {
       Logger.error(`Failed to update donor. Reason = ${error.message}`);
       throw error;
     }
-
-    return {
-      donorId: Number(donorId),
-      donorType: donor.donorType,
-      facebookLink: donor.facebookLink,
-      instagramLink: donor.instagramLink,
-      recurringDonor: donor.recurringDonor,
-      businessName: donor.businessName
-    };
   }
 
   async deleteDonorById(donorId: string): Promise<void> {
     try {
-      const deletedRole: Donor | null = await Donor.findByPk(Number(donorId));
+      const deletedRole: Donor | null = await Donor.findOne({ where: { user_id: Number(donorId) } });
 
       if (!deletedRole) {
         throw new Error(`donorid ${donorId} not found.`);
       }
 
       const numDestroyed: number = await Donor.destroy({
-        where: { id: donorId },
+        where: { user_id: donorId },
       });
 
       if (numDestroyed <= 0) {
