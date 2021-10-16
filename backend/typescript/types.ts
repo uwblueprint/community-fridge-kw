@@ -36,8 +36,6 @@ export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
 
-export type CreateDonorDTO = Omit<DonorDTO, "id">; // fix this
-
 export type UpdateDonorDTO = Omit<DonorDTO, "id">;
 
 export type Letters = "A" | "B" | "C" | "D";
