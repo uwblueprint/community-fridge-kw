@@ -8,7 +8,7 @@ import ResetPassword from "../auth/ResetPassword";
 const Default = (): React.ReactElement => {
   return (
     <div style={{ textAlign: "center", paddingTop: "20px" }}>
-      <h1>Default Page</h1>
+      <h1>Community Fridge KW</h1>
       <div className="btn-group" style={{ paddingRight: "10px" }}>
         <Logout />
         <RefreshCredentials />
