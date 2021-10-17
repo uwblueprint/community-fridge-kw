@@ -43,7 +43,7 @@ class SchedulingService implements ISchedulingService {
   async getSchedulingsByDonorId(donorId: number): Promise<Array<SchedulingDTO>>{
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
-      const schedulings: Array<Scheduling> = await Scheduling.findAll({where: {donorId: donorId}});
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({where: {donor_id: donorId}});
 
       schedulingDtos = schedulings.map(scheduling => {
         return {
@@ -131,9 +131,7 @@ class SchedulingService implements ISchedulingService {
   }
 
 /* TODOs:
- - determine which fields can be updated
  - handle case when times are updated (change status to pending?)
- - handle case when UpdateSchedulingDTO only contains fields to update (all others would be set to null?)
  */
   async updateSchedulingById(schedulingId: number, scheduling: UpdateSchedulingDTO): Promise<SchedulingDTO>{
     try {
