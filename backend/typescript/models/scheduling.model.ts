@@ -1,10 +1,19 @@
-import { Column, DataType, Model, Table, AllowNull, ForeignKey, BelongsTo, AutoIncrement, PrimaryKey } from "sequelize-typescript";
+import {
+  Column,
+  DataType,
+  Model,
+  Table,
+  AllowNull,
+  ForeignKey,
+  BelongsTo,
+  AutoIncrement,
+  PrimaryKey,
+} from "sequelize-typescript";
 import { Status } from "../types";
 import Donor from "./donor.model";
 
 @Table({ tableName: "scheduling" })
 export default class Scheduling extends Model {
-
   @PrimaryKey
   @AutoIncrement
   @Column({ type: DataType.INTEGER })

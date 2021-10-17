@@ -1,5 +1,3 @@
-import { Status } from "../../types";
-
 type Type = "string" | "integer" | "boolean" | "Status";
 
 const allowableContentTypes = new Set([

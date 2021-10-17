@@ -1,8 +1,7 @@
 import {
-  Status,
   SchedulingDTO,
   CreateSchedulingDTO,
-  UpdateSchedulingDTO
+  UpdateSchedulingDTO,
 } from "../../types";
 
 interface ISchedulingService {
@@ -44,7 +43,10 @@ interface ISchedulingService {
    * @returns a SchedulingDTO with the updated scheduling information
    * @throws Error if scheduling update fails
    */
-  updateSchedulingById(id: number, scheduling: UpdateSchedulingDTO): Promise<SchedulingDTO>;
+  updateSchedulingById(
+    id: number,
+    scheduling: UpdateSchedulingDTO,
+  ): Promise<SchedulingDTO>;
 
   /**
    * Delete a scheduling by id

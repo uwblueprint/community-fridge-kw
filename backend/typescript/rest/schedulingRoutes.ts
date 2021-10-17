@@ -2,7 +2,8 @@ import { Router } from "express";
 
 import { isAuthorizedByRole } from "../middlewares/auth";
 import {
-  createSchedulingDtoValidator, updateSchedulingDtoValidator
+  createSchedulingDtoValidator,
+  updateSchedulingDtoValidator,
 } from "../middlewares/validators/schedulingValidators";
 import nodemailerConfig from "../nodemailer.config";
 import AuthService from "../services/implementations/authService";
@@ -31,9 +32,9 @@ const schedulingService: ISchedulingService = new SchedulingService();
   - donorId, through query param (ex. /scheduling/?donorId=1)
 */
 schedulingRouter.get("/:id?", async (req, res) => {
-  let id: number | null = Number(req.params.id);
-  let donorId: number | null = Number(req.query.donorId);
-  
+  const id: number | null = Number(req.params.id);
+  const donorId: number | null = Number(req.query.donorId);
+
   const contentType = req.headers["content-type"];
 
   if (id && donorId) {
@@ -48,7 +49,12 @@ schedulingRouter.get("/:id?", async (req, res) => {
   if (!id && !donorId) {
     try {
       const schedulings = await schedulingService.getSchedulings();
-      await sendResponseByMimeType<SchedulingDTO>(res, 200, contentType, schedulings);
+      await sendResponseByMimeType<SchedulingDTO>(
+        res,
+        200,
+        contentType,
+        schedulings,
+      );
     } catch (error) {
       await sendResponseByMimeType(res, 500, contentType, [
         {
@@ -61,9 +67,7 @@ schedulingRouter.get("/:id?", async (req, res) => {
 
   if (id) {
     if (typeof id !== "number") {
-      res
-        .status(400)
-        .json({ error: "id query parameter must be a number." });
+      res.status(400).json({ error: "id query parameter must be a number." });
     } else {
       try {
         const schedulings = await schedulingService.getSchedulingById(id);
@@ -82,7 +86,9 @@ schedulingRouter.get("/:id?", async (req, res) => {
         .json({ error: "donorId query parameter must be a number." });
     } else {
       try {
-        const schedulings = await schedulingService.getSchedulingsByDonorId(donorId);
+        const schedulings = await schedulingService.getSchedulingsByDonorId(
+          donorId,
+        );
         res.status(200).json(schedulings);
       } catch (error) {
         res.status(500).json({ error: error.message });
@@ -101,25 +107,26 @@ schedulingRouter.post("/", createSchedulingDtoValidator, async (req, res) => {
   }
 });
 
-/* Update the scheduling instance by id*/
+/* Update the scheduling instance by id */
 schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
   try {
-    const updatedScheduling = await schedulingService.updateSchedulingById(parseInt(req.params.id), req.body);
+    const updatedScheduling = await schedulingService.updateSchedulingById(
+      Number(req.params.id),
+      req.body,
+    );
     res.status(200).json(updatedScheduling);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-/* Delete scheduling by id*/
+/* Delete scheduling by id */
 schedulingRouter.delete("/:id", async (req, res) => {
-  const id: number|undefined = Number(req.params.id);
+  const id: number | undefined = Number(req.params.id);
 
   if (id) {
     if (typeof id !== "number") {
-      res
-        .status(400)
-        .json({ error: "id query parameter must be a number." });
+      res.status(400).json({ error: "id query parameter must be a number." });
     } else {
       try {
         await schedulingService.deleteSchedulingById(id);
@@ -131,9 +138,7 @@ schedulingRouter.delete("/:id", async (req, res) => {
     return;
   }
 
-  res
-    .status(400)
-    .json({ error: "Must supply id as query parameter." });
+  res.status(400).json({ error: "Must supply id as query parameter." });
 });
 
 export default schedulingRouter;

@@ -42,11 +42,13 @@ export type SchedulingDTO = {
   volunteersNeeded: number;
   volunteerIds: number[];
   notes: string | null;
-}
+};
 
-export type CreateSchedulingDTO = Omit<SchedulingDTO, "id"|"volunteerIds">;
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerIds">;
 
-export type UpdateSchedulingDTO = Partial<Omit<SchedulingDTO, "id"|"donorId">>
+export type UpdateSchedulingDTO = Partial<
+  Omit<SchedulingDTO, "id" | "donorId">
+>;
 
 export type Letters = "A" | "B" | "C" | "D";
 
