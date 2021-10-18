@@ -4,7 +4,6 @@ import {
   Model,
   Table,
   AllowNull,
-  BelongsTo,
 } from "sequelize-typescript";
 import { DataTypes } from "sequelize";
 import { Role } from "../types";

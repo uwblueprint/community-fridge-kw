@@ -18,8 +18,8 @@ export type UserDTO = {
 };
 
 export type VolunteerDTO = {
-  volunteerId: number;
-  user_id: string;
+  id: string;
+  userId: string;
 };
 
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };

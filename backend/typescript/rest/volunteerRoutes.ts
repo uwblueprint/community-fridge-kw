@@ -22,9 +22,6 @@ const volunteerService = new VolunteerService();
 // const emailService: IEmailService = new EmailService(nodemailerConfig);
 // const authService: IAuthService = new AuthService(userService, emailService);
 
-/* Post a volunteer  - SKIP FOR NOW */
-
-/* Returns all volunteers */
 volunteerRouter.get("/", async (req, res) => {
   const contentType = req.headers["content-type"];
   try {
@@ -45,28 +42,27 @@ volunteerRouter.get("/", async (req, res) => {
   return;
 });
 
-/* Returns a volunteer by its id */
-volunteerRouter.get("/:volunteerId", async (req, res) => {
-  const { volunteerId } = req.params;
+volunteerRouter.get("/:volunteerID", async (req, res) => {
+  const { volunteerID } = req.params;
   const contentType = req.headers["content-type"];
 
-  if (!volunteerId) {
+  if (!volunteerID) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot query by missing volunteerId.",
+        error: "Cannot query by missing volunteerID.",
       },
     ]);
     return;
   }
 
-  if (volunteerId) {
-    if (typeof volunteerId !== "string") {
+  if (volunteerID) {
+    if (typeof volunteerID !== "string") {
       res
         .status(400)
-        .json({ error: "volunteerId query parameter must be a string." });
+        .json({ error: "volunteerID query parameter must be a string." });
     } else {
       try {
-        const volunteer = await volunteerService.getVolunteerById(volunteerId);
+        const volunteer = await volunteerService.getVolunteerByID(volunteerID);
         res.status(200).json(volunteer);
       } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -76,13 +72,11 @@ volunteerRouter.get("/:volunteerId", async (req, res) => {
   }
 });
 
-/* Updates a volunteer by its id */
-volunteerRouter.put("/:volunteerId", async (req, res) => {
+volunteerRouter.put("/:volunteerID", async (req, res) => {
   const { id } = req.query;
 });
 
-/* Deletes a volunteer by its id */
-volunteerRouter.delete("/:volunteerId", async (req, res) => {
+volunteerRouter.delete("/:volunteerID", async (req, res) => {
   const { id } = req.query;
 });
 
