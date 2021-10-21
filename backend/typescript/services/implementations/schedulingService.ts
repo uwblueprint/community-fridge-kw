@@ -146,9 +146,7 @@ class SchedulingService implements ISchedulingService {
     };
   }
 
-  /* TODOs:
- - handle case when times are updated (change status to pending?)
- */
+  // TODO: handle case when times are updated (change status to pending?)
   async updateSchedulingById(
     schedulingId: string,
     scheduling: UpdateSchedulingDTO,

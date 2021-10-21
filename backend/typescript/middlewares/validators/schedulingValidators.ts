@@ -9,6 +9,9 @@ export const createSchedulingDtoValidator = async (
   if (!validatePrimitive(req.body.donorId, "integer")) {
     return res.status(400).send(getApiValidationError("donorId", "integer"));
   }
+  if (!validatePrimitive(req.body.category, "string")) {
+    return res.status(400).send(getApiValidationError("category", "string"));
+  }
   if (!validateDate(req.body.startTime)) {
     return res
       .status(400)
@@ -27,9 +30,6 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("dates", "Date string", false, true));
   }
-  if (!validatePrimitive(req.body.status, "string")) {
-    return res.status(400).send(getApiValidationError("status", "string"));
-  }
   if (!validatePrimitive(req.body.volunteersNeeded, "integer")) {
     return res
       .status(400)
@@ -44,14 +44,14 @@ export const updateSchedulingDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (
-    req.body.description &&
-    !validatePrimitive(req.body.description, "string")
-  ) {
-    return res.status(400).send(getApiValidationError("description", "string"));
+  if (req.body.category && !validatePrimitive(req.body.category, "string")) {
+    return res.status(400).send(getApiValidationError("category", "string"));
   }
   if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
     return res.status(400).send(getApiValidationError("quantity", "integer"));
+  }
+  if (req.body.size && !validatePrimitive(req.body.size, "integer")) {
+    return res.status(400).send(getApiValidationError("size", "integer"));
   }
   if (
     req.body.pickupLocation &&

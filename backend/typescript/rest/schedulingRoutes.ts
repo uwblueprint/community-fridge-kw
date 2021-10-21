@@ -33,8 +33,7 @@ const schedulingService: ISchedulingService = new SchedulingService();
 */
 schedulingRouter.get("/:id?", async (req, res) => {
   const { id } = req.params;
-  const { donorId } = req.body;
-
+  const { donorId } = req.query;
   const contentType = req.headers["content-type"];
 
   if (id && donorId) {
@@ -76,6 +75,13 @@ schedulingRouter.get("/:id?", async (req, res) => {
   }
 
   if (donorId) {
+    if (typeof donorId !== "string") {
+      res
+        .status(400)
+        .json({ error: "donorId query parameter must be a string" });
+      return;
+    }
+
     try {
       const schedulings = await schedulingService.getSchedulingsByDonorId(
         donorId,
