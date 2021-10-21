@@ -13,7 +13,7 @@ const Logger = logger(__filename);
 class SchedulingService implements ISchedulingService {
   /* eslint-disable class-methods-use-this */
 
-  async getSchedulingById(id: number): Promise<SchedulingDTO> {
+  async getSchedulingById(id: string): Promise<SchedulingDTO> {
     let scheduling: Scheduling | null;
 
     try {
@@ -34,8 +34,9 @@ class SchedulingService implements ISchedulingService {
     return {
       id: scheduling.id,
       donorId: scheduling.donor_id,
-      description: scheduling.description,
+      category: scheduling.category,
       quantity: scheduling.quantity,
+      size: scheduling.size,
       pickupLocation: scheduling.pickup_location,
       startTime: scheduling.start_time,
       endTime: scheduling.end_time,
@@ -47,20 +48,21 @@ class SchedulingService implements ISchedulingService {
   }
 
   async getSchedulingsByDonorId(
-    donorId: number,
+    donorId: string,
   ): Promise<Array<SchedulingDTO>> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
       const schedulings: Array<Scheduling> = await Scheduling.findAll({
-        where: { donor_id: donorId },
+        where: { donor_id: Number(donorId) },
       });
 
       schedulingDtos = schedulings.map((scheduling) => {
         return {
           id: scheduling.id,
           donorId: scheduling.donor_id,
-          description: scheduling.description,
+          category: scheduling.category,
           quantity: scheduling.quantity,
+          size: scheduling.size,
           pickupLocation: scheduling.pickup_location,
           startTime: scheduling.start_time,
           endTime: scheduling.end_time,
@@ -86,8 +88,9 @@ class SchedulingService implements ISchedulingService {
         return {
           id: scheduling.id,
           donorId: scheduling.donor_id,
-          description: scheduling.description,
+          category: scheduling.category,
           quantity: scheduling.quantity,
+          size: scheduling.size,
           pickupLocation: scheduling.pickup_location,
           startTime: scheduling.start_time,
           endTime: scheduling.end_time,
@@ -112,12 +115,13 @@ class SchedulingService implements ISchedulingService {
     try {
       newScheduling = await Scheduling.create({
         donor_id: scheduling.donorId,
-        description: scheduling.description,
+        category: scheduling.category,
         quantity: scheduling.quantity,
+        size: scheduling.size,
         pickup_location: scheduling.pickupLocation,
         start_time: scheduling.startTime,
         end_time: scheduling.endTime,
-        status: "Pending",
+        status: scheduling.status,
         volunteers_needed: scheduling.volunteersNeeded,
         notes: scheduling.notes,
       });
@@ -129,8 +133,9 @@ class SchedulingService implements ISchedulingService {
     return {
       id: newScheduling.id,
       donorId: newScheduling.donor_id,
-      description: newScheduling.description,
+      category: newScheduling.category,
       quantity: newScheduling.quantity,
+      size: newScheduling.size,
       pickupLocation: newScheduling.pickup_location,
       startTime: newScheduling.start_time,
       endTime: newScheduling.end_time,
@@ -145,7 +150,7 @@ class SchedulingService implements ISchedulingService {
  - handle case when times are updated (change status to pending?)
  */
   async updateSchedulingById(
-    schedulingId: number,
+    schedulingId: string,
     scheduling: UpdateSchedulingDTO,
   ): Promise<SchedulingDTO> {
     try {
@@ -154,7 +159,7 @@ class SchedulingService implements ISchedulingService {
         updatesSnakeCase[snakeCase(key)] = value;
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
-        where: { id: schedulingId },
+        where: { id: Number(schedulingId) },
         returning: true,
       });
       if (updateResult[0] < 1) {
@@ -164,8 +169,9 @@ class SchedulingService implements ISchedulingService {
       return {
         id: updatedScheduling.id,
         donorId: updatedScheduling.donor_id,
-        description: updatedScheduling.description,
+        category: updatedScheduling.category,
         quantity: updatedScheduling.quantity,
+        size: updatedScheduling.size,
         pickupLocation: updatedScheduling.pickup_location,
         startTime: updatedScheduling.start_time,
         endTime: updatedScheduling.end_time,
@@ -180,10 +186,10 @@ class SchedulingService implements ISchedulingService {
     }
   }
 
-  async deleteSchedulingById(id: number): Promise<void> {
+  async deleteSchedulingById(id: string): Promise<void> {
     try {
       const numDestroyed = await Scheduling.destroy({
-        where: { id },
+        where: { id: Number(id) },
       });
       if (numDestroyed <= 0) {
         throw new Error(`scheduling with id ${id} was not deleted.`);

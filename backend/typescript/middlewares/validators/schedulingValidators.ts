@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { getApiValidationError, validatePrimitive } from "./util";
+import { getApiValidationError, validatePrimitive, validateDate } from "./util";
 
-// TODO: validate dates and enums
 export const createSchedulingDtoValidator = async (
   req: Request,
   res: Response,
@@ -10,11 +9,23 @@ export const createSchedulingDtoValidator = async (
   if (!validatePrimitive(req.body.donorId, "integer")) {
     return res.status(400).send(getApiValidationError("donorId", "integer"));
   }
-  if (!validatePrimitive(req.body.startTime, "string")) {
-    return res.status(400).send(getApiValidationError("startTime", "string"));
+  if (!validateDate(req.body.startTime)) {
+    return res
+      .status(400)
+      .send(getApiValidationError("startTime", "Date string"));
   }
-  if (!validatePrimitive(req.body.endTime, "string")) {
-    return res.status(400).send(getApiValidationError("endTime", "string"));
+  if (!validateDate(req.body.endTime)) {
+    return res
+      .status(400)
+      .send(getApiValidationError("endTime", "Date string"));
+  }
+  if (
+    new Date(req.body.startTime).getTime() >=
+    new Date(req.body.endTime).getTime()
+  ) {
+    return res
+      .status(400)
+      .send(getApiValidationError("dates", "Date string", false, true));
   }
   if (!validatePrimitive(req.body.status, "string")) {
     return res.status(400).send(getApiValidationError("status", "string"));
@@ -59,6 +70,24 @@ export const updateSchedulingDtoValidator = async (
     )
   ) {
     return res.status(400).send(getApiValidationError("status", "string"));
+  }
+  if (req.body.startTime && !validateDate(req.body.startTime)) {
+    return res
+      .status(400)
+      .send(getApiValidationError("startTime", "Date string"));
+  }
+  if (req.body.endTime && !validateDate(req.body.endTime)) {
+    return res
+      .status(400)
+      .send(getApiValidationError("endTime", "Date string"));
+  }
+  if (
+    new Date(req.body.startTime).getTime() >=
+    new Date(req.body.endTime).getTime()
+  ) {
+    return res
+      .status(400)
+      .send(getApiValidationError("dates", "Date string", false, true));
   }
   if (
     req.body.volunteersNeeded &&

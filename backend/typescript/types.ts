@@ -33,15 +33,16 @@ export type AuthDTO = Token & UserDTO;
 export type SchedulingDTO = {
   id: number;
   donorId: number;
-  description: string | null;
-  quantity: number | null;
-  pickupLocation: string | null;
+  category: string;
+  quantity?: number;
+  size?: number;
+  pickupLocation?: string;
   startTime: Date;
   endTime: Date;
   status: Status;
   volunteersNeeded: number;
   volunteerIds: number[];
-  notes: string | null;
+  notes?: string;
 };
 
 export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerIds">;

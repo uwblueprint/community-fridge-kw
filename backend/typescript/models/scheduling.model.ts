@@ -19,14 +19,18 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.INTEGER })
   id!: number;
 
+  @AllowNull(false)
   @Column({ type: DataType.TEXT })
-  description!: string | null;
+  category!: string;
 
   @Column({ type: DataType.INTEGER })
-  quantity!: number | null;
+  quantity!: number;
+
+  @Column({ type: DataType.INTEGER })
+  size!: number;
 
   @Column({ type: DataType.TEXT })
-  pickup_location!: string | null;
+  pickup_location!: string;
 
   @AllowNull(false)
   @Column({ type: DataType.DATE })
@@ -36,8 +40,10 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.DATE })
   end_time!: Date;
 
-  @AllowNull(false)
-  @Column({ type: DataType.ENUM("Rejected", "Approved", "Pending") })
+  @Column({
+    type: DataType.ENUM("Rejected", "Approved", "Pending"),
+    defaultValue: "Approved",
+  })
   status!: Status;
 
   @AllowNull(false)
@@ -45,7 +51,7 @@ export default class Scheduling extends Model {
   volunteers_needed!: number;
 
   @Column({ type: DataType.TEXT })
-  notes!: string | null;
+  notes!: string;
 
   @ForeignKey(() => Donor)
   @AllowNull(false)

@@ -1,4 +1,4 @@
-type Type = "string" | "integer" | "boolean" | "Status";
+type Type = "string" | "integer" | "boolean" | "Status" | "Date string";
 
 const allowableContentTypes = new Set([
   "text/plain",
@@ -7,6 +7,13 @@ const allowableContentTypes = new Set([
   "image/jpeg",
   "image/gif",
 ]);
+
+export const validateDate = (value: string): boolean => {
+  if (Date.parse(value)) {
+    return true;
+  }
+  return false;
+};
 
 export const validatePrimitive = (value: any, type: Type): boolean => {
   if (value === undefined || value === null) return false;
@@ -45,7 +52,11 @@ export const getApiValidationError = (
   fieldName: string,
   type: Type,
   isArray = false,
+  isDateError = true,
 ): string => {
+  if (isDateError) {
+    return "startTime must be before endTime";
+  }
   return `The ${fieldName} is not a ${type}${isArray ? " Array" : ""}`;
 };
 

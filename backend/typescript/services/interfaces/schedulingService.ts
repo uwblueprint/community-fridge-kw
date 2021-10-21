@@ -11,7 +11,7 @@ interface ISchedulingService {
    * @returns a SchedulingDTO
    * @throws Error if scheduling retrieval fails
    */
-  getSchedulingById(id: number): Promise<SchedulingDTO>;
+  getSchedulingById(id: string): Promise<SchedulingDTO>;
 
   /**
    * Get all scheduling information associated with donorId
@@ -19,7 +19,7 @@ interface ISchedulingService {
    * @returns array of SchedulingDTOs
    * @throws Error if schedule retrieval fails
    */
-  getSchedulingsByDonorId(donorId: number): Promise<Array<SchedulingDTO>>;
+  getSchedulingsByDonorId(donorId: string): Promise<Array<SchedulingDTO>>;
 
   /**
    * Get all scheduling information (possibly paginated in the future)
@@ -44,7 +44,7 @@ interface ISchedulingService {
    * @throws Error if scheduling update fails
    */
   updateSchedulingById(
-    id: number,
+    id: string,
     scheduling: UpdateSchedulingDTO,
   ): Promise<SchedulingDTO>;
 
@@ -53,7 +53,7 @@ interface ISchedulingService {
    * @param id scheduling id
    * @throws Error if scheduling deletion fails
    */
-  deleteSchedulingById(id: number): Promise<void>;
+  deleteSchedulingById(id: string): Promise<void>;
 }
 
 export default ISchedulingService;

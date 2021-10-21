@@ -39,7 +39,7 @@ const testDonorsDb = [
 const testSchedules = [
   {
     donorId: 1,
-    description: "this is a description",
+    category: "Dry packaged goods",
     quantity: 2,
     pickupLocation: "location",
     startTime: new Date("2021-09-30T00:00:00.000Z"),
@@ -50,7 +50,7 @@ const testSchedules = [
   },
   {
     donorId: 2,
-    description: "this is a copied description",
+    category: "Non-perishables",
     quantity: 3,
     pickupLocation: "copied location",
     startTime: new Date("2021-09-30T00:00:00.000Z"),
@@ -61,7 +61,7 @@ const testSchedules = [
   },
   {
     donorId: 1,
-    description: "this is a copied description",
+    category: "Fresh produce",
     quantity: 2,
     pickupLocation: "copied location",
     startTime: new Date("2021-03-01T00:08:00.000Z"),
@@ -113,7 +113,9 @@ describe("pg schedulingService", () => {
 
     await Scheduling.bulkCreate(schedules);
     const { donorId } = testSchedules[0];
-    const res = await schedulingService.getSchedulingsByDonorId(donorId);
+    const res = await schedulingService.getSchedulingsByDonorId(
+      donorId.toString(),
+    );
     expect(res).toMatchObject(
       testSchedules.filter((schedule) => schedule.donorId === donorId),
     );
@@ -129,7 +131,7 @@ describe("pg schedulingService", () => {
     });
 
     await Scheduling.bulkCreate(schedules);
-    const res = await schedulingService.getSchedulingById(1);
+    const res = await schedulingService.getSchedulingById("1");
     expect(res).toMatchObject(testSchedules[0]);
   });
 
@@ -169,21 +171,21 @@ describe("pg schedulingService", () => {
     await Scheduling.bulkCreate(schedules);
 
     // Updating one of each type of field
-    const newDescription = "this is an updated description";
+    const newCategory = "Tea and coffee";
     const newVolunteersNeeded = 10;
     const newStartTime: Date = new Date("October 13, 2022 12:00:00");
 
-    const resString = await schedulingService.updateSchedulingById(1, {
-      description: newDescription,
+    const resString = await schedulingService.updateSchedulingById("1", {
+      category: newCategory,
     });
-    const resNum = await schedulingService.updateSchedulingById(2, {
+    const resNum = await schedulingService.updateSchedulingById("2", {
       volunteersNeeded: newVolunteersNeeded,
     });
-    const resDate = await schedulingService.updateSchedulingById(3, {
+    const resDate = await schedulingService.updateSchedulingById("3", {
       startTime: newStartTime,
     });
 
-    expect(resString.description).toBe(newDescription);
+    expect(resString.category).toBe(newCategory);
     expect(resNum.volunteersNeeded).toBe(newVolunteersNeeded);
     expect(resDate.startTime).toEqual(newStartTime);
   });
@@ -203,7 +205,7 @@ describe("pg schedulingService", () => {
     expect(schedulingToDelete).not.toBeNull();
     if (schedulingToDelete) {
       const res = await schedulingService.deleteSchedulingById(
-        schedulingToDelete.id,
+        schedulingToDelete.id.toString(),
       );
       const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll();
       schedulingsDbAfterDelete.forEach((scheduling: Scheduling, i) => {
