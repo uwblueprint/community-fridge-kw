@@ -49,14 +49,16 @@ class VolunteerService implements IVolunteerService {
     let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
-      const volunteers: Array<Volunteer> = await Volunteer.findAll({ include: User });
+      const volunteers: Array<Volunteer> = await Volunteer.findAll({
+        include: User,
+      });
 
       userVolunteerDTOs = await Promise.all(
         volunteers.map(async (volunteer) => {
           const user: User = volunteer.user;
 
           if (!user) {
-            throw new Error(`userId ${volunteer.user_id} not found.`)
+            throw new Error(`userId ${volunteer.user_id} not found.`);
           }
 
           firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
@@ -73,17 +75,18 @@ class VolunteerService implements IVolunteerService {
         }),
       );
     } catch (error: any) {
-      Logger.error(`Failed to get donors. Reason = ${error.message}`);
+      Logger.error(`Failed to get volunteers. Reason = ${error.message}`);
       throw error;
     }
 
     return userVolunteerDTOs;
   }
 
-
   async deleteVolunteerByID(id: string): Promise<void> {
     try {
-      const deletedRole: Volunteer | null = await Volunteer.findByPk(Number(id));
+      const deletedRole: Volunteer | null = await Volunteer.findByPk(
+        Number(id),
+      );
 
       if (!deletedRole) {
         throw new Error(`id ${id} not found.`);

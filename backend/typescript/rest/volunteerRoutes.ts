@@ -12,15 +12,12 @@ import VolunteerService from "../services/implementations/volunteerService";
 import IAuthService from "../services/interfaces/authService";
 import IEmailService from "../services/interfaces/emailService";
 import IUserService from "../services/interfaces/userService";
+import IVolunteerService from "../services/interfaces/volunteerService";
 import { UserDTO, UserVolunteerDTO } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const volunteerRouter: Router = Router();
-volunteerRouter.use(isAuthorizedByRole(new Set(["Admin"])));
-const volunteerService = new VolunteerService();
-// const userService: IUserService = new UserService(); //make a volunteer service
-// const emailService: IEmailService = new EmailService(nodemailerConfig);
-// const authService: IAuthService = new AuthService(userService, emailService);
+const volunteerService: IVolunteerService = new VolunteerService();
 
 volunteerRouter.get("/", async (req, res) => {
   const contentType = req.headers["content-type"];
@@ -39,6 +36,7 @@ volunteerRouter.get("/", async (req, res) => {
       },
     ]);
   }
+
   return;
 });
 
