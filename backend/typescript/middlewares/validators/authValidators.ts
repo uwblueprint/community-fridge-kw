@@ -44,7 +44,6 @@ export const registerRequestValidator = async (
   }
 
   if (req.body.role === Role.VOLUNTEER) {
-
     return next();
   }
 
