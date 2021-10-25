@@ -36,8 +36,6 @@ volunteerRouter.get("/", async (req, res) => {
       },
     ]);
   }
-
-  return;
 });
 
 volunteerRouter.get("/:volunteerID", async (req, res) => {
@@ -66,7 +64,6 @@ volunteerRouter.get("/:volunteerID", async (req, res) => {
         res.status(500).json({ error: error.message });
       }
     }
-    return;
   }
 });
 

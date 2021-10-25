@@ -1,13 +1,35 @@
 import * as firebaseAdmin from "firebase-admin";
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
-import { UserVolunteerDTO } from "../../types";
+import { UserVolunteerDTO, VolunteerDTO } from "../../types";
 import logger from "../../utilities/logger";
 import IVolunteerService from "../interfaces/volunteerService";
 
 const Logger = logger(__filename);
 
 class VolunteerService implements IVolunteerService {
+  /* eslint-disable class-methods-use-this */
+
+  async createVolunteer(
+    volunteer: Omit<VolunteerDTO, "id">,
+  ): Promise<VolunteerDTO> {
+    let newVolunteer: Volunteer;
+
+    try {
+      newVolunteer = await Volunteer.create({
+        user_id: volunteer.userId,
+      });
+    } catch (error: any) {
+      Logger.error(`Failed to create volunteer. Reason = ${error.message}`);
+      throw error;
+    }
+
+    return {
+      id: newVolunteer.id,
+      userId: String(newVolunteer.user_id),
+    };
+  }
+
   async getVolunteerByID(volunteerId: string): Promise<UserVolunteerDTO> {
     let volunteer: Volunteer | null;
     let user: User | null;
@@ -55,7 +77,7 @@ class VolunteerService implements IVolunteerService {
 
       userVolunteerDTOs = await Promise.all(
         volunteers.map(async (volunteer) => {
-          const user: User = volunteer.user;
+          const { user } = volunteer;
 
           if (!user) {
             throw new Error(`userId ${volunteer.user_id} not found.`);

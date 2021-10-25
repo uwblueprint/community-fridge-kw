@@ -9,14 +9,18 @@ import nodemailerConfig from "../nodemailer.config";
 import AuthService from "../services/implementations/authService";
 import EmailService from "../services/implementations/emailService";
 import UserService from "../services/implementations/userService";
+import VolunteerService from "../services/implementations/volunteerService";
 import IAuthService from "../services/interfaces/authService";
 import IEmailService from "../services/interfaces/emailService";
 import IUserService from "../services/interfaces/userService";
+import IVolunteerService from "../services/interfaces/volunteerService";
+import { Role, UserDTO } from "../types";
 
 const authRouter: Router = Router();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
+const volunteerService: IVolunteerService = new VolunteerService();
 
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/login", loginRequestValidator, async (req, res) => {
@@ -44,14 +48,20 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
 /* Register a user, returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/register", registerRequestValidator, async (req, res) => {
   try {
-    await userService.createUser({
+    const user = await userService.createUser({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      role: "User",
+      role: Role.USER,
       phoneNumber: req.body.phoneNumber,
       password: req.body.password,
     });
+
+    if (req.body.role === Role.VOLUNTEER) {
+      await volunteerService.createVolunteer({
+        userId: user.id,
+      });
+    }
 
     const authDTO = await authService.generateToken(
       req.body.email,

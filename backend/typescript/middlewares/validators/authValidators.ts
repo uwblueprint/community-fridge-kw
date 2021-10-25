@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { getApiValidationError, validatePrimitive } from "./util";
-
+import { Role } from "../../types";
 /* eslint-disable-next-line import/prefer-default-export */
 export const loginRequestValidator = async (
   req: Request,
@@ -41,6 +41,14 @@ export const registerRequestValidator = async (
   }
   if (!validatePrimitive(req.body.password, "string")) {
     return res.status(400).send(getApiValidationError("phoneNumber", "string"));
+  }
+
+  if (req.body.role === Role.VOLUNTEER) {
+    if (!validatePrimitive(req.body.donorType, "string")) {
+      return res.status(400).send(getApiValidationError("donorType", "string"));
+    }
+
+    return next();
   }
 
   return next();

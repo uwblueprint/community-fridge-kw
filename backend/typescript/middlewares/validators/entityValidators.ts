@@ -16,7 +16,7 @@ export const entityRequestDtoValidator = async (
   let body;
   try {
     body = JSON.parse(req.body.body);
-  } catch (e) {
+  } catch (e: any) {
     return res.status(400).send(e.message);
   }
   if (!validatePrimitive(body.stringField, "string")) {

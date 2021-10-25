@@ -1,5 +1,11 @@
 export type Status = "Approved" | "Pending" | "Rejected";
-export type Role = "User" | "Admin" | "Volunteer" | "Donor";
+
+export enum Role {
+  USER = "User",
+  ADMIN = "Admin",
+  VOLUNTEER = "Volunteer",
+  DONOR = "Donor",
+}
 
 export type DonorRole = "LocalBusiness" | "IndividualDonor";
 

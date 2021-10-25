@@ -1,6 +1,7 @@
-import { UserVolunteerDTO, UpdateVolunteerDTO } from "../../types";
+import { VolunteerDTO, UserVolunteerDTO } from "../../types";
 
 interface IVolunteerService {
+  createVolunteer(volunteer: Omit<VolunteerDTO, "id">): Promise<VolunteerDTO>;
   /**
    * Get volunteer associated with id
    * @param id volunteer's id
