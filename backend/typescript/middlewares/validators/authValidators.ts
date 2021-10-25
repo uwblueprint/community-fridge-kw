@@ -44,9 +44,6 @@ export const registerRequestValidator = async (
   }
 
   if (req.body.role === Role.VOLUNTEER) {
-    if (!validatePrimitive(req.body.donorType, "string")) {
-      return res.status(400).send(getApiValidationError("donorType", "string"));
-    }
 
     return next();
   }

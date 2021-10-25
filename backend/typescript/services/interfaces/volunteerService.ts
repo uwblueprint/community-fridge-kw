@@ -1,6 +1,12 @@
 import { VolunteerDTO, UserVolunteerDTO } from "../../types";
 
 interface IVolunteerService {
+   /**
+   * Create new Volunteer in database
+   * @param volunteer new volunteer object
+   * @returns a VolunteerDTO with volunteer's information
+   * @throws Error if volunteer creation fails
+   */
   createVolunteer(volunteer: Omit<VolunteerDTO, "id">): Promise<VolunteerDTO>;
   /**
    * Get volunteer associated with id

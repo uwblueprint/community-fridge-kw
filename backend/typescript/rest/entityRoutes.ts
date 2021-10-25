@@ -10,12 +10,13 @@ import {
   EntityResponseDTO,
   IEntityService,
 } from "../services/interfaces/IEntityService";
+import { Role } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const upload = multer({ dest: "uploads/" });
 
 const entityRouter: Router = Router();
-entityRouter.use(isAuthorizedByRole(new Set(["User", "Admin"])));
+entityRouter.use(isAuthorizedByRole(new Set([Role.USER, Role.ADMIN])));
 
 const defaultBucket = process.env.DEFAULT_BUCKET || "";
 const fileStorageService: IFileStorageService = new FileStorageService(
@@ -44,7 +45,7 @@ entityRouter.post(
         fs.unlinkSync(req.file.path);
       }
       res.status(201).json(newEntity);
-    } catch (e) {
+    } catch (e: any) {
       res.status(500).send(e.message);
     }
   },
@@ -61,7 +62,7 @@ entityRouter.get("/", async (req, res) => {
       contentType,
       entities,
     );
-  } catch (e) {
+  } catch (e: any) {
     await sendResponseByMimeType(res, 500, contentType, [
       {
         error: e.message,
@@ -77,7 +78,7 @@ entityRouter.get("/:id", async (req, res) => {
   try {
     const entity = await entityService.getEntity(id);
     res.status(200).json(entity);
-  } catch (e) {
+  } catch (e: any) {
     res.status(500).send(e.message);
   }
 });
@@ -104,7 +105,7 @@ entityRouter.put(
         fs.unlinkSync(req.file.path);
       }
       res.status(200).json(entity);
-    } catch (e) {
+    } catch (e: any) {
       res.status(500).send(e.message);
     }
   },
@@ -117,7 +118,7 @@ entityRouter.delete("/:id", async (req, res) => {
   try {
     await entityService.deleteEntity(id);
     res.status(204).send();
-  } catch (e) {
+  } catch (e: any) {
     res.status(500).send(e.message);
   }
 });
@@ -128,7 +129,7 @@ entityRouter.get("/files/:fileUUID", async (req, res) => {
   try {
     const fileURL = await fileStorageService.getFile(fileUUID);
     res.status(200).json({ fileURL });
-  } catch (e) {
+  } catch (e: any) {
     res.status(500).send(e.message);
   }
 });

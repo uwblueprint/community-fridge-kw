@@ -1,19 +1,7 @@
 import { Router } from "express";
-import { isAuthorizedByRole } from "../middlewares/auth";
-import {
-  createUserDtoValidator,
-  updateUserDtoValidator,
-} from "../middlewares/validators/userValidators";
-import nodemailerConfig from "../nodemailer.config";
-import AuthService from "../services/implementations/authService";
-import EmailService from "../services/implementations/emailService";
-import UserService from "../services/implementations/userService";
 import VolunteerService from "../services/implementations/volunteerService";
-import IAuthService from "../services/interfaces/authService";
-import IEmailService from "../services/interfaces/emailService";
-import IUserService from "../services/interfaces/userService";
 import IVolunteerService from "../services/interfaces/volunteerService";
-import { UserDTO, UserVolunteerDTO } from "../types";
+import { UserVolunteerDTO } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const volunteerRouter: Router = Router();
@@ -72,7 +60,15 @@ volunteerRouter.put("/:volunteerID", async (req, res) => {
 });
 
 volunteerRouter.delete("/:volunteerID", async (req, res) => {
-  const { id } = req.query;
+  const { volunteerID } = req.params;
+
+  try {
+    await volunteerService.deleteVolunteerByID(volunteerID);
+    res.status(204).send();
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+
 });
 
 export default volunteerRouter;
