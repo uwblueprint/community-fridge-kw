@@ -10,6 +10,12 @@ const customTheme = extendTheme({
       fontWeight: "Bold",
       fontSize: "26px",
     },
+    colors: {
+      brand: {
+        100: "#FFFFFF",
+        900: "#333333",
+      }
+    }
   },
   config: {
     initialColorMode: "light",
