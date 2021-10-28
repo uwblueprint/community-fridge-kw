@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -7,16 +8,11 @@ const MainPageButton = (): React.ReactElement => {
   const history = useHistory();
   const navigateTo = () => history.push(HOME_PAGE);
   return (
-    <div>
-      <button
-        onClick={navigateTo}
-        className="btn btn-primary"
-        type="button"
-        style={{ textAlign: "center" }}
-      >
+    <>
+      <Button onClick={navigateTo} colorScheme="blackAlpha" align="center">
         Go Back
-      </button>
-    </div>
+      </Button>
+    </>
   );
 };
 

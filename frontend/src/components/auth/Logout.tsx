@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import React, { useContext } from "react";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
@@ -14,9 +15,9 @@ const Logout = (): React.ReactElement => {
   };
 
   return (
-    <button type="button" className="btn btn-primary" onClick={onLogOutClick}>
+    <Button colorScheme="blackAlpha" onClick={onLogOutClick}>
       Log Out
-    </button>
+    </Button>
   );
 };
 
