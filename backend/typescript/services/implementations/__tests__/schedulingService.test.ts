@@ -41,6 +41,7 @@ const testSchedules = [
     donorId: 1,
     category: "Dry packaged goods",
     quantity: 2,
+    size: "medium",
     pickupLocation: "location",
     startTime: new Date("2021-09-30T00:00:00.000Z"),
     endTime: new Date("2021-10-01T00:00:00.000Z"),
@@ -52,6 +53,7 @@ const testSchedules = [
     donorId: 2,
     category: "Non-perishables",
     quantity: 3,
+    size: "medium",
     pickupLocation: "copied location",
     startTime: new Date("2021-09-30T00:00:00.000Z"),
     endTime: new Date("2021-10-01T00:00:00.000Z"),
@@ -62,14 +64,30 @@ const testSchedules = [
   {
     donorId: 1,
     category: "Fresh produce",
-    quantity: 2,
-    pickupLocation: "copied location",
+    quantity: "",
+    size: "",
+    pickupLocation: "",
     startTime: new Date("2021-03-01T00:08:00.000Z"),
     endTime: new Date("2021-03-01T00:06:00.000Z"),
     status: "Pending",
     volunteersNeeded: 0,
     notes: "these are the copied notes",
   },
+];
+
+const invalidTestSchedule = [
+  {
+    donorId: 2,
+    category: "Non-perishables",
+    quantity: 3,
+    size: "medium",
+    pickupLocation: "copied location",
+    startTime: new Date("2022-09-30T00:00:00.000Z"),
+    endTime: new Date("2021-10-01T00:00:00.000Z"),
+    status: "Pending",
+    volunteersNeeded: 2,
+    notes: "these are the copied notes",
+  }
 ];
 
 describe("pg schedulingService", () => {

@@ -27,7 +27,7 @@ export default class Scheduling extends Model {
   quantity!: number;
 
   @Column({ type: DataType.INTEGER })
-  size!: number;
+  size!: string;
 
   @Column({ type: DataType.TEXT })
   pickup_location!: string;

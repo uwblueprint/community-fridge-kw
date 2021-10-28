@@ -1,4 +1,8 @@
-export type Status = "Approved" | "Pending" | "Rejected";
+export enum Status {
+  APPROVED = "Approved",
+  PENDING = "Pending",
+  REJECTED = "Rejected"
+}
 export type Role = "User" | "Admin" | "Volunteer" | "Donor";
 
 export type DonorRole = "LocalBusiness" | "IndividualDonor";
@@ -35,7 +39,7 @@ export type SchedulingDTO = {
   donorId: number;
   category: string;
   quantity?: number;
-  size?: number;
+  size?: string;
   pickupLocation?: string;
   startTime: Date;
   endTime: Date;

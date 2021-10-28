@@ -127,7 +127,7 @@ schedulingRouter.delete("/:id", async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   } else {
-    res.status(400).json({ error: "Must supply id as query parameter." });
+    res.status(400).json({ error: "Must supply id as request parameter." });
   }
 });
 

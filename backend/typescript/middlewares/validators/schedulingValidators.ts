@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Status } from "../../types";
 import { getApiValidationError, validatePrimitive, validateDate } from "./util";
 
 export const createSchedulingDtoValidator = async (
@@ -11,6 +12,21 @@ export const createSchedulingDtoValidator = async (
   }
   if (!validatePrimitive(req.body.category, "string")) {
     return res.status(400).send(getApiValidationError("category", "string"));
+  }
+  //optional numerical field => check if empty first
+  if(req.body.quantity) {
+    if (!validatePrimitive(req.body.quantity, "integer")) {
+      return res.status(400).send(getApiValidationError("quantity", "integer"));
+    }
+  }
+  if (!validatePrimitive(req.body.size, "string")) {
+    return res.status(400).send(getApiValidationError("size", "string"));
+  }
+  if (!validatePrimitive(req.body.pickupLocation, "string")
+  ) {
+    return res
+      .status(400)
+      .send(getApiValidationError("pickupLocation", "string"));
   }
   if (!validateDate(req.body.startTime)) {
     return res
@@ -35,6 +51,9 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteersNeeded", "integer"));
   }
+  if (!validatePrimitive(req.body.notes, "string")) {
+    return res.status(400).send(getApiValidationError("notes", "string"));
+  }
 
   return next();
 };
@@ -50,8 +69,8 @@ export const updateSchedulingDtoValidator = async (
   if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
     return res.status(400).send(getApiValidationError("quantity", "integer"));
   }
-  if (req.body.size && !validatePrimitive(req.body.size, "integer")) {
-    return res.status(400).send(getApiValidationError("size", "integer"));
+  if (req.body.size && !validatePrimitive(req.body.size, "string")) {
+    return res.status(400).send(getApiValidationError("size", "string"));
   }
   if (
     req.body.pickupLocation &&
@@ -63,11 +82,7 @@ export const updateSchedulingDtoValidator = async (
   }
   if (
     req.body.status &&
-    !(
-      req.body.status === "Approved" ||
-      req.body.status === "Pending" ||
-      req.body.status === "Rejected"
-    )
+    !Object.values(Status).includes(req.body.status)
   ) {
     return res.status(400).send(getApiValidationError("status", "string"));
   }
