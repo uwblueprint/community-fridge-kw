@@ -62,11 +62,9 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
     if (req.body.role === "Donor") {
       await donorService.createDonor({
         userId: user.id,
-        donorType: req.body.donorType ?? null,
+        businessName: req.body.businessName,
         facebookLink: req.body.facebookLink ?? null,
-        instagramLink: req.body.instagramLink ?? null,
-        recurringDonor: req.body.recurringDonor ?? null,
-        businessName: req.body.businessName ?? null
+        instagramLink: req.body.instagramLink ?? null
       });
     }
 

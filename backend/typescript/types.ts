@@ -1,7 +1,7 @@
+import User from "./models/user.model";
+
 export type Status = "Approved" | "Pending" | "Rejected";
 export type Role = "User" | "Admin" | "Volunteer" | "Donor";
-
-export type DonorRole = "LocalBusiness" | "IndividualDonor";
 
 export type Token = {
   accessToken: string;
@@ -20,11 +20,9 @@ export type UserDTO = {
 export type DonorDTO = {
   id: string;
   userId: string;
-  donorType: DonorRole;
+  businessName?: string;
   facebookLink?: string;
   instagramLink?: string;
-  recurringDonor?: boolean;
-  businessName?: string;
 };
 
 export type VolunteerDTO = {
@@ -44,7 +42,7 @@ export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
 
-export type UpdateDonorDTO = Omit<DonorDTO, "id">;
+export type UpdateDonorDTO = Omit<DonorDTO, "id" | "userId">;
 
 export type Letters = "A" | "B" | "C" | "D";
 

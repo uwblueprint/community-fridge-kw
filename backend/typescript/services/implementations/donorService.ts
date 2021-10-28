@@ -39,10 +39,8 @@ class DonorService implements IDonorService {
       role: user.role,
       phoneNumber: user.phone_number,
       userId: String(donor.user_id),
-      donorType: donor.donor_type,
       facebookLink: donor.facebook_link,
       instagramLink: donor.instagram_link,
-      recurringDonor: donor.recurring_donor,
       businessName: donor.business_name
     }
   }
@@ -68,10 +66,8 @@ class DonorService implements IDonorService {
             role: user.role,
             phoneNumber: user.phone_number,
             userId: String(donor.user_id),
-            donorType: donor.donor_type,
             facebookLink: donor.facebook_link,
             instagramLink: donor.instagram_link,
-            recurringDonor: donor.recurring_donor,
             businessName: donor.business_name
           };
         }),
@@ -88,10 +84,8 @@ class DonorService implements IDonorService {
     try {
       const updateResult = await Donor.update(
         {
-          donor_type: donor.donorType,
           facebook_link: donor.facebookLink,
           instagram_link: donor.instagramLink,
-          recurring_donor: donor.recurringDonor,
           business_name: donor.businessName
         },
         {
@@ -138,10 +132,8 @@ class DonorService implements IDonorService {
     try {
       newDonor = await Donor.create({
         user_id: donor.userId,
-        donor_type: donor.donorType,
         facebook_link: donor.facebookLink,
         instagram_link: donor.instagramLink,
-        recurring_donor: donor.recurringDonor,
         business_name: donor.businessName
       });
     } catch (postgresError) {
@@ -151,10 +143,8 @@ class DonorService implements IDonorService {
     return {
       id: newDonor.id,
       userId: String(newDonor.user_id),
-      donorType: newDonor.donor_type,
       facebookLink: newDonor.facebook_link,
       instagramLink: newDonor.instagram_link,
-      recurringDonor: newDonor.recurring_donor,
       businessName: newDonor.business_name
     };
   }

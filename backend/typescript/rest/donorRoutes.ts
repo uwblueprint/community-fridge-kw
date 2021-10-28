@@ -61,12 +61,9 @@ donorRouter.put("/:id", donorDtoValidator, async (req, res) => {
     await donorService.updateDonorById(
       req.params.id,
       {
-        userId: req.body.userId,
-        donorType: req.body.donorType,
-        facebookLink: req.body.facebookLink,
-        instagramLink: req.body.instagramLink,
-        recurringDonor: req.body.recurringDonor,
         businessName: req.body.businessName,
+        facebookLink: req.body.facebookLink,
+        instagramLink: req.body.instagramLink
       },
     );
 
