@@ -52,7 +52,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      role: Role.USER,
+      role: req.body.role,
       phoneNumber: req.body.phoneNumber,
       password: req.body.password,
     });

@@ -91,7 +91,6 @@ class VolunteerService implements IVolunteerService {
             email: firebaseUser.email ?? "",
             role: user.role,
             phoneNumber: user.phone_number,
-            volunteerId: volunteer.user_id,
             userId: String(volunteer.user_id),
           };
         }),
