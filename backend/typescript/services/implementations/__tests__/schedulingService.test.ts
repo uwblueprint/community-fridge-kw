@@ -242,6 +242,7 @@ describe("pg schedulingService", () => {
       schedulingsDbAfterDelete.forEach((scheduling: Scheduling, i) => {
         expect(scheduling.id).not.toBe(schedulingToDelete.id);
       });
+      expect(schedulingsDbAfterDelete.length).toBe(testSchedules.length - 1);
     }
   });
 });
