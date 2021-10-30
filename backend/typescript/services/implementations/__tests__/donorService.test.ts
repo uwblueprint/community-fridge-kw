@@ -103,7 +103,6 @@ describe("Testing DonorService functions", () => {
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
-    donorService = new DonorService();
   });
 
   afterAll(async () => {
@@ -132,7 +131,7 @@ describe("Testing DonorService functions", () => {
 
     await Donor.bulkCreate(donors);
 
-    const res = await donorService.getDonors();
+    const res = await DonorService.getDonors();
 
     res.forEach((donor: DonorDTO, i) => {
       expect(donor).toMatchObject(testUserDonors[i]);
@@ -162,7 +161,7 @@ describe("Testing DonorService functions", () => {
 
     await Donor.bulkCreate(donors);
 
-    const res = await donorService.getDonorById(testDonorId);
+    const res = await DonorService.getDonorById(testDonorId);
 
     expect(res).toMatchObject(testUserDonors[0]);
   });
@@ -183,7 +182,7 @@ describe("Testing DonorService functions", () => {
       businessName: "Shake it off",
     };
 
-    const res = await donorService.createDonor(mockCreateDonorDTO);
+    const res = await DonorService.createDonor(mockCreateDonorDTO);
 
     expect(res).toMatchObject(testDonors[0]);
   });
@@ -213,9 +212,9 @@ describe("Testing DonorService functions", () => {
       businessName: "Fearless",
     };
 
-    await donorService.updateDonorById("1", mockUpdateDonorDTO);
+    await DonorService.updateDonorById("1", mockUpdateDonorDTO);
 
-    const res = await donorService.getDonorById("1");
+    const res = await DonorService.getDonorById("1");
 
     expect(res).toMatchObject(testUpdatedUserDonors[0]);
   });
@@ -242,7 +241,7 @@ describe("Testing DonorService functions", () => {
 
     await donorService.deleteDonorById("1");
 
-    const res = await donorService.getDonors();
+    const res = await DonorService.getDonors();
 
     expect(res).toHaveLength(1);
   });
