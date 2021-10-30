@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { getApiValidationError, validatePrimitive } from "./util";
 
-export const donorDtoValidator = async (
+const donorDtoValidator = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -24,3 +24,5 @@ export const donorDtoValidator = async (
 
   return next();
 };
+
+export default donorDtoValidator;

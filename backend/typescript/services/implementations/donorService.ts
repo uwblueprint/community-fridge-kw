@@ -12,7 +12,7 @@ import User from "../../models/user.model";
 const Logger = logger(__filename);
 
 class DonorService implements IDonorService {
-  async getDonorById(id: string): Promise<UserDonorDTO> {
+  static async getDonorById(id: string): Promise<UserDonorDTO> {
     let donor: Donor | null;
     let user: User | null;
 
@@ -46,7 +46,7 @@ class DonorService implements IDonorService {
     };
   }
 
-  async getDonors(): Promise<Array<UserDonorDTO>> {
+  static async getDonors(): Promise<Array<UserDonorDTO>> {
     let userDonorDTOs: Array<UserDonorDTO> = [];
     try {
       const donors: Array<Donor> = await Donor.findAll({ include: User });
@@ -81,7 +81,10 @@ class DonorService implements IDonorService {
     return userDonorDTOs;
   }
 
-  async updateDonorById(id: string, donor: UpdateDonorDTO): Promise<void> {
+  static async updateDonorById(
+    id: string,
+    donor: UpdateDonorDTO,
+  ): Promise<void> {
     try {
       const updateResult = await Donor.update(
         {
@@ -105,7 +108,7 @@ class DonorService implements IDonorService {
     }
   }
 
-  async deleteDonorById(id: string): Promise<void> {
+  static async deleteDonorById(id: string): Promise<void> {
     try {
       const deletedRole: Donor | null = await Donor.findByPk(Number(id));
 
@@ -126,19 +129,13 @@ class DonorService implements IDonorService {
     }
   }
 
-  async createDonor(donor: CreateDonorDTO): Promise<DonorDTO> {
-    let newDonor: Donor;
-
-    try {
-      newDonor = await Donor.create({
-        user_id: donor.userId,
-        facebook_link: donor.facebookLink,
-        instagram_link: donor.instagramLink,
-        business_name: donor.businessName,
-      });
-    } catch (postgresError) {
-      throw postgresError;
-    }
+  static async createDonor(donor: CreateDonorDTO): Promise<DonorDTO> {
+    const newDonor = await Donor.create({
+      user_id: donor.userId,
+      facebook_link: donor.facebookLink,
+      instagram_link: donor.instagramLink,
+      business_name: donor.businessName,
+    });
 
     return {
       id: String(newDonor.id),
