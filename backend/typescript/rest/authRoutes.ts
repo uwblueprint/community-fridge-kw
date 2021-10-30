@@ -7,16 +7,20 @@ import {
 } from "../middlewares/validators/authValidators";
 import nodemailerConfig from "../nodemailer.config";
 import AuthService from "../services/implementations/authService";
+import DonorService from "../services/implementations/donorService";
 import EmailService from "../services/implementations/emailService";
 import UserService from "../services/implementations/userService";
 import IAuthService from "../services/interfaces/authService";
+import IDonorService from "../services/interfaces/donorService";
 import IEmailService from "../services/interfaces/emailService";
 import IUserService from "../services/interfaces/userService";
+import { UserDTO } from "../types";
 
 const authRouter: Router = Router();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
+const donorService: IDonorService = new DonorService();
 
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/login", loginRequestValidator, async (req, res) => {
@@ -44,14 +48,23 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
 /* Register a user, returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/register", registerRequestValidator, async (req, res) => {
   try {
-    await userService.createUser({
+    const user = await userService.createUser({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      role: "User",
+      role: req.body.role,
       phoneNumber: req.body.phoneNumber,
       password: req.body.password,
     });
+
+    if (req.body.role === "Donor") {
+      await donorService.createDonor({
+        userId: user.id,
+        businessName: req.body.businessName,
+        facebookLink: req.body.facebookLink ?? null,
+        instagramLink: req.body.instagramLink ?? null,
+      });
+    }
 
     const authDTO = await authService.generateToken(
       req.body.email,

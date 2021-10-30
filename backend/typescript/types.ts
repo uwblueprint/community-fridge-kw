@@ -1,8 +1,6 @@
 export type Status = "Approved" | "Pending" | "Rejected";
 export type Role = "User" | "Admin" | "Volunteer" | "Donor";
 
-export type DonorRole = "LocalBusiness" | "IndividualDonor";
-
 export type Token = {
   accessToken: string;
   refreshToken: string;
@@ -17,10 +15,22 @@ export type UserDTO = {
   phoneNumber: string;
 };
 
+export type DonorDTO = {
+  id: string;
+  userId: string;
+  businessName?: string;
+  facebookLink?: string;
+  instagramLink?: string;
+};
+
 export type VolunteerDTO = {
   id: string;
-  user_id: string;
+  userId: string;
 };
+
+export type UserDonorDTO = UserDTO & DonorDTO;
+
+export type CreateDonorDTO = Omit<DonorDTO, "id">;
 
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
@@ -29,6 +39,8 @@ export type UpdateUserDTO = Omit<UserDTO, "id">;
 export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
+
+export type UpdateDonorDTO = Omit<DonorDTO, "id" | "userId">;
 
 export type Letters = "A" | "B" | "C" | "D";
 

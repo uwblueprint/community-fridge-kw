@@ -166,6 +166,7 @@ class UserService implements IUserService {
           first_name: user.firstName,
           last_name: user.lastName,
           auth_id: firebaseUser.uid,
+          email: user.email,
           role: user.role,
           phone_number: user.phoneNumber,
         });
@@ -296,6 +297,7 @@ class UserService implements IUserService {
             first_name: deletedUser.first_name,
             last_name: deletedUser.last_name,
             auth_id: deletedUser.auth_id,
+            email: deletedUser.email,
             role: deletedUser.role,
             phone_number: deletedUser.phone_number,
           });
@@ -349,6 +351,7 @@ class UserService implements IUserService {
             first_name: deletedUser.first_name,
             last_name: deletedUser.last_name,
             auth_id: deletedUser.auth_id,
+            email: deletedUser.email,
             role: deletedUser.role,
             phone_number: deletedUser.phone_number,
           });
