@@ -1,40 +1,63 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import {
+  Column,
+  DataType,
+  Model,
+  Table,
+  AllowNull,
+  ForeignKey,
+  BelongsTo,
+  AutoIncrement,
+  PrimaryKey,
+} from "sequelize-typescript";
 import { Status } from "../types";
+import Donor from "./donor.model";
 
 @Table({ tableName: "scheduling" })
 export default class Scheduling extends Model {
-  @Column({ type: DataType.INTEGER, primaryKey: true })
+  @PrimaryKey
+  @AutoIncrement
+  @Column({ type: DataType.INTEGER })
   id!: number;
 
-  // TODO: donor_id should be made a foreign key
-  // reference to the donors table once it is created
+  @AllowNull(false)
+  @Column({ type: DataType.TEXT })
+  category!: string;
+
   @Column({ type: DataType.INTEGER })
-  donor_id!: string;
+  quantity!: number;
 
   @Column({ type: DataType.TEXT })
-  description!: string | null;
+  size!: string;
 
-  @Column({ type: DataType.INTEGER })
-  quantity!: number | null;
+  @Column({ type: DataType.TEXT })
+  pickup_location!: string;
 
+  @AllowNull(false)
   @Column({ type: DataType.DATE })
   start_time!: Date;
 
+  @AllowNull(false)
   @Column({ type: DataType.DATE })
   end_time!: Date;
 
-  @Column({ type: DataType.ENUM("Rejected", "Approved", "Pending") })
+  @Column({
+    type: DataType.ENUM("Rejected", "Approved", "Pending"),
+    defaultValue: "Approved",
+  })
   status!: Status;
 
+  @AllowNull(false)
   @Column({ type: DataType.INTEGER })
   volunteers_needed!: number;
 
-  // TODO: volunteer_ids should be foreign key references
-  // to the volunteer table once it is created, may have
-  // to create another table 'schedule_volunteer_mapping'
-  @Column({ type: DataType.ARRAY(DataType.INTEGER) })
-  volunteer_ids!: number[] | null;
-
   @Column({ type: DataType.TEXT })
-  notes!: string | null;
+  notes!: string;
+
+  @ForeignKey(() => Donor)
+  @AllowNull(false)
+  @Column({ type: DataType.INTEGER })
+  donor_id!: number;
+
+  @BelongsTo(() => Donor)
+  donor!: Donor;
 }

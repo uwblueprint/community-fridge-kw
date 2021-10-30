@@ -1,5 +1,3 @@
-export type Status = "Approved" | "Pending" | "Rejected";
-
 export enum Role {
   USER = "User",
   ADMIN = "Admin",
@@ -7,7 +5,11 @@ export enum Role {
   DONOR = "Donor",
 }
 
-export type DonorRole = "LocalBusiness" | "IndividualDonor";
+export enum Status {
+  APPROVED = "Approved",
+  PENDING = "Pending",
+  REJECTED = "Rejected",
+}
 
 export type Token = {
   accessToken: string;
@@ -23,10 +25,22 @@ export type UserDTO = {
   phoneNumber: string;
 };
 
+export type DonorDTO = {
+  id: string;
+  userId: string;
+  businessName?: string;
+  facebookLink?: string;
+  instagramLink?: string;
+};
+
 export type VolunteerDTO = {
   id: string;
   userId: string;
 };
+
+export type UserDonorDTO = UserDTO & DonorDTO;
+
+export type CreateDonorDTO = Omit<DonorDTO, "id">;
 
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
@@ -39,6 +53,28 @@ export type AuthDTO = Token & UserDTO;
 export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
 export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
+export type SchedulingDTO = {
+  id: string;
+  donorId: string;
+  category: string;
+  quantity?: number;
+  size?: string;
+  pickupLocation?: string;
+  startTime: Date;
+  endTime: Date;
+  status: Status;
+  volunteersNeeded: number;
+  volunteerIds: number[];
+  notes?: string;
+};
+
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerIds">;
+
+export type UpdateSchedulingDTO = Partial<
+  Omit<SchedulingDTO, "id" | "donorId">
+>;
+
+export type UpdateDonorDTO = Omit<DonorDTO, "id" | "userId">;
 
 export type Letters = "A" | "B" | "C" | "D";
 
