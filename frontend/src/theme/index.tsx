@@ -23,7 +23,7 @@ const customTheme = extendTheme({
       fontFamily: "Inter, sans-serif",
       fontSize: "12px",
       lineHeight: "18px",
-    }
+    },
   },
   colors: {
     white: {
