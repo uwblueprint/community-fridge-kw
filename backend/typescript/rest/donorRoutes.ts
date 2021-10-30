@@ -21,7 +21,6 @@ donorRouter.get("/", async (req, res) => {
       },
     ]);
   }
-  return;
 });
 
 /* Get donor by ID */
@@ -40,9 +39,7 @@ donorRouter.get("/:id", async (req, res) => {
 
   if (id) {
     if (typeof id !== "string") {
-      res
-        .status(400)
-        .json({ error: "id query parameter must be a string." });
+      res.status(400).json({ error: "id query parameter must be a string." });
     } else {
       try {
         const donor = await donorService.getDonorById(id);
@@ -51,21 +48,17 @@ donorRouter.get("/:id", async (req, res) => {
         res.status(500).json({ error: error.message });
       }
     }
-    return;
   }
 });
 
 /* Update a donor */
 donorRouter.put("/:id", donorDtoValidator, async (req, res) => {
   try {
-    await donorService.updateDonorById(
-      req.params.id,
-      {
-        businessName: req.body.businessName,
-        facebookLink: req.body.facebookLink,
-        instagramLink: req.body.instagramLink
-      },
-    );
+    await donorService.updateDonorById(req.params.id, {
+      businessName: req.body.businessName,
+      facebookLink: req.body.facebookLink,
+      instagramLink: req.body.instagramLink,
+    });
 
     res.status(201).send();
   } catch (error: any) {

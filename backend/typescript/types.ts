@@ -1,5 +1,3 @@
-import User from "./models/user.model";
-
 export type Status = "Approved" | "Pending" | "Rejected";
 export type Role = "User" | "Admin" | "Volunteer" | "Donor";
 

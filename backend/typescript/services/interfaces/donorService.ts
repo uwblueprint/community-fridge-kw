@@ -2,11 +2,10 @@ import {
   UpdateDonorDTO,
   UserDonorDTO,
   DonorDTO,
-  CreateDonorDTO
-} from "../../types"
+  CreateDonorDTO,
+} from "../../types";
 
 interface IDonorService {
-
   /**
    * Get donor associated with id
    * @param id donors's id
@@ -14,7 +13,6 @@ interface IDonorService {
    * @throws Error if donor retrieval fails
    */
   getDonorById(id: string): Promise<UserDonorDTO>;
-
 
   /**
    * Get all donor information (possibly paginated in the future)

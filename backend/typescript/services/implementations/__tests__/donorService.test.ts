@@ -29,7 +29,7 @@ const testUsers = [
 const testDonors = [
   {
     userId: "1",
-    businessName: "Shake it off"
+    businessName: "Shake it off",
   },
   {
     userId: "2",
@@ -90,7 +90,6 @@ const testUpdatedUserDonors = [
     userId: "2",
   },
 ];
-
 
 jest.mock("firebase-admin", () => {
   const auth = jest.fn().mockReturnValue({
@@ -245,7 +244,6 @@ describe("Testing DonorService functions", () => {
 
     const res = await donorService.getDonors();
 
-    expect(res).toHaveLength(1)
+    expect(res).toHaveLength(1);
   });
-
 });

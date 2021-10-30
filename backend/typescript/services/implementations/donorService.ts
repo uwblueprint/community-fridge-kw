@@ -1,31 +1,32 @@
 import {
-  DonorDTO, UpdateDonorDTO, UserDonorDTO, UserDTO, CreateDonorDTO
-} from "../../types"
+  DonorDTO,
+  UpdateDonorDTO,
+  UserDonorDTO,
+  CreateDonorDTO,
+} from "../../types";
 import IDonorService from "../interfaces/donorService";
 import logger from "../../utilities/logger";
-import Donor from "../../models/donor.model"
+import Donor from "../../models/donor.model";
 import User from "../../models/user.model";
 
 const Logger = logger(__filename);
 
 class DonorService implements IDonorService {
-
   async getDonorById(id: string): Promise<UserDonorDTO> {
     let donor: Donor | null;
     let user: User | null;
-    
+
     try {
       donor = await Donor.findByPk(Number(id), { include: User });
 
       if (!donor) {
-        throw new Error(`id ${id} not found.`)
+        throw new Error(`id ${id} not found.`);
       }
 
       user = donor.user;
       if (!user) {
-        throw new Error(`userId ${donor.user_id} not found.`)
+        throw new Error(`userId ${donor.user_id} not found.`);
       }
-
     } catch (error) {
       Logger.error(`Failed to get donor. Reason = ${error.message}`);
       throw error;
@@ -41,23 +42,23 @@ class DonorService implements IDonorService {
       userId: String(donor.user_id),
       facebookLink: donor.facebook_link,
       instagramLink: donor.instagram_link,
-      businessName: donor.business_name
-    }
+      businessName: donor.business_name,
+    };
   }
 
   async getDonors(): Promise<Array<UserDonorDTO>> {
     let userDonorDTOs: Array<UserDonorDTO> = [];
     try {
       const donors: Array<Donor> = await Donor.findAll({ include: User });
-      
+
       userDonorDTOs = await Promise.all(
         donors.map(async (donor) => {
-          const user: User = donor.user;
-          
+          const { user } = donor;
+
           if (!user) {
-            throw new Error(`userId ${donor.user_id} not found.`)
+            throw new Error(`userId ${donor.user_id} not found.`);
           }
-          
+
           return {
             id: String(donor.id),
             firstName: user.first_name,
@@ -68,7 +69,7 @@ class DonorService implements IDonorService {
             userId: String(donor.user_id),
             facebookLink: donor.facebook_link,
             instagramLink: donor.instagram_link,
-            businessName: donor.business_name
+            businessName: donor.business_name,
           };
         }),
       );
@@ -86,10 +87,10 @@ class DonorService implements IDonorService {
         {
           facebook_link: donor.facebookLink,
           instagram_link: donor.instagramLink,
-          business_name: donor.businessName
+          business_name: donor.businessName,
         },
         {
-          where: { id: id },
+          where: { id },
           returning: true,
         },
       );
@@ -98,7 +99,6 @@ class DonorService implements IDonorService {
       if (updateResult[0] < 1) {
         throw new Error(`id ${id} not found.`);
       }
-      
     } catch (error) {
       Logger.error(`Failed to update donor. Reason = ${error.message}`);
       throw error;
@@ -114,7 +114,7 @@ class DonorService implements IDonorService {
       }
 
       const numDestroyed: number = await Donor.destroy({
-        where: { id: id },
+        where: { id },
       });
 
       if (numDestroyed <= 0) {
@@ -128,13 +128,13 @@ class DonorService implements IDonorService {
 
   async createDonor(donor: CreateDonorDTO): Promise<DonorDTO> {
     let newDonor: Donor;
-    
+
     try {
       newDonor = await Donor.create({
         user_id: donor.userId,
         facebook_link: donor.facebookLink,
         instagram_link: donor.instagramLink,
-        business_name: donor.businessName
+        business_name: donor.businessName,
       });
     } catch (postgresError) {
       throw postgresError;
@@ -145,7 +145,7 @@ class DonorService implements IDonorService {
       userId: String(newDonor.user_id),
       facebookLink: newDonor.facebook_link,
       instagramLink: newDonor.instagram_link,
-      businessName: newDonor.business_name
+      businessName: newDonor.business_name,
     };
   }
 }

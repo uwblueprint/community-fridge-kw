@@ -1,5 +1,13 @@
-import { Column, DataType, Model, Table, ForeignKey, BelongsTo, AllowNull } from "sequelize-typescript";
-import User from "./user.model"
+import {
+  Column,
+  DataType,
+  Model,
+  Table,
+  ForeignKey,
+  BelongsTo,
+  AllowNull,
+} from "sequelize-typescript";
+import User from "./user.model";
 
 @Table({ tableName: "donors" })
 export default class Donor extends Model {

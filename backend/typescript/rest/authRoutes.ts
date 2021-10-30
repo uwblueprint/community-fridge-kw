@@ -48,15 +48,13 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
 /* Register a user, returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/register", registerRequestValidator, async (req, res) => {
   try {
-    let user: UserDTO;
-
-    user = await userService.createUser({
+    const user = await userService.createUser({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
       role: req.body.role,
       phoneNumber: req.body.phoneNumber,
-      password: req.body.password
+      password: req.body.password,
     });
 
     if (req.body.role === "Donor") {
@@ -64,7 +62,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
         userId: user.id,
         businessName: req.body.businessName,
         facebookLink: req.body.facebookLink ?? null,
-        instagramLink: req.body.instagramLink ?? null
+        instagramLink: req.body.instagramLink ?? null,
       });
     }
 
