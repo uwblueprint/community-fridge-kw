@@ -12,7 +12,9 @@ import User from "../../models/user.model";
 const Logger = logger(__filename);
 
 class DonorService implements IDonorService {
-  static async getDonorById(id: string): Promise<UserDonorDTO> {
+  /* eslint-disable class-methods-use-this */
+
+  async getDonorById(id: string): Promise<UserDonorDTO> {
     let donor: Donor | null;
     let user: User | null;
 
@@ -46,7 +48,7 @@ class DonorService implements IDonorService {
     };
   }
 
-  static async getDonors(): Promise<Array<UserDonorDTO>> {
+  async getDonors(): Promise<Array<UserDonorDTO>> {
     let userDonorDTOs: Array<UserDonorDTO> = [];
     try {
       const donors: Array<Donor> = await Donor.findAll({ include: User });
@@ -81,10 +83,7 @@ class DonorService implements IDonorService {
     return userDonorDTOs;
   }
 
-  static async updateDonorById(
-    id: string,
-    donor: UpdateDonorDTO,
-  ): Promise<void> {
+  async updateDonorById(id: string, donor: UpdateDonorDTO): Promise<void> {
     try {
       const updateResult = await Donor.update(
         {
@@ -108,7 +107,7 @@ class DonorService implements IDonorService {
     }
   }
 
-  static async deleteDonorById(id: string): Promise<void> {
+  async deleteDonorById(id: string): Promise<void> {
     try {
       const deletedRole: Donor | null = await Donor.findByPk(Number(id));
 
@@ -129,7 +128,7 @@ class DonorService implements IDonorService {
     }
   }
 
-  static async createDonor(donor: CreateDonorDTO): Promise<DonorDTO> {
+  async createDonor(donor: CreateDonorDTO): Promise<DonorDTO> {
     const newDonor = await Donor.create({
       user_id: donor.userId,
       facebook_link: donor.facebookLink,
