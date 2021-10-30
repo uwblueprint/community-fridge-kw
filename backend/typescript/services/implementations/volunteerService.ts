@@ -68,7 +68,7 @@ class VolunteerService implements IVolunteerService {
 
   async getVolunteers(): Promise<Array<UserVolunteerDTO>> {
     let userVolunteerDTOs: Array<UserVolunteerDTO> = [];
-    let firebaseUser: firebaseAdmin.auth.UserRecord;
+    // let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
       const volunteers: Array<Volunteer> = await Volunteer.findAll({
@@ -83,12 +83,12 @@ class VolunteerService implements IVolunteerService {
             throw new Error(`userId ${volunteer.user_id} not found.`);
           }
 
-          firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
+          // firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
           return {
             id: String(volunteer.id),
             firstName: user.first_name,
             lastName: user.last_name,
-            email: firebaseUser.email ?? "",
+            email: "", // replace with user. email
             role: user.role,
             phoneNumber: user.phone_number,
             userId: String(volunteer.user_id),
