@@ -32,8 +32,8 @@ class SchedulingService implements ISchedulingService {
     const volunteerIds: number[] = [];
 
     return {
-      id: scheduling.id,
-      donorId: scheduling.donor_id,
+      id: String(scheduling.id),
+      donorId: String(scheduling.donor_id),
       category: scheduling.category,
       quantity: scheduling.quantity,
       size: scheduling.size,
@@ -58,8 +58,8 @@ class SchedulingService implements ISchedulingService {
 
       schedulingDtos = schedulings.map((scheduling) => {
         return {
-          id: scheduling.id,
-          donorId: scheduling.donor_id,
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
           category: scheduling.category,
           quantity: scheduling.quantity,
           size: scheduling.size,
@@ -86,8 +86,8 @@ class SchedulingService implements ISchedulingService {
       const schedulings: Array<Scheduling> = await Scheduling.findAll();
       schedulingDtos = schedulings.map((scheduling) => {
         return {
-          id: scheduling.id,
-          donorId: scheduling.donor_id,
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
           category: scheduling.category,
           quantity: scheduling.quantity,
           size: scheduling.size,
@@ -131,8 +131,8 @@ class SchedulingService implements ISchedulingService {
     }
 
     return {
-      id: newScheduling.id,
-      donorId: newScheduling.donor_id,
+      id: String(newScheduling.id),
+      donorId: String(newScheduling.donor_id),
       category: newScheduling.category,
       quantity: newScheduling.quantity,
       size: newScheduling.size,
@@ -165,8 +165,8 @@ class SchedulingService implements ISchedulingService {
       }
       const updatedScheduling = updateResult[1][0];
       return {
-        id: updatedScheduling.id,
-        donorId: updatedScheduling.donor_id,
+        id: String(updatedScheduling.id),
+        donorId: String(updatedScheduling.donor_id),
         category: updatedScheduling.category,
         quantity: updatedScheduling.quantity,
         size: updatedScheduling.size,

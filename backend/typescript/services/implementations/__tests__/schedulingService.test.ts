@@ -1,11 +1,9 @@
 import { snakeCase } from "lodash";
-import { Request } from "express";
 import Scheduling from "../../../models/scheduling.model";
+import { SchedulingDTO, Status, CreateSchedulingDTO } from "../../../types";
 import User from "../../../models/user.model";
 import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
-
-import { Status, CreateSchedulingDTO } from "../../../types";
 
 import { testSql } from "../../../testUtils/testDb";
 
@@ -39,7 +37,7 @@ const testDonorsDb = [
 
 const testSchedules = [
   {
-    donorId: 1,
+    donorId: "1",
     category: "Dry packaged goods",
     quantity: 2,
     size: "medium",
@@ -51,7 +49,7 @@ const testSchedules = [
     notes: "these are the notes",
   },
   {
-    donorId: 2,
+    donorId: "2",
     category: "Non-perishables",
     quantity: 3,
     size: "medium",
@@ -63,7 +61,7 @@ const testSchedules = [
     notes: "these are the copied notes",
   },
   {
-    donorId: 1,
+    donorId: "1",
     category: "Fresh produce",
     startTime: new Date("2021-03-01T00:08:00.000Z"),
     endTime: new Date("2021-03-01T00:06:00.000Z"),
@@ -75,7 +73,7 @@ const testSchedules = [
 
 const invalidTestSchedule = [
   {
-    donorId: 2,
+    donorId: "2",
     category: "Non-perishables",
     quantity: 3,
     size: "medium",
@@ -173,11 +171,13 @@ describe("pg schedulingService", () => {
 
     const res = await schedulingService.createScheduling(schedulingToCreate);
 
-    const schedulingDbRes: Scheduling | null = await Scheduling.findByPk(1);
+    const schedulingDbRes: SchedulingDTO | null = await schedulingService.getSchedulingById(
+      "1",
+    );
     if (schedulingDbRes) {
       const keys = Object.keys(schedulingToCreate);
       keys.forEach((key) => {
-        expect(schedulingDbRes[snakeCase(key) as keyof Scheduling]).toEqual(
+        expect(schedulingDbRes[key as keyof SchedulingDTO]).toEqual(
           schedulingToCreate[key as keyof CreateSchedulingDTO],
         );
       });

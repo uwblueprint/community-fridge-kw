@@ -35,8 +35,8 @@ export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 export type AuthDTO = Token & UserDTO;
 
 export type SchedulingDTO = {
-  id: number;
-  donorId: number;
+  id: string;
+  donorId: string;
   category: string;
   quantity?: number;
   size?: string;
