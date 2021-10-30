@@ -1,7 +1,7 @@
 export enum Status {
   APPROVED = "Approved",
   PENDING = "Pending",
-  REJECTED = "Rejected"
+  REJECTED = "Rejected",
 }
 export type Role = "User" | "Admin" | "Volunteer" | "Donor";
 

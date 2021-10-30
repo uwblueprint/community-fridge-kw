@@ -32,7 +32,7 @@ app.use("/users", userRouter);
 app.use("/scheduling", schedulingRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const eraseDatabaseOnSync = false;
+const eraseDatabaseOnSync = true;
 sequelize.sync({ force: eraseDatabaseOnSync });
 
 firebaseAdmin.initializeApp({

@@ -13,16 +13,15 @@ export const createSchedulingDtoValidator = async (
   if (!validatePrimitive(req.body.category, "string")) {
     return res.status(400).send(getApiValidationError("category", "string"));
   }
-  //optional numerical field => check if empty first
-  if(req.body.quantity) {
-    if (!validatePrimitive(req.body.quantity, "integer")) {
-      return res.status(400).send(getApiValidationError("quantity", "integer"));
-    }
+  if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
+    return res.status(400).send(getApiValidationError("quantity", "integer"));
   }
-  if (!validatePrimitive(req.body.size, "string")) {
+  if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
   }
-  if (!validatePrimitive(req.body.pickupLocation, "string")
+  if (
+    req.body.pickupLocation &&
+    !validatePrimitive(req.body.pickupLocation, "string")
   ) {
     return res
       .status(400)
@@ -51,7 +50,7 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteersNeeded", "integer"));
   }
-  if (!validatePrimitive(req.body.notes, "string")) {
+  if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));
   }
 
@@ -80,10 +79,7 @@ export const updateSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("pickupLocation", "string"));
   }
-  if (
-    req.body.status &&
-    !Object.values(Status).includes(req.body.status)
-  ) {
+  if (req.body.status && !Object.values(Status).includes(req.body.status)) {
     return res.status(400).send(getApiValidationError("status", "string"));
   }
   if (req.body.startTime && !validateDate(req.body.startTime)) {

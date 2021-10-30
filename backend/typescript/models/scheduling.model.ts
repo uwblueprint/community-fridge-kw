@@ -26,7 +26,7 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.INTEGER })
   quantity!: number;
 
-  @Column({ type: DataType.INTEGER })
+  @Column({ type: DataType.TEXT })
   size!: string;
 
   @Column({ type: DataType.TEXT })

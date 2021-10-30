@@ -9,10 +9,7 @@ const allowableContentTypes = new Set([
 ]);
 
 export const validateDate = (value: string): boolean => {
-  if (Date.parse(value)) {
-    return true;
-  }
-  return false;
+  return !!Date.parse(value);
 };
 
 export const validatePrimitive = (value: any, type: Type): boolean => {
@@ -52,7 +49,7 @@ export const getApiValidationError = (
   fieldName: string,
   type: Type,
   isArray = false,
-  isDateError = true,
+  isDateError = false,
 ): string => {
   if (isDateError) {
     return "startTime must be before endTime";
