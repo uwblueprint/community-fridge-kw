@@ -5,8 +5,6 @@ export enum Status {
 }
 export type Role = "User" | "Admin" | "Volunteer" | "Donor";
 
-export type DonorRole = "LocalBusiness" | "IndividualDonor";
-
 export type Token = {
   accessToken: string;
   refreshToken: string;
@@ -21,10 +19,22 @@ export type UserDTO = {
   phoneNumber: string;
 };
 
+export type DonorDTO = {
+  id: string;
+  userId: string;
+  businessName?: string;
+  facebookLink?: string;
+  instagramLink?: string;
+};
+
 export type VolunteerDTO = {
   id: string;
-  user_id: string;
+  userId: string;
 };
+
+export type UserDonorDTO = UserDTO & DonorDTO;
+
+export type CreateDonorDTO = Omit<DonorDTO, "id">;
 
 export type CreateUserDTO = Omit<UserDTO, "id"> & { password: string };
 
@@ -54,6 +64,8 @@ export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerIds">;
 export type UpdateSchedulingDTO = Partial<
   Omit<SchedulingDTO, "id" | "donorId">
 >;
+
+export type UpdateDonorDTO = Omit<DonorDTO, "id" | "userId">;
 
 export type Letters = "A" | "B" | "C" | "D";
 

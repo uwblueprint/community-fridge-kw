@@ -7,7 +7,6 @@ import {
   BelongsTo,
   AllowNull,
 } from "sequelize-typescript";
-import { DonorRole, UserDTO } from "../types";
 import User from "./user.model";
 
 @Table({ tableName: "donors" })
@@ -18,21 +17,15 @@ export default class Donor extends Model {
   user_id!: number;
 
   @BelongsTo(() => User)
-  user!: UserDTO;
+  user!: User;
 
   @AllowNull(false)
-  @Column({ type: DataType.ENUM("LocalBusiness", "IndividualDonor") })
-  donor_type!: DonorRole;
+  @Column({ type: DataType.STRING })
+  business_name!: string;
 
   @Column({ type: DataType.STRING })
   facebook_link?: string;
 
   @Column({ type: DataType.STRING })
   instagram_link?: string;
-
-  @Column({ type: DataType.BOOLEAN })
-  recurring_donor?: boolean;
-
-  @Column({ type: DataType.STRING })
-  business_name?: string;
 }
