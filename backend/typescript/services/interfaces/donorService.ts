@@ -1,7 +1,6 @@
 import {
   UpdateDonorDTO,
   UserDonorDTO,
-  UserDTO,
   DonorDTO,
   CreateDonorDTO
 } from "../../types"

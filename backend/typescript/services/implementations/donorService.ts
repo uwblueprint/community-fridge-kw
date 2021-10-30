@@ -141,7 +141,7 @@ class DonorService implements IDonorService {
     }
 
     return {
-      id: newDonor.id,
+      id: String(newDonor.id),
       userId: String(newDonor.user_id),
       facebookLink: newDonor.facebook_link,
       instagramLink: newDonor.instagram_link,

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { donorDtoValidator } from "../middlewares/validators/donorValidator";
 import DonorService from "../services/implementations/donorService";
 import IDonorService from "../services/interfaces/donorService";
-import { UserDonorDTO, DonorDTO } from "../types";
+import { UserDonorDTO } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const donorRouter: Router = Router();

@@ -11,6 +11,7 @@ export default class Donor extends Model {
   @BelongsTo(() => User)
   user!: User;
 
+  @AllowNull(false)
   @Column({ type: DataType.STRING })
   business_name!: string;
 
