@@ -28,12 +28,12 @@ const VolunteerRoleStep = ({
 const VolunteerRoles = () => {
   return (
     <Container
-      paddingLeft="42px"
-      paddingRight="42px"
-      paddingTop="73px"
+      pl="42px"
+      pr="42px"
+      pt="73px"
       backgroundColor="black.100"
       mt="57px"
-      paddingBottom="73px"
+      pb="73px"
     >
       <Text color="white.100" textStyle="subHeading" mb="1rem">
         For Donors
