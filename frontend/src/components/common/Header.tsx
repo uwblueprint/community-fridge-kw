@@ -6,12 +6,21 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  Icon,
   IconButton,
   Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
+
+const MenuIcon = (): JSX.Element => (
+  <Icon viewBox="0 0 24 24">
+    <path d="M3 12H21" stroke="#111111" strokeWidth="2" strokeLinecap="round" />
+    <path d="M3 6H21" stroke="#111111" strokeWidth="2" strokeLinecap="round" />
+    <path d="M3 18H21" stroke="#111111" strokeWidth="2" strokeLinecap="round" />
+  </Icon>
+);
 
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,7 +34,10 @@ const Header = (): JSX.Element => {
           flex="1"
           aria-label="menu options"
           onClick={onOpen}
-        />
+          backgroundColor="transparent"
+        >
+          <MenuIcon />
+        </IconButton>
         <Text pl="21px" flex="9">
           Community Fridge
         </Text>
@@ -33,12 +45,12 @@ const Header = (): JSX.Element => {
       <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader>Community Fridge</DrawerHeader>
+          <DrawerHeader textStyles="body">Community Fridge</DrawerHeader>
           <DrawerBody>
             <Stack spacing="1rem">
-              <Text textStyles="subHeading">Schedule Dropoff</Text>
-              <Text textStyles="subHeading">Contact Admin</Text>
-              <Text textStyles="subHeading">Sign In</Text>
+              <Text textStyle="subHeading">Schedule Dropoff</Text>
+              <Text textStyle="subHeading">Contact Admin</Text>
+              <Text textStyle="subHeading">Sign In</Text>
             </Stack>
           </DrawerBody>
         </DrawerContent>

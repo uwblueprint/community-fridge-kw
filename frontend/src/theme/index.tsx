@@ -24,6 +24,18 @@ const customTheme = extendTheme({
       fontSize: "12px",
       lineHeight: "18px",
     },
+    inputDescription: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "15px",
+      lineHeight: "18px",
+      fontWeight: "Medium",
+    },
+    subtitle: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: 500,
+      fontSize: " 15px",
+      lineHeight: "18px",
+    },
   },
   colors: {
     white: {
@@ -35,6 +47,7 @@ const customTheme = extendTheme({
     gray: {
       100: "#C4C4C4",
       200: "#3F4647",
+      300: "#757575",
     },
   },
   breakpoints: {

@@ -2,11 +2,11 @@ import { Box, Button, Container, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import Header from "../../common/Header";
 import DonationProcess from "./DonationProcess";
-import Header from "./Header";
 import VolunteerRoles from "./VolunteerRoles";
 
-const Home = () => {
+const Home = (): JSX.Element => {
   const history = useHistory();
 
   return (

@@ -1,25 +1,29 @@
-import { Box, Button, FormControl, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  FormControl,
+  Input,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
+import { HOME_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
+import Header from "../common/Header";
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
 
   const onLogInClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(email, password);
     setAuthenticatedUser(user);
-  };
-
-  const onSignUpClick = () => {
-    history.push(SIGNUP_PAGE);
   };
 
   if (authenticatedUser) {
@@ -27,50 +31,62 @@ const Login = (): React.ReactElement => {
   }
 
   return (
-    <Box textAlign="center">
-      <Text mt="2" textStyle="heading">
-        Login
-      </Text>
-      <FormControl>
+    <>
+      <Header />
+      <Container pl="42px" pr="42px" pt="73px">
+        <Text mt="2" textStyle="heading">
+          Log into account
+        </Text>
+        <FormControl mt="2rem">
+          <Box>
+            <Text textStyle="inputDescription">Email Address</Text>
+            <Input
+              mt="2"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </Box>
+          <Box mt="1rem">
+            <Text textStyle="inputDescription">Password</Text>
+            <Input
+              mt="2"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </Box>
+          <Text mt="1rem" color="gray.300" textStyles="subtitle">
+            Forgot password?
+          </Text>
+          <Box mt="1rem">
+            <Button
+              mt="2"
+              onClick={onLogInClick}
+              backgroundColor="black.100"
+              color="white.100"
+              size="md"
+              w="100%"
+            >
+              Log In
+            </Button>
+          </Box>
+        </FormControl>
         <Box>
-          <Input
-            w="20%"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="username@domain.com"
-          />
+          <Stack display="inline">
+            <Text display="inline-block" color="gray.300" mt="1rem">
+              Dont have an account? &nbsp;
+            </Text>
+            <Text
+              fontWeight="bold"
+              color="gray.300"
+              display="inline-block"
+              textDecorationLine="underline"
+            >
+              <Link to="/signup"> Sign up now </Link>
+            </Text>
+          </Stack>
         </Box>
-        <Box>
-          <Input
-            w="20%"
-            mt="2"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="password"
-          />
-        </Box>
-        <Box>
-          <Button
-            m="2"
-            onClick={onLogInClick}
-            colorScheme="blackAlpha"
-            variant="solid"
-          >
-            Log In
-          </Button>
-        </Box>
-      </FormControl>
-      <Box>
-        <Button
-          mt="2"
-          colorScheme="blackAlpha"
-          variant="solid"
-          onClick={onSignUpClick}
-        >
-          Sign Up
-        </Button>
-      </Box>
-    </Box>
+      </Container>
+    </>
   );
 };
 

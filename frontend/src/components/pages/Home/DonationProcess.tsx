@@ -26,7 +26,7 @@ const DonationStep = ({
   );
 };
 
-const DonationProcess = () => {
+const DonationProcess = (): JSX.Element => {
   return (
     <Container mt="57px">
       <Text color="gray.200" textStyle="subHeading" mb="1rem">
