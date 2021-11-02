@@ -1,7 +1,12 @@
 import nodemailer, { Transporter } from "nodemailer";
+import cron from "node-cron";
+import moment from "moment";
 import IEmailService from "../interfaces/emailService";
 import { NodemailerConfig } from "../../types";
 import logger from "../../utilities/logger";
+import Schedule from "../../models/scheduling.model";
+import User from "../../models/user.model";
+import createReminderEmailContent from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
@@ -17,6 +22,24 @@ class EmailService implements IEmailService {
     } else {
       this.sender = nodemailerConfig.auth.user;
     }
+  }
+
+  async checkReminders(): Promise<void> {
+    cron.schedule('0 0 0 * *', async () => {
+      const schedules: Array<Schedule> = await Schedule.find({
+        where: { start_time: { lte: moment().add(1, 'days').toDate() } }
+      })
+      
+      schedules.forEach(async (schedule: Schedule) => {
+        const user: User = await User.findByPk(Number(schedule.donor_id));
+        
+        this.sendEmail(
+          user.email,
+          "Test subject",
+          createReminderEmailContent(schedule, user)
+        );
+      })
+    })
   }
 
   async sendEmail(
