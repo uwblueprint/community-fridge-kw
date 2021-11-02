@@ -14,13 +14,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
-const MenuIcon = (): JSX.Element => (
-  <Icon viewBox="0 0 24 24">
-    <path d="M3 12H21" stroke="#111111" strokeWidth="2" strokeLinecap="round" />
-    <path d="M3 6H21" stroke="#111111" strokeWidth="2" strokeLinecap="round" />
-    <path d="M3 18H21" stroke="#111111" strokeWidth="2" strokeLinecap="round" />
-  </Icon>
-);
+import { MenuIcon } from "./icons";
 
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,7 +39,7 @@ const Header = (): JSX.Element => {
       <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader textStyles="body">Community Fridge</DrawerHeader>
+          <DrawerHeader textStyle="body">Community Fridge</DrawerHeader>
           <DrawerBody>
             <Stack spacing="1rem">
               <Text textStyle="subHeading">Schedule Dropoff</Text>

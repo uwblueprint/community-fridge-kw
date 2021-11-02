@@ -54,7 +54,7 @@ const Login = (): React.ReactElement => {
               onChange={(event) => setPassword(event.target.value)}
             />
           </Box>
-          <Text mt="1rem" color="gray.300" textStyles="subtitle">
+          <Text mt="1rem" color="gray.300" textStyle="subtitle">
             Forgot password?
           </Text>
           <Box mt="1rem">

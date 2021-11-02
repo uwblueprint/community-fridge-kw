@@ -10,8 +10,8 @@ const customTheme = extendTheme({
     },
     subHeading: {
       fontFamily: "Inter, sans-serif",
-      fontWeight: "Bold",
-      fontSize: "14px",
+      fontWeight: 700,
+      fontSize: "15px",
       lineHeight: "18px",
     },
     body: {
@@ -28,12 +28,17 @@ const customTheme = extendTheme({
       fontFamily: "Inter, sans-serif",
       fontSize: "15px",
       lineHeight: "18px",
-      fontWeight: "Medium",
+      fontWeight: 500,
     },
     subtitle: {
       fontFamily: "Inter, sans-serif",
       fontWeight: 500,
       fontSize: " 15px",
+      lineHeight: "18px",
+    },
+    secondarySubheading: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
       lineHeight: "18px",
     },
   },
@@ -48,6 +53,12 @@ const customTheme = extendTheme({
       100: "#C4C4C4",
       200: "#3F4647",
       300: "#757575",
+    },
+    red: {
+      100: "#DF7676",
+    },
+    green: {
+      100: "#48BB78",
     },
   },
   breakpoints: {
