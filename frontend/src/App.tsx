@@ -51,6 +51,7 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
+                <Route exact path={Routes.HOME_PAGE} component={Default} />
                 <Route
                   exact
                   path={Routes.VERIFICATION_PAGE}
