@@ -1,3 +1,5 @@
+# Configurations for containers in Github Actions ci
+
 version: "3.7"
 
 services:
@@ -5,37 +7,31 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     ports:
       - 3000:3000
     environment:
       - CHOKIDAR_USEPOLLING=true
-    env_file:
-      - ./frontend/.env
   ts-backend:
-    container-name: backend
     build:
       context: ./backend/typescript
       dockerfile: Dockerfile
-    volumes:
-      - ./backend/typescript:/app
-      - /app/node_modules
     ports:
       - 5000:5000
     dns:
       - 8.8.8.8
     depends_on:
-      - db
       - db-test
-    env_file:
-      - ./.env
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_TEST_HOST
   db-test:
     image: postgres:12-alpine
     ports:
       - 5430:5432
-    volumes:
-      - postgres_data_test:/var/lib/postgresql/data/
-    env_file:
-      - ./.env
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_TEST_HOST
