@@ -56,7 +56,6 @@ const AccountDetails = ({
   } = formValues;
   const [showPassword, setShowPassword] = useState(false);
 
-  console.log("render account details!");
   const onSignupClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
