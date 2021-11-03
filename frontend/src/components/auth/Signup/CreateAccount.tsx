@@ -8,21 +8,23 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
+import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import { LANDING_PAGE } from "../../../constants/Routes";
 import Header from "../../common/Header";
 import { CloseIcon } from "../../common/icons";
 import { MandatoryInputDescription } from "./components";
+import { SignUpFormProps } from "./types";
 
 const CreateAccount = ({
   formData,
   setForm,
   navigation,
 }: {
-  navigation: any;
-  formData: any;
-  setForm: any;
+  navigation: NavigationProps;
+  formData: SignUpFormProps;
+  setForm: SetForm;
 }) => {
   const { next } = navigation;
   const history = useHistory();
@@ -103,10 +105,7 @@ const CreateAccount = ({
               color="white.100"
               size="md"
               w="100%"
-              onClick={() => {
-                console.log("hay");
-                next();
-              }}
+              onClick={next}
             >
               Next
             </Button>

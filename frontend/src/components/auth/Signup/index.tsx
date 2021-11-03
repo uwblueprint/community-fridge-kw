@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, useStep } from "react-hooks-helper";
+import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
 import AccountDetails from "./AccountDetails";
 import CreateAccount from "./CreateAccount";
@@ -12,8 +12,8 @@ const steps = [
 ];
 
 interface UseStepType {
-  step: any;
-  navigation: any;
+  step: number | Step | any;
+  navigation: NavigationProps | any;
 }
 
 const Signup = () => {
