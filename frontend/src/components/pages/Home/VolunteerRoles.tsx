@@ -1,4 +1,3 @@
-// import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Box, Button, Container, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 
@@ -12,7 +11,6 @@ const VolunteerRoleStep = ({
 }: VolunteerRoleStepProps): JSX.Element => {
   return (
     <Flex paddingBottom="1.5rem">
-      {/* <ArrowForwardIcon flex="1" /> */}
       <Box flex="10">
         <Text color="white.100" textStyle="subHeading">
           {title}
