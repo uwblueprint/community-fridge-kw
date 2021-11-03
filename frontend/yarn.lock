@@ -2728,6 +2728,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-hooks-helper@^1.6.4":
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/@types/react-hooks-helper/-/react-hooks-helper-1.6.4.tgz#0cacb40de7ab611f22a84fe74e9ce5a072140daa"
+  integrity sha512-vom1gfhYMKnsC38rqgKfk8YfnT9vZt331BAIQAKR/1YNuqniz321qeFl1LS5KNbUPrPAYcSjgH9lEYtLr4Pn/Q==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-jsonschema-form@^1.7.4":
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/@types/react-jsonschema-form/-/react-jsonschema-form-1.7.4.tgz#b9dded80f830bce11a623107633b13964a143cca"
@@ -10860,6 +10867,11 @@ react-google-login@^5.2.2:
   dependencies:
     "@types/react" "*"
     prop-types "^15.6.0"
+
+react-hooks-helper@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/react-hooks-helper/-/react-hooks-helper-1.6.0.tgz#d4105f8745471600b38dc450260d513553c883b1"
+  integrity sha512-DlyWQ99tgwyDdJfTihCXT6AftYymxhA2LS60vBCTOpclmjPxqDwDTLjVK0kbIc3XsgJvxkanW8TwHE0jrIB8hA==
 
 "react-is@^16.12.0 || ^17.0.0", react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"

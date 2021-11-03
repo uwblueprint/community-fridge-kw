@@ -1,15 +1,20 @@
 import { Box, Container, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
+import { LANDING_PAGE } from "../../constants/Routes";
 import { CloseIcon } from "../common/icons";
 
 const VerificationPage = () => {
+  const history = useHistory();
+
   return (
     <>
       <IconButton
         aria-label="close page"
         float="right"
         backgroundColor="transparent"
+        onClick={() => history.push(LANDING_PAGE)}
       >
         <CloseIcon color="#111111" />
       </IconButton>
