@@ -11,6 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useContext, useReducer, useState } from "react";
+import { NavigationProps, SetForm } from "react-hooks-helper";
 import { Redirect, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
@@ -32,15 +33,16 @@ import {
   checkLength,
 } from "../utilities";
 import { MandatoryInputDescription, PasswordRequirement } from "./components";
+import { SignUpFormProps } from "./types";
 
 const AccountDetails = ({
   formValues,
   setForm,
   navigation,
 }: {
-  navigation: any;
-  formValues: any;
-  setForm: any;
+  navigation: NavigationProps;
+  formValues: SignUpFormProps;
+  setForm: SetForm;
 }) => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
