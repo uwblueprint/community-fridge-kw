@@ -48,7 +48,6 @@ class VolunteerService implements IVolunteerService {
       if (!user) {
         throw new Error(`userID ${volunteer.user_id} not found.`);
       }
-      // firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
     } catch (error: any) {
       Logger.error(`Failed to get volunteer. Reason = ${error.message}`);
       throw error;
