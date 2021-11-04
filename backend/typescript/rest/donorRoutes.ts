@@ -1,5 +1,5 @@
 import { Router } from "express";
-import donorDtoValidator from "../middlewares/validators/donorValidator"
+import donorDtoValidator from "../middlewares/validators/donorValidator";
 import DonorService from "../services/implementations/donorService";
 import IDonorService from "../services/interfaces/donorService";
 import { UserDonorDTO } from "../types";
