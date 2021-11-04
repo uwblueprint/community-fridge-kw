@@ -15,12 +15,14 @@ const testUsersDb = [
     last_name: "User",
     auth_id: "test id",
     role: "Donor",
+    email: "test@email.com",
   },
   {
     first_name: "Test",
     last_name: "User 2",
     auth_id: "test id 2",
     role: "Donor",
+    email: "test2@email.com",
   },
 ];
 
@@ -28,10 +30,12 @@ const testDonorsDb = [
   {
     user_id: 1,
     donor_type: "LocalBusiness",
+    business_name: "Test Name 1",
   },
   {
     user_id: 2,
     donor_type: "IndividualDonor",
+    business_name: "Test Name 2",
   },
 ];
 
