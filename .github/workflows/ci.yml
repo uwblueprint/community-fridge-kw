@@ -19,6 +19,7 @@ jobs:
   ci:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    environment: env
     env:
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
@@ -53,21 +54,15 @@ jobs:
       - name: Check running containers
         run: docker ps -a
 
-      - name: Check backend logs
-        run: docker logs community-fridge-kw_ts-backend_1
-        
-      - name: Check test db logs
-        run: docker logs community-fridge-kw_db-test_1
-
       # Linting check
       - name: Run lint for frontend
         working-directory: ./frontend
         run: yarn lint
-        
+
       - name: Run lint for backend
         working-directory: ./backend/typescript
         run: yarn lint
-              
+
       # Run tests
       - name: Run tests for frontend
         working-directory: ./frontend
