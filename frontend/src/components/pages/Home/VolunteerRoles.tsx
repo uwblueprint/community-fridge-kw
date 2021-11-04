@@ -33,10 +33,10 @@ const VolunteerRoles = () => (
     pb="73px"
   >
     <Text color="white.100" textStyle="subHeading" mb="1rem">
-      For Donors
+      For Volunteers
     </Text>
     <Text mb="1.5rem" color="white.100" textStyle="heading">
-      THE DONATION PROCESS
+      VOLUNTEER ROLES
     </Text>
     <VolunteerRoleStep
       title="Assist with a dropoff"

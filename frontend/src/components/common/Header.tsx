@@ -8,12 +8,15 @@ import {
   Flex,
   Icon,
   IconButton,
+  Link,
   Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
+import { Link as ReactLink } from "react-router-dom";
 
+import { LOGIN_PAGE } from "../../constants/Routes";
 import { MenuIcon } from "./icons";
 
 const Header = (): JSX.Element => {
@@ -44,7 +47,11 @@ const Header = (): JSX.Element => {
             <Stack spacing="1rem">
               <Text textStyle="subHeading">Schedule Dropoff</Text>
               <Text textStyle="subHeading">Contact Admin</Text>
-              <Text textStyle="subHeading">Sign In</Text>
+              <Text textStyle="subHeading">
+                <Link as={ReactLink} to={LOGIN_PAGE}>
+                  Sign In
+                </Link>
+              </Text>
             </Stack>
           </DrawerBody>
         </DrawerContent>

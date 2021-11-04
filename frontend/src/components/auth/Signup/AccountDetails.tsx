@@ -66,8 +66,12 @@ const AccountDetails = ({
       phoneNumber,
       password,
     );
+    if (!user) {
+      return alert("Signup failed");
+    }
     setAuthenticatedUser(user);
-    history.push(VERIFICATION_PAGE);
+
+    return history.push(VERIFICATION_PAGE);
   };
 
   const [state, dispatch] = useReducer(

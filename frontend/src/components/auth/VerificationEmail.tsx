@@ -5,7 +5,13 @@ import { useHistory } from "react-router-dom";
 import { LANDING_PAGE } from "../../constants/Routes";
 import { CloseIcon } from "../common/icons";
 
-const VerificationPage = () => {
+interface VerificationPageProps {
+  email: string;
+}
+
+const VerificationPage = ({
+  email = "johndoe@gmail.com",
+}: VerificationPageProps) => {
   const history = useHistory();
 
   return (
@@ -29,8 +35,8 @@ const VerificationPage = () => {
           textStyle="secondarySubheading"
           color="gray.300"
         >
-          We sent a verfication email to john.doe@gmail.com. Please check your
-          email to begin scheduling your first dropoff!
+          We sent a verfication email to {email}. Please check your email to
+          begin scheduling your first dropoff!
         </Text>
       </Container>
     </>
