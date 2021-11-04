@@ -33,7 +33,6 @@ class VolunteerService implements IVolunteerService {
   async getVolunteerByID(volunteerId: string): Promise<UserVolunteerDTO> {
     let volunteer: Volunteer | null;
     let user: User | null;
-    let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
       volunteer = await Volunteer.findOne({
@@ -49,7 +48,7 @@ class VolunteerService implements IVolunteerService {
       if (!user) {
         throw new Error(`userID ${volunteer.user_id} not found.`);
       }
-      firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
+      // firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
     } catch (error: any) {
       Logger.error(`Failed to get volunteer. Reason = ${error.message}`);
       throw error;
@@ -59,7 +58,7 @@ class VolunteerService implements IVolunteerService {
       id: String(volunteer.id),
       firstName: user.first_name,
       lastName: user.last_name,
-      email: firebaseUser.email ?? "",
+      email: user.email,
       role: user.role,
       phoneNumber: user.phone_number,
       userId: String(volunteer.user_id),
@@ -68,7 +67,6 @@ class VolunteerService implements IVolunteerService {
 
   async getVolunteers(): Promise<Array<UserVolunteerDTO>> {
     let userVolunteerDTOs: Array<UserVolunteerDTO> = [];
-    // let firebaseUser: firebaseAdmin.auth.UserRecord;
 
     try {
       const volunteers: Array<Volunteer> = await Volunteer.findAll({
@@ -83,12 +81,11 @@ class VolunteerService implements IVolunteerService {
             throw new Error(`userId ${volunteer.user_id} not found.`);
           }
 
-          // firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
           return {
             id: String(volunteer.id),
             firstName: user.first_name,
             lastName: user.last_name,
-            email: "", // replace with user. email
+            email: user.email,
             role: user.role,
             phoneNumber: user.phone_number,
             userId: String(volunteer.user_id),
