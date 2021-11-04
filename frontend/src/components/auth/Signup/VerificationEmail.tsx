@@ -2,8 +2,8 @@ import { Box, Container, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import { LANDING_PAGE } from "../../constants/Routes";
-import { CloseIcon } from "../common/icons";
+import { LANDING_PAGE } from "../../../constants/Routes";
+import { CloseIcon } from "../../common/icons";
 
 interface VerificationPageProps {
   email: string;

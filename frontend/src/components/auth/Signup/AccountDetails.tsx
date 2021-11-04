@@ -21,10 +21,13 @@ import {
   VERIFICATION_PAGE,
 } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import {
+  initialState,
+  passwordVerificationReducer,
+} from "../../../reducers/PasswordVerificationReducer";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import Header from "../../common/Header";
 import { BackArrow, CloseIcon } from "../../common/icons";
-import { initialState, passwordVerificationReducer } from "../reducer";
 import {
   checkForLowerCase,
   checkForNumbers,
@@ -32,7 +35,8 @@ import {
   checkForUpperCase,
   checkLength,
 } from "../utilities";
-import { MandatoryInputDescription, PasswordRequirement } from "./components";
+import MandatoryInputDescription from "./components/MandatoryInputDescription";
+import PasswordRequirement from "./components/PasswordRequirement";
 import { SignUpFormProps } from "./types";
 
 const AccountDetails = ({

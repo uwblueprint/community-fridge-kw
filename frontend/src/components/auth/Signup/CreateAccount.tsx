@@ -11,10 +11,10 @@ import React from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
-import { LANDING_PAGE } from "../../../constants/Routes";
+import { LOGIN_PAGE } from "../../../constants/Routes";
 import Header from "../../common/Header";
 import { CloseIcon } from "../../common/icons";
-import { MandatoryInputDescription } from "./components";
+import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
 const CreateAccount = ({
@@ -37,7 +37,7 @@ const CreateAccount = ({
         <IconButton
           float="right"
           aria-label="close sign up"
-          onClick={() => history.push(LANDING_PAGE)}
+          onClick={() => history.push(LOGIN_PAGE)}
           backgroundColor="transparent"
         >
           <CloseIcon color="#111111" />
