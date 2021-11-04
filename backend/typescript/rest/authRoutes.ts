@@ -10,16 +10,19 @@ import AuthService from "../services/implementations/authService";
 import DonorService from "../services/implementations/donorService";
 import EmailService from "../services/implementations/emailService";
 import UserService from "../services/implementations/userService";
+import VolunteerService from "../services/implementations/volunteerService";
 import IAuthService from "../services/interfaces/authService";
 import IDonorService from "../services/interfaces/donorService";
 import IEmailService from "../services/interfaces/emailService";
 import IUserService from "../services/interfaces/userService";
-import { UserDTO } from "../types";
+import IVolunteerService from "../services/interfaces/volunteerService";
+import { Role, UserDTO } from "../types";
 
 const authRouter: Router = Router();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
+const volunteerService: IVolunteerService = new VolunteerService();
 const donorService: IDonorService = new DonorService();
 
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
@@ -57,6 +60,11 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       password: req.body.password,
     });
 
+    if (req.body.role === Role.VOLUNTEER) {
+      await volunteerService.createVolunteer({
+        userId: user.id,
+      });
+    }
     if (req.body.role === "Donor") {
       await donorService.createDonor({
         userId: user.id,

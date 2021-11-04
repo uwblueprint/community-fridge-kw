@@ -12,11 +12,11 @@ import UserService from "../services/implementations/userService";
 import IAuthService from "../services/interfaces/authService";
 import IEmailService from "../services/interfaces/emailService";
 import IUserService from "../services/interfaces/userService";
-import { UserDTO } from "../types";
+import { UserDTO, Role } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const userRouter: Router = Router();
-userRouter.use(isAuthorizedByRole(new Set(["Admin"])));
+userRouter.use(isAuthorizedByRole(new Set([Role.ADMIN])));
 
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);

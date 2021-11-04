@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import { nextTick } from "process";
 import { getApiValidationError, validatePrimitive } from "./util";
-
+import { Role } from "../../types";
 /* eslint-disable-next-line import/prefer-default-export */
 export const loginRequestValidator = async (
   req: Request,
@@ -43,6 +44,10 @@ export const registerRequestValidator = async (
     return res.status(400).send(getApiValidationError("phoneNumber", "string"));
   }
 
+  if (req.body.role === Role.VOLUNTEER) {
+    return next();
+  }
+
   if (req.body.role === "Donor") {
     if (
       req.body.facebookLink &&
@@ -69,6 +74,5 @@ export const registerRequestValidator = async (
         .send(getApiValidationError("businessName", "string"));
     }
   }
-
   return next();
 };

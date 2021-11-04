@@ -18,5 +18,5 @@ export default class Volunteer extends Model {
   user_id!: number;
 
   @BelongsTo(() => User)
-  user!: UserDTO;
+  user!: User;
 }

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Role } from "../../types";
 import { getApiValidationError, validatePrimitive } from "./util";
 
 export const createUserDtoValidator = async (

@@ -10,6 +10,7 @@ import authRouter from "./rest/authRoutes";
 import donorRouter from "./rest/donorRoutes";
 import entityRouter from "./rest/entityRoutes";
 import userRouter from "./rest/userRoutes";
+import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
 
 const CORS_ALLOW_LIST = ["http://localhost:3000"];
@@ -31,6 +32,7 @@ app.use("/auth", authRouter);
 app.use("/entities", entityRouter);
 app.use("/donors", donorRouter);
 app.use("/users", userRouter);
+app.use("/volunteers", volunteerRouter);
 app.use("/scheduling", schedulingRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

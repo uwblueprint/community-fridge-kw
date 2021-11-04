@@ -1,9 +1,15 @@
+export enum Role {
+  USER = "User",
+  ADMIN = "Admin",
+  VOLUNTEER = "Volunteer",
+  DONOR = "Donor",
+}
+
 export enum Status {
   APPROVED = "Approved",
   PENDING = "Pending",
   REJECTED = "Rejected",
 }
-export type Role = "User" | "Admin" | "Volunteer" | "Donor";
 
 export type Token = {
   accessToken: string;
@@ -44,6 +50,9 @@ export type RegisterUserDTO = Omit<CreateUserDTO, "role">;
 
 export type AuthDTO = Token & UserDTO;
 
+export type UserVolunteerDTO = UserDTO & VolunteerDTO;
+
+export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
 export type SchedulingDTO = {
   id: string;
   donorId: string;

@@ -9,6 +9,7 @@ import { testSql } from "../../../testUtils/testDb";
 const testUsers = [
   {
     firstName: "Peter",
+    email: "peter@test.com",
     lastName: "Pan",
     authId: "123",
     role: "Admin",
@@ -16,9 +17,29 @@ const testUsers = [
   },
   {
     firstName: "Wendy",
+    email: "wendy@test.com",
     lastName: "Darling",
     authId: "321",
     role: "User",
+    phoneNumber: "111-111-1111",
+  },
+];
+
+const expectedUsers = [
+  {
+    email: "peter@test.com",
+    firstName: "Peter",
+    id: 1,
+    lastName: "Pan",
+    role: "Admin",
+    phoneNumber: "111-111-1111",
+  },
+  {
+    email: "wendy@test.com",
+    firstName: "Wendy",
+    id: 2,
+    lastName: "Darling",
+    role: "Volunteer",
     phoneNumber: "111-111-1111",
   },
 ];
@@ -57,7 +78,7 @@ describe.skip("pg userService", () => {
     const res = await userService.getUsers();
 
     res.forEach((user: UserDTO, i) => {
-      expect(user).toContainEqual(testUsers[i]);
+      expect(user).toContainEqual(expectedUsers[i]);
     });
   });
 });
