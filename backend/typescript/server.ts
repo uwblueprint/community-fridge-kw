@@ -44,8 +44,10 @@ firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.applicationDefault(),
 });
 
-const emailService: IEmailService = new EmailService(nodemailerConfig);
-emailService.checkReminders();
+if (process.env.NODE_ENV === "production") {
+  const emailService: IEmailService = new EmailService(nodemailerConfig);
+  emailService.checkReminders();
+}
 
 app.listen({ port: 5000 }, () => {
   /* eslint-disable-next-line no-console */
