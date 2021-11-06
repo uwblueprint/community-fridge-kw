@@ -29,7 +29,11 @@ class EmailService implements IEmailService {
   async checkReminders(): Promise<void> {
     cron.schedule("0 0 0 * *", async () => {
       const schedules: Array<Schedule> = await Schedule.findAll({
-        where: { start_time: { lte: dayjs().add(1, "days").toDate() } },// TODO: this condition needs to be tested
+        where: {
+          start_time: {
+            lte: dayjs().add(1, "days").toDate(),
+          },
+        },// TODO: this condition needs to be tested
       });
 
       schedules.forEach(async (schedule: Schedule) => {
