@@ -7,7 +7,9 @@ import Schedule from "../../models/scheduling.model";
 import User from "../../models/user.model";
 import createReminderEmailContent from "../../utilities/emailUtils";
 
+// eslint-disable-next-line
 const cron = require("node-cron");
+
 const Logger = logger(__filename);
 
 class EmailService implements IEmailService {
@@ -27,14 +29,14 @@ class EmailService implements IEmailService {
   async checkReminders(): Promise<void> {
     cron.schedule("0 0 0 * *", async () => {
       const schedules: Array<Schedule> = await Schedule.findAll({
-        where: { start_time: { lte: dayjs().add(1, "days").toDate() } } // TODO: this condition needs to be tested
+        where: { start_time: { lte: dayjs().add(1, "days").toDate() } },// TODO: this condition needs to be tested
       });
 
       schedules.forEach(async (schedule: Schedule) => {
         const user: User | null = await User.findByPk(
-          Number(schedule.donor_id)
+          Number(schedule.donor_id),
         );
-        
+
         if (!user) {
           throw new Error(`donorId ${schedule.donor_id} not found.`);
         }
@@ -45,7 +47,6 @@ class EmailService implements IEmailService {
             "Test subject", // TODO: test subject needs to be changed
             createReminderEmailContent(schedule, user),
           );
-
         } catch (error) {
           Logger.error(
             `Failed to send reminder email. Reason = ${error.message}`,
