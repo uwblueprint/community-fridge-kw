@@ -8,6 +8,8 @@ import VerificationPage from "./components/auth/Signup/VerificationEmail";
 import Default from "./components/pages/Default";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
+import Scheduling from "./components/pages/Scheduling";
+import ThankYou from "./components/pages/Scheduling/ThankYou";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
@@ -56,6 +58,16 @@ const App = (): React.ReactElement => {
                   exact
                   path={Routes.VERIFICATION_PAGE}
                   component={VerificationPage}
+                />
+                <Route
+                  exact
+                  path={Routes.SCHEDULING_PAGE}
+                  component={Scheduling}
+                />
+                <Route
+                  exact
+                  path={Routes.SCHEDULE_THANKYOU_PAGE}
+                  component={ThankYou}
                 />
                 <Route exact path="*" component={NotFound} />
               </Switch>
