@@ -6,12 +6,15 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 
 import sequelize from "./models";
+import nodemailerConfig from "./nodemailer.config";
 import authRouter from "./rest/authRoutes";
 import donorRouter from "./rest/donorRoutes";
 import entityRouter from "./rest/entityRoutes";
 import userRouter from "./rest/userRoutes";
 import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
+import EmailService from "./services/implementations/emailService";
+import IEmailService from "./services/interfaces/emailService";
 
 const CORS_ALLOW_LIST = ["http://localhost:3000"];
 
@@ -42,6 +45,11 @@ sequelize.sync({ force: eraseDatabaseOnSync });
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.applicationDefault(),
 });
+
+if (process.env.NODE_ENV === "production") {
+  const emailService: IEmailService = new EmailService(nodemailerConfig);
+  emailService.checkReminders();
+}
 
 app.listen({ port: 5000 }, () => {
   /* eslint-disable-next-line no-console */
