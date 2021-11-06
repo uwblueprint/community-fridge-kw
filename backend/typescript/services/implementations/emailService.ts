@@ -33,7 +33,7 @@ class EmailService implements IEmailService {
           start_time: {
             lte: dayjs().add(1, "days").toDate(),
           },
-        },// TODO: this condition needs to be tested
+        },
       });
 
       schedules.forEach(async (schedule: Schedule) => {
