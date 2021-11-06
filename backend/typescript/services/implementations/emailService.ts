@@ -1,5 +1,5 @@
 import nodemailer, { Transporter } from "nodemailer";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import IEmailService from "../interfaces/emailService";
 import { NodemailerConfig } from "../../types";
 import logger from "../../utilities/logger";
@@ -9,7 +9,6 @@ import createReminderEmailContent from "../../utilities/emailUtils";
 
 const cron = require("node-cron");
 const Logger = logger(__filename);
-
 
 class EmailService implements IEmailService {
   transporter: Transporter;
@@ -26,9 +25,9 @@ class EmailService implements IEmailService {
   }
 
   async checkReminders(): Promise<void> {
-    cron.schedule('0 0 0 * *', async () => {
+    cron.schedule("0 0 0 * *", async () => {
       const schedules: Array<Schedule> = await Schedule.findAll({
-        where: { start_time: { lte: dayjs().add(1, 'days').toDate() } } // TODO: this condition needs to be tested
+        where: { start_time: { lte: dayjs().add(1, "days").toDate() } } // TODO: this condition needs to be tested
       });
       
       schedules.forEach(async (schedule: Schedule) => {
@@ -39,13 +38,20 @@ class EmailService implements IEmailService {
         }
         
         try {
-          this.sendEmail(user.email, "Test subject", createReminderEmailContent(schedule, user)); // TODO: test subject needs to be changed
+          this.sendEmail(
+            user.email,
+            "Test subject", // TODO: test subject needs to be changed
+            createReminderEmailContent(schedule, user)
+          );
+          
         } catch (error) {
-          Logger.error(`Failed to send reminder email. Reason = ${error.message}`);
+          Logger.error(
+            `Failed to send reminder email. Reason = ${error.message}`
+          );
           throw error;
         }
-      })
-    })
+      });
+    });
   }
 
   async sendEmail(

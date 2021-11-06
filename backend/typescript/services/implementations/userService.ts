@@ -117,9 +117,9 @@ class UserService implements IUserService {
 
           try {
             firebaseUser = await firebaseAdmin.auth().getUser(user.auth_id);
-          } catch (error) {
+          } catch (error: any) {
             Logger.error(
-              `user with authId ${user.auth_id} could not be fetched from Firebase`,
+              `user with authId ${user.auth_id} could not be fetched from Firebase`
             );
             throw error;
           }
@@ -132,7 +132,7 @@ class UserService implements IUserService {
             role: user.role,
             phoneNumber: user.phone_number,
           };
-        }),
+        })
       );
     } catch (error: any) {
       Logger.error(`Failed to get users. Reason = ${error.message}`);
@@ -145,7 +145,7 @@ class UserService implements IUserService {
   async createUser(
     user: CreateUserDTO,
     authId?: string,
-    signUpMethod = "PASSWORD",
+    signUpMethod = "PASSWORD"
   ): Promise<UserDTO> {
     let newUser: User;
     let firebaseUser: firebaseAdmin.auth.UserRecord;
@@ -213,7 +213,7 @@ class UserService implements IUserService {
         {
           where: { id: userId },
           returning: true,
-        },
+        }
       );
 
       // check number of rows affected
@@ -242,7 +242,7 @@ class UserService implements IUserService {
             },
             {
               where: { id: userId },
-            },
+            }
           );
         } catch (postgresError: any) {
           const errorMessage = [
@@ -338,7 +338,7 @@ class UserService implements IUserService {
 
       if (numDestroyed <= 0) {
         throw new Error(
-          `userid ${firebaseUser.uid} was not deleted in Postgres.`,
+          `userid ${firebaseUser.uid} was not deleted in Postgres.`
         );
       }
 
