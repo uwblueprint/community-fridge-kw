@@ -29,24 +29,26 @@ class EmailService implements IEmailService {
       const schedules: Array<Schedule> = await Schedule.findAll({
         where: { start_time: { lte: dayjs().add(1, "days").toDate() } } // TODO: this condition needs to be tested
       });
-      
+
       schedules.forEach(async (schedule: Schedule) => {
-        const user: User | null = await User.findByPk(Number(schedule.donor_id));
+        const user: User | null = await User.findByPk(
+          Number(schedule.donor_id)
+        );
         
         if (!user) {
-          throw new Error(`donorId ${schedule.donor_id} not found.`)
+          throw new Error(`donorId ${schedule.donor_id} not found.`);
         }
-        
+
         try {
           this.sendEmail(
             user.email,
             "Test subject", // TODO: test subject needs to be changed
-            createReminderEmailContent(schedule, user)
+            createReminderEmailContent(schedule, user),
           );
-          
+
         } catch (error) {
           Logger.error(
-            `Failed to send reminder email. Reason = ${error.message}`
+            `Failed to send reminder email. Reason = ${error.message}`,
           );
           throw error;
         }
