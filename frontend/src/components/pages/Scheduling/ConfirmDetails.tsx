@@ -18,9 +18,7 @@ const ConfirmDetails = ({
   const { next } = navigation;
   const history = useHistory();
 
-  const onSubmitClick = async () => {
-    return history.push(SCHEDULE_THANKYOU_PAGE);
-  };
+  const onSubmitClick = async () =>  history.push(SCHEDULE_THANKYOU_PAGE);
 
   //   const { insert form fields for this page here } = formData;
 
