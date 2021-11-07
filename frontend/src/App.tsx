@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
+import AdminCalendar from "./components/pages/AdminCalendar";
 import Default from "./components/pages/Default";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
@@ -51,6 +52,11 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
+                <Route
+                  exact
+                  path={Routes.ADMIN_CALENDAR}
+                  component={AdminCalendar}
+                />
                 <Route exact path={Routes.HOME_PAGE} component={Default} />
                 <Route
                   exact
