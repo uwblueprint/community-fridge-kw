@@ -15,10 +15,10 @@ const ConfirmDetails = ({
   formValues: SchedulingFormProps;
   setForm: SetForm;
 }) => {
-  const { next } = navigation;
+  const { previous, next } = navigation;
   const history = useHistory();
 
-  const onSubmitClick = async () =>  history.push(SCHEDULE_THANKYOU_PAGE);
+  const onSubmitClick = async () => history.push(SCHEDULE_THANKYOU_PAGE);
 
   //   const { insert form fields for this page here } = formData;
 
@@ -26,16 +26,8 @@ const ConfirmDetails = ({
     // Insert confirm Donation detail page here
     <Container>
       This is Confirm Donation Details page
-      <Button
-        mt="2"
-        backgroundColor="black.100"
-        color="white.100"
-        size="md"
-        w="100%"
-        onClick={onSubmitClick}
-      >
-        Submit
-      </Button>
+      <Button onClick={previous}>Back</Button>
+      <Button onClick={onSubmitClick}>Submit</Button>
     </Container>
   );
 };

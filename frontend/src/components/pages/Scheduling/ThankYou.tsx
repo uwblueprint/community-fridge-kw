@@ -7,12 +7,7 @@ const ThankYou = () => {
     <Container>
       This is thank you page
       <Button
-        mt="2"
-        backgroundColor="black.100"
-        color="white.100"
-        size="md"
-        w="100%"
-        // onClick={next}
+      // onClick={???}
       >
         View Dashboard
       </Button>

@@ -3,8 +3,8 @@ export interface SchedulingFormProps {
   quantity: number;
   size: string;
   pickupLocation: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: string;
+  endTime: string;
   status: string;
   volunteersNeeded: number;
   notes: string;

@@ -14,7 +14,7 @@ const VolunteerInformation = ({
   formValues: SchedulingFormProps;
   setForm: SetForm;
 }) => {
-  const { next } = navigation;
+  const { previous, next } = navigation;
   const history = useHistory();
   //   const { insert form fields for this page here } = formData;
 
@@ -22,16 +22,8 @@ const VolunteerInformation = ({
     // Insert Volunteer Information page here
     <Container>
       This is Volunteer Information page
-      <Button
-        mt="2"
-        backgroundColor="black.100"
-        color="white.100"
-        size="md"
-        w="100%"
-        onClick={next}
-      >
-        Next
-      </Button>
+      <Button onClick={previous}>Back</Button>
+      <Button onClick={next}>Next</Button>
     </Container>
   );
 };

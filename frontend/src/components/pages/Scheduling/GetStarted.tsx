@@ -21,16 +21,7 @@ const GetStarted = ({
     // Insert Get Started page here
     <Container>
       This is Get Started page
-      <Button
-        mt="2"
-        backgroundColor="black.100"
-        color="white.100"
-        size="md"
-        w="100%"
-        onClick={next}
-      >
-        Get started!
-      </Button>
+      <Button onClick={next}>Get started</Button>
     </Container>
   );
 };
