@@ -31,7 +31,7 @@ interface UseStepType {
 }
 
 const Scheduling = () => {
-  const [formValues, setForm] = useForm({
+  const [schedulingFormValues, setSchedulingForm] = useForm({
     category: "",
     quantity: 0,
     size: "",
@@ -50,40 +50,40 @@ const Scheduling = () => {
     case "get started scheduling":
       return (
         <GetStarted
-          formValues={formValues}
-          setForm={setForm}
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
           navigation={navigation}
         />
       );
     case "date and time":
       return (
         <SelectDateTime
-          formValues={formValues}
-          setForm={setForm}
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
           navigation={navigation}
         />
       );
     case "donation information":
       return (
         <DonationInformation
-          formValues={formValues}
-          setForm={setForm}
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
           navigation={navigation}
         />
       );
     case "volunteer information":
       return (
         <VolunteerInformation
-          formValues={formValues}
-          setForm={setForm}
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
           navigation={navigation}
         />
       );
     case "confirm donation details":
       return (
         <ConfirmDetails
-          formValues={formValues}
-          setForm={setForm}
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
           navigation={navigation}
         />
       );
