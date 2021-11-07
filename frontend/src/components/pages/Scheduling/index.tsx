@@ -35,11 +35,11 @@ const Scheduling = () => {
     category: "",
     quantity: 0,
     size: "",
-    pickup_location: "",
-    start_time: new Date("December 17, 1995 03:24:00"),
-    end_time: new Date("December 17, 1995 03:24:00"),
+    pickupLocation: "",
+    startTime: new Date("December 17, 1995 03:24:00"),
+    endTime: new Date("December 17, 1995 03:24:00"),
     status: "",
-    volunteers_needed: 0,
+    volunteersNeeded: 0,
     notes: "",
   });
 

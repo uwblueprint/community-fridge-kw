@@ -10,4 +10,4 @@ export const VERIFICATION_PAGE = "/verify";
 
 export const SCHEDULING_PAGE = "/schedule";
 
-export const SCHEDULE_THANKYOU_PAGE = "/thankyou";
+export const SCHEDULE_THANKYOU_PAGE = "schedule/confirmation";
