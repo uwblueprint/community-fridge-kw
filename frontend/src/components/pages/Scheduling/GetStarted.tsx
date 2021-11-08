@@ -1,27 +1,22 @@
-import { Button, Container } from "@chakra-ui/react";
+import { Button, Container, Text } from "@chakra-ui/react";
 import React from "react";
-import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
 
-import { SchedulingFormProps } from "./types";
+import { SchedulingStepProps } from "./types";
 
 const GetStarted = ({
   formValues,
   setForm,
   navigation,
-}: {
-  navigation: NavigationProps;
-  formValues: SchedulingFormProps;
-  setForm: SetForm;
-}) => {
+}: SchedulingStepProps) => {
   const { next } = navigation;
-  const history = useHistory();
 
   return (
     // Insert Get Started page here
     <Container>
-      This is Get Started page
-      <Button onClick={next}>Get started</Button>
+      <Text textStyle="mobileHeader2">This is Get Started page</Text>
+      <Button onClick={next} variant="navigation">
+        Get started
+      </Button>
     </Container>
   );
 };

@@ -1,16 +1,12 @@
-import { Button, Container } from "@chakra-ui/react";
+import { Button, Container, Text } from "@chakra-ui/react";
 import React from "react";
 
 const ThankYou = () => {
   return (
     // Insert thank you page here
     <Container>
-      This is thank you page
-      <Button
-      // onClick={???}
-      >
-        View Dashboard
-      </Button>
+      <Text textStyle="mobileHeading2">Thank You Page</Text>
+      <Button variant="navigation">View Dashboard</Button>
     </Container>
   );
 };

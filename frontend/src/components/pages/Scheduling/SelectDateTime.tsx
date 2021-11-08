@@ -1,29 +1,28 @@
-import { Button, Container } from "@chakra-ui/react";
+import { Button, Container, HStack, Text } from "@chakra-ui/react";
 import React from "react";
-import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
 
-import { SchedulingFormProps } from "./types";
+import { SchedulingStepProps } from "./types";
 
 const SelectDateTime = ({
   formValues,
   setForm,
   navigation,
-}: {
-  navigation: NavigationProps;
-  formValues: SchedulingFormProps;
-  setForm: SetForm;
-}) => {
+}: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const history = useHistory();
   //   const { insert form fields for this page here } = formData;
 
   return (
     // Insert Select Date and Time page here
     <Container>
-      This is Date and Time page
-      <Button onClick={previous}>Back</Button>
-      <Button onClick={next}>Next</Button>
+      <Text textStyle="mobileHeader2"> This is Date and Time page </Text>
+      <HStack>
+        <Button onClick={previous} variant="navigation">
+          Back
+        </Button>
+        <Button onClick={next} variant="navigation">
+          Next
+        </Button>
+      </HStack>
     </Container>
   );
 };
