@@ -2,6 +2,7 @@ import { Box, Button, Container, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import { SCHEDULING_PAGE } from "../../../constants/Routes";
 import Header from "../../common/Header";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
@@ -22,7 +23,7 @@ const Home = (): JSX.Element => {
         </Text>
         <Stack ml="-42px" spacing="1rem">
           <Button
-            onClick={() => history.push("/login")}
+            onClick={() => history.push(SCHEDULING_PAGE)}
             backgroundColor="black.100"
             color="white.100"
             size="lg"

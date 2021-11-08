@@ -1,5 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
 
+import Button from "./components/Button";
+
 const customTheme = extendTheme({
   textStyles: {
     heading: {
@@ -41,6 +43,13 @@ const customTheme = extendTheme({
       fontSize: "14px",
       lineHeight: "18px",
     },
+    mobileHeader2: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "24px",
+      lineHeight: "32px",
+      fontWeight: "bold",
+      letterSpacing: "-0.01rem",
+    },
   },
   colors: {
     white: {
@@ -60,11 +69,17 @@ const customTheme = extendTheme({
     green: {
       100: "#48BB78",
     },
+    raddish: {
+      100: "#DA1B97",
+    },
   },
   breakpoints: {
     sm: "320px",
     md: "768px",
     lg: "960px",
+  },
+  components: {
+    Button,
   },
   config: {
     initialColorMode: "light",
