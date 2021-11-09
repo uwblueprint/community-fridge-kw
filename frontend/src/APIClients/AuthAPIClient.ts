@@ -61,11 +61,12 @@ const register = async (
   email: string,
   phoneNumber: string,
   password: string,
+  role: string,
 ): Promise<AuthenticatedUser> => {
   try {
     const { data } = await baseAPIClient.post(
       "/auth/register",
-      { firstName, lastName, email, phoneNumber, password },
+      { firstName, lastName, email, phoneNumber, password, role },
       { withCredentials: true },
     );
     localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(data));
