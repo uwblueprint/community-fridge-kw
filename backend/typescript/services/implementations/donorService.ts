@@ -101,7 +101,6 @@ class DonorService implements IDonorService {
       if (updateResult[0] < 1) {
         throw new Error(`id ${id} not found.`);
       }
-
     } catch (error) {
       Logger.error(`Failed to update donor. Reason = ${error.message}`);
       throw error;
