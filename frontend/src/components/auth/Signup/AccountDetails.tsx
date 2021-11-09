@@ -120,7 +120,7 @@ const AccountDetails = ({
         >
           <CloseIcon color="#111111" />
         </IconButton>
-        <Text mt="67px" textStyle="heading">
+        <Text mt="67px" textStyle="mobileHeader1">
           Account details
         </Text>
         <FormControl mt="2rem">
@@ -160,7 +160,7 @@ const AccountDetails = ({
               </InputRightElement>
             </InputGroup>
 
-            <Text mt="1rem" textStyle="secondarySubheading" color="gray.300">
+            <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
               <Text>Password Requirements: </Text>
               <Stack alignItems="start" spacing="0">
                 <PasswordRequirement
@@ -198,14 +198,7 @@ const AccountDetails = ({
             />
           </Box>
           <Box mt="4rem">
-            <Button
-              mt="2"
-              backgroundColor="black.100"
-              color="white.100"
-              size="md"
-              w="100%"
-              onClick={onSignupClick}
-            >
+            <Button mt="2" variant="authNavigation" onClick={onSignupClick}>
               Next
             </Button>
           </Box>

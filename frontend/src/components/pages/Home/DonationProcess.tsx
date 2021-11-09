@@ -13,14 +13,14 @@ const DonationStep = ({
 }: DonationStepProps): JSX.Element => {
   return (
     <Flex paddingBottom="1.5rem">
-      <Text textStyle="body" flex="1">
+      <Text textStyle="mobileSmall" flex="1" color="poison.100">
         {stepNumber}
       </Text>
       <Box flex="10">
-        <Text color="gray.200" textStyle="subHeading">
+        <Text color="black.100" textStyle="mobileHeader4">
           {title}
         </Text>
-        <Text textStyle="caption">{description}</Text>
+        <Text textStyle="mobileSmall">{description}</Text>
       </Box>
     </Flex>
   );
@@ -29,10 +29,10 @@ const DonationStep = ({
 const DonationProcess = (): JSX.Element => {
   return (
     <Container mt="57px">
-      <Text color="gray.200" textStyle="subHeading" mb="1rem">
+      <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
         For Donors
       </Text>
-      <Text mb="1.5rem" color="black.100" textStyle="heading">
+      <Text mb="1.5rem" color="evergreen.100" textStyle="mobileHeader2">
         THE DONATION PROCESS
       </Text>
       <DonationStep
@@ -50,7 +50,7 @@ const DonationProcess = (): JSX.Element => {
         title="Complete your donation"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut condimentum libero. Cras sodales."
       />
-      <Button width="90%" variant="outline" backgroundColor="white.100">
+      <Button width="100%" variant="navigation">
         Start now
       </Button>
     </Container>
