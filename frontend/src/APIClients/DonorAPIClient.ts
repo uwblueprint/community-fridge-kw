@@ -1,4 +1,5 @@
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
+import { DonorResponse } from "../types/DonorTypes";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 import baseAPIClient from "./BaseAPIClient";
 
@@ -6,20 +7,6 @@ const BEARER_TOKEN = `Bearer ${getLocalStorageObjProperty(
   AUTHENTICATED_USER_KEY,
   "accessToken",
 )}`;
-
-export type DonorResponse = {
-  id: string;
-  businessName: string;
-  email: string;
-  facebookLink?: string;
-  firstName: string;
-  instagramLink?: string;
-  twitterLink?: string;
-  lastName: string;
-  phoneNumber: string;
-  role: string;
-  userId: string;
-};
 
 const getAllDonors = async (): Promise<DonorResponse[]> => {
   try {
