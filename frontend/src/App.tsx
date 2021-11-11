@@ -6,7 +6,6 @@ import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
 import Header from "./components/common/Header";
-import AdminCalendar from "./components/pages/AdminCalendar";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import Default from "./components/pages/Default";
@@ -14,6 +13,7 @@ import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import ThankYou from "./components/pages/Scheduling/ThankYou";
+import ViewDonations from "./components/pages/ViewDonations";
 import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
@@ -61,8 +61,8 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
                 <Route
                   exact
-                  path={Routes.ADMIN_CALENDAR}
-                  component={AdminCalendar}
+                  path={Routes.VIEW_DONATIONS}
+                  component={ViewDonations}
                 />
                 <Route exact path={Routes.HOME_PAGE} component={Default} />
                 <Route

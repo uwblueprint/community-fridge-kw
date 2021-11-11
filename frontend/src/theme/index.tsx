@@ -64,6 +64,25 @@ const customTheme = extendTheme({
       fontWeight: 600,
       lineHeight: "20px",
     },
+    calendarDate: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "20px",
+      lineHeight: "28px",
+    },
+    calendarEventTime: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
+      lineHeight: "16px",
+      color: "black",
+    },
+    calendarEventHeader: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "16px",
+      lineHeight: "19px",
+      color: "black",
+    },
   },
   colors: {
     squash: {

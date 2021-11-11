@@ -1,9 +1,5 @@
-import { HStack, VStack } from "@chakra-ui/react";
-import {
-  format,
-  setDay,
-  startOfWeek,
-} from "date-fns";
+import { HStack, Text, VStack } from "@chakra-ui/react";
+import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 import daysInWeek from "../../constants/DaysInWeek";
@@ -63,11 +59,9 @@ const DayButton = ({ day }: DayButtonProps) => {
   const currentDate = setDay(week, day.day, { locale });
   // Vstack
   return (
-    <div>
-      <p>
-        {day.label} {format(currentDate, "do", { locale })}
-      </p>
-    </div>
+    <Text textStyle="calendarDate">
+      {day.label.substr(0, 3)} {format(currentDate, "do", { locale })}
+    </Text>
   );
 };
 
@@ -91,8 +85,7 @@ export function WeeklyBody<EventItem>({
 
   return (
     <div>
-      <h1>{selectedDay}</h1>
-      <HStack spacing="24px">
+      <HStack spacing="40px" align="stretch">
         {daysToRender.map((day) => (
           <div key={day.day}>
             <VStack>
