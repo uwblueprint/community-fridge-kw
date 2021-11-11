@@ -11,6 +11,20 @@ export enum Status {
   REJECTED = "Rejected",
 }
 
+export const Category = new Set([
+  "Dry packaged goods",
+  "Non-perishables",
+  "Fresh produce",
+  "Bread and baked goods",
+  "Oil, spreads and seasonings",
+  "Tea and coffee",
+  "Frozen meals",
+  "Prepared meals",
+  "Non-alcoholic drinks & juices",
+  "Essential items (masks, hand sanitizer, bags)",
+  "Hygiene products (tampons, pads, soap etc.)",
+]);
+
 export type Token = {
   accessToken: string;
   refreshToken: string;

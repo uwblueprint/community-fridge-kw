@@ -4,7 +4,7 @@ import {
   getApiValidationError,
   validatePrimitive,
   validateDate,
-  validateArray,
+  validateCategories,
 } from "./util";
 
 export const createSchedulingDtoValidator = async (
@@ -15,10 +15,10 @@ export const createSchedulingDtoValidator = async (
   if (!validatePrimitive(req.body.donorId, "integer")) {
     return res.status(400).send(getApiValidationError("donorId", "integer"));
   }
-  if (!validateArray(req.body.categories, "string")) {
+  if (!validateCategories(req.body.categories)) {
     return res
       .status(400)
-      .send(getApiValidationError("categories", "string", true));
+      .send("categories is not an array of accepted category strings");
   }
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
@@ -72,10 +72,10 @@ export const updateSchedulingDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.body.categories && !validateArray(req.body.categories, "string")) {
+  if (req.body.categories && !validateCategories(req.body.categories)) {
     return res
       .status(400)
-      .send(getApiValidationError("categories", "string", true));
+      .send("categories is not an array of accepted category strings");
   }
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));

@@ -1,3 +1,5 @@
+import { Category } from "../../types";
+
 type Type = "string" | "integer" | "boolean" | "Status" | "Date string";
 
 const allowableContentTypes = new Set([
@@ -38,6 +40,12 @@ export const validateArray = (value: any, type: Type): boolean => {
     typeof value === "object" &&
     Array.isArray(value) &&
     value.every((item) => validatePrimitive(item, type))
+  );
+};
+
+export const validateCategories = (value: string[]): boolean => {
+  return (
+    validateArray(value, "string") && value.every((item) => Category.has(item))
   );
 };
 
