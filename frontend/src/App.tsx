@@ -6,6 +6,7 @@ import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
 import Default from "./components/pages/Default";
+import Dropoff from "./components/pages/Dropoff";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
@@ -54,6 +55,7 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
                 <Route exact path={Routes.HOME_PAGE} component={Default} />
+                <Route exact path={Routes.DROPOFF_PAGE} component={Dropoff} />
                 <Route
                   exact
                   path={Routes.VERIFICATION_PAGE}
