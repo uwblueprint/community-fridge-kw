@@ -43,7 +43,6 @@ const testSchedules = [
   {
     donorId: "1",
     categories: ["Dry packaged goods"],
-    quantity: 2,
     size: "medium",
     pickupLocation: "location",
     startTime: new Date("2021-09-30T00:00:00.000Z"),
@@ -55,7 +54,6 @@ const testSchedules = [
   {
     donorId: "2",
     categories: ["Non-perishables", "Tea and coffee"],
-    quantity: 3,
     size: "medium",
     pickupLocation: "copied location",
     startTime: new Date("2021-09-30T00:00:00.000Z"),
@@ -79,7 +77,6 @@ const invalidTestSchedule = [
   {
     donorId: "2",
     categories: ["Non-perishables"],
-    quantity: 3,
     size: "medium",
     pickupLocation: "copied location",
     startTime: new Date("2021-10-30T00:50:00.000Z"),

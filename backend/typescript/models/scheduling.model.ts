@@ -23,9 +23,6 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.ARRAY(DataType.TEXT) })
   categories!: string[];
 
-  @Column({ type: DataType.INTEGER })
-  quantity!: number;
-
   @Column({ type: DataType.TEXT })
   size!: string;
 

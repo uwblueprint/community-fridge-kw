@@ -33,7 +33,6 @@ interface UseStepType {
 const Scheduling = () => {
   const [schedulingFormValues, setSchedulingForm] = useForm({
     categories: "",
-    quantity: 0,
     size: "",
     pickupLocation: "",
     startTime: new Date().toDateString(),

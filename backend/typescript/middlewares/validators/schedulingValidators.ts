@@ -20,9 +20,6 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("categories", "string", true));
   }
-  if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
-    return res.status(400).send(getApiValidationError("quantity", "integer"));
-  }
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
   }
@@ -73,9 +70,6 @@ export const updateSchedulingDtoValidator = async (
     return res
       .status(400)
       .send(getApiValidationError("categories", "string", true));
-  }
-  if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
-    return res.status(400).send(getApiValidationError("quantity", "integer"));
   }
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));

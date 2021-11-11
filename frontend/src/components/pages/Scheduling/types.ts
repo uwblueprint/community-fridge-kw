@@ -2,7 +2,6 @@ import { NavigationProps, SetForm } from "react-hooks-helper";
 
 export interface SchedulingFormProps {
   categories: string;
-  quantity: number;
   size: string;
   pickupLocation: string;
   startTime: string;
