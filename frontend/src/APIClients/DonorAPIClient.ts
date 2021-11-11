@@ -1,5 +1,5 @@
 import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
-import { DonorResponse } from "../types/DonorTypes";
+import { DonorResponse, UpdateDonorDataType } from "../types/DonorTypes";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 import baseAPIClient from "./BaseAPIClient";
 
@@ -32,7 +32,7 @@ const getDonorById = async (id: string): Promise<DonorResponse> => {
 
 const updateDonorById = async (
   id: string,
-  donorData: any,
+  donorData: UpdateDonorDataType,
 ): Promise<DonorResponse> => {
   try {
     const { data } = await baseAPIClient.put(`/donors/${id}`, donorData, {

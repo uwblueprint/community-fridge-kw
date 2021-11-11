@@ -10,3 +10,9 @@ export type DonorResponse = {
   role: string;
   userId: string;
 };
+
+export type UpdateDonorDataType = {
+  businessName?: string;
+  facebookLink?: string;
+  instagramLink?: string;
+};
