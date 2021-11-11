@@ -58,6 +58,12 @@ const customTheme = extendTheme({
       fontSize: "16px",
       lineHeight: "22px",
     },
+    mobileCardDescription: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
+      fontWeight: 600,
+      lineHeight: "20px",
+    },
   },
   colors: {
     squash: {
