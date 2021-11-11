@@ -6,12 +6,18 @@ const donorDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (!validatePrimitive(req.body.facebookLink, "string")) {
+  if (
+    req.body.facebookLink &&
+    !validatePrimitive(req.body.facebookLink, "string")
+  ) {
     return res
       .status(400)
       .send(getApiValidationError("facebookLink", "string"));
   }
-  if (!validatePrimitive(req.body.instagramLink, "string")) {
+  if (
+    req.body.instagramLink &&
+    !validatePrimitive(req.body.instagramLink, "string")
+  ) {
     return res
       .status(400)
       .send(getApiValidationError("instagramLink", "string"));
