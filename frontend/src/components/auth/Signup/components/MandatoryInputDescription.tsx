@@ -7,18 +7,10 @@ const MandatoryInputDescription = ({
   label: string;
 }): JSX.Element => (
   <Box display="inline">
-    <Text
-      display="inline-block"
-      textStyle="secondarySubheading"
-      color="gray.300"
-    >
+    <Text display="inline-block" textStyle="mobileBody" color="black.100">
       {label}
     </Text>{" "}
-    <Text
-      textStyle="secondarySubheading"
-      display="inline-block"
-      color="red.100"
-    >
+    <Text textStyle="mobileBody" display="inline-block" color="tomato.100">
       *
     </Text>
   </Box>

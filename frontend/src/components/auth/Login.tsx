@@ -34,16 +34,20 @@ const Login = (): React.ReactElement => {
     <>
       <Header />
       <Container pl="42px" pr="42px" pt="73px">
-        <Text mt="2" textStyle="heading">
-          Log into account
+        <Text mt="2" textStyle="mobileHeader1">
+          Log in to account
         </Text>
         <FormControl mt="2rem">
           <Box>
-            <Text textStyle="inputDescription">Email Address</Text>
+            <Text textStyle="mobileBodyBold" color="poison.100">
+              Email Address
+            </Text>
             <Input mt="2" value={email} name="email" onChange={setValue} />
           </Box>
           <Box mt="1rem">
-            <Text textStyle="inputDescription">Password</Text>
+            <Text textStyle="mobileBodyBold" color="poison.100">
+              Password
+            </Text>
             <Input
               mt="2"
               value={password}
@@ -51,30 +55,23 @@ const Login = (): React.ReactElement => {
               onChange={setValue}
             />
           </Box>
-          <Text mt="1rem" color="gray.300" textStyle="subtitle">
+          <Text mt="1rem" color="hubbard.100" textStyle="mobileSmall">
             Forgot password?
           </Text>
           <Box mt="1rem">
-            <Button
-              mt="2"
-              onClick={onLogInClick}
-              backgroundColor="black.100"
-              color="white.100"
-              size="md"
-              w="100%"
-            >
+            <Button mt="2" onClick={onLogInClick} variant="authNavigation">
               Log In
             </Button>
           </Box>
         </FormControl>
         <Box>
           <Stack display="inline">
-            <Text display="inline-block" color="gray.300" mt="1rem">
+            <Text display="inline-block" color="hubbard.300" mt="1rem">
               Dont have an account? &nbsp;
             </Text>
             <Text
               fontWeight="bold"
-              color="gray.300"
+              color="raddish.100"
               display="inline-block"
               textDecorationLine="underline"
             >

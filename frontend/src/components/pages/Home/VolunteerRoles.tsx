@@ -12,10 +12,10 @@ const VolunteerRoleStep = ({
   return (
     <Flex paddingBottom="1.5rem">
       <Box flex="10">
-        <Text color="white.100" textStyle="subHeading">
+        <Text color="squash.100" textStyle="mobileBodyBold">
           {title}
         </Text>
-        <Text color="white.100" textStyle="caption">
+        <Text color="squash.100" textStyle="mobileSmall">
           {description}
         </Text>
       </Box>
@@ -28,14 +28,14 @@ const VolunteerRoles = () => (
     pl="42px"
     pr="42px"
     pt="73px"
-    backgroundColor="black.100"
+    backgroundColor="evergreen.100"
     mt="57px"
     pb="73px"
   >
-    <Text color="white.100" textStyle="subHeading" mb="1rem">
+    <Text color="squash.100" textStyle="mobilePretitleBold" mb="1rem">
       For Volunteers
     </Text>
-    <Text mb="1.5rem" color="white.100" textStyle="heading">
+    <Text mb="1.5rem" color="squash.100" textStyle="mobileHeader2">
       VOLUNTEER ROLES
     </Text>
     <VolunteerRoleStep
@@ -46,10 +46,6 @@ const VolunteerRoles = () => (
       title="Conduct a check-in"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut condimentum libero. Cras sodales."
     />
-
-    <Button width="90%" variant="outline" backgroundColor="white.100">
-      Start now
-    </Button>
   </Container>
 );
 
