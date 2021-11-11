@@ -3,6 +3,7 @@ import { Schedule, UpdatedSchedulingFields } from "../types/SchedulingTypes";
 import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 import baseAPIClient from "./BaseAPIClient";
 
+// TO DO: verify that api clients once authorization is enabled
 const getSchedules = async (): Promise<Schedule[]> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
     AUTHENTICATED_USER_KEY,
