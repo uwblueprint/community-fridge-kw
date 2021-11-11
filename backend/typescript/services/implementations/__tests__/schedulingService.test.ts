@@ -49,6 +49,7 @@ const testSchedules = [
     endTime: new Date("2021-10-01T00:00:00.000Z"),
     status: "Pending",
     volunteerNeeded: true,
+    frequency: "One-time",
     notes: "these are the notes",
   },
   {
@@ -61,6 +62,7 @@ const testSchedules = [
     endTime: new Date("2021-10-01T00:00:00.000Z"),
     status: "Pending",
     volunteerNeeded: false,
+    frequency: "Biweekly",
     notes: "these are the copied notes",
   },
   {
@@ -71,6 +73,7 @@ const testSchedules = [
     endTime: new Date("2021-03-01T00:06:00.000Z"),
     status: "Pending",
     volunteerNeeded: false,
+    frequency: "Monthly",
     notes: "these are the copied notes",
   },
 ];
@@ -86,6 +89,7 @@ const invalidTestSchedule = [
     endTime: new Date("2021-10-30T00:00:00.000Z"),
     status: "Pending",
     volunteerNeeded: false,
+    frequency: "Biweekly",
     notes: "these are the copied notes",
   },
 ];

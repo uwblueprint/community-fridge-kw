@@ -40,6 +40,7 @@ const Scheduling = () => {
     endTime: new Date().toDateString(),
     status: "",
     volunteerNeeded: false,
+    frequency: "",
     notes: "",
   });
 

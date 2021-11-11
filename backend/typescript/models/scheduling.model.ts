@@ -51,6 +51,10 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.BOOLEAN })
   volunteer_needed!: boolean;
 
+  @AllowNull(false)
+  @Column({ type: DataType.TEXT })
+  frequency!: string;
+
   @Column({ type: DataType.TEXT })
   notes!: string;
 

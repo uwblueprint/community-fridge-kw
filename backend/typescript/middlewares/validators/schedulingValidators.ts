@@ -57,6 +57,9 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerNeeded", "boolean"));
   }
+  if (!validatePrimitive(req.body.frequency, "string")) {
+    return res.status(400).send(getApiValidationError("frequency", "string"));
+  }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));
   }
@@ -77,7 +80,7 @@ export const updateSchedulingDtoValidator = async (
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
   }
-  if (!validatePrimitive(req.body.isPickup, "boolean")) {
+  if (req.body.isPickup && !validatePrimitive(req.body.isPickup, "boolean")) {
     return res.status(400).send(getApiValidationError("isPickup", "boolean"));
   }
   if (
@@ -116,6 +119,9 @@ export const updateSchedulingDtoValidator = async (
     return res
       .status(400)
       .send(getApiValidationError("volunteerNeeded", "boolean"));
+  }
+  if (req.body.frequency && !validatePrimitive(req.body.frequency, "string")) {
+    return res.status(400).send(getApiValidationError("frequency", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));

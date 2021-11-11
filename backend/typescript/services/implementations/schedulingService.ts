@@ -43,6 +43,7 @@ class SchedulingService implements ISchedulingService {
       status: scheduling.status,
       volunteerNeeded: scheduling.volunteer_needed,
       volunteerIds,
+      frequency: scheduling.frequency,
       notes: scheduling.notes,
     };
   }
@@ -69,6 +70,7 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerIds: [],
+          frequency: scheduling.frequency,
           notes: scheduling.notes,
         };
       });
@@ -97,6 +99,7 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerIds: [],
+          frequency: scheduling.frequency,
           notes: scheduling.notes,
         };
       });
@@ -123,6 +126,7 @@ class SchedulingService implements ISchedulingService {
         end_time: scheduling.endTime,
         status: scheduling.status,
         volunteer_needed: scheduling.volunteerNeeded,
+        frequency: scheduling.frequency,
         notes: scheduling.notes,
       });
     } catch (error) {
@@ -142,6 +146,7 @@ class SchedulingService implements ISchedulingService {
       status: newScheduling.status,
       volunteerNeeded: newScheduling.volunteer_needed,
       volunteerIds: [],
+      frequency: newScheduling.frequency,
       notes: newScheduling.notes,
     };
   }
@@ -176,6 +181,7 @@ class SchedulingService implements ISchedulingService {
         status: updatedScheduling.status,
         volunteerNeeded: updatedScheduling.volunteer_needed,
         volunteerIds: [],
+        frequency: updatedScheduling.frequency,
         notes: updatedScheduling.notes,
       };
     } catch (error) {
