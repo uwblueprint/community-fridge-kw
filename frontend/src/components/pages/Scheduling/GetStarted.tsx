@@ -1,6 +1,7 @@
-import { Button, Container, Text } from "@chakra-ui/react";
+import { Button, Container, Img, Text } from "@chakra-ui/react";
 import React from "react";
 
+import cfImage from "../../../assets/scheduling_getstarted.png";
 import { SchedulingStepProps } from "./types";
 
 const GetStarted = ({ navigation }: SchedulingStepProps) => {
@@ -20,7 +21,8 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
         fridge for as long as possible. Contact admin for specific time
         requests.
       </Text>
-      <Button onClick={next} variant="scheduleNavigation">
+      <Img src={cfImage} alt="Community Fridge" marginBottom="50px" />
+      <Button onClick={next} variant="navigation">
         Get started
       </Button>
     </Container>
