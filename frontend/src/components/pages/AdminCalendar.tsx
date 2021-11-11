@@ -4,18 +4,15 @@ import React, { useContext } from "react";
 import {
   WeeklyBody,
   WeeklyCalendar,
-  WeeklyContainer,
-  WeeklyDays,
+  WeeklyContainer
 } from "../common/WeeklyCalendar";
 import DefaultWeeklyEventItem from "../common/WeeklyEventItems";
 
 const AdminCalendar = (): React.ReactElement => {
   return (
     <>
-      Hello
       <WeeklyCalendar week={new Date()}>
         <WeeklyContainer>
-          <WeeklyDays />
           <WeeklyBody
             events={[{ title: "Jane doe", date: new Date() }]}
             renderItem={({ item, showingFullWeek }) => (
