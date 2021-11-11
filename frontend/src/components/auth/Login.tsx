@@ -16,8 +16,6 @@ import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 import Header from "../common/Header";
-// eslint-disable-next-line import/no-named-as-default
-import SchedulingProgressBar from "../common/SchedulingProgressBar";
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
@@ -38,7 +36,6 @@ const Login = (): React.ReactElement => {
         <Text mt="2" textStyle="mobileHeader1">
           Log in to account
         </Text>
-        <SchedulingProgressBar />
         <FormControl mt="2rem">
           <Box>
             <Text textStyle="mobileBodyBold" color="poison.100">

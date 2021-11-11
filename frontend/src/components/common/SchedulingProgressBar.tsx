@@ -1,61 +1,45 @@
-import { Step, Steps, useSteps } from "chakra-ui-steps";
+import { Flex } from "@chakra-ui/layout";
+import { Step, Steps } from "chakra-ui-steps";
 import React from "react";
 
-const content = (
-  <div>
-    <p>Hello</p>
-  </div>
-);
+import customTheme from "../../theme";
+import { SchedulingProgessBarProps } from "../pages/Scheduling/types";
 
-const steps = [
-  { label: "Step 1", content },
-  { label: "Step 2", content },
-  { label: "Step 3", content },
-];
-
-const SchedulingProgressBar = () => {
-  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
-    initialStep: 0,
-  });
-
-  return (
-    <Steps activeStep={activeStep}>
-      {steps.map(({ label }) => (
-        <Step label={label} key={label}>
-          {content}
-        </Step>
-      ))}
-    </Steps>
-  );
+const Button = {
+  variants: {
+    navigation: {
+      background: "raddish.100",
+      color: "squash.100",
+      width: "100%",
+      fontSize: "16px",
+    },
+    authNavigation: {
+      backgroundColor: "evergreen.100",
+      color: "squash.100",
+      size: "lg",
+      width: "100%",
+    },
+  },
 };
 
-// const SchedulingProgressBar = ({
-//   currentStep,
-//   totalSteps,
-// }: SchedulingProgressBarProps): JSX.Element => {
-//   const [current, setCurrent] = React.useState(0);
-
-//   function handleNext() {
-//     console.log("next");
-//     setCurrent(Math.min(current + 1, steps.length));
-//   }
-//   function handlePrevious() {
-//     console.log("prev");
-//     setCurrent(Math.max(current - 1, 0));
-//   }
-//   return (
-//     <>
-//       <Progress
-//         value={(currentStep * 100) / totalSteps}
-//         size="sm"
-//         hasStripe
-//         color="pink"
-//       />
-//       <Box bg="customTheme.colors.balcl" height="200px" width="200px" />
-//       <Button onClick={handlePrevious}> Prev Page </Button>
-//       <Button onClick={handleNext}> Next Page </Button>
-//     </>
-//   );
-// };
+const steps = [{ label: "1" }, { label: "2" }, { label: "3" }, { label: "4" }];
+const SchedulingProgressBar = ({
+  activeStep,
+}: SchedulingProgessBarProps): JSX.Element => {
+  return (
+    <Flex flexDir="column" width="100%">
+      <Steps
+        activeStep={activeStep}
+        responsive={false}
+        colorScheme="teal"
+        size="sm"
+      >
+        {steps.map(({ label }) => (
+          <Step key={label} colorScheme="blue" />
+        ))}
+      </Steps>
+    </Flex>
+  );
+};
 
 export default SchedulingProgressBar;

@@ -117,12 +117,10 @@ const customTheme = extendTheme({
   },
   components: {
     Button,
+    Steps,
   },
   config: {
     initialColorMode: "light",
-  },
-  components: {
-    Steps,
   },
 });
 
