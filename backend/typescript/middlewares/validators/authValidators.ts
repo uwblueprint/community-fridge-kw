@@ -65,8 +65,7 @@ export const registerRequestValidator = async (
         .status(400)
         .send(getApiValidationError("instagramLink", "string"));
     }
-    if (validatePrimitive(req.body.businessName, "string")
-    ) {
+    if (!validatePrimitive(req.body.businessName, "string")) {
       return res
         .status(400)
         .send(getApiValidationError("businessName", "string"));
