@@ -1,9 +1,6 @@
-import { HStack, Stack, VStack } from "@chakra-ui/react";
+import { HStack, VStack } from "@chakra-ui/react";
 import {
   format,
-  getDay,
-  isSameDay,
-  isSameWeek,
   setDay,
   startOfWeek,
 } from "date-fns";
@@ -53,14 +50,6 @@ export const WeeklyCalendar = ({
   );
 };
 
-type WeeklyContainerProps = {
-  children: ReactNode;
-};
-
-export const WeeklyContainer = ({ children }: WeeklyContainerProps) => {
-  return <div>{children}</div>;
-};
-
 type DayButtonProps = {
   day: {
     day: number;
@@ -69,46 +58,16 @@ type DayButtonProps = {
 };
 
 const DayButton = ({ day }: DayButtonProps) => {
-  const { locale, week, selectedDay, changeSelectedDay } = useWeeklyCalendar();
-
-  const isSelected: boolean = selectedDay
-    ? getDay(selectedDay) === day.day
-    : false;
+  const { locale, week, selectedDay } = useWeeklyCalendar();
 
   const currentDate = setDay(week, day.day, { locale });
-
   // Vstack
   return (
-    <ul> 
-      <div>
-        <p>
-          {day.label} {format(currentDate, "do", { locale })}
-        </p>
-      </div>
-    </ul>
-  );
-};
-
-type WeeklyDaysProps = {
-  omitDays?: number[];
-};
-
-export const WeeklyDays = ({ omitDays }: WeeklyDaysProps) => {
-  const { locale } = useWeeklyCalendar();
-  let daysToRender = daysInWeek({ locale });
-
-  if (omitDays) {
-    daysToRender = daysInWeek({ locale }).filter(
-      (day) => !omitDays.includes(day.day),
-    );
-  }
-
-  return (
-    <HStack spacing="24px">
-      {daysToRender.map((day) => ( 
-        <DayButton key={day.day} day={day} />
-      ))}
-    </HStack>
+    <div>
+      <p>
+        {day.label} {format(currentDate, "do", { locale })}
+      </p>
+    </div>
   );
 };
 
@@ -126,7 +85,7 @@ export function WeeklyBody<EventItem>({
   events,
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
-  const { week, selectedDay } = useWeeklyCalendar();
+  const { selectedDay } = useWeeklyCalendar();
   const { locale } = useWeeklyCalendar();
   const daysToRender = daysInWeek({ locale });
 
@@ -135,9 +94,9 @@ export function WeeklyBody<EventItem>({
       <h1>{selectedDay}</h1>
       <HStack spacing="24px">
         {daysToRender.map((day) => (
-          <>
+          <div key={day.day}>
             <VStack>
-              <DayButton key={day.day} day={day} />
+              <DayButton day={day} />
               {events.map((item) => {
                 if (item.date.getDay() !== day.day) {
                   return null;
@@ -149,7 +108,7 @@ export function WeeklyBody<EventItem>({
                 });
               })}
             </VStack>
-          </>
+          </div>
         ))}
       </HStack>
     </div>
