@@ -53,10 +53,11 @@ export type AuthDTO = Token & UserDTO;
 export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
 export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
+
 export type SchedulingDTO = {
   id: string;
   donorId: string;
-  category: string;
+  categories: string[];
   quantity?: number;
   size?: string;
   pickupLocation?: string;

@@ -20,8 +20,8 @@ export default class Scheduling extends Model {
   id!: number;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT })
-  category!: string;
+  @Column({ type: DataType.ARRAY(DataType.TEXT) })
+  categories!: string[];
 
   @Column({ type: DataType.INTEGER })
   quantity!: number;

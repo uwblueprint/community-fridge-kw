@@ -34,7 +34,7 @@ class SchedulingService implements ISchedulingService {
     return {
       id: String(scheduling.id),
       donorId: String(scheduling.donor_id),
-      category: scheduling.category,
+      categories: scheduling.categories,
       quantity: scheduling.quantity,
       size: scheduling.size,
       pickupLocation: scheduling.pickup_location,
@@ -60,7 +60,7 @@ class SchedulingService implements ISchedulingService {
         return {
           id: String(scheduling.id),
           donorId: String(scheduling.donor_id),
-          category: scheduling.category,
+          categories: scheduling.categories,
           quantity: scheduling.quantity,
           size: scheduling.size,
           pickupLocation: scheduling.pickup_location,
@@ -88,7 +88,7 @@ class SchedulingService implements ISchedulingService {
         return {
           id: String(scheduling.id),
           donorId: String(scheduling.donor_id),
-          category: scheduling.category,
+          categories: scheduling.categories,
           quantity: scheduling.quantity,
           size: scheduling.size,
           pickupLocation: scheduling.pickup_location,
@@ -115,7 +115,7 @@ class SchedulingService implements ISchedulingService {
     try {
       newScheduling = await Scheduling.create({
         donor_id: scheduling.donorId,
-        category: scheduling.category,
+        categories: scheduling.categories,
         quantity: scheduling.quantity,
         size: scheduling.size,
         pickup_location: scheduling.pickupLocation,
@@ -133,7 +133,7 @@ class SchedulingService implements ISchedulingService {
     return {
       id: String(newScheduling.id),
       donorId: String(newScheduling.donor_id),
-      category: newScheduling.category,
+      categories: newScheduling.categories,
       quantity: newScheduling.quantity,
       size: newScheduling.size,
       pickupLocation: newScheduling.pickup_location,
@@ -167,7 +167,7 @@ class SchedulingService implements ISchedulingService {
       return {
         id: String(updatedScheduling.id),
         donorId: String(updatedScheduling.donor_id),
-        category: updatedScheduling.category,
+        categories: updatedScheduling.categories,
         quantity: updatedScheduling.quantity,
         size: updatedScheduling.size,
         pickupLocation: updatedScheduling.pickup_location,

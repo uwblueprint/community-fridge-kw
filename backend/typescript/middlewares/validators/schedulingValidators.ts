@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { Status } from "../../types";
-import { getApiValidationError, validatePrimitive, validateDate } from "./util";
+import {
+  getApiValidationError,
+  validatePrimitive,
+  validateDate,
+  validateArray,
+} from "./util";
 
 export const createSchedulingDtoValidator = async (
   req: Request,
@@ -10,8 +15,10 @@ export const createSchedulingDtoValidator = async (
   if (!validatePrimitive(req.body.donorId, "integer")) {
     return res.status(400).send(getApiValidationError("donorId", "integer"));
   }
-  if (!validatePrimitive(req.body.category, "string")) {
-    return res.status(400).send(getApiValidationError("category", "string"));
+  if (!validateArray(req.body.categories, "string")) {
+    return res
+      .status(400)
+      .send(getApiValidationError("categories", "string", true));
   }
   if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
     return res.status(400).send(getApiValidationError("quantity", "integer"));
@@ -62,8 +69,10 @@ export const updateSchedulingDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.body.category && !validatePrimitive(req.body.category, "string")) {
-    return res.status(400).send(getApiValidationError("category", "string"));
+  if (req.body.categories && !validateArray(req.body.categories, "string")) {
+    return res
+      .status(400)
+      .send(getApiValidationError("categories", "string", true));
   }
   if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
     return res.status(400).send(getApiValidationError("quantity", "integer"));

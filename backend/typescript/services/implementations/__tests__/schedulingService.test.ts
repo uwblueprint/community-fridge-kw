@@ -42,7 +42,7 @@ const testDonorsDb = [
 const testSchedules = [
   {
     donorId: "1",
-    category: "Dry packaged goods",
+    categories: ["Dry packaged goods"],
     quantity: 2,
     size: "medium",
     pickupLocation: "location",
@@ -54,7 +54,7 @@ const testSchedules = [
   },
   {
     donorId: "2",
-    category: "Non-perishables",
+    categories: ["Non-perishables", "Tea and coffee"],
     quantity: 3,
     size: "medium",
     pickupLocation: "copied location",
@@ -66,7 +66,7 @@ const testSchedules = [
   },
   {
     donorId: "1",
-    category: "Fresh produce",
+    categories: ["Fresh produce"],
     startTime: new Date("2021-03-01T00:08:00.000Z"),
     endTime: new Date("2021-03-01T00:06:00.000Z"),
     status: "Pending",
@@ -78,7 +78,7 @@ const testSchedules = [
 const invalidTestSchedule = [
   {
     donorId: "2",
-    category: "Non-perishables",
+    categories: ["Non-perishables"],
     quantity: 3,
     size: "medium",
     pickupLocation: "copied location",
@@ -109,7 +109,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | number | Date | undefined
+        string | string[] | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -127,7 +127,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | number | Date | undefined
+        string | string[] | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -149,7 +149,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | number | Date | undefined
+        string | string[] | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -192,7 +192,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | number | Date | undefined
+        string | string[] | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -203,12 +203,12 @@ describe("pg schedulingService", () => {
     await Scheduling.bulkCreate(schedules);
 
     // Updating one of each type of field
-    const newCategory = "Tea and coffee";
+    const newCategories = ["Tea and coffee"];
     const newVolunteersNeeded = 10;
     const newStartTime: Date = new Date("October 13, 2022 12:00:00");
 
     const resString = await schedulingService.updateSchedulingById("1", {
-      category: newCategory,
+      categories: newCategories,
     });
     const resNum = await schedulingService.updateSchedulingById("2", {
       volunteersNeeded: newVolunteersNeeded,
@@ -217,7 +217,7 @@ describe("pg schedulingService", () => {
       startTime: newStartTime,
     });
 
-    expect(resString.category).toBe(newCategory);
+    expect(resString.categories).toStrictEqual(newCategories);
     expect(resNum.volunteersNeeded).toBe(newVolunteersNeeded);
     expect(resDate.startTime).toEqual(newStartTime);
   });
@@ -226,7 +226,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | number | Date | undefined
+        string | string[] | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
