@@ -22,6 +22,7 @@
     "@types/react-hooks-helper": "^1.6.4",
     "@types/react-jsonschema-form": "^1.7.4",
     "@types/react-table": "^7.0.29",
+    "@types/react-datepicker": "^4.1.7",
     "axios": "^0.21.1",
     "date-fns": "^2.25.0",
     "depcheck": "^1.4.2",

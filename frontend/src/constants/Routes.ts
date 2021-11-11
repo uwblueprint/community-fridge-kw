@@ -8,4 +8,4 @@ export const HOME_PAGE = "/home";
 
 export const VERIFICATION_PAGE = "/verify";
 
-export const ADMIN_CALENDAR = "/admin";
+export const VIEW_DONATIONS = "/view-donations";
