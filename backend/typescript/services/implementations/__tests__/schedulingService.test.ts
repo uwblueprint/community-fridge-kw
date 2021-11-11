@@ -113,7 +113,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | string[] | number | Date | undefined
+        string | string[] | boolean | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -131,7 +131,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | string[] | number | Date | undefined
+        string | string[] | boolean | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -153,7 +153,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | string[] | number | Date | undefined
+        string | string[] | boolean | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -196,7 +196,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | string[] | number | Date | undefined
+        string | string[] | boolean | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
@@ -230,7 +230,7 @@ describe("pg schedulingService", () => {
     const schedules = testSchedules.map((schedule) => {
       const scheduleSnakeCase: Record<
         string,
-        string | string[] | number | Date | undefined
+        string | string[] | boolean | number | Date | undefined
       > = {};
       Object.entries(schedule).forEach(([key, value]) => {
         scheduleSnakeCase[snakeCase(key)] = value;
