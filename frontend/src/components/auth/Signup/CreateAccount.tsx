@@ -42,19 +42,19 @@ const CreateAccount = ({
         >
           <CloseIcon color="#111111" />
         </IconButton>
-        <Text mt="67px" textStyle="heading">
+        <Text mt="67px" textStyle="mobileHeader1">
           Create an account
         </Text>
-        <Text textStyle="secondarySubheading" color="gray.300">
+        <Text textStyle="mobileSmall" color="hubbard.100">
           Account information can be edited in the Account section of the
           platform.
         </Text>
         <FormControl mt="2rem">
           <Box>
-            <Text textStyle="subHeading" color="gray.300">
+            <Text textStyle="mobileBodyBold" color="hubbard.100">
               Organization
             </Text>
-            <MandatoryInputDescription label="Business Name" />
+            <MandatoryInputDescription label="Name of Business" />
             <Input
               mt="2"
               value={businessName}
@@ -63,7 +63,7 @@ const CreateAccount = ({
               placeholder="Enter name of business"
             />
           </Box>
-          <Text mt="2rem" textStyle="subHeading" color="gray.300">
+          <Text mt="2rem" textStyle="mobileBodyBold" color="hubbard.100">
             Point of Contact
           </Text>
           <Box>
@@ -99,14 +99,7 @@ const CreateAccount = ({
             />
           </Box>
           <Box mt="1rem">
-            <Button
-              mt="2"
-              backgroundColor="black.100"
-              color="white.100"
-              size="md"
-              w="100%"
-              onClick={next}
-            >
+            <Button mt="2" variant="authNavigation" onClick={next}>
               Next
             </Button>
           </Box>

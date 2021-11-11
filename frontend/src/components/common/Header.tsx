@@ -41,13 +41,13 @@ const Header = (): JSX.Element => {
       </Flex>
       <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
         <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader textStyle="body">Community Fridge</DrawerHeader>
+        <DrawerContent backgroundColor="evergreen.100">
           <DrawerBody>
             <Stack spacing="1rem">
-              <Text textStyle="subHeading">Schedule Dropoff</Text>
-              <Text textStyle="subHeading">Contact Admin</Text>
-              <Text textStyle="subHeading">
+              <Text color="squash.100" textStyle="mobileHeader4">
+                Schedule Dropoff
+              </Text>
+              <Text color="squash.100" textStyle="mobileHeader4">
                 <Link as={ReactLink} to={LOGIN_PAGE}>
                   Sign In
                 </Link>

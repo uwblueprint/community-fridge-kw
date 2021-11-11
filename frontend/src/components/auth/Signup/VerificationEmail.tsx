@@ -26,14 +26,14 @@ const VerificationPage = ({
       </IconButton>
       <Container centerContent pl="42px" pr="42px" pt="73px">
         <Box w="200px" h="140px" backgroundColor="gray.100" />
-        <Text mt="1rem" textAlign="center" textStyle="heading">
+        <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">
           Please verify your email address!
         </Text>
         <Text
           mt="1rem"
           textAlign="center"
-          textStyle="secondarySubheading"
-          color="gray.300"
+          textStyle="mobileBody"
+          color="hubbard.100"
         >
           We sent a verfication email to {email}. Please check your email to
           begin scheduling your first dropoff!
