@@ -48,7 +48,7 @@ const testSchedules = [
     startTime: new Date("2021-09-30T00:00:00.000Z"),
     endTime: new Date("2021-10-01T00:00:00.000Z"),
     status: "Pending",
-    volunteersNeeded: 2,
+    volunteerNeeded: true,
     notes: "these are the notes",
   },
   {
@@ -59,7 +59,7 @@ const testSchedules = [
     startTime: new Date("2021-09-30T00:00:00.000Z"),
     endTime: new Date("2021-10-01T00:00:00.000Z"),
     status: "Pending",
-    volunteersNeeded: 2,
+    volunteerNeeded: false,
     notes: "these are the copied notes",
   },
   {
@@ -68,7 +68,7 @@ const testSchedules = [
     startTime: new Date("2021-03-01T00:08:00.000Z"),
     endTime: new Date("2021-03-01T00:06:00.000Z"),
     status: "Pending",
-    volunteersNeeded: 0,
+    volunteerNeeded: false,
     notes: "these are the copied notes",
   },
 ];
@@ -82,7 +82,7 @@ const invalidTestSchedule = [
     startTime: new Date("2021-10-30T00:50:00.000Z"),
     endTime: new Date("2021-10-30T00:00:00.000Z"),
     status: "Pending",
-    volunteersNeeded: 2,
+    volunteerNeeded: false,
     notes: "these are the copied notes",
   },
 ];
@@ -201,21 +201,21 @@ describe("pg schedulingService", () => {
 
     // Updating one of each type of field
     const newCategories = ["Tea and coffee"];
-    const newVolunteersNeeded = 10;
+    const newVolunteerNeeded = !testSchedules[1].volunteerNeeded;
     const newStartTime: Date = new Date("October 13, 2022 12:00:00");
 
     const resString = await schedulingService.updateSchedulingById("1", {
       categories: newCategories,
     });
     const resNum = await schedulingService.updateSchedulingById("2", {
-      volunteersNeeded: newVolunteersNeeded,
+      volunteerNeeded: newVolunteerNeeded,
     });
     const resDate = await schedulingService.updateSchedulingById("3", {
       startTime: newStartTime,
     });
 
     expect(resString.categories).toStrictEqual(newCategories);
-    expect(resNum.volunteersNeeded).toBe(newVolunteersNeeded);
+    expect(resNum.volunteerNeeded).toBe(newVolunteerNeeded);
     expect(resDate.startTime).toEqual(newStartTime);
   });
 

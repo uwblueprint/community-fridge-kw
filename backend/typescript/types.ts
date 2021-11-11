@@ -63,7 +63,7 @@ export type SchedulingDTO = {
   startTime: Date;
   endTime: Date;
   status: Status;
-  volunteersNeeded: number;
+  volunteerNeeded: boolean;
   volunteerIds: number[];
   notes?: string;
 };

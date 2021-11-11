@@ -40,7 +40,7 @@ class SchedulingService implements ISchedulingService {
       startTime: scheduling.start_time,
       endTime: scheduling.end_time,
       status: scheduling.status,
-      volunteersNeeded: scheduling.volunteers_needed,
+      volunteerNeeded: scheduling.volunteer_needed,
       volunteerIds,
       notes: scheduling.notes,
     };
@@ -65,7 +65,7 @@ class SchedulingService implements ISchedulingService {
           startTime: scheduling.start_time,
           endTime: scheduling.end_time,
           status: scheduling.status,
-          volunteersNeeded: scheduling.volunteers_needed,
+          volunteerNeeded: scheduling.volunteer_needed,
           volunteerIds: [],
           notes: scheduling.notes,
         };
@@ -92,7 +92,7 @@ class SchedulingService implements ISchedulingService {
           startTime: scheduling.start_time,
           endTime: scheduling.end_time,
           status: scheduling.status,
-          volunteersNeeded: scheduling.volunteers_needed,
+          volunteerNeeded: scheduling.volunteer_needed,
           volunteerIds: [],
           notes: scheduling.notes,
         };
@@ -118,7 +118,7 @@ class SchedulingService implements ISchedulingService {
         start_time: scheduling.startTime,
         end_time: scheduling.endTime,
         status: scheduling.status,
-        volunteers_needed: scheduling.volunteersNeeded,
+        volunteer_needed: scheduling.volunteerNeeded,
         notes: scheduling.notes,
       });
     } catch (error) {
@@ -135,7 +135,7 @@ class SchedulingService implements ISchedulingService {
       startTime: newScheduling.start_time,
       endTime: newScheduling.end_time,
       status: newScheduling.status,
-      volunteersNeeded: newScheduling.volunteers_needed,
+      volunteerNeeded: newScheduling.volunteer_needed,
       volunteerIds: [],
       notes: newScheduling.notes,
     };
@@ -168,7 +168,7 @@ class SchedulingService implements ISchedulingService {
         startTime: updatedScheduling.start_time,
         endTime: updatedScheduling.end_time,
         status: updatedScheduling.status,
-        volunteersNeeded: updatedScheduling.volunteers_needed,
+        volunteerNeeded: updatedScheduling.volunteer_needed,
         volunteerIds: [],
         notes: updatedScheduling.notes,
       };

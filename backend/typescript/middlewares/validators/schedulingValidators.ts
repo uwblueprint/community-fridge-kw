@@ -49,10 +49,10 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("dates", "Date string", false, true));
   }
-  if (!validatePrimitive(req.body.volunteersNeeded, "integer")) {
+  if (!validatePrimitive(req.body.volunteerNeeded, "boolean")) {
     return res
       .status(400)
-      .send(getApiValidationError("volunteersNeeded", "integer"));
+      .send(getApiValidationError("volunteerNeeded", "boolean"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));
@@ -104,12 +104,12 @@ export const updateSchedulingDtoValidator = async (
       .send(getApiValidationError("dates", "Date string", false, true));
   }
   if (
-    req.body.volunteersNeeded &&
-    !validatePrimitive(req.body.volunteersNeeded, "integer")
+    req.body.volunteerNeeded &&
+    !validatePrimitive(req.body.volunteerNeeded, "boolean")
   ) {
     return res
       .status(400)
-      .send(getApiValidationError("volunteersNeeded", "integer"));
+      .send(getApiValidationError("volunteerNeeded", "boolean"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));

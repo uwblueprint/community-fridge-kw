@@ -44,8 +44,8 @@ export default class Scheduling extends Model {
   status!: Status;
 
   @AllowNull(false)
-  @Column({ type: DataType.INTEGER })
-  volunteers_needed!: number;
+  @Column({ type: DataType.BOOLEAN })
+  volunteer_needed!: boolean;
 
   @Column({ type: DataType.TEXT })
   notes!: string;

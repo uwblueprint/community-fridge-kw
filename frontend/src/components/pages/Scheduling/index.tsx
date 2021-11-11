@@ -38,7 +38,7 @@ const Scheduling = () => {
     startTime: new Date().toDateString(),
     endTime: new Date().toDateString(),
     status: "",
-    volunteersNeeded: 0,
+    volunteerNeeded: false,
     notes: "",
   });
 

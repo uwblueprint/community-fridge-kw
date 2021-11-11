@@ -7,7 +7,7 @@ export interface SchedulingFormProps {
   startTime: string;
   endTime: string;
   status: string;
-  volunteersNeeded: number;
+  volunteerNeeded: boolean;
   notes: string;
 }
 
