@@ -23,6 +23,9 @@ export const createSchedulingDtoValidator = async (
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
   }
+  if (!validatePrimitive(req.body.isPickup, "boolean")) {
+    return res.status(400).send(getApiValidationError("isPickup", "boolean"));
+  }
   if (
     req.body.pickupLocation &&
     !validatePrimitive(req.body.pickupLocation, "string")
@@ -73,6 +76,9 @@ export const updateSchedulingDtoValidator = async (
   }
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
+  }
+  if (!validatePrimitive(req.body.isPickup, "boolean")) {
+    return res.status(400).send(getApiValidationError("isPickup", "boolean"));
   }
   if (
     req.body.pickupLocation &&

@@ -59,6 +59,7 @@ export type SchedulingDTO = {
   donorId: string;
   categories: string[];
   size?: string;
+  isPickup: boolean;
   pickupLocation?: string;
   startTime: Date;
   endTime: Date;

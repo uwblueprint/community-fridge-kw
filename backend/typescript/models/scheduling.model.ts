@@ -26,6 +26,10 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.TEXT })
   size!: string;
 
+  @AllowNull(false)
+  @Column({ type: DataType.BOOLEAN })
+  is_pickup!: boolean;
+
   @Column({ type: DataType.TEXT })
   pickup_location!: string;
 

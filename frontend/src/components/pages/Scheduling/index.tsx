@@ -34,6 +34,7 @@ const Scheduling = () => {
   const [schedulingFormValues, setSchedulingForm] = useForm({
     categories: "",
     size: "",
+    isPickup: false,
     pickupLocation: "",
     startTime: new Date().toDateString(),
     endTime: new Date().toDateString(),
