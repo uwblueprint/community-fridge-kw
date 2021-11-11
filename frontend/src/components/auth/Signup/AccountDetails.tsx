@@ -49,7 +49,7 @@ const AccountDetails = ({
   setForm: SetForm;
 }) => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
-
+  const role = "Donor";
   const history = useHistory();
   const { previous } = navigation;
   const {
@@ -69,6 +69,7 @@ const AccountDetails = ({
       email,
       phoneNumber,
       password,
+      role,
     );
     if (!user) {
       return alert("Signup failed");
