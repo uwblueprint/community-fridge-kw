@@ -21,7 +21,12 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
         fridge for as long as possible. Contact admin for specific time
         requests.
       </Text>
-      <Img src={cfImage} alt="Community Fridge" marginBottom="50px" />
+      <Img
+        src={cfImage}
+        alt="Community Fridge"
+        marginBottom="50px"
+        width="100%"
+      />
       <Button onClick={next} variant="navigation">
         Get started
       </Button>
