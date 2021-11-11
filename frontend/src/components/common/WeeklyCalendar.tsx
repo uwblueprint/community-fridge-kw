@@ -1,3 +1,4 @@
+import { HStack, Stack, VStack } from "@chakra-ui/react";
 import {
   format,
   getDay,
@@ -76,14 +77,15 @@ const DayButton = ({ day }: DayButtonProps) => {
 
   const currentDate = setDay(week, day.day, { locale });
 
+  // Vstack
   return (
-    <li>
+    <ul> 
       <div>
         <p>
           {day.label} {format(currentDate, "do", { locale })}
         </p>
       </div>
-    </li>
+    </ul>
   );
 };
 
@@ -102,11 +104,11 @@ export const WeeklyDays = ({ omitDays }: WeeklyDaysProps) => {
   }
 
   return (
-    <ul>
-      {daysToRender.map((day) => (
+    <HStack spacing="24px">
+      {daysToRender.map((day) => ( 
         <DayButton key={day.day} day={day} />
       ))}
-    </ul>
+    </HStack>
   );
 };
 
@@ -125,22 +127,31 @@ export function WeeklyBody<EventItem>({
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
   const { week, selectedDay } = useWeeklyCalendar();
+  const { locale } = useWeeklyCalendar();
+  const daysToRender = daysInWeek({ locale });
+
   return (
     <div>
-      <ul>
-        {events.map((item) => {
-          if (selectedDay) {
-            if (!isSameDay(selectedDay, item.date)) return null;
-          }
+      <h1>{selectedDay}</h1>
+      <HStack spacing="24px">
+        {daysToRender.map((day) => (
+          <>
+            <VStack>
+              <DayButton key={day.day} day={day} />
+              {events.map((item) => {
+                if (item.date.getDay() !== day.day) {
+                  return null;
+                }
 
-          if (!isSameWeek(week, item.date)) return null;
-
-          return renderItem({
-            item,
-            showingFullWeek: selectedDay === undefined,
-          });
-        })}
-      </ul>
+                return renderItem({
+                  item,
+                  showingFullWeek: selectedDay === undefined,
+                });
+              })}
+            </VStack>
+          </>
+        ))}
+      </HStack>
     </div>
   );
 }
