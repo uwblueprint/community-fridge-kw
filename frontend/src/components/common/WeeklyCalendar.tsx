@@ -80,7 +80,7 @@ export function WeeklyBody<EventItem>({
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
   const { selectedDay } = useWeeklyCalendar();
-  const { locale } = useWeeklyCalendar();
+  const { locale, week } = useWeeklyCalendar();
   const daysToRender = daysInWeek({ locale });
 
   return (
@@ -91,7 +91,13 @@ export function WeeklyBody<EventItem>({
             <VStack>
               <DayButton day={day} />
               {events.map((item) => {
-                if (item.date.getDay() !== day.day) {
+                const currentDate = setDay(week, day.day, { locale });
+
+                if (
+                  item.date.getDate() !== currentDate.getDate() ||
+                  item.date.getMonth() !== currentDate.getMonth() ||
+                  item.date.getFullYear() !== currentDate.getFullYear()
+                ) {
                   return null;
                 }
 
