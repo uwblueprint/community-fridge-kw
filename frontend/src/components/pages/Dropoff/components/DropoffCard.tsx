@@ -1,4 +1,4 @@
-import { TimeIcon } from "@chakra-ui/icons";
+import { StarIcon, TimeIcon } from "@chakra-ui/icons";
 import { Badge, Box, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 
@@ -42,6 +42,7 @@ const DropoffCard = ({
           <Text>{startTime}</Text>
         </HStack>
         <HStack mb="16px">
+          <StarIcon color="raddish.100"/>
           <Text textStyle="mobileCardDescription">Volunteers Requested: </Text>
           <Text>{volunteersRequested > 0 ? "Yes" : "No"}</Text>
         </HStack>

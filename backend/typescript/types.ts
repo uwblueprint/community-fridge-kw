@@ -42,7 +42,7 @@ export type UserDTO = {
 export type DonorDTO = {
   id: string;
   userId: string;
-  businessName?: string;
+  businessName: string;
   facebookLink?: string;
   instagramLink?: string;
 };

@@ -21,6 +21,7 @@ const Dropoff = (): JSX.Element => {
   React.useEffect(() => {
     const getSchedules = async () => {
       const response = await SchedulingAPIClient.getScheduleByDonorId("2");
+      console.log("response: ", response)
       setSchedule(response);
     };
 
