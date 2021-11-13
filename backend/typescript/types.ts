@@ -11,7 +11,7 @@ export enum Status {
   REJECTED = "Rejected",
 }
 
-export const Category = new Set([
+export const Categories = new Set([
   "Dry packaged goods",
   "Non-perishables",
   "Fresh produce",

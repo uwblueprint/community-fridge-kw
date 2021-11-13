@@ -1,4 +1,4 @@
-import { Category } from "../../types";
+import { Categories } from "../../types";
 
 type Type = "string" | "integer" | "boolean" | "Status" | "Date string";
 
@@ -45,7 +45,8 @@ export const validateArray = (value: any, type: Type): boolean => {
 
 export const validateCategories = (value: string[]): boolean => {
   return (
-    validateArray(value, "string") && value.every((item) => Category.has(item))
+    validateArray(value, "string") &&
+    value.every((item) => Categories.has(item))
   );
 };
 
