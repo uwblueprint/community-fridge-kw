@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { Status } from "../../types";
-import { getApiValidationError, validatePrimitive, validateDate } from "./util";
+import {
+  getApiValidationError,
+  validatePrimitive,
+  validateDate,
+  validateCategories,
+} from "./util";
 
 export const createSchedulingDtoValidator = async (
   req: Request,
@@ -10,14 +15,16 @@ export const createSchedulingDtoValidator = async (
   if (!validatePrimitive(req.body.donorId, "integer")) {
     return res.status(400).send(getApiValidationError("donorId", "integer"));
   }
-  if (!validatePrimitive(req.body.category, "string")) {
-    return res.status(400).send(getApiValidationError("category", "string"));
-  }
-  if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
-    return res.status(400).send(getApiValidationError("quantity", "integer"));
+  if (!validateCategories(req.body.categories)) {
+    return res
+      .status(400)
+      .send("categories is not an array of accepted category strings");
   }
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
+  }
+  if (!validatePrimitive(req.body.isPickup, "boolean")) {
+    return res.status(400).send(getApiValidationError("isPickup", "boolean"));
   }
   if (
     req.body.pickupLocation &&
@@ -45,10 +52,13 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("dates", "Date string", false, true));
   }
-  if (!validatePrimitive(req.body.volunteersNeeded, "integer")) {
+  if (!validatePrimitive(req.body.volunteerNeeded, "boolean")) {
     return res
       .status(400)
-      .send(getApiValidationError("volunteersNeeded", "integer"));
+      .send(getApiValidationError("volunteerNeeded", "boolean"));
+  }
+  if (!validatePrimitive(req.body.frequency, "string")) {
+    return res.status(400).send(getApiValidationError("frequency", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));
@@ -62,14 +72,16 @@ export const updateSchedulingDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.body.category && !validatePrimitive(req.body.category, "string")) {
-    return res.status(400).send(getApiValidationError("category", "string"));
-  }
-  if (req.body.quantity && !validatePrimitive(req.body.quantity, "integer")) {
-    return res.status(400).send(getApiValidationError("quantity", "integer"));
+  if (req.body.categories && !validateCategories(req.body.categories)) {
+    return res
+      .status(400)
+      .send("categories is not an array of accepted category strings");
   }
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
+  }
+  if (req.body.isPickup && !validatePrimitive(req.body.isPickup, "boolean")) {
+    return res.status(400).send(getApiValidationError("isPickup", "boolean"));
   }
   if (
     req.body.pickupLocation &&
@@ -101,12 +113,15 @@ export const updateSchedulingDtoValidator = async (
       .send(getApiValidationError("dates", "Date string", false, true));
   }
   if (
-    req.body.volunteersNeeded &&
-    !validatePrimitive(req.body.volunteersNeeded, "integer")
+    req.body.volunteerNeeded &&
+    !validatePrimitive(req.body.volunteerNeeded, "boolean")
   ) {
     return res
       .status(400)
-      .send(getApiValidationError("volunteersNeeded", "integer"));
+      .send(getApiValidationError("volunteerNeeded", "boolean"));
+  }
+  if (req.body.frequency && !validatePrimitive(req.body.frequency, "string")) {
+    return res.status(400).send(getApiValidationError("frequency", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));

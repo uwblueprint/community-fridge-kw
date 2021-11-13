@@ -34,15 +34,16 @@ class SchedulingService implements ISchedulingService {
     return {
       id: String(scheduling.id),
       donorId: String(scheduling.donor_id),
-      category: scheduling.category,
-      quantity: scheduling.quantity,
+      categories: scheduling.categories,
       size: scheduling.size,
+      isPickup: scheduling.is_pickup,
       pickupLocation: scheduling.pickup_location,
       startTime: scheduling.start_time,
       endTime: scheduling.end_time,
       status: scheduling.status,
-      volunteersNeeded: scheduling.volunteers_needed,
+      volunteerNeeded: scheduling.volunteer_needed,
       volunteerIds,
+      frequency: scheduling.frequency,
       notes: scheduling.notes,
     };
   }
@@ -60,15 +61,16 @@ class SchedulingService implements ISchedulingService {
         return {
           id: String(scheduling.id),
           donorId: String(scheduling.donor_id),
-          category: scheduling.category,
-          quantity: scheduling.quantity,
+          categories: scheduling.categories,
           size: scheduling.size,
+          isPickup: scheduling.is_pickup,
           pickupLocation: scheduling.pickup_location,
           startTime: scheduling.start_time,
           endTime: scheduling.end_time,
           status: scheduling.status,
-          volunteersNeeded: scheduling.volunteers_needed,
+          volunteerNeeded: scheduling.volunteer_needed,
           volunteerIds: [],
+          frequency: scheduling.frequency,
           notes: scheduling.notes,
         };
       });
@@ -88,15 +90,16 @@ class SchedulingService implements ISchedulingService {
         return {
           id: String(scheduling.id),
           donorId: String(scheduling.donor_id),
-          category: scheduling.category,
-          quantity: scheduling.quantity,
+          categories: scheduling.categories,
           size: scheduling.size,
+          isPickup: scheduling.is_pickup,
           pickupLocation: scheduling.pickup_location,
           startTime: scheduling.start_time,
           endTime: scheduling.end_time,
           status: scheduling.status,
-          volunteersNeeded: scheduling.volunteers_needed,
+          volunteerNeeded: scheduling.volunteer_needed,
           volunteerIds: [],
+          frequency: scheduling.frequency,
           notes: scheduling.notes,
         };
       });
@@ -115,14 +118,15 @@ class SchedulingService implements ISchedulingService {
     try {
       newScheduling = await Scheduling.create({
         donor_id: scheduling.donorId,
-        category: scheduling.category,
-        quantity: scheduling.quantity,
+        categories: scheduling.categories,
         size: scheduling.size,
+        is_pickup: scheduling.isPickup,
         pickup_location: scheduling.pickupLocation,
         start_time: scheduling.startTime,
         end_time: scheduling.endTime,
         status: scheduling.status,
-        volunteers_needed: scheduling.volunteersNeeded,
+        volunteer_needed: scheduling.volunteerNeeded,
+        frequency: scheduling.frequency,
         notes: scheduling.notes,
       });
     } catch (error) {
@@ -133,15 +137,16 @@ class SchedulingService implements ISchedulingService {
     return {
       id: String(newScheduling.id),
       donorId: String(newScheduling.donor_id),
-      category: newScheduling.category,
-      quantity: newScheduling.quantity,
+      categories: newScheduling.categories,
       size: newScheduling.size,
+      isPickup: newScheduling.is_pickup,
       pickupLocation: newScheduling.pickup_location,
       startTime: newScheduling.start_time,
       endTime: newScheduling.end_time,
       status: newScheduling.status,
-      volunteersNeeded: newScheduling.volunteers_needed,
+      volunteerNeeded: newScheduling.volunteer_needed,
       volunteerIds: [],
+      frequency: newScheduling.frequency,
       notes: newScheduling.notes,
     };
   }
@@ -167,15 +172,16 @@ class SchedulingService implements ISchedulingService {
       return {
         id: String(updatedScheduling.id),
         donorId: String(updatedScheduling.donor_id),
-        category: updatedScheduling.category,
-        quantity: updatedScheduling.quantity,
+        categories: updatedScheduling.categories,
         size: updatedScheduling.size,
+        isPickup: updatedScheduling.is_pickup,
         pickupLocation: updatedScheduling.pickup_location,
         startTime: updatedScheduling.start_time,
         endTime: updatedScheduling.end_time,
         status: updatedScheduling.status,
-        volunteersNeeded: updatedScheduling.volunteers_needed,
+        volunteerNeeded: updatedScheduling.volunteer_needed,
         volunteerIds: [],
+        frequency: updatedScheduling.frequency,
         notes: updatedScheduling.notes,
       };
     } catch (error) {

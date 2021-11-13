@@ -20,14 +20,15 @@ export default class Scheduling extends Model {
   id!: number;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT })
-  category!: string;
-
-  @Column({ type: DataType.INTEGER })
-  quantity!: number;
+  @Column({ type: DataType.ARRAY(DataType.TEXT) })
+  categories!: string[];
 
   @Column({ type: DataType.TEXT })
   size!: string;
+
+  @AllowNull(false)
+  @Column({ type: DataType.BOOLEAN })
+  is_pickup!: boolean;
 
   @Column({ type: DataType.TEXT })
   pickup_location!: string;
@@ -47,8 +48,12 @@ export default class Scheduling extends Model {
   status!: Status;
 
   @AllowNull(false)
-  @Column({ type: DataType.INTEGER })
-  volunteers_needed!: number;
+  @Column({ type: DataType.BOOLEAN })
+  volunteer_needed!: boolean;
+
+  @AllowNull(false)
+  @Column({ type: DataType.TEXT })
+  frequency!: string;
 
   @Column({ type: DataType.TEXT })
   notes!: string;

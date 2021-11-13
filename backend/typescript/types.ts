@@ -11,6 +11,20 @@ export enum Status {
   REJECTED = "Rejected",
 }
 
+export const Categories = new Set([
+  "Dry packaged goods",
+  "Non-perishables",
+  "Fresh produce",
+  "Bread and baked goods",
+  "Oil, spreads and seasonings",
+  "Tea and coffee",
+  "Frozen meals",
+  "Prepared meals",
+  "Non-alcoholic drinks & juices",
+  "Essential items (masks, hand sanitizer, bags)",
+  "Hygiene products (tampons, pads, soap etc.)",
+]);
+
 export type Token = {
   accessToken: string;
   refreshToken: string;
@@ -53,17 +67,19 @@ export type AuthDTO = Token & UserDTO;
 export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
 export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
+
 export type SchedulingDTO = {
   id: string;
   donorId: string;
-  category: string;
-  quantity?: number;
+  categories: string[];
   size?: string;
+  isPickup: boolean;
   pickupLocation?: string;
   startTime: Date;
   endTime: Date;
   status: Status;
-  volunteersNeeded: number;
+  frequency: string;
+  volunteerNeeded: boolean;
   volunteerIds: number[];
   notes?: string;
 };
