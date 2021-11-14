@@ -1,6 +1,6 @@
 const getErrorMessage = (error: unknown): string => {
   return error instanceof Error
-    ? getErrorMessage(error)
+    ? error.message
     : "Error: Caught error of invalid type ";
 };
 
