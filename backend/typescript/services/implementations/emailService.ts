@@ -6,6 +6,7 @@ import logger from "../../utilities/logger";
 import Schedule from "../../models/scheduling.model";
 import User from "../../models/user.model";
 import createReminderEmailContent from "../../utilities/emailUtils";
+import getErrorMessage from "../../utilities/errorMessageUtil";
 
 // eslint-disable-next-line
 const cron = require("node-cron");
@@ -53,7 +54,7 @@ class EmailService implements IEmailService {
           );
         } catch (error) {
           Logger.error(
-            `Failed to send reminder email. Reason = ${error.message}`,
+            `Failed to send reminder email. Reason = ${getErrorMessage(error)}`,
           );
           throw error;
         }
@@ -76,7 +77,7 @@ class EmailService implements IEmailService {
     try {
       return await this.transporter.sendMail(mailOptions);
     } catch (error) {
-      Logger.error(`Failed to send email. Reason = ${error.message}`);
+      Logger.error(`Failed to send email. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
   }

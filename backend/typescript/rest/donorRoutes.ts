@@ -3,6 +3,7 @@ import donorDtoValidator from "../middlewares/validators/donorValidator";
 import DonorService from "../services/implementations/donorService";
 import IDonorService from "../services/interfaces/donorService";
 import { UserDonorDTO } from "../types";
+import getErrorMessage from "../utilities/errorMessageUtil";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const donorRouter: Router = Router();
@@ -17,7 +18,7 @@ donorRouter.get("/", async (req, res) => {
   } catch (error) {
     await sendResponseByMimeType(res, 500, contentType, [
       {
-        error: error.message,
+        error: getErrorMessage(error),
       },
     ]);
   }
@@ -44,8 +45,8 @@ donorRouter.get("/:id", async (req, res) => {
       try {
         const donor = await donorService.getDonorById(id);
         res.status(200).json(donor);
-      } catch (error: any) {
-        res.status(500).json({ error: error.message });
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
       }
     }
   }
@@ -61,8 +62,8 @@ donorRouter.put("/:id", donorDtoValidator, async (req, res) => {
     });
 
     res.status(201).send();
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -73,8 +74,8 @@ donorRouter.delete("/:id", async (req, res) => {
   try {
     await donorService.deleteDonorById(id);
     res.status(204).send();
-  } catch (error: any) {
-    res.status(500).send(error.message);
+  } catch (error: unknown) {
+    res.status(500).send(getErrorMessage(error));
   }
 });
 
