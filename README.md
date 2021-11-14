@@ -103,6 +103,32 @@ $ docker exec -it community-fridge-kw_ts-backend_1 /bin/bash  # For our project,
 node migrate up
 ```
 
+## Seeding Db
+
+1. Run both the TypeScript backend and database containers, you can use 
+```bash
+docker-compose up
+```
+2. `cd` into the backend/typescript folder
+```bash
+cd backend/typescript
+```
+
+3. Run a bash shell in the TypeScript backend container
+```bash
+# run a bash shell
+$ docker exec -it community-fridge-kw_ts-backend_1 /bin/bash
+```
+
+5. Run the following command to seed with sample data. Ensure the tables are empty, otherwise you would get key violation errors. The user that is being seeded is already been created in firebase and has the following credentials: `email`: `"test@test.org"` and `password`: `"password123"`
+```bash
+node seed up
+```
+Run the following command to remove sample data
+```bash
+node seed down
+```
+
 
 ## Useful Commands
 
