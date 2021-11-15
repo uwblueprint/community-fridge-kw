@@ -8,7 +8,6 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import Header from "../../common/Header";
 import DropoffCard from "./components/DropoffCard";
 
 const Dropoff = (): JSX.Element => {
@@ -45,39 +44,36 @@ const Dropoff = (): JSX.Element => {
   }, [authenticatedUser]);
 
   return (
-    <>
-      <Header />
-      <Container pl="42px" pr="42px" pt="73px">
-        <Text color="black.100" textStyle="mobileHeader1">
-          Welcome {authenticatedUser?.firstName}!
-        </Text>
-        <Text pt="0.8rem" textStyle="mobileBody">
-          Thank you for your efforts in volunteering with the community fridge
-        </Text>
-        <Button
-          mt="1.5rem"
-          size="lg"
-          variant="navigation"
-          onClick={() => history.push(Routes.SCHEDULING_PAGE)}
-        >
-          Schedule new donation
-        </Button>
-        <Text mt="3rem" textStyle="mobileHeader1">
-          Upcoming Dropoffs
-        </Text>
-        <Text pt="0.8rem" textStyle="mobileBody" mb="0.8rem">
-          View all of the upcoming donations that you have scheduled{" "}
-        </Text>
-        {schedule &&
-          schedule.map((scheduleObject: any, id) => (
-            <DropoffCard
-              key={id}
-              schedule={scheduleObject}
-              onDelete={() => deleteSchedule(scheduleObject.id)}
-            />
-          ))}
-      </Container>
-    </>
+    <Container pl="42px" pr="42px" pt="73px">
+      <Text color="black.100" textStyle="mobileHeader1">
+        Welcome {authenticatedUser?.firstName}!
+      </Text>
+      <Text pt="0.8rem" textStyle="mobileBody">
+        Thank you for your efforts in volunteering with the community fridge
+      </Text>
+      <Button
+        mt="1.5rem"
+        size="lg"
+        variant="navigation"
+        onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+      >
+        Schedule new donation
+      </Button>
+      <Text mt="3rem" textStyle="mobileHeader1">
+        Upcoming Dropoffs
+      </Text>
+      <Text pt="0.8rem" textStyle="mobileBody" mb="0.8rem">
+        View all of the upcoming donations that you have scheduled{" "}
+      </Text>
+      {schedule &&
+        schedule.map((scheduleObject: any, id) => (
+          <DropoffCard
+            key={id}
+            schedule={scheduleObject}
+            onDelete={() => deleteSchedule(scheduleObject.id)}
+          />
+        ))}
+    </Container>
   );
 };
 

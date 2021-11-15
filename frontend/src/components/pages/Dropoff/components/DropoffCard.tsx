@@ -13,6 +13,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../../APIClients/SchedulingAPIClient";
 import { EllipsisIcon } from "../../../common/icons";
@@ -27,6 +28,7 @@ interface DropoffCardProps {
 const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
   const startDate = new Date(schedule.startTime).toDateString();
   const startTime = new Date(schedule.startTime).toLocaleTimeString();
+  const history = useHistory();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -52,7 +54,11 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
             />
             <MenuList p={0} minW="0" w="94px">
               <MenuItem
-                onClick={() => console.log("edit!")}
+                onClick={() =>
+                  history.push(
+                    `/dropoff/${schedule.id}?donorId=${schedule.donorId}`,
+                  )
+                }
                 textStyle="mobileSmall"
               >
                 Edit

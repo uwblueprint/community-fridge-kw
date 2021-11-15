@@ -13,3 +13,5 @@ export const SCHEDULING_PAGE = "/schedule";
 export const SCHEDULE_THANKYOU_PAGE = "/schedule/confirmation";
 
 export const DROPOFF_PAGE = "/dropoff";
+
+export const DROPOFF_EDIT_PAGE = "/dropoff/:id";
