@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
+import Header from "../../common/Header";
 import ConfirmDetails from "./ConfirmDetails";
 import DonationInformation from "./DonationInformation";
 import GetStarted from "./GetStarted";
@@ -50,43 +51,58 @@ const Scheduling = () => {
   switch (id) {
     case "get started scheduling":
       return (
-        <GetStarted
-          formValues={schedulingFormValues}
-          setForm={setSchedulingForm}
-          navigation={navigation}
-        />
+        <>
+          <Header />
+          <GetStarted
+            formValues={schedulingFormValues}
+            setForm={setSchedulingForm}
+            navigation={navigation}
+          />
+        </>
       );
     case "date and time":
       return (
-        <SelectDateTime
-          formValues={schedulingFormValues}
-          setForm={setSchedulingForm}
-          navigation={navigation}
-        />
+        <>
+          <Header />
+          <SelectDateTime
+            formValues={schedulingFormValues}
+            setForm={setSchedulingForm}
+            navigation={navigation}
+          />
+        </>
       );
     case "donation information":
       return (
-        <DonationInformation
-          formValues={schedulingFormValues}
-          setForm={setSchedulingForm}
-          navigation={navigation}
-        />
+        <>
+          <Header />
+          <DonationInformation
+            formValues={schedulingFormValues}
+            setForm={setSchedulingForm}
+            navigation={navigation}
+          />
+        </>
       );
     case "volunteer information":
       return (
-        <VolunteerInformation
-          formValues={schedulingFormValues}
-          setForm={setSchedulingForm}
-          navigation={navigation}
-        />
+        <>
+          <Header />
+          <VolunteerInformation
+            formValues={schedulingFormValues}
+            setForm={setSchedulingForm}
+            navigation={navigation}
+          />
+        </>
       );
     case "confirm donation details":
       return (
-        <ConfirmDetails
-          formValues={schedulingFormValues}
-          setForm={setSchedulingForm}
-          navigation={navigation}
-        />
+        <>
+          <Header />
+          <ConfirmDetails
+            formValues={schedulingFormValues}
+            setForm={setSchedulingForm}
+            navigation={navigation}
+          />
+        </>
       );
     default:
       return null;
