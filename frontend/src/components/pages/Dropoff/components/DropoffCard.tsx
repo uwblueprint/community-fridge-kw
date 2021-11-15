@@ -15,7 +15,6 @@ import {
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import SchedulingAPIClient from "../../../../APIClients/SchedulingAPIClient";
 import { EllipsisIcon } from "../../../common/icons";
 import { SchedulingFormProps } from "../../Scheduling/types";
 import DeleteScheduleModal from "./DeleteScheduleModal";
