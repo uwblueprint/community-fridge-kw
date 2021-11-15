@@ -20,6 +20,13 @@ const Dropoff = (): JSX.Element => {
     history.push(Routes.LOGIN_PAGE);
   }
 
+  const deleteSchedule = async (id: string) => {
+    await SchedulingAPIClient.deleteSchedule(id);
+    if (schedule) {
+      setSchedule(schedule.filter((s) => s?.id !== id));
+    }
+  };
+
   React.useEffect(() => {
     const getSchedules = async () => {
       const donorID =
@@ -62,8 +69,12 @@ const Dropoff = (): JSX.Element => {
           View all of the upcoming donations that you have scheduled{" "}
         </Text>
         {schedule &&
-          schedule.map((scheduleObject: any, id: any) => (
-            <DropoffCard key={id} schedule={scheduleObject} />
+          schedule.map((scheduleObject: any, id) => (
+            <DropoffCard
+              key={id}
+              schedule={scheduleObject}
+              onDelete={() => deleteSchedule(scheduleObject.id)}
+            />
           ))}
       </Container>
     </>

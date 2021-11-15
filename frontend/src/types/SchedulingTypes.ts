@@ -1,4 +1,5 @@
 export type Schedule = {
+  id: string;
   donorId: string;
   categories: string[];
   size: string;
