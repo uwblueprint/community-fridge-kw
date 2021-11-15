@@ -61,9 +61,10 @@ const Dropoff = (): JSX.Element => {
         <Text pt="0.8rem" textStyle="mobileBody" mb="0.8rem">
           View all of the upcoming donations that you have scheduled{" "}
         </Text>
-        {schedule.map((scheduleObject: any, id: any) => (
-          <DropoffCard key={id} schedule={scheduleObject} />
-        ))}
+        {schedule &&
+          schedule.map((scheduleObject: any, id: any) => (
+            <DropoffCard key={id} schedule={scheduleObject} />
+          ))}
       </Container>
     </>
   );
