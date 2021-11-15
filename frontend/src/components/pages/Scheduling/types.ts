@@ -2,6 +2,7 @@ import { NavigationProps, SetForm } from "react-hooks-helper";
 
 export interface SchedulingFormProps {
   id: string;
+  donorId: string;
   categories: string[];
   size: string;
   isPickup: boolean;

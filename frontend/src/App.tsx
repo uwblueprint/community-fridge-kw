@@ -5,8 +5,10 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
+import Header from "./components/common/Header";
 import Default from "./components/pages/Default";
 import Dropoff from "./components/pages/Dropoff";
+import EditDropoffPage from "./components/pages/Dropoff/EditDropoff";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
@@ -50,11 +52,18 @@ const App = (): React.ReactElement => {
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
             <Router>
+              <Header />
+
               <Switch>
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
                 <Route exact path={Routes.HOME_PAGE} component={Default} />
+                <Route
+                  exact
+                  path={Routes.DROPOFF_EDIT_PAGE}
+                  component={EditDropoffPage}
+                />
                 <Route exact path={Routes.DROPOFF_PAGE} component={Dropoff} />
                 <Route
                   exact
