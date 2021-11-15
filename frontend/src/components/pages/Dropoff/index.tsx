@@ -6,12 +6,14 @@ import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import { DonorResponse } from "../../../types/DonorTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
 import Header from "../../common/Header";
 import DropoffCard from "./components/DropoffCard";
 
 const Dropoff = (): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
-  const [schedule, setSchedule] = useState<any>(null);
+  const [schedule, setSchedule] = useState<Schedule[] | null>([]);
   const history = useHistory();
 
   if (!authenticatedUser) {
@@ -20,16 +22,21 @@ const Dropoff = (): JSX.Element => {
 
   React.useEffect(() => {
     const getSchedules = async () => {
-      const response = await SchedulingAPIClient.getScheduleByDonorId("2");
-      console.log("response: ", response)
-      setSchedule(response);
+      const donorID =
+        (await DonorAPIClient.getAllDonors()).find(
+          (donor: DonorResponse) => donor.userId === authenticatedUser?.id,
+        )?.id ?? "";
+
+      const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
+        donorID,
+      );
+
+      setSchedule(scheduleResponse);
     };
 
     getSchedules();
   }, [authenticatedUser]);
 
-  console.log("USER: ", authenticatedUser);
-  console.log("SCHEUDLES: ", schedule);
   return (
     <>
       <Header />
@@ -55,13 +62,7 @@ const Dropoff = (): JSX.Element => {
           View all of the upcoming donations that you have scheduled{" "}
         </Text>
         {schedule.map((scheduleObject: any, id: any) => (
-          <DropoffCard
-            key={id}
-            startTime={scheduleObject.startTime}
-            endTime={scheduleObject.endTime}
-            volunteersRequested={scheduleObject.volunteersRequested}
-            recurring
-          />
+          <DropoffCard key={id} schedule={scheduleObject} />
         ))}
       </Container>
     </>
