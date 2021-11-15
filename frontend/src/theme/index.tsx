@@ -79,7 +79,7 @@ const customTheme = extendTheme({
       100: "#48BB78",
     },
     raddish: {
-      100: "#DA1B97",
+      100: "#C31887",
     },
     orange: {
       100: "#FC964C",
