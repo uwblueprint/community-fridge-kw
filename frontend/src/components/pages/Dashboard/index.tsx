@@ -1,12 +1,11 @@
 import { Button, Container, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import DropoffCard from "./components/DropoffCard";
 
@@ -14,10 +13,6 @@ const Dashboard = (): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
   const [schedule, setSchedule] = useState<Schedule[] | null>([]);
   const history = useHistory();
-
-  if (!authenticatedUser) {
-    history.push(Routes.LOGIN_PAGE);
-  }
 
   const deleteSchedule = async (id: string) => {
     await SchedulingAPIClient.deleteSchedule(id);
@@ -28,13 +23,12 @@ const Dashboard = (): JSX.Element => {
 
   React.useEffect(() => {
     const getSchedules = async () => {
-      const donorID =
-        (await DonorAPIClient.getAllDonors()).find(
-          (donor: DonorResponse) => donor.userId === authenticatedUser?.id,
-        )?.id ?? "";
-
+      const donor = await DonorAPIClient.getDonorByUserId(
+        authenticatedUser!.id,
+      );
+      console.log(donor.id);
       const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
-        donorID,
+        donor.id,
       );
 
       setSchedule(scheduleResponse);
@@ -42,6 +36,10 @@ const Dashboard = (): JSX.Element => {
 
     getSchedules();
   }, [authenticatedUser]);
+
+  if (!authenticatedUser) {
+    return <Redirect to={Routes.HOME_PAGE} />;
+  }
 
   return (
     <Container pl="42px" pr="42px" pt="73px">
