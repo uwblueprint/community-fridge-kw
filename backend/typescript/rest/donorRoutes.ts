@@ -9,8 +9,8 @@ const donorRouter: Router = Router();
 const donorService: IDonorService = new DonorService();
 
 /* Get all donors and optionally filter by:
-  - id, through URI (ex. /scheduling/1)
-  - userId, through query param (ex. /scheduling/?userId=1)
+  - id, through URI (ex. /donors/1)
+  - userId, through query param (ex. /donors/?userId=1)
 */
 donorRouter.get("/:id?", async (req, res) => {
   const { id } = req.params;

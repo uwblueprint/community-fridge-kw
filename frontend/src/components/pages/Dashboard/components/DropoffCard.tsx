@@ -14,6 +14,7 @@ import {
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import * as Routes from "../../../../constants/Routes";
 import { EllipsisIcon } from "../../../common/icons";
 import { SchedulingFormProps } from "../../Scheduling/types";
 import DeleteScheduleModal from "./DeleteScheduleModal";
@@ -57,7 +58,9 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
             />
             <MenuList p={0} minW="0" w="94px">
               <MenuItem
-                onClick={() => history.push(`/dashboard/${schedule.id}`)}
+                onClick={() =>
+                  history.push(`/${Routes.DASHBOARD_PAGE}/${schedule.id}`)
+                }
                 textStyle="mobileSmall"
               >
                 Edit
