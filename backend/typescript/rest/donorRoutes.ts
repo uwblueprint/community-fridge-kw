@@ -8,22 +8,10 @@ import { sendResponseByMimeType } from "../utilities/responseUtil";
 const donorRouter: Router = Router();
 const donorService: IDonorService = new DonorService();
 
-/* Get all donors */
-donorRouter.get("/", async (req, res) => {
-  const contentType = req.headers["content-type"];
-  try {
-    const donors = await donorService.getDonors();
-    await sendResponseByMimeType<UserDonorDTO>(res, 200, contentType, donors);
-  } catch (error) {
-    await sendResponseByMimeType(res, 500, contentType, [
-      {
-        error: error.message,
-      },
-    ]);
-  }
-});
-
-/* Get donor by ID */
+/* Get all donors and optionally filter by:
+  - id, through URI (ex. /scheduling/1)
+  - userId, through query param (ex. /scheduling/?userId=1)
+*/
 donorRouter.get("/:id?", async (req, res) => {
   const { id } = req.params;
   const { userId } = req.query;
@@ -40,11 +28,16 @@ donorRouter.get("/:id?", async (req, res) => {
   }
 
   if (!id && !userId) {
-    await sendResponseByMimeType(res, 400, contentType, [
-      {
-        error: "Cannot query by missing id.",
-      },
-    ]);
+    try {
+      const donors = await donorService.getDonors();
+      await sendResponseByMimeType(res, 200, contentType, donors);
+    } catch (error) {
+      await sendResponseByMimeType(res, 500, contentType, [
+        {
+          error: error.message,
+        },
+      ]);
+    }
     return;
   }
 

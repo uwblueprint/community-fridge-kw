@@ -48,16 +48,19 @@ class DonorService implements IDonorService {
     };
   }
 
-  async getDonorByUserId(userId: string): Promise<UserDonorDTO> {
+  async getDonorByUserId(userId: string): Promise<any> {
     let donor: Donor | null;
     let user: User | null;
 
     try {
-      donor = await Donor.findOne({ where: { user_id: Number(userId) } });
+      donor = await Donor.findOne({
+        where: { user_id: Number(userId) },
+        include: User,
+      });
+
       if (!donor) {
         throw new Error(`donor with userid ${userId} not found.`);
       }
-
       user = donor.user;
       if (!user) {
         throw new Error(`user with userid ${userId} not found`);

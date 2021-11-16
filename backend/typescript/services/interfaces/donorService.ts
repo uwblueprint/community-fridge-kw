@@ -29,6 +29,12 @@ interface IDonorService {
    */
   getDonors(): Promise<Array<UserDonorDTO>>;
 
+  /**
+   * Create new Donor in database
+   * @param donor is a new donor object
+   * @returns a DonorDTO with Donor's information
+   * @throws Error if donor creation fails
+   */
   createDonor(donor: CreateDonorDTO): Promise<DonorDTO>;
 
   /**

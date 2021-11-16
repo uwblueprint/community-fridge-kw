@@ -69,6 +69,7 @@ const deleteDonorById = async (id: string): Promise<DonorResponse> => {
 export default {
   getAllDonors,
   getDonorById,
+  getDonorByUserId,
   updateDonorById,
   deleteDonorById,
 };
