@@ -24,11 +24,22 @@ donorRouter.get("/", async (req, res) => {
 });
 
 /* Get donor by ID */
-donorRouter.get("/:id", async (req, res) => {
+donorRouter.get("/:id?", async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.query;
+
   const contentType = req.headers["content-type"];
 
-  if (!id) {
+  if (id && userId) {
+    await sendResponseByMimeType(res, 400, contentType, [
+      {
+        error: "Cannot query by both id and userId.",
+      },
+    ]);
+    return;
+  }
+
+  if (!id && !userId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
         error: "Cannot query by missing id.",
@@ -47,6 +58,21 @@ donorRouter.get("/:id", async (req, res) => {
       } catch (error: any) {
         res.status(500).json({ error: error.message });
       }
+    }
+  }
+
+  if (userId) {
+    if (typeof userId !== "string") {
+      res
+        .status(400)
+        .json({ error: "userId query parameter must be a string" });
+      return;
+    }
+    try {
+      const donor = await donorService.getDonorByUserId(userId);
+      res.status(200).json(donor);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   }
 });
