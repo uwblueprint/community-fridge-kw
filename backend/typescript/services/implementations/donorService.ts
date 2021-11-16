@@ -8,6 +8,7 @@ import IDonorService from "../interfaces/donorService";
 import logger from "../../utilities/logger";
 import Donor from "../../models/donor.model";
 import User from "../../models/user.model";
+import getErrorMessage from "../../utilities/errorMessageUtil";
 
 const Logger = logger(__filename);
 
@@ -30,7 +31,7 @@ class DonorService implements IDonorService {
         throw new Error(`userId ${donor.user_id} not found.`);
       }
     } catch (error) {
-      Logger.error(`Failed to get donor. Reason = ${error.message}`);
+      Logger.error(`Failed to get donor. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
@@ -76,7 +77,7 @@ class DonorService implements IDonorService {
         }),
       );
     } catch (error) {
-      Logger.error(`Failed to get donors. Reason = ${error.message}`);
+      Logger.error(`Failed to get donors. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
@@ -102,7 +103,9 @@ class DonorService implements IDonorService {
         throw new Error(`id ${id} not found.`);
       }
     } catch (error) {
-      Logger.error(`Failed to update donor. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to update donor. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }
@@ -123,7 +126,9 @@ class DonorService implements IDonorService {
         throw new Error(`id ${id} was not deleted in Postgres.`);
       }
     } catch (error) {
-      Logger.error(`Failed to delete donor. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to delete donor. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }

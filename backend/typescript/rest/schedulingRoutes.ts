@@ -16,6 +16,7 @@ import IEmailService from "../services/interfaces/emailService";
 import ISchedulingService from "../services/interfaces/schedulingService";
 import { SchedulingDTO } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
+import getErrorMessage from "../utilities/errorMessageUtil";
 
 const schedulingRouter: Router = Router();
 
@@ -54,10 +55,10 @@ schedulingRouter.get("/:id?", async (req, res) => {
         contentType,
         schedulings,
       );
-    } catch (error) {
+    } catch (error: unknown) {
       await sendResponseByMimeType(res, 500, contentType, [
         {
-          error: error.message,
+          error: getErrorMessage(error),
         },
       ]);
     }
@@ -68,8 +69,8 @@ schedulingRouter.get("/:id?", async (req, res) => {
     try {
       const schedulings = await schedulingService.getSchedulingById(id);
       res.status(200).json(schedulings);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
     }
     return;
   }
@@ -87,8 +88,8 @@ schedulingRouter.get("/:id?", async (req, res) => {
         donorId,
       );
       res.status(200).json(schedulings);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
     }
   }
 });
@@ -98,8 +99,8 @@ schedulingRouter.post("/", createSchedulingDtoValidator, async (req, res) => {
   try {
     const newScheduling = await schedulingService.createScheduling(req.body);
     res.status(201).json(newScheduling);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -111,8 +112,8 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
       req.body,
     );
     res.status(200).json(updatedScheduling);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -123,8 +124,8 @@ schedulingRouter.delete("/:id", async (req, res) => {
     try {
       await schedulingService.deleteSchedulingById(id);
       res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
     }
   } else {
     res.status(400).json({ error: "Must supply id as request parameter." });
