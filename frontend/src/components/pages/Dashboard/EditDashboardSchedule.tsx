@@ -1,43 +1,59 @@
-import { EditIcon } from "@chakra-ui/icons";
-import { Badge, Button, Container, Text, VStack } from "@chakra-ui/react";
-import React from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
+import {
+  Badge,
+  Button,
+  Container,
+  IconButton,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import * as Routes from "../../../constants/Routes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 
-const EditDropoffPage = (): JSX.Element => {
+const EditDashboard = (): JSX.Element => {
   const { id } = useParams<{ id: string }>();
-  const query = useLocation().search;
+  const history = useHistory();
 
-  const donorId = new URLSearchParams(query).get("donorId") ?? "";
+  const [currentSchedule, setCurrentSchedule] = useState<Schedule>();
+  const [currentDonor, setCurrentDonor] = useState<DonorResponse>();
 
-  const [currentSchedule, setCurrentSchedule] = React.useState<Schedule>();
-  const [currentDonor, setCurrentDonor] = React.useState<DonorResponse>();
+  const getScheduleData = async () => {
+    const response = await SchedulingAPIClient.getScheduleById(id);
+    setCurrentSchedule(response);
+  };
 
-  React.useEffect(() => {
-    const getScheduleData = async () => {
-      const response = await SchedulingAPIClient.getScheduleById(id);
-      setCurrentSchedule(response);
-    };
+  const getDonorData = async () => {
+    const response = await DonorAPIClient.getDonorById(
+      currentSchedule?.donorId ?? "",
+    );
+    setCurrentDonor(response);
+  };
 
-    const getDonorData = async () => {
-      const response = await DonorAPIClient.getDonorById(donorId);
-      setCurrentDonor(response);
-    };
-
+  useEffect(() => {
     getScheduleData();
     getDonorData();
-  }, [id, donorId]);
+  }, [id]);
 
   if (!currentSchedule || !currentDonor) {
     return <div>Invalid Schedule or Donor</div>;
   }
 
   return (
-    <Container ml="32px" mt="64px" mb="60px">
+    <Container ml="1rem" mt="2.5rem" mb="1.5rem">
+      <IconButton
+        onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+        marginLeft="-12px"
+        variant="ghost"
+        aria-label="back"
+      >
+        <ArrowBackIcon />
+      </IconButton>
       <Text textStyle="mobileHeader1" mb="12px">
         Donation Details
       </Text>
@@ -54,7 +70,7 @@ const EditDropoffPage = (): JSX.Element => {
         {currentSchedule?.frequency}
       </Badge>
 
-      <Container pl="0" align="left" mb="56px">
+      <Container pl="0" align="left" mb="2rem">
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -74,7 +90,7 @@ const EditDropoffPage = (): JSX.Element => {
         <Text textStyle="mobileBody">{currentSchedule.frequency}</Text>
       </Container>
 
-      <Container pl="0" align="left" mb="56px">
+      <Container pl="0" align="left" mb="2rem">
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -118,4 +134,4 @@ const EditDropoffPage = (): JSX.Element => {
   );
 };
 
-export default EditDropoffPage;
+export default EditDashboard;

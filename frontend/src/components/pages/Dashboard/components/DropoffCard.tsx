@@ -10,7 +10,6 @@ import {
   MenuList,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -39,13 +38,18 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
       borderColor="hubbard.100"
       borderRadius="8px"
     >
-      <Box p="6">
-        <HStack spacing="112">
+      <Box pl="6" pr="6" pb="6" pt="4">
+        <HStack spacing="10">
           <Text mb="16px" textStyle="mobileBodyBold">
             {startDate}
           </Text>
           <Menu isLazy>
             <MenuButton
+              style={{
+                marginLeft: "6rem",
+                marginBottom: "15px",
+                marginRight: "0px",
+              }}
               as={IconButton}
               aria-label="options"
               icon={<EllipsisIcon />}
@@ -53,11 +57,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
             />
             <MenuList p={0} minW="0" w="94px">
               <MenuItem
-                onClick={() =>
-                  history.push(
-                    `/dropoff/${schedule.id}?donorId=${schedule.donorId}`,
-                  )
-                }
+                onClick={() => history.push(`/dashboard/${schedule.id}`)}
                 textStyle="mobileSmall"
               >
                 Edit

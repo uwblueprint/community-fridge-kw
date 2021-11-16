@@ -10,7 +10,7 @@ import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import DropoffCard from "./components/DropoffCard";
 
-const Dropoff = (): JSX.Element => {
+const Dashboard = (): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
   const [schedule, setSchedule] = useState<Schedule[] | null>([]);
   const history = useHistory();
@@ -77,4 +77,4 @@ const Dropoff = (): JSX.Element => {
   );
 };
 
-export default Dropoff;
+export default Dashboard;
