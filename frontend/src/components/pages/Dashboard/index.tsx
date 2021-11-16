@@ -26,7 +26,6 @@ const Dashboard = (): JSX.Element => {
       const donor = await DonorAPIClient.getDonorByUserId(
         authenticatedUser!.id,
       );
-      console.log(donor.id);
       const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
         donor.id,
       );
