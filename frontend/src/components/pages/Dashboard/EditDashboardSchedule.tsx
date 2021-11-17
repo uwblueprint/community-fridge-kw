@@ -27,7 +27,7 @@ const EditDashboard = (): JSX.Element => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
     setCurrentSchedule(scheduleResponse);
     const donorResponse = await DonorAPIClient.getDonorById(
-      currentSchedule?.donorId ?? "",
+      scheduleResponse!.donorId,
     );
     setCurrentDonor(donorResponse);
   };
