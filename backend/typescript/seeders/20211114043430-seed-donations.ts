@@ -19,6 +19,8 @@ const seedDonors = [
     id: 1,
     user_id: 1,
     business_name: "Joe's Farm",
+    facebook_link: "facebook.com",
+    instagram_link: "instagram.com",
     createdAt: new Date(1636226732806),
     updatedAt: new Date(1636226732806),
   },
@@ -49,7 +51,7 @@ const seedSchedules = [
     pickup_location: "location",
     start_time: new Date("2021-09-30T00:00:00.000Z"),
     end_time: new Date("2021-10-01T00:00:00.000Z"),
-    status: "Approved",
+    status: "Pending",
     volunteer_needed: false,
     frequency: "Biweekly",
     notes: "these are the copied notes",
@@ -86,5 +88,5 @@ export const down: Seeder = async ({ context: sequelize }) => {
     .bulkDelete("donors", { id: seedDonors.map((donor) => donor.id) });
   await sequelize
     .getQueryInterface()
-    .bulkDelete("users", { id: seedUsers.map((u) => u.id) });
+    .bulkDelete("users", { id: seedUsers.map((user) => user.id) });
 };
