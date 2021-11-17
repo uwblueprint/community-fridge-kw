@@ -11,13 +11,13 @@ import DropoffCard from "./components/DropoffCard";
 
 const Dashboard = (): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
-  const [schedule, setSchedule] = useState<Schedule[] | null>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
   const history = useHistory();
 
   const deleteSchedule = async (id: string) => {
     await SchedulingAPIClient.deleteSchedule(id);
-    if (schedule) {
-      setSchedule(schedule.filter((s) => s?.id !== id));
+    if (schedules) {
+      setSchedules(schedules.filter((s) => s?.id !== id));
     }
   };
 
@@ -26,11 +26,12 @@ const Dashboard = (): JSX.Element => {
       const donor = await DonorAPIClient.getDonorByUserId(
         authenticatedUser!.id,
       );
+
       const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
         donor.id,
       );
 
-      setSchedule(scheduleResponse);
+      setSchedules(scheduleResponse);
     };
 
     getSchedules();
@@ -62,12 +63,12 @@ const Dashboard = (): JSX.Element => {
       <Text pt="0.8rem" textStyle="mobileBody" mb="0.8rem">
         View all of the upcoming donations that you have scheduled{" "}
       </Text>
-      {schedule &&
-        schedule.map((scheduleObject: any, id) => (
+      {schedules.length > 0 &&
+        schedules.map((scheduleObject: Schedule, id) => (
           <DropoffCard
             key={id}
-            schedule={scheduleObject}
-            onDelete={() => deleteSchedule(scheduleObject.id)}
+            schedule={scheduleObject!}
+            onDelete={() => deleteSchedule(scheduleObject!.id)}
           />
         ))}
     </Container>

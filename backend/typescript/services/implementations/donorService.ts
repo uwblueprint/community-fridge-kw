@@ -49,7 +49,7 @@ class DonorService implements IDonorService {
     };
   }
 
-  async getDonorByUserId(userId: string): Promise<any> {
+  async getDonorByUserId(userId: string): Promise<UserDonorDTO> {
     let donor: Donor | null;
     let user: User | null;
 
@@ -67,7 +67,7 @@ class DonorService implements IDonorService {
         throw new Error(`user with userid ${userId} not found`);
       }
     } catch (error) {
-      Logger.error(`Failed to get donor. Reason = ${error.message}`);
+      Logger.error(`Failed to get donor. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 

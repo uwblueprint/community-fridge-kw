@@ -40,7 +40,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
       borderRadius="8px"
     >
       <Box pl="6" pr="6" pb="6" pt="4">
-        <HStack spacing="10">
+        <HStack spacing="0">
           <Text mb="16px" textStyle="mobileBodyBold">
             {startDate}
           </Text>
@@ -59,7 +59,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
             <MenuList p={0} minW="0" w="94px">
               <MenuItem
                 onClick={() =>
-                  history.push(`/${Routes.DASHBOARD_PAGE}/${schedule.id}`)
+                  history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)
                 }
                 textStyle="mobileSmall"
               >

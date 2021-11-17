@@ -34,7 +34,7 @@ donorRouter.get("/:id?", async (req, res) => {
     } catch (error) {
       await sendResponseByMimeType(res, 500, contentType, [
         {
-          error: error.message,
+          error: getErrorMessage(error),
         },
       ]);
     }
@@ -65,7 +65,7 @@ donorRouter.get("/:id?", async (req, res) => {
       const donor = await donorService.getDonorByUserId(userId);
       res.status(200).json(donor);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: getErrorMessage(error) });
     }
   }
 });
