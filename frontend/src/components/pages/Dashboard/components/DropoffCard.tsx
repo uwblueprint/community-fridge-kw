@@ -38,6 +38,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
       border="1px solid"
       borderColor="hubbard.100"
       borderRadius="8px"
+      onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)}
     >
       <Box pl="6" pr="6" pb="6" pt="4">
         <HStack spacing="0">
@@ -46,6 +47,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
           </Text>
           <Menu isLazy>
             <MenuButton
+              zIndex="9999"
               style={{
                 marginLeft: "6rem",
                 marginBottom: "15px",
@@ -55,6 +57,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
               aria-label="options"
               icon={<EllipsisIcon />}
               variant="ghost"
+              onClick={(e) => e.stopPropagation()}
             />
             <MenuList p={0} minW="0" w="94px">
               <MenuItem
