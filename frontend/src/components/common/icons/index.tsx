@@ -68,7 +68,7 @@ export const CheckmarkIcon = (): JSX.Element => (
 );
 
 export const Facebook = (): JSX.Element => (
-  <Icon viewBox="0 0 24 24">
+  <Icon boxSize={8} viewBox="0 0 24 24">
     <svg
       width="24"
       height="24"
@@ -98,7 +98,7 @@ export const Facebook = (): JSX.Element => (
 );
 
 export const Instagram = (): JSX.Element => (
-  <Icon viewBox="0 0 24 24">
+  <Icon boxSize={8} viewBox="0 0 24 24">
     <svg
       width="24"
       height="24"
