@@ -71,7 +71,10 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
               <MenuItem
                 textStyle="mobileSmall"
                 color="tomato.100"
-                onClick={onOpen}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpen();
+                }}
               >
                 Cancel
               </MenuItem>
