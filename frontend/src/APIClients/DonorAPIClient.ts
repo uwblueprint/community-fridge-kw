@@ -30,6 +30,17 @@ const getDonorById = async (id: string): Promise<DonorResponse> => {
   }
 };
 
+const getDonorByUserId = async (userId: string): Promise<DonorResponse> => {
+  try {
+    const { data } = await baseAPIClient.get(`/donors/?userId=${userId}`, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as DonorResponse;
+  }
+};
+
 const updateDonorById = async (
   id: string,
   donorData: UpdateDonorDataType,
@@ -58,6 +69,7 @@ const deleteDonorById = async (id: string): Promise<DonorResponse> => {
 export default {
   getAllDonors,
   getDonorById,
+  getDonorByUserId,
   updateDonorById,
   deleteDonorById,
 };
