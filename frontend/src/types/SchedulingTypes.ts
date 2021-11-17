@@ -1,7 +1,6 @@
 export type Schedule = {
   donorId: number;
-  category: string[];
-  quantity: number;
+  categories: string[];
   size: string;
   isPickup: boolean;
   pickupLocation: string;
