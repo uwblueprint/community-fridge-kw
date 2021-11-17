@@ -17,7 +17,10 @@ const VolunteerInformation = ({
   return (
     // Insert Volunteer Information page here
     <Container>
-      <SchedulingProgressBar activeStep={3} />
+      <SchedulingProgressBar
+        activeStep={{ label: "2", stepNumber: 2 }}
+        totalSteps={4}
+      />
       <Text textStyle="mobileHeader2">Volunteer Information Page</Text>
       <HStack>
         <Button onClick={previous} variant="navigation">

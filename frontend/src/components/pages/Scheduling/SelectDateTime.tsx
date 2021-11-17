@@ -15,7 +15,10 @@ const SelectDateTime = ({
   return (
     // Insert Select Date and Time page here
     <Container>
-      <SchedulingProgressBar activeStep={1} />
+      <SchedulingProgressBar
+        activeStep={{ label: "0", stepNumber: 0 }}
+        totalSteps={4}
+      />
       <Text textStyle="mobileHeader2"> This is Date and Time page </Text>
       <HStack>
         <Button onClick={previous} variant="navigation">
