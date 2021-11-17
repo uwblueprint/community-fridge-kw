@@ -20,8 +20,12 @@ const EditDashboard = (): JSX.Element => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
 
-  const [currentSchedule, setCurrentSchedule] = useState<Schedule>(null);
-  const [currentDonor, setCurrentDonor] = useState<DonorResponse>();
+  const [currentSchedule, setCurrentSchedule] = useState<Schedule>(
+    {} as Schedule,
+  );
+  const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
+    {} as DonorResponse,
+  );
 
   const getScheduleAndDonorData = async () => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
@@ -36,7 +40,7 @@ const EditDashboard = (): JSX.Element => {
 
   useEffect(() => {
     getScheduleAndDonorData();
-  }, []);
+  }, [id]);
 
   if (!currentSchedule || !currentDonor) {
     return <div>Invalid Schedule or Donor</div>;
