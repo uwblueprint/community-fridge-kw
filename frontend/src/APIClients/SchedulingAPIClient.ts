@@ -48,7 +48,7 @@ const getScheduleByDonorId = async (donorId: string): Promise<Schedule[]> => {
     );
     return data;
   } catch (error) {
-    return error as any;
+    return error as Schedule[];
   }
 };
 
