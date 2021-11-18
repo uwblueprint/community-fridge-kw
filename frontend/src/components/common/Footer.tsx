@@ -1,15 +1,28 @@
-import { Box, Container, Flex, Link, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Divider,
+  Flex,
+  Link,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import React from "react";
 
 import { Email, Facebook, Instagram } from "./icons";
 
 const Footer = (): JSX.Element => (
-  <Container p={{ base: "1.5rem" }}>
-    <Box display={{ md: "flex" }}>
+  <>
+    <Divider pt={{ base: "200px", lg: "200px", md: "200px", sm: "100px" }} />
+    <Box
+      p={{ base: "4rem" }}
+      display={{ md: "flex" }}
+      justifyContent="space-evenly"
+    >
       <VStack
         mt={{ base: 4, md: 0 }}
         align={{ md: "left" }}
-        mr={{ base: "10%", lg: "10%", md: "0%", sm: "0%" }}
+        mr={{ base: "10%", lg: "10%", md: "10%", sm: "0%" }}
       >
         <Text textStyle="mobileHeader1">Community Fridge</Text>
         <Text mt={{ base: 4 }}>
@@ -20,7 +33,7 @@ const Footer = (): JSX.Element => (
       <VStack
         mt={{ base: 4, md: 0 }}
         align={{ md: "left" }}
-        mr={{ base: "10%", lg: "10%", md: "0%", sm: "0%" }}
+        mr={{ base: "10%", lg: "10%", md: "10%", sm: "0%" }}
       >
         <Text color="raddish.100" textStyle="mobileHeader3">
           Location
@@ -36,7 +49,7 @@ const Footer = (): JSX.Element => (
       <VStack
         mt={{ base: 4, md: 0 }}
         align={{ md: "left" }}
-        mr={{ base: "10%", lg: "10%", md: "0%", sm: "0%" }}
+        mr={{ base: "10%", lg: "10%", md: "10%", sm: "0%" }}
       >
         <Text color="raddish.100" textStyle="mobileHeader3">
           Follow Us
@@ -67,7 +80,7 @@ const Footer = (): JSX.Element => (
         </Flex>
       </VStack>
     </Box>
-  </Container>
+  </>
 );
 
 export default Footer;
