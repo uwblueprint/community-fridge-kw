@@ -1,6 +1,13 @@
 import { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 
+export const colorMap = {
+  "One Time": "spinach",
+  "Daily": "H2O",
+  "Weekly": "onion",
+  "Monthly": "turnip",
+};
+
 type DaysInWeekProps = {
   locale?: Locale;
 };

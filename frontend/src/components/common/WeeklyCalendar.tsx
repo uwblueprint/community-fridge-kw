@@ -57,10 +57,10 @@ const DayButton = ({ day }: DayButtonProps) => {
   const { locale, week, selectedDay } = useWeeklyCalendar();
 
   const currentDate = setDay(week, day.day, { locale });
-  // Vstack
+
   return (
     <Text textStyle="calendarDate">
-      {day.label.substr(0, 3)} {format(currentDate, "do", { locale })}
+      {day.label.substr(0, 3)} {format(currentDate, "do", { locale }).slice(0, -2)}
     </Text>
   );
 };
@@ -84,33 +84,31 @@ export function WeeklyBody<EventItem>({
   const daysToRender = daysInWeek({ locale });
 
   return (
-    <div>
-      <HStack spacing="40px" align="stretch">
-        {daysToRender.map((day) => (
-          <div key={day.day}>
-            <VStack>
-              <DayButton day={day} />
-              {events.map((item) => {
-                const currentDate = setDay(week, day.day, { locale });
+    <HStack align="stretch">
+      {daysToRender.map((day) => (
+        <div key={day.day}>
+          <VStack width="10rem">
+            <DayButton day={day} />
+            {events.map((item) => {
+              const currentDate = setDay(week, day.day, { locale });
 
-                if (
-                  item.date.getDate() !== currentDate.getDate() ||
-                  item.date.getMonth() !== currentDate.getMonth() ||
-                  item.date.getFullYear() !== currentDate.getFullYear()
-                ) {
-                  return null;
-                }
+              if (
+                item.date.getDate() !== currentDate.getDate() ||
+                item.date.getMonth() !== currentDate.getMonth() ||
+                item.date.getFullYear() !== currentDate.getFullYear()
+              ) {
+                return null;
+              }
 
-                return renderItem({
-                  item,
-                  showingFullWeek: selectedDay === undefined,
-                });
-              })}
-            </VStack>
-          </div>
-        ))}
-      </HStack>
-    </div>
+              return renderItem({
+                item,
+                showingFullWeek: selectedDay === undefined,
+              });
+            })}
+          </VStack>
+        </div>
+      ))}
+    </HStack>
   );
 }
 

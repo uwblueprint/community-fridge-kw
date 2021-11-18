@@ -35,53 +35,57 @@ const ViewDonations = (): React.ReactElement => {
   };
 
   return (
-    <>
-      <Stack spacing="25px">
-        <Flex>
-          <HStack>
-            <Text textStyle="desktopHeader">
-              Week of{" "}
-              {selectedDay?.toLocaleString(undefined, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </Text>
-            <DatePicker
-              value={selectedDay}
-              onChange={(e: DateObject) => {
-                setSelectedDay(e?.toDate?.());
-              }}
-              render={<Icon />}
-            />
-          </HStack>
-          <Spacer />
-          <IconButton
-            backgroundColor="transparent"
-            aria-label="previous week"
-            onClick={() => {
-              changeWeek(-7);
+    <Stack spacing="1rem" mt="10rem" mx="8rem">
+      <Text textStyle="desktopHeader2">
+        Upcoming Scheduled Fridge Donations
+      </Text>
+      <Text textStyle="desktopSmall">
+        Select a card to see more details pertaining to the upcoming donation.
+      </Text>
+      <Flex mt="5rem" width="72rem">
+        <HStack>
+          <Text textStyle="desktopHeader">
+            Week of{" "}
+            {selectedDay?.toLocaleString(undefined, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </Text>
+          <DatePicker
+            value={selectedDay}
+            onChange={(e: DateObject) => {
+              setSelectedDay(e?.toDate?.());
             }}
-          >
-            <ChevronLeftIcon />
-          </IconButton>
-          <IconButton
-            backgroundColor="transparent"
-            aria-label="next week"
-            onClick={() => {
-              changeWeek(7);
-            }}
-          >
-            <ChevronRightIcon />
-          </IconButton>
-        </Flex>
+            render={<Icon />}
+          />
+        </HStack>
+        <Spacer />
+        <IconButton
+          backgroundColor="transparent"
+          aria-label="previous week"
+          onClick={() => {
+            changeWeek(-7);
+          }}
+        >
+          <ChevronLeftIcon />
+        </IconButton>
+        <IconButton
+          backgroundColor="transparent"
+          aria-label="next week"
+          onClick={() => {
+            changeWeek(7);
+          }}
+        >
+          <ChevronRightIcon />
+        </IconButton>
+      </Flex>
 
-        <AdminCalendar
-          key={selectedDay?.toString()}
-          selectedDay={selectedDay as Date}
-        />
-      </Stack>
-    </>
+      <AdminCalendar
+        key={selectedDay?.toString()}
+        selectedDay={selectedDay as Date}
+      />
+    </Stack>
   );
 };
 
