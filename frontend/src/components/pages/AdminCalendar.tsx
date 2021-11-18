@@ -20,8 +20,14 @@ const AdminCalendar = ({
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
         events={[
-          { title: "Jane doe1", date: today },
-          { title: "Jane doe3", date: tomorrow },
+          { title: "Jane doe1", date: today, frequency: "Weekly" },
+          { title: "Jane doe2", date: today, frequency: "Monthly" },
+          { title: "Jane doe3", date: today, frequency: "One Time" },
+          { title: "Jane doe4", date: today, frequency: "Daily" },
+          { title: "Jane doe1", date: tomorrow, frequency: "Weekly" },
+          { title: "Jane doe2", date: tomorrow, frequency: "Monthly" },
+          { title: "Jane doe3", date: tomorrow, frequency: "One Time" },
+          { title: "Jane doe4", date: tomorrow, frequency: "Daily" },
         ]}
         renderItem={({ item, showingFullWeek }) => (
           <DefaultWeeklyEventItem
@@ -32,6 +38,7 @@ const AdminCalendar = ({
                 ? format(item.date, "MMM do k:mm")
                 : format(item.date, "k:mm")
             }
+            frequency={item.frequency}
           />
         )}
       />

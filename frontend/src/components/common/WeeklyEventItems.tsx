@@ -1,27 +1,56 @@
-import { Box, Button, Container, Stack, Text } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  Center,
+  Container,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
+
+import { colorMap } from "../../constants/DaysInWeek";
 
 type DefaultWeeklyEventItemProps = {
   title: string;
   date: string;
+  frequency: string;
 };
 
 const DefaultWeeklyEventItem = ({
   title,
   date,
+  frequency,
 }: DefaultWeeklyEventItemProps) => {
+
   return (
-    <Box
+    <Container
       color="#FAFCFE"
       borderWidth="1px"
-      borderRadius="lg"
-      borderColor="#C4DAD6"
+      borderRadius="8px"
+      borderColor="#D8DDE0"
       alignItems="center"
-      p={5}
+      centerContent
+      py="24px"
+      px="30px"
     >
-      <Text textAlign="center" textStyle="calendarEventHeader">{title}</Text>
-      <Text textAlign="center" textStyle="calendarEventTime">{date}</Text>
-    </Box>
+      <Text textAlign="center" textStyle="desktopBodyBold" mb="8px">
+        {title}
+      </Text>
+      <Text textAlign="center" textStyle="desktopSmall" mb="16px">
+        {date}
+      </Text>
+      <Badge
+        color={`${(colorMap as any)[frequency]}.100`}
+        backgroundColor={`${(colorMap as any)[frequency]}.200`}
+        textStyle="desktopSmall"
+        py="6px"
+        ph="14px"
+      >
+        {" "}
+        {frequency}{" "}
+      </Badge>
+    </Container>
   );
 };
 

@@ -47,13 +47,13 @@ const customTheme = extendTheme({
       fontSize: "20px",
       lineHeight: "28px",
     },
-    calendarEventTime: {
+    desktopSmall: {
       fontFamily: "Inter, sans-serif",
       fontSize: "14px",
       lineHeight: "16px",
       color: "black",
     },
-    calendarEventHeader: {
+    desktopBodyBold: {
       fontFamily: "Inter, sans-serif",
       fontWeight: "Bold",
       fontSize: "16px",
@@ -65,6 +65,13 @@ const customTheme = extendTheme({
       fontWeight: "Bold",
       fontSize: "24px",
       lineHeight: "34px",
+      color: "black",
+    },
+    desktopHeader2: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "32px",
+      lineHeight: "42px",
       color: "black",
     }
   },
@@ -85,6 +92,22 @@ const customTheme = extendTheme({
     },
     green: {
       100: "#48BB78",
+    },
+    turnip: {
+      100: "#BC577B",
+      200: "#FCEFF2",
+    },
+    onion: {
+      100: "#8557BC",
+      200: "#F5EFFC",
+    },
+    H2O: {
+      100: "#496DB6",
+      200: "#EFF6FC",
+    },
+    spinach: {
+      100: "#317C71",
+      200: "#EFFCF9",
     },
   },
   breakpoints: {
