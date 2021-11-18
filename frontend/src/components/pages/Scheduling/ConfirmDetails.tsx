@@ -21,10 +21,7 @@ const ConfirmDetails = ({
   return (
     // Insert confirm Donation detail page here
     <Container>
-      <SchedulingProgressBar
-        activeStep={{ label: "3", stepNumber: 3 }}
-        totalSteps={4}
-      />
+      <SchedulingProgressBar activeStep={3} totalSteps={4} />
       <Text textStyle="mobileHeader2"> Confirm Donation Details Page </Text>
       <HStack>
         <Button onClick={previous} variant="navigation">

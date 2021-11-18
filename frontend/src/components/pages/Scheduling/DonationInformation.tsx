@@ -15,10 +15,7 @@ const DonationInformation = ({
   return (
     // Insert Select Date and Time page here
     <Container>
-      <SchedulingProgressBar
-        activeStep={{ label: "1", stepNumber: 1 }}
-        totalSteps={4}
-      />
+      <SchedulingProgressBar activeStep={1} totalSteps={4} />
       <Text textStyle="mobileHeader2">This is Donation Information Page </Text>
       <HStack>
         <Button onClick={previous} variant="navigation">

@@ -22,11 +22,6 @@ export interface SchedulingStepProps {
 }
 
 export interface SchedulingProgessBarProps {
-  activeStep: StepType;
+  activeStep: number;
   totalSteps: number;
 }
-
-type StepType = {
-  label: string;
-  stepNumber: number;
-};
