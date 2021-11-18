@@ -50,53 +50,43 @@ const Scheduling = () => {
   switch (id) {
     case "get started scheduling":
       return (
-        <>
-          <GetStarted
-            formValues={schedulingFormValues}
-            setForm={setSchedulingForm}
-            navigation={navigation}
-          />
-        </>
+        <GetStarted
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
+          navigation={navigation}
+        />
       );
     case "date and time":
       return (
-        <>
-          <SelectDateTime
-            formValues={schedulingFormValues}
-            setForm={setSchedulingForm}
-            navigation={navigation}
-          />
-        </>
+        <SelectDateTime
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
+          navigation={navigation}
+        />
       );
     case "donation information":
       return (
-        <>
-          <DonationInformation
-            formValues={schedulingFormValues}
-            setForm={setSchedulingForm}
-            navigation={navigation}
-          />
-        </>
+        <DonationInformation
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
+          navigation={navigation}
+        />
       );
     case "volunteer information":
       return (
-        <>
-          <VolunteerInformation
-            formValues={schedulingFormValues}
-            setForm={setSchedulingForm}
-            navigation={navigation}
-          />
-        </>
+        <VolunteerInformation
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
+          navigation={navigation}
+        />
       );
     case "confirm donation details":
       return (
-        <>
-          <ConfirmDetails
-            formValues={schedulingFormValues}
-            setForm={setSchedulingForm}
-            navigation={navigation}
-          />
-        </>
+        <ConfirmDetails
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
+          navigation={navigation}
+        />
       );
     default:
       return null;
