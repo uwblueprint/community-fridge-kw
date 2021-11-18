@@ -11,7 +11,6 @@ const SelectDateTime = ({
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
   const { daypart } = formValues;
-  console.log("daypartt", daypart)
 
   const dayparts = [
     "Early Morning (12am - 6am)",
@@ -22,7 +21,6 @@ const SelectDateTime = ({
   ];
 
   const handleChange = (e: any, name:string) => {
-    console.log(e)
     setForm({target: { name, value: e }});
   }
 
