@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
+import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
@@ -84,6 +85,7 @@ const App = (): React.ReactElement => {
                 />
                 <Route exact path="*" component={NotFound} />
               </Switch>
+              <Footer />
             </Router>
           </AuthContext.Provider>
         </SampleContextDispatcherContext.Provider>
