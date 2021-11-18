@@ -11,7 +11,6 @@ import React from "react";
 
 interface RadioSelectGroupProps {
   name: string;
-  value: any;
   values: string[];
   label: string;
   isRequired: boolean;
