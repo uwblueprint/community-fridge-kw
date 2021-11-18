@@ -58,6 +58,12 @@ const customTheme = extendTheme({
       fontSize: "16px",
       lineHeight: "22px",
     },
+    mobileCardDescription: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
+      fontWeight: 600,
+      lineHeight: "20px",
+    },
   },
   colors: {
     squash: {
@@ -73,7 +79,7 @@ const customTheme = extendTheme({
       100: "#48BB78",
     },
     raddish: {
-      100: "#DA1B97",
+      100: "#C31887",
     },
     orange: {
       100: "#FC964C",

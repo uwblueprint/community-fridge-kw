@@ -34,6 +34,24 @@ const getScheduleById = async (scheduleId: string): Promise<Schedule> => {
   }
 };
 
+const getScheduleByDonorId = async (donorId: string): Promise<Schedule[]> => {
+  const bearerToken = `Bearer ${getLocalStorageObjProperty(
+    AUTHENTICATED_USER_KEY,
+    "accessToken",
+  )}`;
+  try {
+    const { data } = await baseAPIClient.get(
+      `/scheduling/?donorId=${donorId}`,
+      {
+        headers: { Authorization: bearerToken },
+      },
+    );
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
 const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
   const bearerToken = `Bearer ${getLocalStorageObjProperty(
     AUTHENTICATED_USER_KEY,
@@ -93,6 +111,7 @@ const deleteSchedule = async (scheduleId: string): Promise<boolean> => {
 export default {
   getSchedules,
   getScheduleById,
+  getScheduleByDonorId,
   createSchedule,
   updateSchedule,
   deleteSchedule,

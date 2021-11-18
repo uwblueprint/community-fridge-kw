@@ -16,7 +16,8 @@ import IDonorService from "../services/interfaces/donorService";
 import IEmailService from "../services/interfaces/emailService";
 import IUserService from "../services/interfaces/userService";
 import IVolunteerService from "../services/interfaces/volunteerService";
-import { Role, UserDTO } from "../types";
+import { Role } from "../types";
+import getErrorMessage from "../utilities/errorMessageUtil";
 
 const authRouter: Router = Router();
 const userService: IUserService = new UserService();
@@ -43,8 +44,8 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
       })
       .status(200)
       .json(rest);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -90,8 +91,8 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       })
       .status(200)
       .json(rest);
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -108,8 +109,8 @@ authRouter.post("/refresh", async (req, res) => {
       })
       .status(200)
       .json({ accessToken: token.accessToken });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -121,8 +122,8 @@ authRouter.post(
     try {
       await authService.revokeTokens(req.params.userId);
       res.status(204).send();
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
     }
   },
 );
@@ -135,8 +136,8 @@ authRouter.post(
     try {
       await authService.resetPassword(req.params.email);
       res.status(204).send();
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
     }
   },
 );
