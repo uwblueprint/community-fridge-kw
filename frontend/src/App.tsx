@@ -53,7 +53,6 @@ const App = (): React.ReactElement => {
           >
             <Router>
               <Header />
-
               <Switch>
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
