@@ -38,6 +38,7 @@ const Scheduling = () => {
     size: "",
     isPickup: false,
     pickupLocation: "",
+    daypart: "",
     startTime: new Date().toDateString(),
     endTime: new Date().toDateString(),
     status: "",

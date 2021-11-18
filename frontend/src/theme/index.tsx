@@ -108,6 +108,9 @@ const customTheme = extendTheme({
     water: {
       100: "#C4DAD6",
     },
+    strawberry: {
+      100: "#F0C5E1",
+    },
   },
   breakpoints: {
     sm: "320px",
