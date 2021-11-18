@@ -32,7 +32,19 @@ interface UseStepType {
 
 const Scheduling = () => {
   const [schedulingFormValues, setSchedulingForm] = useForm({
-    categories: [],
+    categories: [
+      "Dry packaged goods",
+      "Non-perishables",
+      "Fresh produce",
+      "Bread and baked goods",
+      "Oil, spreads, and seasoning",
+      "Tea and coffee",
+      "Frozen meals",
+      "Prepared meals",
+      "Non-alcoholic drinks and juices",
+      "Essential items (masks, hand sanitizer, bags)",
+      "Hygiene products (tampons, pads, soap, etc.)",
+    ],
     size: "",
     isPickup: false,
     pickupLocation: "",

@@ -18,3 +18,14 @@ export interface SchedulingStepProps {
   formValues: SchedulingFormProps;
   setForm: SetForm;
 }
+
+export interface TypesOfItemsInterface {
+  title: string;
+  list: string[];
+}
+
+export interface DonationSizeInterface {
+  image: string;
+  size: string;
+  description: string;
+}
