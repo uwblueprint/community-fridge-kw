@@ -34,12 +34,11 @@ const Header = (): JSX.Element => {
     const success = await authAPIClient.logout(authenticatedUser?.id);
     if (success) {
       setAuthenticatedUser(null);
-      history.push(LANDING_PAGE);
     }
   };
 
   return (
-    <Container pt="0.5rem" maxWidth={{ base: "default", md: "70%" }}>
+    <Container pt="1.5rem" maxWidth={{ base: "default", md: "70%" }}>
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="row"
