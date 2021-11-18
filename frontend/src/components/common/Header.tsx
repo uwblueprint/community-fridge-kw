@@ -12,21 +12,19 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect } from "react";
-import { Link as ReactLink, useHistory } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link as ReactLink } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import {
-  HOME_PAGE,
+  DASHBOARD_PAGE,
   LANDING_PAGE,
   LOGIN_PAGE,
-  SCHEDULING_PAGE,
 } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { CloseIcon, MenuIcon } from "./icons";
 
 const Header = (): JSX.Element => {
-  const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
 
@@ -35,6 +33,7 @@ const Header = (): JSX.Element => {
     if (success) {
       setAuthenticatedUser(null);
     }
+    onClose();
   };
 
   return (
@@ -71,16 +70,21 @@ const Header = (): JSX.Element => {
           <Link as={ReactLink} to={LANDING_PAGE}>
             Home
           </Link>
-          <Link as={ReactLink} to={SCHEDULING_PAGE}>
-            Schedule Donation
-          </Link>
           {authenticatedUser ? (
             <>
+              <Link as={ReactLink} to={DASHBOARD_PAGE}>
+                Scheduled Donations
+              </Link>
               <Link as={ReactLink} to={LANDING_PAGE}>
                 {/* update link to account page */}
                 My Account
               </Link>
-              <Button onClick={onLogOutClick} variant="link" color="black">
+              <Button
+                onClick={onLogOutClick}
+                variant="link"
+                color="black"
+                fontWeight="400"
+              >
                 Log Out
               </Button>
             </>
@@ -93,7 +97,7 @@ const Header = (): JSX.Element => {
       </Flex>
       <Drawer placement="left" onClose={onClose} isOpen={isOpen} size="xs">
         <DrawerOverlay />
-        <DrawerContent backgroundColor="evergreen.100">
+        <DrawerContent backgroundColor="squash.100">
           <DrawerBody>
             <IconButton
               w="24px"
@@ -104,39 +108,26 @@ const Header = (): JSX.Element => {
               backgroundColor="transparent"
               onClick={onClose}
             >
-              <CloseIcon color="white" />
+              <CloseIcon color="black" />
             </IconButton>
             <Image
+              w="120px"
               mt="70px"
+              ml="20px"
               mb="30px"
               src="drawer-logo.png"
               alt="Community Fridge logo"
             />
-            <Stack spacing="1rem">
-              <Link
-                as={ReactLink}
-                to={LANDING_PAGE}
-                color="squash.100"
-                textStyle="mobileHeader4"
-              >
+            <Stack spacing="1rem" ml="20px">
+              <Link as={ReactLink} to={LANDING_PAGE} onClick={onClose}>
                 Home
-              </Link>
-              <Link
-                as={ReactLink}
-                to={SCHEDULING_PAGE}
-                color="squash.100"
-                textStyle="mobileHeader4"
-              >
-                Schedule Donation
               </Link>
               {authenticatedUser ? (
                 <>
-                  <Link
-                    as={ReactLink}
-                    to={LANDING_PAGE}
-                    color="squash.100"
-                    textStyle="mobileHeader4"
-                  >
+                  <Link as={ReactLink} to={DASHBOARD_PAGE} onClick={onClose}>
+                    Scheduled Donations
+                  </Link>
+                  <Link as={ReactLink} to={LANDING_PAGE} onClick={onClose}>
                     {/* update link to account page */}
                     My Account
                   </Link>
@@ -144,20 +135,15 @@ const Header = (): JSX.Element => {
                     onClick={onLogOutClick}
                     variant="link"
                     position="fixed"
-                    bottom="20px"
-                    color="squash.100"
-                    textStyle="mobileHeader4"
+                    bottom="30px"
+                    color="black"
+                    fontWeight="400"
                   >
                     Log Out
                   </Button>
                 </>
               ) : (
-                <Link
-                  as={ReactLink}
-                  to={LOGIN_PAGE}
-                  color="squash.100"
-                  textStyle="mobileHeader4"
-                >
+                <Link as={ReactLink} to={LOGIN_PAGE} onClick={onClose}>
                   Sign In
                 </Link>
               )}
