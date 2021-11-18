@@ -4,15 +4,12 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
-  Icon,
   IconButton,
   Image,
   Link,
   Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect } from "react";
@@ -72,36 +69,26 @@ const Header = (): JSX.Element => {
           direction="row"
           display={{ base: "none", md: "flex" }}
         >
-          <Text>
-            <Link as={ReactLink} to={LANDING_PAGE}>
-              Home
-            </Link>
-          </Text>
-          <Text>
-            <Link as={ReactLink} to={SCHEDULING_PAGE}>
-              Schedule Donation
-            </Link>
-          </Text>
-          {authenticatedUser && (
+          <Link as={ReactLink} to={LANDING_PAGE}>
+            Home
+          </Link>
+          <Link as={ReactLink} to={SCHEDULING_PAGE}>
+            Schedule Donation
+          </Link>
+          {authenticatedUser ? (
             <>
-              <Text>
-                <Link as={ReactLink} to={LANDING_PAGE}>
-                  {" "}
-                  {/* update this to account page */}
-                  My Account
-                </Link>
-              </Text>
+              <Link as={ReactLink} to={LANDING_PAGE}>
+                {/* update link to account page */}
+                My Account
+              </Link>
               <Button onClick={onLogOutClick} variant="link" color="black">
-                <Text>Log Out</Text>
+                Log Out
               </Button>
             </>
-          )}
-          {!authenticatedUser && (
-            <Text>
-              <Link as={ReactLink} to={LOGIN_PAGE}>
-                Sign In
-              </Link>
-            </Text>
+          ) : (
+            <Link as={ReactLink} to={LOGIN_PAGE}>
+              Sign In
+            </Link>
           )}
         </Stack>
       </Flex>
@@ -127,45 +114,55 @@ const Header = (): JSX.Element => {
               alt="Community Fridge logo"
             />
             <Stack spacing="1rem">
-              <Text color="squash.100" textStyle="mobileHeader4">
-                <Link as={ReactLink} to={LANDING_PAGE}>
-                  Home
-                </Link>
-              </Text>
-              <Text color="squash.100" textStyle="mobileHeader4">
-                <Link as={ReactLink} to={SCHEDULING_PAGE}>
-                  Schedule Donation
-                </Link>
-              </Text>
-              {authenticatedUser && (
-                <Text color="squash.100" textStyle="mobileHeader4">
-                  <Link as={ReactLink} to={LANDING_PAGE}>
-                    {" "}
-                    {/* update this to account page */}
+              <Link
+                as={ReactLink}
+                to={LANDING_PAGE}
+                color="squash.100"
+                textStyle="mobileHeader4"
+              >
+                Home
+              </Link>
+              <Link
+                as={ReactLink}
+                to={SCHEDULING_PAGE}
+                color="squash.100"
+                textStyle="mobileHeader4"
+              >
+                Schedule Donation
+              </Link>
+              {authenticatedUser ? (
+                <>
+                  <Link
+                    as={ReactLink}
+                    to={LANDING_PAGE}
+                    color="squash.100"
+                    textStyle="mobileHeader4"
+                  >
+                    {/* update link to account page */}
                     My Account
                   </Link>
-                </Text>
-              )}
-              {!authenticatedUser && (
-                <Text color="squash.100" textStyle="mobileHeader4">
-                  <Link as={ReactLink} to={LOGIN_PAGE}>
-                    Sign In
-                  </Link>
-                </Text>
+                  <Button
+                    onClick={onLogOutClick}
+                    variant="link"
+                    position="fixed"
+                    bottom="20px"
+                    color="squash.100"
+                    textStyle="mobileHeader4"
+                  >
+                    Log Out
+                  </Button>
+                </>
+              ) : (
+                <Link
+                  as={ReactLink}
+                  to={LOGIN_PAGE}
+                  color="squash.100"
+                  textStyle="mobileHeader4"
+                >
+                  Sign In
+                </Link>
               )}
             </Stack>
-            {authenticatedUser && (
-              <Button
-                onClick={onLogOutClick}
-                variant="link"
-                position="fixed"
-                bottom="20px"
-              >
-                <Text color="squash.100" textStyle="mobileHeader4">
-                  Log Out
-                </Text>
-              </Button>
-            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

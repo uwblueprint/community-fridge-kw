@@ -1,7 +1,6 @@
 import React from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
-import Header from "../../common/Header";
 import ConfirmDetails from "./ConfirmDetails";
 import DonationInformation from "./DonationInformation";
 import GetStarted from "./GetStarted";
@@ -52,7 +51,6 @@ const Scheduling = () => {
     case "get started scheduling":
       return (
         <>
-          <Header />
           <GetStarted
             formValues={schedulingFormValues}
             setForm={setSchedulingForm}
@@ -63,7 +61,6 @@ const Scheduling = () => {
     case "date and time":
       return (
         <>
-          <Header />
           <SelectDateTime
             formValues={schedulingFormValues}
             setForm={setSchedulingForm}
@@ -74,7 +71,6 @@ const Scheduling = () => {
     case "donation information":
       return (
         <>
-          <Header />
           <DonationInformation
             formValues={schedulingFormValues}
             setForm={setSchedulingForm}
@@ -85,7 +81,6 @@ const Scheduling = () => {
     case "volunteer information":
       return (
         <>
-          <Header />
           <VolunteerInformation
             formValues={schedulingFormValues}
             setForm={setSchedulingForm}
@@ -96,7 +91,6 @@ const Scheduling = () => {
     case "confirm donation details":
       return (
         <>
-          <Header />
           <ConfirmDetails
             formValues={schedulingFormValues}
             setForm={setSchedulingForm}

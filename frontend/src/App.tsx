@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
+import Header from "./components/common/Header";
 import Default from "./components/pages/Default";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
@@ -49,6 +50,7 @@ const App = (): React.ReactElement => {
             value={{ authenticatedUser, setAuthenticatedUser }}
           >
             <Router>
+              <Header />
               <Switch>
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />

@@ -12,7 +12,6 @@ import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import { LOGIN_PAGE } from "../../../constants/Routes";
-import Header from "../../common/Header";
 import { CloseIcon } from "../../common/icons";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
@@ -32,7 +31,6 @@ const CreateAccount = ({
 
   return (
     <>
-      <Header />
       <Container pl="42px" pr="42px" pt="0.5rem">
         <IconButton
           float="right"

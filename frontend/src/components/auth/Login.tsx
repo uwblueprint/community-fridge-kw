@@ -15,7 +15,6 @@ import authAPIClient from "../../APIClients/AuthAPIClient";
 import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
-import Header from "../common/Header";
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
@@ -32,7 +31,6 @@ const Login = (): React.ReactElement => {
 
   return (
     <>
-      <Header />
       <Container pl="42px" pr="42px" pt="73px">
         <Text mt="2" textStyle="mobileHeader1">
           Log in to account

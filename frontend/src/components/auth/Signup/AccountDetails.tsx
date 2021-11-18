@@ -26,7 +26,6 @@ import {
   passwordVerificationReducer,
 } from "../../../reducers/PasswordVerificationReducer";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
-import Header from "../../common/Header";
 import { BackArrow, CloseIcon } from "../../common/icons";
 import {
   checkForLowerCase,
@@ -101,7 +100,6 @@ const AccountDetails = ({
 
   return (
     <>
-      <Header />
       <Container pl="42px" pr="42px" pt="0.5rem">
         <IconButton
           marginLeft="-12px"
