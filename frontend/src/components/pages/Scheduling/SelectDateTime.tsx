@@ -30,6 +30,7 @@ const SelectDateTime = ({
       <RadioSelectGroup
         name="daypart"
         label="What time of day would you like to drop off your donation?"
+        value={daypart}
         values={dayparts}
         isRequired
         onChange={(e: any) => handleChange(e, "daypart")}
