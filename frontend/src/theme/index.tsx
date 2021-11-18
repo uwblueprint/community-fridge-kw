@@ -83,6 +83,13 @@ const customTheme = extendTheme({
       lineHeight: "19px",
       color: "black",
     },
+    desktopHeader: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "24px",
+      lineHeight: "34px",
+      color: "black",
+    }
   },
   colors: {
     squash: {
