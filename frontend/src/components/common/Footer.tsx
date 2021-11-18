@@ -1,12 +1,4 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Link,
-  Text,
-  useMediaQuery,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Container, Flex, Link, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 
 import { Email, Facebook, Instagram } from "./icons";
