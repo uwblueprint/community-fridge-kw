@@ -37,7 +37,6 @@ const Header = (): JSX.Element => {
     const success = await authAPIClient.logout(authenticatedUser?.id);
     if (success) {
       setAuthenticatedUser(null);
-      history.push(LANDING_PAGE);
     }
   };
 
