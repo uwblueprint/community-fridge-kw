@@ -7,6 +7,7 @@ import {
 } from "../../types";
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
+import getErrorMessage from "../../utilities/errorMessageUtil";
 
 const Logger = logger(__filename);
 
@@ -23,7 +24,7 @@ class SchedulingService implements ISchedulingService {
         throw new Error(`scheduling with id ${id} not found.`);
       }
     } catch (error) {
-      Logger.error(`Failed to get user. Reason = ${error.message}`);
+      Logger.error(`Failed to get user. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
@@ -75,7 +76,9 @@ class SchedulingService implements ISchedulingService {
         };
       });
     } catch (error) {
-      Logger.error(`Failed to get schedules. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to get schedules. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
 
@@ -104,7 +107,9 @@ class SchedulingService implements ISchedulingService {
         };
       });
     } catch (error) {
-      Logger.error(`Failed to get schedulings. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to get schedulings. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
 
@@ -130,7 +135,9 @@ class SchedulingService implements ISchedulingService {
         notes: scheduling.notes,
       });
     } catch (error) {
-      Logger.error(`Failed to create scheduling. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to create scheduling. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
 
@@ -157,7 +164,7 @@ class SchedulingService implements ISchedulingService {
     scheduling: UpdateSchedulingDTO,
   ): Promise<SchedulingDTO> {
     try {
-      const updatesSnakeCase: Record<string, any> = {};
+      const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
         updatesSnakeCase[snakeCase(key)] = value;
       });
@@ -185,7 +192,9 @@ class SchedulingService implements ISchedulingService {
         notes: updatedScheduling.notes,
       };
     } catch (error) {
-      Logger.error(`Failed to update scheduling. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to update scheduling. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }
@@ -199,7 +208,9 @@ class SchedulingService implements ISchedulingService {
         throw new Error(`scheduling with id ${id} was not deleted.`);
       }
     } catch (error) {
-      Logger.error(`Failed to delete scheduling. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to delete scheduling. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }

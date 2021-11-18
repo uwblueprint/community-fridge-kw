@@ -11,6 +11,7 @@ import {
   IEntityService,
 } from "../services/interfaces/IEntityService";
 import { Role } from "../types";
+import getErrorMessage from "../utilities/errorMessageUtil";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const upload = multer({ dest: "uploads/" });
@@ -45,8 +46,8 @@ entityRouter.post(
         fs.unlinkSync(req.file.path);
       }
       res.status(201).json(newEntity);
-    } catch (e: any) {
-      res.status(500).send(e.message);
+    } catch (e: unknown) {
+      res.status(500).send(getErrorMessage(e));
     }
   },
 );
@@ -62,10 +63,10 @@ entityRouter.get("/", async (req, res) => {
       contentType,
       entities,
     );
-  } catch (e: any) {
+  } catch (e: unknown) {
     await sendResponseByMimeType(res, 500, contentType, [
       {
-        error: e.message,
+        error: getErrorMessage(e),
       },
     ]);
   }
@@ -78,8 +79,8 @@ entityRouter.get("/:id", async (req, res) => {
   try {
     const entity = await entityService.getEntity(id);
     res.status(200).json(entity);
-  } catch (e: any) {
-    res.status(500).send(e.message);
+  } catch (e: unknown) {
+    res.status(500).send(getErrorMessage(e));
   }
 });
 
@@ -105,8 +106,8 @@ entityRouter.put(
         fs.unlinkSync(req.file.path);
       }
       res.status(200).json(entity);
-    } catch (e: any) {
-      res.status(500).send(e.message);
+    } catch (e: unknown) {
+      res.status(500).send(getErrorMessage(e));
     }
   },
 );
@@ -118,8 +119,8 @@ entityRouter.delete("/:id", async (req, res) => {
   try {
     await entityService.deleteEntity(id);
     res.status(204).send();
-  } catch (e: any) {
-    res.status(500).send(e.message);
+  } catch (e: unknown) {
+    res.status(500).send(getErrorMessage(e));
   }
 });
 
@@ -129,8 +130,8 @@ entityRouter.get("/files/:fileUUID", async (req, res) => {
   try {
     const fileURL = await fileStorageService.getFile(fileUUID);
     res.status(200).json({ fileURL });
-  } catch (e: any) {
-    res.status(500).send(e.message);
+  } catch (e: unknown) {
+    res.status(500).send(getErrorMessage(e));
   }
 });
 

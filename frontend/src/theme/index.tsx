@@ -15,12 +15,12 @@ const customTheme = extendTheme({
       fontFamily: "Inter, sans-serif",
       fontSize: "24px",
       lineHeight: "32px",
-      fontWeight: 700,
+      fontWeight: 600,
       letterSpacing: "-0.01rem",
     },
     mobileHeader3: {
       fontFamily: "Inter, sans-serif",
-      fontWeight: 500,
+      fontWeight: 700,
       fontSize: "20px",
       lineHeight: "28px",
     },
@@ -58,6 +58,12 @@ const customTheme = extendTheme({
       fontSize: "16px",
       lineHeight: "22px",
     },
+    mobileCardDescription: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
+      fontWeight: 600,
+      lineHeight: "20px",
+    },
   },
   colors: {
     squash: {
@@ -73,7 +79,7 @@ const customTheme = extendTheme({
       100: "#48BB78",
     },
     raddish: {
-      100: "#DA1B97",
+      100: "#C31887",
     },
     orange: {
       100: "#FC964C",

@@ -1,4 +1,5 @@
 import {
+  Box,
   Container,
   Flex,
   Link,
@@ -8,90 +9,73 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
-import { Facebook, Instagram } from "./icons";
+import { Email, Facebook, Instagram } from "./icons";
 
 const Footer = (): JSX.Element => {
-  const [isScreenLargerThan] = useMediaQuery("(min-width: 320px)");
   return (
-    <Container pt="24px">
-      <VStack>
-        {isScreenLargerThan ? (
-          <>
-            <Flex>
-              <VStack pr="100px">
-                <Container>
-                  <Text
-                    marginBottom="24px"
-                    textStyle="mobileHeader1"
-                    color="raddish.100"
-                  >
-                    Community Fridge
-                  </Text>
-                  <Text>
-                    The Kitchener Market: <br />
-                    300 King Street East, <br />
-                    Kitchener, ON N2H 2V5 <br />
-                    (647) 607-1312 <br />
-                    communityfridgekw@gmail.com
-                  </Text>
-                </Container>
-              </VStack>
-              <Container>
-                <Text textStyle="mobileHeader2">Stay Updated!</Text>
-                <br />
-                <Link
-                  href="https://www.facebook.com/CommunityFridgeKW/"
-                  pr="18px"
-                >
-                  <Facebook />
-                </Link>
-                <Link href="https://www.instagram.com/communityfridgekw/">
-                  <Instagram />
-                </Link>
-              </Container>
-            </Flex>
-            <Text pt="24px">© Community Fridge KW 2021</Text>
-          </>
-        ) : (
-          <>
+    <Container p={{ base: "1.5rem" }}>
+      <Box display={{ md: "flex" }}>
+        <VStack
+          mt={{ base: 4, md: 0 }}
+          align={{ md: "left" }}
+          mr={{ base: "10%", lg: "10%", md: "0%", sm: "0%" }}
+        >
+          <Text textStyle="mobileHeader1">Community Fridge</Text>
+          <Text mt={{ base: 4 }}>
+            Helping facilitate access to food and reduce food waste
+          </Text>
+        </VStack>
+
+        <VStack
+          mt={{ base: 4, md: 0 }}
+          align={{ md: "left" }}
+          mr={{ base: "10%", lg: "10%", md: "0%", sm: "0%" }}
+        >
+          <Text color="raddish.100" textStyle="mobileHeader3">
+            Location
+          </Text>
+          <Text mt={{ base: 4 }}>
+            The Kitchener Market: <br />
+            300 King Street East, <br />
+            Kitchener, ON N2H 2V5 <br />
+            (647) 607-1312
+          </Text>
+        </VStack>
+
+        <VStack
+          mt={{ base: 4, md: 0 }}
+          align={{ md: "left" }}
+          mr={{ base: "10%", lg: "10%", md: "0%", sm: "0%" }}
+        >
+          <Text color="raddish.100" textStyle="mobileHeader3">
+            Follow Us
+          </Text>
+          <Flex mt={{ base: 4 }}>
+            <Link href="https://www.facebook.com/CommunityFridgeKW/">
+              <Facebook />
+            </Link>
             <Container>
-              <Text
-                marginBottom="24px"
-                textStyle="mobileHeader1"
-                color="raddish.100"
-              >
-                Community Fridge
-              </Text>
-              <Text>
-                The Kitchener Market: <br />
-                300 King Street East, <br />
-                Kitchener, ON N2H 2V5 <br />
-                (647) 607-1312 <br />
-                communityfridgekw@gmail.com
-              </Text>
+              <Text>Facebook</Text>
             </Container>
+          </Flex>
+          <Flex mt={{ base: 4 }}>
+            <Link href="https://www.instagram.com/communityfridgekw/">
+              <Instagram />
+            </Link>
             <Container>
-              <Text pt="18px" textStyle="mobileHeader2">
-                Stay Updated!
-              </Text>
+              <Text>Instagram</Text>
             </Container>
+          </Flex>
+          <Flex mt={{ base: 4 }}>
+            <Link href="mailto:communityfridgekw@gmail.com">
+              <Email />
+            </Link>
             <Container>
-              <Link
-                href="https://www.facebook.com/CommunityFridgeKW/"
-                pr="18px"
-              >
-                <Facebook />
-              </Link>
-              <Link href="https://www.instagram.com/communityfridgekw/">
-                <Instagram />
-              </Link>
+              <Text>Email</Text>
             </Container>
-            <Container>
-              <Text pt="8px">© Community Fridge KW 2021</Text>
-            </Container>
-          </>
-        )}
-      </VStack>
+          </Flex>
+        </VStack>
+      </Box>
     </Container>
   );
 };

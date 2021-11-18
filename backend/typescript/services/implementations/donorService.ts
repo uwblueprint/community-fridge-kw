@@ -8,6 +8,7 @@ import IDonorService from "../interfaces/donorService";
 import logger from "../../utilities/logger";
 import Donor from "../../models/donor.model";
 import User from "../../models/user.model";
+import getErrorMessage from "../../utilities/errorMessageUtil";
 
 const Logger = logger(__filename);
 
@@ -30,7 +31,43 @@ class DonorService implements IDonorService {
         throw new Error(`userId ${donor.user_id} not found.`);
       }
     } catch (error) {
-      Logger.error(`Failed to get donor. Reason = ${error.message}`);
+      Logger.error(`Failed to get donor. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+
+    return {
+      id: String(donor.id),
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      role: user.role,
+      phoneNumber: user.phone_number,
+      userId: String(donor.user_id),
+      facebookLink: donor.facebook_link,
+      instagramLink: donor.instagram_link,
+      businessName: donor.business_name,
+    };
+  }
+
+  async getDonorByUserId(userId: string): Promise<UserDonorDTO> {
+    let donor: Donor | null;
+    let user: User | null;
+
+    try {
+      donor = await Donor.findOne({
+        where: { user_id: Number(userId) },
+        include: User,
+      });
+
+      if (!donor) {
+        throw new Error(`donor with userid ${userId} not found.`);
+      }
+      user = donor.user;
+      if (!user) {
+        throw new Error(`user with userid ${userId} not found`);
+      }
+    } catch (error) {
+      Logger.error(`Failed to get donor. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
@@ -76,7 +113,7 @@ class DonorService implements IDonorService {
         }),
       );
     } catch (error) {
-      Logger.error(`Failed to get donors. Reason = ${error.message}`);
+      Logger.error(`Failed to get donors. Reason = ${getErrorMessage(error)}`);
       throw error;
     }
 
@@ -102,7 +139,9 @@ class DonorService implements IDonorService {
         throw new Error(`id ${id} not found.`);
       }
     } catch (error) {
-      Logger.error(`Failed to update donor. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to update donor. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }
@@ -123,7 +162,9 @@ class DonorService implements IDonorService {
         throw new Error(`id ${id} was not deleted in Postgres.`);
       }
     } catch (error) {
-      Logger.error(`Failed to delete donor. Reason = ${error.message}`);
+      Logger.error(
+        `Failed to delete donor. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }

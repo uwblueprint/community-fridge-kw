@@ -1,7 +1,7 @@
-import * as firebaseAdmin from "firebase-admin";
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
 import { UserVolunteerDTO, VolunteerDTO } from "../../types";
+import getErrorMessage from "../../utilities/errorMessageUtil";
 import logger from "../../utilities/logger";
 import IVolunteerService from "../interfaces/volunteerService";
 
@@ -19,8 +19,10 @@ class VolunteerService implements IVolunteerService {
       newVolunteer = await Volunteer.create({
         user_id: volunteer.userId,
       });
-    } catch (error: any) {
-      Logger.error(`Failed to create volunteer. Reason = ${error.message}`);
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to create volunteer. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
 
@@ -48,8 +50,10 @@ class VolunteerService implements IVolunteerService {
       if (!user) {
         throw new Error(`userID ${volunteer.user_id} not found.`);
       }
-    } catch (error: any) {
-      Logger.error(`Failed to get volunteer. Reason = ${error.message}`);
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get volunteer. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
 
@@ -91,8 +95,10 @@ class VolunteerService implements IVolunteerService {
           };
         }),
       );
-    } catch (error: any) {
-      Logger.error(`Failed to get volunteers. Reason = ${error.message}`);
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get volunteers. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
 
@@ -116,8 +122,10 @@ class VolunteerService implements IVolunteerService {
       if (numDestroyed <= 0) {
         throw new Error(`id ${id} was not deleted in Postgres.`);
       }
-    } catch (error: any) {
-      Logger.error(`Failed to delete volunteer. Reason = ${error.message}`);
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to delete volunteer. Reason = ${getErrorMessage(error)}`,
+      );
       throw error;
     }
   }

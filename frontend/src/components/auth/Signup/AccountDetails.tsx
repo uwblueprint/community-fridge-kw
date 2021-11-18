@@ -26,7 +26,6 @@ import {
   passwordVerificationReducer,
 } from "../../../reducers/PasswordVerificationReducer";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
-import Header from "../../common/Header";
 import { BackArrow, CloseIcon } from "../../common/icons";
 import {
   checkForLowerCase,
@@ -100,112 +99,109 @@ const AccountDetails = ({
   }
 
   return (
-    <>
-      <Header />
-      <Container pl="42px" pr="42px" pt="0.5rem">
-        <IconButton
-          marginLeft="-12px"
-          float="left"
-          backgroundColor="transparent"
-          aria-label="go back"
-          onClick={previous}
-        >
-          <BackArrow />
-        </IconButton>
-        <IconButton
-          float="right"
-          marginRight="-12px"
-          aria-label="close sign up"
-          onClick={() => history.push(LANDING_PAGE)}
-          backgroundColor="transparent"
-        >
-          <CloseIcon color="#111111" />
-        </IconButton>
-        <Text mt="67px" textStyle="mobileHeader1">
-          Account details
-        </Text>
-        <FormControl mt="2rem">
-          <Box>
-            <MandatoryInputDescription label="Email Address" />
-            <Input
-              mt="2"
-              value={email}
-              onChange={setForm}
-              name="email"
-              placeholder="Enter email"
-            />
-          </Box>
-          <Box mt="1rem">
-            <MandatoryInputDescription label="Password" />
+    <Container pl="42px" pr="42px" pt="0.5rem">
+      <IconButton
+        marginLeft="-12px"
+        float="left"
+        backgroundColor="transparent"
+        aria-label="go back"
+        onClick={previous}
+      >
+        <BackArrow />
+      </IconButton>
+      <IconButton
+        float="right"
+        marginRight="-12px"
+        aria-label="close sign up"
+        onClick={() => history.push(LANDING_PAGE)}
+        backgroundColor="transparent"
+      >
+        <CloseIcon color="#111111" />
+      </IconButton>
+      <Text mt="67px" textStyle="mobileHeader1">
+        Account details
+      </Text>
+      <FormControl mt="2rem">
+        <Box>
+          <MandatoryInputDescription label="Email Address" />
+          <Input
+            mt="2"
+            value={email}
+            onChange={setForm}
+            name="email"
+            placeholder="Enter email"
+          />
+        </Box>
+        <Box mt="1rem">
+          <MandatoryInputDescription label="Password" />
 
-            <InputGroup size="md">
-              <Input
-                pr="4.5rem"
-                type={showPassword ? "text" : "password"}
-                placeholder="New password"
-                name="password"
-                value={password}
-                onChange={(event) => {
-                  verifyPassword(event?.target.value);
-                  setForm(event);
-                }}
+          <InputGroup size="md">
+            <Input
+              pr="4.5rem"
+              type={showPassword ? "text" : "password"}
+              placeholder="New password"
+              name="password"
+              value={password}
+              onChange={(event) => {
+                verifyPassword(event?.target.value);
+                setForm(event);
+              }}
+            />
+            <InputRightElement width="4.5rem">
+              <Button
+                h="1.75rem"
+                size="sm"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+
+          <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
+            <Text>Password Requirements: </Text>
+            <Stack alignItems="start" spacing="0">
+              <PasswordRequirement
+                state={state.isTwelveChars}
+                label="minimum of 12 characters as string"
               />
-              <InputRightElement width="4.5rem">
-                <Button
-                  h="1.75rem"
-                  size="sm"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
+              <PasswordRequirement
+                state={state.isUpperCase}
+                label="at least 1 uppercase letter"
+              />
+              <PasswordRequirement
+                state={state.isLowerCase}
+                label="at least 1 lowercase letter"
+              />
+              <PasswordRequirement
+                state={state.isNumber}
+                label="at least 1 number"
+              />
+              <PasswordRequirement
+                state={state.isSpecialChar}
+                label="at least 1 special character"
+              />
+            </Stack>
+          </Text>
+        </Box>
 
-            <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
-              <Text>Password Requirements: </Text>
-              <Stack alignItems="start" spacing="0">
-                <PasswordRequirement
-                  state={state.isTwelveChars}
-                  label="minimum of 12 characters as string"
-                />
-                <PasswordRequirement
-                  state={state.isUpperCase}
-                  label="at least 1 uppercase letter"
-                />
-                <PasswordRequirement
-                  state={state.isLowerCase}
-                  label="at least 1 lowercase letter"
-                />
-                <PasswordRequirement
-                  state={state.isNumber}
-                  label="at least 1 number"
-                />
-                <PasswordRequirement
-                  state={state.isSpecialChar}
-                  label="at least 1 special character"
-                />
-              </Stack>
-            </Text>
-          </Box>
-
-          <Box mt="2rem">
-            <MandatoryInputDescription label="Confirm password" />
-            <Input
-              mt="2"
-              value={confirmPassword}
-              onChange={setForm}
-              name="confirmPassword"
-              placeholder="Re-enter password"
-            />
-          </Box>
-          <Box mt="4rem">
-            <Button mt="2" variant="authNavigation" onClick={onSignupClick}>
-              Next
-            </Button>
-          </Box>
-        </FormControl>
-      </Container>
-    </>
+        <Box mt="2rem">
+          <MandatoryInputDescription label="Confirm password" />
+          <Input
+            mt="2"
+            value={confirmPassword}
+            onChange={setForm}
+            name="confirmPassword"
+            placeholder="Re-enter password"
+          />
+        </Box>
+        <Box mt="4rem">
+          <Button mt="2" variant="authNavigation" onClick={onSignupClick}>
+            Next
+          </Button>
+        </Box>
+      </FormControl>
+    </Container>
   );
 };
 

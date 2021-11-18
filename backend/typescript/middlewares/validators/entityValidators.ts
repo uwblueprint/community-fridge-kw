@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import getErrorMessage from "../../utilities/errorMessageUtil";
 import {
   getApiValidationError,
   getFileTypeValidationError,
@@ -16,8 +17,8 @@ export const entityRequestDtoValidator = async (
   let body;
   try {
     body = JSON.parse(req.body.body);
-  } catch (e: any) {
-    return res.status(400).send(e.message);
+  } catch (e: unknown) {
+    return res.status(400).send(getErrorMessage(e));
   }
   if (!validatePrimitive(body.stringField, "string")) {
     return res.status(400).send(getApiValidationError("stringField", "string"));
