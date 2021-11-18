@@ -20,9 +20,9 @@ const SelectDateTime = ({
     "Night (9pm - 12am)",
   ];
 
-  const handleChange = (e: any, name:string) => {
-    setForm({target: { name, value: e }});
-  }
+  const handleChange = (e: any, name: string) => {
+    setForm({ target: { name, value: e } });
+  };
 
   return (
     <Container>

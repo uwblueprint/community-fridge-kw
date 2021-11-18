@@ -5,19 +5,17 @@ import {
   FormLabel,
   useRadio,
   useRadioGroup,
-  useStyleConfig,
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
 
-
 interface RadioSelectGroupProps {
-  name: string,
-  value: any,
-  values: string[],
-  label: string,
-  isRequired: boolean
-  onChange: any
+  name: string;
+  value: any;
+  values: string[];
+  label: string;
+  isRequired: boolean;
+  onChange: any;
 }
 
 const RadioSelectButton = (props: any) => {
@@ -25,8 +23,6 @@ const RadioSelectButton = (props: any) => {
   const input = getInputProps();
   const checkbox = getCheckboxProps();
   const { children } = props;
-
-  // const styles = useStyleConfig("RadioSelectButton", { variant });
 
   const RadioButtonStyle = {
     default: {
@@ -52,7 +48,6 @@ const RadioSelectButton = (props: any) => {
       <input {...input} />
       <Box
         {...checkbox}
-        // __css={styles}
         {...RadioButtonStyle.default}
         _checked={RadioButtonStyle.selected}
       >
@@ -61,8 +56,6 @@ const RadioSelectButton = (props: any) => {
     </Box>
   );
 };
-
-
 
 const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   const { name, values, label, isRequired, onChange } = props;
