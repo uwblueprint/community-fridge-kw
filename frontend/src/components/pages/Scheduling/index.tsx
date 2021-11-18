@@ -36,6 +36,7 @@ const Scheduling = () => {
     size: "",
     isPickup: false,
     pickupLocation: "",
+    daypart: "Early Morning (12am - 6am)",
     startTime: new Date().toDateString(),
     endTime: new Date().toDateString(),
     status: "",

@@ -35,6 +35,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-google-login": "^5.2.2",
+    "react-hook-form": "^7.19.5",
     "react-hooks-helper": "^1.6.0",
     "react-json-schema": "^1.2.2",
     "react-jsonschema-form": "^1.8.1",

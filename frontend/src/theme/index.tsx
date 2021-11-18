@@ -1,6 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
 
 import Button from "./components/Button";
+import RadioSelectButton from "./components/RadioSelectButton";
 
 const customTheme = extendTheme({
   textStyles: {
@@ -102,6 +103,9 @@ const customTheme = extendTheme({
     water: {
       100: "#C4DAD6",
     },
+    strawberry: {
+      100: "#F0C5E1",
+    },
   },
   breakpoints: {
     sm: "320px",
@@ -110,6 +114,7 @@ const customTheme = extendTheme({
   },
   components: {
     Button,
+    // RadioSelectButton
   },
   config: {
     initialColorMode: "light",
