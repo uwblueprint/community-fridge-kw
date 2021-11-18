@@ -58,15 +58,16 @@ const RadioSelectButton = (props: any) => {
 };
 
 const RadioSelectGroup = (props: RadioSelectGroupProps) => {
-  const { name, values, label, isRequired, onChange } = props;
+  const { name, value, values, label, isRequired, onChange } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     onChange,
+    value
   });
 
-  const radioSelectButtons = values.map((value) => (
-    <RadioSelectButton key={value} {...getRadioProps({ value })}>
-      {value}
+  const radioSelectButtons = values.map((v) => (
+    <RadioSelectButton key={v} {...getRadioProps({ value: v })}>
+      {v}
     </RadioSelectButton>
   ));
 
