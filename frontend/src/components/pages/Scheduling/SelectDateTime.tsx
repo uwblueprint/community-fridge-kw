@@ -21,9 +21,9 @@ const SelectDateTime = ({
     "Night (9pm - 12am)",
   ];
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: any, name:string) => {
     console.log(e)
-    setForm(e)
+    setForm({target: { name, value: e }});
   }
 
   return (
@@ -35,7 +35,7 @@ const SelectDateTime = ({
         value={daypart}
         values={dayparts}
         isRequired
-        onChange={handleChange}
+        onChange={(e: any) => handleChange(e, "daypart")}
       />
       <HStack>
         <Button onClick={previous} variant="navigation">

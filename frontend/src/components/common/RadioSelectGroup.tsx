@@ -82,7 +82,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   return (
     <FormControl isRequired={isRequired}>
       <FormLabel>{label}</FormLabel>
-      <VStack {...group}>{radioSelectButtons}</VStack>;
+      <VStack {...group}>{radioSelectButtons}</VStack>
     </FormControl>
   );
 };
