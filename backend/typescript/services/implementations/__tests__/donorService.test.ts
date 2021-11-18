@@ -167,6 +167,34 @@ describe("Testing DonorService functions", () => {
     expect(res).toMatchObject(testUserDonors[0]);
   });
 
+  it("testing getDonorByUserId", async () => {
+    const testUserId = "1";
+
+    const donors = testDonors.map((donor) => {
+      const donorSnakeCase: Record<string, string> = {};
+      Object.entries(donor).forEach(([key, value]) => {
+        donorSnakeCase[snakeCase(key)] = value;
+      });
+      return donorSnakeCase;
+    });
+
+    const users = testUsers.map((user) => {
+      const userSnakeCase: Record<string, string> = {};
+      Object.entries(user).forEach(([key, value]) => {
+        userSnakeCase[snakeCase(key)] = value;
+      });
+      return userSnakeCase;
+    });
+
+    await User.bulkCreate(users);
+
+    await Donor.bulkCreate(donors);
+
+    const res = await donorService.getDonorByUserId(testUserId);
+
+    expect(res).toMatchObject(testUserDonors[0]);
+  });
+
   it("testing createDonor", async () => {
     const users = testUsers.map((user) => {
       const userSnakeCase: Record<string, string> = {};

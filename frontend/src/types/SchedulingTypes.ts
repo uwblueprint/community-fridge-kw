@@ -1,13 +1,15 @@
 export type Schedule = {
-  donorId: number;
-  category: string;
-  quantity: number;
+  id: string;
+  donorId: string;
+  categories: string[];
   size: string;
+  isPickup: boolean;
   pickupLocation: string;
-  startTime: Date;
-  endTime: Date;
-  status: "Approved" | "Pending" | "Rejected";
-  volunteersNeeded: number;
+  startTime: string;
+  endTime: string;
+  status: string;
+  volunteerNeeded: boolean;
+  frequency: string;
   notes: string;
 } | null;
 

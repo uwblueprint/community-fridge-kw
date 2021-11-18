@@ -2,6 +2,7 @@ import { Router } from "express";
 import VolunteerService from "../services/implementations/volunteerService";
 import IVolunteerService from "../services/interfaces/volunteerService";
 import { UserVolunteerDTO } from "../types";
+import getErrorMessage from "../utilities/errorMessageUtil";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const volunteerRouter: Router = Router();
@@ -17,10 +18,10 @@ volunteerRouter.get("/", async (req, res) => {
       contentType,
       volunteers,
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     await sendResponseByMimeType(res, 500, contentType, [
       {
-        error: error.message,
+        error: getErrorMessage(error),
       },
     ]);
   }
@@ -48,8 +49,8 @@ volunteerRouter.get("/:volunteerID", async (req, res) => {
       try {
         const volunteer = await volunteerService.getVolunteerByID(volunteerID);
         res.status(200).json(volunteer);
-      } catch (error: any) {
-        res.status(500).json({ error: error.message });
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
       }
     }
   }
@@ -65,8 +66,8 @@ volunteerRouter.delete("/:volunteerID", async (req, res) => {
   try {
     await volunteerService.deleteVolunteerByID(volunteerID);
     res.status(204).send();
-  } catch (error: any) {
-    res.status(500).send(error.message);
+  } catch (error: unknown) {
+    res.status(500).send(getErrorMessage(error));
   }
 });
 
