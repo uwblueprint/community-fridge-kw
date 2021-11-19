@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 
 import Button from "./components/Button";
 
@@ -79,7 +80,16 @@ const customTheme = extendTheme({
       100: "#48BB78",
     },
     raddish: {
-      100: "#C31887",
+      50: "#ffe5f9",
+      100: "#DA1B97",
+      200: "#f38dcf",
+      300: "#ec5fbb",
+      400: "#e633a7",
+      500: "#cc198d",
+      600: "#a0116e",
+      700: "#720a50",
+      800: "#470330",
+      900: "#1d0013",
     },
     orange: {
       100: "#FC964C",
@@ -116,6 +126,7 @@ const customTheme = extendTheme({
   },
   components: {
     Button,
+    Steps,
   },
   config: {
     initialColorMode: "light",
