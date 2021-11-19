@@ -32,7 +32,8 @@ module.exports = {
     "react/no-array-index-key": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
+    "sort-imports": "off",
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn",
   },
 };
