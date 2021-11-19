@@ -16,6 +16,7 @@ import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import { SCHEDULE_THANKYOU_PAGE } from "../../../constants/Routes";
 import * as Routes from "../../../constants/Routes";
 import { DonorResponse } from "../../../types/DonorTypes";
+import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -49,7 +50,7 @@ const ConfirmDetails = ({
   return (
     // Insert confirm Donation detail page here
     <Container ml="1rem" mt="2.5rem" mb="1.5rem">
-      {isBeingEdited && (
+      {isBeingEdited ? (
         <IconButton
           onClick={() => history.push(Routes.DASHBOARD_PAGE)}
           marginLeft="-12px"
@@ -58,6 +59,8 @@ const ConfirmDetails = ({
         >
           <ArrowBackIcon />
         </IconButton>
+      ) : (
+        <SchedulingProgressBar activeStep={0} totalSteps={4} />
       )}
 
       <Text textStyle="mobileHeader1" mb="12px">

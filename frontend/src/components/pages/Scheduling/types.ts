@@ -21,3 +21,8 @@ export interface SchedulingStepProps {
   setForm: SetForm;
   isBeingEdited?: boolean;
 }
+
+export interface SchedulingProgessBarProps {
+  activeStep: number;
+  totalSteps: number;
+}
