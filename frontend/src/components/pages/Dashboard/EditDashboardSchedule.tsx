@@ -1,19 +1,7 @@
-import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
-import {
-  Badge,
-  Button,
-  Container,
-  IconButton,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import * as Routes from "../../../constants/Routes";
-import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import Scheduling from "../Scheduling";
 

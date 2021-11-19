@@ -32,13 +32,13 @@ interface UseStepType {
 }
 
 interface SchedulingProps {
-  schedulingData?: SchedulingFormProps;
-  isBeingEdited?: boolean;
+  schedulingData: SchedulingFormProps;
+  isBeingEdited: boolean;
 }
 
 const schedulingDefaultData = {
   id: "",
-  donorId: "1",
+  donorId: "",
   categories: [],
   size: "",
   isPickup: false,

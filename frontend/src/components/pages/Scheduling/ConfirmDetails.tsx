@@ -9,12 +9,13 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import { SCHEDULE_THANKYOU_PAGE } from "../../../constants/Routes";
 import * as Routes from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
@@ -27,6 +28,7 @@ const ConfirmDetails = ({
 }: SchedulingStepProps) => {
   const { previous, go } = navigation;
   const history = useHistory();
+  const { authenticatedUser } = useContext(AuthContext);
 
   const onSubmitClick = async () => history.push(SCHEDULE_THANKYOU_PAGE);
 
@@ -38,7 +40,7 @@ const ConfirmDetails = ({
 
   const getDonorData = async () => {
     const donorResponse = await DonorAPIClient.getDonorById(
-      currentSchedule.donorId,
+      authenticatedUser!.id,
     );
     setCurrentDonor(donorResponse);
   };
