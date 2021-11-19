@@ -49,7 +49,7 @@ const ConfirmDetails = ({
 
   return (
     // Insert confirm Donation detail page here
-    <Container ml="1rem" mt="2.5rem" mb="1.5rem">
+    <Container>
       {isBeingEdited ? (
         <IconButton
           onClick={() => history.push(Routes.DASHBOARD_PAGE)}
@@ -60,7 +60,7 @@ const ConfirmDetails = ({
           <ArrowBackIcon />
         </IconButton>
       ) : (
-        <SchedulingProgressBar activeStep={0} totalSteps={4} />
+        <SchedulingProgressBar activeStep={3} totalSteps={4} />
       )}
 
       <Text textStyle="mobileHeader1" mb="12px">
@@ -123,7 +123,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="ghost"
           color="hubbard.100"
-          onClick={() => go && go("donation information")}
+          onClick={() => go && go("volunteer information")}
         >
           Edit
         </Button>
