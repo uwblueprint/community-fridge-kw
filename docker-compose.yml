@@ -49,16 +49,13 @@ services:
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
     restart: always
     ports:
       - 5050:80
-    # env_file:
-    #   - ./.env
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
-      PGADMIN_DEFAULT_PASSWORD: "root"
+    env_file:
+      - ./.env
     depends_on:
       - db
 
