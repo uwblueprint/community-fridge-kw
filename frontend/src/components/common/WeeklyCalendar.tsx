@@ -60,7 +60,8 @@ const DayButton = ({ day }: DayButtonProps) => {
 
   return (
     <Text textStyle="calendarDate">
-      {day.label.substr(0, 3)} {format(currentDate, "do", { locale }).slice(0, -2)}
+      {day.label.substr(0, 3)}{" "}
+      {format(currentDate, "do", { locale }).slice(0, -2)}
     </Text>
   );
 };
