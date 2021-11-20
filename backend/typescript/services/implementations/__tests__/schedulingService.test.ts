@@ -178,7 +178,7 @@ describe("pg schedulingService", () => {
     const startTime: Date = new Date("October 13, 2014 11:13:00");
     const endTime: Date = new Date("October 13, 2014 11:13:00");
     const status: Status = Status.APPROVED;
-    const dayPart: string = "morning";
+    const dayPart = "morning";
     const schedulingToCreate: CreateSchedulingDTO = {
       ...testSchedules[0],
       status,

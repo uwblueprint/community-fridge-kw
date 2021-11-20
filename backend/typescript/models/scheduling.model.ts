@@ -34,7 +34,7 @@ export default class Scheduling extends Model {
   pickup_location!: string;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT})
+  @Column({ type: DataType.TEXT })
   day_part!: string;
 
   @AllowNull(false)
@@ -61,7 +61,7 @@ export default class Scheduling extends Model {
   @AllowNull(false)
   @Column({ type: DataType.TEXT })
   frequency!: string;
-  
+
   @Column({ type: DataType.INTEGER })
   recurring_donation_id!: number;
 
