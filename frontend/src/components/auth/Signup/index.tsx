@@ -25,6 +25,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     businessName: "",
+    role: "Donor",
   });
 
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
