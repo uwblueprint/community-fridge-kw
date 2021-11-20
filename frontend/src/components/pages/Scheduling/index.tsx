@@ -36,6 +36,23 @@ interface SchedulingProps {
   isBeingEdited: boolean;
 }
 
+const Scheduling = () => {
+  const [schedulingFormValues, setSchedulingForm] = useForm({
+    id: "",
+    donorId: "",
+    categories: [],
+    size: "",
+    isPickup: false,
+    pickupLocation: "",
+    daypart: "",
+    startTime: new Date().toDateString(),
+    endTime: new Date().toDateString(),
+    status: "",
+    volunteerNeeded: false,
+    frequency: "",
+    notes: "",
+  });
+
 const schedulingDefaultData = {
   id: "",
   donorId: "",

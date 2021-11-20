@@ -11,7 +11,7 @@ const DonationInformation = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  //   const { insert form fields for this page here } = formData;
+  const { daypart } = formValues;
 
   return (
     // Insert Select Date and Time page here
