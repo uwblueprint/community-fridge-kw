@@ -15,7 +15,7 @@ import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import ThankYou from "./components/pages/Scheduling/ThankYou";
 import ViewDonations from "./components/pages/ViewDonations";
-import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
+import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
 import SampleContext, {
