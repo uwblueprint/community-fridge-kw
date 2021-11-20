@@ -5,11 +5,15 @@ export type Schedule = {
   size: string;
   isPickup: boolean;
   pickupLocation: string;
+  dayPart: string;
   startTime: string;
   endTime: string;
   status: string;
   volunteerNeeded: boolean;
+  volunteerTime: string;
   frequency: string;
+  recurringDonationId: string;
+  recurringEndDate: string;
   notes: string;
 } | null;
 

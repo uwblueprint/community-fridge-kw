@@ -34,6 +34,10 @@ export default class Scheduling extends Model {
   pickup_location!: string;
 
   @AllowNull(false)
+  @Column({ type: DataType.TEXT})
+  day_part!: string;
+
+  @AllowNull(false)
   @Column({ type: DataType.DATE })
   start_time!: Date;
 
@@ -51,9 +55,18 @@ export default class Scheduling extends Model {
   @Column({ type: DataType.BOOLEAN })
   volunteer_needed!: boolean;
 
+  @Column({ type: DataType.TEXT })
+  volunteer_time!: string;
+
   @AllowNull(false)
   @Column({ type: DataType.TEXT })
   frequency!: string;
+  
+  @Column({ type: DataType.INTEGER })
+  recurring_donation_id!: number;
+
+  @Column({ type: DataType.DATE })
+  recurring_end_date!: Date;
 
   @Column({ type: DataType.TEXT })
   notes!: string;

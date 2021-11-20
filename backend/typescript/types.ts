@@ -75,11 +75,15 @@ export type SchedulingDTO = {
   size?: string;
   isPickup: boolean;
   pickupLocation?: string;
+  dayPart: string;
   startTime: Date;
   endTime: Date;
   status: Status;
   frequency: string;
+  recurringDonationId?: number;
+  recurringEndDate?: Date;
   volunteerNeeded: boolean;
+  volunteerTime?: string;
   volunteerIds: number[];
   notes?: string;
 };

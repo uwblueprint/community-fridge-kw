@@ -34,6 +34,9 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("pickupLocation", "string"));
   }
+  if (!validatePrimitive(req.body.dayPart, "string")) {
+    return res.status(400).send(getApiValidationError("dayPart", "string"));
+  }
   if (!validateDate(req.body.startTime)) {
     return res
       .status(400)
@@ -57,8 +60,19 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerNeeded", "boolean"));
   }
+  if (req.body.volunteerTime && !validatePrimitive(req.body.volunteerTime, "string")) {
+    return res.status(400).send(getApiValidationError("volunteerTime", "string"));
+  }
   if (!validatePrimitive(req.body.frequency, "string")) {
     return res.status(400).send(getApiValidationError("frequency", "string"));
+  }
+  if (req.body.recurringDonationId && !validatePrimitive(req.body.recurringDonationId, "integer")) {
+    return res.status(400).send(getApiValidationError("recurringDonationId", "integer"));
+  }
+  if (req.body.recurringEndDate && !validateDate(req.body.recurringEndDate)) {
+    return res
+      .status(400)
+      .send(getApiValidationError("recurringEndDate", "Date string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));

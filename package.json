@@ -2,6 +2,7 @@
   "dependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "chakra-ui-steps": "^1.5.0",
     "husky": "^7.0.2"
   }
 }
