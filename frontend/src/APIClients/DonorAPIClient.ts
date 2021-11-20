@@ -1,12 +1,6 @@
-import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
+import { BEARER_TOKEN } from "../constants/AuthConstants";
 import { DonorResponse, UpdateDonorDataType } from "../types/DonorTypes";
-import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 import baseAPIClient from "./BaseAPIClient";
-
-const BEARER_TOKEN = `Bearer ${getLocalStorageObjProperty(
-  AUTHENTICATED_USER_KEY,
-  "accessToken",
-)}`;
 
 const getAllDonors = async (): Promise<DonorResponse[]> => {
   try {
@@ -22,6 +16,17 @@ const getAllDonors = async (): Promise<DonorResponse[]> => {
 const getDonorById = async (id: string): Promise<DonorResponse> => {
   try {
     const { data } = await baseAPIClient.get(`/donors/${id}`, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as DonorResponse;
+  }
+};
+
+const getDonorByUserId = async (userId: string): Promise<DonorResponse> => {
+  try {
+    const { data } = await baseAPIClient.get(`/donors/?userId=${userId}`, {
       headers: { Authorization: BEARER_TOKEN },
     });
     return data;
@@ -58,6 +63,7 @@ const deleteDonorById = async (id: string): Promise<DonorResponse> => {
 export default {
   getAllDonors,
   getDonorById,
+  getDonorByUserId,
   updateDonorById,
   deleteDonorById,
 };

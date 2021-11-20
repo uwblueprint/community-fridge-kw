@@ -11,6 +11,7 @@ import {
 import { prependOnceListener } from "process";
 import React from "react";
 
+import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import {
   DonationSizeInterface,
   SchedulingStepProps,
@@ -95,6 +96,7 @@ const DonationInformation: any = ({
   return (
     // Insert Select Date and Time page here
     <Container pl="42px" pr="42px" py="73px">
+      <SchedulingProgressBar activeStep={1} totalSteps={4} />
       <Text textStyle="mobileHeader2" mb="20px">
         Donation Information{" "}
       </Text>

@@ -32,6 +32,8 @@ interface UseStepType {
 
 const Scheduling = () => {
   const [schedulingFormValues, setSchedulingForm] = useForm({
+    id: "",
+    donorId: "",
     categories: [
       "Dry packaged goods",
       "Non-perishables",

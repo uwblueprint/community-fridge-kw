@@ -15,12 +15,26 @@ interface IDonorService {
   getDonorById(id: string): Promise<UserDonorDTO>;
 
   /**
+   * Get donor associated with a user id
+   * @param userId id associated with user
+   * @returns a UserDonorDTO with donor's information
+   * @throws Error if donor retrieval fails
+   */
+  getDonorByUserId(userId: string): Promise<UserDonorDTO>;
+
+  /**
    * Get all donor information (possibly paginated in the future)
    * @returns array of UserDonorDTO
    * @throws Error if donors retrieval fails
    */
   getDonors(): Promise<Array<UserDonorDTO>>;
 
+  /**
+   * Create new Donor in database
+   * @param donor is a new donor object
+   * @returns a DonorDTO with Donor's information
+   * @throws Error if donor creation fails
+   */
   createDonor(donor: CreateDonorDTO): Promise<DonorDTO>;
 
   /**

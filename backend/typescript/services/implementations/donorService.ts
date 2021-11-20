@@ -49,6 +49,42 @@ class DonorService implements IDonorService {
     };
   }
 
+  async getDonorByUserId(userId: string): Promise<UserDonorDTO> {
+    let donor: Donor | null;
+    let user: User | null;
+
+    try {
+      donor = await Donor.findOne({
+        where: { user_id: Number(userId) },
+        include: User,
+      });
+
+      if (!donor) {
+        throw new Error(`donor with userid ${userId} not found.`);
+      }
+      user = donor.user;
+      if (!user) {
+        throw new Error(`user with userid ${userId} not found`);
+      }
+    } catch (error) {
+      Logger.error(`Failed to get donor. Reason = ${getErrorMessage(error)}`);
+      throw error;
+    }
+
+    return {
+      id: String(donor.id),
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      role: user.role,
+      phoneNumber: user.phone_number,
+      userId: String(donor.user_id),
+      facebookLink: donor.facebook_link,
+      instagramLink: donor.instagram_link,
+      businessName: donor.business_name,
+    };
+  }
+
   async getDonors(): Promise<Array<UserDonorDTO>> {
     let userDonorDTOs: Array<UserDonorDTO> = [];
     try {
