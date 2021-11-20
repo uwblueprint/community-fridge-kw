@@ -14,6 +14,7 @@ import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import ThankYou from "./components/pages/Scheduling/ThankYou";
+import ViewDonations from "./components/pages/ViewDonations";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
@@ -58,6 +59,11 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
+                <Route
+                  exact
+                  path={Routes.VIEW_DONATIONS}
+                  component={ViewDonations}
+                />
                 <Route exact path={Routes.HOME_PAGE} component={Default} />
                 <Route
                   exact

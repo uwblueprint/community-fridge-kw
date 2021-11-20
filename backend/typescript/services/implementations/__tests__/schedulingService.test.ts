@@ -65,7 +65,7 @@ const testSchedules = [
     status: "Pending",
     volunteerNeeded: false,
     frequency: "Biweekly",
-    recurringDonationId: "1",
+    recurringDonationId: 1,
     recurringEndDate: new Date("2022-10-01T00:00:00.000Z"),
     notes: "these are the copied notes",
   },
@@ -73,12 +73,13 @@ const testSchedules = [
     donorId: "1",
     categories: ["Fresh produce"],
     isPickup: false,
+    dayPart: "evening",
     startTime: new Date("2021-03-01T00:08:00.000Z"),
     endTime: new Date("2021-03-01T00:06:00.000Z"),
     status: "Pending",
     volunteerNeeded: false,
     frequency: "Monthly",
-    recurringDonationId: "2",
+    recurringDonationId: 2,
     recurringEndDate: new Date("2021-03-01T00:06:00.000Z"),
     notes: "these are the copied notes",
   },
@@ -91,6 +92,7 @@ const invalidTestSchedule = [
     size: "medium",
     isPickup: true,
     pickupLocation: "copied location",
+    dayPart: "morning",
     startTime: new Date("2021-10-30T00:50:00.000Z"),
     endTime: new Date("2021-10-30T00:00:00.000Z"),
     status: "Pending",
@@ -176,9 +178,11 @@ describe("pg schedulingService", () => {
     const startTime: Date = new Date("October 13, 2014 11:13:00");
     const endTime: Date = new Date("October 13, 2014 11:13:00");
     const status: Status = Status.APPROVED;
+    const dayPart: string = "morning";
     const schedulingToCreate: CreateSchedulingDTO = {
       ...testSchedules[0],
       status,
+      dayPart,
       startTime,
       endTime,
     };

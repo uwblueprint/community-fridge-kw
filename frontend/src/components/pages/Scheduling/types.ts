@@ -7,6 +7,7 @@ export interface SchedulingFormProps {
   size: string;
   isPickup: boolean;
   pickupLocation: string;
+  daypart: string;
   startTime: string;
   endTime: string;
   status: string;
