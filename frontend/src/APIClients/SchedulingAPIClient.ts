@@ -1,17 +1,12 @@
-import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
+import { BEARER_TOKEN } from "../constants/AuthConstants";
 import { Schedule, UpdatedSchedulingFields } from "../types/SchedulingTypes";
-import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 import baseAPIClient from "./BaseAPIClient";
 
 // TO DO: verify that api clients once authorization is enabled
 const getSchedules = async (): Promise<Schedule[]> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
   try {
     const { data } = await baseAPIClient.get("/scheduling", {
-      headers: { Authorization: bearerToken },
+      headers: { Authorization: BEARER_TOKEN },
     });
     return data;
   } catch (error) {
@@ -20,13 +15,9 @@ const getSchedules = async (): Promise<Schedule[]> => {
 };
 
 const getScheduleById = async (scheduleId: string): Promise<Schedule> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
   try {
     const { data } = await baseAPIClient.get(`/scheduling/${scheduleId}`, {
-      headers: { Authorization: bearerToken },
+      headers: { Authorization: BEARER_TOKEN },
     });
     return data;
   } catch (error) {
@@ -35,15 +26,11 @@ const getScheduleById = async (scheduleId: string): Promise<Schedule> => {
 };
 
 const getScheduleByDonorId = async (donorId: string): Promise<Schedule[]> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
   try {
     const { data } = await baseAPIClient.get(
       `/scheduling/?donorId=${donorId}`,
       {
-        headers: { Authorization: bearerToken },
+        headers: { Authorization: BEARER_TOKEN },
       },
     );
     return data;
@@ -53,17 +40,13 @@ const getScheduleByDonorId = async (donorId: string): Promise<Schedule[]> => {
 };
 
 const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
   try {
     const { data } = await baseAPIClient.post(
       "/scheduling",
       {
         ...schedule,
       },
-      { headers: { Authorization: bearerToken } },
+      { headers: { Authorization: BEARER_TOKEN } },
     );
     return data;
   } catch (error) {
@@ -75,17 +58,13 @@ const updateSchedule = async (
   scheduleId: string,
   fields: UpdatedSchedulingFields,
 ): Promise<Schedule> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
   try {
     const { data } = await baseAPIClient.put(
       `/scheduling/${scheduleId}`,
       {
         ...fields,
       },
-      { headers: { Authorization: bearerToken } },
+      { headers: { Authorization: BEARER_TOKEN } },
     );
     return data;
   } catch (error) {
@@ -94,13 +73,9 @@ const updateSchedule = async (
 };
 
 const deleteSchedule = async (scheduleId: string): Promise<boolean> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
   try {
-    const { data } = await baseAPIClient.delete(`/scheduling/${scheduleId}`, {
-      headers: { Authorization: bearerToken },
+    await baseAPIClient.delete(`/scheduling/${scheduleId}`, {
+      headers: { Authorization: BEARER_TOKEN },
     });
     return true;
   } catch (error) {

@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { StepsStyleConfig as Steps } from "chakra-ui-steps";
 
 import Button from "./components/Button";
 
@@ -15,12 +16,12 @@ const customTheme = extendTheme({
       fontFamily: "Inter, sans-serif",
       fontSize: "24px",
       lineHeight: "32px",
-      fontWeight: 700,
+      fontWeight: 600,
       letterSpacing: "-0.01rem",
     },
     mobileHeader3: {
       fontFamily: "Inter, sans-serif",
-      fontWeight: 500,
+      fontWeight: 700,
       fontSize: "20px",
       lineHeight: "28px",
     },
@@ -64,6 +65,39 @@ const customTheme = extendTheme({
       fontWeight: 600,
       lineHeight: "20px",
     },
+    calendarDate: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "20px",
+      lineHeight: "28px",
+    },
+    desktopSmall: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "14px",
+      lineHeight: "16px",
+      color: "black",
+    },
+    desktopBodyBold: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "16px",
+      lineHeight: "19px",
+      color: "black",
+    },
+    desktopHeader: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "24px",
+      lineHeight: "34px",
+      color: "black",
+    },
+    desktopHeader2: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "32px",
+      lineHeight: "42px",
+      color: "black",
+    },
   },
   colors: {
     squash: {
@@ -79,7 +113,16 @@ const customTheme = extendTheme({
       100: "#48BB78",
     },
     raddish: {
-      100: "#C31887",
+      50: "#ffe5f9",
+      100: "#DA1B97",
+      200: "#f38dcf",
+      300: "#ec5fbb",
+      400: "#e633a7",
+      500: "#cc198d",
+      600: "#a0116e",
+      700: "#720a50",
+      800: "#470330",
+      900: "#1d0013",
     },
     orange: {
       100: "#FC964C",
@@ -110,6 +153,21 @@ const customTheme = extendTheme({
     },
     strawberry: {
       100: "#F0C5E1",
+    turnip: {
+      100: "#BC577B",
+      200: "#FCEFF2",
+    },
+    onion: {
+      100: "#8557BC",
+      200: "#F5EFFC",
+    },
+    H2O: {
+      100: "#496DB6",
+      200: "#EFF6FC",
+    },
+    spinach: {
+      100: "#317C71",
+      200: "#EFFCF9",
     },
   },
   breakpoints: {
@@ -119,6 +177,7 @@ const customTheme = extendTheme({
   },
   components: {
     Button,
+    Steps,
   },
   config: {
     initialColorMode: "light",

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
+import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
@@ -13,7 +14,8 @@ import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import ThankYou from "./components/pages/Scheduling/ThankYou";
-import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
+import ViewDonations from "./components/pages/ViewDonations";
+import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
 import SampleContext, {
@@ -57,6 +59,11 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
+                <Route
+                  exact
+                  path={Routes.VIEW_DONATIONS}
+                  component={ViewDonations}
+                />
                 <Route exact path={Routes.HOME_PAGE} component={Default} />
                 <Route
                   exact
@@ -84,6 +91,7 @@ const App = (): React.ReactElement => {
                 />
                 <Route exact path="*" component={NotFound} />
               </Switch>
+              <Footer />
             </Router>
           </AuthContext.Provider>
         </SampleContextDispatcherContext.Provider>

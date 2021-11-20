@@ -2,6 +2,7 @@ import { Button, Container, HStack, Text } from "@chakra-ui/react";
 import React from "react";
 
 import RadioSelectGroup from "../../common/RadioSelectGroup";
+import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
 
 const SelectDateTime = ({
@@ -29,6 +30,7 @@ const SelectDateTime = ({
 
   return (
     <Container>
+      <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2"> This is Date and Time page </Text>
       <RadioSelectGroup
         name="daypart"

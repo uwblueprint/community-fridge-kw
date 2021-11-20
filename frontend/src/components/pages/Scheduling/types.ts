@@ -21,3 +21,8 @@ export interface SchedulingStepProps {
   formValues: SchedulingFormProps;
   setForm: SetForm;
 }
+
+export interface SchedulingProgessBarProps {
+  activeStep: number;
+  totalSteps: number;
+}
