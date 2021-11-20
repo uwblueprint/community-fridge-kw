@@ -189,6 +189,7 @@ const AccountDetails = ({
           <MandatoryInputDescription label="Confirm password" />
           <Input
             mt="2"
+            type="password"
             value={confirmPassword}
             onChange={setForm}
             name="confirmPassword"
