@@ -153,35 +153,35 @@ const customTheme = extendTheme({
     },
     strawberry: {
       100: "#F0C5E1",
-      turnip: {
-        100: "#BC577B",
-        200: "#FCEFF2",
-      },
-      onion: {
-        100: "#8557BC",
-        200: "#F5EFFC",
-      },
-      H2O: {
-        100: "#496DB6",
-        200: "#EFF6FC",
-      },
-      spinach: {
-        100: "#317C71",
-        200: "#EFFCF9",
-      },
     },
-    breakpoints: {
-      sm: "320px",
-      md: "768px",
-      lg: "960px",
+    turnip: {
+      100: "#BC577B",
+      200: "#FCEFF2",
     },
-    components: {
-      Button,
-      Steps,
+    onion: {
+      100: "#8557BC",
+      200: "#F5EFFC",
     },
-    config: {
-      initialColorMode: "light",
+    H2O: {
+      100: "#496DB6",
+      200: "#EFF6FC",
     },
+    spinach: {
+      100: "#317C71",
+      200: "#EFFCF9",
+    },
+  },
+  breakpoints: {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+  },
+  components: {
+    Button,
+    Steps,
+  },
+  config: {
+    initialColorMode: "light",
   },
 });
 
