@@ -3,9 +3,9 @@ import { enUS } from "date-fns/locale";
 
 export const colorMap = {
   "One Time": "spinach",
-  "Daily": "H2O",
-  "Weekly": "onion",
-  "Monthly": "turnip",
+  Daily: "H2O",
+  Weekly: "onion",
+  Monthly: "turnip",
 };
 
 type DaysInWeekProps = {

@@ -12,7 +12,7 @@ import {
   Spacer,
   Stack,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";

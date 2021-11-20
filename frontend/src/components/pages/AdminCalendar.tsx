@@ -11,7 +11,6 @@ type AdminCalendarProps = {
 const AdminCalendar = ({
   selectedDay,
 }: AdminCalendarProps): React.ReactElement => {
-
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
