@@ -11,11 +11,11 @@ import React from "react";
 
 interface RadioSelectGroupProps {
   name: string;
-  value: any;
+  value: string;
   values: string[];
   label: string;
   isRequired: boolean;
-  onChange: any;
+  onChange: (arg0: any) => void;
 }
 
 const RadioSelectButton = (props: any) => {

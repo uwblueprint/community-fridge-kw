@@ -20,7 +20,10 @@ const SelectDateTime = ({
     "Night (9pm - 12am)",
   ];
 
-  const handleChange = (e: any, name: string) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: string,
+  ) => {
     setForm({ target: { name, value: e } });
   };
 
@@ -33,7 +36,9 @@ const SelectDateTime = ({
         value={daypart}
         values={dayparts}
         isRequired
-        onChange={(e: any) => handleChange(e, "daypart")}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          handleChange(e, "daypart");
+        }}
       />
       <HStack>
         <Button onClick={previous} variant="navigation">
