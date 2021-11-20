@@ -1,4 +1,4 @@
-import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
+import { AUTHENTICATED_USER_KEY } from "../constants/AuthConstants";
 import { AuthenticatedUser } from "../types/AuthTypes";
 import {
   getLocalStorageObjProperty,

@@ -3,6 +3,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 import { SCHEDULE_THANKYOU_PAGE } from "../../../constants/Routes";
+import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -20,6 +21,7 @@ const ConfirmDetails = ({
   return (
     // Insert confirm Donation detail page here
     <Container>
+      <SchedulingProgressBar activeStep={3} totalSteps={4} />
       <Text textStyle="mobileHeader2"> Confirm Donation Details Page </Text>
       <HStack>
         <Button onClick={previous} variant="navigation">

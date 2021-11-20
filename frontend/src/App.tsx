@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
+import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
@@ -14,7 +15,7 @@ import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import ThankYou from "./components/pages/Scheduling/ThankYou";
 import ViewDonations from "./components/pages/ViewDonations";
-import AUTHENTICATED_USER_KEY from "./constants/AuthConstants";
+import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
 import SampleContext, {
@@ -54,7 +55,6 @@ const App = (): React.ReactElement => {
           >
             <Router>
               <Header />
-
               <Switch>
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
@@ -91,6 +91,7 @@ const App = (): React.ReactElement => {
                 />
                 <Route exact path="*" component={NotFound} />
               </Switch>
+              <Footer />
             </Router>
           </AuthContext.Provider>
         </SampleContextDispatcherContext.Provider>

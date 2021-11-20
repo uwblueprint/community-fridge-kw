@@ -1,12 +1,6 @@
-import AUTHENTICATED_USER_KEY from "../constants/AuthConstants";
+import { BEARER_TOKEN } from "../constants/AuthConstants";
 import { DonorResponse, UpdateDonorDataType } from "../types/DonorTypes";
-import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 import baseAPIClient from "./BaseAPIClient";
-
-const BEARER_TOKEN = `Bearer ${getLocalStorageObjProperty(
-  AUTHENTICATED_USER_KEY,
-  "accessToken",
-)}`;
 
 const getAllDonors = async (): Promise<DonorResponse[]> => {
   try {
