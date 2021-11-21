@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
+import { Role } from "../../../types/AuthTypes";
 import AccountDetails from "./AccountDetails";
 import CreateAccount from "./CreateAccount";
 
@@ -25,7 +26,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
     businessName: "",
-    role: "Donor",
+    role: Role.DONOR,
   });
 
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
