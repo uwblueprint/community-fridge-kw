@@ -13,7 +13,7 @@ export type Schedule = {
   volunteerTime: string;
   frequency: string;
   recurringDonationId: string;
-  recurringEndDate: string;
+  recurringDonationEndDate: string;
   notes: string;
 } | null;
 

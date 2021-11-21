@@ -79,10 +79,13 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("recurringDonationId", "integer"));
   }
-  if (req.body.recurringEndDate && !validateDate(req.body.recurringEndDate)) {
+  if (
+    req.body.recurringDonationEndDate &&
+    !validateDate(req.body.recurringDonationEndDate)
+  ) {
     return res
       .status(400)
-      .send(getApiValidationError("recurringEndDate", "Date string"));
+      .send(getApiValidationError("recurringDonationEndDate", "Date string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));

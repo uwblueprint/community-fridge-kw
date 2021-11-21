@@ -66,7 +66,7 @@ const testSchedules = [
     volunteerNeeded: false,
     frequency: "Biweekly",
     recurringDonationId: 1,
-    recurringEndDate: new Date("2022-10-01T00:00:00.000Z"),
+    recurringDonationEndDate: new Date("2022-10-01T00:00:00.000Z"),
     notes: "these are the copied notes",
   },
   {
@@ -80,7 +80,7 @@ const testSchedules = [
     volunteerNeeded: false,
     frequency: "Monthly",
     recurringDonationId: 2,
-    recurringEndDate: new Date("2021-03-01T00:06:00.000Z"),
+    recurringDonationEndDate: new Date("2021-03-01T00:06:00.000Z"),
     notes: "these are the copied notes",
   },
 ];

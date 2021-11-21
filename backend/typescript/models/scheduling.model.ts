@@ -66,7 +66,7 @@ export default class Scheduling extends Model {
   recurring_donation_id!: number;
 
   @Column({ type: DataType.DATE })
-  recurring_end_date!: Date;
+  recurring_donation_end_date!: Date;
 
   @Column({ type: DataType.TEXT })
   notes!: string;

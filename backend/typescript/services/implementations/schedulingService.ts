@@ -48,7 +48,7 @@ class SchedulingService implements ISchedulingService {
       volunteerIds,
       frequency: scheduling.frequency,
       recurringDonationId: scheduling.recurring_donation_id,
-      recurringEndDate: scheduling.recurring_end_date,
+      recurringDonationEndDate: scheduling.recurring_donation_end_date,
       notes: scheduling.notes,
     };
   }
@@ -79,7 +79,7 @@ class SchedulingService implements ISchedulingService {
           volunteerIds: [],
           frequency: scheduling.frequency,
           recurringDonationId: scheduling.recurring_donation_id,
-          recurringEndDate: scheduling.recurring_end_date,
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
         };
       });
@@ -114,7 +114,7 @@ class SchedulingService implements ISchedulingService {
           volunteerIds: [],
           frequency: scheduling.frequency,
           recurringDonationId: scheduling.recurring_donation_id,
-          recurringEndDate: scheduling.recurring_end_date,
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
         };
       });
@@ -147,7 +147,7 @@ class SchedulingService implements ISchedulingService {
         volunteer_time: scheduling.volunteerTime,
         frequency: scheduling.frequency,
         recurring_donation_id: scheduling.recurringDonationId,
-        recurring_end_date: scheduling.recurringEndDate,
+        recurring_donation_end_date: scheduling.recurringDonationEndDate,
         notes: scheduling.notes,
       });
     } catch (error) {
@@ -173,7 +173,7 @@ class SchedulingService implements ISchedulingService {
       volunteerIds: [],
       frequency: newScheduling.frequency,
       recurringDonationId: newScheduling.recurring_donation_id,
-      recurringEndDate: newScheduling.recurring_end_date,
+      recurringDonationEndDate: newScheduling.recurring_donation_end_date,
       notes: newScheduling.notes,
     };
   }
@@ -212,7 +212,7 @@ class SchedulingService implements ISchedulingService {
         volunteerIds: [],
         frequency: updatedScheduling.frequency,
         recurringDonationId: updatedScheduling.recurring_donation_id,
-        recurringEndDate: updatedScheduling.recurring_end_date,
+        recurringDonationEndDate: updatedScheduling.recurring_donation_end_date,
         notes: updatedScheduling.notes,
       };
     } catch (error) {
