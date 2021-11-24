@@ -24,7 +24,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_UW_BLUEPRINT_STARTER_CODE }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMMUNITY_FRIDGE_KW }}"
           channelId: live
-          projectId: uw-blueprint-starter-code
+          projectId: community-fridge-kw
           entryPoint: ./frontend
