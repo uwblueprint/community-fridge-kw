@@ -6,4 +6,5 @@ export interface SignUpFormProps {
   password: string;
   confirmPassword: string;
   businessName: string;
+  role: string;
 }
