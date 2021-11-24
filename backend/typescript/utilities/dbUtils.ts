@@ -12,7 +12,7 @@ export const SQLOptions = (
   modelPath: string[],
   testdb: boolean,
 ): SequelizeOptions => {
-  return process.env.DATABASE_URL
+  return process.env.NODE_ENV === "production"
     ? {
         dialect: "postgres",
         protocol: "postgres",
@@ -23,7 +23,7 @@ export const SQLOptions = (
           },
         },
         models: modelPath,
-        ...(testdb && { logging: false }), // https://stackoverflow.com/questions/11704267/in-javascript-how-to-conditionally-add-a-member-to-an-object
+        ...(testdb && { logging: false }),
       }
     : {
         models: modelPath,
