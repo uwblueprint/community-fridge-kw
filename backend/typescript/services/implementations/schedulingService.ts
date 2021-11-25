@@ -47,7 +47,7 @@ class SchedulingService implements ISchedulingService {
       volunteerTime: scheduling.volunteer_time,
       volunteerIds,
       frequency: scheduling.frequency,
-      recurringDonationId: scheduling.recurring_donation_id,
+      recurringDonationId: String(scheduling.recurring_donation_id),
       recurringDonationEndDate: scheduling.recurring_donation_end_date,
       notes: scheduling.notes,
     };
@@ -78,7 +78,7 @@ class SchedulingService implements ISchedulingService {
           volunteerTime: scheduling.volunteer_time,
           volunteerIds: [],
           frequency: scheduling.frequency,
-          recurringDonationId: scheduling.recurring_donation_id,
+          recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
         };
@@ -113,7 +113,7 @@ class SchedulingService implements ISchedulingService {
           volunteerTime: scheduling.volunteer_time,
           volunteerIds: [],
           frequency: scheduling.frequency,
-          recurringDonationId: scheduling.recurring_donation_id,
+          recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
         };
@@ -172,7 +172,7 @@ class SchedulingService implements ISchedulingService {
       volunteerTime: newScheduling.volunteer_time,
       volunteerIds: [],
       frequency: newScheduling.frequency,
-      recurringDonationId: newScheduling.recurring_donation_id,
+      recurringDonationId: String(newScheduling.recurring_donation_id),
       recurringDonationEndDate: newScheduling.recurring_donation_end_date,
       notes: newScheduling.notes,
     };
@@ -211,7 +211,7 @@ class SchedulingService implements ISchedulingService {
         volunteerTime: updatedScheduling.volunteer_time,
         volunteerIds: [],
         frequency: updatedScheduling.frequency,
-        recurringDonationId: updatedScheduling.recurring_donation_id,
+        recurringDonationId: String(updatedScheduling.recurring_donation_id),
         recurringDonationEndDate: updatedScheduling.recurring_donation_end_date,
         notes: updatedScheduling.notes,
       };
