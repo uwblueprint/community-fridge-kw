@@ -2,6 +2,10 @@ import {
   Badge,
   Container,
   Text,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
