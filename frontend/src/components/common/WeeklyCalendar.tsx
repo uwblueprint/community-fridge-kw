@@ -3,6 +3,7 @@ import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 import daysInWeek from "../../constants/DaysInWeek";
+import { Schedule } from "../../types/SchedulingTypes";
 
 type State = {
   week: Date;
@@ -67,17 +68,17 @@ const DayButton = ({ day }: DayButtonProps) => {
 };
 
 type RenderItemProps<EventItem> = {
-  item: EventItem & { date: Date };
+  schedule: Schedule;
   showingFullWeek: boolean;
 };
 
 type WeeklyBodyProps<EventItem> = {
-  events: (EventItem & { date: Date })[];
+  schedules: Schedule[];
   renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
 };
 
 export function WeeklyBody<EventItem>({
-  events,
+  schedules,
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
   const { selectedDay } = useWeeklyCalendar();
@@ -90,19 +91,22 @@ export function WeeklyBody<EventItem>({
         <div key={day.day}>
           <VStack width="10rem">
             <DayButton day={day} />
-            {events.map((item) => {
+            {schedules.map((schedule) => {
               const currentDate = setDay(week, day.day, { locale });
+              const scheduledDate = new Date(schedule?.startTime as string);
 
               if (
-                item.date.getDate() !== currentDate.getDate() ||
-                item.date.getMonth() !== currentDate.getMonth() ||
-                item.date.getFullYear() !== currentDate.getFullYear()
+                schedule === null ||
+                scheduledDate === null ||
+                scheduledDate.getDate() !== currentDate.getDate() ||
+                scheduledDate.getMonth() !== currentDate.getMonth() ||
+                scheduledDate.getFullYear() !== currentDate.getFullYear()
               ) {
                 return null;
               }
 
               return renderItem({
-                item,
+                schedule,
                 showingFullWeek: selectedDay === undefined,
               });
             })}
