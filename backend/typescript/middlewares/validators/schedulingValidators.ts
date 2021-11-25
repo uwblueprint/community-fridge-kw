@@ -131,7 +131,10 @@ export const updateSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("dates", "Date string", false, true));
   }
-  if (req.body.frequency && !Object.values(Frequency).includes(req.body.frequency)) {
+  if (
+    req.body.frequency &&
+    !Object.values(Frequency).includes(req.body.frequency)
+  ) {
     return res.status(400).send(getApiValidationError("frequency", "string"));
   }
   if (
