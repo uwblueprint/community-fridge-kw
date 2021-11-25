@@ -34,7 +34,7 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("pickupLocation", "string"));
   }
-  if (!Object.values(DayPart).includes(req.body.status)) {
+  if (!Object.values(DayPart).includes(req.body.dayPart)) {
     return res.status(400).send(getApiValidationError("dayPart", "string"));
   }
   if (!validateDate(req.body.startTime)) {
@@ -68,7 +68,7 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerTime", "string"));
   }
-  if (!Object.values(Frequency).includes(req.body.status)) {
+  if (!Object.values(Frequency).includes(req.body.frequency)) {
     return res.status(400).send(getApiValidationError("frequency", "string"));
   }
   if (
@@ -131,6 +131,17 @@ export const updateSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("dates", "Date string", false, true));
   }
+  if (req.body.frequency && !Object.values(Frequency).includes(req.body.frequency)) {
+    return res.status(400).send(getApiValidationError("frequency", "string"));
+  }
+  if (
+    req.body.recurringDonationEndDate &&
+    !validateDate(req.body.recurringDonationEndDate)
+  ) {
+    return res
+      .status(400)
+      .send(getApiValidationError("recurringDonationEndDate", "Date string"));
+  }
   if (
     req.body.volunteerNeeded &&
     !validatePrimitive(req.body.volunteerNeeded, "boolean")
@@ -139,7 +150,15 @@ export const updateSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerNeeded", "boolean"));
   }
-  if (req.body.status && !Object.values(DayPart).includes(req.body.status)) {
+  if (
+    req.body.volunteerTime &&
+    !validatePrimitive(req.body.volunteerTime, "string")
+  ) {
+    return res
+      .status(400)
+      .send(getApiValidationError("volunteerTime", "string"));
+  }
+  if (req.body.dayPart && !Object.values(DayPart).includes(req.body.status)) {
     return res.status(400).send(getApiValidationError("dayPart", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
