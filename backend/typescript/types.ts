@@ -95,7 +95,7 @@ export type SchedulingDTO = {
   endTime: Date;
   status: Status;
   frequency: Frequency;
-  recurringDonationId?: number;
+  recurringDonationId?: string;
   recurringDonationEndDate?: Date;
   volunteerNeeded: boolean;
   volunteerTime?: string;

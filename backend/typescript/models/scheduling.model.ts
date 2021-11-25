@@ -72,8 +72,8 @@ export default class Scheduling extends Model {
   })
   frequency!: Frequency;
 
-  @Column({ type: DataType.INTEGER })
-  recurring_donation_id!: number;
+  @Column({ type: DataType.TEXT })
+  recurring_donation_id!: string;
 
   @Column({ type: DataType.DATE })
   recurring_donation_end_date!: Date;

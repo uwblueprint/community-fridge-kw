@@ -72,8 +72,8 @@ const testSchedules = [
     status: "Pending",
     volunteerNeeded: false,
     frequency: "Weekly",
-    recurringDonationId: 1,
-    recurringDonationEndDate: new Date("2022-10-01T00:00:00.000Z"),
+    recurringDonationId: "1",
+    recurringDonationEndDate: new Date("2022-11-01T00:00:00.000Z"),
     notes: "these are the copied notes",
   },
   {
@@ -86,8 +86,8 @@ const testSchedules = [
     status: "Pending",
     volunteerNeeded: false,
     frequency: "Monthly",
-    recurringDonationId: 2,
-    recurringDonationEndDate: new Date("2021-03-01T00:06:00.000Z"),
+    recurringDonationId: "2",
+    recurringDonationEndDate: new Date("2021-10-01T00:06:00.000Z"),
     notes: "these are the copied notes",
   },
 ];
