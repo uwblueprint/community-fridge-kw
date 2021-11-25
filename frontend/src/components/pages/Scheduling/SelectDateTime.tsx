@@ -12,9 +12,9 @@ const SelectDateTime = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const { daypart } = formValues;
+  const { dayPart } = formValues;
 
-  const dayparts = [
+  const dayParts = [
     "Early Morning (12am - 6am)",
     "Morning (6am - 11am)",
     "Afternoon (11pm - 4pm)",
@@ -28,19 +28,18 @@ const SelectDateTime = ({
   ) => {
     setForm({ target: { name, value: e } });
   };
-
   return (
     <Container>
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2"> This is Date and Time page </Text>
       <RadioSelectGroup
-        name="daypart"
+        name="dayPart"
         label="What time of day would you like to drop off your donation?"
-        value={daypart}
-        values={dayparts}
+        value={dayPart}
+        values={dayParts}
         isRequired
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          handleChange(e, "daypart");
+          handleChange(e, "dayPart");
         }}
       />
       <HStack>

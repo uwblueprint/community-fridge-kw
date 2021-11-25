@@ -43,7 +43,7 @@ const schedulingDefaultData = {
   size: "",
   isPickup: false,
   pickupLocation: "",
-  daypart: "",
+  dayPart: "",
   startTime: new Date().toDateString(),
   endTime: new Date().toDateString(),
   status: "",
