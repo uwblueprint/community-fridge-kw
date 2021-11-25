@@ -10,6 +10,7 @@ const VolunteerInformation = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
   const history = useHistory();
