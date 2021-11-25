@@ -152,12 +152,7 @@ const ConfirmDetails = ({
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Container>
-      {isBeingEdited ? (
-        <VStack>
-          <Button variant="navigation">Save Changes</Button>
-          <Button variant="navigation">Cancel</Button>
-        </VStack>
-      ) : (
+      {!isBeingEdited && (
         <HStack>
           <Button onClick={previous} variant="navigation">
             Back
