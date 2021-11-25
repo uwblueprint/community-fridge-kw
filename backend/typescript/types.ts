@@ -11,6 +11,21 @@ export enum Status {
   REJECTED = "Rejected",
 }
 
+export enum DayPart {
+  EARLY_MORNING = "Early Morning (12am - 6am)",
+  MORNING = "Morning (6am - 11am)",
+  AFTERNOON = "Afternoon (11am - 4pm)",
+  EVENING = "Evening (4pm - 9pm)",
+  NIGHT = "Night (9pm - 12am)",
+}
+
+export enum Frequency {
+  ONE_TIME = "One time donation",
+  DAILY = "Daily",
+  WEEKLY = "Weekly",
+  MONTHLY = "Monthly",
+}
+
 export const Categories = new Set([
   "Dry packaged goods",
   "Non-perishables",
@@ -75,7 +90,7 @@ export type SchedulingDTO = {
   size?: string;
   isPickup: boolean;
   pickupLocation?: string;
-  dayPart: string;
+  dayPart: DayPart;
   startTime: Date;
   endTime: Date;
   status: Status;

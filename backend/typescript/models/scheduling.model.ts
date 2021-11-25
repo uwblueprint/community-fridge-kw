@@ -9,7 +9,7 @@ import {
   AutoIncrement,
   PrimaryKey,
 } from "sequelize-typescript";
-import { Status } from "../types";
+import { DayPart, Frequency, Status } from "../types";
 import Donor from "./donor.model";
 
 @Table({ tableName: "scheduling" })
@@ -34,8 +34,16 @@ export default class Scheduling extends Model {
   pickup_location!: string;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT })
-  day_part!: string;
+  @Column({
+    type: DataType.ENUM(
+      "Early Morning (12am - 6am)",
+      "Morning (6am - 11am)",
+      "Afternoon (11am - 4pm)",
+      "Evening (4pm - 9pm)",
+      "Night (9pm - 12am)",
+    ),
+  })
+  day_part!: DayPart;
 
   @AllowNull(false)
   @Column({ type: DataType.DATE })
@@ -59,8 +67,10 @@ export default class Scheduling extends Model {
   volunteer_time!: string;
 
   @AllowNull(false)
-  @Column({ type: DataType.TEXT })
-  frequency!: string;
+  @Column({
+    type: DataType.ENUM("One time donation", "Daily", "Weekly", "Monthly"),
+  })
+  frequency!: Frequency;
 
   @Column({ type: DataType.INTEGER })
   recurring_donation_id!: number;

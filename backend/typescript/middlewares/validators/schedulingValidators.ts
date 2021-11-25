@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Status } from "../../types";
+import { DayPart, Frequency, Status } from "../../types";
 import {
   getApiValidationError,
   validatePrimitive,
@@ -34,7 +34,7 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("pickupLocation", "string"));
   }
-  if (!validatePrimitive(req.body.dayPart, "string")) {
+  if (!Object.values(DayPart).includes(req.body.status)) {
     return res.status(400).send(getApiValidationError("dayPart", "string"));
   }
   if (!validateDate(req.body.startTime)) {
@@ -68,16 +68,8 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerTime", "string"));
   }
-  if (!validatePrimitive(req.body.frequency, "string")) {
+  if (!Object.values(Frequency).includes(req.body.status)) {
     return res.status(400).send(getApiValidationError("frequency", "string"));
-  }
-  if (
-    req.body.recurringDonationId &&
-    !validatePrimitive(req.body.recurringDonationId, "integer")
-  ) {
-    return res
-      .status(400)
-      .send(getApiValidationError("recurringDonationId", "integer"));
   }
   if (
     req.body.recurringDonationEndDate &&
@@ -147,8 +139,8 @@ export const updateSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerNeeded", "boolean"));
   }
-  if (req.body.frequency && !validatePrimitive(req.body.frequency, "string")) {
-    return res.status(400).send(getApiValidationError("frequency", "string"));
+  if (req.body.status && !Object.values(DayPart).includes(req.body.status)) {
+    return res.status(400).send(getApiValidationError("dayPart", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));
