@@ -4,6 +4,7 @@ import {
   Button,
   Center,
   Container,
+  Grid,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,13 +13,23 @@ import {
   ModalHeader,
   ModalOverlay,
   Stack,
+  Table,
+  TableCaption,
+  Tbody,
+  Td,
   Text,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import React from "react";
 
 import { colorMap } from "../../constants/DaysInWeek";
 import { Schedule } from "../../types/SchedulingTypes";
+import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
 
 type DefaultWeeklyEventItemProps = {
   schedule: Schedule;
@@ -69,16 +80,7 @@ const DefaultWeeklyEventItem = ({
         </Badge>
       </Container>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Donation Details</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>here</ModalBody>
-
-          <ModalFooter />
-        </ModalContent>
-      </Modal>
+      <WeeklyEventItemPopUp isOpen={isOpen} onClose={onClose} onOpen={onOpen} schedule={schedule} />
     </>
   );
 };
