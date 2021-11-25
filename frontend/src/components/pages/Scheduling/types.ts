@@ -20,6 +20,7 @@ export interface SchedulingStepProps {
   navigation: NavigationProps;
   formValues: SchedulingFormProps;
   setForm: SetForm;
+  isBeingEdited?: boolean;
 }
 
 export interface SchedulingProgessBarProps {

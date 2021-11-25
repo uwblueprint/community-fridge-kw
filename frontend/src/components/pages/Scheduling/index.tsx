@@ -5,6 +5,7 @@ import ConfirmDetails from "./ConfirmDetails";
 import DonationInformation from "./DonationInformation";
 import GetStarted from "./GetStarted";
 import SelectDateTime from "./SelectDateTime";
+import { SchedulingFormProps } from "./types";
 import VolunteerInformation from "./VolunteerInformation";
 
 const steps = [
@@ -30,24 +31,37 @@ interface UseStepType {
   navigation: NavigationProps | any;
 }
 
-const Scheduling = () => {
-  const [schedulingFormValues, setSchedulingForm] = useForm({
-    id: "",
-    donorId: "",
-    categories: [],
-    size: "",
-    isPickup: false,
-    pickupLocation: "",
-    daypart: "",
-    startTime: new Date().toDateString(),
-    endTime: new Date().toDateString(),
-    status: "",
-    volunteerNeeded: false,
-    frequency: "",
-    notes: "",
-  });
+interface SchedulingProps {
+  schedulingData: SchedulingFormProps;
+  isBeingEdited: boolean;
+}
 
-  const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
+const schedulingDefaultData = {
+  id: "",
+  donorId: "",
+  categories: [],
+  size: "",
+  isPickup: false,
+  pickupLocation: "",
+  daypart: "",
+  startTime: new Date().toDateString(),
+  endTime: new Date().toDateString(),
+  status: "",
+  volunteerNeeded: false,
+  volunteerIds: [],
+  frequency: "",
+  notes: "",
+};
+
+const Scheduling = ({
+  schedulingData = schedulingDefaultData,
+  isBeingEdited = false,
+}: SchedulingProps) => {
+  const [schedulingFormValues, setSchedulingForm] = useForm(schedulingData);
+  const { step, navigation }: UseStepType = useStep({
+    steps,
+    initialStep: isBeingEdited ? 4 : 0,
+  });
   const { id } = step;
 
   switch (id) {
@@ -65,6 +79,7 @@ const Scheduling = () => {
           formValues={schedulingFormValues}
           setForm={setSchedulingForm}
           navigation={navigation}
+          isBeingEdited={isBeingEdited}
         />
       );
     case "donation information":
@@ -73,6 +88,7 @@ const Scheduling = () => {
           formValues={schedulingFormValues}
           setForm={setSchedulingForm}
           navigation={navigation}
+          isBeingEdited={isBeingEdited}
         />
       );
     case "volunteer information":
@@ -81,6 +97,7 @@ const Scheduling = () => {
           formValues={schedulingFormValues}
           setForm={setSchedulingForm}
           navigation={navigation}
+          isBeingEdited={isBeingEdited}
         />
       );
     case "confirm donation details":
@@ -89,6 +106,7 @@ const Scheduling = () => {
           formValues={schedulingFormValues}
           setForm={setSchedulingForm}
           navigation={navigation}
+          isBeingEdited={isBeingEdited}
         />
       );
     default:

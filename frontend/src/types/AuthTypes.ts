@@ -1,9 +1,16 @@
+export enum Role {
+  USER = "User",
+  ADMIN = "Admin",
+  VOLUNTEER = "Volunteer",
+  DONOR = "Donor",
+}
+
 export type AuthenticatedUser = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  role: "Admin" | "User" | "Donor" | "Volunteer";
+  role: Role;
   accessToken: string;
   phoneNumber: string;
 } | null;
@@ -13,7 +20,7 @@ export type AuthenticatedDonor = {
   firstName: string;
   lastName: string;
   email: string;
-  role: "Donor";
+  role: Role.DONOR;
   phoneNumber: string;
   accessToken: string;
   businessName: string;
