@@ -5,6 +5,7 @@ import {
   Status,
   CreateSchedulingDTO,
   DayPart,
+  Frequency,
 } from "../../../types";
 import User from "../../../models/user.model";
 import Donor from "../../../models/donor.model";
@@ -186,9 +187,11 @@ describe("pg schedulingService", () => {
     const endTime: Date = new Date("October 13, 2014 11:13:00");
     const status: Status = Status.APPROVED;
     const dayPart = DayPart.AFTERNOON;
+    const frequency = Frequency.MONTHLY;
     const schedulingToCreate: CreateSchedulingDTO = {
       ...testSchedules[0],
       status,
+      frequency,
       dayPart,
       startTime,
       endTime,
