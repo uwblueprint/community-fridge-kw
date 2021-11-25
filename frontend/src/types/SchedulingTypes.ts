@@ -10,7 +10,10 @@ export type Schedule = {
   endTime: string;
   status: string;
   volunteerNeeded: boolean;
+  volunteerTime: string;
   frequency: string;
+  recurringDonationId: string;
+  recurringDonationEndDate: string;
   notes: string;
 } | null;
 
