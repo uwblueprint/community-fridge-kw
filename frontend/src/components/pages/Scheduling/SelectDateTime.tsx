@@ -9,6 +9,7 @@ const SelectDateTime = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
   const { daypart } = formValues;
