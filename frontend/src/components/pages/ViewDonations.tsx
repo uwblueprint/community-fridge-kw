@@ -33,6 +33,10 @@ const ViewDonations = (): React.ReactElement => {
   useEffect(() => {
     const getSchedules = async () => {
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
+<<<<<<< HEAD
+=======
+      console.log(scheduleResponse);
+>>>>>>> add backend
       setSchedules(scheduleResponse);
     };
 
@@ -100,6 +104,7 @@ const ViewDonations = (): React.ReactElement => {
           </IconButton>
         </Flex>
 
+<<<<<<< HEAD
         <AdminCalendar
           key={selectedDay?.toString()}
           selectedDay={selectedDay as Date}
@@ -107,6 +112,14 @@ const ViewDonations = (): React.ReactElement => {
         />
         </Flex>
     </Container>
+=======
+      <AdminCalendar
+        key={selectedDay?.toString()}
+        selectedDay={selectedDay as Date}
+        schedules={schedules}
+      />
+    </Stack>
+>>>>>>> add backend
   );
 };
 
