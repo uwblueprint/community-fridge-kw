@@ -5,6 +5,7 @@ export type Schedule = {
   size: string;
   isPickup: boolean;
   pickupLocation: string;
+  daypart: string;
   startTime: string;
   endTime: string;
   status: string;

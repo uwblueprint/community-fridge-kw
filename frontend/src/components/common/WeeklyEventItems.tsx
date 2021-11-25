@@ -22,7 +22,6 @@ const DefaultWeeklyEventItem = ({
   date,
   frequency,
 }: DefaultWeeklyEventItemProps) => {
-
   return (
     <Container
       color="#FAFCFE"

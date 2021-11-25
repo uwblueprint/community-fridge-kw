@@ -103,6 +103,7 @@ const DonationInformation: any = ({
   function selectionHandler() {
     console.log("select");
   }
+  const { daypart } = formValues;
 
   return (
     // Insert Select Date and Time page here
