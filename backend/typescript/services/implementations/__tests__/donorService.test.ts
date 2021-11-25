@@ -4,7 +4,7 @@ import DonorService from "../donorService";
 
 import { DonorDTO } from "../../../types";
 
-import { testSql } from "../../../testUtils/testDb";
+import testSql from "../../../testUtils/testDb";
 import User from "../../../models/user.model";
 
 const testUsers = [

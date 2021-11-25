@@ -4,7 +4,7 @@ import UserService from "../userService";
 
 import { Role, UserDTO, VolunteerDTO } from "../../../types";
 
-import { testSql } from "../../../testUtils/testDb";
+import testSql from "../../../testUtils/testDb";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
 
