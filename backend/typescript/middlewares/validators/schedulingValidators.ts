@@ -158,7 +158,7 @@ export const updateSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerTime", "string"));
   }
-  if (req.body.dayPart && !Object.values(DayPart).includes(req.body.status)) {
+  if (req.body.dayPart && !Object.values(DayPart).includes(req.body.dayPart)) {
     return res.status(400).send(getApiValidationError("dayPart", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
