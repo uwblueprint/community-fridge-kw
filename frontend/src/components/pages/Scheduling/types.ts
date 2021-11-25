@@ -30,6 +30,7 @@ export interface DonationSizeInterface {
   image: string;
   size: string;
   description: string;
+  selected?: boolean;
 }
 export interface SchedulingProgessBarProps {
   activeStep: number;

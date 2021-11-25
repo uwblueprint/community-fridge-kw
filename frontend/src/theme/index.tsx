@@ -167,6 +167,9 @@ const customTheme = extendTheme({
       100: "#317C71",
       200: "#EFFCF9",
     },
+    cottonCandy: {
+      100: "#FDF5FA",
+    },
   },
   breakpoints: {
     sm: "320px",

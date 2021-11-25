@@ -46,23 +46,29 @@ const DonationSizeCard = ({
   image,
   size,
   description,
+  selected,
 }: DonationSizeInterface): any => {
+  const sizeSelected = false;
+  console.log(sizeSelected);
+
   return (
     <>
-      <Box borderRadius="lg" borderWidth="1px" my="10px">
+      <Box
+        borderRadius="lg"
+        borderWidth="1px"
+        my="10px"
+        bg={selected ? "cottonCandy.100" : "grey.100"}
+      >
         <HStack>
-          <Box
-            m="20px"
-            w="5rem"
-            h="5rem"
-            backgroundColor="gray.100"
-            borderRadius="lg"
-          >
+          <Box m="20px" w="5rem" h="5rem" bg="grey.100" borderRadius="lg">
             {image}
           </Box>
           <Box>
             <Text textStyle="mobileBodyBold"> {size}</Text>
-            <Text textStyle="mobileSmall">{description}</Text>
+            <Text textStyle="mobileSmall">
+              {description}
+              {selected ? "true" : "false"}
+            </Text>
           </Box>
         </HStack>
       </Box>
@@ -92,6 +98,11 @@ const DonationInformation: any = ({
   const { previous, next } = navigation;
   const { categories, size } = formValues;
   //   const { insert form fields for this page here } = formData;
+  const selectedState = true;
+
+  function selectionHandler() {
+    console.log("select");
+  }
 
   return (
     // Insert Select Date and Time page here
@@ -108,6 +119,8 @@ const DonationInformation: any = ({
             image={donationSize.image}
             size={donationSize.size}
             description={donationSize.description}
+            selected={selectedState}
+            // onClick={selectionHandler()}
           />
         ))}
       </Box>
