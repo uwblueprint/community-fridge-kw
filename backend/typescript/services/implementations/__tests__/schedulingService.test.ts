@@ -11,7 +11,7 @@ import User from "../../../models/user.model";
 import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
 
-import { testSql } from "../../../testUtils/testDb";
+import testSql from "../../../testUtils/testDb";
 
 type SchedulingKey = keyof typeof Scheduling;
 
