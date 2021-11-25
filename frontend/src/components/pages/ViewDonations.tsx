@@ -14,9 +14,11 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
+import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
+import { Schedule } from "../../types/SchedulingTypes";
 
 import AdminCalendar from "./AdminCalendar";
 
@@ -25,6 +27,17 @@ const ViewDonations = (): React.ReactElement => {
     Date | DateObject | DateObject[] | null
   >(new Date());
   const [test, setTest] = useState<any>(0);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+
+  useEffect(() => {
+    const getSchedules = async () => {
+      const scheduleResponse = await SchedulingAPIClient.getSchedules();
+      console.log(scheduleResponse);
+      setSchedules(scheduleResponse);
+    };
+
+    getSchedules();
+  }, []);
 
   const changeWeek = (days: number) => {
     setTest(test + 1); // need this for some reason
@@ -84,6 +97,7 @@ const ViewDonations = (): React.ReactElement => {
       <AdminCalendar
         key={selectedDay?.toString()}
         selectedDay={selectedDay as Date}
+        schedules={schedules}
       />
     </Stack>
   );
