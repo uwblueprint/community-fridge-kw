@@ -6,6 +6,7 @@ import {
 import {
   Box,
   Button,
+  Container,
   Flex,
   HStack,
   IconButton,
@@ -47,58 +48,65 @@ const ViewDonations = (): React.ReactElement => {
   };
 
   return (
-    <Stack spacing="1rem" mt="10rem" mx="8rem">
-      <Text textStyle="desktopHeader2">
-        Upcoming Scheduled Fridge Donations
-      </Text>
-      <Text textStyle="desktopSmall">
-        Select a card to see more details pertaining to the upcoming donation.
-      </Text>
-      <Flex mt="5rem" width="72rem">
-        <HStack>
-          <Text textStyle="desktopHeader">
-            Week of{" "}
-            {selectedDay?.toLocaleString(undefined, {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </Text>
-          <DatePicker
-            value={selectedDay}
-            onChange={(e: DateObject) => {
-              setSelectedDay(e?.toDate?.());
+    <Container pt="1.5rem" maxWidth={{ base: "default", md: "70%" }}>
+      <Flex
+        pt={{ base: "0.5rem", md: "2rem" }}
+        flexDirection="column"
+        justifyContent="space-between"
+        display={{ base: "inline", md: "flex" }}
+      >
+        <Text textStyle="desktopHeader2" pt="1.4rem">
+          Upcoming Scheduled Fridge Donations
+        </Text>
+        <Text textStyle="desktopSmall" pt="1.4rem">
+          Select a card to see more details pertaining to the upcoming donation.
+        </Text>
+        <Flex pt="4rem" width="72rem">
+          <HStack py="1.2rem">
+            <Text textStyle="desktopHeader">
+              Week of{" "}
+              {selectedDay?.toLocaleString(undefined, {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </Text>
+            <DatePicker
+              value={selectedDay}
+              onChange={(e: DateObject) => {
+                setSelectedDay(e?.toDate?.());
+              }}
+              render={<Icon />}
+            />
+          </HStack>
+          <Spacer />
+          <IconButton
+            backgroundColor="transparent"
+            aria-label="previous week"
+            onClick={() => {
+              changeWeek(-7);
             }}
-            render={<Icon />}
-          />
-        </HStack>
-        <Spacer />
-        <IconButton
-          backgroundColor="transparent"
-          aria-label="previous week"
-          onClick={() => {
-            changeWeek(-7);
-          }}
-        >
-          <ChevronLeftIcon />
-        </IconButton>
-        <IconButton
-          backgroundColor="transparent"
-          aria-label="next week"
-          onClick={() => {
-            changeWeek(7);
-          }}
-        >
-          <ChevronRightIcon />
-        </IconButton>
-      </Flex>
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+          <IconButton
+            backgroundColor="transparent"
+            aria-label="next week"
+            onClick={() => {
+              changeWeek(7);
+            }}
+          >
+            <ChevronRightIcon />
+          </IconButton>
+        </Flex>
 
-      <AdminCalendar
-        key={selectedDay?.toString()}
-        selectedDay={selectedDay as Date}
-        schedules={schedules}
-      />
-    </Stack>
+        <AdminCalendar
+          key={selectedDay?.toString()}
+          selectedDay={selectedDay as Date}
+          schedules={schedules}
+        />
+        </Flex>
+    </Container>
   );
 };
 
