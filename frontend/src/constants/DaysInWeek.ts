@@ -5,6 +5,7 @@ export const convertTime = (dateToConvert: string): string => {
   return new Date(dateToConvert).toLocaleTimeString(navigator.language, {
     hour: "2-digit",
     minute: "2-digit",
+    hour12: true,
   });
 };
 
