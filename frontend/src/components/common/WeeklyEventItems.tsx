@@ -118,27 +118,27 @@ const DefaultWeeklyEventItem = ({
       <>
         <Container
           color="#FAFCFE"
-          borderWidth="1px"
-          borderRadius="8px"
+          borderWidth="0.05rem"
+          borderRadius="0.5rem"
           borderColor="#D8DDE0"
           alignItems="center"
           centerContent
-          py="24px"
-          px="30px"
+          py="1.5rem"
+          px="2rem"
           onClick={onOpen}
         >
-          <Text textAlign="center" textStyle="desktopBodyBold" mb="8px">
+          <Text textAlign="center" textStyle="desktopBodyBold" mb="0.5rem">
             {donor?.firstName} {donor?.lastName}
           </Text>
-          <Text textAlign="center" textStyle="desktopSmall" mb="16px">
+          <Text textAlign="center" textStyle="desktopSmall" mb="1rem">
             {convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}
           </Text>
           <Badge
             color={`${(colorMap as any)[schedule!.frequency]}.100`}
             backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
             textStyle="desktopSmall"
-            py="6px"
-            ph="14px"
+            py="0.5rem"
+            ph="1rem"
           >
             {" "}
             {schedule!.frequency}{" "}
