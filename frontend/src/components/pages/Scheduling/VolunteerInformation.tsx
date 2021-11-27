@@ -130,19 +130,19 @@ const VolunteerInformation = ({
             size="lg"
           />
         </FormControl>
-        <FormControl m="3em 0">
-          <FormLabel>Additional notes</FormLabel>
-          <FormHelperText mb="1em">
-            Any notes added will be visible to admin.
-          </FormHelperText>
-          <Textarea
-            value={notes}
-            onChange={(e) => handleChange(e.target.value, "notes")}
-            placeholder="john@shawarmaplus.com"
-          />
-        </FormControl>
         </>
       }
+      <FormControl m="3em 0">
+        <FormLabel>Additional notes</FormLabel>
+        <FormHelperText mb="1em">
+          Any notes added will be visible to admin.
+        </FormHelperText>
+        <Textarea
+          value={notes}
+          onChange={(e) => handleChange(e.target.value, "notes")}
+          placeholder="john@shawarmaplus.com"
+        />
+      </FormControl>
       <HStack>
         <Button onClick={previous} variant="navigation">
           Back
