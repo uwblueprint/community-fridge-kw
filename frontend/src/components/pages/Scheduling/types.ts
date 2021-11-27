@@ -5,13 +5,13 @@ export interface SchedulingFormProps {
   donorId: string;
   categories: string[];
   size: string;
-  isPickup: boolean;
+  isPickup: boolean | null;
   pickupLocation: string;
   dayPart: string;
   startTime: string;
   endTime: string;
   status: string;
-  volunteerNeeded: boolean;
+  volunteerNeeded: boolean | null;
   volunteerTime: string;
   frequency: string;
   recurringDonationEndDate: string;
