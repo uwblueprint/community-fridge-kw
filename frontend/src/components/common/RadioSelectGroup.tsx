@@ -84,7 +84,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   const group = getRootProps();
 
   return (
-    <FormControl isRequired={isRequired}>
+    <FormControl isRequired={isRequired} m="2em 0">
       <FormLabel>{label}</FormLabel>
       {helperText && <FormHelperText mb="1em">{helperText}</FormHelperText>}
       <VStack {...group}>{radioSelectButtons}</VStack>

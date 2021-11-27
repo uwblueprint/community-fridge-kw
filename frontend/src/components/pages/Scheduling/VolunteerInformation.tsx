@@ -96,8 +96,6 @@ const VolunteerInformation = ({
           handleChange(e === "Yes", "volunteerNeeded");
         }}
       />
-      <br />
-      <br />
       {volunteerNeeded &&
         <>
         <RadioSelectGroup
