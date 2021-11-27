@@ -60,7 +60,15 @@ const RadioSelectButton = (props: any) => {
 };
 
 const RadioSelectGroup = (props: RadioSelectGroupProps) => {
-  const { name, value, values, label, isRequired, helperText, onChange } = props;
+  const {
+    name,
+    value,
+    values,
+    label,
+    isRequired,
+    helperText,
+    onChange,
+  } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     onChange,
