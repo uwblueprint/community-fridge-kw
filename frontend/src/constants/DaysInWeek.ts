@@ -29,11 +29,13 @@ export const getNextDropOff = (currentDate: string, frequency: string): string =
     return "";
   }
 
-  return nextDate.toLocaleString(undefined, {
+  const nextTime = nextDate.toLocaleString(undefined, {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
+
+  return `Next dropoff: ${nextTime}`;
 };
 
 type DaysInWeekProps = {
