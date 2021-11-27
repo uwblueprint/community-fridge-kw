@@ -14,8 +14,7 @@ const VolunteerInformation = ({
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
   const history = useHistory();
-  const { startTime, endTime, frequency, volunteerNeeded, pickupLocation, isPickup, notes } = formValues;
-  const pickupTime = "";
+  const { startTime, endTime, volunteerNeeded, volunteerTime, pickupLocation, isPickup, notes } = formValues;
 
   const handleChange = (
     e: boolean | string,
@@ -29,7 +28,6 @@ const VolunteerInformation = ({
   const volunteerRequiredHelperText = "A volunteer is a community fridge member who will assist with donation dropoffs. Information of the volunteer assigned will be provided."
 
   return (
-    // Insert Volunteer Information page here
     <Container p="30px">
       <SchedulingProgressBar activeStep={2} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em">Volunteer Information</Text>
@@ -70,7 +68,7 @@ const VolunteerInformation = ({
         <FormLabel>Pickup location:</FormLabel>
       <Input
         value={pickupLocation}
-        onChange={() => handleChange(pickupLocation, "pickupLocation")}
+        onChange={(e) => handleChange(e.target.value, "pickupLocation")}
         placeholder="Enter location"
         size="lg"
       />
@@ -78,8 +76,8 @@ const VolunteerInformation = ({
       <FormControl isRequired m="3em 0">
         <FormLabel>What is the specific time you require assistance?</FormLabel>
       <Input
-        value={pickupTime}
-        onChange={() => handleChange(pickupTime, "pickupTime")}
+        value={volunteerTime}
+        onChange={(e) => handleChange(e.target.value, "volunteerTime")}
         placeholder="Enter time"
         size="lg"
       />
@@ -89,6 +87,7 @@ const VolunteerInformation = ({
         <FormHelperText mb="1em">Any notes added will be visible to admin.</FormHelperText>
         <Textarea
           value={notes}
+          onChange={(e) => handleChange(e.target.value, "notes")}
           placeholder="john@shawarmaplus.com"
         />
       </FormControl>

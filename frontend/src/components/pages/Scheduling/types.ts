@@ -12,7 +12,9 @@ export interface SchedulingFormProps {
   endTime: string;
   status: string;
   volunteerNeeded: boolean;
+  volunteerTime: string;
   frequency: string;
+  recurringDonationEndDate: string;
   notes: string;
 }
 

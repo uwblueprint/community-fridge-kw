@@ -49,7 +49,9 @@ const schedulingDefaultData = {
   status: "",
   volunteerNeeded: false,
   volunteerIds: [],
+  volunteerTime: "",
   frequency: "",
+  recurringDonationEndDate: "",
   notes: "",
 };
 
