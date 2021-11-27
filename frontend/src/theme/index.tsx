@@ -113,7 +113,17 @@ const customTheme = extendTheme({
       900: "#1d0013",
     },
     black: {
+      // colorScheme prop requires a full range of colours in Chakra
+      50: "#EDF2F7",
       100: "#171717",
+      200: "#E2E8F0",
+      300: "#CBD5E0",
+      400: "#A0AEC0",
+      500: "#171717",
+      600: "#171717",
+      700: "#2D3748",
+      800: "#1A202C",
+      900: "#171923",
     },
     squash: {
       100: "#FAFCFE",

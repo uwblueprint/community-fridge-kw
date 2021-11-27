@@ -1,16 +1,23 @@
 import {
-  Box,
   Button,
-  Center,
   Checkbox,
   Container,
+  FormControl,
+  FormLabel,
   HStack,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { prependOnceListener } from "process";
+import { env, prependOnceListener } from "process";
 import React from "react";
 
+import xl from "../../../assets/donation-sizes/lg.png";
+import lg from "../../../assets/donation-sizes/md.png";
+import md from "../../../assets/donation-sizes/sm.png";
+import sm from "../../../assets/donation-sizes/xs.png";
+import customTheme from "../../../theme";
+import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
+import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import {
   DonationSizeInterface,
@@ -20,75 +27,65 @@ import {
 
 const DonationSizes: DonationSizeInterface[] = [
   {
-    image: "image1",
-    size: "Extra small",
-    description: "Fills less than a shelf of the fridge/pantry",
-  },
-  {
-    image: "image2",
+    image: sm,
     size: "Small",
     description: "Approximately fills one shelf of the fridge/ pantry",
   },
   {
-    image: "image3",
+    image: md,
     size: "Medium",
     description: "Approximately fills two shelves of the fridge/ pantry",
   },
   {
-    image: "image4",
+    image: lg,
     size: "Large",
+    description:
+      "Approximately fills four shelves of the fridge/ pantry (full capacity)",
+  },
+  {
+    image: xl,
+    size: "Extra-large",
     description:
       "Approximately fills four shelves of the fridge/ pantry (full capacity)",
   },
 ];
 
-const DonationSizeCard = ({
-  image,
-  size,
-  description,
-  selected,
-}: DonationSizeInterface): any => {
-  const sizeSelected = false;
-  console.log(sizeSelected);
+const categoriesOptions = [
+  "Dry packaged goods",
+  "Non-perishables",
+  "Fresh produce",
+  "Bread and baked goods",
+  "Oil, spreads, and seasoning",
+  "Tea and coffee",
+  "Frozen meals",
+  "Prepared meals",
+  "Non-alcoholic drinks and juices",
+  "Essential items (masks, hand sanitizer, bags)",
+  "Hygiene products (tampons, pads, soap, etc.)",
+];
 
-  return (
-    <>
-      <Box
-        borderRadius="lg"
-        borderWidth="1px"
-        my="10px"
-        bg={selected ? "cottonCandy.100" : "grey.100"}
-      >
-        <HStack>
-          <Box m="20px" w="5rem" h="5rem" bg="grey.100" borderRadius="lg">
-            {image}
-          </Box>
-          <Box>
-            <Text textStyle="mobileBodyBold"> {size}</Text>
-            <Text textStyle="mobileSmall">
-              {description}
-              {selected ? "true" : "false"}
-            </Text>
-          </Box>
-        </HStack>
-      </Box>
-    </>
-  );
-};
-
-const TypesOfItems = ({ title, list }: TypesOfItemsInterface) => {
-  return (
-    <Box my="40px">
-      <Text textStyle="mobileHeader4">{title}</Text>
-
-      <Stack spacing={2} direction="column" size="lg" mt="10px">
-        {list.map((item, i) => (
-          <Checkbox key={i}>{item}</Checkbox>
-        ))}
-      </Stack>
-    </Box>
-  );
-};
+// const TypesOfItems = ({ title, list, setForm }: TypesOfItemsInterface) => {
+//   return (
+//     <FormControl isRequired my="50px">
+//       <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
+//         {title}
+//       </FormLabel>
+//       <Stack spacing={2} direction="column" size="lg" mt="10px">
+//         {list.map((item, i) => (
+//           <Checkbox
+//             key={i}
+//             colorScheme="black"
+//             onChange={() => {
+//               setForm({ target: { name, value: e } });
+//             }}
+//           >
+//             {item}
+//           </Checkbox>
+//         ))}
+//       </Stack>
+//     </FormControl>
+//   );
+// };
 
 const DonationInformation: any = ({
   formValues,
@@ -97,45 +94,66 @@ const DonationInformation: any = ({
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
   const { categories, size } = formValues;
-  //   const { insert form fields for this page here } = formData;
-  const selectedState = true;
 
-  function selectionHandler() {
-    console.log("select");
-  }
-  const { daypart } = formValues;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: string,
+  ) => {
+    setForm({ target: { name, value: e } });
+  };
 
   return (
-    // Insert Select Date and Time page here
-    <Container pl="42px" pr="42px" py="73px">
+    <>
       <SchedulingProgressBar activeStep={1} totalSteps={4} />
-      <Text textStyle="mobileHeader2" mb="20px">
-        Donation Information{" "}
-      </Text>
-      <Text textStyle="mobileHeader4">Size/quantity of donation </Text>
-      <Box>
-        {DonationSizes.map((donationSize, i) => (
-          <DonationSizeCard
-            key={i}
-            image={donationSize.image}
-            size={donationSize.size}
-            description={donationSize.description}
-            selected={selectedState}
-            // onClick={selectionHandler()}
-          />
-        ))}
-      </Box>
-      <TypesOfItems title="Types of item(s)" list={categories} />
+      <Container px="32px">
+        <Text textStyle="mobileHeader2" mb="20px">
+          Donation Information{" "}
+        </Text>
+        <RadioImageSelectGroup
+          value={size}
+          values={DonationSizes}
+          name="size"
+          isRequired
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleChange(e, "size");
+          }}
+        />
 
-      <HStack>
-        <Button onClick={previous} variant="navigation">
-          Back
-        </Button>
-        <Button onClick={next} variant="navigation">
-          Next
-        </Button>
-      </HStack>
-    </Container>
+        <FormControl isRequired my="50px">
+          <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
+            test
+          </FormLabel>
+          <Stack spacing={2} direction="column" size="lg" mt="10px">
+            {categoriesOptions.map((item, i) => (
+              <Checkbox
+                key={i}
+                colorScheme="black"
+                isChecked={categories.includes(item)}
+                onChange={() => {
+                  setForm({
+                    target: {
+                      name: "categories",
+                      value: categories.concat(item),
+                    },
+                  });
+                }}
+              >
+                {item}
+              </Checkbox>
+            ))}
+          </Stack>
+        </FormControl>
+
+        <HStack>
+          <Button onClick={previous} variant="navigation">
+            Back
+          </Button>
+          <Button onClick={next} variant="navigation">
+            Next
+          </Button>
+        </HStack>
+      </Container>
+    </>
   );
 };
 

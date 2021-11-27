@@ -28,7 +28,7 @@ export interface TypesOfItemsInterface {
 }
 
 export interface DonationSizeInterface {
-  image: string;
+  image: any;
   size: string;
   description: string;
   selected?: boolean;
