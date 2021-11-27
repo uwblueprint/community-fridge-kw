@@ -98,6 +98,13 @@ const customTheme = extendTheme({
       lineHeight: "42px",
       color: "black",
     },
+    desktopSubtitle: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: "Bold",
+      fontSize: "20px",
+      lineHeight: "28px",
+      color: "black",
+    },
     popupTitleText: {
       fontFamily: "Inter, sans-serif",
       fontWeight: 500,
