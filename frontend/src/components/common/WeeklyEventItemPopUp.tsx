@@ -26,6 +26,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
+
+import { DonorResponse } from "../../types/DonorTypes";
 import { Schedule } from "../../types/SchedulingTypes";
 
 type WeeklyEventItemPopUpProps = {
@@ -33,6 +35,7 @@ type WeeklyEventItemPopUpProps = {
   onOpen: any;
   onClose: any;
   schedule: Schedule;
+  donor: DonorResponse;
 };
 
 const WeeklyEventItemPopUp = ({
@@ -40,6 +43,7 @@ const WeeklyEventItemPopUp = ({
   onOpen,
   onClose,
   schedule,
+  donor,
 }: WeeklyEventItemPopUpProps) => {
   return (
     <>
@@ -97,13 +101,15 @@ const WeeklyEventItemPopUp = ({
                 </Text>
                 <Grid templateColumns="repeat(2, 1fr)" gap={3}>
                   <Text>Name:</Text>
-                  <Text>Yes</Text>
+                  <Text>
+                    {donor.firstName} {donor.lastName}
+                  </Text>
                   <Text>Email:</Text>
-                  <Text>Yes</Text>
+                  <Text>{donor.email}</Text>
                   <Text>Phone:</Text>
-                  <Text>Yes</Text>
-                  <Text>Organization:</Text>
-                  <Text>Yes</Text>
+                  <Text>{donor.phoneNumber}</Text>
+                  <Text>Organizations:</Text>
+                  <Text>{donor.businessName}</Text>
                 </Grid>
               </Container>
             </VStack>
