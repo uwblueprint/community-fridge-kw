@@ -9,10 +9,14 @@ import React, { useEffect, useState } from "react";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { colorMap, convertTime } from "../../constants/DaysInWeek";
 =======
 import { colorMap } from "../../constants/DaysInWeek";
 >>>>>>> Donor information retrieval done
+=======
+import { colorMap, convertTime } from "../../constants/DaysInWeek";
+>>>>>>> Add icons
 import { DonorResponse } from "../../types/DonorTypes";
 import { Schedule } from "../../types/SchedulingTypes";
 import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
@@ -41,6 +45,7 @@ const DefaultWeeklyEventItem = ({
     getDonor();
   }, []);
 
+<<<<<<< HEAD
   const convertTime = (dateToConvert: string): string => {
     return new Date(dateToConvert).toLocaleTimeString(navigator.language, {
       hour: "2-digit",
@@ -62,6 +67,8 @@ const DefaultWeeklyEventItem = ({
     getDonor();
   }, []);
 
+=======
+>>>>>>> Add icons
   return (
     <>
 <<<<<<< HEAD
