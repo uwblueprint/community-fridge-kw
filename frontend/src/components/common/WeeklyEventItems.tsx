@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useState } from "react";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
-import { colorMap } from "../../constants/DaysInWeek";
+import { colorMap, convertTime } from "../../constants/DaysInWeek";
 import { DonorResponse } from "../../types/DonorTypes";
 import { Schedule } from "../../types/SchedulingTypes";
 import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
@@ -36,13 +36,6 @@ const DefaultWeeklyEventItem = ({
 
     getDonor();
   }, []);
-
-  const convertTime = (dateToConvert: string): string => {
-    return new Date(dateToConvert).toLocaleTimeString(navigator.language, {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   return (
     <>
