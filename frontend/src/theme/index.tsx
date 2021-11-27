@@ -98,6 +98,19 @@ const customTheme = extendTheme({
       lineHeight: "42px",
       color: "black",
     },
+    popupTitleText: {
+      fontFamily: "Inter, sans-serif",
+      fontWeight: 500,
+      fontSize: "16px",
+      lineHeight: "22px",
+      color: "black",
+    },
+    popupInformationText: {
+      fontFamily: "Inter, sans-serif",
+      fontSize: "16px",
+      lineHeight: "24px",
+      color: "black",
+    }
   },
   colors: {
     squash: {
