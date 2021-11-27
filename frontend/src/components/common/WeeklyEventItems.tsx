@@ -1,33 +1,15 @@
 import {
   Badge,
-  Box,
-  Button,
-  Center,
   Container,
-  Grid,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Stack,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
   Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
+import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import { colorMap } from "../../constants/DaysInWeek";
+import { DonorResponse } from "../../types/DonorTypes";
 import { Schedule } from "../../types/SchedulingTypes";
 import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
 
@@ -42,6 +24,19 @@ const DefaultWeeklyEventItem = ({
 }: DefaultWeeklyEventItemProps) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [donor, setDonor] = useState<DonorResponse>();
+
+  useEffect(() => {
+    const getDonor = async () => {
+      const donorResponse = await DonorAPIClient.getDonorById(
+        schedule!.donorId,
+      );
+      console.log(donorResponse);
+      setDonor(donorResponse);
+    };
+
+    getDonor();
+  }, []);
 
   const convertTime = (dateToConvert: string): string => {
     return new Date(dateToConvert).toLocaleTimeString(navigator.language, {
@@ -52,36 +47,48 @@ const DefaultWeeklyEventItem = ({
 
   return (
     <>
-      <Container
-        color="#FAFCFE"
-        borderWidth="1px"
-        borderRadius="8px"
-        borderColor="#D8DDE0"
-        alignItems="center"
-        centerContent
-        py="24px"
-        px="30px"
-        onClick={onOpen}
-      >
-        <Text textAlign="center" textStyle="desktopBodyBold" mb="8px">
-          {schedule?.donorId}
-        </Text>
-        <Text textAlign="center" textStyle="desktopSmall" mb="16px">
-          {convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}
-        </Text>
-        <Badge
-          color={`${(colorMap as any)[schedule!.frequency]}.100`}
-          backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
-          textStyle="desktopSmall"
-          py="6px"
-          ph="14px"
+    {
+    donor ?
+      <>
+        <Container
+          color="#FAFCFE"
+          borderWidth="1px"
+          borderRadius="8px"
+          borderColor="#D8DDE0"
+          alignItems="center"
+          centerContent
+          py="24px"
+          px="30px"
+          onClick={onOpen}
         >
-          {" "}
-          {schedule!.frequency}{" "}
-        </Badge>
-      </Container>
+          <Text textAlign="center" textStyle="desktopBodyBold" mb="8px">
+            {donor?.firstName} {donor?.lastName}
+          </Text>
+          <Text textAlign="center" textStyle="desktopSmall" mb="16px">
+            {convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}
+          </Text>
+          <Badge
+            color={`${(colorMap as any)[schedule!.frequency]}.100`}
+            backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
+            textStyle="desktopSmall"
+            py="6px"
+            ph="14px"
+          >
+            {" "}
+            {schedule!.frequency}{" "}
+          </Badge>
+        </Container>
 
-      <WeeklyEventItemPopUp isOpen={isOpen} onClose={onClose} onOpen={onOpen} schedule={schedule} />
+        <WeeklyEventItemPopUp
+          isOpen={isOpen}
+          onClose={onClose}
+          onOpen={onOpen}
+          schedule={schedule}
+          donor={donor as DonorResponse}
+        />
+      </>
+      : null
+      }
     </>
   );
 };
