@@ -38,7 +38,6 @@ const DefaultWeeklyEventItem = ({
       const donorResponse = await DonorAPIClient.getDonorById(
         schedule!.donorId,
       );
-      console.log(donorResponse);
       setDonor(donorResponse);
     };
 

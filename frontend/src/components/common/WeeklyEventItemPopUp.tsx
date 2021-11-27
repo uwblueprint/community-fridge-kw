@@ -72,6 +72,7 @@ const WeeklyEventItemPopUp = ({
           <ModalBody>
             <VStack alignItems="start" pl="5rem" pt="2.5rem">
               <Flex width="100%" pl="1rem">
+<<<<<<< HEAD
                 <VStack alignItems="start">
                   <Text textStyle="desktopBodyBold" py="0.5rem">{donor.businessName ? donor.businessName : `${donor.firstName} ${donor.lastName}`}</Text>
                   <HStack py="0.5rem">
@@ -95,6 +96,31 @@ const WeeklyEventItemPopUp = ({
                   }
                 </VStack>
                 <Spacer />
+=======
+                  <VStack alignItems="start">
+                    <Text textStyle="desktopBodyBold" py="0.5rem">{donor.businessName ? donor.businessName : `${donor.firstName} ${donor.lastName}`}</Text>
+                    <HStack py="0.5rem">
+                      <CalendarIcon/>
+                      <Text textStyle="desktopSmall">
+                        {new Date(schedule!.startTime).toLocaleString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </Text>
+                    </HStack>
+                    <HStack py="0.5rem">
+                      <TimeIcon />
+                      <Text textStyle="desktopSmall">{convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}</Text>
+                    </HStack>
+                    {
+                      getNextDropOff(schedule!.startTime, schedule!.frequency) ?
+                          <Text textStyle="desktopSmall" py="0.5rem">{getNextDropOff(schedule!.startTime, schedule!.frequency)}</Text>
+                        : null
+                    }
+                  </VStack>
+                <Spacer/>
+>>>>>>> Fix stylings
                 <Badge
                   color={`${(colorMap as any)[schedule!.frequency]}.100`}
                   backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
