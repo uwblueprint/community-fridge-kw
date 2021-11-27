@@ -102,6 +102,25 @@ const DonationInformation: any = ({
     setForm({ target: { name, value: e } });
   };
 
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: string,
+  ) => {
+    let categoriesNew = categories;
+    if (e.target.checked) {
+      categoriesNew.push(item);
+    } else {
+      categoriesNew = categories.filter((string) => item !== string);
+    }
+
+    setForm({
+      target: {
+        name: "categories",
+        value: categoriesNew,
+      },
+    });
+  };
+
   return (
     <>
       <SchedulingProgressBar activeStep={1} totalSteps={4} />
@@ -129,13 +148,8 @@ const DonationInformation: any = ({
                 key={i}
                 colorScheme="black"
                 isChecked={categories.includes(item)}
-                onChange={() => {
-                  setForm({
-                    target: {
-                      name: "categories",
-                      value: categories.concat(item),
-                    },
-                  });
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleCheckboxChange(e, item);
                 }}
               >
                 {item}
