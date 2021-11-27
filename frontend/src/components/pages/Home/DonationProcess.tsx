@@ -13,7 +13,7 @@ const DonationStep = ({
 }: DonationStepProps): JSX.Element => {
   return (
     <Flex paddingBottom="1.5rem">
-      <Text textStyle="mobileSmall" flex="1" color="poison.100">
+      <Text textStyle="mobileSmall" flex="1" color="black.100">
         {stepNumber}
       </Text>
       <Box flex="10">
@@ -32,7 +32,7 @@ const DonationProcess = (): JSX.Element => {
       <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
         For Donors
       </Text>
-      <Text mb="1.5rem" color="evergreen.100" textStyle="mobileHeader2">
+      <Text mb="1.5rem" color="spinach.100" textStyle="mobileHeader2">
         THE DONATION PROCESS
       </Text>
       <DonationStep
