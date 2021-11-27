@@ -4,6 +4,7 @@ import {
   Button,
   Center,
   Container,
+  Divider,
   Flex,
   Grid,
   HStack,
@@ -53,76 +54,87 @@ const WeeklyEventItemPopUp = ({
 }: WeeklyEventItemPopUpProps) => {
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="full">
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent maxW="full" height={{ md: "60rem", base: "60rem" }}>
-          <ModalHeader>Donation Details</ModalHeader>
+        <ModalContent
+          maxW="55rem"
+          width="55rem"
+          maxH="65rem"
+          height="65rem"
+        >
+          <ModalHeader>
+            <Text textStyle="desktopSubtitle" pl="6rem" pt="4rem">
+              Donation Details 
+            </Text>
+          </ModalHeader>
           <ModalCloseButton />
+          <Divider orientation="horizontal"/>
           <ModalBody>
-            <VStack>
-              <Container>
-                <Flex>
-                    <VStack>
-                      <Text textStyle="desktopBodyBold">{donor.businessName}</Text>
-                      <HStack>
-                        <CalendarIcon pr="16px"/>
-                        <Text textStyle="popupInformationText">
-                          {new Date(schedule!.startTime).toLocaleString(undefined, {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </Text>
-                      </HStack>
-                      <HStack>
-                        <TimeIcon pr="16px"/>
-                        <Text textStyle="popupInformationText">{convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}</Text>
-                      </HStack>
-                      <Text textStyle="popupInformationText">{getNextDropOff(schedule!.startTime, schedule!.frequency)}</Text>
-                    </VStack>
-                  <Spacer/>
-                  <Badge
-                    color={`${(colorMap as any)[schedule!.frequency]}.100`}
-                    backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
-                    textStyle="desktopSmall"
-                    py="6px"
-                    ph="14px"
-                    width="5rem"
-                    height="2rem"
-                  >
-                    {" "}
-                    {schedule!.frequency}{" "}
-                  </Badge>
-                </Flex>
-              </Container>
-              <Container>
+            <VStack alignItems="start" pl="5rem" pt="2.5rem">
+              <Flex width="100%" pl="1rem">
+                  <VStack alignItems="start">
+                    <Text textStyle="desktopBodyBold" py="0.5rem">{donor.businessName}</Text>
+                    <HStack py="0.5rem">
+                      <CalendarIcon/>
+                      <Text textStyle="desktopSmall">
+                        {new Date(schedule!.startTime).toLocaleString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </Text>
+                    </HStack>
+                    <HStack py="0.5rem">
+                      <TimeIcon />
+                      <Text textStyle="desktopSmall">{convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}</Text>
+                    </HStack>
+                    <Text textStyle="desktopSmall">{getNextDropOff(schedule!.startTime, schedule!.frequency)}</Text>
+                  </VStack>
+                <Spacer/>
+                <Badge
+                  color={`${(colorMap as any)[schedule!.frequency]}.100`}
+                  backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
+                  textStyle="desktopSmall"
+                  textAlign="center"
+                  alignItems="center"
+                  pt="0.5rem"
+                  mr="6rem"
+                  width="5.5rem"
+                  height="2rem"
+                >
+                  {" "}
+                  {schedule!.frequency}{" "}
+                </Badge>
+              </Flex>
+              <Divider orientation="horizontal" />
+              <Container pt="1.5rem">
                 <Text
                   textStyle="mobileCardDescription"
                   color="#6C6C84"
                   verticalAlign="top"
                   textAlign="left"
-                  py="16px"
+                  pb="2rem"
                 >
                   DONATION INFORMATION
                 </Text>
-                <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+                <Grid templateColumns="repeat(2, 1fr)" gap="1rem">
                   <Text textStyle="popupTitleText">Size:</Text>
                   <Text textStyle="popupInformationText">{schedule?.size}</Text>
                   <Text textStyle="popupTitleText">Category of Item:</Text>
                   <Text textStyle="popupInformationText">{schedule?.categories.join(", ")}</Text>
                 </Grid>
               </Container>
-              <Container>
+              <Container pt="2.5rem">
                 <Text
                   textStyle="mobileCardDescription"
                   color="#6C6C84"
                   verticalAlign="top"
                   textAlign="left"
-                  py="16px"
+                  pb="2rem"
                 >
                   VOLUNTEER INFORMATION
                 </Text>
-                <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+                <Grid templateColumns="repeat(2, 1fr)" gap="1rem">
                   <Text textStyle="popupTitleText">Volunteer Required:</Text>
                   <Text textStyle="popupInformationText">{schedule?.volunteerNeeded ? "Yes" : "No"}</Text>
                   <Text textStyle="popupTitleText">Pickup Required:</Text>
@@ -133,17 +145,17 @@ const WeeklyEventItemPopUp = ({
                   <Text textStyle="popupInformationText">{schedule?.notes}</Text>
                 </Grid>
               </Container>
-              <Container>
+              <Container pt="2.5rem">
                 <Text
                   textStyle="mobileCardDescription"
                   color="#6C6C84"
                   verticalAlign="top"
                   textAlign="left"
-                  py="16px"
+                  pb="2rem"
                 >
                   DONOR INFORMATION
                 </Text>
-                <Grid templateColumns="repeat(2, 1fr)" gap={3}>
+                <Grid templateColumns="repeat(2, 1fr)" gap="1rem" pb="5rem">
                   <Text textStyle="popupTitleText">Name:</Text>
                   <Text textStyle="popupInformationText">
                     {donor.firstName} {donor.lastName}
