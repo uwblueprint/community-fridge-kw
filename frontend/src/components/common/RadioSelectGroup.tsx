@@ -2,6 +2,7 @@
 import {
   Box,
   FormControl,
+  FormHelperText,
   FormLabel,
   useRadio,
   useRadioGroup,
@@ -15,6 +16,7 @@ interface RadioSelectGroupProps {
   values: string[];
   label: string;
   isRequired: boolean;
+  helperText?: string;
   onChange: (arg0: any) => void;
 }
 
@@ -58,7 +60,7 @@ const RadioSelectButton = (props: any) => {
 };
 
 const RadioSelectGroup = (props: RadioSelectGroupProps) => {
-  const { name, value, values, label, isRequired, onChange } = props;
+  const { name, value, values, label, isRequired, helperText, onChange } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
     onChange,
@@ -76,6 +78,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   return (
     <FormControl isRequired={isRequired}>
       <FormLabel>{label}</FormLabel>
+      {helperText && <FormHelperText mb="1em">{helperText}</FormHelperText>}
       <VStack {...group}>{radioSelectButtons}</VStack>
     </FormControl>
   );
