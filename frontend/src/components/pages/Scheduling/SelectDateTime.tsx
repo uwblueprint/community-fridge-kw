@@ -1,7 +1,12 @@
 import { Button, Container, HStack, Text, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Calendar } from "react-multi-date-picker";
+import { Redirect } from "react-router-dom";
 
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import * as Routes from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
+import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
@@ -14,16 +19,14 @@ const SelectDateTime = ({
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
   const { dayPart, frequency, startTime, endTime } = formValues;
-
-  const [timeRange, setTimeRange] = useState(`${startTime} - ${endTime}`);
-  const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(null);
+  const { authenticatedUser } = useContext(AuthContext);
 
   enum DayParts {
     EARLY_MORNING = "Early Morning (12am - 6am)",
     MORNING = "Morning (6am - 11am)",
     AFTERNOON = "Afternoon (11pm - 4pm)",
     EVENING = "Evening (4pm - 9pm)",
-    NIGHT = "Night (9pm - 12am)"
+    NIGHT = "Night (9pm - 12am)",
   }
 
   const dayParts = [
@@ -64,44 +67,69 @@ const SelectDateTime = ({
       "7:00 PM - 8:00 PM",
       "8:00 PM - 9:00 PM",
     ],
-    night: [
-      "9:00 PM - 10:00 PM",
-      "10:00 PM - 11:00 PM",
-      "11:00 PM - 12:00 AM",
-    ]
+    night: ["9:00 PM - 10:00 PM", "10:00 PM - 11:00 PM", "11:00 PM - 12:00 AM"],
   };
 
   const frequencies = ["One time donation", "Daily", "Weekly", "Monthly"];
 
-  const showDropOffTimes = (selectedDayPart: string) => {
-    switch(selectedDayPart) {
+  const getTimeSlot = (selectedDayPart: string) => {
+    switch (selectedDayPart) {
       case DayParts.EARLY_MORNING:
-        setShowTimeSlots(timeRanges.earlyMorning);
-        break;
+        return timeRanges.earlyMorning;
       case DayParts.MORNING:
-        setShowTimeSlots(timeRanges.morning);
-        break;
+        return timeRanges.morning;
       case DayParts.AFTERNOON:
-        setShowTimeSlots(timeRanges.afternoon);
-        break;
+        return timeRanges.afternoon;
       case DayParts.EVENING:
-        setShowTimeSlots(timeRanges.evening);
-        break;
+        return timeRanges.evening;
       case DayParts.NIGHT:
-        setShowTimeSlots(timeRanges.night);
-        break;
+        return timeRanges.night;
       default:
-        setShowTimeSlots(null);
+        return null;
     }
+  };
+
+  const [timeRange, setTimeRange] = useState(`${startTime} - ${endTime}`);
+  const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(
+    getTimeSlot(dayPart),
+  );
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  // TODO: Need to edit this to update + calculate based on schedules pulled from backend
+  const [icons, setIcons] = useState<number[]>([0, 0, 1, 0, 3]);
+
+  React.useEffect(() => {
+    const fetchSchedules = async () => {
+      const scheduleResponse = await SchedulingAPIClient.getSchedules();
+      setSchedules(scheduleResponse);
+    };
+    fetchSchedules();
+  }, [authenticatedUser]);
+
+  if (!authenticatedUser) {
+    return <Redirect to={Routes.HOME_PAGE} />;
   }
+
+  const showDropOffTimes = (selectedDayPart: string) => {
+    const timeSlot = getTimeSlot(selectedDayPart);
+    setShowTimeSlots(timeSlot);
+    console.log(schedules[0]?.endTime.toString());
+
+    // const d = new Date()
+    // console.log(d)
+    // schedules.forEach(schedule => {
+    //   const start = new Date(schedule?.startTime.toDa);
+    //   const end = schedule?.endTime;
+
+    // })
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
   ) => {
     setForm({ target: { name, value: e } });
-    if(name === "dayPart"){
-      showDropOffTimes(e.toString())
+    if (name === "dayPart") {
+      showDropOffTimes(e.toString());
     }
   };
 
@@ -115,10 +143,9 @@ const SelectDateTime = ({
   };
 
   return (
-    <Container>
-      <VStack spacing="45px">
+    <Container p="30px">
         <SchedulingProgressBar activeStep={0} totalSteps={4} />
-        <Text textStyle="mobileHeader2">Date and Time</Text>
+        <Text textStyle="mobileHeader2" mt="2em">Date and Time</Text>
         <Calendar
           buttons={false}
           disableMonthPicker
@@ -131,35 +158,39 @@ const SelectDateTime = ({
           label="What time of day would you like to drop off your donation?"
           value={dayPart}
           values={dayParts}
+          icons={[]}
           isRequired
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(e, "dayPart");
           }}
         />
-        {showTimeSlots && <RadioSelectGroup
-          name="timeRanges"
-          label="Select drop off time"
-          helperText="From the options below, select your first choice."
-          helperText2="Each [] represents an already signed up donor. Please try to choose a time slot without a pre-existing donor. "
-          value={timeRange}
-          values={showTimeSlots}
-          isRequired
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            handleTimeRangeChange(e);
-          }}
-        />}
+        {showTimeSlots && (
+          <RadioSelectGroup
+            name="timeRanges"
+            label="Select drop off time"
+            helperText="From the options below, select your first choice."
+            helperText2="Each [] represents an already signed up donor. Please try to choose a time slot without a pre-existing donor. "
+            value={timeRange}
+            values={showTimeSlots}
+            icons={icons}
+            isRequired
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleTimeRangeChange(e);
+            }}
+          />
+        )}
         <RadioSelectGroup
           name="frequency"
           label="Select frequency"
           helperText="How often will this donation occur?"
           value={frequency}
           values={frequencies}
+          icons={[]}
           isRequired
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(e, "frequency");
           }}
         />
-      </VStack>
       <HStack>
         <Button onClick={previous} variant="navigation">
           Back
