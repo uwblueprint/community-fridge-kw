@@ -1,4 +1,4 @@
-import { Button, Container, HStack, Text, VStack } from "@chakra-ui/react";
+import { Button, Container, FormControl, FormLabel, HStack, Input, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Calendar } from "react-multi-date-picker";
 import { Redirect } from "react-router-dom";
@@ -18,7 +18,7 @@ const SelectDateTime = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const { dayPart, frequency, startTime, endTime } = formValues;
+  const { dayPart, frequency, startTime, endTime, recurringDonationEndDate} = formValues;
   const { authenticatedUser } = useContext(AuthContext);
 
   enum DayParts {
@@ -124,7 +124,7 @@ const SelectDateTime = ({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement> | string,
     name: string,
   ) => {
     setForm({ target: { name, value: e } });
@@ -145,7 +145,9 @@ const SelectDateTime = ({
   return (
     <Container p="30px">
         <SchedulingProgressBar activeStep={0} totalSteps={4} />
-        <Text textStyle="mobileHeader2" mt="2em">Date and Time</Text>
+        <Text textStyle="mobileHeader2" mt="2em" mb="1em">Date and Time</Text>
+        <FormControl isRequired>
+          <FormLabel fontWeight="600">Select date of donation</FormLabel>
         <Calendar
           buttons={false}
           disableMonthPicker
@@ -153,6 +155,7 @@ const SelectDateTime = ({
           shadow={false}
           minDate={new Date()}
         />
+        </FormControl>
         <RadioSelectGroup
           name="dayPart"
           label="What time of day would you like to drop off your donation?"
@@ -191,6 +194,14 @@ const SelectDateTime = ({
             handleChange(e, "frequency");
           }}
         />
+        <FormControl isRequired mb="3em">
+          <FormLabel fontWeight="600">Proposed end date</FormLabel>
+          <Input
+          value={recurringDonationEndDate}
+          onChange={(e) => handleChange(e.target.value, "recurringDonationEndDate")}
+          placeholder="MM/DD/YYYY"
+        />
+        </FormControl>
       <HStack>
         <Button onClick={previous} variant="navigation">
           Back
