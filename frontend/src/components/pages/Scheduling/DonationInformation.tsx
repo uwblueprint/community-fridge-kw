@@ -8,9 +8,9 @@ const DonationInformation = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const { daypart } = formValues;
 
   return (
     // Insert Select Date and Time page here

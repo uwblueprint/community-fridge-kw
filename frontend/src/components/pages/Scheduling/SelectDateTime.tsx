@@ -10,13 +10,14 @@ const SelectDateTime = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const { daypart, frequency, startTime, endTime } = formValues;
+  const { dayPart, frequency, startTime, endTime } = formValues;
 
   const [timeRange, setTimeRange] = useState(`${startTime} - ${endTime}`);
 
-  const dayparts = [
+  const dayParts = [
     "Early Morning (12am - 6am)",
     "Morning (6am - 11am)",
     "Afternoon (11pm - 4pm)",
@@ -64,13 +65,13 @@ const SelectDateTime = ({
           minDate={new Date()}
         />
         <RadioSelectGroup
-          name="daypart"
+          name="dayPart"
           label="What time of day would you like to drop off your donation?"
-          value={daypart}
-          values={dayparts}
+          value={dayPart}
+          values={dayParts}
           isRequired
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            handleChange(e, "daypart");
+            handleChange(e, "dayPart");
           }}
         />
         <RadioSelectGroup

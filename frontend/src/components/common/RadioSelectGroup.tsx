@@ -86,7 +86,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   const group = getRootProps();
 
   return (
-    <FormControl isRequired={isRequired}>
+    <FormControl isRequired={isRequired} m="2em 0">
       <FormLabel>{label}</FormLabel>
       <FormHelperText fontSize="16px" color="black" marginBottom="20px">
         {helperText}
