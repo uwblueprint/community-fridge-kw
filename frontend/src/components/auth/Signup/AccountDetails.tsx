@@ -48,7 +48,6 @@ const AccountDetails = ({
   setForm: SetForm;
 }) => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
-  const role = "Donor";
   const history = useHistory();
   const { previous } = navigation;
   const {
@@ -57,7 +56,9 @@ const AccountDetails = ({
     email,
     phoneNumber,
     confirmPassword,
+    businessName,
     password,
+    role,
   } = formValues;
   const [showPassword, setShowPassword] = useState(false);
 
@@ -68,6 +69,7 @@ const AccountDetails = ({
       email,
       phoneNumber,
       password,
+      businessName,
       role,
     );
     if (!user) {
@@ -189,6 +191,7 @@ const AccountDetails = ({
           <MandatoryInputDescription label="Confirm password" />
           <Input
             mt="2"
+            type="password"
             value={confirmPassword}
             onChange={setForm}
             name="confirmPassword"

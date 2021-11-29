@@ -51,6 +51,7 @@ const Login = (): React.ReactElement => {
               value={password}
               name="password"
               onChange={setValue}
+              type="password"
             />
           </Box>
           <Text mt="1rem" color="hubbard.100" textStyle="mobileSmall">

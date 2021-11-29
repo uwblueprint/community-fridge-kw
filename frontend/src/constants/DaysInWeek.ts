@@ -11,9 +11,9 @@ export const convertTime = (dateToConvert: string): string => {
 
 export const colorMap = {
   "One Time": "spinach",
-  "Daily": "H2O",
-  "Weekly": "onion",
-  "Monthly": "turnip",
+  Daily: "H2O",
+  Weekly: "onion",
+  Monthly: "turnip",
 };
 
 export const getNextDropOff = (currentDate: string, frequency: string): string => {
