@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   IconButton,
   Input,
   InputGroup,
@@ -10,9 +11,11 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { type } from "os";
 import React, { useContext, useReducer, useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { Redirect, useHistory } from "react-router-dom";
+
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import {
   HOME_PAGE,
@@ -61,7 +64,14 @@ const AccountDetails = ({
   } = formValues;
   const [showPassword, setShowPassword] = useState(false);
 
+  const [tempPassword, setTempPassword] = React.useState("");
+  const [interaction, setInteraction] = React.useState({
+    email: false,
+    password: false,
+  });
+
   const onSignupClick = async () => {
+    console.log(formValues);
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,
@@ -72,7 +82,9 @@ const AccountDetails = ({
       role,
     );
     if (!user) {
-      return alert("Signup failed");
+      return alert(
+        "Signup failed. Please ensure all fields are filled and formatted correctly. ",
+      );
     }
     setAuthenticatedUser(user);
 
@@ -93,6 +105,13 @@ const AccountDetails = ({
       isNumber: checkForNumbers(input),
       isSpecialChar: checkForSpecialCharacters(input),
     });
+
+    const { isTwelveChars, isUpperCase, isLowerCase, isNumber } = state;
+
+    if (isTwelveChars && isUpperCase && isLowerCase && isNumber) {
+      return true;
+    }
+    return false;
   };
 
   if (authenticatedUser) {
@@ -122,30 +141,42 @@ const AccountDetails = ({
       <Text mt="67px" textStyle="mobileHeader1">
         Account details
       </Text>
-      <FormControl mt="2rem">
+      <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>
           <MandatoryInputDescription label="Email Address" />
           <Input
             mt="2"
             value={email}
-            onChange={setForm}
+            onChange={(e) => {
+              setInteraction({ ...interaction, email: true });
+              setForm(e);
+            }}
             name="email"
-            placeholder="Enter email"
+            placeholder="i.e. janedoe@gmail.com"
           />
+          <FormErrorMessage>
+            Please enter a valid email address.
+          </FormErrorMessage>
         </Box>
-        <Box mt="1rem">
-          <MandatoryInputDescription label="Password" />
+      </FormControl>
 
+      <Box mt="1rem">
+        <MandatoryInputDescription label="Password" />
+
+        <FormControl isInvalid={!password && interaction.password}>
           <InputGroup size="md">
             <Input
               pr="4.5rem"
               type={showPassword ? "text" : "password"}
-              placeholder="New password"
+              placeholder="Enter password"
               name="password"
-              value={password}
+              value={tempPassword}
               onChange={(event) => {
-                verifyPassword(event?.target.value);
-                setForm(event);
+                setInteraction({ ...interaction, password: true });
+                setTempPassword(event.target.value);
+                if (verifyPassword(event?.target.value)) {
+                  setForm(event);
+                }
               }}
             />
             <InputRightElement width="4.5rem">
@@ -184,8 +215,11 @@ const AccountDetails = ({
               />
             </Stack>
           </Text>
-        </Box>
+          <FormErrorMessage>Please enter a valid password.</FormErrorMessage>
+        </FormControl>
+      </Box>
 
+      <FormControl isInvalid={confirmPassword !== tempPassword}>
         <Box mt="2rem">
           <MandatoryInputDescription label="Confirm password" />
           <Input
@@ -196,9 +230,10 @@ const AccountDetails = ({
             name="confirmPassword"
             placeholder="Re-enter password"
           />
+          <FormErrorMessage>Passwords do not match.</FormErrorMessage>
         </Box>
-        <Box mt="4rem">
-          <Button mt="2" variant="authNavigation" onClick={onSignupClick}>
+        <Box mt="3rem">
+          <Button mt="2" variant="navigation" onClick={onSignupClick}>
             Next
           </Button>
         </Box>
