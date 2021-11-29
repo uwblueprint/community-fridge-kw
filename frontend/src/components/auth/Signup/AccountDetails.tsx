@@ -18,6 +18,7 @@ import { Redirect, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import {
+  DASHBOARD_PAGE,
   HOME_PAGE,
   LANDING_PAGE,
   VERIFICATION_PAGE,
@@ -115,7 +116,7 @@ const AccountDetails = ({
   };
 
   if (authenticatedUser) {
-    return <Redirect to={HOME_PAGE} />;
+    return <Redirect to={DASHBOARD_PAGE} />;
   }
 
   return (
