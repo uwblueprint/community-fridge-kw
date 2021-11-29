@@ -38,31 +38,6 @@ export const getNextDropOff = (currentDate: string, frequency: string): string =
   return `Next dropoff: ${nextTime}`;
 };
 
-<<<<<<< HEAD
-export const getNextDropOff = (currentDate: string, frequency: string): string => {
-  const nextDate = new Date(currentDate);
-  
-  if (frequency === "Daily") {
-    nextDate.setDate(nextDate.getDate() + 1);
-  } else if (frequency === "Weekly") {
-    nextDate.setDate(nextDate.getDate() + 7);
-  } else if (frequency === "Monthly") {
-    nextDate.setMonth(nextDate.getMonth() + 1);
-  } else {
-    return "";
-  }
-
-  const nextTime = nextDate.toLocaleString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-
-  return `Next dropoff: ${nextTime}`;
-};
-
-=======
->>>>>>> 7c55e4005da7a2a96c342db8dc0c92b2875cddfc
 type DaysInWeekProps = {
   locale?: Locale;
 };
