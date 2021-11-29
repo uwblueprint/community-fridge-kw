@@ -185,6 +185,9 @@ const customTheme = extendTheme({
     gray: {
       100: "#C4C4C4",
     },
+    champagne: {
+      100: "#8D2569",
+    },
   },
   breakpoints: {
     sm: "320px",

@@ -7,6 +7,7 @@ import {
   IconButton,
   Input,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
@@ -29,6 +30,8 @@ const CreateAccount = ({
   const { next } = navigation;
   const history = useHistory();
   const { firstName, lastName, businessName, phoneNumber } = formData;
+  const [isDesktop] = useMediaQuery("(min-width: 768px)");
+
   const [interaction, setInteraction] = React.useState({
     businessName: false,
     firstName: false,
@@ -61,7 +64,7 @@ const CreateAccount = ({
         onClick={() => history.push(LOGIN_PAGE)}
         backgroundColor="transparent"
       >
-        <CloseIcon color="#111111" />
+        {!isDesktop && <CloseIcon color="#111111" />}
       </IconButton>
       <Text mt="67px" textStyle="mobileHeader1">
         Create an account

@@ -12,7 +12,7 @@ import { useForm } from "react-hooks-helper";
 import { Link, Redirect } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import { DASHBOARD_PAGE, HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
+import { DASHBOARD_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 
@@ -40,7 +40,13 @@ const Login = (): React.ReactElement => {
             <Text textStyle="mobileBodyBold" color="black.100">
               Email Address
             </Text>
-            <Input mt="2" value={email} name="email" onChange={setValue} />
+            <Input
+              mt="2"
+              value={email}
+              name="email"
+              onChange={setValue}
+              placeholder="Enter email address"
+            />
           </Box>
           <Box mt="1rem">
             <Text textStyle="mobileBodyBold" color="black.100">
@@ -52,25 +58,26 @@ const Login = (): React.ReactElement => {
               name="password"
               onChange={setValue}
               type="password"
+              placeholder="Enter password"
             />
           </Box>
           <Text mt="1rem" color="hubbard.100" textStyle="mobileSmall">
             Forgot password?
           </Text>
           <Box mt="1rem">
-            <Button mt="2" onClick={onLogInClick} variant="authNavigation">
+            <Button mt="2" onClick={onLogInClick} variant="navigation">
               Log In
             </Button>
           </Box>
         </FormControl>
         <Box>
           <Stack display="inline">
-            <Text display="inline-block" color="hubbard.300" mt="1rem">
+            <Text display="inline-block" color="hubbard.100" mt="1rem">
               Dont have an account? &nbsp;
             </Text>
             <Text
               fontWeight="bold"
-              color="raddish.100"
+              color="champagne.100"
               display="inline-block"
               textDecorationLine="underline"
             >

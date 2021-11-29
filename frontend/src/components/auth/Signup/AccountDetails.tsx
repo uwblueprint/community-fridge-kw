@@ -18,6 +18,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useContext, useReducer, useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
@@ -60,6 +61,7 @@ const AccountDetails = ({
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
   const { previous } = navigation;
+  const [isDesktop] = useMediaQuery("(min-width: 768px)");
   const {
     firstName,
     lastName,
@@ -143,7 +145,7 @@ const AccountDetails = ({
         onClick={() => history.push(LANDING_PAGE)}
         backgroundColor="transparent"
       >
-        <CloseIcon color="#111111" />
+        {!isDesktop && <CloseIcon color="#111111" />}
       </IconButton>
       <Text mt="67px" textStyle="mobileHeader1">
         Account details
