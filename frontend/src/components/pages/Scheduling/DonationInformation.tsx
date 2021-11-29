@@ -8,7 +8,6 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { env, prependOnceListener } from "process";
 import React from "react";
 
 import xl from "../../../assets/donation-sizes/lg.png";
@@ -17,13 +16,8 @@ import md from "../../../assets/donation-sizes/sm.png";
 import sm from "../../../assets/donation-sizes/xs.png";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
-import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import {
-  DonationSizeInterface,
-  SchedulingStepProps,
-  TypesOfItemsInterface,
-} from "./types";
+import { DonationSizeInterface, SchedulingStepProps } from "./types";
 
 const DonationSizes: DonationSizeInterface[] = [
   {
@@ -63,29 +57,6 @@ const categoriesOptions = [
   "Essential items (masks, hand sanitizer, bags)",
   "Hygiene products (tampons, pads, soap, etc.)",
 ];
-
-// const TypesOfItems = ({ title, list, setForm }: TypesOfItemsInterface) => {
-//   return (
-//     <FormControl isRequired my="50px">
-//       <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
-//         {title}
-//       </FormLabel>
-//       <Stack spacing={2} direction="column" size="lg" mt="10px">
-//         {list.map((item, i) => (
-//           <Checkbox
-//             key={i}
-//             colorScheme="black"
-//             onChange={() => {
-//               setForm({ target: { name, value: e } });
-//             }}
-//           >
-//             {item}
-//           </Checkbox>
-//         ))}
-//       </Stack>
-//     </FormControl>
-//   );
-// };
 
 const DonationInformation: any = ({
   formValues,

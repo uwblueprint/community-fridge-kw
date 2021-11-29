@@ -5,14 +5,16 @@ export interface SchedulingFormProps {
   donorId: string;
   categories: string[];
   size: string;
-  isPickup: boolean;
+  isPickup: boolean | null;
   pickupLocation: string;
-  daypart: string;
+  dayPart: string;
   startTime: string;
   endTime: string;
   status: string;
-  volunteerNeeded: boolean;
+  volunteerNeeded: boolean | null;
+  volunteerTime: string;
   frequency: string;
+  recurringDonationEndDate: string;
   notes: string;
 }
 
@@ -20,6 +22,7 @@ export interface SchedulingStepProps {
   navigation: NavigationProps;
   formValues: SchedulingFormProps;
   setForm: SetForm;
+  isBeingEdited?: boolean;
 }
 
 export interface TypesOfItemsInterface {
