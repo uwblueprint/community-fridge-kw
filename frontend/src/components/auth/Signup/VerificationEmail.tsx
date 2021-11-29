@@ -10,7 +10,7 @@ interface VerificationPageProps {
 }
 
 const VerificationPage = ({
-  email = "johndoe@gmail.com",
+  email = "janedoe@gmail.com",
 }: VerificationPageProps) => {
   const history = useHistory();
 
@@ -25,7 +25,6 @@ const VerificationPage = ({
         <CloseIcon color="#111111" />
       </IconButton>
       <Container centerContent pl="42px" pr="42px" pt="73px">
-        <Box w="200px" h="140px" backgroundColor="gray.100" />
         <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">
           Please verify your email address!
         </Text>

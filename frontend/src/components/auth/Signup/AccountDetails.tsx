@@ -8,10 +8,17 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { type } from "os";
 import React, { useContext, useReducer, useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { Redirect, useHistory } from "react-router-dom";
@@ -19,8 +26,8 @@ import { Redirect, useHistory } from "react-router-dom";
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import {
   DASHBOARD_PAGE,
-  HOME_PAGE,
   LANDING_PAGE,
+  LOGIN_PAGE,
   VERIFICATION_PAGE,
 } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
@@ -70,9 +77,9 @@ const AccountDetails = ({
     email: false,
     password: false,
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onSignupClick = async () => {
-    console.log(formValues);
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,
@@ -83,9 +90,8 @@ const AccountDetails = ({
       role,
     );
     if (!user) {
-      return alert(
-        "Signup failed. Please ensure all fields are filled and formatted correctly. ",
-      );
+      onOpen();
+      return false;
     }
     setAuthenticatedUser(user);
 
@@ -239,6 +245,29 @@ const AccountDetails = ({
           </Button>
         </Box>
       </FormControl>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Sign up failed</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody textStyle="mobileBody">
+            Sorry, something went wrong. Please try again later and check all
+            fields have correct formatting.
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              width="100%"
+              color="squash.100"
+              backgroundColor="raddish.100"
+              mr={3}
+              onClick={() => history.push(LOGIN_PAGE)}
+            >
+              Return to Log In
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };
