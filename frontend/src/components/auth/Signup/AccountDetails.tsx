@@ -13,7 +13,6 @@ import {
 import React, { useContext, useReducer, useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { Redirect, useHistory } from "react-router-dom";
-
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import {
   HOME_PAGE,
