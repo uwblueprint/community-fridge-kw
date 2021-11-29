@@ -38,6 +38,7 @@ export const getNextDropOff = (currentDate: string, frequency: string): string =
   return `Next dropoff: ${nextTime}`;
 };
 
+<<<<<<< HEAD
 export const getNextDropOff = (currentDate: string, frequency: string): string => {
   const nextDate = new Date(currentDate);
   
@@ -60,6 +61,8 @@ export const getNextDropOff = (currentDate: string, frequency: string): string =
   return `Next dropoff: ${nextTime}`;
 };
 
+=======
+>>>>>>> 7c55e4005da7a2a96c342db8dc0c92b2875cddfc
 type DaysInWeekProps = {
   locale?: Locale;
 };

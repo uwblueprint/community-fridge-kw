@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { colorMap, convertTime } from "../../constants/DaysInWeek";
 =======
 import { colorMap } from "../../constants/DaysInWeek";
@@ -17,6 +18,9 @@ import { colorMap } from "../../constants/DaysInWeek";
 =======
 import { colorMap, convertTime } from "../../constants/DaysInWeek";
 >>>>>>> Add icons
+=======
+import { colorMap, convertTime } from "../../constants/DaysInWeek";
+>>>>>>> 7c55e4005da7a2a96c342db8dc0c92b2875cddfc
 import { DonorResponse } from "../../types/DonorTypes";
 import { Schedule } from "../../types/SchedulingTypes";
 import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
@@ -30,6 +34,7 @@ const DefaultWeeklyEventItem = ({
   schedule,
   date,
 }: DefaultWeeklyEventItemProps) => {
+<<<<<<< HEAD
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [donor, setDonor] = useState<DonorResponse>();
 
@@ -51,6 +56,8 @@ const DefaultWeeklyEventItem = ({
       minute: "2-digit",
     });
   };
+=======
+>>>>>>> 7c55e4005da7a2a96c342db8dc0c92b2875cddfc
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [donor, setDonor] = useState<DonorResponse>();
@@ -66,11 +73,16 @@ const DefaultWeeklyEventItem = ({
     getDonor();
   }, []);
 
+<<<<<<< HEAD
 =======
 >>>>>>> Add icons
   return (
     <>
 <<<<<<< HEAD
+=======
+  return (
+    <>
+>>>>>>> 7c55e4005da7a2a96c342db8dc0c92b2875cddfc
       {
         donor ?
           <>
@@ -112,6 +124,7 @@ const DefaultWeeklyEventItem = ({
             />
           </>
           : null
+<<<<<<< HEAD
 =======
     {
     donor ?
@@ -155,6 +168,8 @@ const DefaultWeeklyEventItem = ({
       </>
       : null
 >>>>>>> Donor information retrieval done
+=======
+>>>>>>> 7c55e4005da7a2a96c342db8dc0c92b2875cddfc
       }
     </>
   );
