@@ -34,8 +34,6 @@ const ViewDonations = (): React.ReactElement => {
     const getSchedules = async () => {
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
       setSchedules(scheduleResponse);
-      console.log(scheduleResponse);
-      console.log("-----");
     };
 
     getSchedules();
