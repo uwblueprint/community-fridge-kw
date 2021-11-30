@@ -1,11 +1,41 @@
 import { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 
+export const convertTime = (dateToConvert: string): string => {
+  return new Date(dateToConvert).toLocaleTimeString(navigator.language, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
+
 export const colorMap = {
   "One Time": "spinach",
   Daily: "H2O",
   Weekly: "onion",
   Monthly: "turnip",
+};
+
+export const getNextDropOff = (currentDate: string, frequency: string): string => {
+  const nextDate = new Date(currentDate);
+  
+  if (frequency === "Daily") {
+    nextDate.setDate(nextDate.getDate() + 1);
+  } else if (frequency === "Weekly") {
+    nextDate.setDate(nextDate.getDate() + 7);
+  } else if (frequency === "Monthly") {
+    nextDate.setMonth(nextDate.getMonth() + 1);
+  } else {
+    return "";
+  }
+
+  const nextTime = nextDate.toLocaleString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+  return `Next dropoff: ${nextTime}`;
 };
 
 type DaysInWeekProps = {
