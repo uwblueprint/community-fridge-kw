@@ -1,4 +1,5 @@
-import { Box, Button, Container, Flex, Text } from "@chakra-ui/react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { Box, Container, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 
 interface VolunteerRoleStepProps {
@@ -12,10 +13,11 @@ const VolunteerRoleStep = ({
   return (
     <Flex paddingBottom="1.5rem">
       <Box flex="10">
-        <Text color="squash.100" textStyle="mobileBodyBold">
+        <Text color="black.100" textStyle="mobileBodyBold">
+          <ArrowForwardIcon width="24px" />
           {title}
         </Text>
-        <Text color="squash.100" textStyle="mobileSmall">
+        <Text pl="24px" color="hubbard.100" textStyle="mobileSmall">
           {description}
         </Text>
       </Box>
@@ -28,15 +30,15 @@ const VolunteerRoles = () => (
     pl="42px"
     pr="42px"
     pt="73px"
-    backgroundColor="evergreen.100"
+    backgroundColor="cottonCandy.100"
     mt="57px"
-    pb="73px"
+    pb="120px"
   >
-    <Text color="squash.100" textStyle="mobilePretitleBold" mb="1rem">
+    <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
       For Volunteers
     </Text>
-    <Text mb="1.5rem" color="squash.100" textStyle="mobileHeader2">
-      VOLUNTEER ROLES
+    <Text mb="1.5rem" color="black.100" textStyle="mobileHeader2">
+      Volunteer Roles
     </Text>
     <VolunteerRoleStep
       title="Assist with a dropoff"
