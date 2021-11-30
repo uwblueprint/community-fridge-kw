@@ -18,10 +18,11 @@ import {
 } from "@chakra-ui/react";
 
 import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import { colorMap, convertTime, getNextDropOff } from "../../constants/DaysInWeek";
+import { colorMap, convertTime } from "../../constants/DaysInWeek";
 import { DonorResponse } from "../../types/DonorTypes";
+import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
 import { Schedule } from "../../types/SchedulingTypes";
 
 type WeeklyEventItemPopUpProps = {
@@ -37,6 +38,20 @@ const WeeklyEventItemPopUp = ({
   schedule,
   donor,
 }: WeeklyEventItemPopUpProps) => {
+
+  const [nextDropOff, setNextDropOff] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const getNextDropOff = async () => {
+      const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(donor.id);
+      setNextDropOff(scheduleResponse.find(nextSchedule => {
+        return new Date(nextSchedule!.startTime) > new Date(schedule!.startTime);
+      })?.startTime);
+    };
+
+    getNextDropOff();
+  }, []);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -74,9 +89,15 @@ const WeeklyEventItemPopUp = ({
                     <Text textStyle="desktopSmall">{convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}</Text>
                   </HStack>
                   {
-                    getNextDropOff(schedule!.startTime, schedule!.frequency) ?
-                      <Text textStyle="desktopSmall" py="0.5rem">{getNextDropOff(schedule!.startTime, schedule!.frequency)}</Text>
-                      : null
+                    nextDropOff && (
+                      <Text textStyle="desktopSmall" py="0.5rem">
+                        Next Dropoff: {new Date(nextDropOff).toLocaleString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </Text>
+                    )
                   }
                 </VStack>
                 <Spacer />
