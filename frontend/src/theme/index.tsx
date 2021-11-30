@@ -104,7 +104,7 @@ const customTheme = extendTheme({
       100: "#FAFCFE",
     },
     black: {
-      100: "#0D0D0D",
+      100: "#171717",
     },
     gray: {
       100: "#C4C4C4",
@@ -114,7 +114,7 @@ const customTheme = extendTheme({
     },
     raddish: {
       50: "#ffe5f9",
-      100: "#DA1B97",
+      100: "#C31887",
       200: "#f38dcf",
       300: "#ec5fbb",
       400: "#e633a7",
@@ -169,6 +169,9 @@ const customTheme = extendTheme({
     spinach: {
       100: "#317C71",
       200: "#EFFCF9",
+    },
+    cottonCandy: {
+      100: "#FDF5FA",
     },
   },
   breakpoints: {
