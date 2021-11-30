@@ -1,8 +1,5 @@
 import {
   Badge,
-  Box,
-  Button,
-  Center,
   Container,
   Divider,
   Flex,
@@ -16,17 +13,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Spacer,
-  Stack,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
   Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 
@@ -38,16 +25,14 @@ import { DonorResponse } from "../../types/DonorTypes";
 import { Schedule } from "../../types/SchedulingTypes";
 
 type WeeklyEventItemPopUpProps = {
-  isOpen: any;
-  onOpen: any;
-  onClose: any;
+  isOpen: boolean;
+  onClose: () => void;
   schedule: Schedule;
   donor: DonorResponse;
 };
 
 const WeeklyEventItemPopUp = ({
   isOpen,
-  onOpen,
   onClose,
   schedule,
   donor,
@@ -98,6 +83,7 @@ const WeeklyEventItemPopUp = ({
                 <Badge
                   color={`${(colorMap as any)[schedule!.frequency]}.100`}
                   backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
+                  borderRadius="0.5rem"
                   textStyle="desktopSmall"
                   textAlign="center"
                   alignItems="center"
@@ -106,15 +92,14 @@ const WeeklyEventItemPopUp = ({
                   width="5.5rem"
                   height="2rem"
                 >
-                  {" "}
-                  {schedule!.frequency}{" "}
+                  {`${schedule!.frequency}`}
                 </Badge>
               </Flex>
               <Divider orientation="horizontal" />
               <Container pt="1.5rem">
                 <Text
                   textStyle="mobileCardDescription"
-                  color="#6C6C84"
+                  color="hubbard.100"
                   verticalAlign="top"
                   textAlign="left"
                   pb="2rem"
@@ -131,7 +116,7 @@ const WeeklyEventItemPopUp = ({
               <Container pt="2.5rem">
                 <Text
                   textStyle="mobileCardDescription"
-                  color="#6C6C84"
+                  color="hubbard.100"
                   verticalAlign="top"
                   textAlign="left"
                   pb="2rem"
@@ -152,7 +137,7 @@ const WeeklyEventItemPopUp = ({
               <Container pt="2.5rem">
                 <Text
                   textStyle="mobileCardDescription"
-                  color="#6C6C84"
+                  color="hubbard.100"
                   verticalAlign="top"
                   textAlign="left"
                   pb="2rem"

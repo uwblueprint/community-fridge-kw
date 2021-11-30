@@ -3,7 +3,6 @@ import {
   Container,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
@@ -38,48 +37,46 @@ const DefaultWeeklyEventItem = ({
 
   return (
     <>
-      {
-        donor ?
-          <>
-            <Container
-              color="#FAFCFE"
-              borderWidth="0.05rem"
-              borderRadius="0.5rem"
-              borderColor="#D8DDE0"
-              alignItems="center"
-              centerContent
-              py="1.5rem"
-              px="2rem"
-              onClick={onOpen}
+      {donor && (
+        <>
+          <Container
+            color="#FAFCFE"
+            borderWidth="0.05rem"
+            borderRadius="0.5rem"
+            borderColor="#D8DDE0"
+            alignItems="center"
+            centerContent
+            py="1.5rem"
+            px="2rem"
+            onClick={onOpen}
+          >
+            <Text textAlign="center" textStyle="desktopBodyBold" mb="0.5rem">
+              {donor?.firstName} {donor?.lastName}
+            </Text>
+            <Text textAlign="center" textStyle="desktopSmall" mb="1rem">
+              {convertTime(schedule!.startTime)} -{" "}
+              {convertTime(schedule!.endTime)}
+            </Text>
+            <Badge
+              color={`${(colorMap as any)[schedule!.frequency]}.100`}
+              backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
+              textStyle="desktopSmall"
+              py="0.5rem"
+              ph="1rem"
             >
-              <Text textAlign="center" textStyle="desktopBodyBold" mb="0.5rem">
-                {donor?.firstName} {donor?.lastName}
-              </Text>
-              <Text textAlign="center" textStyle="desktopSmall" mb="1rem">
-                {convertTime(schedule!.startTime)} - {convertTime(schedule!.endTime)}
-              </Text>
-              <Badge
-                color={`${(colorMap as any)[schedule!.frequency]}.100`}
-                backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
-                textStyle="desktopSmall"
-                py="0.5rem"
-                ph="1rem"
-              >
-                {" "}
-                {schedule!.frequency}{" "}
-              </Badge>
-            </Container>
+              {" "}
+              {schedule!.frequency}{" "}
+            </Badge>
+          </Container>
 
-            <WeeklyEventItemPopUp
-              isOpen={isOpen}
-              onClose={onClose}
-              onOpen={onOpen}
-              schedule={schedule}
-              donor={donor as DonorResponse}
-            />
-          </>
-          : null
-      }
+          <WeeklyEventItemPopUp
+            isOpen={isOpen}
+            onClose={onClose}
+            schedule={schedule}
+            donor={donor as DonorResponse}
+          />
+        </>
+      )}
     </>
   );
 };
