@@ -135,7 +135,7 @@ class SchedulingService implements ISchedulingService {
     let newScheduling: Scheduling;
     try {
       const schedulingFrequency = scheduling.frequency;
-      if ( schedulingFrequency == Frequency.ONE_TIME ) {
+      if (schedulingFrequency === Frequency.ONE_TIME) {
         newScheduling = await Scheduling.create({
           donor_id: scheduling.donorId,
           categories: scheduling.categories,
@@ -153,168 +153,203 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
         });
-      }
-      else {
+      } else {
         // get new recurring donation id
-        const dbCurrentSchedules : SchedulingDTO[]= await this.getSchedulings();
-        const recurringDonationIds = dbCurrentSchedules.map(
-          item => {
-            return item.recurringDonationId;
-          }
-        );
+        const dbCurrentSchedules: SchedulingDTO[] = await this.getSchedulings();
+        const recurringDonationIds = dbCurrentSchedules.map((item) => {
+          return item.recurringDonationId;
+        });
 
-        let arrayRecurringDonationIds = [];
-        for(let i = 0; i < recurringDonationIds.length; i++){
+        const arrayRecurringDonationIds = [];
+        for (let i = 0; i < recurringDonationIds.length; i += 1) {
           if (!recurringDonationIds[i]) {
             arrayRecurringDonationIds.push(0);
-          }
-          else {
+          } else {
             arrayRecurringDonationIds.push(Number(recurringDonationIds[i]));
           }
         }
-        let newRecurringDonationId = Math.max(... arrayRecurringDonationIds) + 1;
+        const newRecurringDonationId =
+          Math.max(...arrayRecurringDonationIds) + 1;
 
         // end date of recurring donation
-        let recurringDonationEndDate : Date = scheduling.recurringDonationEndDate!;
+        const recurringDonationEndDate: Date = scheduling.recurringDonationEndDate!;
         recurringDonationEndDate.setHours(23);
         recurringDonationEndDate.setMinutes(59);
         recurringDonationEndDate.setSeconds(59);
         recurringDonationEndDate.setMilliseconds(999);
-        
-        //loop for calculations if frequency is DAILY
-        if (schedulingFrequency == Frequency.DAILY) {
-          const nextDay : Date = scheduling.startTime;
-          do {
-            const originalStartTime : Date = scheduling.startTime;
-            const originalEndTime : Date = scheduling.endTime;
-            const newStartTime : Date = new Date(
-              nextDay.getFullYear(), 
-              nextDay.getMonth(), 
-              nextDay.getDay(), 
-              originalStartTime.getHours(), 
-              originalStartTime.getMinutes(), 
-              originalStartTime.getSeconds(), 
-              originalStartTime.getMilliseconds()
-            );
-            const newEndTime : Date = new Date(
-              nextDay.getFullYear(), 
-              nextDay.getMonth(), 
+
+        // create first schedule and assign it to newScheduling
+        newScheduling = await Scheduling.create({
+          donor_id: scheduling.donorId,
+          categories: scheduling.categories,
+          size: scheduling.size,
+          is_pickup: scheduling.isPickup,
+          pickup_location: scheduling.pickupLocation,
+          day_part: scheduling.dayPart,
+          start_time: scheduling.startTime,
+          end_time: scheduling.endTime,
+          status: scheduling.status,
+          volunteer_needed: scheduling.volunteerNeeded,
+          volunteer_time: scheduling.volunteerTime,
+          frequency: scheduling.frequency,
+          recurring_donation_id: scheduling.recurringDonationId,
+          recurring_donation_end_date: scheduling.recurringDonationEndDate,
+          notes: scheduling.notes,
+        });
+
+        const promisesArray: Promise<Scheduling>[] = [];
+        // loop for calculations if frequency is DAILY
+        if (schedulingFrequency === Frequency.DAILY) {
+          const nextDay: Date = scheduling.startTime;
+          nextDay.setDate(nextDay.getDate() + 1);
+
+          while (Number(nextDay) <= Number(recurringDonationEndDate)) {
+            const originalStartTime: Date = scheduling.startTime;
+            const originalEndTime: Date = scheduling.endTime;
+            const newStartTime: Date = new Date(
+              nextDay.getFullYear(),
+              nextDay.getMonth(),
               nextDay.getDay(),
-              originalEndTime.getHours(), 
-              originalEndTime.getMinutes(), 
-              originalEndTime.getSeconds(), 
-              originalEndTime.getMilliseconds()
+              originalStartTime.getHours(),
+              originalStartTime.getMinutes(),
+              originalStartTime.getSeconds(),
+              originalStartTime.getMilliseconds(),
             );
-            //create scheduling
-            newScheduling = await Scheduling.create({
-              donor_id: scheduling.donorId,
-              categories: scheduling.categories,
-              size: scheduling.size,
-              is_pickup: scheduling.isPickup,
-              pickup_location: scheduling.pickupLocation,
-              day_part: scheduling.dayPart,
-              start_time: newStartTime,
-              end_time: newEndTime,
-              status: scheduling.status,
-              volunteer_needed: scheduling.volunteerNeeded,
-              volunteer_time: scheduling.volunteerTime,
-              frequency: scheduling.frequency,
-              recurring_donation_id: newRecurringDonationId,
-              recurring_donation_end_date: scheduling.recurringDonationEndDate,
-              notes: scheduling.notes,
-            });
+            const newEndTime: Date = new Date(
+              nextDay.getFullYear(),
+              nextDay.getMonth(),
+              nextDay.getDay(),
+              originalEndTime.getHours(),
+              originalEndTime.getMinutes(),
+              originalEndTime.getSeconds(),
+              originalEndTime.getMilliseconds(),
+            );
+            // create scheduling
+            promisesArray.push(
+              Scheduling.create({
+                donor_id: scheduling.donorId,
+                categories: scheduling.categories,
+                size: scheduling.size,
+                is_pickup: scheduling.isPickup,
+                pickup_location: scheduling.pickupLocation,
+                day_part: scheduling.dayPart,
+                start_time: newStartTime,
+                end_time: newEndTime,
+                status: scheduling.status,
+                volunteer_needed: scheduling.volunteerNeeded,
+                volunteer_time: scheduling.volunteerTime,
+                frequency: scheduling.frequency,
+                recurring_donation_id: newRecurringDonationId,
+                recurring_donation_end_date:
+                  scheduling.recurringDonationEndDate,
+                notes: scheduling.notes,
+              }),
+            );
             nextDay.setDate(nextDay.getDate() + 1);
-          } while (Number(nextDay) <= Number(recurringDonationEndDate));
+          }
+          await Promise.all(promisesArray);
         }
-        //loop for calculations if frequency is WEEKLY
-        else if (schedulingFrequency == Frequency.WEEKLY) {
-          const nextDay : Date = scheduling.startTime;
-          do {
-            const originalStartTime : Date = scheduling.startTime;
-            const originalEndTime : Date = scheduling.endTime;
-            const newStartTime : Date = new Date(
-              nextDay.getFullYear(), 
-              nextDay.getMonth(), 
-              nextDay.getDay(), 
-              originalStartTime.getHours(), 
-              originalStartTime.getMinutes(), 
-              originalStartTime.getSeconds(), 
-              originalStartTime.getMilliseconds()
-            );
-            const newEndTime : Date = new Date(
-              nextDay.getFullYear(), 
-              nextDay.getMonth(), 
+        // loop for calculations if frequency is WEEKLY
+        else if (schedulingFrequency === Frequency.WEEKLY) {
+          const nextDay: Date = scheduling.startTime;
+          nextDay.setDate(nextDay.getDate() + 7);
+
+          while (Number(nextDay) <= Number(recurringDonationEndDate)) {
+            const originalStartTime: Date = scheduling.startTime;
+            const originalEndTime: Date = scheduling.endTime;
+            const newStartTime: Date = new Date(
+              nextDay.getFullYear(),
+              nextDay.getMonth(),
               nextDay.getDay(),
-              originalEndTime.getHours(), 
-              originalEndTime.getMinutes(), 
-              originalEndTime.getSeconds(), 
-              originalEndTime.getMilliseconds()
+              originalStartTime.getHours(),
+              originalStartTime.getMinutes(),
+              originalStartTime.getSeconds(),
+              originalStartTime.getMilliseconds(),
             );
-            //create scheduling
-            newScheduling = await Scheduling.create({
-              donor_id: scheduling.donorId,
-              categories: scheduling.categories,
-              size: scheduling.size,
-              is_pickup: scheduling.isPickup,
-              pickup_location: scheduling.pickupLocation,
-              day_part: scheduling.dayPart,
-              start_time: newStartTime,
-              end_time: newEndTime,
-              status: scheduling.status,
-              volunteer_needed: scheduling.volunteerNeeded,
-              volunteer_time: scheduling.volunteerTime,
-              frequency: scheduling.frequency,
-              recurring_donation_id: newRecurringDonationId,
-              recurring_donation_end_date: scheduling.recurringDonationEndDate,
-              notes: scheduling.notes,
-            });
+            const newEndTime: Date = new Date(
+              nextDay.getFullYear(),
+              nextDay.getMonth(),
+              nextDay.getDay(),
+              originalEndTime.getHours(),
+              originalEndTime.getMinutes(),
+              originalEndTime.getSeconds(),
+              originalEndTime.getMilliseconds(),
+            );
+            // create scheduling
+            promisesArray.push(
+              Scheduling.create({
+                donor_id: scheduling.donorId,
+                categories: scheduling.categories,
+                size: scheduling.size,
+                is_pickup: scheduling.isPickup,
+                pickup_location: scheduling.pickupLocation,
+                day_part: scheduling.dayPart,
+                start_time: newStartTime,
+                end_time: newEndTime,
+                status: scheduling.status,
+                volunteer_needed: scheduling.volunteerNeeded,
+                volunteer_time: scheduling.volunteerTime,
+                frequency: scheduling.frequency,
+                recurring_donation_id: newRecurringDonationId,
+                recurring_donation_end_date:
+                  scheduling.recurringDonationEndDate,
+                notes: scheduling.notes,
+              }),
+            );
             nextDay.setDate(nextDay.getDate() + 7);
-          } while (Number(nextDay) <= Number(recurringDonationEndDate));
+          }
+          await Promise.all(promisesArray);
         }
-        //loop for calculations if frequency is MONTHLY
+        // loop for calculations if frequency is MONTHLY
         else {
-          const nextDay : Date = scheduling.startTime;
-          do {
-            const originalStartTime : Date = scheduling.startTime;
-            const originalEndTime : Date = scheduling.endTime;
-            const newStartTime : Date = new Date(
-              nextDay.getFullYear(), 
-              nextDay.getMonth(), 
-              nextDay.getDay(), 
-              originalStartTime.getHours(), 
-              originalStartTime.getMinutes(), 
-              originalStartTime.getSeconds(), 
-              originalStartTime.getMilliseconds()
-            );
-            const newEndTime : Date = new Date(
-              nextDay.getFullYear(), 
-              nextDay.getMonth(), 
+          const nextDay: Date = scheduling.startTime;
+          nextDay.setMonth(nextDay.getMonth() + 1);
+
+          while (Number(nextDay) <= Number(recurringDonationEndDate)) {
+            const originalStartTime: Date = scheduling.startTime;
+            const originalEndTime: Date = scheduling.endTime;
+            const newStartTime: Date = new Date(
+              nextDay.getFullYear(),
+              nextDay.getMonth(),
               nextDay.getDay(),
-              originalEndTime.getHours(), 
-              originalEndTime.getMinutes(), 
-              originalEndTime.getSeconds(), 
-              originalEndTime.getMilliseconds()
+              originalStartTime.getHours(),
+              originalStartTime.getMinutes(),
+              originalStartTime.getSeconds(),
+              originalStartTime.getMilliseconds(),
             );
-            //create scheduling
-            newScheduling = await Scheduling.create({
-              donor_id: scheduling.donorId,
-              categories: scheduling.categories,
-              size: scheduling.size,
-              is_pickup: scheduling.isPickup,
-              pickup_location: scheduling.pickupLocation,
-              day_part: scheduling.dayPart,
-              start_time: newStartTime,
-              end_time: newEndTime,
-              status: scheduling.status,
-              volunteer_needed: scheduling.volunteerNeeded,
-              volunteer_time: scheduling.volunteerTime,
-              frequency: scheduling.frequency,
-              recurring_donation_id: newRecurringDonationId,
-              recurring_donation_end_date: scheduling.recurringDonationEndDate,
-              notes: scheduling.notes,
-            });
+            const newEndTime: Date = new Date(
+              nextDay.getFullYear(),
+              nextDay.getMonth(),
+              nextDay.getDay(),
+              originalEndTime.getHours(),
+              originalEndTime.getMinutes(),
+              originalEndTime.getSeconds(),
+              originalEndTime.getMilliseconds(),
+            );
+            // create scheduling
+            promisesArray.push(
+              Scheduling.create({
+                donor_id: scheduling.donorId,
+                categories: scheduling.categories,
+                size: scheduling.size,
+                is_pickup: scheduling.isPickup,
+                pickup_location: scheduling.pickupLocation,
+                day_part: scheduling.dayPart,
+                start_time: newStartTime,
+                end_time: newEndTime,
+                status: scheduling.status,
+                volunteer_needed: scheduling.volunteerNeeded,
+                volunteer_time: scheduling.volunteerTime,
+                frequency: scheduling.frequency,
+                recurring_donation_id: newRecurringDonationId,
+                recurring_donation_end_date:
+                  scheduling.recurringDonationEndDate,
+                notes: scheduling.notes,
+              }),
+            );
             nextDay.setMonth(nextDay.getMonth() + 1);
-          } while (Number(nextDay) <= Number(recurringDonationEndDate));
+          }
+          await Promise.all(promisesArray);
         }
       }
     } catch (error) {
