@@ -49,17 +49,17 @@ const DonationProcess = (): JSX.Element => {
       <DonationStep
         stepNumber={1}
         title="Create an account"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut condimentum libero. Cras sodales."
+        description="Join us as a donor on our donation platform."
       />
       <DonationStep
         stepNumber={2}
         title="Schedule a dropoff"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut condimentum libero. Cras sodales."
+        description="Use the donor platform to schedule your donations to the community fridge."
       />
       <DonationStep
         stepNumber={3}
         title="Complete your donation"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut condimentum libero. Cras sodales."
+        description="Complete your donation and feel good about redistributing food in our community."
       />
       <Button width="100%" variant="navigation">
         Start now
