@@ -10,6 +10,7 @@ import {
   useRadioGroup,
   VStack,
 } from "@chakra-ui/react";
+import { StringOrNumber } from "@chakra-ui/utils";
 import React from "react";
 
 import customTheme from "../../theme";
@@ -42,7 +43,7 @@ const RadioImageSelectButton = (props: any) => {
     },
     selected: {
       bg: "cottonCandy.100",
-      borderColor: "raddish.100",
+      borderColor: "champagne.100",
       textStyle: "mobileBodyBold",
       color: "black.100",
     },
@@ -82,7 +83,7 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
           />
         </Box>
         <Box width="70%">
-          <Text textStyle="mobileBodyBold"> {v.size}</Text>
+          <Text textStyle="mobileBody"> {v.size}</Text>
           <Text textStyle="mobileSmall">{v.description}</Text>
         </Box>
       </HStack>
@@ -92,7 +93,7 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
   const group = getRootProps();
 
   return (
-    <FormControl isRequired={isRequired}>
+    <FormControl isRequired={isRequired} m="2em 0">
       <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
         Size/quantity of donation
       </FormLabel>

@@ -24,17 +24,10 @@ export interface SchedulingStepProps {
   setForm: SetForm;
   isBeingEdited?: boolean;
 }
-
-export interface TypesOfItemsInterface {
-  title: string;
-  list: string[];
-}
-
 export interface DonationSizeInterface {
-  image: any;
+  image: string;
   size: string;
   description: string;
-  selected?: boolean;
 }
 export interface SchedulingProgessBarProps {
   activeStep: number;
