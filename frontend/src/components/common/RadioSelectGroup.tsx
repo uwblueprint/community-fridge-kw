@@ -52,15 +52,18 @@ const RadioSelectButton = (props: any) => {
   };
 
   const iconRender = [];
-  for(let i = 0; i < numIcons; i+=1){
-    iconRender.push(<Img key={i}
-      src={personIcon}
-      alt="person icon"
-      width="15.75px"
-      align="right"
-      marginTop="3px"
-      marginLeft="3px"
-    />);
+  for (let i = 0; i < numIcons; i += 1) {
+    iconRender.push(
+      <Img
+        key={i}
+        src={personIcon}
+        alt="person icon"
+        width="15.75px"
+        align="right"
+        marginTop="3px"
+        marginLeft="3px"
+      />,
+    );
   }
 
   return (
@@ -97,7 +100,11 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   });
 
   const radioSelectButtons = values.map((v, i) => (
-    <RadioSelectButton key={v} {...getRadioProps({ value: v })} numIcons={icons[i]}>
+    <RadioSelectButton
+      key={v}
+      {...getRadioProps({ value: v })}
+      numIcons={icons[i]}
+    >
       {v}
     </RadioSelectButton>
   ));

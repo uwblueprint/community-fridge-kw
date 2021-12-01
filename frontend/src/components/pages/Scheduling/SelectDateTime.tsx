@@ -1,4 +1,12 @@
-import { Button, Container, FormControl, FormLabel, HStack, Input, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Calendar } from "react-multi-date-picker";
 import { Redirect } from "react-router-dom";
@@ -18,8 +26,16 @@ const SelectDateTime = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const { dayPart, frequency, startTime, endTime, recurringDonationEndDate} = formValues;
+  const {
+    dayPart,
+    frequency,
+    startTime,
+    endTime,
+    recurringDonationEndDate,
+  } = formValues;
   const { authenticatedUser } = useContext(AuthContext);
+
+  const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(true);
 
   enum DayParts {
     EARLY_MORNING = "Early Morning (12am - 6am)",
@@ -130,6 +146,13 @@ const SelectDateTime = ({
     setForm({ target: { name, value: e } });
     if (name === "dayPart") {
       showDropOffTimes(e.toString());
+    } else if (name === "frequency") {
+      const val = e.toString();
+      if (val === "One time donation") {
+        setIsOneTimeDonation(true);
+      } else {
+        setIsOneTimeDonation(false);
+      }
     }
   };
 
@@ -144,10 +167,12 @@ const SelectDateTime = ({
 
   return (
     <Container p="30px">
-        <SchedulingProgressBar activeStep={0} totalSteps={4} />
-        <Text textStyle="mobileHeader2" mt="2em" mb="1em">Date and Time</Text>
-        <FormControl isRequired>
-          <FormLabel fontWeight="600">Select date of donation</FormLabel>
+      <SchedulingProgressBar activeStep={0} totalSteps={4} />
+      <Text textStyle="mobileHeader2" mt="2em" mb="1em">
+        Date and Time
+      </Text>
+      <FormControl isRequired>
+        <FormLabel fontWeight="600">Select date of donation</FormLabel>
         <Calendar
           buttons={false}
           disableMonthPicker
@@ -155,53 +180,57 @@ const SelectDateTime = ({
           shadow={false}
           minDate={new Date()}
         />
-        </FormControl>
+      </FormControl>
+      <RadioSelectGroup
+        name="dayPart"
+        label="What time of day would you like to drop off your donation?"
+        value={dayPart}
+        values={dayParts}
+        icons={[]}
+        isRequired
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          handleChange(e, "dayPart");
+        }}
+      />
+      {showTimeSlots && (
         <RadioSelectGroup
-          name="dayPart"
-          label="What time of day would you like to drop off your donation?"
-          value={dayPart}
-          values={dayParts}
-          icons={[]}
+          name="timeRanges"
+          label="Select drop off time"
+          helperText="From the options below, select your first choice."
+          helperText2="Each [] represents an already signed up donor. Please try to choose a time slot without a pre-existing donor. "
+          value={timeRange}
+          values={showTimeSlots}
+          icons={icons}
           isRequired
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            handleChange(e, "dayPart");
+            handleTimeRangeChange(e);
           }}
         />
-        {showTimeSlots && (
-          <RadioSelectGroup
-            name="timeRanges"
-            label="Select drop off time"
-            helperText="From the options below, select your first choice."
-            helperText2="Each [] represents an already signed up donor. Please try to choose a time slot without a pre-existing donor. "
-            value={timeRange}
-            values={showTimeSlots}
-            icons={icons}
-            isRequired
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              handleTimeRangeChange(e);
-            }}
-          />
-        )}
-        <RadioSelectGroup
-          name="frequency"
-          label="Select frequency"
-          helperText="How often will this donation occur?"
-          value={frequency}
-          values={frequencies}
-          icons={[]}
-          isRequired
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            handleChange(e, "frequency");
-          }}
-        />
+      )}
+      <RadioSelectGroup
+        name="frequency"
+        label="Select frequency"
+        helperText="How often will this donation occur?"
+        value={frequency}
+        values={frequencies}
+        icons={[]}
+        isRequired
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          handleChange(e, "frequency");
+        }}
+      />
+      {!isOneTimeDonation && (
         <FormControl isRequired mb="3em">
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
           <Input
-          value={recurringDonationEndDate}
-          onChange={(e) => handleChange(e.target.value, "recurringDonationEndDate")}
-          placeholder="MM/DD/YYYY"
-        />
+            value={recurringDonationEndDate}
+            onChange={(e) =>
+              handleChange(e.target.value, "recurringDonationEndDate")
+            }
+            placeholder="MM/DD/YYYY"
+          />
         </FormControl>
+      )}
       <HStack>
         <Button onClick={previous} variant="navigation">
           Back

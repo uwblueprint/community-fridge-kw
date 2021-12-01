@@ -1,9 +1,4 @@
-import {
-  Badge,
-  Container,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Badge, Container, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";

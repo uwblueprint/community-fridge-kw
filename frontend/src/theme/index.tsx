@@ -117,7 +117,7 @@ const customTheme = extendTheme({
       fontSize: "16px",
       lineHeight: "24px",
       color: "black",
-    }
+    },
   },
   colors: {
     squash: {
@@ -191,11 +191,11 @@ const customTheme = extendTheme({
       200: "#EFFCF9",
     },
     cottonCandy: {
-      100: "#FDF5FA"
+      100: "#FDF5FA",
     },
     champagne: {
-      100: "#8D2569"
-    }
+      100: "#8D2569",
+    },
   },
   breakpoints: {
     sm: "320px",
