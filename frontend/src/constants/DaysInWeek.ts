@@ -1,6 +1,14 @@
 import { Locale } from "date-fns";
 import { enUS } from "date-fns/locale";
 
+export const convertTime = (dateToConvert: string): string => {
+  return new Date(dateToConvert).toLocaleTimeString(navigator.language, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+};
+
 export const colorMap = {
   "One Time": "spinach",
   Daily: "H2O",
