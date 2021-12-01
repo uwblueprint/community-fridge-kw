@@ -1,4 +1,4 @@
-import { Box, Button, Container, Stack, Text } from "@chakra-ui/react";
+import { Button, Container, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -12,7 +12,15 @@ const Home = (): JSX.Element => {
   return (
     <>
       <Container centerContent pl="42px" pr="42px" pt="73px">
-        <Text marginBottom="13px" textStyle="mobileHeader1">
+        <Image
+          src="drawer-logo.png"
+          alt="Community Fridge logo"
+          borderRadius="100px"
+          marginRight="50%"
+          maxWidth="145px"
+          maxHeight="145px"
+        />
+        <Text align="left" marginBottom="13px" textStyle="mobileHeader1">
           Welcome to Community Fridge KW
         </Text>
         <Text marginBottom="30px" textStyle="mobileBody">
@@ -26,7 +34,6 @@ const Home = (): JSX.Element => {
         >
           Schedule a food dropoff
         </Button>
-        <Box mt="84px" w="100%" h="10rem" backgroundColor="gray.100" />
         <DonationProcess />
       </Container>
       <VolunteerRoles />
