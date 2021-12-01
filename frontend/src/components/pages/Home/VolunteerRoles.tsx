@@ -41,12 +41,12 @@ const VolunteerRoles = () => (
       Volunteer Roles
     </Text>
     <VolunteerRoleStep
-      title="Assist with a dropoff"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut condimentum libero. Cras sodales."
+      title="Sign up for a fridge check-in"
+      description="Visit the fridge in your desired time window to complete one of the three daily fridge check-ins to maintain public health standards."
     />
     <VolunteerRoleStep
-      title="Conduct a check-in"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ut condimentum libero. Cras sodales."
+      title="Assist with food rescue"
+      description="Support a donation from a local business, organization or individual by making a pick-up or assisting with donation unloading and stocking at the fridge."
     />
   </Container>
 );
