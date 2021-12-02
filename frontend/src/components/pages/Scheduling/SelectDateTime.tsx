@@ -7,6 +7,7 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import { da } from "date-fns/locale";
 import moment from "moment";
 import React, { useContext, useState } from "react";
 import { Calendar, DateObject } from "react-multi-date-picker";
@@ -117,8 +118,6 @@ const SelectDateTime = ({
     getTimeSlot(dayPart),
   );
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  // TODO: Need to edit this to update + calculate based on schedules pulled from backend
-  const [icons, setIcons] = useState<number[]>([0, 0, 1, 0, 3]);
   const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
     frequency === "One time donation",
   );
@@ -162,6 +161,8 @@ const SelectDateTime = ({
     });
     return iconsPerTimeSlot;
   };
+
+  const [icons, setIcons] = useState<number[]>(getIconsPerTimeSlot(dayPart, date));
 
   const showDropOffTimes = (selectedDayPart: string, selectedDate: Date) => {
     const timeSlot = getTimeSlot(selectedDayPart);
