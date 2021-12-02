@@ -34,7 +34,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
 
   return (
     <Box
-      width="fit-content"
+      width="100%"
       mb="24px"
       border="1px solid"
       borderColor="hubbard.100"
@@ -42,54 +42,63 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
       onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)}
     >
       <Box pl="6" pr="6" pb="6" pt="4">
-        <HStack spacing="0">
-          <Text mb="16px" textStyle="mobileBodyBold">
+        <Box spacing="0" display="flex">
+          <Text
+            mt="0.5rem"
+            mb="16px"
+            textStyle="mobileBodyBold"
+            whiteSpace="nowrap"
+            flexGrow={8}
+          >
             {startDate}
           </Text>
-          <Menu isLazy>
-            <MenuButton
-              zIndex="9999"
-              style={{
-                marginLeft: "6rem",
-                marginBottom: "15px",
-                marginRight: "0px",
-              }}
-              as={IconButton}
-              aria-label="options"
-              icon={<EllipsisIcon />}
-              variant="ghost"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <MenuList p={0} minW="0" w="94px">
-              <MenuItem
-                onClick={() =>
-                  history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)
-                }
-                textStyle="mobileSmall"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem
-                textStyle="mobileSmall"
-                color="tomato.100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOpen();
+          <Box marginLeft="0px">
+            <Menu isLazy>
+              <MenuButton
+                zIndex="9999"
+                style={{
+                  marginLeft: "6rem",
+                  marginBottom: "15px",
+                  marginRight: "0px",
                 }}
-              >
-                Cancel
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <DeleteScheduleModal
-            isOpen={isOpen}
-            onClose={onClose}
-            onDelete={() => {
-              onDelete();
-              onClose();
-            }}
-          />
-        </HStack>
+                as={IconButton}
+                aria-label="options"
+                icon={<EllipsisIcon />}
+                variant="ghost"
+                backgroundColor="transparent"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <MenuList p={0} minW="0" w="94px">
+                <MenuItem
+                  onClick={() =>
+                    history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)
+                  }
+                  textStyle="mobileSmall"
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem
+                  textStyle="mobileSmall"
+                  color="tomato.100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpen();
+                  }}
+                >
+                  Cancel
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            <DeleteScheduleModal
+              isOpen={isOpen}
+              onClose={onClose}
+              onDelete={() => {
+                onDelete();
+                onClose();
+              }}
+            />
+          </Box>
+        </Box>
         <HStack>
           <TimeIcon color="black.100" />
           <Text textStyle="mobileBodyBold">Time: </Text>

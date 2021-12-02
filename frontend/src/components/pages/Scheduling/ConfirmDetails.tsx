@@ -80,7 +80,14 @@ const ConfirmDetails = ({
         {currentSchedule?.frequency}
       </Badge>
 
-      <Box pl="0" align="left" mb="2rem">
+      <Box
+        pl="0"
+        align="left"
+        mb="2rem"
+        display={{ lg: "flex" }}
+        justifyContent="space-between"
+        flexDirection="row-reverse"
+      >
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -90,18 +97,27 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Text textStyle="mobileHeader2">Proposed dropoff time</Text>
-        <Text textStyle="mobileBody">
-          {new Date(currentSchedule.startTime).toDateString()}
-        </Text>
-        <Text textStyle="mobileBody">
-          {new Date(currentSchedule.startTime).toLocaleTimeString()}-
-          {new Date(currentSchedule.endTime).toLocaleTimeString()}
-        </Text>
-        <Text textStyle="mobileBody">{currentSchedule.frequency}</Text>
+        <Box>
+          <Text textStyle="mobileHeader2">Proposed dropoff time</Text>
+          <Text textStyle="mobileBody">
+            {new Date(currentSchedule.startTime).toDateString()}
+          </Text>
+          <Text textStyle="mobileBody">
+            {new Date(currentSchedule.startTime).toLocaleTimeString()}-
+            {new Date(currentSchedule.endTime).toLocaleTimeString()}
+          </Text>
+          <Text textStyle="mobileBody">{currentSchedule.frequency}</Text>
+        </Box>
       </Box>
 
-      <Box pl="0" align="left" mb="2rem">
+      <Box
+        pl="0"
+        align="left"
+        mb="2rem"
+        display={{ lg: "flex" }}
+        justifyContent="space-between"
+        flexDirection="row-reverse"
+      >
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -111,14 +127,23 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Text textStyle="mobileHeader2">Donation Information</Text>
-        <Text textStyle="mobileBody">{currentSchedule.size}</Text>
-        <Text textStyle="mobileBody">
-          {currentSchedule.categories.join(", ")}
-        </Text>
+        <Box>
+          <Text textStyle="mobileHeader2">Donation Information</Text>
+          <Text textStyle="mobileBody">{currentSchedule.size}</Text>
+          <Text textStyle="mobileBody">
+            {currentSchedule.categories.join(", ")}
+          </Text>
+        </Box>
       </Box>
 
-      <Box pl="0" align="left" mb="2rem">
+      <Box
+        pl="0"
+        align="left"
+        mb="2rem"
+        display={{ lg: "flex" }}
+        justifyContent="space-between"
+        flexDirection="row-reverse"
+      >
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -128,18 +153,20 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Text textStyle="mobileHeader2">Volunteer Information</Text>
-        {currentSchedule.volunteerNeeded && (
-          <Text textStyle="mobileBody">Volunteer required</Text>
-        )}
-        {currentSchedule.isPickup && (
-          <Text textStyle="mobileBody">Pickup required</Text>
-        )}
-        <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text>
+        <Box>
+          <Text textStyle="mobileHeader2">Volunteer Information</Text>
+          {currentSchedule.volunteerNeeded && (
+            <Text textStyle="mobileBody">Volunteer required</Text>
+          )}
+          {currentSchedule.isPickup && (
+            <Text textStyle="mobileBody">Pickup required</Text>
+          )}
+          <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text>
 
-        <Text textStyle="mobileBody">
-          Additional notes: {currentSchedule.notes}
-        </Text>
+          <Text textStyle="mobileBody">
+            Additional notes: {currentSchedule.notes}
+          </Text>
+        </Box>
       </Box>
 
       <Box pl="0" align="left">
