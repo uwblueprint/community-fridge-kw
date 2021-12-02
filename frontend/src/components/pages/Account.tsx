@@ -9,10 +9,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
-import { DASHBOARD_PAGE } from "../../constants/Routes";
+import { DASHBOARD_PAGE, LOGIN_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
 
@@ -37,7 +37,7 @@ const Account = (): JSX.Element => {
   }, [authenticatedUser]);
 
   if (!authenticatedUser) {
-    return <></>;
+    return <Redirect to={LOGIN_PAGE} />;
   }
 
   return (
@@ -81,7 +81,7 @@ const Account = (): JSX.Element => {
                 size="sm"
               />
             </Box>
-            <Box mt="1rem">
+            <Box mt="1.5rem">
               <Text>Last name</Text>
               <Input
                 mt="2"
@@ -93,7 +93,7 @@ const Account = (): JSX.Element => {
               />
             </Box>
           </HStack>
-          <Box mt="1rem">
+          <Box mt="1.5rem">
             <Text>Phone number</Text>
             <Input
               mt="2"
@@ -105,18 +105,18 @@ const Account = (): JSX.Element => {
               size="sm"
             />
           </Box>
-          <Box mt="1rem">
+          <Box mt="1.5rem">
             <Text>Email address</Text>
             <Input
               mt="2"
-              name={authenticatedUser!.email}
-              value="email"
+              value={authenticatedUser!.email}
+              name="email"
               placeholder="Enter email"
               variant="unstyled"
               size="sm"
             />
           </Box>
-          <Box mt="1rem">
+          <Box mt="1.5rem">
             <Button mt="2" variant="navigation" onClick={navigateToDashboard}>
               View Scheduled Donations
             </Button>
