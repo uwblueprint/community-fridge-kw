@@ -31,8 +31,12 @@ const seedSchedules = [
     size: "Medium",
     is_pickup: false,
     day_part: "Morning (6am - 11am)",
-    start_time: new Date("Wed Dec 15 2021 07:00:00 GMT-0500 (Eastern Standard Time)"),
-    end_time: new Date("Wed Dec 15 2021 08:00:00 GMT-0500 (Eastern Standard Time)"),
+    start_time: new Date(
+      "Wed Dec 15 2021 07:00:00 GMT-0500 (Eastern Standard Time)",
+    ),
+    end_time: new Date(
+      "Wed Dec 15 2021 08:00:00 GMT-0500 (Eastern Standard Time)",
+    ),
     status: "Approved",
     volunteer_needed: true,
     volunteer_time: "8:00 AM",
@@ -48,8 +52,12 @@ const seedSchedules = [
     is_pickup: true,
     pickup_location: "location",
     day_part: "Night (9pm - 12am)",
-    start_time: new Date("Wed Dec 15 2021 22:00:00 GMT-0500 (Eastern Standard Time)"),
-    end_time: new Date("Wed Dec 15 2021 23:00:00 GMT-0500 (Eastern Standard Time)"),
+    start_time: new Date(
+      "Wed Dec 15 2021 22:00:00 GMT-0500 (Eastern Standard Time)",
+    ),
+    end_time: new Date(
+      "Wed Dec 15 2021 23:00:00 GMT-0500 (Eastern Standard Time)",
+    ),
     status: "Pending",
     volunteer_needed: false,
     frequency: "Weekly",
@@ -65,8 +73,12 @@ const seedSchedules = [
     size: "Small",
     is_pickup: false,
     day_part: "Afternoon (11am - 4pm)",
-    start_time: new Date("Wed Dec 15 2021 13:00:00 GMT-0500 (Eastern Standard Time)"),
-    end_time: new Date("Wed Dec 15 2021 14:00:00 GMT-0500 (Eastern Standard Time)"),
+    start_time: new Date(
+      "Wed Dec 15 2021 13:00:00 GMT-0500 (Eastern Standard Time)",
+    ),
+    end_time: new Date(
+      "Wed Dec 15 2021 14:00:00 GMT-0500 (Eastern Standard Time)",
+    ),
     status: "Approved",
     volunteer_needed: true,
     volunteer_time: "8:00 AM",
