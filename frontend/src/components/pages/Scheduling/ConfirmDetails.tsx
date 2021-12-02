@@ -75,7 +75,7 @@ const ConfirmDetails = ({
         pl="14px"
         pr="14px"
         color="squash.100"
-        backgroundColor="evergreen.100"
+        backgroundColor="spinach.100"
         mb="56px"
       >
         {currentSchedule?.frequency}

@@ -7,7 +7,7 @@ const Button = {
       fontSize: "16px",
     },
     authNavigation: {
-      backgroundColor: "evergreen.100",
+      backgroundColor: "spinach.100",
       color: "squash.100",
       size: "lg",
       width: "100%",

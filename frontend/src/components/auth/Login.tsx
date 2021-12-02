@@ -37,13 +37,13 @@ const Login = (): React.ReactElement => {
         </Text>
         <FormControl mt="2rem">
           <Box>
-            <Text textStyle="mobileBodyBold" color="poison.100">
+            <Text textStyle="mobileBodyBold" color="black.100">
               Email Address
             </Text>
             <Input mt="2" value={email} name="email" onChange={setValue} />
           </Box>
           <Box mt="1rem">
-            <Text textStyle="mobileBodyBold" color="poison.100">
+            <Text textStyle="mobileBodyBold" color="black.100">
               Password
             </Text>
             <Input

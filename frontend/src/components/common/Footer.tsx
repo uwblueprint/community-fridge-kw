@@ -13,7 +13,7 @@ import { Email, Facebook, Instagram } from "./icons";
 
 const Footer = (): JSX.Element => (
   <>
-    <Divider pt={{ base: "200px", lg: "200px", md: "200px", sm: "100px" }} />
+    <Divider pt={{ base: "200px", lg: "200px", md: "200px", sm: "0px" }} />
     <Box
       p={{ base: "4rem" }}
       display={{ md: "flex" }}

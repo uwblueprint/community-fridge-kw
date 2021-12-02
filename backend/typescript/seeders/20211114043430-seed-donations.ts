@@ -2,7 +2,6 @@ import { Seeder } from "../umzug";
 
 const seedUsers = [
   {
-    id: 1,
     first_name: "John",
     last_name: "Doe",
     auth_id: "wzvuBJcZNCaSj7uAkqxEnzduKlD3",
@@ -16,7 +15,6 @@ const seedUsers = [
 
 const seedDonors = [
   {
-    id: 1,
     user_id: 1,
     business_name: "Joe's Farm",
     facebook_link: "facebook.com",
@@ -28,10 +26,9 @@ const seedDonors = [
 
 const seedSchedules = [
   {
-    id: 1,
     donor_id: 1,
     categories: ["Dry packaged goods"],
-    size: "medium",
+    size: "Medium",
     is_pickup: false,
     day_part: "Morning (6am - 11am)",
     start_time: new Date("2021-09-30T00:00:00.000Z"),
@@ -45,15 +42,14 @@ const seedSchedules = [
     updatedAt: new Date(1636226732806),
   },
   {
-    id: 2,
     donor_id: 1,
     categories: ["Non-perishables", "Tea and coffee"],
-    size: "medium",
+    size: "Medium",
     is_pickup: true,
     pickup_location: "location",
     day_part: "Morning (6am - 11am)",
     start_time: new Date("2021-09-30T00:00:00.000Z"),
-    end_time: new Date("2021-10-01T00:00:00.000Z"),
+    end_time: new Date("2021-09-30T00:01:00.000Z"),
     status: "Pending",
     volunteer_needed: false,
     frequency: "Weekly",
@@ -64,13 +60,13 @@ const seedSchedules = [
     updatedAt: new Date(1636226732806),
   },
   {
-    id: 3,
     donor_id: 1,
     categories: ["Fresh produce"],
+    size: "Small",
     is_pickup: false,
     day_part: "Morning (6am - 11am)",
-    start_time: new Date("2021-03-01T00:08:00.000Z"),
-    end_time: new Date("2021-03-01T00:06:00.000Z"),
+    start_time: new Date("2021-03-01T06:00:00.000Z"),
+    end_time: new Date("2021-03-01T07:00:00.000Z"),
     status: "Approved",
     volunteer_needed: true,
     volunteer_time: "8:00 AM",
@@ -90,12 +86,8 @@ export const up: Seeder = async ({ context: sequelize }) => {
 };
 export const down: Seeder = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().bulkDelete("scheduling", {
-    id: seedSchedules.map((schedule) => schedule.id),
+    id: [1, 2, 3],
   });
-  await sequelize
-    .getQueryInterface()
-    .bulkDelete("donors", { id: seedDonors.map((donor) => donor.id) });
-  await sequelize
-    .getQueryInterface()
-    .bulkDelete("users", { id: seedUsers.map((user) => user.id) });
+  await sequelize.getQueryInterface().bulkDelete("donors", { id: [1] });
+  await sequelize.getQueryInterface().bulkDelete("users", { id: [1] });
 };
