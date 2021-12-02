@@ -11,6 +11,7 @@ export const convertTime = (dateToConvert: string): string => {
 
 export const colorMap = {
   "One Time": "spinach",
+  "One time donation": "spinach",
   Daily: "H2O",
   Weekly: "onion",
   Monthly: "turnip",

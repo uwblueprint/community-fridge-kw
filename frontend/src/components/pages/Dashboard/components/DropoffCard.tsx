@@ -14,6 +14,7 @@ import {
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import { colorMap } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
 import { EllipsisIcon } from "../../../common/icons";
 import { SchedulingFormProps } from "../../Scheduling/types";
@@ -90,12 +91,12 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
           />
         </HStack>
         <HStack>
-          <TimeIcon color="raddish.100" />
+          <TimeIcon color="black.100" />
           <Text textStyle="mobileCardDescription">Time: </Text>
           <Text textStyle="mobileSmall">{startTime}</Text>
         </HStack>
         <HStack mb="16px">
-          <StarIcon color="raddish.100" />
+          <StarIcon color="black.100" />
           <Text textStyle="mobileCardDescription">Volunteers Requested: </Text>
           <Text textStyle="mobileSmall">
             {schedule.volunteerNeeded ? "Yes" : "No"}
@@ -103,13 +104,13 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
         </HStack>
         {schedule.frequency && (
           <Badge
-            borderRadius="full"
+            borderRadius="8px"
             pt="6px"
             pb="6px"
             pl="14px"
             pr="14px"
-            color="squash.100"
-            backgroundColor="spinach.100"
+            color={`${(colorMap as any)[schedule.frequency]}.100`}
+            backgroundColor={`${(colorMap as any)[schedule.frequency]}.50`}
           >
             {schedule.frequency}
           </Badge>
