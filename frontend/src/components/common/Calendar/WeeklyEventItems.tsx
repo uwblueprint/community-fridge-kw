@@ -61,7 +61,7 @@ const DefaultWeeklyEventItem = ({
             </Text>
             <Badge
               color={`${(colorMap as any)[schedule!.frequency]}.100`}
-              backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
+              backgroundColor={`${(colorMap as any)[schedule!.frequency]}.50`}
               textStyle="desktopSmall"
               py="0.5rem"
               ph="1rem"
