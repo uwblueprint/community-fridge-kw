@@ -27,7 +27,7 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
         marginBottom="50px"
         width="100%"
       />
-      <Button onClick={next} variant="navigation">
+      <Button onClick={next} variant="navigation" w="100%">
         Get started
       </Button>
     </Container>
