@@ -130,7 +130,7 @@ const WeeklyEventItemPopUp = ({
                       color={`${(colorMap as any)[schedule!.frequency]}.100`}
                       backgroundColor={`${
                         (colorMap as any)[schedule!.frequency]
-                      }.200`}
+                      }.50`}
                       borderRadius="0.5rem"
                       textStyle={isMobile ? "mobileSmall" : "desktopSmall"}
                       textAlign="center"
@@ -150,7 +150,7 @@ const WeeklyEventItemPopUp = ({
                     color={`${(colorMap as any)[schedule!.frequency]}.100`}
                     backgroundColor={`${
                       (colorMap as any)[schedule!.frequency]
-                    }.200`}
+                    }.50`}
                     borderRadius="0.5rem"
                     textStyle={isMobile ? "mobileSmall" : "desktopSmall"}
                     textAlign="center"
