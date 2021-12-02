@@ -10,7 +10,6 @@ import {
   useRadioGroup,
   VStack,
 } from "@chakra-ui/react";
-import { StringOrNumber } from "@chakra-ui/utils";
 import React from "react";
 
 import customTheme from "../../theme";

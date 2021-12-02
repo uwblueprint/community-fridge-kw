@@ -8,7 +8,6 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { StringOrNumber } from "@chakra-ui/utils";
 import React, { ChangeEvent } from "react";
 
 import xl from "../../../assets/donation-sizes/lg.png";
