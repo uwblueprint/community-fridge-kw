@@ -11,7 +11,7 @@ export enum Status {
   REJECTED = "Rejected",
 }
 
-export enum dayPart {
+export enum DayPart {
   EARLY_MORNING = "Early Morning (12am - 6am)",
   MORNING = "Morning (6am - 11am)",
   AFTERNOON = "Afternoon (11am - 4pm)",
@@ -90,7 +90,7 @@ export type SchedulingDTO = {
   size?: string;
   isPickup: boolean;
   pickupLocation?: string;
-  dayPart: dayPart;
+  dayPart: DayPart;
   startTime: Date;
   endTime: Date;
   status: Status;

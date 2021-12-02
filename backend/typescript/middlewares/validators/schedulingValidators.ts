@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { dayPart, Frequency, Status } from "../../types";
+import { DayPart, Frequency, Status } from "../../types";
 import {
   getApiValidationError,
   validatePrimitive,
@@ -34,7 +34,7 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("pickupLocation", "string"));
   }
-  if (!Object.values(dayPart).includes(req.body.dayPart)) {
+  if (!Object.values(DayPart).includes(req.body.dayPart)) {
     return res.status(400).send(getApiValidationError("dayPart", "string"));
   }
   if (!validateDate(req.body.startTime)) {
@@ -161,7 +161,7 @@ export const updateSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("volunteerTime", "string"));
   }
-  if (req.body.dayPart && !Object.values(dayPart).includes(req.body.dayPart)) {
+  if (req.body.dayPart && !Object.values(DayPart).includes(req.body.dayPart)) {
     return res.status(400).send(getApiValidationError("dayPart", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {

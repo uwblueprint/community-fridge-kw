@@ -9,7 +9,7 @@ import {
   AutoIncrement,
   PrimaryKey,
 } from "sequelize-typescript";
-import { dayPart, Frequency, Status } from "../types";
+import { DayPart, Frequency, Status } from "../types";
 import Donor from "./donor.model";
 
 @Table({ tableName: "scheduling" })
@@ -43,7 +43,7 @@ export default class Scheduling extends Model {
       "Night (9pm - 12am)",
     ),
   })
-  day_part!: dayPart;
+  day_part!: DayPart;
 
   @AllowNull(false)
   @Column({ type: DataType.DATE })
