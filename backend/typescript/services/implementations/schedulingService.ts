@@ -160,23 +160,23 @@ class SchedulingService implements ISchedulingService {
           return item.recurringDonationId;
         });
 
-        const arrayRecurringDonationIds = [];
+        const arrayRecurringDonationIds : number[] = [];
         for (let i = 0; i < recurringDonationIds.length; i += 1) {
-          if (!recurringDonationIds[i]) {
+          if (!recurringDonationIds[i] || Number.isNaN(Number(recurringDonationIds[i]))) {
             arrayRecurringDonationIds.push(0);
           } else {
             arrayRecurringDonationIds.push(Number(recurringDonationIds[i]));
           }
         }
-        const newRecurringDonationId =
+
+        const newRecurringDonationId : number =
           Math.max(...arrayRecurringDonationIds) + 1;
+        console.log(newRecurringDonationId);
 
         // end date of recurring donation
-        const recurringDonationEndDate: Date = scheduling.recurringDonationEndDate!;
-        recurringDonationEndDate.setHours(23);
-        recurringDonationEndDate.setMinutes(59);
-        recurringDonationEndDate.setSeconds(59);
-        recurringDonationEndDate.setMilliseconds(999);
+        console.log(scheduling.recurringDonationEndDate!)
+        const recurringDonationEndDate: Date = new Date(scheduling.recurringDonationEndDate!);
+        recurringDonationEndDate.setHours(23, 59, 59, 999);
 
         // create first schedule and assign it to newScheduling
         newScheduling = await Scheduling.create({
@@ -192,164 +192,71 @@ class SchedulingService implements ISchedulingService {
           volunteer_needed: scheduling.volunteerNeeded,
           volunteer_time: scheduling.volunteerTime,
           frequency: scheduling.frequency,
-          recurring_donation_id: scheduling.recurringDonationId,
+          recurring_donation_id: newRecurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
         });
 
-        const promisesArray: Promise<Scheduling>[] = [];
+        let schedulesToBeCreated : Record<string, string | number | boolean | string[] | Date | undefined>[] = [];
+        const originalStartTime: Date = new Date (scheduling.startTime);
+        console.log(`this is the original start time asdfjkafksl ${originalStartTime.getHours()}`)
+        const originalEndTime: Date = new Date (scheduling.endTime);
         // loop for calculations if frequency is DAILY
         if (schedulingFrequency === Frequency.DAILY) {
-          const nextDay: Date = scheduling.startTime;
+          const nextDay: Date = new Date (scheduling.startTime);
           nextDay.setDate(nextDay.getDate() + 1);
 
-          while (Number(nextDay) <= Number(recurringDonationEndDate)) {
-            const originalStartTime: Date = scheduling.startTime;
-            const originalEndTime: Date = scheduling.endTime;
-            const newStartTime: Date = new Date(
-              nextDay.getFullYear(),
-              nextDay.getMonth(),
-              nextDay.getDay(),
-              originalStartTime.getHours(),
-              originalStartTime.getMinutes(),
-              originalStartTime.getSeconds(),
-              originalStartTime.getMilliseconds(),
-            );
-            const newEndTime: Date = new Date(
-              nextDay.getFullYear(),
-              nextDay.getMonth(),
-              nextDay.getDay(),
-              originalEndTime.getHours(),
-              originalEndTime.getMinutes(),
-              originalEndTime.getSeconds(),
-              originalEndTime.getMilliseconds(),
-            );
-            // create scheduling
-            promisesArray.push(
-              Scheduling.create({
-                donor_id: scheduling.donorId,
-                categories: scheduling.categories,
-                size: scheduling.size,
-                is_pickup: scheduling.isPickup,
-                pickup_location: scheduling.pickupLocation,
-                day_part: scheduling.dayPart,
-                start_time: newStartTime,
-                end_time: newEndTime,
-                status: scheduling.status,
-                volunteer_needed: scheduling.volunteerNeeded,
-                volunteer_time: scheduling.volunteerTime,
-                frequency: scheduling.frequency,
-                recurring_donation_id: newRecurringDonationId,
-                recurring_donation_end_date:
-                  scheduling.recurringDonationEndDate,
-                notes: scheduling.notes,
-              }),
-            );
+          while (nextDay <= recurringDonationEndDate) {
+            const newStartTime: Date = nextDay;
+
+            console.log(`scheduling start time hours ${originalStartTime.getHours()}`)
+              newStartTime.setHours(originalStartTime.getHours())
+              newStartTime.setMinutes(originalStartTime.getMinutes())
+              newStartTime.setSeconds(originalStartTime.getSeconds())
+              newStartTime.setSeconds(originalStartTime.getMilliseconds())
+
+            const newEndTime: Date = nextDay;
+            newEndTime.setHours(originalEndTime.getHours())
+              newEndTime.setMinutes(originalEndTime.getMinutes())
+              newEndTime.setSeconds(originalEndTime.getSeconds())
+              newEndTime.setSeconds(originalEndTime.getMilliseconds())
+
+            console.log(`new date ${nextDay}`)
+            console.log(`new start time ${newStartTime}`)
+            console.log(`new end time ${newEndTime}`)
+            // WIP TO GET RECURRING SCHEDULES CREATED FOR DAILY DONATIONS (will extend fixed logic to WEEKLY and MONTHLY)
+            const newSchedule = {
+              ...scheduling, 
+              start_time: newStartTime, 
+              end_time: newEndTime, 
+              recurring_donation_id: String(newRecurringDonationId)
+            }
+            const scheduleInArray : CreateSchedulingDTO[] = [newSchedule];
+            const createScheduleDTOArray = scheduleInArray.map((schedule) => {
+              const scheduleSnakeCase: Record<
+                string,
+                string | string[] | boolean | number | Date | undefined
+              > = {};
+              Object.entries(schedule).forEach(([key, value]) => {
+                scheduleSnakeCase[snakeCase(key)] = value;
+              });
+              return scheduleSnakeCase;
+            })
+            console.log(createScheduleDTOArray)
+            schedulesToBeCreated = schedulesToBeCreated.concat(createScheduleDTOArray)
             nextDay.setDate(nextDay.getDate() + 1);
           }
-          await Promise.all(promisesArray);
+
+          console.log(schedulesToBeCreated)
+          await Scheduling.bulkCreate(schedulesToBeCreated)
         }
         // loop for calculations if frequency is WEEKLY
         else if (schedulingFrequency === Frequency.WEEKLY) {
-          const nextDay: Date = scheduling.startTime;
-          nextDay.setDate(nextDay.getDate() + 7);
 
-          while (Number(nextDay) <= Number(recurringDonationEndDate)) {
-            const originalStartTime: Date = scheduling.startTime;
-            const originalEndTime: Date = scheduling.endTime;
-            const newStartTime: Date = new Date(
-              nextDay.getFullYear(),
-              nextDay.getMonth(),
-              nextDay.getDay(),
-              originalStartTime.getHours(),
-              originalStartTime.getMinutes(),
-              originalStartTime.getSeconds(),
-              originalStartTime.getMilliseconds(),
-            );
-            const newEndTime: Date = new Date(
-              nextDay.getFullYear(),
-              nextDay.getMonth(),
-              nextDay.getDay(),
-              originalEndTime.getHours(),
-              originalEndTime.getMinutes(),
-              originalEndTime.getSeconds(),
-              originalEndTime.getMilliseconds(),
-            );
-            // create scheduling
-            promisesArray.push(
-              Scheduling.create({
-                donor_id: scheduling.donorId,
-                categories: scheduling.categories,
-                size: scheduling.size,
-                is_pickup: scheduling.isPickup,
-                pickup_location: scheduling.pickupLocation,
-                day_part: scheduling.dayPart,
-                start_time: newStartTime,
-                end_time: newEndTime,
-                status: scheduling.status,
-                volunteer_needed: scheduling.volunteerNeeded,
-                volunteer_time: scheduling.volunteerTime,
-                frequency: scheduling.frequency,
-                recurring_donation_id: newRecurringDonationId,
-                recurring_donation_end_date:
-                  scheduling.recurringDonationEndDate,
-                notes: scheduling.notes,
-              }),
-            );
-            nextDay.setDate(nextDay.getDate() + 7);
-          }
-          await Promise.all(promisesArray);
         }
         // loop for calculations if frequency is MONTHLY
         else {
-          const nextDay: Date = scheduling.startTime;
-          nextDay.setMonth(nextDay.getMonth() + 1);
-
-          while (Number(nextDay) <= Number(recurringDonationEndDate)) {
-            const originalStartTime: Date = scheduling.startTime;
-            const originalEndTime: Date = scheduling.endTime;
-            const newStartTime: Date = new Date(
-              nextDay.getFullYear(),
-              nextDay.getMonth(),
-              nextDay.getDay(),
-              originalStartTime.getHours(),
-              originalStartTime.getMinutes(),
-              originalStartTime.getSeconds(),
-              originalStartTime.getMilliseconds(),
-            );
-            const newEndTime: Date = new Date(
-              nextDay.getFullYear(),
-              nextDay.getMonth(),
-              nextDay.getDay(),
-              originalEndTime.getHours(),
-              originalEndTime.getMinutes(),
-              originalEndTime.getSeconds(),
-              originalEndTime.getMilliseconds(),
-            );
-            // create scheduling
-            promisesArray.push(
-              Scheduling.create({
-                donor_id: scheduling.donorId,
-                categories: scheduling.categories,
-                size: scheduling.size,
-                is_pickup: scheduling.isPickup,
-                pickup_location: scheduling.pickupLocation,
-                day_part: scheduling.dayPart,
-                start_time: newStartTime,
-                end_time: newEndTime,
-                status: scheduling.status,
-                volunteer_needed: scheduling.volunteerNeeded,
-                volunteer_time: scheduling.volunteerTime,
-                frequency: scheduling.frequency,
-                recurring_donation_id: newRecurringDonationId,
-                recurring_donation_end_date:
-                  scheduling.recurringDonationEndDate,
-                notes: scheduling.notes,
-              }),
-            );
-            nextDay.setMonth(nextDay.getMonth() + 1);
-          }
-          await Promise.all(promisesArray);
+          
         }
       }
     } catch (error) {
