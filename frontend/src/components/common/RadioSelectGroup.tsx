@@ -119,15 +119,15 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       </FormHelperText>
       {name === "timeRanges" && (
         <FormHelperText fontSize="14px" color="black.100" mb="20px">
-            Each{" "}
-            <Img
-              src={personIcon}
-              alt="person icon"
-              width="15.75px"
-              display="inline"
-            />{" "}
-            represents an already signed up donor. Please try to choose a time
-            slot without a pre-existing donor.
+          Each{" "}
+          <Img
+            src={personIcon}
+            alt="person icon"
+            width="15.75px"
+            display="inline"
+          />{" "}
+          represents an already signed up donor. Please try to choose a time
+          slot without a pre-existing donor.
         </FormHelperText>
       )}
       <VStack {...group}>{radioSelectButtons}</VStack>

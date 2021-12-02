@@ -120,7 +120,9 @@ const SelectDateTime = ({
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   // TODO: Need to edit this to update + calculate based on schedules pulled from backend
   const [icons, setIcons] = useState<number[]>([0, 0, 1, 0, 3]);
-  const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(frequency === "One time donation");
+  const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
+    frequency === "One time donation",
+  );
 
   // fetch schedules
   React.useEffect(() => {

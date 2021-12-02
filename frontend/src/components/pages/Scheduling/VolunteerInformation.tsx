@@ -11,7 +11,6 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import React from "react";
-import { useHistory } from "react-router-dom";
 
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
@@ -21,7 +20,6 @@ const VolunteerInformation = ({
   formValues,
   setForm,
   navigation,
-  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
 
