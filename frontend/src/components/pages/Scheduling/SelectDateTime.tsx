@@ -134,12 +134,13 @@ const SelectDateTime = ({
   }, [authenticatedUser]);
 
   if (!authenticatedUser) {
-    return <Redirect to={Routes.HOME_PAGE} />;
+    return <Redirect to={Routes.LANDING_PAGE} />;
   }
 
   const showDropOffTimes = (selectedDayPart: string) => {
     const timeSlot = getTimeSlot(selectedDayPart);
     setShowTimeSlots(timeSlot);
+
 
     // render person icons using setIcons
   };

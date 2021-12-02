@@ -20,7 +20,6 @@ interface RadioSelectGroupProps {
   values: string[];
   label: string;
   helperText?: string;
-  helperText2?: string;
   icons: number[];
   isRequired: boolean;
   onChange: (arg0: any) => void;
@@ -88,7 +87,6 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
     values,
     label,
     helperText,
-    helperText2,
     icons,
     isRequired,
     onChange,
