@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React, { useReducer, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import Account from "./components/pages/Account";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
@@ -59,6 +60,7 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
+                <Route exact path={Routes.ACCOUNT_PAGE} component={Account} />
                 <Route
                   exact
                   path={Routes.VIEW_DONATIONS}

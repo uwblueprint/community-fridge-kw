@@ -12,16 +12,18 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link as ReactLink } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import {
+  ACCOUNT_PAGE,
   DASHBOARD_PAGE,
   LANDING_PAGE,
   LOGIN_PAGE,
 } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
+import { Role } from "../../types/AuthTypes";
 import { CloseIcon, MenuIcon } from "./icons";
 
 const Header = (): JSX.Element => {
@@ -75,7 +77,7 @@ const Header = (): JSX.Element => {
               <Link as={ReactLink} to={DASHBOARD_PAGE}>
                 Scheduled Donations
               </Link>
-              <Link as={ReactLink} to={LANDING_PAGE}>
+              <Link as={ReactLink} to={ACCOUNT_PAGE}>
                 {/* update link to account page */}
                 My Account
               </Link>
@@ -127,8 +129,7 @@ const Header = (): JSX.Element => {
                   <Link as={ReactLink} to={DASHBOARD_PAGE} onClick={onClose}>
                     Scheduled Donations
                   </Link>
-                  <Link as={ReactLink} to={LANDING_PAGE} onClick={onClose}>
-                    {/* update link to account page */}
+                  <Link as={ReactLink} to={ACCOUNT_PAGE} onClick={onClose}>
                     My Account
                   </Link>
                   <Button
