@@ -78,7 +78,6 @@ const Header = (): JSX.Element => {
                 Scheduled Donations
               </Link>
               <Link as={ReactLink} to={ACCOUNT_PAGE}>
-                {/* update link to account page */}
                 My Account
               </Link>
               <Button
