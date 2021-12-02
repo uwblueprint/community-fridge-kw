@@ -53,14 +53,16 @@ const VolunteerInformation = ({
       return volunteerNeeded ? "Yes" : "No";
     }
     return "";
-  }
+  };
 
   const isPickupRadioValue = () => {
     if (isPickup !== null) {
-      return isPickup ? volunteerAssistanceValues[0] : volunteerAssistanceValues[1];
+      return isPickup
+        ? volunteerAssistanceValues[0]
+        : volunteerAssistanceValues[1];
     }
     return "";
-  }
+  };
 
   return (
     <Container p="30px">
@@ -96,40 +98,42 @@ const VolunteerInformation = ({
           handleChange(e === "Yes", "volunteerNeeded");
         }}
       />
-      {volunteerNeeded &&
+      {volunteerNeeded && (
         <>
-        <RadioSelectGroup
-          name="is-pickup"
-          label="What do you require volunteer assistance for?"
-          value={isPickupRadioValue()}
-          values={volunteerAssistanceValues}
-          isRequired
-          onChange={(e: string) => {
-            handleChange(e === volunteerAssistanceValues[0], "isPickup");
-          }}
-        />
-        {isPickup &&
+          <RadioSelectGroup
+            name="is-pickup"
+            label="What do you require volunteer assistance for?"
+            value={isPickupRadioValue()}
+            values={volunteerAssistanceValues}
+            isRequired
+            onChange={(e: string) => {
+              handleChange(e === volunteerAssistanceValues[0], "isPickup");
+            }}
+          />
+          {isPickup && (
+            <FormControl isRequired m="3em 0">
+              <FormLabel>Pickup location:</FormLabel>
+              <Input
+                value={pickupLocation}
+                onChange={(e) => handleChange(e.target.value, "pickupLocation")}
+                placeholder="Enter location"
+                size="lg"
+              />
+            </FormControl>
+          )}
           <FormControl isRequired m="3em 0">
-            <FormLabel>Pickup location:</FormLabel>
+            <FormLabel>
+              What is the specific time you require assistance?
+            </FormLabel>
             <Input
-              value={pickupLocation}
-              onChange={(e) => handleChange(e.target.value, "pickupLocation")}
-              placeholder="Enter location"
+              value={volunteerTime}
+              onChange={(e) => handleChange(e.target.value, "volunteerTime")}
+              placeholder="Enter time"
               size="lg"
             />
           </FormControl>
-        }
-        <FormControl isRequired m="3em 0">
-          <FormLabel>What is the specific time you require assistance?</FormLabel>
-          <Input
-            value={volunteerTime}
-            onChange={(e) => handleChange(e.target.value, "volunteerTime")}
-            placeholder="Enter time"
-            size="lg"
-          />
-        </FormControl>
         </>
-      }
+      )}
       <FormControl m="3em 0">
         <FormLabel>Additional notes</FormLabel>
         <FormHelperText mb="1em">

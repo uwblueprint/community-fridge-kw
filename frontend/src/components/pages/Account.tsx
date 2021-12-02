@@ -10,32 +10,29 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  DASHBOARD_PAGE,
-} from "../../constants/Routes";
-import { Role } from "../../types/AuthTypes";
-import AuthContext from "../../contexts/AuthContext";
+
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
+import { DASHBOARD_PAGE } from "../../constants/Routes";
+import AuthContext from "../../contexts/AuthContext";
+import { Role } from "../../types/AuthTypes";
 
 const Account = (): JSX.Element => {
   const history = useHistory();
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
-  const [ businessName, setBusinessName ] = useState("");
+  const [businessName, setBusinessName] = useState("");
 
   const navigateToDashboard = () => {
     history.push(DASHBOARD_PAGE);
-  }
+  };
 
   React.useEffect(() => {
     if (!authenticatedUser) {
       return;
     }
     const getDonor = async () => {
-      const donor = await DonorAPIClient.getDonorByUserId(
-        authenticatedUser.id,
-      );
+      const donor = await DonorAPIClient.getDonorByUserId(authenticatedUser.id);
       setBusinessName(donor.businessName);
-    }
+    };
     getDonor();
   }, [authenticatedUser]);
 
@@ -61,14 +58,19 @@ const Account = (): JSX.Element => {
               name="businessName"
               placeholder="Enter name of business"
               variant="unstyled"
-              size='sm'
+              size="sm"
             />
           </Box>
-          <Text mt="2rem" mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
+          <Text
+            mt="2rem"
+            mb="1em"
+            textStyle="mobileBodyBold"
+            color="hubbard.100"
+          >
             Point of Contact
           </Text>
           <HStack>
-          <Box>
+            <Box>
               <Text>First name</Text>
               <Input
                 mt="2"
@@ -76,7 +78,7 @@ const Account = (): JSX.Element => {
                 name="firstName"
                 placeholder="Enter first name"
                 variant="unstyled"
-                size='sm'
+                size="sm"
               />
             </Box>
             <Box mt="1rem">
@@ -87,7 +89,7 @@ const Account = (): JSX.Element => {
                 name="lastName"
                 placeholder="Enter last name"
                 variant="unstyled"
-                size='sm'
+                size="sm"
               />
             </Box>
           </HStack>
@@ -100,7 +102,7 @@ const Account = (): JSX.Element => {
               name="phoneNumber"
               placeholder="Enter phone number"
               variant="unstyled"
-              size='sm'
+              size="sm"
             />
           </Box>
           <Box mt="1rem">
@@ -111,7 +113,7 @@ const Account = (): JSX.Element => {
               value="email"
               placeholder="Enter email"
               variant="unstyled"
-              size='sm'
+              size="sm"
             />
           </Box>
           <Box mt="1rem">

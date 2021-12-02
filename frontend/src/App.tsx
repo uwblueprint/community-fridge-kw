@@ -2,12 +2,12 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React, { useReducer, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import Account from "./components/pages/Account";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
+import Account from "./components/pages/Account";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import Default from "./components/pages/Default";
