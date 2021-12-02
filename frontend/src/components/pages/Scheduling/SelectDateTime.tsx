@@ -7,7 +7,6 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
-import { da } from "date-fns/locale";
 import moment from "moment";
 import React, { useContext, useState } from "react";
 import { Calendar, DateObject } from "react-multi-date-picker";
@@ -117,9 +116,10 @@ const SelectDateTime = ({
   const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(
     getTimeSlot(dayPart),
   );
+  const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
-    frequency === "One time donation",
+    frequency === "One time donation" || frequency === "",
   );
   const [recurringEndDate, setRecurringEndDate] = useState<string>(
     recurringDonationEndDate
@@ -161,8 +161,6 @@ const SelectDateTime = ({
     });
     return iconsPerTimeSlot;
   };
-
-  const [icons, setIcons] = useState<number[]>(getIconsPerTimeSlot(dayPart, date));
 
   const showDropOffTimes = (selectedDayPart: string, selectedDate: Date) => {
     const timeSlot = getTimeSlot(selectedDayPart);
@@ -229,7 +227,6 @@ const SelectDateTime = ({
   ) => {
     setRecurringEndDate(e.toString());
     const recurringDate = new Date(e.toString());
-    console.log("recurringDate", recurringDate);
     setForm({
       target: {
         name: "recurringDonationEndDate",

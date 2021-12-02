@@ -7,7 +7,6 @@ import {
   Spacer,
   Text,
   useMediaQuery,
-  VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
@@ -44,7 +43,9 @@ const ViewDonations = (): React.ReactElement => {
   };
 
   return (
-    <Container pt="1.5rem" maxWidth={{ base: "default", md: "70%" }}
+    <Container
+      pt="1.5rem"
+      maxWidth={{ base: "default", md: "70%" }}
       px={isMobile ? "2rem" : "1rem"}
     >
       <Flex
@@ -93,7 +94,8 @@ const ViewDonations = (): React.ReactElement => {
               onClick={() => {
                 changeDays(1);
               }}
-            ><ChevronRightIcon />
+            >
+              <ChevronRightIcon />
             </IconButton>
           </HStack>
         ) : (

@@ -87,7 +87,10 @@ const WeeklyEventItemPopUp = ({
             >
               <Flex width="100%" pl="1rem">
                 <VStack alignItems="start">
-                  <Text textStyle={isMobile ? "mobileBodyBold" : "desktopBodyBold"} py="0.5rem">
+                  <Text
+                    textStyle={isMobile ? "mobileBodyBold" : "desktopBodyBold"}
+                    py="0.5rem"
+                  >
                     {donor.businessName
                       ? donor.businessName
                       : `${donor.firstName} ${donor.lastName}`}
@@ -110,7 +113,10 @@ const WeeklyEventItemPopUp = ({
                     </Text>
                   </HStack>
                   {nextDropOff && (
-                    <Text textStyle={isMobile ? "mobileSmall" : "desktopSmall"} py="0.5rem">
+                    <Text
+                      textStyle={isMobile ? "mobileSmall" : "desktopSmall"}
+                      py="0.5rem"
+                    >
                       Next Dropoff:{" "}
                       {new Date(nextDropOff).toLocaleString(undefined, {
                         year: "numeric",
@@ -122,8 +128,9 @@ const WeeklyEventItemPopUp = ({
                   {isMobile && (
                     <Badge
                       color={`${(colorMap as any)[schedule!.frequency]}.100`}
-                      backgroundColor={`${(colorMap as any)[schedule!.frequency]
-                        }.200`}
+                      backgroundColor={`${
+                        (colorMap as any)[schedule!.frequency]
+                      }.200`}
                       borderRadius="0.5rem"
                       textStyle={isMobile ? "mobileSmall" : "desktopSmall"}
                       textAlign="center"
@@ -141,8 +148,9 @@ const WeeklyEventItemPopUp = ({
                 {!isMobile && (
                   <Badge
                     color={`${(colorMap as any)[schedule!.frequency]}.100`}
-                    backgroundColor={`${(colorMap as any)[schedule!.frequency]
-                      }.200`}
+                    backgroundColor={`${
+                      (colorMap as any)[schedule!.frequency]
+                    }.200`}
                     borderRadius="0.5rem"
                     textStyle={isMobile ? "mobileSmall" : "desktopSmall"}
                     textAlign="center"
