@@ -52,7 +52,7 @@ const ViewDonations = (): React.ReactElement => {
 
   return (
     <Container pt="1.5rem" maxWidth={{ base: "default", md: "70%" }}
-      px={isMobile ? "3rem" : "1rem"}
+      px={isMobile ? "2rem" : "1rem"}
     >
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
@@ -71,7 +71,7 @@ const ViewDonations = (): React.ReactElement => {
         </Text>
         {isMobile ? (
           <HStack py="1.2rem">
-            <Text textStyle="mobileHeader3">
+            <Text textStyle="mobileHeader4">
               {selectedDay?.toLocaleString(undefined, {
                 year: "numeric",
                 month: "long",
@@ -85,6 +85,23 @@ const ViewDonations = (): React.ReactElement => {
               }}
               render={<Icon />}
             />
+            <IconButton
+              backgroundColor="transparent"
+              aria-label="previous week"
+              onClick={() => {
+                changeWeek(-1);
+              }}
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+            <IconButton
+              backgroundColor="transparent"
+              aria-label="next week"
+              onClick={() => {
+                changeWeek(1);
+              }}
+            ><ChevronRightIcon />
+            </IconButton>
           </HStack>
         ) : (
           <Flex pt="4rem" width="72rem">
