@@ -1,19 +1,19 @@
 import { format } from "date-fns";
 import React from "react";
 
-import { Schedule } from "../../types/SchedulingTypes";
-import { WeeklyBody, WeeklyCalendar } from "../common/WeeklyCalendar";
-import DefaultWeeklyEventItem from "../common/WeeklyEventItems";
+import { Schedule } from "../../../types/SchedulingTypes";
+import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
+import DefaultWeeklyEventItem from "./WeeklyEventItems";
 
-type AdminCalendarProps = {
+type CalendarProps = {
   selectedDay: Date;
   schedules: Schedule[];
 };
 
-const AdminCalendar = ({
+const Calendar = ({
   selectedDay,
   schedules,
-}: AdminCalendarProps): React.ReactElement => {
+}: CalendarProps): React.ReactElement => {
   return (
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
@@ -35,4 +35,4 @@ const AdminCalendar = ({
   );
 };
 
-export default AdminCalendar;
+export default Calendar;

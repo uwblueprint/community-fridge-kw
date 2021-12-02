@@ -20,10 +20,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
-import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
-import { colorMap, convertTime } from "../../constants/DaysInWeek";
-import { DonorResponse } from "../../types/DonorTypes";
-import { Schedule } from "../../types/SchedulingTypes";
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import { colorMap, convertTime } from "../../../constants/DaysInWeek";
+import { DonorResponse } from "../../../types/DonorTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
 
 type WeeklyEventItemPopUpProps = {
   isOpen: boolean;

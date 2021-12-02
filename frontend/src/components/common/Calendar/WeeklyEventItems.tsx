@@ -9,10 +9,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
-import DonorAPIClient from "../../APIClients/DonorAPIClient";
-import { colorMap, convertTime } from "../../constants/DaysInWeek";
-import { DonorResponse } from "../../types/DonorTypes";
-import { Schedule } from "../../types/SchedulingTypes";
+import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import { colorMap, convertTime } from "../../../constants/DaysInWeek";
+import { DonorResponse } from "../../../types/DonorTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
 import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
 
 type DefaultWeeklyEventItemProps = {
@@ -43,12 +43,13 @@ const DefaultWeeklyEventItem = ({
     <>
       {donor && (
         <>
-          <Box
+          <Container
             color="#FAFCFE"
             borderWidth="0.05rem"
             borderRadius="0.5rem"
             borderColor="#D8DDE0"
             alignItems="center"
+            centerContent
             py={isMobile ? "1.25rem" : "1.5rem"}
             px={isMobile ? "0.5rem" : "2rem"}
             onClick={onOpen}
@@ -60,18 +61,16 @@ const DefaultWeeklyEventItem = ({
               {convertTime(schedule!.startTime)} -{" "}
               {convertTime(schedule!.endTime)}
             </Text>
-            <Center>
-              <Badge
-                color={`${(colorMap as any)[schedule!.frequency]}.100`}
-                backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
-                textStyle="desktopSmall"
-                py="0.5rem"
-                ph="1rem"
-              >
-                {schedule!.frequency}
-              </Badge>
-            </Center>
-          </Box>
+            <Badge
+              color={`${(colorMap as any)[schedule!.frequency]}.100`}
+              backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
+              textStyle="desktopSmall"
+              py="0.5rem"
+              ph="1rem"
+            >
+              {schedule!.frequency}
+            </Badge>
+          </Container>
 
           <WeeklyEventItemPopUp
             isOpen={isOpen}

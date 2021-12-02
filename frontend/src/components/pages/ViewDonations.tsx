@@ -22,7 +22,7 @@ import Icon from "react-multi-date-picker/components/icon";
 
 import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
 import { Schedule } from "../../types/SchedulingTypes";
-import AdminCalendar from "./AdminCalendar";
+import Calendar from "../common/Calendar/Calendar";
 
 const ViewDonations = (): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
@@ -143,7 +143,7 @@ const ViewDonations = (): React.ReactElement => {
             </IconButton>
           </Flex>
         )}
-        <AdminCalendar
+        <Calendar
           key={selectedDay?.toString()}
           selectedDay={selectedDay as Date}
           schedules={schedules}

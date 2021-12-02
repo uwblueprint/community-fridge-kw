@@ -2,8 +2,8 @@ import { Grid, HStack, Text, useMediaQuery, VStack } from "@chakra-ui/react";
 import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
-import daysInWeek from "../../constants/DaysInWeek";
-import { Schedule } from "../../types/SchedulingTypes";
+import daysInWeek from "../../../constants/DaysInWeek";
+import { Schedule } from "../../../types/SchedulingTypes";
 
 type State = {
   week: Date;
