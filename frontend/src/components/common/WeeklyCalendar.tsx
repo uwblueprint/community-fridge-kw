@@ -87,10 +87,6 @@ export function WeeklyBody<EventItem>({
   const { locale, week } = useWeeklyCalendar();
   const daysToRender = daysInWeek({ locale });
 
-  useEffect(() => {
-    console.log(isMobile);
-  }, []);
-
   return (
     <>
       {isMobile ? (

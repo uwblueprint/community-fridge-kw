@@ -68,9 +68,7 @@ const DefaultWeeklyEventItem = ({
                 py="0.5rem"
                 ph="1rem"
               >
-                Frequency
-                {/* {""} */}
-                {/* {schedule!.frequency}{" "} */}
+                {schedule!.frequency}
               </Badge>
             </Center>
           </Box>

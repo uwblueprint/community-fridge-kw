@@ -42,7 +42,7 @@ const ViewDonations = (): React.ReactElement => {
     getSchedules();
   }, []);
 
-  const changeWeek = (days: number) => {
+  const changeDays = (days: number) => {
     setTest(test + 1); // need this for some reason
 
     const newDate: Date = selectedDay as Date;
@@ -89,7 +89,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="previous week"
               onClick={() => {
-                changeWeek(-1);
+                changeDays(-1);
               }}
             >
               <ChevronLeftIcon />
@@ -98,7 +98,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="next week"
               onClick={() => {
-                changeWeek(1);
+                changeDays(1);
               }}
             ><ChevronRightIcon />
             </IconButton>
@@ -127,7 +127,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="previous week"
               onClick={() => {
-                changeWeek(-7);
+                changeDays(-7);
               }}
             >
               <ChevronLeftIcon />
@@ -136,7 +136,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="next week"
               onClick={() => {
-                changeWeek(7);
+                changeDays(7);
               }}
             >
               <ChevronRightIcon />
