@@ -123,6 +123,11 @@ const SelectDateTime = ({
   const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
     frequency === "One time donation",
   );
+  const [recurringEndDate, setRecurringEndDate] = useState<string>(
+    recurringDonationEndDate
+      ? moment(recurringDonationEndDate).format("MM/DD/YYYY")
+      : "",
+  );
 
   // fetch schedules
   React.useEffect(() => {
@@ -140,7 +145,6 @@ const SelectDateTime = ({
   const showDropOffTimes = (selectedDayPart: string) => {
     const timeSlot = getTimeSlot(selectedDayPart);
     setShowTimeSlots(timeSlot);
-
 
     // render person icons using setIcons
   };
@@ -196,6 +200,20 @@ const SelectDateTime = ({
     });
     selectedDateObj.setHours(new Date(endTime).getHours());
     setForm({ target: { name: "endTime", value: selectedDateObj.toString() } });
+  };
+
+  const handleChangeRecurringDate = (
+    e: React.ChangeEvent<HTMLInputElement> | string,
+  ) => {
+    setRecurringEndDate(e.toString());
+    const recurringDate = new Date(e.toString());
+    console.log("recurringDate", recurringDate);
+    setForm({
+      target: {
+        name: "recurringDonationEndDate",
+        value: recurringDate.toString(),
+      },
+    });
   };
 
   return (
@@ -257,10 +275,8 @@ const SelectDateTime = ({
         <FormControl isRequired mb="3em">
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
           <Input
-            value={recurringDonationEndDate}
-            onChange={(e) =>
-              handleChange(e.target.value, "recurringDonationEndDate")
-            }
+            value={recurringEndDate}
+            onChange={(e) => handleChangeRecurringDate(e.target.value)}
             placeholder="MM/DD/YYYY"
           />
         </FormControl>
