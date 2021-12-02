@@ -1,4 +1,4 @@
-import { Button, Container, Text } from "@chakra-ui/react";
+import { Box, Button, Container, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 
@@ -42,7 +42,7 @@ const Dashboard = (): JSX.Element => {
   }
 
   return (
-    <Container pl="42px" pr="42px" pt="73px">
+    <Container maxWidth={{ base: "default", md: "70%" }} pt="73px">
       <Text color="black.100" textStyle="mobileHeader1">
         Welcome {authenticatedUser?.firstName}!
       </Text>
@@ -52,25 +52,28 @@ const Dashboard = (): JSX.Element => {
       <Button
         mt="1.5rem"
         size="lg"
+        width={{ lg: "30%", base: "100%" }}
         variant="navigation"
         onClick={() => history.push(Routes.SCHEDULING_PAGE)}
       >
         Schedule new donation
       </Button>
-      <Text mt="3rem" textStyle="mobileHeader1">
+      <Text mt="4rem" textStyle="mobileHeader1">
         Upcoming Dropoffs
       </Text>
-      <Text pt="0.8rem" textStyle="mobileBody" mb="0.8rem">
+      <Text pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
         View all of the upcoming donations that you have scheduled{" "}
       </Text>
-      {schedules.length > 0 &&
-        schedules.map((scheduleObject: Schedule, id) => (
-          <DropoffCard
-            key={id}
-            schedule={scheduleObject!}
-            onDelete={() => deleteSchedule(scheduleObject!.id)}
-          />
-        ))}
+      <Container centerContent>
+        {schedules.length > 0 &&
+          schedules.map((scheduleObject: Schedule, id) => (
+            <DropoffCard
+              key={id}
+              schedule={scheduleObject!}
+              onDelete={() => deleteSchedule(scheduleObject!.id)}
+            />
+          ))}
+      </Container>
     </Container>
   );
 };

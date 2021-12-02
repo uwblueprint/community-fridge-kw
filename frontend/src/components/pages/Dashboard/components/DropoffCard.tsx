@@ -34,7 +34,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
 
   return (
     <Box
-      maxW="sm"
+      width="fit-content"
       mb="24px"
       border="1px solid"
       borderColor="hubbard.100"
@@ -92,23 +92,22 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
         </HStack>
         <HStack>
           <TimeIcon color="black.100" />
-          <Text textStyle="mobileCardDescription">Time: </Text>
-          <Text textStyle="mobileSmall">{startTime}</Text>
+          <Text textStyle="mobileBodyBold">Time: </Text>
+          <Text textStyle="mobileBody">{startTime}</Text>
         </HStack>
-        <HStack mb="16px">
+        <HStack>
           <StarIcon color="black.100" />
-          <Text textStyle="mobileCardDescription">Volunteers Requested: </Text>
-          <Text textStyle="mobileSmall">
+          <Text textStyle="mobileBodyBold">Volunteers Requested: </Text>
+          <Text textStyle="mobileBody">
             {schedule.volunteerNeeded ? "Yes" : "No"}
           </Text>
         </HStack>
         {schedule.frequency && (
           <Badge
             borderRadius="8px"
-            pt="6px"
-            pb="6px"
-            pl="14px"
-            pr="14px"
+            py="6px"
+            px="14px"
+            mt="16px"
             color={`${(colorMap as any)[schedule.frequency]}.100`}
             backgroundColor={`${(colorMap as any)[schedule.frequency]}.50`}
           >
