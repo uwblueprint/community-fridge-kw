@@ -11,7 +11,7 @@ const Home = (): JSX.Element => {
 
   return (
     <>
-      <Container centerContent pl="42px" pr="42px" pt="73px">
+      <Container maxWidth={{ base: "default", md: "70%" }} px="42px" pt="73px">
         <Image
           src="drawer-logo.png"
           alt="Community Fridge logo"
@@ -19,6 +19,7 @@ const Home = (): JSX.Element => {
           marginRight="50%"
           maxWidth="145px"
           maxHeight="145px"
+          display={{ base: "inline", md: "none" }}
         />
         <Text align="left" marginBottom="13px" textStyle="mobileHeader1">
           Welcome to Community Fridge KW
