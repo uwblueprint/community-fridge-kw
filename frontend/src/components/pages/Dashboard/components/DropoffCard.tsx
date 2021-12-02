@@ -36,6 +36,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
     <Box
       width="100%"
       mb="24px"
+      mr="24px"
       border="1px solid"
       borderColor="hubbard.100"
       borderRadius="8px"
