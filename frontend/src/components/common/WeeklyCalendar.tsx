@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from "@chakra-ui/react";
+import { Grid, HStack, Text, useMediaQuery, VStack } from "@chakra-ui/react";
 import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
@@ -73,47 +73,78 @@ type RenderItemProps<EventItem> = {
 };
 
 type WeeklyBodyProps<EventItem> = {
+  selectedDay: Date;
   schedules: Schedule[];
   renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
 };
 
 export function WeeklyBody<EventItem>({
+  selectedDay,
   schedules,
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
-  const { selectedDay } = useWeeklyCalendar();
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const { locale, week } = useWeeklyCalendar();
   const daysToRender = daysInWeek({ locale });
 
+  useEffect(() => {
+    console.log(isMobile);
+  }, []);
+
   return (
-    <HStack align="stretch">
-      {daysToRender.map((day) => (
-        <div key={day.day}>
-          <VStack width="10rem">
-            <DayButton day={day} />
-            {schedules.map((schedule) => {
-              const currentDate = setDay(week, day.day, { locale });
-              const scheduledDate = new Date(schedule?.startTime as string);
+    <>
+      {isMobile ? (
+        <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+          {schedules.map((schedule) => {
+            const scheduledDate = new Date(schedule?.startTime as string);
 
-              if (
-                schedule === null ||
-                scheduledDate === null ||
-                scheduledDate.getDate() !== currentDate.getDate() ||
-                scheduledDate.getMonth() !== currentDate.getMonth() ||
-                scheduledDate.getFullYear() !== currentDate.getFullYear()
-              ) {
-                return null;
-              }
+            if (
+              schedule === null ||
+              scheduledDate === null ||
+              scheduledDate.getDate() !== selectedDay!.getDate() ||
+              scheduledDate.getMonth() !== selectedDay!.getMonth() ||
+              scheduledDate.getFullYear() !== selectedDay!.getFullYear()
+            ) {
+              return null;
+            }
 
-              return renderItem({
-                schedule,
-                showingFullWeek: selectedDay === undefined,
-              });
-            })}
-          </VStack>
-        </div>
-      ))}
-    </HStack>
+            return renderItem({
+              schedule,
+              showingFullWeek: selectedDay === undefined,
+            });
+          })}
+        </Grid>
+      ) : (
+        <HStack align="stretch">
+          {daysToRender.map((day) => (
+            <div key={day.day}>
+              <VStack width="10rem">
+                <DayButton day={day} />
+                {schedules.map((schedule) => {
+                  const currentDate = setDay(week, day.day, { locale });
+                  const scheduledDate = new Date(schedule?.startTime as string);
+
+                  if (
+                    schedule === null ||
+                    scheduledDate === null ||
+                    scheduledDate.getDate() !== currentDate.getDate() ||
+                    scheduledDate.getMonth() !== currentDate.getMonth() ||
+                    scheduledDate.getFullYear() !== currentDate.getFullYear()
+                  ) {
+                    return null;
+                  }
+
+                  return renderItem({
+                    schedule,
+                    showingFullWeek: selectedDay === undefined,
+                  });
+                })}
+              </VStack>
+            </div>
+          ))}
+        </HStack>
+      )}
+    </>
   );
 }
 

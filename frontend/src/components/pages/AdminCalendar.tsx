@@ -17,6 +17,7 @@ const AdminCalendar = ({
   return (
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
+        selectedDay={selectedDay}
         schedules={schedules}
         renderItem={({ schedule, showingFullWeek }) => (
           <DefaultWeeklyEventItem

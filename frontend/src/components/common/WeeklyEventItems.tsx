@@ -1,8 +1,11 @@
 import {
   Badge,
+  Box,
+  Center,
   Container,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
@@ -21,6 +24,7 @@ const DefaultWeeklyEventItem = ({
   schedule,
   date,
 }: DefaultWeeklyEventItemProps) => {
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [donor, setDonor] = useState<DonorResponse>();
 
@@ -39,15 +43,14 @@ const DefaultWeeklyEventItem = ({
     <>
       {donor && (
         <>
-          <Container
+          <Box
             color="#FAFCFE"
             borderWidth="0.05rem"
             borderRadius="0.5rem"
             borderColor="#D8DDE0"
             alignItems="center"
-            centerContent
-            py="1.5rem"
-            px="2rem"
+            py={isMobile ? "1.25rem" : "1.5rem"}
+            px={isMobile ? "0.5rem" : "2rem"}
             onClick={onOpen}
           >
             <Text textAlign="center" textStyle="desktopBodyBold" mb="0.5rem">
@@ -57,17 +60,20 @@ const DefaultWeeklyEventItem = ({
               {convertTime(schedule!.startTime)} -{" "}
               {convertTime(schedule!.endTime)}
             </Text>
-            <Badge
-              color={`${(colorMap as any)[schedule!.frequency]}.100`}
-              backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
-              textStyle="desktopSmall"
-              py="0.5rem"
-              ph="1rem"
-            >
-              {" "}
-              {schedule!.frequency}{" "}
-            </Badge>
-          </Container>
+            <Center>
+              <Badge
+                color={`${(colorMap as any)[schedule!.frequency]}.100`}
+                backgroundColor={`${(colorMap as any)[schedule!.frequency]}.200`}
+                textStyle="desktopSmall"
+                py="0.5rem"
+                ph="1rem"
+              >
+                Frequency
+                {/* {""} */}
+                {/* {schedule!.frequency}{" "} */}
+              </Badge>
+            </Center>
+          </Box>
 
           <WeeklyEventItemPopUp
             isOpen={isOpen}
