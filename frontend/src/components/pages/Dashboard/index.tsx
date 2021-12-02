@@ -64,7 +64,7 @@ const Dashboard = (): JSX.Element => {
       <Text pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
         View all of the upcoming donations that you have scheduled{" "}
       </Text>
-      <Box display={{ lg: "flex" }} flexDirection="row">
+      <Box display={{ lg: "flex" }} flexDirection="row" flexWrap="wrap">
         {schedules.length > 0 &&
           schedules.map((scheduleObject: Schedule, id) => (
             <DropoffCard
