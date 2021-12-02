@@ -114,11 +114,11 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   return (
     <FormControl isRequired={isRequired} m="2em 0">
       <FormLabel fontWeight="600">{label}</FormLabel>
-      <FormHelperText fontSize="16px" color="black" mb="20px">
+      <FormHelperText fontSize="16px" color="black.100" mb="20px">
         {helperText}
       </FormHelperText>
       {name === "timeRanges" && (
-        <FormHelperText fontSize="14px" color="black" mb="20px">
+        <FormHelperText fontSize="14px" color="black.100" mb="20px">
           <span>
             Each{" "}
             <Img
