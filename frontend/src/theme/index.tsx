@@ -117,7 +117,7 @@ const customTheme = extendTheme({
       fontSize: "16px",
       lineHeight: "24px",
       color: "black",
-    }
+    },
   },
   colors: {
     raddish: {
