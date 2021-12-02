@@ -103,8 +103,7 @@ const SelectDateTime = ({
     }
   };
 
-  const get12HTimeString = (type: "start" | "end") => {
-    const time = type === "start" ? startTime : endTime;
+  const get12HTimeString = (time: string) => {
     const time24Hour = `${new Date(time).getHours().toString()}:00`;
     return moment(time24Hour, "HH:mm").format("h:mm A");
   };
@@ -112,7 +111,7 @@ const SelectDateTime = ({
   // setting state initial values
   const [date, setDate] = useState<Date>(new Date(startTime));
   const [timeRange, setTimeRange] = useState(
-    `${get12HTimeString("start")} - ${get12HTimeString("end")}`,
+    `${get12HTimeString(startTime)} - ${get12HTimeString(endTime)}`,
   );
   const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(
     getTimeSlot(dayPart),
@@ -142,11 +141,32 @@ const SelectDateTime = ({
     return <Redirect to={Routes.LANDING_PAGE} />;
   }
 
-  const showDropOffTimes = (selectedDayPart: string) => {
+  const getIconsPerTimeSlot = (selectedDayPart: string, selectedDate: Date) => {
+    const iconsPerTimeSlot = [0, 0, 0, 0, 0] as number[];
+    schedules.forEach((schedule) => {
+      if (schedule) {
+        if (new Date(schedule.startTime).getDate() === selectedDate.getDate()) {
+          if (schedule.dayPart === selectedDayPart) {
+            const timeSlots = getTimeSlot(schedule.dayPart);
+            if (timeSlots) {
+              timeSlots.forEach((timeSlot, i) => {
+                const start = timeSlot.split(" - ")[0];
+                if (get12HTimeString(schedule.startTime) === start) {
+                  iconsPerTimeSlot[i] += 1;
+                }
+              });
+            }
+          }
+        }
+      }
+    });
+    return iconsPerTimeSlot;
+  };
+
+  const showDropOffTimes = (selectedDayPart: string, selectedDate: Date) => {
     const timeSlot = getTimeSlot(selectedDayPart);
     setShowTimeSlots(timeSlot);
-
-    // render person icons using setIcons
+    setIcons(getIconsPerTimeSlot(selectedDayPart, selectedDate));
   };
 
   const handleChange = (
@@ -155,7 +175,7 @@ const SelectDateTime = ({
   ) => {
     setForm({ target: { name, value: e } });
     if (name === "dayPart") {
-      showDropOffTimes(e.toString());
+      showDropOffTimes(e.toString(), date);
     } else if (name === "frequency") {
       const val = e.toString();
       if (val === "One time donation") {
@@ -200,6 +220,7 @@ const SelectDateTime = ({
     });
     selectedDateObj.setHours(new Date(endTime).getHours());
     setForm({ target: { name: "endTime", value: selectedDateObj.toString() } });
+    if (dayPart) showDropOffTimes(dayPart, date);
   };
 
   const handleChangeRecurringDate = (
