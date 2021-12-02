@@ -1,15 +1,18 @@
 import {
   Badge,
+  Box,
+  Center,
   Container,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
-import DonorAPIClient from "../../APIClients/DonorAPIClient";
-import { colorMap, convertTime } from "../../constants/DaysInWeek";
-import { DonorResponse } from "../../types/DonorTypes";
-import { Schedule } from "../../types/SchedulingTypes";
+import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import { colorMap, convertTime } from "../../../constants/DaysInWeek";
+import { DonorResponse } from "../../../types/DonorTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
 import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
 
 type DefaultWeeklyEventItemProps = {
@@ -21,6 +24,7 @@ const DefaultWeeklyEventItem = ({
   schedule,
   date,
 }: DefaultWeeklyEventItemProps) => {
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [donor, setDonor] = useState<DonorResponse>();
 
@@ -46,8 +50,8 @@ const DefaultWeeklyEventItem = ({
             borderColor="#D8DDE0"
             alignItems="center"
             centerContent
-            py="1.5rem"
-            px="2rem"
+            py={isMobile ? "1.25rem" : "1.5rem"}
+            px={isMobile ? "0.5rem" : "2rem"}
             onClick={onOpen}
           >
             <Text textAlign="center" textStyle="desktopBodyBold" mb="0.5rem">
@@ -64,8 +68,7 @@ const DefaultWeeklyEventItem = ({
               py="0.5rem"
               ph="1rem"
             >
-              {" "}
-              {schedule!.frequency}{" "}
+              {schedule!.frequency}
             </Badge>
           </Container>
 
