@@ -11,7 +11,6 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import React from "react";
-import { useHistory } from "react-router-dom";
 
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
@@ -21,10 +20,9 @@ const VolunteerInformation = ({
   formValues,
   setForm,
   navigation,
-  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const history = useHistory();
+
   const {
     startTime,
     endTime,
@@ -92,6 +90,7 @@ const VolunteerInformation = ({
         label="Do you require a volunteer?"
         value={volunteerNeededRadioValue()}
         values={volunteerNeededValues}
+        icons={[]}
         isRequired
         helperText={volunteerRequiredHelperText}
         onChange={(e: string) => {
@@ -105,6 +104,7 @@ const VolunteerInformation = ({
             label="What do you require volunteer assistance for?"
             value={isPickupRadioValue()}
             values={volunteerAssistanceValues}
+            icons={[]}
             isRequired
             onChange={(e: string) => {
               handleChange(e === volunteerAssistanceValues[0], "isPickup");
