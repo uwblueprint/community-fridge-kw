@@ -120,18 +120,6 @@ const customTheme = extendTheme({
     }
   },
   colors: {
-    squash: {
-      100: "#FAFCFE",
-    },
-    black: {
-      100: "#171717",
-    },
-    gray: {
-      100: "#C4C4C4",
-    },
-    green: {
-      100: "#48BB78",
-    },
     raddish: {
       50: "#ffe5f9",
       100: "#C31887",
@@ -144,23 +132,21 @@ const customTheme = extendTheme({
       800: "#470330",
       900: "#1d0013",
     },
-    orange: {
-      100: "#FC964C",
+    black: {
+      // colorScheme prop requires a full range of colours in Chakra
+      50: "#EDF2F7",
+      100: "#171717",
+      200: "#E2E8F0",
+      300: "#CBD5E0",
+      400: "#A0AEC0",
+      500: "#171717",
+      600: "#171717",
+      700: "#2D3748",
+      800: "#1A202C",
+      900: "#171923",
     },
-    evergreen: {
-      100: "#007980",
-    },
-    mint: {
-      100: "#CBF7F0",
-    },
-    avocado: {
-      100: "#94D969",
-    },
-    tomato: {
-      100: "#D10000",
-    },
-    poison: {
-      100: "#0E0E2C",
+    squash: {
+      100: "#FAFCFE",
     },
     hubbard: {
       100: "#6C6C84",
@@ -168,30 +154,36 @@ const customTheme = extendTheme({
     dorian: {
       100: "#ECF1F4",
     },
-    water: {
-      100: "#C4DAD6",
+    tomato: {
+      100: "#D10000",
+    },
+    champagne: {
+      100: "#8D2569",
     },
     strawberry: {
       100: "#F0C5E1",
     },
-    turnip: {
-      100: "#BC577B",
-      200: "#FCEFF2",
-    },
-    onion: {
-      100: "#8557BC",
-      200: "#F5EFFC",
-    },
-    H2O: {
-      100: "#496DB6",
-      200: "#EFF6FC",
-    },
-    spinach: {
-      100: "#317C71",
-      200: "#EFFCF9",
-    },
     cottonCandy: {
       100: "#FDF5FA",
+    },
+    spinach: {
+      50: "#EFFCF9",
+      100: "#317C71",
+    },
+    h20: {
+      50: "#EFF6FC",
+      100: "#496DB6",
+    },
+    onion: {
+      50: "#F5EFFC",
+      100: "#8557BC",
+    },
+    turnip: {
+      50: "#FCEFF2",
+      100: "#BC577B",
+    },
+    gray: {
+      100: "#C4C4C4",
     },
   },
   breakpoints: {
