@@ -7,8 +7,9 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import moment from "moment";
 import React, { useContext, useState } from "react";
-import { Calendar } from "react-multi-date-picker";
+import { Calendar, DateObject } from "react-multi-date-picker";
 import { Redirect } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -35,12 +36,10 @@ const SelectDateTime = ({
   } = formValues;
   const { authenticatedUser } = useContext(AuthContext);
 
-  const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(true);
-
   enum DayParts {
     EARLY_MORNING = "Early Morning (12am - 6am)",
     MORNING = "Morning (6am - 11am)",
-    AFTERNOON = "Afternoon (11pm - 4pm)",
+    AFTERNOON = "Afternoon (11am - 4pm)",
     EVENING = "Evening (4pm - 9pm)",
     NIGHT = "Night (9pm - 12am)",
   }
@@ -105,13 +104,23 @@ const SelectDateTime = ({
     }
   };
 
-  const [timeRange, setTimeRange] = useState(`${startTime} - ${endTime}`);
+  const get12HTimeString = (type: "start" | "end") => {
+    const time = type === "start" ? startTime : endTime;
+    const time24Hour = `${new Date(time).getHours().toString()}:00`;
+    return moment(time24Hour, "HH:mm").format("h:mm A");
+  };
+
+  const [date, setDate] = useState<Date>(new Date(startTime));
+  const [timeRange, setTimeRange] = useState(
+    `${get12HTimeString("start")} - ${get12HTimeString("end")}`,
+  );
   const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(
     getTimeSlot(dayPart),
   );
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   // TODO: Need to edit this to update + calculate based on schedules pulled from backend
   const [icons, setIcons] = useState<number[]>([0, 0, 1, 0, 3]);
+  const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(true);
 
   React.useEffect(() => {
     const fetchSchedules = async () => {
@@ -128,15 +137,8 @@ const SelectDateTime = ({
   const showDropOffTimes = (selectedDayPart: string) => {
     const timeSlot = getTimeSlot(selectedDayPart);
     setShowTimeSlots(timeSlot);
-    console.log(schedules[0]?.endTime.toString());
 
-    // const d = new Date()
-    // console.log(d)
-    // schedules.forEach(schedule => {
-    //   const start = new Date(schedule?.startTime.toDa);
-    //   const end = schedule?.endTime;
-
-    // })
+    // render person icons using setIcons
   };
 
   const handleChange = (
@@ -161,8 +163,34 @@ const SelectDateTime = ({
     setTimeRange(e.toString());
     const timeRangeSelected = e.toString();
     const tokens = timeRangeSelected.split(" - ");
-    setForm({ target: { name: "startTime", value: tokens[0] } });
-    setForm({ target: { name: "endTime", value: tokens[1] } });
+    // converrt start and end time to 24h values
+    const convertedStartTime = moment(tokens[0], "hh:mm A").format("HH:mm");
+    const convertedEndTime = moment(tokens[1], "hh:mm A").format("HH:mm");
+
+    const newStartTime = new Date(`11/11/1970 ${convertedStartTime}`);
+    const newEndTime = new Date(`11/11/1970 ${convertedEndTime}`);
+    newStartTime.setDate(date.getDate());
+    newStartTime.setMonth(date.getMonth());
+    newStartTime.setFullYear(date.getFullYear());
+
+    newEndTime.setDate(date.getDate());
+    newEndTime.setMonth(date.getMonth());
+    newEndTime.setFullYear(date.getFullYear());
+
+    setForm({ target: { name: "startTime", value: newStartTime.toString() } });
+    setForm({ target: { name: "endTime", value: newEndTime.toString() } });
+  };
+
+  const handleDateSelect = (selectedDate: DateObject) => {
+    const selectedDateObj = selectedDate.toDate();
+
+    setDate(selectedDateObj);
+    selectedDateObj.setHours(new Date(startTime).getHours());
+    setForm({
+      target: { name: "startTime", value: selectedDateObj.toString() },
+    });
+    selectedDateObj.setHours(new Date(endTime).getHours());
+    setForm({ target: { name: "endTime", value: selectedDateObj.toString() } });
   };
 
   return (
@@ -179,6 +207,8 @@ const SelectDateTime = ({
           disableYearPicker
           shadow={false}
           minDate={new Date()}
+          value={date}
+          onChange={handleDateSelect}
         />
       </FormControl>
       <RadioSelectGroup

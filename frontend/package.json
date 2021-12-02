@@ -33,6 +33,7 @@
     "json-schema": "^0.3.0",
     "json2csv": "^5.0.6",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "react": "^17.0.1",

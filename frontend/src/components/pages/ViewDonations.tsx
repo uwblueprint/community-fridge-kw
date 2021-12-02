@@ -1,19 +1,11 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
-  CalendarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
   Container,
   Flex,
   HStack,
   IconButton,
   Spacer,
-  Stack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
