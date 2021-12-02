@@ -114,12 +114,24 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   return (
     <FormControl isRequired={isRequired} m="2em 0">
       <FormLabel fontWeight="600">{label}</FormLabel>
-      <FormHelperText fontSize="16px" color="black" marginBottom="20px">
+      <FormHelperText fontSize="16px" color="black" mb="20px">
         {helperText}
       </FormHelperText>
-      <FormHelperText fontSize="14px" color="black" marginBottom="20px">
-        {helperText2}
-      </FormHelperText>
+      {name === "timeRanges" && (
+        <FormHelperText fontSize="14px" color="black" mb="20px">
+          <span>
+            Each{" "}
+            <Img
+              src={personIcon}
+              alt="person icon"
+              width="15.75px"
+              display="inline"
+            />{" "}
+            represents an already signed up donor. Please try to choose a time
+            slot without a pre-existing donor.
+          </span>
+        </FormHelperText>
+      )}
       <VStack {...group}>{radioSelectButtons}</VStack>
     </FormControl>
   );

@@ -24,7 +24,6 @@ const SelectDateTime = ({
   formValues,
   setForm,
   navigation,
-  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
   const {
@@ -110,6 +109,7 @@ const SelectDateTime = ({
     return moment(time24Hour, "HH:mm").format("h:mm A");
   };
 
+  // setting state initial values
   const [date, setDate] = useState<Date>(new Date(startTime));
   const [timeRange, setTimeRange] = useState(
     `${get12HTimeString("start")} - ${get12HTimeString("end")}`,
@@ -122,6 +122,7 @@ const SelectDateTime = ({
   const [icons, setIcons] = useState<number[]>([0, 0, 1, 0, 3]);
   const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(true);
 
+  // fetch schedules
   React.useEffect(() => {
     const fetchSchedules = async () => {
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
@@ -163,7 +164,8 @@ const SelectDateTime = ({
     setTimeRange(e.toString());
     const timeRangeSelected = e.toString();
     const tokens = timeRangeSelected.split(" - ");
-    // converrt start and end time to 24h values
+
+    // convert start and end time to 24h values
     const convertedStartTime = moment(tokens[0], "hh:mm A").format("HH:mm");
     const convertedEndTime = moment(tokens[1], "hh:mm A").format("HH:mm");
 
@@ -227,7 +229,6 @@ const SelectDateTime = ({
           name="timeRanges"
           label="Select drop off time"
           helperText="From the options below, select your first choice."
-          helperText2="Each [] represents an already signed up donor. Please try to choose a time slot without a pre-existing donor. "
           value={timeRange}
           values={showTimeSlots}
           icons={icons}
