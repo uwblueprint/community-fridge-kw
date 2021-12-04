@@ -199,8 +199,9 @@ describe("pg schedulingService", () => {
 
     const res = await schedulingService.createScheduling(schedulingToCreate);
 
-    const schedulingDbRes: SchedulingDTO | null =
-      await schedulingService.getSchedulingById("1");
+    const schedulingDbRes: SchedulingDTO | null = await schedulingService.getSchedulingById(
+      "1",
+    );
     if (schedulingDbRes) {
       const keys = Object.keys(schedulingToCreate);
       keys.forEach((key) => {
