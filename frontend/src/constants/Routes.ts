@@ -6,8 +6,6 @@ export const SIGNUP_PAGE = "/signup";
 
 export const HOME_PAGE = "/home";
 
-export const VERIFICATION_PAGE = "/verify";
-
 export const SCHEDULING_PAGE = "/schedule";
 
 export const DASHBOARD_PAGE = "/dashboard";

@@ -3,15 +3,18 @@ import {
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   IconButton,
   Input,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 
-import { LOGIN_PAGE } from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
+import { LOGIN_PAGE, DASHBOARD_PAGE } from "../../../constants/Routes";
 import { CloseIcon } from "../../common/icons";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
@@ -28,7 +31,38 @@ const CreateAccount = ({
   const { next } = navigation;
   const history = useHistory();
   const { firstName, lastName, businessName, phoneNumber } = formData;
+  const { authenticatedUser } = useContext(AuthContext);
 
+  const [isDesktop] = useMediaQuery("(min-width: 768px)");
+
+  const [interaction, setInteraction] = React.useState({
+    businessName: false,
+    firstName: false,
+    lastName: false,
+    phoneNumber: false,
+  });
+
+  const checkValidation = () => {
+    if (!businessName) {
+      setInteraction({ ...interaction, businessName: true });
+    }
+    if (!firstName) {
+      setInteraction({ ...interaction, firstName: true });
+    }
+    if (!lastName) {
+      setInteraction({ ...interaction, lastName: true });
+    }
+    if (!phoneNumber) {
+      setInteraction({ ...interaction, phoneNumber: true });
+    }
+    if (businessName && firstName && lastName && phoneNumber) {
+      next();
+    }
+  };
+
+  if (authenticatedUser) {
+    return <Redirect to={DASHBOARD_PAGE} />;
+  }
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">
       <IconButton
@@ -37,66 +71,106 @@ const CreateAccount = ({
         onClick={() => history.push(LOGIN_PAGE)}
         backgroundColor="transparent"
       >
-        <CloseIcon color="#111111" />
+        {!isDesktop && <CloseIcon color="#111111" />}
       </IconButton>
       <Text mt="67px" textStyle="mobileHeader1">
         Create an account
       </Text>
       <Text textStyle="mobileSmall" color="hubbard.100">
-        Account information can be edited in the Account section of the
+        Account information can be edited in the My Account section of the
         platform.
       </Text>
-      <FormControl mt="2rem">
+
+      <FormControl mt="2rem" isRequired>
         <Box>
-          <Text textStyle="mobileBodyBold" color="hubbard.100">
+          <Text mb="0.5rem" textStyle="mobileBodyBold" color="hubbard.100">
             Organization
           </Text>
           <MandatoryInputDescription label="Name of Business" />
-          <Input
-            mt="2"
-            value={businessName}
-            onChange={setForm}
-            name="businessName"
-            placeholder="Enter name of business"
-          />
+          <FormControl isInvalid={!businessName && interaction.businessName}>
+            <Input
+              validate="Required"
+              mt="2"
+              value={businessName}
+              onChange={(e) => {
+                setForm(e);
+                setInteraction({ ...interaction, businessName: true });
+              }}
+              name="businessName"
+              placeholder="i.e. Lettuce Garden"
+            />
+            <FormErrorMessage>
+              Please enter the name of your business.
+            </FormErrorMessage>
+          </FormControl>
         </Box>
-        <Text mt="2rem" textStyle="mobileBodyBold" color="hubbard.100">
+
+        <Text
+          mt="2rem"
+          mb="0.5rem"
+          textStyle="mobileBodyBold"
+          color="hubbard.100"
+        >
           Point of Contact
         </Text>
         <Box>
-          <MandatoryInputDescription label="First Name" />
-          <Input
-            mt="2"
-            value={firstName}
-            onChange={setForm}
-            name="firstName"
-            placeholder="Enter first name"
-          />
+          <FormControl isInvalid={!firstName && interaction.firstName}>
+            <MandatoryInputDescription label="First Name" />
+            <Input
+              mt="2"
+              value={firstName}
+              onChange={(e) => {
+                setForm(e);
+                setInteraction({ ...interaction, firstName: true });
+              }}
+              name="firstName"
+              placeholder="i.e. Jane"
+            />
+            <FormErrorMessage>Please enter a first name.</FormErrorMessage>
+          </FormControl>
         </Box>
         <Box mt="1rem">
-          <MandatoryInputDescription label="Last Name" />
-
-          <Input
-            mt="2"
-            value={lastName}
-            onChange={setForm}
-            name="lastName"
-            placeholder="Enter last name"
-          />
+          <FormControl isInvalid={!lastName && interaction.lastName}>
+            <MandatoryInputDescription label="Last Name" />
+            <Input
+              mt="2"
+              value={lastName}
+              onChange={(e) => {
+                setForm(e);
+                setInteraction({ ...interaction, lastName: true });
+              }}
+              name="lastName"
+              placeholder="i.e. Doe"
+            />
+            <FormErrorMessage>Please enter a last name.</FormErrorMessage>
+          </FormControl>
         </Box>
         <Box mt="1rem">
-          <MandatoryInputDescription label="Phone Number" />
-          <Input
-            mt="2"
-            type="tel"
-            value={phoneNumber}
-            name="phoneNumber"
-            onChange={setForm}
-            placeholder="Enter phone number"
-          />
+          <FormControl isInvalid={!phoneNumber && interaction.phoneNumber}>
+            <MandatoryInputDescription label="Phone Number" />
+            <Input
+              mt="2"
+              type="tel"
+              value={phoneNumber}
+              name="phoneNumber"
+              onChange={(e) => {
+                setForm(e);
+                setInteraction({ ...interaction, phoneNumber: true });
+              }}
+              placeholder="i.e. 999-999-999"
+            />
+            <FormErrorMessage>
+              Please enter a valid phone number.
+            </FormErrorMessage>
+          </FormControl>
         </Box>
         <Box mt="1rem">
-          <Button mt="2" variant="authNavigation" onClick={next}>
+          <Button
+            mt="1.5"
+            variant="navigation"
+            onClick={checkValidation}
+            width="100%"
+          >
             Next
           </Button>
         </Box>
