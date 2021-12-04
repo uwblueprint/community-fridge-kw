@@ -172,7 +172,7 @@ const AccountDetails = ({
       <Box mt="1rem">
         <MandatoryInputDescription label="Password" />
 
-        <FormControl isInvalid={!password && interaction.password}>
+        <FormControl isInvalid={!tempPassword && interaction.password}>
           <InputGroup size="md">
             <Input
               pr="4.5rem"
@@ -244,10 +244,8 @@ const AccountDetails = ({
           <Button
             mt="2"
             variant="navigation"
-            onClick={() => {
-              console.log(formValues);
-              onSignupClick();
-            }}
+            onClick={onSignupClick}
+            width="100%"
           >
             Next
           </Button>

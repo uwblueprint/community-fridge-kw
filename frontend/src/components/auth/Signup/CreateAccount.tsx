@@ -158,7 +158,12 @@ const CreateAccount = ({
           </FormControl>
         </Box>
         <Box mt="1rem">
-          <Button mt="1.5" variant="navigation" onClick={checkValidation}>
+          <Button
+            mt="1.5"
+            variant="navigation"
+            onClick={checkValidation}
+            width="100%"
+          >
             Next
           </Button>
         </Box>
