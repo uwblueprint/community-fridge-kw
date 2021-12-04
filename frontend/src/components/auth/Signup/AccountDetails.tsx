@@ -203,23 +203,23 @@ const AccountDetails = ({
             <Text>Password Requirements: </Text>
             <Stack alignItems="start" spacing="0">
               <PasswordRequirement
-                state={state.isTwelveChars}
+                state={checkLength(tempPassword)}
                 label="minimum of 12 characters as string"
               />
               <PasswordRequirement
-                state={state.isUpperCase}
+                state={checkForUpperCase(tempPassword)}
                 label="at least 1 uppercase letter"
               />
               <PasswordRequirement
-                state={state.isLowerCase}
+                state={checkForLowerCase(tempPassword)}
                 label="at least 1 lowercase letter"
               />
               <PasswordRequirement
-                state={state.isNumber}
+                state={checkForNumbers(tempPassword)}
                 label="at least 1 number"
               />
               <PasswordRequirement
-                state={state.isSpecialChar}
+                state={checkForSpecialCharacters(tempPassword)}
                 label="at least 1 special character"
               />
             </Stack>
