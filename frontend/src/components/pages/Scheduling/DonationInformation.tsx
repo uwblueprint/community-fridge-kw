@@ -7,13 +7,17 @@ import {
   HStack,
   Stack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import React, { ChangeEvent } from "react";
+import { useHistory } from "react-router-dom";
 
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
 import lg from "../../../assets/donation-sizes/md.png";
 import md from "../../../assets/donation-sizes/sm.png";
 import sm from "../../../assets/donation-sizes/xs.png";
+import * as Routes from "../../../constants/Routes";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
@@ -23,10 +27,11 @@ const DonationInformation: any = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
-  const { categories, size } = formValues;
-
+  const { id, categories, size } = formValues;
+  const history = useHistory();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -46,6 +51,11 @@ const DonationInformation: any = ({
           : categories.filter((string) => item !== string),
       },
     });
+  };
+
+  const onSaveClick = async () => {
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    history.push(Routes.DASHBOARD_PAGE);
   };
 
   const DonationSizes: DonationSizeInterface[] = [
@@ -122,14 +132,29 @@ const DonationInformation: any = ({
         </Stack>
       </FormControl>
 
-      <HStack>
-        <Button onClick={previous} variant="navigation">
-          Back
-        </Button>
-        <Button onClick={next} variant="navigation">
-          Next
-        </Button>
-      </HStack>
+      {isBeingEdited ? (
+        <VStack>
+          <Button onClick={onSaveClick} variant="navigation" w="100%">
+            Save Changes
+          </Button>
+          <Button
+            onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+            variant="cancelNavigation"
+            w="100%"
+          >
+            Cancel
+          </Button>
+        </VStack>
+      ) : (
+        <HStack>
+          <Button onClick={previous} variant="navigation">
+            Back
+          </Button>
+          <Button onClick={next} variant="navigation">
+            Next
+          </Button>
+        </HStack>
+      )}
     </Container>
   );
 };

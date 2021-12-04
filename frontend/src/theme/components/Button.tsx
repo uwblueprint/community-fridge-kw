@@ -13,6 +13,13 @@ const Button = {
       size: "lg",
       width: "100%",
     },
+    cancelNavigation: {
+      border: "1px",
+      borderColor: "hubbard.100",
+      color: "hubbard.100",
+      size: "lg",
+      width: "100%",
+    },
   },
 };
 

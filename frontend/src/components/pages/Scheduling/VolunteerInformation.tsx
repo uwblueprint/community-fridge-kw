@@ -9,9 +9,13 @@ import {
   Input,
   Text,
   Textarea,
+  VStack,
 } from "@chakra-ui/react";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import * as Routes from "../../../constants/Routes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
@@ -20,10 +24,12 @@ const VolunteerInformation = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
 
   const {
+    id,
     startTime,
     endTime,
     frequency,
@@ -33,6 +39,8 @@ const VolunteerInformation = ({
     isPickup,
     notes,
   } = formValues;
+
+  const history = useHistory();
 
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
@@ -60,6 +68,11 @@ const VolunteerInformation = ({
         : volunteerAssistanceValues[1];
     }
     return "";
+  };
+
+  const onSaveClick = async () => {
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    history.push(Routes.DASHBOARD_PAGE);
   };
 
   return (
@@ -145,14 +158,29 @@ const VolunteerInformation = ({
           placeholder="john@shawarmaplus.com"
         />
       </FormControl>
-      <HStack>
-        <Button onClick={previous} variant="navigation">
-          Back
-        </Button>
-        <Button onClick={next} variant="navigation">
-          Next
-        </Button>
-      </HStack>
+      {isBeingEdited ? (
+        <VStack>
+          <Button onClick={onSaveClick} variant="navigation" w="100%">
+            Save Changes
+          </Button>
+          <Button
+            onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+            variant="cancelNavigation"
+            w="100%"
+          >
+            Cancel
+          </Button>
+        </VStack>
+      ) : (
+        <HStack>
+          <Button onClick={previous} variant="navigation">
+            Back
+          </Button>
+          <Button onClick={next} variant="navigation">
+            Next
+          </Button>
+        </HStack>
+      )}
     </Container>
   );
 };

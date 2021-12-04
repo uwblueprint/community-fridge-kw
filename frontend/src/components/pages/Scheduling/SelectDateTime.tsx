@@ -6,11 +6,12 @@ import {
   HStack,
   Input,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useContext, useState } from "react";
 import { Calendar, DateObject } from "react-multi-date-picker";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
@@ -24,9 +25,12 @@ const SelectDateTime = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next } = navigation;
+  const history = useHistory();
   const {
+    id,
     dayPart,
     frequency,
     startTime,
@@ -235,6 +239,11 @@ const SelectDateTime = ({
     });
   };
 
+  const onSaveClick = async () => {
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    history.push(Routes.DASHBOARD_PAGE);
+  };
+
   return (
     <Container p="30px">
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
@@ -278,6 +287,14 @@ const SelectDateTime = ({
           }}
         />
       )}
+
+      {isBeingEdited && (
+        <Text textStyle="mobileBody" mt="2em">
+          The following fields cannot be edited. If you would like to edit these
+          please contact Community Fridge admin.
+        </Text>
+      )}
+
       <RadioSelectGroup
         name="frequency"
         label="Select frequency"
@@ -294,20 +311,36 @@ const SelectDateTime = ({
         <FormControl isRequired mb="3em">
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
           <Input
+            isDisabled={isBeingEdited}
             value={recurringEndDate}
             onChange={(e) => handleChangeRecurringDate(e.target.value)}
             placeholder="MM/DD/YYYY"
           />
         </FormControl>
       )}
-      <HStack>
-        <Button onClick={previous} variant="navigation">
-          Back
-        </Button>
-        <Button onClick={next} variant="navigation">
-          Next
-        </Button>
-      </HStack>
+      {isBeingEdited ? (
+        <VStack>
+          <Button onClick={onSaveClick} variant="navigation" w="100%">
+            Save Changes
+          </Button>
+          <Button
+            onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+            variant="cancelNavigation"
+            w="100%"
+          >
+            Cancel
+          </Button>
+        </VStack>
+      ) : (
+        <HStack>
+          <Button onClick={previous} variant="navigation">
+            Back
+          </Button>
+          <Button onClick={next} variant="navigation">
+            Next
+          </Button>
+        </HStack>
+      )}
     </Container>
   );
 };
