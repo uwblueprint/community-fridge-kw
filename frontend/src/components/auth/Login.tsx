@@ -65,7 +65,12 @@ const Login = (): React.ReactElement => {
             Forgot password?
           </Text>
           <Box mt="1rem">
-            <Button mt="2" onClick={onLogInClick} variant="navigation">
+            <Button
+              width="100%"
+              mt="2"
+              onClick={onLogInClick}
+              variant="navigation"
+            >
               Log In
             </Button>
           </Box>
