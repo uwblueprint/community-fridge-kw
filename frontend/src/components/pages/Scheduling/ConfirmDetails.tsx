@@ -7,12 +7,12 @@ import {
   HStack,
   IconButton,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import { colorMap } from "../../../constants/DaysInWeek";
 import { SCHEDULE_THANKYOU_PAGE } from "../../../constants/Routes";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
@@ -48,10 +48,9 @@ const ConfirmDetails = ({
   useEffect(() => {
     getDonorData();
   }, [currentSchedule.id]);
-
   return (
     // Insert confirm Donation detail page here
-    <Container>
+    <Container mt="2rem" maxWidth={{ base: "default", md: "70%" }}>
       {isBeingEdited ? (
         <IconButton
           onClick={() => history.push(Routes.DASHBOARD_PAGE)}
@@ -74,14 +73,21 @@ const ConfirmDetails = ({
         pb="6px"
         pl="14px"
         pr="14px"
-        color="squash.100"
-        backgroundColor="evergreen.100"
+        color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
+        backgroundColor={`${(colorMap as any)[currentSchedule?.frequency]}.50`}
         mb="56px"
       >
         {currentSchedule?.frequency}
       </Badge>
 
-      <Container pl="0" align="left" mb="2rem">
+      <Box
+        pl="0"
+        align="left"
+        mb="2rem"
+        display={{ lg: "flex" }}
+        justifyContent="space-between"
+        flexDirection="row-reverse"
+      >
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -91,18 +97,27 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Text textStyle="mobileHeader2">Proposed dropoff time</Text>
-        <Text textStyle="mobileBody">
-          {new Date(currentSchedule.startTime).toDateString()}
-        </Text>
-        <Text textStyle="mobileBody">
-          {new Date(currentSchedule.startTime).toLocaleTimeString()}-
-          {new Date(currentSchedule.endTime).toLocaleTimeString()}
-        </Text>
-        <Text textStyle="mobileBody">{currentSchedule.frequency}</Text>
-      </Container>
+        <Box>
+          <Text textStyle="mobileHeader2">Proposed dropoff time</Text>
+          <Text textStyle="mobileBody">
+            {new Date(currentSchedule.startTime).toDateString()}
+          </Text>
+          <Text textStyle="mobileBody">
+            {new Date(currentSchedule.startTime).toLocaleTimeString()}-
+            {new Date(currentSchedule.endTime).toLocaleTimeString()}
+          </Text>
+          <Text textStyle="mobileBody">{currentSchedule.frequency}</Text>
+        </Box>
+      </Box>
 
-      <Container pl="0" align="left" mb="2rem">
+      <Box
+        pl="0"
+        align="left"
+        mb="2rem"
+        display={{ lg: "flex" }}
+        justifyContent="space-between"
+        flexDirection="row-reverse"
+      >
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -112,14 +127,23 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Text textStyle="mobileHeader2">Donation Information</Text>
-        <Text textStyle="mobileBody">{currentSchedule.size}</Text>
-        <Text textStyle="mobileBody">
-          {currentSchedule.categories.join(", ")}
-        </Text>
-      </Container>
+        <Box>
+          <Text textStyle="mobileHeader2">Donation Information</Text>
+          <Text textStyle="mobileBody">{currentSchedule.size}</Text>
+          <Text textStyle="mobileBody">
+            {currentSchedule.categories.join(", ")}
+          </Text>
+        </Box>
+      </Box>
 
-      <Container pl="0" align="left" mb="2rem">
+      <Box
+        pl="0"
+        align="left"
+        mb="2rem"
+        display={{ lg: "flex" }}
+        justifyContent="space-between"
+        flexDirection="row-reverse"
+      >
         <Button
           rightIcon={<EditIcon />}
           pl="0"
@@ -129,21 +153,23 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Text textStyle="mobileHeader2">Volunteer Information</Text>
-        {currentSchedule.volunteerNeeded && (
-          <Text textStyle="mobileBody">Volunteer required</Text>
-        )}
-        {currentSchedule.isPickup && (
-          <Text textStyle="mobileBody">Pickup required</Text>
-        )}
-        <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text>
+        <Box>
+          <Text textStyle="mobileHeader2">Volunteer Information</Text>
+          {currentSchedule.volunteerNeeded && (
+            <Text textStyle="mobileBody">Volunteer required</Text>
+          )}
+          {currentSchedule.isPickup && (
+            <Text textStyle="mobileBody">Pickup required</Text>
+          )}
+          <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text>
 
-        <Text textStyle="mobileBody">
-          Additional notes: {currentSchedule.notes}
-        </Text>
-      </Container>
+          <Text textStyle="mobileBody">
+            Additional notes: {currentSchedule.notes}
+          </Text>
+        </Box>
+      </Box>
 
-      <Container pl="0" align="left">
+      <Box pl="0" align="left">
         <Text textStyle="mobileHeader2">Donor information</Text>
         <Text textStyle="mobileBody">
           {currentDonor.firstName} {currentDonor.lastName}
@@ -151,7 +177,7 @@ const ConfirmDetails = ({
         <Text textStyle="mobileBody">{currentDonor.email}</Text>
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
-      </Container>
+      </Box>
       {!isBeingEdited && (
         <HStack>
           <Button onClick={previous} variant="navigation">

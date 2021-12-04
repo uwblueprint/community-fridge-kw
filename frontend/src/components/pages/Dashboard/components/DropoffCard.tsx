@@ -14,6 +14,7 @@ import {
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import { colorMap } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
 import { EllipsisIcon } from "../../../common/icons";
 import { SchedulingFormProps } from "../../Scheduling/types";
@@ -33,83 +34,92 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
 
   return (
     <Box
-      maxW="sm"
+      width="fit-content"
       mb="24px"
+      mr="24px"
       border="1px solid"
       borderColor="hubbard.100"
       borderRadius="8px"
       onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)}
     >
       <Box pl="6" pr="6" pb="6" pt="4">
-        <HStack spacing="0">
-          <Text mb="16px" textStyle="mobileBodyBold">
+        <Box spacing="0" display="flex">
+          <Text
+            mt="0.5rem"
+            mb="16px"
+            textStyle="mobileBodyBold"
+            whiteSpace="nowrap"
+            flexGrow={8}
+          >
             {startDate}
           </Text>
-          <Menu isLazy>
-            <MenuButton
-              zIndex="9999"
-              style={{
-                marginLeft: "6rem",
-                marginBottom: "15px",
-                marginRight: "0px",
-              }}
-              as={IconButton}
-              aria-label="options"
-              icon={<EllipsisIcon />}
-              variant="ghost"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <MenuList p={0} minW="0" w="94px">
-              <MenuItem
-                onClick={() =>
-                  history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)
-                }
-                textStyle="mobileSmall"
-              >
-                Edit
-              </MenuItem>
-              <MenuItem
-                textStyle="mobileSmall"
-                color="tomato.100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onOpen();
+          <Box marginLeft="0px">
+            <Menu isLazy>
+              <MenuButton
+                zIndex="9999"
+                style={{
+                  marginLeft: "6rem",
+                  marginBottom: "15px",
+                  marginRight: "0px",
                 }}
-              >
-                Cancel
-              </MenuItem>
-            </MenuList>
-          </Menu>
-          <DeleteScheduleModal
-            isOpen={isOpen}
-            onClose={onClose}
-            onDelete={() => {
-              onDelete();
-              onClose();
-            }}
-          />
+                as={IconButton}
+                aria-label="options"
+                icon={<EllipsisIcon />}
+                variant="ghost"
+                backgroundColor="transparent"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <MenuList p={0} minW="0" w="94px">
+                <MenuItem
+                  onClick={() =>
+                    history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)
+                  }
+                  textStyle="mobileSmall"
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem
+                  textStyle="mobileSmall"
+                  color="tomato.100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpen();
+                  }}
+                >
+                  Cancel
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            <DeleteScheduleModal
+              isOpen={isOpen}
+              onClose={onClose}
+              onDelete={() => {
+                onDelete();
+                onClose();
+              }}
+            />
+          </Box>
+        </Box>
+        <HStack>
+          <TimeIcon color="black.100" />
+          <Text textStyle="mobileBodyBold">Time: </Text>
+          <Text textStyle="mobileBody">{startTime}</Text>
         </HStack>
         <HStack>
-          <TimeIcon color="raddish.100" />
-          <Text textStyle="mobileCardDescription">Time: </Text>
-          <Text textStyle="mobileSmall">{startTime}</Text>
-        </HStack>
-        <HStack mb="16px">
-          <StarIcon color="raddish.100" />
-          <Text textStyle="mobileCardDescription">Volunteers Requested: </Text>
-          <Text textStyle="mobileSmall">
+          <StarIcon color="black.100" />
+          <Text textStyle="mobileBodyBold">Volunteers Requested: </Text>
+          <Text textStyle="mobileBody">
             {schedule.volunteerNeeded ? "Yes" : "No"}
           </Text>
         </HStack>
         {schedule.frequency && (
           <Badge
-            borderRadius="full"
-            pt="6px"
-            pb="6px"
-            pl="14px"
-            pr="14px"
-            color="squash.100"
-            backgroundColor="evergreen.100"
+            borderRadius="8px"
+            py="6px"
+            px="14px"
+            mt="16px"
+            color={`${(colorMap as any)[schedule.frequency]}.100`}
+            backgroundColor={`${(colorMap as any)[schedule.frequency]}.50`}
           >
             {schedule.frequency}
           </Badge>
