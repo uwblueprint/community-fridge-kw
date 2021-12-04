@@ -12,7 +12,6 @@ interface VerificationPageProps {
 
 const VerificationPage = ({ formValues }: VerificationPageProps) => {
   const history = useHistory();
-
   const { email } = formValues;
   return (
     <>
@@ -21,6 +20,7 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
         float="right"
         backgroundColor="transparent"
         onClick={() => history.push(LANDING_PAGE)}
+        display={{ md: "none" }}
       >
         <CloseIcon color="#111111" />
       </IconButton>

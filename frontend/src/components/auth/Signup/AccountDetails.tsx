@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useReducer, useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import {
@@ -57,7 +57,7 @@ const AccountDetails = ({
   formValues: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
   const { previous, next } = navigation;
   const [isDesktop] = useMediaQuery("(min-width: 768px)");
@@ -131,10 +131,6 @@ const AccountDetails = ({
     }
     return false;
   };
-
-  if (authenticatedUser) {
-    return <Redirect to={DASHBOARD_PAGE} />;
-  }
 
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">

@@ -9,11 +9,12 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 
-import { LOGIN_PAGE } from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
+import { LOGIN_PAGE, DASHBOARD_PAGE } from "../../../constants/Routes";
 import { CloseIcon } from "../../common/icons";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
@@ -30,6 +31,8 @@ const CreateAccount = ({
   const { next } = navigation;
   const history = useHistory();
   const { firstName, lastName, businessName, phoneNumber } = formData;
+  const { authenticatedUser } = useContext(AuthContext);
+
   const [isDesktop] = useMediaQuery("(min-width: 768px)");
 
   const [interaction, setInteraction] = React.useState({
@@ -56,6 +59,10 @@ const CreateAccount = ({
       next();
     }
   };
+
+  if (authenticatedUser) {
+    return <Redirect to={DASHBOARD_PAGE} />;
+  }
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">
       <IconButton
