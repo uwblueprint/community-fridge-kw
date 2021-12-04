@@ -4,12 +4,14 @@ import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 import { Role } from "../../../types/AuthTypes";
 import AccountDetails from "./AccountDetails";
 import CreateAccount from "./CreateAccount";
+import VerificationPage from "./VerificationEmail";
 
 const steps = [
   {
     id: "create account",
   },
   { id: "account details" },
+  { id: "email verification" },
 ];
 
 interface UseStepType {
@@ -49,6 +51,8 @@ const Signup = () => {
           navigation={navigation}
         />
       );
+    case "email verification":
+      return <VerificationPage formValues={formValues} />;
     default:
       return null;
   }

@@ -4,16 +4,15 @@ import { useHistory } from "react-router-dom";
 
 import { LANDING_PAGE } from "../../../constants/Routes";
 import { CloseIcon } from "../../common/icons";
+import { SignUpFormProps } from "./types";
 
 interface VerificationPageProps {
-  email: string;
+  formValues: SignUpFormProps;
 }
 
-const VerificationPage = ({
-  email = "johndoe@gmail.com",
-}: VerificationPageProps) => {
+const VerificationPage = ({ formValues }: VerificationPageProps) => {
   const history = useHistory();
-
+  const { email } = formValues;
   return (
     <>
       <IconButton
@@ -21,11 +20,11 @@ const VerificationPage = ({
         float="right"
         backgroundColor="transparent"
         onClick={() => history.push(LANDING_PAGE)}
+        display={{ md: "none" }}
       >
         <CloseIcon color="#111111" />
       </IconButton>
       <Container centerContent pl="42px" pr="42px" pt="73px">
-        <Box w="200px" h="140px" backgroundColor="gray.100" />
         <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">
           Please verify your email address!
         </Text>

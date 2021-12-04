@@ -21,7 +21,7 @@ const getScheduleById = async (scheduleId: string): Promise<Schedule> => {
     });
     return data;
   } catch (error) {
-    return null;
+    return error as Schedule;
   }
 };
 
@@ -50,7 +50,7 @@ const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
     );
     return data;
   } catch (error) {
-    return null;
+    return error as Schedule;
   }
 };
 
@@ -68,7 +68,7 @@ const updateSchedule = async (
     );
     return data;
   } catch (error) {
-    return null;
+    return error as Schedule;
   }
 };
 

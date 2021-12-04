@@ -10,7 +10,6 @@ import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
-import Default from "./components/pages/Default";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
@@ -66,7 +65,6 @@ const App = (): React.ReactElement => {
                   path={Routes.VIEW_DONATIONS}
                   component={ViewDonations}
                 />
-                <Route exact path={Routes.HOME_PAGE} component={Default} />
                 <Route
                   exact
                   path={Routes.DASHBOARD_SCHEDULE_EDIT_PAGE}
@@ -79,17 +77,8 @@ const App = (): React.ReactElement => {
                 />
                 <Route
                   exact
-                  path={Routes.VERIFICATION_PAGE}
-                  component={VerificationPage}
-                />
-                <Route
-                  exact
                   path={Routes.SCHEDULING_PAGE}
                   component={Scheduling}
-                />
-                <Route
-                  path={Routes.SCHEDULE_THANKYOU_PAGE}
-                  component={ThankYou}
                 />
                 <Route exact path="*" component={NotFound} />
               </Switch>

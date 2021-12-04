@@ -31,13 +31,13 @@ export const Categories = new Set([
   "Non-perishables",
   "Fresh produce",
   "Bread and baked goods",
-  "Oil, spreads and seasonings",
+  "Oil, spreads, and seasoning",
   "Tea and coffee",
   "Frozen meals",
   "Prepared meals",
-  "Non-alcoholic drinks & juices",
+  "Non-alcoholic drinks and juices",
   "Essential items (masks, hand sanitizer, bags)",
-  "Hygiene products (tampons, pads, soap etc.)",
+  "Hygiene products (tampons, pads, soap, etc.)",
 ]);
 
 export type Token = {
