@@ -47,14 +47,14 @@ const VolunteerInformation = ({
   };
 
   const volunteerNeededRadioValue = () => {
-    if (volunteerNeeded !== null) {
+    if (volunteerNeeded !== null && volunteerNeeded !== undefined) {
       return volunteerNeeded ? "Yes" : "No";
     }
     return "";
   };
 
   const isPickupRadioValue = () => {
-    if (isPickup !== null) {
+    if (isPickup !== null && isPickup !== undefined) {
       return isPickup
         ? volunteerAssistanceValues[0]
         : volunteerAssistanceValues[1];

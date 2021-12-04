@@ -49,7 +49,6 @@ const seedSchedules = [
     donor_id: 1,
     categories: ["Non-perishables", "Tea and coffee"],
     size: "Medium",
-    is_pickup: true,
     pickup_location: "location",
     day_part: "Night (9pm - 12am)",
     start_time: new Date(
@@ -71,7 +70,7 @@ const seedSchedules = [
     donor_id: 1,
     categories: ["Fresh produce"],
     size: "Small",
-    is_pickup: false,
+    is_pickup: true,
     day_part: "Afternoon (11am - 4pm)",
     start_time: new Date(
       "Wed Dec 15 2021 13:00:00 GMT-0500 (Eastern Standard Time)",

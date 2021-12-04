@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
+import { Redirect } from "react-router-dom";
 
+import * as Routes from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
+import { Schedule } from "../../../types/SchedulingTypes";
 import ConfirmDetails from "./ConfirmDetails";
 import DonationInformation from "./DonationInformation";
 import GetStarted from "./GetStarted";
 import SelectDateTime from "./SelectDateTime";
-import { SchedulingFormProps } from "./types";
+import ThankYou from "./ThankYou";
 import VolunteerInformation from "./VolunteerInformation";
 
 const steps = [
@@ -24,6 +28,9 @@ const steps = [
   {
     id: "confirm donation details",
   },
+  {
+    id: "thank you page",
+  },
 ];
 
 interface UseStepType {
@@ -32,28 +39,22 @@ interface UseStepType {
 }
 
 interface SchedulingProps {
-  schedulingData: SchedulingFormProps;
+  schedulingData: Schedule;
   isBeingEdited: boolean;
 }
 
-const schedulingDefaultData = {
+const schedulingDefaultData = ({
   id: "",
   donorId: "",
   categories: [],
   size: "",
-  isPickup: null,
-  pickupLocation: "",
   dayPart: "",
   startTime: new Date().toDateString(),
   endTime: new Date().toDateString(),
-  status: "",
-  volunteerNeeded: null,
   volunteerIds: [],
-  volunteerTime: "",
   frequency: "",
-  recurringDonationEndDate: "",
   notes: "",
-};
+} as unknown) as Schedule;
 
 const Scheduling = ({
   schedulingData = schedulingDefaultData,
@@ -65,6 +66,12 @@ const Scheduling = ({
     initialStep: isBeingEdited ? 4 : 0,
   });
   const { id } = step;
+
+  const { authenticatedUser } = useContext(AuthContext);
+
+  if (!authenticatedUser) {
+    return <Redirect to={Routes.LOGIN_PAGE} />;
+  }
 
   switch (id) {
     case "get started scheduling":
@@ -105,6 +112,15 @@ const Scheduling = ({
     case "confirm donation details":
       return (
         <ConfirmDetails
+          formValues={schedulingFormValues}
+          setForm={setSchedulingForm}
+          navigation={navigation}
+          isBeingEdited={isBeingEdited}
+        />
+      );
+    case "thank you page":
+      return (
+        <ThankYou
           formValues={schedulingFormValues}
           setForm={setSchedulingForm}
           navigation={navigation}

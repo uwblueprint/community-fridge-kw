@@ -12,8 +12,8 @@ export const createSchedulingDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (!validatePrimitive(req.body.donorId, "integer")) {
-    return res.status(400).send(getApiValidationError("donorId", "integer"));
+  if (!validatePrimitive(req.body.donorId, "string")) {
+    return res.status(400).send(getApiValidationError("donorId", "string"));
   }
   if (!validateCategories(req.body.categories)) {
     return res
@@ -23,7 +23,7 @@ export const createSchedulingDtoValidator = async (
   if (req.body.size && !validatePrimitive(req.body.size, "string")) {
     return res.status(400).send(getApiValidationError("size", "string"));
   }
-  if (!validatePrimitive(req.body.isPickup, "boolean")) {
+  if (req.body.isPickup && !validatePrimitive(req.body.isPickup, "boolean")) {
     return res.status(400).send(getApiValidationError("isPickup", "boolean"));
   }
   if (
