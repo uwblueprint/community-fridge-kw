@@ -119,13 +119,10 @@ class AuthService implements IAuthService {
         .auth()
         .generatePasswordResetLink(email);
       const emailBody = `
-      Hey neighbour!
+      Hello,
       <br><br>
-      Thank you for getting involved with mutual aid through Community Fridge KW. We’re thrilled to have you. 
-
-      <br><br>
-Please confirm that this is the email address (${email}) you would like to use to schedule donations with Community Fridge KW by clicking “Verify”.
-
+      We have received a password reset request for your account.
+      Please click the following link to reset it.
       <strong>This link is only valid for 1 hour.</strong>
       <br><br>
       <a href=${resetLink}>Reset Password</a>`;
@@ -173,9 +170,8 @@ Please confirm that this is the email address (${email}) you would like to use t
     roles: Set<Role>,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
-        .auth()
-        .verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
+        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
       const userRole = await this.userService.getUserRoleByAuthId(
         decodedIdToken.uid,
       );
@@ -195,9 +191,8 @@ Please confirm that this is the email address (${email}) you would like to use t
     requestedUserId: string,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
-        .auth()
-        .verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
+        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
       const tokenUserId = await this.userService.getUserIdByAuthId(
         decodedIdToken.uid,
       );
@@ -219,9 +214,8 @@ Please confirm that this is the email address (${email}) you would like to use t
     requestedEmail: string,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
-        .auth()
-        .verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
+        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
 
       const firebaseUser = await firebaseAdmin
         .auth()
