@@ -81,6 +81,16 @@ const AccountDetails = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onSignupClick = async () => {
+    if (!email) {
+      setInteraction({ ...interaction, email: true });
+    }
+    if (!password) {
+      setInteraction({ ...interaction, password: true });
+    }
+    if (!password || !email || password !== confirmPassword) {
+      return false;
+    }
+
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,
