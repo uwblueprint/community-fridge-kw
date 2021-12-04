@@ -31,10 +31,6 @@ import {
   LOGIN_PAGE,
 } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import {
-  initialState,
-  passwordVerificationReducer,
-} from "../../../reducers/PasswordVerificationReducer";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import { BackArrow, CloseIcon } from "../../common/icons";
 import {
@@ -106,11 +102,6 @@ const AccountDetails = ({
 
     return next();
   };
-
-  const [state, dispatch] = useReducer(
-    passwordVerificationReducer,
-    initialState(),
-  );
 
   const verifyPassword = (input: string) => {
     if (
