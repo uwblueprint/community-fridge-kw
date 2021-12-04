@@ -22,7 +22,6 @@ interface RadioSelectGroupProps {
   helperText?: string;
   icons: number[];
   isRequired: boolean;
-  helperText?: string;
   onChange: (arg0: any) => void;
 }
 

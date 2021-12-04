@@ -11,8 +11,6 @@ import {
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
-import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
-import { Schedule } from "../../types/SchedulingTypes";
 
 import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
 import { Schedule } from "../../types/SchedulingTypes";
