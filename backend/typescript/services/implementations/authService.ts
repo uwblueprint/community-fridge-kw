@@ -170,8 +170,9 @@ class AuthService implements IAuthService {
     roles: Set<Role>,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
-        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
       const userRole = await this.userService.getUserRoleByAuthId(
         decodedIdToken.uid,
       );
@@ -191,8 +192,9 @@ class AuthService implements IAuthService {
     requestedUserId: string,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
-        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
       const tokenUserId = await this.userService.getUserIdByAuthId(
         decodedIdToken.uid,
       );
@@ -214,8 +216,9 @@ class AuthService implements IAuthService {
     requestedEmail: string,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
-        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
 
       const firebaseUser = await firebaseAdmin
         .auth()
