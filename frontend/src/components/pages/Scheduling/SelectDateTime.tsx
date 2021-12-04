@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useContext, useState } from "react";
-import { Calendar, DateObject } from "react-multi-date-picker";
+import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
 import { Redirect } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -235,6 +235,10 @@ const SelectDateTime = ({
     });
   };
 
+  const calendarStyle = {
+    backgroundColor: "champagne.100"
+  };
+
   return (
     <Container p="30px">
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
@@ -243,7 +247,8 @@ const SelectDateTime = ({
       </Text>
       <FormControl isRequired>
         <FormLabel fontWeight="600">Select date of donation</FormLabel>
-        <Calendar
+        <DatePicker style={calendarStyle}/>
+        {/* <Calendar
           buttons={false}
           disableMonthPicker
           disableYearPicker
@@ -251,7 +256,8 @@ const SelectDateTime = ({
           minDate={new Date()}
           value={date}
           onChange={handleDateSelect}
-        />
+      
+        /> */}
       </FormControl>
       <RadioSelectGroup
         name="dayPart"
