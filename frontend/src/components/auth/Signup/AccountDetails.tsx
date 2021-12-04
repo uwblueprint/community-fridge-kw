@@ -29,7 +29,6 @@ import {
   DASHBOARD_PAGE,
   LANDING_PAGE,
   LOGIN_PAGE,
-  VERIFICATION_PAGE,
 } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import {
@@ -60,7 +59,7 @@ const AccountDetails = ({
 }) => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
-  const { previous } = navigation;
+  const { previous, next } = navigation;
   const [isDesktop] = useMediaQuery("(min-width: 768px)");
   const {
     firstName,
@@ -95,9 +94,9 @@ const AccountDetails = ({
       onOpen();
       return false;
     }
-    setAuthenticatedUser(user);
+    await setAuthenticatedUser(user);
 
-    return history.push(VERIFICATION_PAGE);
+    return next();
   };
 
   const [state, dispatch] = useReducer(

@@ -4,16 +4,16 @@ import { useHistory } from "react-router-dom";
 
 import { LANDING_PAGE } from "../../../constants/Routes";
 import { CloseIcon } from "../../common/icons";
+import { SignUpFormProps } from "./types";
 
 interface VerificationPageProps {
-  email: string;
+  formValues: SignUpFormProps;
 }
 
-const VerificationPage = ({
-  email = "janedoe@gmail.com",
-}: VerificationPageProps) => {
+const VerificationPage = ({ formValues }: VerificationPageProps) => {
   const history = useHistory();
 
+  const { email } = formValues;
   return (
     <>
       <IconButton

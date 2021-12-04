@@ -77,11 +77,6 @@ const App = (): React.ReactElement => {
                 />
                 <Route
                   exact
-                  path={Routes.VERIFICATION_PAGE}
-                  component={VerificationPage}
-                />
-                <Route
-                  exact
                   path={Routes.SCHEDULING_PAGE}
                   component={Scheduling}
                 />
