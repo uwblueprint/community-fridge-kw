@@ -1,4 +1,4 @@
-import { Box, Button, Container, IconButton, Text } from "@chakra-ui/react";
+import { Button, Container, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -11,6 +11,7 @@ const ConfirmVerificationPage = () => {
   return (
     <>
       <IconButton
+        display={{ md: "none" }}
         aria-label="close page"
         float="right"
         backgroundColor="transparent"
