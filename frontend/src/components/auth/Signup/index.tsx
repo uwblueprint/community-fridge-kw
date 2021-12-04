@@ -3,7 +3,6 @@ import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
 import { Role } from "../../../types/AuthTypes";
 import AccountDetails from "./AccountDetails";
-import ConfirmVerificationPage from "./ConfirmVerificationPage";
 import CreateAccount from "./CreateAccount";
 import VerificationPage from "./VerificationEmail";
 
@@ -37,7 +36,13 @@ const Signup = () => {
 
   switch (id) {
     case "create account":
-      return <ConfirmVerificationPage />;
+      return (
+        <CreateAccount
+          formData={formValues}
+          setForm={setForm}
+          navigation={navigation}
+        />
+      );
     case "account details":
       return (
         <AccountDetails
