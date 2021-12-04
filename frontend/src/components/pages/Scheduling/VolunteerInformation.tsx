@@ -12,10 +12,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import { useHistory } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import * as Routes from "../../../constants/Routes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
@@ -26,7 +24,7 @@ const VolunteerInformation = ({
   navigation,
   isBeingEdited,
 }: SchedulingStepProps) => {
-  const { previous, next } = navigation;
+  const { previous, next, go } = navigation;
 
   const {
     id,
@@ -39,8 +37,6 @@ const VolunteerInformation = ({
     isPickup,
     notes,
   } = formValues;
-
-  const history = useHistory();
 
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
@@ -72,7 +68,9 @@ const VolunteerInformation = ({
 
   const onSaveClick = async () => {
     await SchedulingAPIClient.updateSchedule(id, formValues);
-    history.push(Routes.DASHBOARD_PAGE);
+    if (go !== undefined) {
+      go("confirm donation details");
+    }
   };
 
   return (
@@ -164,7 +162,7 @@ const VolunteerInformation = ({
             Save Changes
           </Button>
           <Button
-            onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+            onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
             w="100%"
           >

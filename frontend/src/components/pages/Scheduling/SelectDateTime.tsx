@@ -11,7 +11,7 @@ import {
 import moment from "moment";
 import React, { useContext, useState } from "react";
 import { Calendar, DateObject } from "react-multi-date-picker";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
@@ -27,8 +27,7 @@ const SelectDateTime = ({
   navigation,
   isBeingEdited,
 }: SchedulingStepProps) => {
-  const { previous, next } = navigation;
-  const history = useHistory();
+  const { previous, next, go } = navigation;
   const {
     id,
     dayPart,
@@ -241,7 +240,9 @@ const SelectDateTime = ({
 
   const onSaveClick = async () => {
     await SchedulingAPIClient.updateSchedule(id, formValues);
-    history.push(Routes.DASHBOARD_PAGE);
+    if (go !== undefined) {
+      go("confirm donation details");
+    }
   };
 
   return (
@@ -324,7 +325,7 @@ const SelectDateTime = ({
             Save Changes
           </Button>
           <Button
-            onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+            onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
             w="100%"
           >

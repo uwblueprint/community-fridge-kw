@@ -10,14 +10,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { ChangeEvent } from "react";
-import { useHistory } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
 import lg from "../../../assets/donation-sizes/md.png";
 import md from "../../../assets/donation-sizes/sm.png";
 import sm from "../../../assets/donation-sizes/xs.png";
-import * as Routes from "../../../constants/Routes";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
@@ -29,9 +27,8 @@ const DonationInformation: any = ({
   navigation,
   isBeingEdited,
 }: SchedulingStepProps) => {
-  const { previous, next } = navigation;
+  const { previous, next, go } = navigation;
   const { id, categories, size } = formValues;
-  const history = useHistory();
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -55,7 +52,9 @@ const DonationInformation: any = ({
 
   const onSaveClick = async () => {
     await SchedulingAPIClient.updateSchedule(id, formValues);
-    history.push(Routes.DASHBOARD_PAGE);
+    if (go !== undefined) {
+      go("confirm donation details");
+    }
   };
 
   const DonationSizes: DonationSizeInterface[] = [
@@ -138,7 +137,7 @@ const DonationInformation: any = ({
             Save Changes
           </Button>
           <Button
-            onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+            onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
             w="100%"
           >
