@@ -6,6 +6,8 @@ import { SCHEDULING_PAGE } from "../../../constants/Routes";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
 
+import ViewDonations from "../ViewDonations";
+
 const Home = (): JSX.Element => {
   const history = useHistory();
 
@@ -35,6 +37,7 @@ const Home = (): JSX.Element => {
         >
           Schedule a food dropoff
         </Button>
+        <ViewDonations />
         <DonationProcess />
       </Container>
       <VolunteerRoles />

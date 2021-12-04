@@ -11,10 +11,11 @@ const VolunteerRoleStep = ({
   description,
 }: VolunteerRoleStepProps): JSX.Element => {
   return (
-    <Flex paddingBottom="1.5rem" paddingInline={{ base: "1rem" }}>
+    <Flex paddingBottom="1.5rem" mr="1rem">
       <Box
         flex="10"
         backgroundColor="cottonCandy.100"
+        borderRadius="16px"
         padding={{ base: "0px", md: "3rem" }}
       >
         <Text color="black.100" textStyle="mobileBodyBold">
@@ -24,7 +25,11 @@ const VolunteerRoleStep = ({
           />
           {title}
         </Text>
-        <Text pl="24px" color="hubbard.100" textStyle="mobileSmall">
+        <Text
+          pl={{ base: "24px", md: "0px" }}
+          color="hubbard.100"
+          textStyle="mobileSmall"
+        >
           {description}
         </Text>
       </Box>
