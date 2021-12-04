@@ -234,4 +234,3 @@ class AuthService implements IAuthService {
 }
 
 export default AuthService;
- 
