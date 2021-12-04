@@ -38,7 +38,7 @@ const Dashboard = (): JSX.Element => {
   }, [authenticatedUser]);
 
   if (!authenticatedUser) {
-    return <Redirect to={Routes.HOME_PAGE} />;
+    return <Redirect to={Routes.LOGIN_PAGE} />;
   }
 
   return (

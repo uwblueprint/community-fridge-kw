@@ -16,12 +16,12 @@ import { useHistory } from "react-router-dom";
 
 import { colorMap } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
+import { Schedule } from "../../../../types/SchedulingTypes";
 import { EllipsisIcon } from "../../../common/icons";
-import { SchedulingFormProps } from "../../Scheduling/types";
 import DeleteScheduleModal from "./DeleteScheduleModal";
 
 interface DropoffCardProps {
-  schedule: SchedulingFormProps;
+  schedule: Schedule;
   onDelete: () => void;
 }
 

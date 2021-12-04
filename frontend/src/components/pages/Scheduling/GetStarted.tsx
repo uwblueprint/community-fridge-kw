@@ -1,7 +1,7 @@
 import { Button, Container, Img, Text } from "@chakra-ui/react";
 import React from "react";
 
-import cfImage from "../../../assets/scheduling_getstarted.svg";
+import cfImage from "../../../assets/scheduling_getstarted.png";
 import { SchedulingStepProps } from "./types";
 
 const GetStarted = ({ navigation }: SchedulingStepProps) => {

@@ -12,8 +12,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import { colorMap } from "../../../constants/DaysInWeek";
-import { SCHEDULE_THANKYOU_PAGE } from "../../../constants/Routes";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
@@ -26,22 +26,25 @@ const ConfirmDetails = ({
   navigation,
   isBeingEdited,
 }: SchedulingStepProps) => {
-  const { previous, go } = navigation;
+  const { previous, next, go } = navigation;
   const history = useHistory();
   const { authenticatedUser } = useContext(AuthContext);
 
-  const onSubmitClick = async () => history.push(SCHEDULE_THANKYOU_PAGE);
-
-  //   const { insert form fields for this page here } = formData;
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
     {} as DonorResponse,
   );
   const currentSchedule = formValues;
 
+  const onSubmitClick = async () => {
+    await SchedulingAPIClient.createSchedule(currentSchedule);
+    next();
+  };
+
   const getDonorData = async () => {
     const donorResponse = await DonorAPIClient.getDonorById(
       authenticatedUser!.id,
     );
+    setForm({ target: { name: "donorId", value: donorResponse.id } });
     setCurrentDonor(donorResponse);
   };
 
@@ -49,8 +52,7 @@ const ConfirmDetails = ({
     getDonorData();
   }, [currentSchedule.id]);
   return (
-    // Insert confirm Donation detail page here
-    <Container mt="2rem" maxWidth={{ base: "default", md: "70%" }}>
+    <Container maxWidth={{ base: "default", md: "70%" }} p="30px">
       {isBeingEdited ? (
         <IconButton
           onClick={() => history.push(Routes.DASHBOARD_PAGE)}
@@ -63,10 +65,16 @@ const ConfirmDetails = ({
       ) : (
         <SchedulingProgressBar activeStep={3} totalSteps={4} />
       )}
+      {isBeingEdited ? (
+        <Text textStyle="mobileHeader1" mt="2em">
+          Donation Details
+        </Text>
+      ) : (
+        <Text textStyle="mobileHeader2" mt="2em">
+          Confirm Donation Details
+        </Text>
+      )}
 
-      <Text textStyle="mobileHeader1" mb="12px">
-        Donation Details
-      </Text>
       <Badge
         borderRadius="full"
         pt="6px"
@@ -75,12 +83,12 @@ const ConfirmDetails = ({
         pr="14px"
         color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
         backgroundColor={`${(colorMap as any)[currentSchedule?.frequency]}.50`}
-        mb="56px"
       >
         {currentSchedule?.frequency}
       </Badge>
 
       <Box
+        p="1.5em"
         pl="0"
         align="left"
         mb="2rem"
@@ -169,7 +177,7 @@ const ConfirmDetails = ({
         </Box>
       </Box>
 
-      <Box pl="0" align="left">
+      <Box m="3em 0" pl="0" align="left">
         <Text textStyle="mobileHeader2">Donor information</Text>
         <Text textStyle="mobileBody">
           {currentDonor.firstName} {currentDonor.lastName}

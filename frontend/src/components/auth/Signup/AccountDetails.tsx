@@ -3,28 +3,34 @@ import {
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   IconButton,
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useContext, useReducer, useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import {
-  HOME_PAGE,
+  DASHBOARD_PAGE,
   LANDING_PAGE,
-  VERIFICATION_PAGE,
+  LOGIN_PAGE,
 } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import {
-  initialState,
-  passwordVerificationReducer,
-} from "../../../reducers/PasswordVerificationReducer";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import { BackArrow, CloseIcon } from "../../common/icons";
 import {
@@ -47,9 +53,10 @@ const AccountDetails = ({
   formValues: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
-  const { previous } = navigation;
+  const { previous, next } = navigation;
+  const [isDesktop] = useMediaQuery("(min-width: 768px)");
   const {
     firstName,
     lastName,
@@ -62,7 +69,22 @@ const AccountDetails = ({
   } = formValues;
   const [showPassword, setShowPassword] = useState(false);
 
+  const [tempPassword, setTempPassword] = React.useState("");
+  const [interaction, setInteraction] = React.useState({
+    email: false,
+    password: false,
+  });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const onSignupClick = async () => {
+    if (!email) {
+      setInteraction({ ...interaction, email: true });
+    }
+    if (!password) {
+      setInteraction({ ...interaction, password: true });
+    }
+    if (!password || !email || password !== confirmPassword) {
+      return false;
+    }
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,
@@ -73,32 +95,26 @@ const AccountDetails = ({
       role,
     );
     if (!user) {
-      return alert("Signup failed");
+      onOpen();
+      return false;
     }
-    setAuthenticatedUser(user);
+    await setAuthenticatedUser(user);
 
-    return history.push(VERIFICATION_PAGE);
+    return next();
   };
-
-  const [state, dispatch] = useReducer(
-    passwordVerificationReducer,
-    initialState(),
-  );
 
   const verifyPassword = (input: string) => {
-    dispatch({
-      type: "CHECK_PASSWORD_REQUIREMENTS",
-      isTwelveChars: checkLength(input),
-      isUpperCase: checkForUpperCase(input),
-      isLowerCase: checkForLowerCase(input),
-      isNumber: checkForNumbers(input),
-      isSpecialChar: checkForSpecialCharacters(input),
-    });
+    if (
+      checkLength(input) &&
+      checkForLowerCase(input) &&
+      checkForUpperCase(input) &&
+      checkForNumbers(input) &&
+      checkForSpecialCharacters(input)
+    ) {
+      return true;
+    }
+    return false;
   };
-
-  if (authenticatedUser) {
-    return <Redirect to={HOME_PAGE} />;
-  }
 
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">
@@ -118,35 +134,49 @@ const AccountDetails = ({
         onClick={() => history.push(LANDING_PAGE)}
         backgroundColor="transparent"
       >
-        <CloseIcon color="#111111" />
+        {!isDesktop && <CloseIcon color="#111111" />}
       </IconButton>
       <Text mt="67px" textStyle="mobileHeader1">
         Account details
       </Text>
-      <FormControl mt="2rem">
+      <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>
           <MandatoryInputDescription label="Email Address" />
           <Input
             mt="2"
             value={email}
-            onChange={setForm}
+            onChange={(e) => {
+              setInteraction({ ...interaction, email: true });
+              setForm(e);
+            }}
             name="email"
-            placeholder="Enter email"
+            placeholder="i.e. janedoe@gmail.com"
           />
+          <FormErrorMessage>
+            Please enter a valid email address.
+          </FormErrorMessage>
         </Box>
-        <Box mt="1rem">
-          <MandatoryInputDescription label="Password" />
+      </FormControl>
 
+      <Box mt="1rem">
+        <MandatoryInputDescription label="Password" />
+
+        <FormControl isInvalid={!tempPassword && interaction.password}>
           <InputGroup size="md">
             <Input
               pr="4.5rem"
               type={showPassword ? "text" : "password"}
-              placeholder="New password"
+              placeholder="Enter password"
               name="password"
-              value={password}
+              value={tempPassword}
               onChange={(event) => {
-                verifyPassword(event?.target.value);
-                setForm(event);
+                setInteraction({ ...interaction, password: true });
+                setTempPassword(event.target.value);
+                if (verifyPassword(event?.target.value)) {
+                  setForm({
+                    target: { name: "password", value: event.target.value },
+                  });
+                }
               }}
             />
             <InputRightElement width="4.5rem">
@@ -164,46 +194,77 @@ const AccountDetails = ({
             <Text>Password Requirements: </Text>
             <Stack alignItems="start" spacing="0">
               <PasswordRequirement
-                state={state.isTwelveChars}
+                state={checkLength(tempPassword)}
                 label="minimum of 12 characters as string"
               />
               <PasswordRequirement
-                state={state.isUpperCase}
+                state={checkForUpperCase(tempPassword)}
                 label="at least 1 uppercase letter"
               />
               <PasswordRequirement
-                state={state.isLowerCase}
+                state={checkForLowerCase(tempPassword)}
                 label="at least 1 lowercase letter"
               />
               <PasswordRequirement
-                state={state.isNumber}
+                state={checkForNumbers(tempPassword)}
                 label="at least 1 number"
               />
               <PasswordRequirement
-                state={state.isSpecialChar}
+                state={checkForSpecialCharacters(tempPassword)}
                 label="at least 1 special character"
               />
             </Stack>
           </Text>
-        </Box>
+          <FormErrorMessage>Please enter a valid password.</FormErrorMessage>
+        </FormControl>
+      </Box>
 
+      <FormControl isInvalid={confirmPassword !== tempPassword}>
         <Box mt="2rem">
           <MandatoryInputDescription label="Confirm password" />
           <Input
             mt="2"
             type="password"
-            value={confirmPassword}
             onChange={setForm}
             name="confirmPassword"
             placeholder="Re-enter password"
           />
+          <FormErrorMessage>Passwords do not match.</FormErrorMessage>
         </Box>
-        <Box mt="4rem">
-          <Button mt="2" variant="authNavigation" onClick={onSignupClick}>
+        <Box mt="3rem">
+          <Button
+            mt="2"
+            variant="navigation"
+            onClick={onSignupClick}
+            width="100%"
+          >
             Next
           </Button>
         </Box>
       </FormControl>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Sign up failed</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody textStyle="mobileBody">
+            Sorry, something went wrong. Please try again later and check all
+            fields have correct formatting.
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              width="100%"
+              color="squash.100"
+              backgroundColor="raddish.100"
+              mr={3}
+              onClick={() => history.push(LOGIN_PAGE)}
+            >
+              Return to Log In
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };

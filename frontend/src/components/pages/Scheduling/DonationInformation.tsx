@@ -7,9 +7,11 @@ import {
   HStack,
   Stack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import React, { ChangeEvent } from "react";
 
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
 import lg from "../../../assets/donation-sizes/md.png";
 import md from "../../../assets/donation-sizes/sm.png";
@@ -23,10 +25,10 @@ const DonationInformation: any = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
-  const { previous, next } = navigation;
-  const { categories, size } = formValues;
-
+  const { previous, next, go } = navigation;
+  const { id, categories, size } = formValues;
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -46,6 +48,13 @@ const DonationInformation: any = ({
           : categories.filter((string) => item !== string),
       },
     });
+  };
+
+  const onSaveClick = async () => {
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    if (go !== undefined) {
+      go("confirm donation details");
+    }
   };
 
   const DonationSizes: DonationSizeInterface[] = [
@@ -122,14 +131,29 @@ const DonationInformation: any = ({
         </Stack>
       </FormControl>
 
-      <HStack>
-        <Button onClick={previous} variant="navigation">
-          Back
-        </Button>
-        <Button onClick={next} variant="navigation">
-          Next
-        </Button>
-      </HStack>
+      {isBeingEdited ? (
+        <VStack>
+          <Button onClick={onSaveClick} variant="navigation" w="100%">
+            Save Changes
+          </Button>
+          <Button
+            onClick={() => go && go("confirm donation details")}
+            variant="cancelNavigation"
+            w="100%"
+          >
+            Cancel
+          </Button>
+        </VStack>
+      ) : (
+        <HStack>
+          <Button onClick={previous} variant="navigation">
+            Back
+          </Button>
+          <Button onClick={next} variant="navigation">
+            Next
+          </Button>
+        </HStack>
+      )}
     </Container>
   );
 };
