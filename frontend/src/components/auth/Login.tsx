@@ -12,7 +12,7 @@ import { useForm } from "react-hooks-helper";
 import { Link, Redirect } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import { HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
+import { DASHBOARD_PAGE, HOME_PAGE, SIGNUP_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../types/AuthTypes";
 
@@ -26,7 +26,7 @@ const Login = (): React.ReactElement => {
   };
 
   if (authenticatedUser) {
-    return <Redirect to={HOME_PAGE} />;
+    return <Redirect to={DASHBOARD_PAGE} />;
   }
 
   return (

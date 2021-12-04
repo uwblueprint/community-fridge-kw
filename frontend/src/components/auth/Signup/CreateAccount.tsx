@@ -4,7 +4,6 @@ import {
   Container,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   IconButton,
   Input,
   Text,
@@ -68,13 +67,13 @@ const CreateAccount = ({
         Create an account
       </Text>
       <Text textStyle="mobileSmall" color="hubbard.100">
-        Account information can be edited in the Account section of the
+        Account information can be edited in the My Account section of the
         platform.
       </Text>
 
       <FormControl mt="2rem" isRequired>
         <Box>
-          <Text textStyle="mobileBodyBold" color="hubbard.100">
+          <Text mb="0.5rem" textStyle="mobileBodyBold" color="hubbard.100">
             Organization
           </Text>
           <MandatoryInputDescription label="Name of Business" />
@@ -96,7 +95,12 @@ const CreateAccount = ({
           </FormControl>
         </Box>
 
-        <Text mt="2rem" textStyle="mobileBodyBold" color="hubbard.100">
+        <Text
+          mt="2rem"
+          mb="0.5rem"
+          textStyle="mobileBodyBold"
+          color="hubbard.100"
+        >
           Point of Contact
         </Text>
         <Box>
@@ -151,7 +155,7 @@ const CreateAccount = ({
           </FormControl>
         </Box>
         <Box mt="1rem">
-          <Button mt="2" variant="authNavigation" onClick={checkValidation}>
+          <Button mt="1.5" variant="navigation" onClick={checkValidation}>
             Next
           </Button>
         </Box>
