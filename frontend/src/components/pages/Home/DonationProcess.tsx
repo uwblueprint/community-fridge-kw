@@ -70,7 +70,7 @@ const DonationProcess = (): JSX.Element => {
         />
       </Flex>
 
-      <Button width="100%" variant="navigation">
+      <Button width="100%" variant="navigation" display={{ md: "none" }}>
         Start now
       </Button>
     </Box>

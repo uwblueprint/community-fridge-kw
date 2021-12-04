@@ -44,7 +44,7 @@ const VolunteerRoles = () => (
     pt="73px"
     backgroundColor={{ base: "cottonCandy.100", md: "white" }}
     mt="57px"
-    pb="120px"
+    pb="2rem"
   >
     <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
       For Volunteers
