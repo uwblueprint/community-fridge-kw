@@ -87,10 +87,6 @@ const App = (): React.ReactElement => {
                   path={Routes.SCHEDULING_PAGE}
                   component={Scheduling}
                 />
-                <Route
-                  path={Routes.SCHEDULE_THANKYOU_PAGE}
-                  component={ThankYou}
-                />
                 <Route exact path="*" component={NotFound} />
               </Switch>
               <Footer />

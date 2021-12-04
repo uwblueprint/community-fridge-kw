@@ -15,6 +15,6 @@ export type Schedule = {
   recurringDonationId: string;
   recurringDonationEndDate: string;
   notes: string;
-} | null;
+};
 
 export type UpdatedSchedulingFields = Partial<Omit<Schedule, "donorId">>;

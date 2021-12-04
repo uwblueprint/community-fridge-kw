@@ -9,9 +9,11 @@ import {
   Input,
   Text,
   Textarea,
+  VStack,
 } from "@chakra-ui/react";
 import React from "react";
 
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
@@ -20,10 +22,12 @@ const VolunteerInformation = ({
   formValues,
   setForm,
   navigation,
+  isBeingEdited,
 }: SchedulingStepProps) => {
-  const { previous, next } = navigation;
+  const { previous, next, go } = navigation;
 
   const {
+    id,
     startTime,
     endTime,
     frequency,
@@ -47,19 +51,26 @@ const VolunteerInformation = ({
   };
 
   const volunteerNeededRadioValue = () => {
-    if (volunteerNeeded !== null) {
+    if (volunteerNeeded !== null && volunteerNeeded !== undefined) {
       return volunteerNeeded ? "Yes" : "No";
     }
     return "";
   };
 
   const isPickupRadioValue = () => {
-    if (isPickup !== null) {
+    if (isPickup !== null && isPickup !== undefined) {
       return isPickup
         ? volunteerAssistanceValues[0]
         : volunteerAssistanceValues[1];
     }
     return "";
+  };
+
+  const onSaveClick = async () => {
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    if (go !== undefined) {
+      go("confirm donation details");
+    }
   };
 
   return (
@@ -145,14 +156,29 @@ const VolunteerInformation = ({
           placeholder="john@shawarmaplus.com"
         />
       </FormControl>
-      <HStack>
-        <Button onClick={previous} variant="navigation">
-          Back
-        </Button>
-        <Button onClick={next} variant="navigation">
-          Next
-        </Button>
-      </HStack>
+      {isBeingEdited ? (
+        <VStack>
+          <Button onClick={onSaveClick} variant="navigation" w="100%">
+            Save Changes
+          </Button>
+          <Button
+            onClick={() => go && go("confirm donation details")}
+            variant="cancelNavigation"
+            w="100%"
+          >
+            Cancel
+          </Button>
+        </VStack>
+      ) : (
+        <HStack>
+          <Button onClick={previous} variant="navigation">
+            Back
+          </Button>
+          <Button onClick={next} variant="navigation">
+            Next
+          </Button>
+        </HStack>
+      )}
     </Container>
   );
 };
