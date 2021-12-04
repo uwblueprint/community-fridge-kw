@@ -79,7 +79,6 @@ const AccountDetails = ({
     password: false,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const onSignupClick = async () => {
     if (!email) {
       setInteraction({ ...interaction, email: true });
@@ -90,7 +89,6 @@ const AccountDetails = ({
     if (!password || !email || password !== confirmPassword) {
       return false;
     }
-
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,
@@ -115,18 +113,13 @@ const AccountDetails = ({
   );
 
   const verifyPassword = (input: string) => {
-    dispatch({
-      type: "CHECK_PASSWORD_REQUIREMENTS",
-      isTwelveChars: checkLength(input),
-      isUpperCase: checkForUpperCase(input),
-      isLowerCase: checkForLowerCase(input),
-      isNumber: checkForNumbers(input),
-      isSpecialChar: checkForSpecialCharacters(input),
-    });
-
-    const { isTwelveChars, isUpperCase, isLowerCase, isNumber } = state;
-
-    if (isTwelveChars && isUpperCase && isLowerCase && isNumber) {
+    if (
+      checkLength(input) &&
+      checkForLowerCase(input) &&
+      checkForUpperCase(input) &&
+      checkForNumbers(input) &&
+      checkForSpecialCharacters(input)
+    ) {
       return true;
     }
     return false;
@@ -189,7 +182,9 @@ const AccountDetails = ({
                 setInteraction({ ...interaction, password: true });
                 setTempPassword(event.target.value);
                 if (verifyPassword(event?.target.value)) {
-                  setForm(event);
+                  setForm({
+                    target: { name: "password", value: event.target.value },
+                  });
                 }
               }}
             />
