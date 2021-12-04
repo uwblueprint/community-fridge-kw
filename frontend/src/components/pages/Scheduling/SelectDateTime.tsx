@@ -252,6 +252,17 @@ const SelectDateTime = ({
   };
 
   const today = new Date();
+  const getSunday = (d: Date) => {
+    const day = d.getDay();
+    const diff = d.getDate() - day; // adjust when day is sunday
+    return new Date(d.setDate(diff));
+  };
+
+  const getMaxDate = () => {
+    const sunday = getSunday(today);
+    const diff = sunday.getDate() + 13;
+    return new Date(sunday.setDate(diff));
+  };
 
   return (
     <Container p="30px">
@@ -264,8 +275,8 @@ const SelectDateTime = ({
         <DatePicker
           render={<InputIcon style={{ height: "3em" }} />}
           className="rmdp-mobile purple"
-          minDate={today}
-          maxDate={new Date().setDate(today.getDate() + 14)}
+          minDate={getSunday(today)}
+          maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
         />
