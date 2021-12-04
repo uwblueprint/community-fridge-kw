@@ -38,13 +38,13 @@ const VolunteerRoleStep = ({
 };
 
 const VolunteerRoles = () => (
-  <Container
-    maxWidth={{ base: "default", md: "70%" }}
-    px="42px"
-    pt="73px"
+  <Box
     backgroundColor={{ base: "cottonCandy.100", md: "white" }}
     mt="57px"
     pb="2rem"
+    px={{ base: "42px", md: "none" }}
+    pt={{ base: "73px", md: "none" }}
+    mx={{ base: "-42px", md: "0px" }}
   >
     <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
       For Volunteers
@@ -66,7 +66,7 @@ const VolunteerRoles = () => (
         description="Support a donation from a local business, organization or individual by making a pick-up or assisting with donation unloading and stocking at the fridge."
       />
     </Flex>
-  </Container>
+  </Box>
 );
 
 export default VolunteerRoles;

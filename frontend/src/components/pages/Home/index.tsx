@@ -1,12 +1,4 @@
-import {
-  Box,
-  Flex,
-  Button,
-  Container,
-  Image,
-  Text,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import { Box, Flex, Button, Container, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -21,7 +13,11 @@ const Home = (): JSX.Element => {
 
   return (
     <>
-      <Container maxWidth={{ base: "default", md: "70%" }} px="42px" pt="73px">
+      <Container
+        maxWidth={{ base: "default", md: "70%" }}
+        px={{ base: "42px", md: "0px" }}
+        pt="73px"
+      >
         <Image
           src="drawer-logo.png"
           alt="Community Fridge logo"
@@ -55,6 +51,7 @@ const Home = (): JSX.Element => {
             width="374px"
             height="338px"
             ml="5rem"
+            alignSelf="flex-end"
             src={communityFrigeLandingPageImage}
             alt="Community Fridge Image"
           />
@@ -63,8 +60,8 @@ const Home = (): JSX.Element => {
           {/* TODO: Add back after styling fix <ViewDonations isPublicView /> */}
         </Box>
         <DonationProcess />
+        <VolunteerRoles />
       </Container>
-      <VolunteerRoles />
     </>
   );
 };
