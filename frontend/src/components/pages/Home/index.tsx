@@ -18,7 +18,6 @@ import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png
 
 const Home = (): JSX.Element => {
   const history = useHistory();
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   return (
     <>
