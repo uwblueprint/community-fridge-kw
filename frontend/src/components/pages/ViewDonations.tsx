@@ -16,12 +16,17 @@ import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
 import { Schedule } from "../../types/SchedulingTypes";
 import Calendar from "../common/Calendar/Calendar";
 
-const ViewDonations = (): React.ReactElement => {
+const ViewDonations = ({
+  isPublicView,
+}: {
+  isPublicView?: boolean;
+}): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
   >(new Date());
 
   const [isMobile] = useMediaQuery("(max-width: 768px)");
+
   const [test, setTest] = useState<any>(0);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
@@ -60,9 +65,15 @@ const ViewDonations = (): React.ReactElement => {
         >
           Upcoming Scheduled Fridge Donations
         </Text>
-        <Text textStyle={isMobile ? "mobileSmall" : "desktopSmall"} pt="1.4rem">
-          Select a card to see more details pertaining to the upcoming donation.
-        </Text>
+        {!isPublicView && (
+          <Text
+            textStyle={isMobile ? "mobileSmall" : "desktopSmall"}
+            pt="1.4rem"
+          >
+            Select a card to see more details pertaining to the upcoming
+            donation.
+          </Text>
+        )}
         {isMobile ? (
           <HStack py="1.2rem">
             <Text textStyle="mobileHeader4">

@@ -1,4 +1,12 @@
-import { Box, Flex, Button, Container, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Button,
+  Container,
+  Image,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -6,11 +14,11 @@ import { SCHEDULING_PAGE } from "../../../constants/Routes";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
 
-import ViewDonations from "../ViewDonations";
 import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png";
 
 const Home = (): JSX.Element => {
   const history = useHistory();
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   return (
     <>
@@ -52,7 +60,9 @@ const Home = (): JSX.Element => {
             alt="Community Fridge Image"
           />
         </Flex>
-        {/* <ViewDonations /> */}
+        <Box maxWidth={{ base: "default", md: "70%" }} marginLeft="-7.5rem">
+          {/* TODO: Add back after styling fix <ViewDonations isPublicView /> */}
+        </Box>
         <DonationProcess />
       </Container>
       <VolunteerRoles />
