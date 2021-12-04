@@ -234,7 +234,6 @@ const AccountDetails = ({
           <Input
             mt="2"
             type="password"
-            value={confirmPassword}
             onChange={setForm}
             name="confirmPassword"
             placeholder="Re-enter password"
@@ -242,7 +241,14 @@ const AccountDetails = ({
           <FormErrorMessage>Passwords do not match.</FormErrorMessage>
         </Box>
         <Box mt="3rem">
-          <Button mt="2" variant="navigation" onClick={onSignupClick}>
+          <Button
+            mt="2"
+            variant="navigation"
+            onClick={() => {
+              console.log(formValues);
+              onSignupClick();
+            }}
+          >
             Next
           </Button>
         </Box>
