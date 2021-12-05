@@ -14,8 +14,12 @@ import { Email, Facebook, Instagram } from "./icons";
 const Footer = (): JSX.Element => (
   <>
     <Divider pt={{ base: "200px", lg: "200px", md: "200px", sm: "0px" }} />
-    <Box
-      p={{ base: "4rem" }}
+    <Container
+      maxWidth={{ base: "default", md: "70%" }}
+      pt={{ base: "4rem" }}
+      pb={{ base: "4rem" }}
+      pl={{ base: "0px", lg: "0px", md: "0px", sm: "2rem" }}
+      pr={{ base: "0px", lg: "0px", md: "0px", sm: "4rem" }}
       display={{ md: "flex" }}
       justifyContent="space-evenly"
     >
@@ -79,7 +83,7 @@ const Footer = (): JSX.Element => (
           </Container>
         </Flex>
       </VStack>
-    </Box>
+    </Container>
   </>
 );
 
