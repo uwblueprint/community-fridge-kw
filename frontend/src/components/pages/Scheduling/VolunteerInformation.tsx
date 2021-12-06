@@ -90,11 +90,11 @@ const VolunteerInformation = ({
     };
     let valid = true;
 
-    if (volunteerNeeded === null) {
+    if (volunteerNeeded === undefined) {
       valid = false;
       newErrors.volunteerNeeded = "Required field.";
     }
-    if (volunteerNeeded && isPickup === null) {
+    if (volunteerNeeded && isPickup === undefined) {
       valid = false;
       newErrors.isPickup = "Required field.";
     }
@@ -196,7 +196,7 @@ const VolunteerInformation = ({
               placeholder="Enter time"
               size="lg"
             />
-            <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
+            <FormErrorMessage>{formErrors.volunteerTime}</FormErrorMessage>
           </FormControl>
         </>
       )}
