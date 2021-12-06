@@ -3,13 +3,14 @@ import {
   Checkbox,
   Container,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
@@ -95,6 +96,36 @@ const DonationInformation: any = ({
     "Hygiene products (tampons, pads, soap, etc.)",
   ];
 
+  const [formErrors, setFormErrors] = useState({
+    categories: "",
+    size: "",
+  });
+
+  const validateForm = () => {
+    const newErrors = {
+      categories: "",
+      size: "",
+    };
+    let valid = true;
+
+    if (!categories || categories.length === 0) {
+      valid = false;
+      newErrors.categories = "Required field.";
+    }
+    if (!size) {
+      valid = false;
+      newErrors.size = "Required field.";
+    }
+    setFormErrors(newErrors);
+    return valid;
+  }
+
+  const handleNext = () => {
+    if (validateForm()) {
+      next();
+    } 
+  }
+
   return (
     <Container p="30px">
       <SchedulingProgressBar activeStep={1} totalSteps={4} />
@@ -106,12 +137,13 @@ const DonationInformation: any = ({
         values={DonationSizes}
         name="size"
         isRequired
+        error={formErrors.size}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           handleChange(e, "size");
         }}
       />
 
-      <FormControl isRequired my="50px">
+      <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
         <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
           Type of item(s)
         </FormLabel>
@@ -129,6 +161,7 @@ const DonationInformation: any = ({
             </Checkbox>
           ))}
         </Stack>
+        <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
       </FormControl>
 
       {isBeingEdited ? (
@@ -149,7 +182,7 @@ const DonationInformation: any = ({
           <Button onClick={previous} variant="navigation">
             Back
           </Button>
-          <Button onClick={next} variant="navigation">
+          <Button onClick={handleNext} variant="navigation">
             Next
           </Button>
         </HStack>

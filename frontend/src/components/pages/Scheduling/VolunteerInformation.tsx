@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   HStack,
@@ -11,7 +12,7 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
@@ -73,6 +74,48 @@ const VolunteerInformation = ({
     }
   };
 
+  const [formErrors, setFormErrors] = useState({
+    volunteerNeeded: "",
+    volunteerTime: "",
+    pickupLocation: "",
+    isPickup: "",
+  });
+
+  const validateForm = () => {
+    const newErrors = {
+      volunteerNeeded: "",
+      volunteerTime: "",
+      pickupLocation: "",
+      isPickup: "",
+    };
+    let valid = true;
+
+    if (volunteerNeeded === null) {
+      valid = false;
+      newErrors.volunteerNeeded = "Required field.";
+    }
+    if (volunteerNeeded && isPickup === null) {
+      valid = false;
+      newErrors.isPickup = "Required field.";
+    }
+    if (volunteerNeeded && !volunteerTime) {
+      valid = false;
+      newErrors.volunteerTime = "Required field.";
+    }
+    if (volunteerNeeded && isPickup && !pickupLocation) {
+      valid = false
+      newErrors.pickupLocation = "Required field.";
+    }
+    setFormErrors(newErrors);
+    return valid;
+  }
+
+  const handleNext = () => {
+    if (validateForm()) {
+      next();
+    } 
+  }
+
   return (
     <Container p="30px">
       <SchedulingProgressBar activeStep={2} totalSteps={4} />
@@ -103,6 +146,7 @@ const VolunteerInformation = ({
         values={volunteerNeededValues}
         icons={[]}
         isRequired
+        error={formErrors.volunteerNeeded}
         helperText={volunteerRequiredHelperText}
         onChange={(e: string) => {
           handleChange(e === "Yes", "volunteerNeeded");
@@ -117,12 +161,13 @@ const VolunteerInformation = ({
             values={volunteerAssistanceValues}
             icons={[]}
             isRequired
+            error={formErrors.isPickup}
             onChange={(e: string) => {
               handleChange(e === volunteerAssistanceValues[0], "isPickup");
             }}
           />
           {isPickup && (
-            <FormControl isRequired m="3em 0">
+            <FormControl isRequired isInvalid={!!formErrors.pickupLocation} m="3em 0">
               <FormLabel>Pickup location:</FormLabel>
               <Input
                 value={pickupLocation}
@@ -130,9 +175,10 @@ const VolunteerInformation = ({
                 placeholder="Enter location"
                 size="lg"
               />
+            <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
             </FormControl>
           )}
-          <FormControl isRequired m="3em 0">
+          <FormControl isRequired isInvalid={!!formErrors.volunteerTime} m="3em 0">
             <FormLabel>
               What is the specific time you require assistance?
             </FormLabel>
@@ -142,6 +188,7 @@ const VolunteerInformation = ({
               placeholder="Enter time"
               size="lg"
             />
+            <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
           </FormControl>
         </>
       )}
@@ -174,7 +221,7 @@ const VolunteerInformation = ({
           <Button onClick={previous} variant="navigation">
             Back
           </Button>
-          <Button onClick={next} variant="navigation">
+          <Button onClick={handleNext} variant="navigation">
             Next
           </Button>
         </HStack>

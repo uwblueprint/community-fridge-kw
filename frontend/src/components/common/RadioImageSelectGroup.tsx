@@ -2,6 +2,7 @@
 import {
   Box,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Image,
@@ -20,6 +21,7 @@ interface RadioImageSelectGroupProps {
   values: DonationSizeInterface[];
   name: string;
   isRequired?: boolean;
+  error?: string;
   onChange: (arg0: any) => void;
 }
 
@@ -63,7 +65,7 @@ const RadioImageSelectButton = (props: any) => {
 };
 
 const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
-  const { value, name, values, isRequired, onChange } = props;
+  const { value, name, values, isRequired, error, onChange } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     onChange,
     value,
@@ -92,11 +94,12 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
   const group = getRootProps();
 
   return (
-    <FormControl isRequired={isRequired} m="2em 0">
+    <FormControl isRequired={isRequired} isInvalid={!!error} m="2em 0">
       <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
         Size/quantity of donation
       </FormLabel>
       <VStack {...group}>{radioImageSelectButtons}</VStack>
+      <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );
 };

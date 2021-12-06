@@ -2,6 +2,7 @@ import {
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Input,
@@ -10,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useContext, useState } from "react";
+import { toDateString } from "react-jsonschema-form/lib/utils";
 import { Calendar, DateObject } from "react-multi-date-picker";
 import { Redirect } from "react-router-dom";
 
@@ -130,6 +132,14 @@ const SelectDateTime = ({
       : "",
   );
 
+  const [formErrors, setFormErrors] = useState({
+    date: "",
+    dayPart: "",
+    timeRange: "",
+    frequency: "",
+    recurringDonationEndDate: "",
+  });
+
   // fetch schedules
   React.useEffect(() => {
     const fetchSchedules = async () => {
@@ -245,13 +255,68 @@ const SelectDateTime = ({
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {
+      date: "",
+      dayPart: "",
+      timeRange: "",
+      frequency: "",
+      recurringDonationEndDate: "",
+    };
+    let valid = true;
+
+    if (!date) {
+      valid = false;
+      newErrors.date = "Required field."
+    }
+    if (!dayPart) {
+      valid = false;
+      newErrors.dayPart= "Required field."
+    }    
+    if (!endTime) {
+      // Null endTime means a timeRange was not selected in the form
+      valid = false;
+      newErrors.timeRange= "Required field."
+    }     
+    if (!frequency) {
+      valid = false;
+      newErrors.frequency= "Required field."
+    } else if (frequency !== "One time donation") {
+      if (!recurringDonationEndDate) {
+        valid = false;
+        newErrors.recurringDonationEndDate = "Required field."
+      } else if (recurringDonationEndDate === "Invalid Date") {
+        valid = false;
+        newErrors.recurringDonationEndDate = "Required format: MM/DD/YYYY";
+      } else {
+        // Validate end date is within 6 months of start date
+        const startDate = new Date(startTime);
+        const maxEndDate = new Date(startTime);
+        maxEndDate.setMonth(startDate.getMonth() + 6);
+        const endDate = new Date(recurringDonationEndDate);
+        if (!(startDate <= endDate && endDate <= maxEndDate)) {
+          valid = false;
+          newErrors.recurringDonationEndDate = "End date must be within 6 months of start date." 
+        }
+      }
+    }
+    setFormErrors(newErrors);
+    return valid;
+  }
+
+  const handleNext = () => {
+    if (validateForm()) {
+      next();
+    } 
+  }
+
   return (
     <Container p="30px">
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         Date and Time
       </Text>
-      <FormControl isRequired>
+      <FormControl isRequired isInvalid={!!formErrors.date}>
         <FormLabel fontWeight="600">Select date of donation</FormLabel>
         <Calendar
           buttons={false}
@@ -270,6 +335,7 @@ const SelectDateTime = ({
         values={dayParts}
         icons={[]}
         isRequired
+        error={formErrors.dayPart}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           handleChange(e, "dayPart");
         }}
@@ -283,6 +349,7 @@ const SelectDateTime = ({
           values={showTimeSlots}
           icons={icons}
           isRequired
+          error={formErrors.timeRange}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleTimeRangeChange(e);
           }}
@@ -304,12 +371,13 @@ const SelectDateTime = ({
         values={frequencies}
         icons={[]}
         isRequired
+        error={formErrors.frequency}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           handleChange(e, "frequency");
         }}
       />
       {!isOneTimeDonation && (
-        <FormControl isRequired mb="3em">
+        <FormControl isRequired isInvalid={!!formErrors.recurringDonationEndDate} mb="3em">
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
           <Input
             isDisabled={isBeingEdited}
@@ -317,6 +385,7 @@ const SelectDateTime = ({
             onChange={(e) => handleChangeRecurringDate(e.target.value)}
             placeholder="MM/DD/YYYY"
           />
+          <FormErrorMessage>{formErrors.recurringDonationEndDate}</FormErrorMessage>
         </FormControl>
       )}
       {isBeingEdited ? (
@@ -337,7 +406,7 @@ const SelectDateTime = ({
           <Button onClick={previous} variant="navigation">
             Back
           </Button>
-          <Button onClick={next} variant="navigation">
+          <Button onClick={handleNext} variant="navigation">
             Next
           </Button>
         </HStack>

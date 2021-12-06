@@ -2,6 +2,7 @@
 import {
   Box,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   HStack,
@@ -22,6 +23,7 @@ interface RadioSelectGroupProps {
   helperText?: string;
   icons: number[];
   isRequired: boolean;
+  error?: string;
   onChange: (arg0: any) => void;
 }
 
@@ -89,6 +91,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
     helperText,
     icons,
     isRequired,
+    error,
     onChange,
   } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -110,7 +113,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   const group = getRootProps();
 
   return (
-    <FormControl isRequired={isRequired} m="2em 0">
+    <FormControl isRequired={isRequired} m="2em 0" isInvalid={!!error}>
       <FormLabel fontWeight="600">{label}</FormLabel>
       <FormHelperText fontSize="16px" color="black.100" mb="20px">
         {helperText}
@@ -129,6 +132,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
         </FormHelperText>
       )}
       <VStack {...group}>{radioSelectButtons}</VStack>
+      <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );
 };
