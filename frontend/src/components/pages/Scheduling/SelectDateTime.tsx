@@ -246,7 +246,10 @@ const SelectDateTime = ({
   };
 
   return (
-    <Container p="30px">
+    <Container
+      p={{ base: "30px", md: "2rem 1rem" }}
+      maxWidth={{ base: "default", md: "70%" }}
+    >
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         Date and Time
@@ -316,6 +319,7 @@ const SelectDateTime = ({
             value={recurringEndDate}
             onChange={(e) => handleChangeRecurringDate(e.target.value)}
             placeholder="MM/DD/YYYY"
+            maxWidth="740px"
           />
         </FormControl>
       )}

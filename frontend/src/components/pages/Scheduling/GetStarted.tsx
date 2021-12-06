@@ -8,11 +8,14 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
   const { next } = navigation;
 
   return (
-    <Container pl="42px" pr="42px" pt="73px">
+    <Container
+      p={{ base: "30px", md: "2rem 1rem" }}
+      maxWidth={{ base: "default", md: "70%" }}
+    >
       <Text marginBottom="30px" textStyle="mobileHeader2">
-        Schedule new donation drop off
+        Schedule a donation drop off
       </Text>
-      <Text marginBottom="30px" textStyle="mobileBody">
+      <Text marginBottom="1rem" textStyle="mobileBody">
         Submit general information of the food you are planning to donate. Pick
         the date and time you’re available to come in.
       </Text>
@@ -26,8 +29,9 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
         alt="Community Fridge"
         marginBottom="50px"
         width="100%"
+        maxWidth="600px"
       />
-      <Button onClick={next} variant="navigation" w="100%">
+      <Button onClick={next} variant="navigation" w="100%" maxWidth="500px">
         Get started
       </Button>
     </Container>

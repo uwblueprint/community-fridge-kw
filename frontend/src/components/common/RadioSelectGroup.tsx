@@ -110,7 +110,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   const group = getRootProps();
 
   return (
-    <FormControl isRequired={isRequired} m="2em 0">
+    <FormControl isRequired={isRequired} m="2em 0" maxWidth="800px">
       <FormLabel fontWeight="600">{label}</FormLabel>
       <FormHelperText fontSize="16px" color="black.100" mb="20px">
         {helperText}
@@ -128,7 +128,9 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
           slot without a pre-existing donor.
         </FormHelperText>
       )}
-      <VStack {...group}>{radioSelectButtons}</VStack>
+      <VStack {...group} maxWidth="350px">
+        {radioSelectButtons}
+      </VStack>
     </FormControl>
   );
 };

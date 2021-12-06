@@ -41,7 +41,13 @@ const Account = (): JSX.Element => {
   }
 
   return (
-    <Container centerContent pl="42px" pr="42px" pt="0.5rem" maxWidth={{ base: "default", md: "70%" }}>
+    <Container
+      centerContent
+      pl="42px"
+      pr="42px"
+      pt="0.5rem"
+      maxWidth={{ base: "default", md: "70%" }}
+    >
       <Box>
         <Text mt="67px" textStyle="mobileHeader1">
           My Account

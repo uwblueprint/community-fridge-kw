@@ -96,7 +96,10 @@ const DonationInformation: any = ({
   ];
 
   return (
-    <Container p="30px">
+    <Container
+      p={{ base: "30px", md: "2rem 1rem" }}
+      maxWidth={{ base: "default", md: "70%" }}
+    >
       <SchedulingProgressBar activeStep={1} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em">
         Donation Information
