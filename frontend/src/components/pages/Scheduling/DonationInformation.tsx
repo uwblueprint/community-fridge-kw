@@ -10,7 +10,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { useState, ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
@@ -118,13 +118,13 @@ const DonationInformation: any = ({
     }
     setFormErrors(newErrors);
     return valid;
-  }
+  };
 
   const handleNext = () => {
     if (validateForm()) {
       next();
-    } 
-  }
+    }
+  };
 
   return (
     <Container p="30px">

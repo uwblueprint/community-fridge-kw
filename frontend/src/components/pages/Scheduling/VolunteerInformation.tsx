@@ -103,18 +103,18 @@ const VolunteerInformation = ({
       newErrors.volunteerTime = "Required field.";
     }
     if (volunteerNeeded && isPickup && !pickupLocation) {
-      valid = false
+      valid = false;
       newErrors.pickupLocation = "Required field.";
     }
     setFormErrors(newErrors);
     return valid;
-  }
+  };
 
   const handleNext = () => {
     if (validateForm()) {
       next();
-    } 
-  }
+    }
+  };
 
   return (
     <Container p="30px">
@@ -167,7 +167,11 @@ const VolunteerInformation = ({
             }}
           />
           {isPickup && (
-            <FormControl isRequired isInvalid={!!formErrors.pickupLocation} m="3em 0">
+            <FormControl
+              isRequired
+              isInvalid={!!formErrors.pickupLocation}
+              m="3em 0"
+            >
               <FormLabel>Pickup location:</FormLabel>
               <Input
                 value={pickupLocation}
@@ -175,10 +179,14 @@ const VolunteerInformation = ({
                 placeholder="Enter location"
                 size="lg"
               />
-            <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
+              <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
             </FormControl>
           )}
-          <FormControl isRequired isInvalid={!!formErrors.volunteerTime} m="3em 0">
+          <FormControl
+            isRequired
+            isInvalid={!!formErrors.volunteerTime}
+            m="3em 0"
+          >
             <FormLabel>
               What is the specific time you require assistance?
             </FormLabel>

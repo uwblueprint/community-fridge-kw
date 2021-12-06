@@ -267,24 +267,24 @@ const SelectDateTime = ({
 
     if (!date) {
       valid = false;
-      newErrors.date = "Required field."
+      newErrors.date = "Required field.";
     }
     if (!dayPart) {
       valid = false;
-      newErrors.dayPart= "Required field."
-    }    
+      newErrors.dayPart = "Required field.";
+    }
     if (!endTime) {
       // Null endTime means a timeRange was not selected in the form
       valid = false;
-      newErrors.timeRange= "Required field."
-    }     
+      newErrors.timeRange = "Required field.";
+    }
     if (!frequency) {
       valid = false;
-      newErrors.frequency= "Required field."
+      newErrors.frequency = "Required field.";
     } else if (frequency !== "One time donation") {
       if (!recurringDonationEndDate) {
         valid = false;
-        newErrors.recurringDonationEndDate = "Required field."
+        newErrors.recurringDonationEndDate = "Required field.";
       } else if (recurringDonationEndDate === "Invalid Date") {
         valid = false;
         newErrors.recurringDonationEndDate = "Required format: MM/DD/YYYY";
@@ -296,19 +296,20 @@ const SelectDateTime = ({
         const endDate = new Date(recurringDonationEndDate);
         if (!(startDate <= endDate && endDate <= maxEndDate)) {
           valid = false;
-          newErrors.recurringDonationEndDate = "End date must be within 6 months of start date." 
+          newErrors.recurringDonationEndDate =
+            "End date must be within 6 months of start date.";
         }
       }
     }
     setFormErrors(newErrors);
     return valid;
-  }
+  };
 
   const handleNext = () => {
     if (validateForm()) {
       next();
-    } 
-  }
+    }
+  };
 
   return (
     <Container p="30px">
@@ -377,7 +378,11 @@ const SelectDateTime = ({
         }}
       />
       {!isOneTimeDonation && (
-        <FormControl isRequired isInvalid={!!formErrors.recurringDonationEndDate} mb="3em">
+        <FormControl
+          isRequired
+          isInvalid={!!formErrors.recurringDonationEndDate}
+          mb="3em"
+        >
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
           <Input
             isDisabled={isBeingEdited}
@@ -385,7 +390,9 @@ const SelectDateTime = ({
             onChange={(e) => handleChangeRecurringDate(e.target.value)}
             placeholder="MM/DD/YYYY"
           />
-          <FormErrorMessage>{formErrors.recurringDonationEndDate}</FormErrorMessage>
+          <FormErrorMessage>
+            {formErrors.recurringDonationEndDate}
+          </FormErrorMessage>
         </FormControl>
       )}
       {isBeingEdited ? (
