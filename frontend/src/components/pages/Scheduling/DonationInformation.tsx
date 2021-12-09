@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 
+import ErrorMessages from "./ErrorMessages";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
 import lg from "../../../assets/donation-sizes/md.png";
@@ -110,11 +111,11 @@ const DonationInformation: any = ({
 
     if (!categories || categories.length === 0) {
       valid = false;
-      newErrors.categories = "Required field.";
+      newErrors.categories = ErrorMessages.requiredField;
     }
     if (!size) {
       valid = false;
-      newErrors.size = "Required field.";
+      newErrors.size = ErrorMessages.requiredField;
     }
     setFormErrors(newErrors);
     return valid;

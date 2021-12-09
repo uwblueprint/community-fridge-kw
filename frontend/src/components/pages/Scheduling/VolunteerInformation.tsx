@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
+import ErrorMessages from "./ErrorMessages";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
@@ -92,19 +93,19 @@ const VolunteerInformation = ({
 
     if (volunteerNeeded === undefined) {
       valid = false;
-      newErrors.volunteerNeeded = "Required field.";
+      newErrors.volunteerNeeded = ErrorMessages.requiredField;
     }
     if (volunteerNeeded && isPickup === undefined) {
       valid = false;
-      newErrors.isPickup = "Required field.";
+      newErrors.isPickup = ErrorMessages.requiredField;
     }
     if (volunteerNeeded && !volunteerTime) {
       valid = false;
-      newErrors.volunteerTime = "Required field.";
+      newErrors.volunteerTime = ErrorMessages.requiredField;
     }
     if (volunteerNeeded && isPickup && !pickupLocation) {
       valid = false;
-      newErrors.pickupLocation = "Required field.";
+      newErrors.pickupLocation = ErrorMessages.requiredField;
     }
     setFormErrors(newErrors);
     return valid;

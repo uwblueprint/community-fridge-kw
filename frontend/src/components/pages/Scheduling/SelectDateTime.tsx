@@ -15,6 +15,7 @@ import { toDateString } from "react-jsonschema-form/lib/utils";
 import { Calendar, DateObject } from "react-multi-date-picker";
 import { Redirect } from "react-router-dom";
 
+import ErrorMessages from "./ErrorMessages";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
@@ -267,27 +268,27 @@ const SelectDateTime = ({
 
     if (!date) {
       valid = false;
-      newErrors.date = "Required field.";
+      newErrors.date = ErrorMessages.requiredField;
     }
     if (!dayPart) {
       valid = false;
-      newErrors.dayPart = "Required field.";
+      newErrors.dayPart = ErrorMessages.requiredField;
     }
     if (!endTime) {
       // Null endTime means a timeRange was not selected in the form
       valid = false;
-      newErrors.timeRange = "Required field.";
+      newErrors.timeRange = ErrorMessages.requiredField;
     }
     if (!frequency) {
       valid = false;
-      newErrors.frequency = "Required field.";
+      newErrors.frequency = ErrorMessages.requiredField;
     } else if (frequency !== "One time donation") {
       if (!recurringDonationEndDate) {
         valid = false;
-        newErrors.recurringDonationEndDate = "Required field.";
+        newErrors.recurringDonationEndDate = ErrorMessages.requiredField;
       } else if (recurringDonationEndDate === "Invalid Date") {
         valid = false;
-        newErrors.recurringDonationEndDate = "Required format: MM/DD/YYYY";
+        newErrors.recurringDonationEndDate = ErrorMessages.invalidRecurringDonationEndDateFormat;
       } else {
         // Validate end date is within 6 months of start date
         const startDate = new Date(startTime);
@@ -296,8 +297,7 @@ const SelectDateTime = ({
         const endDate = new Date(recurringDonationEndDate);
         if (!(startDate <= endDate && endDate <= maxEndDate)) {
           valid = false;
-          newErrors.recurringDonationEndDate =
-            "End date must be within 6 months of start date.";
+          newErrors.recurringDonationEndDate = ErrorMessages.recurringDonationEndDateWithinSixMonths;
         }
       }
     }
