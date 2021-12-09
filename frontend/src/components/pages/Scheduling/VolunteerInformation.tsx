@@ -79,13 +79,6 @@ const VolunteerInformation = ({
     return "";
   };
 
-  const onSaveClick = async () => {
-    await SchedulingAPIClient.updateSchedule(id, formValues);
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
-  };
-
   const validateForm = () => {
     const newErrors = {
       volunteerNeeded: "",
@@ -113,6 +106,16 @@ const VolunteerInformation = ({
     }
     setFormErrors(newErrors);
     return valid;
+  };
+
+  const onSaveClick = async () => {
+    if (!validateForm()) {
+      return;
+    }
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    if (go !== undefined) {
+      go("confirm donation details");
+    }
   };
 
   const handleNext = () => {

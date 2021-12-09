@@ -276,13 +276,6 @@ const SelectDateTime = ({
     });
   };
 
-  const onSaveClick = async () => {
-    await SchedulingAPIClient.updateSchedule(id, formValues);
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
-  };
-
   const validateForm = () => {
     const newErrors = {
       date: "",
@@ -337,6 +330,16 @@ const SelectDateTime = ({
   const handleNext = () => {
     if (validateForm()) {
       next();
+    }
+  };
+
+  const onSaveClick = async () => {
+    if (!validateForm()) {
+      return;
+    }
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    if (go !== undefined) {
+      go("confirm donation details");
     }
   };
 

@@ -65,13 +65,6 @@ const DonationInformation: any = ({
     });
   };
 
-  const onSaveClick = async () => {
-    await SchedulingAPIClient.updateSchedule(id, formValues);
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
-  };
-
   const DonationSizes: DonationSizeInterface[] = [
     {
       image: sm,
@@ -132,6 +125,16 @@ const DonationInformation: any = ({
   const handleNext = () => {
     if (validateForm()) {
       next();
+    }
+  };
+
+  const onSaveClick = async () => {
+    if (!validateForm()) {
+      return;
+    }
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    if (go !== undefined) {
+      go("confirm donation details");
     }
   };
 
