@@ -11,10 +11,11 @@ const VolunteerRoleStep = ({
   description,
 }: VolunteerRoleStepProps): JSX.Element => {
   return (
-    <Flex paddingBottom="1.5rem" paddingInline={{ base: "1rem" }}>
+    <Flex paddingBottom="1.5rem" mr="1rem">
       <Box
         flex="10"
         backgroundColor="cottonCandy.100"
+        borderRadius="16px"
         padding={{ base: "0px", md: "3rem" }}
       >
         <Text color="black.100" textStyle="mobileBodyBold">
@@ -24,7 +25,11 @@ const VolunteerRoleStep = ({
           />
           {title}
         </Text>
-        <Text pl="24px" color="hubbard.100" textStyle="mobileSmall">
+        <Text
+          pl={{ base: "24px", md: "0px" }}
+          color="hubbard.100"
+          textStyle="mobileSmall"
+        >
           {description}
         </Text>
       </Box>
@@ -33,13 +38,13 @@ const VolunteerRoleStep = ({
 };
 
 const VolunteerRoles = () => (
-  <Container
-    maxWidth={{ base: "default", md: "70%" }}
-    px="42px"
-    pt="73px"
+  <Box
     backgroundColor={{ base: "cottonCandy.100", md: "white" }}
     mt="57px"
-    pb="120px"
+    pb="2rem"
+    px={{ base: "42px", md: "0px" }}
+    pt={{ base: "73px", md: "0px" }}
+    mx={{ base: "-42px", md: "0px" }}
   >
     <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
       For Volunteers
@@ -61,7 +66,7 @@ const VolunteerRoles = () => (
         description="Support a donation from a local business, organization or individual by making a pick-up or assisting with donation unloading and stocking at the fridge."
       />
     </Flex>
-  </Container>
+  </Box>
 );
 
 export default VolunteerRoles;

@@ -16,12 +16,12 @@ const customTheme = extendTheme({
       fontFamily: "Inter, sans-serif",
       fontSize: "24px",
       lineHeight: "32px",
-      fontWeight: 600,
+      fontWeight: "bold",
       letterSpacing: "-0.01rem",
     },
     mobileHeader3: {
       fontFamily: "Inter, sans-serif",
-      fontWeight: 700,
+      fontWeight: "bold",
       fontSize: "20px",
       lineHeight: "28px",
     },
@@ -117,7 +117,7 @@ const customTheme = extendTheme({
       fontSize: "16px",
       lineHeight: "24px",
       color: "black",
-    }
+    },
   },
   colors: {
     raddish: {

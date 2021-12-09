@@ -7,6 +7,7 @@ import Signup from "./components/auth/Signup";
 import VerificationPage from "./components/auth/Signup/VerificationEmail";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
+import Account from "./components/pages/Account";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import Default from "./components/pages/Default";
@@ -59,6 +60,7 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.LOGIN_PAGE} component={Login} />
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
+                <Route exact path={Routes.ACCOUNT_PAGE} component={Account} />
                 <Route
                   exact
                   path={Routes.VIEW_DONATIONS}

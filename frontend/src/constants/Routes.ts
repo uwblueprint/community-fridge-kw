@@ -17,3 +17,5 @@ export const DASHBOARD_PAGE = "/dashboard";
 export const DASHBOARD_SCHEDULE_EDIT_PAGE = "/dashboard/:id";
 
 export const VIEW_DONATIONS = "/view-donations";
+
+export const ACCOUNT_PAGE = "/account";
