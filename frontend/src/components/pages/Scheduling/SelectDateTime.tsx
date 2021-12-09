@@ -303,9 +303,11 @@ const SelectDateTime = ({
         </Text>
       )}
 
-      {isDesktop ?
+      {isDesktop ? (
         <FormControl isRequired mb="2em">
-          <FormLabel fontWeight="600">How often will this donation occur?</FormLabel>
+          <FormLabel fontWeight="600">
+            How often will this donation occur?
+          </FormLabel>
           <Select
             maxWidth="350px"
             size="lg"
@@ -314,10 +316,14 @@ const SelectDateTime = ({
               handleChange(e.target.value, "frequency");
             }}
           >
-            {frequencies.map((freq, i) => <option key={i} value={freq}>{freq}</option>)}
+            {frequencies.map((freq, i) => (
+              <option key={i} value={freq}>
+                {freq}
+              </option>
+            ))}
           </Select>
         </FormControl>
-        :
+      ) : (
         <RadioSelectGroup
           name="frequency"
           label="Select frequency"
@@ -330,7 +336,7 @@ const SelectDateTime = ({
             handleChange(e, "frequency");
           }}
         />
-      }
+      )}
       {!isOneTimeDonation && (
         <FormControl isRequired mb="3em">
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
@@ -345,14 +351,18 @@ const SelectDateTime = ({
         </FormControl>
       )}
       {isBeingEdited ? (
-        <VStack>
-          <Button onClick={onSaveClick} variant="navigation" w="100%">
+        <VStack alignItems="flex-start">
+          <Button
+            onClick={onSaveClick}
+            variant="navigation"
+            w={{ base: "100%", md: "350px" }}
+          >
             Save Changes
           </Button>
           <Button
             onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
-            w="100%"
+            w={{ base: "100%", md: "350px" }}
           >
             Cancel
           </Button>

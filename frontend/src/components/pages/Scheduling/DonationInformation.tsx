@@ -135,14 +135,18 @@ const DonationInformation: any = ({
       </FormControl>
 
       {isBeingEdited ? (
-        <VStack>
-          <Button onClick={onSaveClick} variant="navigation" w="100%">
+        <VStack alignItems="flex-start">
+          <Button
+            onClick={onSaveClick}
+            variant="navigation"
+            w={{ base: "100%", md: "350px" }}
+          >
             Save Changes
           </Button>
           <Button
             onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
-            w="100%"
+            w={{ base: "100%", md: "350px" }}
           >
             Cancel
           </Button>
