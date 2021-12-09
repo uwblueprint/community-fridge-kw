@@ -339,7 +339,8 @@ const SelectDateTime = ({
             value={recurringEndDate}
             onChange={(e) => handleChangeRecurringDate(e.target.value)}
             placeholder="MM/DD/YYYY"
-            maxWidth="740px"
+            maxWidth="350px"
+            size="lg"
           />
         </FormControl>
       )}
