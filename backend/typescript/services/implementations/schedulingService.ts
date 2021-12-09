@@ -167,6 +167,7 @@ class SchedulingService implements ISchedulingService {
           notes: scheduling.notes,
         });
       } else {
+        // TO DO: refactor & optimize code, replace use of this.getSchedulings()
         // get new recurring donation id
         const dbCurrentSchedules: SchedulingDTO[] = await this.getSchedulings();
         const recurringDonationIds = dbCurrentSchedules.map((item) => {
@@ -182,9 +183,10 @@ class SchedulingService implements ISchedulingService {
           }
         }
 
-        const newRecurringDonationId: number = arrayRecurringDonationIds.length
-          ? Math.max(...arrayRecurringDonationIds) + 1
-          : 1;
+        const newRecurringDonationId: number =
+          arrayRecurringDonationIds.length > 0
+            ? Math.max(...arrayRecurringDonationIds) + 1
+            : 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(

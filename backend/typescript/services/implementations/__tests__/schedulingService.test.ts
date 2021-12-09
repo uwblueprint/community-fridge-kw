@@ -217,6 +217,21 @@ describe("pg schedulingService", () => {
     const status: Status = Status.APPROVED;
     const dayPart = DayPart.AFTERNOON;
     const frequency = Frequency.DAILY;
+
+    const oneTimeDonationScheduleToCreate: CreateSchedulingDTO = {
+      ...testSchedules[0],
+      status,
+      frequency: Frequency.ONE_TIME,
+      dayPart,
+      startTime,
+      endTime,
+    };
+
+    // CREATE ONE-TIME DONATION
+    const resOneTime = await schedulingService.createScheduling(
+      oneTimeDonationScheduleToCreate,
+    );
+
     const dailySchedulingToCreate: CreateSchedulingDTO = {
       ...testSchedules[1],
       status,
@@ -228,11 +243,18 @@ describe("pg schedulingService", () => {
     const currStartDate: Date = new Date(startTime);
     const currEndDate: Date = new Date(endTime);
 
-    // DAILY DONATION
+    // CREATE DAILY DONATION
     const resDaily = await schedulingService.createScheduling(
       dailySchedulingToCreate,
     );
     const dailySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings();
+    // filter out one-time donation schedule
+    const dailySchedules: SchedulingDTO[] = dailySchedulingDbRes.filter(
+      (item) => {
+        return Number(item.recurringDonationId) === 1;
+      },
+    );
+    // calculate expected number of schedules associated with this daily donation
     startTime.setHours(0, 0, 0, 0);
     const dailySchedulingObjectsNum: number =
       (dailySchedulingToCreate.recurringDonationEndDate!.getTime() -
@@ -240,24 +262,24 @@ describe("pg schedulingService", () => {
         (1000 * 60 * 60 * 24) +
       1;
 
-    expect(dailySchedulingDbRes.length).toEqual(dailySchedulingObjectsNum);
+    expect(dailySchedules.length).toEqual(dailySchedulingObjectsNum);
 
     const dailyDonationGroupId = 1;
-    for (let i = 0; i < dailySchedulingDbRes.length; i += 1) {
+    for (let i = 0; i < dailySchedules.length; i += 1) {
       const tempStartDate: Date = new Date(currStartDate);
       const tempEndDate: Date = new Date(currEndDate);
-      // check that date is correct
+      // check that start and end dates are correct
       tempStartDate.setDate(currStartDate.getDate() + i);
       tempEndDate.setDate(currEndDate.getDate() + i);
-      expect(dailySchedulingDbRes[i].startTime).toEqual(tempStartDate);
-      expect(dailySchedulingDbRes[i].endTime).toEqual(tempEndDate);
-      // verify recurring donation id is the same for all
-      expect(Number(dailySchedulingDbRes[i].recurringDonationId)).toEqual(
+      expect(dailySchedules[i].startTime).toEqual(tempStartDate);
+      expect(dailySchedules[i].endTime).toEqual(tempEndDate);
+      // verify recurring donation id is the same for all schedule objects
+      expect(Number(dailySchedules[i].recurringDonationId)).toEqual(
         dailyDonationGroupId,
       );
     }
 
-    // WEEKLY DONATION
+    // CREATE WEEKLY DONATION
     const weeklySchedulingToCreate: CreateSchedulingDTO = {
       ...dailySchedulingToCreate,
       frequency: Frequency.WEEKLY,
@@ -270,11 +292,13 @@ describe("pg schedulingService", () => {
       weeklySchedulingToCreate,
     );
     const weeklySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings();
+    // filter for only schedules associated with this weekly donation
     const weeklySchedules: SchedulingDTO[] = weeklySchedulingDbRes.filter(
       (item) => {
         return Number(item.recurringDonationId) === 2;
       },
     );
+    // calculate expected number of schedules associated with this weekly donation
     const weeklySchedulingObjectsNum: number =
       Math.floor(
         (weeklySchedulingToCreate.recurringDonationEndDate!.getTime() -
@@ -288,18 +312,18 @@ describe("pg schedulingService", () => {
     for (let i = 0; i < weeklySchedules.length; i += 1) {
       const tempStartDate: Date = new Date(currStartDate);
       const tempEndDate: Date = new Date(currEndDate);
-      // check that date is correct
+      // check that start and end dates are correct
       tempStartDate.setDate(currStartDate.getDate() + i * 7);
       tempEndDate.setDate(currEndDate.getDate() + i * 7);
       expect(weeklySchedules[i].startTime).toEqual(tempStartDate);
       expect(weeklySchedules[i].endTime).toEqual(tempEndDate);
-      // verify recurring donation id is the same for all
+      // verify recurring donation id is the same for all scheduling objects
       expect(Number(weeklySchedules[i].recurringDonationId)).toEqual(
         weeklyDonationGroupId,
       );
     }
 
-    // MONTHLY DONATION
+    // CREATE MONTHLY DONATION
     const monthlySchedulingToCreate: CreateSchedulingDTO = {
       ...dailySchedulingToCreate,
       frequency: Frequency.MONTHLY,
@@ -312,12 +336,13 @@ describe("pg schedulingService", () => {
       monthlySchedulingToCreate,
     );
     const resMonthlySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings();
+    // filter for only scheduling objects associated with this monthly donation
     const monthlySchedules: SchedulingDTO[] = resMonthlySchedulingDbRes.filter(
       (item) => {
         return Number(item.recurringDonationId) === 3;
       },
     );
-
+    // calculate expected number of donations associated with this monthly donation
     let monthlySchedulingObjectsNum = 0;
     const dateIncrementor: Date = new Date(currStartDate);
     dateIncrementor.setHours(0, 0, 0, 0);
@@ -335,12 +360,12 @@ describe("pg schedulingService", () => {
     for (let i = 0; i < monthlySchedules.length; i += 1) {
       const tempStartDate: Date = new Date(currStartDate);
       const tempEndDate: Date = new Date(currEndDate);
-      // check that date is correct
+      // check that start and end dates are correct
       tempStartDate.setMonth(currStartDate.getMonth() + i);
       tempEndDate.setMonth(currEndDate.getMonth() + i);
       expect(monthlySchedules[i].startTime).toEqual(tempStartDate);
       expect(monthlySchedules[i].endTime).toEqual(tempEndDate);
-      // verify recurring donation id is the same for all
+      // verify recurring donation id is the same for all scheduling objects
       expect(Number(monthlySchedules[i].recurringDonationId)).toEqual(
         monthlyDonationGroupId,
       );
