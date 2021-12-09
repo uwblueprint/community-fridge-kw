@@ -14,6 +14,17 @@ export const validateDate = (value: string): boolean => {
   return !!Date.parse(value);
 };
 
+export const validateRecurringDonationEndDate = (
+  startDateString: string,
+  recurringEndDateString: string,
+): boolean => {
+  const startDate = new Date(startDateString);
+  const maxEndDate = new Date(startDateString);
+  maxEndDate.setMonth(startDate.getMonth() + 6);
+  const endDate = new Date(recurringEndDateString);
+  return startDate <= endDate && endDate <= maxEndDate;
+};
+
 export const validatePrimitive = (value: any, type: Type): boolean => {
   if (value === undefined || value === null) return false;
 
