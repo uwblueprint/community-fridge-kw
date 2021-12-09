@@ -1,0 +1,47 @@
+import { Button, Container, IconButton, Text } from "@chakra-ui/react";
+import React from "react";
+import { useHistory } from "react-router-dom";
+
+import { DASHBOARD_PAGE, LANDING_PAGE } from "../../../constants/Routes";
+import { CloseIcon } from "../../common/icons";
+
+const ConfirmVerificationPage = () => {
+  const history = useHistory();
+
+  return (
+    <>
+      <IconButton
+        display={{ md: "none" }}
+        aria-label="close page"
+        float="right"
+        backgroundColor="transparent"
+        onClick={() => history.push(LANDING_PAGE)}
+      >
+        <CloseIcon color="#111111" />
+      </IconButton>
+      <Container centerContent pl="42px" pr="42px" pt="73px">
+        <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">
+          Thank you for verifying your email address!
+        </Text>
+        <Text
+          mt="1rem"
+          textAlign="center"
+          textStyle="mobileBody"
+          color="hubbard.100"
+        >
+          Almost done! Click &ldquo;Finish&rdquo; to contine.
+        </Text>
+        <Button
+          mt="2rem"
+          width="100%"
+          variant="navigation"
+          onClick={() => history.push(DASHBOARD_PAGE)}
+        >
+          Finish
+        </Button>
+      </Container>
+    </>
+  );
+};
+
+export default ConfirmVerificationPage;
