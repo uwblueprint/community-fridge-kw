@@ -51,13 +51,13 @@ const RadioImageSelectButton = (props: any) => {
     invalid: {
       color: "tomato.100",
       borderColor: "tomato.100",
-    }
+    },
   };
 
   return (
     <Box w="100%" as="label">
       <input {...input} />
-      {invalid ? 
+      {invalid ? (
         <Box
           {...checkbox}
           {...RadioButtonStyle.default}
@@ -66,7 +66,7 @@ const RadioImageSelectButton = (props: any) => {
         >
           {children}
         </Box>
-        :
+      ) : (
         <Box
           {...checkbox}
           {...RadioButtonStyle.default}
@@ -74,7 +74,7 @@ const RadioImageSelectButton = (props: any) => {
         >
           {children}
         </Box>
-      }
+      )}
     </Box>
   );
 };
@@ -88,7 +88,11 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
   });
 
   const radioImageSelectButtons = values.map((v) => (
-    <RadioImageSelectButton key={v.size} invalid={!!error} {...getRadioProps({ value: v.size })}>
+    <RadioImageSelectButton
+      key={v.size}
+      invalid={!!error}
+      {...getRadioProps({ value: v.size })}
+    >
       <HStack>
         <Box height="100px" width="100px">
           <Image

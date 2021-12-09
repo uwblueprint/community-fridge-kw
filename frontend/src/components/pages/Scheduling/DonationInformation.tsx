@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 
-import ErrorMessages from "./ErrorMessages";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
 import lg from "../../../assets/donation-sizes/md.png";
@@ -21,6 +20,7 @@ import sm from "../../../assets/donation-sizes/xs.png";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ErrorMessages from "./ErrorMessages";
 import { DonationSizeInterface, SchedulingStepProps } from "./types";
 
 const DonationInformation: any = ({
@@ -43,7 +43,7 @@ const DonationInformation: any = ({
     setForm({ target: { name, value: e } });
     setFormErrors({
       ...formErrors,
-      size: ""
+      size: "",
     });
   };
 
@@ -61,7 +61,7 @@ const DonationInformation: any = ({
     });
     setFormErrors({
       ...formErrors,
-      categories: ""
+      categories: "",
     });
   };
 

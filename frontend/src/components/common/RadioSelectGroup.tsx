@@ -53,7 +53,7 @@ const RadioSelectButton = (props: any) => {
     invalid: {
       color: "tomato.100",
       borderColor: "tomato.100",
-    }
+    },
   };
 
   const iconRender = [];
@@ -74,7 +74,7 @@ const RadioSelectButton = (props: any) => {
   return (
     <Box w="100%" as="label">
       <input {...input} />
-      {invalid ? 
+      {invalid ? (
         <Box
           {...checkbox}
           {...RadioButtonStyle.default}
@@ -84,7 +84,7 @@ const RadioSelectButton = (props: any) => {
           {children}
           {iconRender}
         </Box>
-        :
+      ) : (
         <Box
           {...checkbox}
           {...RadioButtonStyle.default}
@@ -93,7 +93,7 @@ const RadioSelectButton = (props: any) => {
           {children}
           {iconRender}
         </Box>
-      }
+      )}
     </Box>
   );
 };

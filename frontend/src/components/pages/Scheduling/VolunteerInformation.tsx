@@ -14,10 +14,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-import ErrorMessages from "./ErrorMessages";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ErrorMessages from "./ErrorMessages";
 import { SchedulingStepProps } from "./types";
 
 const VolunteerInformation = ({
@@ -60,7 +60,7 @@ const VolunteerInformation = ({
     setFormErrors({
       ...formErrors,
       [name]: "",
-    })
+    });
   };
 
   const volunteerNeededRadioValue = () => {

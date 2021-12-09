@@ -18,13 +18,13 @@ import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
 import InputIcon from "react-multi-date-picker/components/input_icon";
 import { Redirect } from "react-router-dom";
 
-import ErrorMessages from "./ErrorMessages";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ErrorMessages from "./ErrorMessages";
 import { SchedulingStepProps } from "./types";
 
 const SelectDateTime = ({
@@ -195,7 +195,7 @@ const SelectDateTime = ({
       showDropOffTimes(e.toString(), date);
       setFormErrors({
         ...formErrors,
-        dayPart: ""
+        dayPart: "",
       });
     } else if (name === "frequency") {
       const val = e.toString();
@@ -206,7 +206,7 @@ const SelectDateTime = ({
       }
       setFormErrors({
         ...formErrors,
-        frequency: ""
+        frequency: "",
       });
     }
   };
@@ -234,9 +234,9 @@ const SelectDateTime = ({
     setForm({ target: { name: "startTime", value: newStartTime.toString() } });
     setForm({ target: { name: "endTime", value: newEndTime.toString() } });
 
-    setFormErrors({ 
-      ...formErrors, 
-      timeRange: ""
+    setFormErrors({
+      ...formErrors,
+      timeRange: "",
     });
   };
 
@@ -244,7 +244,8 @@ const SelectDateTime = ({
     const selectedDateObj = selectedDate.toDate();
 
     setDate(selectedDateObj);
-    if (startTime !== "") selectedDateObj.setHours(new Date(startTime).getHours());
+    if (startTime !== "")
+      selectedDateObj.setHours(new Date(startTime).getHours());
     setForm({
       target: { name: "startTime", value: selectedDateObj.toString() },
     });
@@ -267,8 +268,8 @@ const SelectDateTime = ({
     });
     setFormErrors({
       ...formErrors,
-      recurringDonationEndDate: ""
-    })
+      recurringDonationEndDate: "",
+    });
   };
 
   const onSaveClick = async () => {
@@ -310,7 +311,8 @@ const SelectDateTime = ({
         newErrors.recurringDonationEndDate = ErrorMessages.requiredField;
       } else if (recurringDonationEndDate === "Invalid Date") {
         valid = false;
-        newErrors.recurringDonationEndDate = ErrorMessages.invalidRecurringDonationEndDateFormat;
+        newErrors.recurringDonationEndDate =
+          ErrorMessages.invalidRecurringDonationEndDateFormat;
       } else {
         // Validate end date is within 6 months of start date
         const startDate = new Date(startTime);
@@ -319,7 +321,8 @@ const SelectDateTime = ({
         const endDate = new Date(recurringDonationEndDate);
         if (!(startDate <= endDate && endDate <= maxEndDate)) {
           valid = false;
-          newErrors.recurringDonationEndDate = ErrorMessages.recurringDonationEndDateWithinSixMonths;
+          newErrors.recurringDonationEndDate =
+            ErrorMessages.recurringDonationEndDateWithinSixMonths;
         }
       }
     }
@@ -331,7 +334,7 @@ const SelectDateTime = ({
     if (validateForm()) {
       next();
     }
-  }
+  };
 
   const today = new Date();
   const getSunday = (d: Date) => {
@@ -362,9 +365,7 @@ const SelectDateTime = ({
           value={date}
           onChange={handleDateSelect}
         />
-        <FormErrorMessage>
-          {formErrors.date}
-        </FormErrorMessage>
+        <FormErrorMessage>{formErrors.date}</FormErrorMessage>
       </FormControl>
       <RadioSelectGroup
         name="dayPart"
