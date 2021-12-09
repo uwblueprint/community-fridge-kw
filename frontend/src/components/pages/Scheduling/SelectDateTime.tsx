@@ -5,7 +5,9 @@ import {
   FormLabel,
   HStack,
   Input,
+  Select,
   Text,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
@@ -37,6 +39,8 @@ const SelectDateTime = ({
     recurringDonationEndDate,
   } = formValues;
   const { authenticatedUser } = useContext(AuthContext);
+
+  const [isDesktop] = useMediaQuery("(min-width: 48em)");
 
   enum DayParts {
     EARLY_MORNING = "Early Morning (12am - 6am)",
@@ -299,18 +303,34 @@ const SelectDateTime = ({
         </Text>
       )}
 
-      <RadioSelectGroup
-        name="frequency"
-        label="Select frequency"
-        helperText="How often will this donation occur?"
-        value={frequency}
-        values={frequencies}
-        icons={[]}
-        isRequired
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          handleChange(e, "frequency");
-        }}
-      />
+      {isDesktop ?
+        <FormControl isRequired mb="2em">
+          <FormLabel fontWeight="600">How often will this donation occur?</FormLabel>
+          <Select
+            maxWidth="350px"
+            size="lg"
+            value={frequency}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handleChange(e.target.value, "frequency");
+            }}
+          >
+            {frequencies.map((freq, i) => <option key={i} value={freq}>{freq}</option>)}
+          </Select>
+        </FormControl>
+        :
+        <RadioSelectGroup
+          name="frequency"
+          label="Select frequency"
+          helperText="How often will this donation occur?"
+          value={frequency}
+          values={frequencies}
+          icons={[]}
+          isRequired
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleChange(e, "frequency");
+          }}
+        />
+      }
       {!isOneTimeDonation && (
         <FormControl isRequired mb="3em">
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
