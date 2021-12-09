@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 import { Redirect } from "react-router-dom";
 
@@ -68,6 +68,11 @@ const Scheduling = ({
   const { id } = step;
 
   const { authenticatedUser } = useContext(AuthContext);
+
+  // Scroll to top of page at each step in flow
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   if (!authenticatedUser) {
     return <Redirect to={Routes.LOGIN_PAGE} />;

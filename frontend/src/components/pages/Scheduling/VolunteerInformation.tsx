@@ -122,7 +122,10 @@ const VolunteerInformation = ({
   };
 
   return (
-    <Container p="30px">
+    <Container
+      p={{ base: "30px", md: "2rem 1rem" }}
+      maxWidth={{ base: "default", md: "70%" }}
+    >
       <SchedulingProgressBar activeStep={2} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em">
         Volunteer Information
@@ -135,6 +138,7 @@ const VolunteerInformation = ({
         borderWidth="1px"
         borderColor="#6C6C84"
         borderRadius="5px"
+        maxWidth="500px"
       >
         <Text textStyle="mobileHeader4">Proposed dropoff time</Text>
         <Text textStyle="mobileBody">{new Date(startTime).toDateString()}</Text>
@@ -183,6 +187,7 @@ const VolunteerInformation = ({
                 onChange={(e) => handleChange(e.target.value, "pickupLocation")}
                 placeholder="Enter location"
                 size="lg"
+                maxWidth="740px"
               />
               <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
             </FormControl>
@@ -200,6 +205,7 @@ const VolunteerInformation = ({
               onChange={(e) => handleChange(e.target.value, "volunteerTime")}
               placeholder="Enter time"
               size="lg"
+              maxWidth="740px"
             />
             <FormErrorMessage>{formErrors.volunteerTime}</FormErrorMessage>
           </FormControl>
@@ -214,17 +220,22 @@ const VolunteerInformation = ({
           value={notes}
           onChange={(e) => handleChange(e.target.value, "notes")}
           placeholder="john@shawarmaplus.com"
+          maxWidth="740px"
         />
       </FormControl>
       {isBeingEdited ? (
-        <VStack>
-          <Button onClick={onSaveClick} variant="navigation" w="100%">
+        <VStack alignItems="flex-start">
+          <Button
+            onClick={onSaveClick}
+            variant="navigation"
+            w={{ base: "100%", md: "350px" }}
+          >
             Save Changes
           </Button>
           <Button
             onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
-            w="100%"
+            w={{ base: "100%", md: "350px" }}
           >
             Cancel
           </Button>

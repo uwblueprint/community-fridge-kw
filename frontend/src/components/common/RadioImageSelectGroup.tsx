@@ -4,9 +4,11 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Grid,
   HStack,
   Image,
   Text,
+  useMediaQuery,
   useRadio,
   useRadioGroup,
   VStack,
@@ -86,27 +88,39 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
     value,
     name,
   });
+  const [isDesktop] = useMediaQuery("(min-width: 48em)");
 
   const radioImageSelectButtons = values.map((v) => (
-    <RadioImageSelectButton
-      key={v.size}
-      invalid={!!error}
-      {...getRadioProps({ value: v.size })}
-    >
-      <HStack>
-        <Box height="100px" width="100px">
+    <RadioImageSelectButton key={v.size} invalid={!!error} {...getRadioProps({ value: v.size })}>
+      {isDesktop ? (
+        <VStack p="20px">
+          <Text textStyle="mobileBody">{v.size}</Text>
           <Image
             objectFit="fill"
             src={v.image}
             alt="Size image"
             display="inline"
+            h="164px"
+            w="164px"
           />
-        </Box>
-        <Box width="70%">
-          <Text textStyle="mobileBody"> {v.size}</Text>
           <Text textStyle="mobileSmall">{v.description}</Text>
-        </Box>
-      </HStack>
+        </VStack>
+      ) : (
+        <HStack>
+          <Box height="100px" width="100px">
+            <Image
+              objectFit="fill"
+              src={v.image}
+              alt="Size image"
+              display="inline"
+            />
+          </Box>
+          <Box width="70%">
+            <Text textStyle="mobileBody"> {v.size}</Text>
+            <Text textStyle="mobileSmall">{v.description}</Text>
+          </Box>
+        </HStack>
+      )}
     </RadioImageSelectButton>
   ));
 
@@ -117,7 +131,16 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
       <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
         Size/quantity of donation
       </FormLabel>
-      <VStack {...group}>{radioImageSelectButtons}</VStack>
+      <Grid
+        templateRows={{ base: "repeat(4, 1fr)", md: "repeat(2, 1fr)" }}
+        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+        rowGap={4}
+        columnGap={6}
+        {...group}
+        maxWidth="600px"
+      >
+        {radioImageSelectButtons}
+      </Grid>
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );

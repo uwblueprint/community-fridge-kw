@@ -9,7 +9,9 @@ import {
   FormLabel,
   HStack,
   Input,
+  Select,
   Text,
+  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
@@ -52,6 +54,8 @@ const SelectDateTime = ({
   });
 
   const { authenticatedUser } = useContext(AuthContext);
+
+  const [isDesktop] = useMediaQuery("(min-width: 48em)");
 
   enum DayParts {
     EARLY_MORNING = "Early Morning (12am - 6am)",
@@ -350,7 +354,10 @@ const SelectDateTime = ({
   };
 
   return (
-    <Container p="30px">
+    <Container
+      p={{ base: "30px", md: "2rem 1rem" }}
+      maxWidth={{ base: "default", md: "70%" }}
+    >
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         Date and Time
@@ -402,19 +409,44 @@ const SelectDateTime = ({
         </Text>
       )}
 
-      <RadioSelectGroup
-        name="frequency"
-        label="Select frequency"
-        helperText="How often will this donation occur?"
-        value={frequency}
-        values={frequencies}
-        icons={[]}
-        isRequired
-        error={formErrors.frequency}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          handleChange(e, "frequency");
-        }}
-      />
+      {isDesktop ? (
+        <FormControl isRequired mb="2em">
+          <FormLabel fontWeight="600">
+            How often will this donation occur?
+          </FormLabel>
+          <Select
+            maxWidth="350px"
+            size="lg"
+            value={frequency}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handleChange(e.target.value, "frequency");
+            }}
+          >
+            {frequencies.map((freq, i) => (
+              <option key={i} value={freq}>
+                {freq}
+              </option>
+            ))}
+          </Select>
+          <FormErrorMessage>
+            {formErrors.frequency}
+          </FormErrorMessage>
+        </FormControl>
+      ) : (
+        <RadioSelectGroup
+          name="frequency"
+          label="Select frequency"
+          helperText="How often will this donation occur?"
+          value={frequency}
+          values={frequencies}
+          icons={[]}
+          isRequired
+          error={formErrors.frequency}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleChange(e, "frequency");
+          }}
+        />
+      )}
       {!isOneTimeDonation && (
         <FormControl
           isRequired
@@ -427,6 +459,8 @@ const SelectDateTime = ({
             value={recurringEndDate}
             onChange={(e) => handleChangeRecurringDate(e.target.value)}
             placeholder="MM/DD/YYYY"
+            maxWidth="350px"
+            size="lg"
           />
           <FormErrorMessage>
             {formErrors.recurringDonationEndDate}
@@ -434,14 +468,18 @@ const SelectDateTime = ({
         </FormControl>
       )}
       {isBeingEdited ? (
-        <VStack>
-          <Button onClick={onSaveClick} variant="navigation" w="100%">
+        <VStack alignItems="flex-start">
+          <Button
+            onClick={onSaveClick}
+            variant="navigation"
+            w={{ base: "100%", md: "350px" }}
+          >
             Save Changes
           </Button>
           <Button
             onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
-            w="100%"
+            w={{ base: "100%", md: "350px" }}
           >
             Cancel
           </Button>

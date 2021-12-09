@@ -88,9 +88,9 @@ const ConfirmDetails = ({
       </Badge>
 
       <Box
-        p="1.5em"
         pl="0"
         align="left"
+        mt="2rem"
         mb="2rem"
         display={{ lg: "flex" }}
         justifyContent="space-between"

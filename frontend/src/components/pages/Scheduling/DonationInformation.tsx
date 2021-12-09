@@ -136,7 +136,10 @@ const DonationInformation: any = ({
   };
 
   return (
-    <Container p="30px">
+    <Container
+      p={{ base: "30px", md: "2rem 1rem" }}
+      maxWidth={{ base: "default", md: "70%" }}
+    >
       <SchedulingProgressBar activeStep={1} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em">
         Donation Information
@@ -174,14 +177,18 @@ const DonationInformation: any = ({
       </FormControl>
 
       {isBeingEdited ? (
-        <VStack>
-          <Button onClick={onSaveClick} variant="navigation" w="100%">
+        <VStack alignItems="flex-start">
+          <Button
+            onClick={onSaveClick}
+            variant="navigation"
+            w={{ base: "100%", md: "350px" }}
+          >
             Save Changes
           </Button>
           <Button
             onClick={() => go && go("confirm donation details")}
             variant="cancelNavigation"
-            w="100%"
+            w={{ base: "100%", md: "350px" }}
           >
             Cancel
           </Button>
