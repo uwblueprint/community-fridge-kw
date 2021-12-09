@@ -39,6 +39,15 @@ const SelectDateTime = ({
     endTime,
     recurringDonationEndDate,
   } = formValues;
+
+  const [formErrors, setFormErrors] = useState({
+    date: "",
+    dayPart: "",
+    timeRange: "",
+    frequency: "",
+    recurringDonationEndDate: "",
+  });
+
   const { authenticatedUser } = useContext(AuthContext);
 
   enum DayParts {
@@ -133,14 +142,6 @@ const SelectDateTime = ({
       : "",
   );
 
-  const [formErrors, setFormErrors] = useState({
-    date: "",
-    dayPart: "",
-    timeRange: "",
-    frequency: "",
-    recurringDonationEndDate: "",
-  });
-
   // fetch schedules
   React.useEffect(() => {
     const fetchSchedules = async () => {
@@ -189,6 +190,10 @@ const SelectDateTime = ({
     setForm({ target: { name, value: e } });
     if (name === "dayPart") {
       showDropOffTimes(e.toString(), date);
+      setFormErrors({
+        ...formErrors,
+        dayPart: ""
+      });
     } else if (name === "frequency") {
       const val = e.toString();
       if (val === "One time donation") {
@@ -196,6 +201,10 @@ const SelectDateTime = ({
       } else {
         setIsOneTimeDonation(false);
       }
+      setFormErrors({
+        ...formErrors,
+        frequency: ""
+      });
     }
   };
 
@@ -221,6 +230,11 @@ const SelectDateTime = ({
 
     setForm({ target: { name: "startTime", value: newStartTime.toString() } });
     setForm({ target: { name: "endTime", value: newEndTime.toString() } });
+
+    setFormErrors({ 
+      ...formErrors, 
+      timeRange: ""
+    });
   };
 
   const handleDateSelect = (selectedDate: DateObject) => {
@@ -247,6 +261,10 @@ const SelectDateTime = ({
         value: recurringDate.toString(),
       },
     });
+    setFormErrors({
+      ...formErrors,
+      recurringDonationEndDate: ""
+    })
   };
 
   const onSaveClick = async () => {

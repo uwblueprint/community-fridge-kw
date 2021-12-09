@@ -31,7 +31,7 @@ const RadioSelectButton = (props: any) => {
   const { getInputProps, getCheckboxProps } = useRadio(props);
   const input = getInputProps();
   const checkbox = getCheckboxProps();
-  const { numIcons, children } = props;
+  const { numIcons, children, invalid } = props;
 
   const RadioButtonStyle = {
     default: {
@@ -50,6 +50,10 @@ const RadioSelectButton = (props: any) => {
       textStyle: "mobileBodyBold",
       color: "black.100",
     },
+    invalid: {
+      color: "tomato.100",
+      borderColor: "tomato.100",
+    }
   };
 
   const iconRender = [];
@@ -70,14 +74,26 @@ const RadioSelectButton = (props: any) => {
   return (
     <Box w="100%" as="label">
       <input {...input} />
-      <Box
-        {...checkbox}
-        {...RadioButtonStyle.default}
-        _checked={RadioButtonStyle.selected}
-      >
-        {children}
-        {iconRender}
-      </Box>
+      {invalid ? 
+        <Box
+          {...checkbox}
+          {...RadioButtonStyle.default}
+          _checked={RadioButtonStyle.selected}
+          {...RadioButtonStyle.invalid}
+        >
+          {children}
+          {iconRender}
+        </Box>
+        :
+        <Box
+          {...checkbox}
+          {...RadioButtonStyle.default}
+          _checked={RadioButtonStyle.selected}
+        >
+          {children}
+          {iconRender}
+        </Box>
+      }
     </Box>
   );
 };
@@ -105,6 +121,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       key={v}
       {...getRadioProps({ value: v })}
       numIcons={icons[i]}
+      invalid={!!error}
     >
       {v}
     </RadioSelectButton>

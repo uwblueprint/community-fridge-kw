@@ -31,11 +31,20 @@ const DonationInformation: any = ({
 }: SchedulingStepProps) => {
   const { previous, next, go } = navigation;
   const { id, categories, size } = formValues;
+  const [formErrors, setFormErrors] = useState({
+    categories: "",
+    size: "",
+  });
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
   ) => {
     setForm({ target: { name, value: e } });
+    setFormErrors({
+      ...formErrors,
+      size: ""
+    });
   };
 
   const handleCheckboxChange = (
@@ -49,6 +58,10 @@ const DonationInformation: any = ({
           ? [...categories, item]
           : categories.filter((string) => item !== string),
       },
+    });
+    setFormErrors({
+      ...formErrors,
+      categories: ""
     });
   };
 
@@ -96,11 +109,6 @@ const DonationInformation: any = ({
     "Essential items (masks, hand sanitizer, bags)",
     "Hygiene products (tampons, pads, soap, etc.)",
   ];
-
-  const [formErrors, setFormErrors] = useState({
-    categories: "",
-    size: "",
-  });
 
   const validateForm = () => {
     const newErrors = {

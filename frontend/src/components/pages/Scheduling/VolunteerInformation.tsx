@@ -40,6 +40,13 @@ const VolunteerInformation = ({
     notes,
   } = formValues;
 
+  const [formErrors, setFormErrors] = useState({
+    volunteerNeeded: "",
+    volunteerTime: "",
+    pickupLocation: "",
+    isPickup: "",
+  });
+
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
     "Pickup (food rescue)",
@@ -50,6 +57,10 @@ const VolunteerInformation = ({
 
   const handleChange = (e: boolean | string, name: string) => {
     setForm({ target: { name, value: e } });
+    setFormErrors({
+      ...formErrors,
+      [name]: "",
+    })
   };
 
   const volunteerNeededRadioValue = () => {
@@ -74,13 +85,6 @@ const VolunteerInformation = ({
       go("confirm donation details");
     }
   };
-
-  const [formErrors, setFormErrors] = useState({
-    volunteerNeeded: "",
-    volunteerTime: "",
-    pickupLocation: "",
-    isPickup: "",
-  });
 
   const validateForm = () => {
     const newErrors = {
