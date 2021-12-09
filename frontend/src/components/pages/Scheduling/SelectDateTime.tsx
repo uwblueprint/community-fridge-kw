@@ -112,7 +112,6 @@ const SelectDateTime = ({
 
   const get12HTimeString = (time: string) => {
     const time24Hour = `${new Date(time).getHours().toString()}:00`;
-    console.log(moment(time24Hour, "HH:mm").format("h:mm A"));
     return moment(time24Hour, "HH:mm").format("h:mm A");
   };
 
