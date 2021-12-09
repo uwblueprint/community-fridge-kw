@@ -12,7 +12,12 @@ const DonationStep = ({
   stepNumber,
 }: DonationStepProps): JSX.Element => {
   return (
-    <Flex paddingBottom="1.5rem">
+    <Flex
+      paddingBottom="1.5rem"
+      px="1.2rem"
+      textAlign={{ md: "center" }}
+      width="100%"
+    >
       <Text
         width="22px"
         height="22px"
@@ -24,6 +29,7 @@ const DonationStep = ({
         textAlign="center"
         marginRight="11px"
         marginTop="4px"
+        display={{ base: "inline", md: "none" }}
       >
         {stepNumber}
       </Text>
@@ -46,22 +52,25 @@ const DonationProcess = (): JSX.Element => {
       <Text mb="1.5rem" color="black.100" textStyle="mobileHeader2">
         The Donation Process
       </Text>
-      <DonationStep
-        stepNumber={1}
-        title="Create an account"
-        description="Join us as a donor on our donation platform."
-      />
-      <DonationStep
-        stepNumber={2}
-        title="Schedule a dropoff"
-        description="Use the donor platform to schedule your donations to the community fridge."
-      />
-      <DonationStep
-        stepNumber={3}
-        title="Complete your donation"
-        description="Complete your donation and feel good about redistributing food in our community."
-      />
-      <Button width="100%" variant="navigation">
+      <Flex direction={{ base: "column", md: "row" }} padding="30px">
+        <DonationStep
+          stepNumber={1}
+          title="Create an account"
+          description="Join us as a donor on our donation platform."
+        />
+        <DonationStep
+          stepNumber={2}
+          title="Schedule a food donation"
+          description="Use the donor platform to schedule your donations to the community fridge."
+        />
+        <DonationStep
+          stepNumber={3}
+          title="Complete your donation"
+          description="Complete your donation and feel good about redistributing food in our community."
+        />
+      </Flex>
+
+      <Button width="100%" variant="navigation" display={{ md: "none" }}>
         Start now
       </Button>
     </Box>
