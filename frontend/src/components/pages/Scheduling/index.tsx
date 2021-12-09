@@ -49,7 +49,7 @@ const schedulingDefaultData = ({
   categories: [],
   size: "",
   dayPart: "",
-  startTime: new Date().toDateString(),
+  startTime: "",
   endTime: "",
   volunteerIds: [],
   frequency: "",

@@ -226,11 +226,11 @@ const SelectDateTime = ({
     const selectedDateObj = selectedDate.toDate();
 
     setDate(selectedDateObj);
-    selectedDateObj.setHours(new Date(startTime).getHours());
+    if (startTime !== "") selectedDateObj.setHours(new Date(startTime).getHours());
     setForm({
       target: { name: "startTime", value: selectedDateObj.toString() },
     });
-    selectedDateObj.setHours(new Date(endTime).getHours());
+    if (endTime !== "") selectedDateObj.setHours(new Date(endTime).getHours());
     setForm({ target: { name: "endTime", value: selectedDateObj.toString() } });
     if (dayPart) showDropOffTimes(dayPart, date);
   };
