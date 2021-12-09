@@ -346,6 +346,9 @@ const SelectDateTime = ({
           value={date}
           onChange={handleDateSelect}
         />
+        <FormErrorMessage>
+          {formErrors.date}
+        </FormErrorMessage>
       </FormControl>
       <RadioSelectGroup
         name="dayPart"
