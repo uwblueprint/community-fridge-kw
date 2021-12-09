@@ -1,3 +1,6 @@
+import "react-multi-date-picker/styles/layouts/mobile.css";
+import "react-multi-date-picker/styles/colors/purple.css";
+
 import {
   Button,
   Container,
@@ -10,7 +13,8 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useContext, useState } from "react";
-import { Calendar, DateObject } from "react-multi-date-picker";
+import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
+import InputIcon from "react-multi-date-picker/components/input_icon";
 import { Redirect } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -56,12 +60,12 @@ const SelectDateTime = ({
 
   const timeRanges = {
     earlyMorning: [
-      "12:00 AM - 1:00AM",
-      "1:00 AM - 2:00AM",
-      "2:00 AM - 3:00AM",
-      "3:00 AM - 4:00AM",
-      "4:00 AM - 5:00AM",
-      "5:00 AM - 6:00AM",
+      "12:00 AM - 1:00 AM",
+      "1:00 AM - 2:00 AM",
+      "2:00 AM - 3:00 AM",
+      "3:00 AM - 4:00 AM",
+      "4:00 AM - 5:00 AM",
+      "5:00 AM - 6:00 AM",
     ],
     morning: [
       "6:00 AM - 7:00 AM",
@@ -222,7 +226,8 @@ const SelectDateTime = ({
     });
     selectedDateObj.setHours(new Date(endTime).getHours());
     setForm({ target: { name: "endTime", value: selectedDateObj.toString() } });
-    if (dayPart) showDropOffTimes(dayPart, date);
+    setShowTimeSlots(getTimeSlot("")); // reset timeslots
+    setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
   };
 
   const handleChangeRecurringDate = (
@@ -245,6 +250,19 @@ const SelectDateTime = ({
     }
   };
 
+  const today = new Date();
+  const getSunday = (d: Date) => {
+    const day = d.getDay();
+    const diff = d.getDate() - day; // adjust when day is sunday
+    return new Date(d.setDate(diff));
+  };
+
+  const getMaxDate = () => {
+    const sunday = getSunday(today);
+    const diff = sunday.getDate() + 13;
+    return new Date(sunday.setDate(diff));
+  };
+
   return (
     <Container p="30px">
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
@@ -253,12 +271,11 @@ const SelectDateTime = ({
       </Text>
       <FormControl isRequired>
         <FormLabel fontWeight="600">Select date of donation</FormLabel>
-        <Calendar
-          buttons={false}
-          disableMonthPicker
-          disableYearPicker
-          shadow={false}
-          minDate={new Date()}
+        <DatePicker
+          render={<InputIcon style={{ height: "3em" }} />}
+          className="rmdp-mobile purple"
+          minDate={getSunday(today)}
+          maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
         />

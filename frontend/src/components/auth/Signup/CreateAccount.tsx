@@ -11,10 +11,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory, Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
+import { DASHBOARD_PAGE, LOGIN_PAGE } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import { LOGIN_PAGE, DASHBOARD_PAGE } from "../../../constants/Routes";
 import { CloseIcon } from "../../common/icons";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";

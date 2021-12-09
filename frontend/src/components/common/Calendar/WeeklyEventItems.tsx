@@ -1,9 +1,9 @@
 import {
-  useMediaQuery,
   Badge,
   Container,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
