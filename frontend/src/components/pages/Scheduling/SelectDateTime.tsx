@@ -149,6 +149,14 @@ const SelectDateTime = ({
       : "",
   );
 
+  React.useEffect(() => {
+    // Need to set frequency here since "One time donation"
+    // is default value in desktop dropdown
+    if (isDesktop && isOneTimeDonation) {
+      setForm({ target: { name: "frequency", value: "One time donation" } });
+    }
+  }, []);
+
   // fetch schedules
   React.useEffect(() => {
     const fetchSchedules = async () => {
@@ -197,6 +205,8 @@ const SelectDateTime = ({
     setForm({ target: { name, value: e } });
     if (name === "dayPart") {
       showDropOffTimes(e.toString(), date);
+      setForm({ target: { name: "startTime", value: "" } });
+      setForm({ target: { name: "endTime", value: "" } });
       setFormErrors({
         ...formErrors,
         dayPart: "",
@@ -246,15 +256,7 @@ const SelectDateTime = ({
 
   const handleDateSelect = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
-
     setDate(selectedDateObj);
-    if (startTime !== "")
-      selectedDateObj.setHours(new Date(startTime).getHours());
-    setForm({
-      target: { name: "startTime", value: selectedDateObj.toString() },
-    });
-    if (endTime !== "") selectedDateObj.setHours(new Date(endTime).getHours());
-    setForm({ target: { name: "endTime", value: selectedDateObj.toString() } });
     setShowTimeSlots(getTimeSlot("")); // reset timeslots
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
   };
@@ -286,7 +288,7 @@ const SelectDateTime = ({
     };
     let valid = true;
 
-    if (!date) {
+    if (!date || date.toString() === "Invalid Date") {
       valid = false;
       newErrors.date = ErrorMessages.requiredField;
     }
@@ -413,7 +415,7 @@ const SelectDateTime = ({
       )}
 
       {isDesktop ? (
-        <FormControl isRequired mb="2em">
+        <FormControl isRequired isInvalid={!!formErrors.frequency} mb="2em">
           <FormLabel fontWeight="600">
             How often will this donation occur?
           </FormLabel>
@@ -431,9 +433,7 @@ const SelectDateTime = ({
               </option>
             ))}
           </Select>
-          <FormErrorMessage>
-            {formErrors.frequency}
-          </FormErrorMessage>
+          <FormErrorMessage>{formErrors.frequency}</FormErrorMessage>
         </FormControl>
       ) : (
         <RadioSelectGroup

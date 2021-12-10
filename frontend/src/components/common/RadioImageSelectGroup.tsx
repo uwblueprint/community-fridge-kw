@@ -91,7 +91,11 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
   const [isDesktop] = useMediaQuery("(min-width: 48em)");
 
   const radioImageSelectButtons = values.map((v) => (
-    <RadioImageSelectButton key={v.size} invalid={!!error} {...getRadioProps({ value: v.size })}>
+    <RadioImageSelectButton
+      key={v.size}
+      invalid={!!error}
+      {...getRadioProps({ value: v.size })}
+    >
       {isDesktop ? (
         <VStack p="20px">
           <Text textStyle="mobileBody">{v.size}</Text>
