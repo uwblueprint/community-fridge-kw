@@ -24,6 +24,9 @@ const Dashboard = (): JSX.Element => {
   };
 
   React.useEffect(() => {
+    if (!authenticatedUser) {
+      return;
+    }
     const getSchedules = async () => {
       const donor = await DonorAPIClient.getDonorByUserId(
         authenticatedUser!.id,
