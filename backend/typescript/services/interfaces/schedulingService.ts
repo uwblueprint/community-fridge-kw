@@ -16,10 +16,14 @@ interface ISchedulingService {
   /**
    * Get all scheduling information associated with donorId
    * @param donorId id associated with donor
+   * @param weekLimit default none but if provided, returns schedules for the upcoming week
    * @returns array of SchedulingDTOs
    * @throws Error if schedule retrieval fails
    */
-  getSchedulingsByDonorId(donorId: string): Promise<Array<SchedulingDTO>>;
+  getSchedulingsByDonorId(
+    donorId: string,
+    weekLimit?: number,
+  ): Promise<Array<SchedulingDTO>>;
 
   /**
    * Get all scheduling information (possibly paginated in the future)

@@ -25,14 +25,17 @@ const getScheduleById = async (scheduleId: string): Promise<Schedule> => {
   }
 };
 
-const getScheduleByDonorId = async (donorId: string): Promise<Schedule[]> => {
+const getScheduleByDonorId = async (
+  donorId: string,
+  weekLimit?: string,
+): Promise<Schedule[]> => {
   try {
-    const { data } = await baseAPIClient.get(
-      `/scheduling/?donorId=${donorId}`,
-      {
-        headers: { Authorization: BEARER_TOKEN },
-      },
-    );
+    const url = weekLimit
+      ? `/scheduling/?donorId=${donorId}&weekLimit=${weekLimit}`
+      : `/scheduling/?donorId=${donorId}`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
     return data;
   } catch (error) {
     return error as Schedule[];

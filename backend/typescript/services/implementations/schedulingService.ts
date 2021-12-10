@@ -1,4 +1,5 @@
 import { snakeCase } from "lodash";
+import { Op } from "sequelize";
 import ISchedulingService from "../interfaces/schedulingService";
 import {
   SchedulingDTO,
@@ -69,12 +70,32 @@ class SchedulingService implements ISchedulingService {
 
   async getSchedulingsByDonorId(
     donorId: string,
+    weekLimit?: number,
   ): Promise<Array<SchedulingDTO>> {
     let schedulingDtos: Array<SchedulingDTO> = [];
+    let schedulings: Array<Scheduling>;
     try {
-      const schedulings: Array<Scheduling> = await Scheduling.findAll({
-        where: { donor_id: Number(donorId) },
-      });
+      if (weekLimit) {
+        const currentStartDate = new Date();
+        const nextDate = new Date();
+        nextDate.setDate(nextDate.getDate() + weekLimit * 7);
+        schedulings = await Scheduling.findAll({
+          where: {
+            donor_id: Number(donorId),
+            start_time: {
+              [Op.between]: [currentStartDate, nextDate] as any,
+            },
+          },
+          order: [["start_time", "ASC"]],
+        });
+      } else {
+        schedulings = await Scheduling.findAll({
+          where: {
+            donor_id: Number(donorId),
+          },
+          order: [["start_time", "ASC"]],
+        });
+      }
 
       schedulingDtos = schedulings.map((scheduling) => {
         return {
@@ -110,7 +131,9 @@ class SchedulingService implements ISchedulingService {
   async getSchedulings(): Promise<Array<SchedulingDTO>> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
-      const schedulings: Array<Scheduling> = await Scheduling.findAll();
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
+        order: [["start_time", "ASC"]],
+      });
       schedulingDtos = schedulings.map((scheduling) => {
         return {
           id: String(scheduling.id),
