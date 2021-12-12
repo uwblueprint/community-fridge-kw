@@ -40,6 +40,7 @@ const Home = (): JSX.Element => {
               size="lg"
               onClick={() => history.push(SCHEDULING_PAGE)}
               variant="navigation"
+              width="100%"
             >
               Schedule a food dropoff
             </Button>

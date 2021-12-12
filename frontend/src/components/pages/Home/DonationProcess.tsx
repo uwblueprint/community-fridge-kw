@@ -80,6 +80,7 @@ const DonationProcess = (): JSX.Element => {
       <Button
         width="100%"
         variant="navigation"
+        size="lg"
         display={{ md: "none" }}
         onClick={() =>
           history.push(
