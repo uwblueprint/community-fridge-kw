@@ -23,6 +23,7 @@ interface RadioSelectGroupProps {
   helperText?: string;
   icons: number[];
   isRequired: boolean;
+  isDisabled?: boolean;
   error?: string;
   onChange: (arg0: any) => void;
 }
@@ -54,6 +55,10 @@ const RadioSelectButton = (props: any) => {
       color: "tomato.100",
       borderColor: "tomato.100",
     },
+    disabled: {
+      cursor: "not-allowed",
+      opacity: 0.4,
+    },
   };
 
   const iconRender = [];
@@ -80,6 +85,7 @@ const RadioSelectButton = (props: any) => {
           {...RadioButtonStyle.default}
           _checked={RadioButtonStyle.selected}
           {...RadioButtonStyle.invalid}
+          _disabled={RadioButtonStyle.disabled}
         >
           {children}
           {iconRender}
@@ -89,6 +95,7 @@ const RadioSelectButton = (props: any) => {
           {...checkbox}
           {...RadioButtonStyle.default}
           _checked={RadioButtonStyle.selected}
+          _disabled={RadioButtonStyle.disabled}
         >
           {children}
           {iconRender}
@@ -107,6 +114,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
     helperText,
     icons,
     isRequired,
+    isDisabled,
     error,
     onChange,
   } = props;
@@ -135,6 +143,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       m="2em 0"
       maxWidth="800px"
       isInvalid={!!error}
+      isDisabled={isDisabled}
     >
       <FormLabel fontWeight="600">{label}</FormLabel>
       <FormHelperText fontSize="16px" color="black.100" mb="20px">

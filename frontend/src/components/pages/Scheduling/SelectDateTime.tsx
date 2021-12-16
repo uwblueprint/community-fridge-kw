@@ -155,10 +155,8 @@ const SelectDateTime = ({
     if (isDesktop && isOneTimeDonation) {
       setForm({ target: { name: "frequency", value: "One time donation" } });
     }
-  }, []);
 
-  // fetch schedules
-  React.useEffect(() => {
+    // fetch schedules
     const fetchSchedules = async () => {
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
       setSchedules(scheduleResponse);
@@ -314,11 +312,20 @@ const SelectDateTime = ({
           ErrorMessages.invalidRecurringDonationEndDateFormat;
       } else {
         // Validate end date is within 6 months of start date
-        const startDate = new Date(startTime);
-        const maxEndDate = new Date(startTime);
-        maxEndDate.setMonth(startDate.getMonth() + 6);
-        const endDate = new Date(recurringDonationEndDate);
-        if (!(startDate <= endDate && endDate <= maxEndDate)) {
+        const startDateVal = new Date(startTime);
+        const maxRecurringEndDateVal = new Date(startTime);
+        maxRecurringEndDateVal.setMonth(startDateVal.getMonth() + 6);
+        const recurringEndDateVal = new Date(recurringDonationEndDate);
+        // Setting time to 11:59 so editing the last
+        // recurring donation doesn't throw an error
+        recurringEndDateVal.setHours(23);
+        recurringEndDateVal.setMinutes(59);
+
+        if (startDateVal > recurringEndDateVal) {
+          valid = false;
+          newErrors.recurringDonationEndDate =
+            ErrorMessages.recurringEndDateAfterStartDate;
+        } else if (recurringEndDateVal > maxRecurringEndDateVal) {
           valid = false;
           newErrors.recurringDonationEndDate =
             ErrorMessages.recurringDonationEndDateWithinSixMonths;
@@ -415,7 +422,12 @@ const SelectDateTime = ({
       )}
 
       {isDesktop ? (
-        <FormControl isRequired isInvalid={!!formErrors.frequency} mb="2em">
+        <FormControl
+          isRequired
+          isDisabled={isBeingEdited}
+          isInvalid={!!formErrors.frequency}
+          mb="2em"
+        >
           <FormLabel fontWeight="600">
             How often will this donation occur?
           </FormLabel>
@@ -444,6 +456,7 @@ const SelectDateTime = ({
           values={frequencies}
           icons={[]}
           isRequired
+          isDisabled={isBeingEdited}
           error={formErrors.frequency}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(e, "frequency");
