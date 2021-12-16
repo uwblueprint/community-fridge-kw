@@ -26,5 +26,5 @@ jobs:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_COMMUNITY_FRIDGE_KW }}"
           channelId: live
-          projectId: community-fridge-kw
+          projectId: communityfridgekw
           entryPoint: ./frontend

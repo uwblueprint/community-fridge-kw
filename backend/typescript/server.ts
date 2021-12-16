@@ -17,7 +17,7 @@ import EmailService from "./services/implementations/emailService";
 import IEmailService from "./services/interfaces/emailService";
 
 const clientHost = new RegExp(
-  "https://community-fridge-kw(--([A-Za-z0-9-])+-[A-Za-z0-9]+)?.web.app",
+  "https://communityfridgekw(--([A-Za-z0-9-])+-[A-Za-z0-9]+)?.web.app",
 );
 const CORS_ALLOW_LIST = ["http://localhost:3000", clientHost];
 

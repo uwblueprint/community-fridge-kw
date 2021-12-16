@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "communityfridgekw",
     "public": "build",
     "ignore": [
       "firebase.json",
