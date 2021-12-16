@@ -1,6 +1,8 @@
 import { snakeCase } from "lodash";
 import { Op } from "sequelize";
 import ISchedulingService from "../interfaces/schedulingService";
+import IEmailService from "../interfaces/emailService";
+import IUserService from "../interfaces/userService";
 import {
   SchedulingDTO,
   CreateSchedulingDTO,
@@ -27,7 +29,17 @@ function toSnakeCase(
 }
 
 class SchedulingService implements ISchedulingService {
-  /* eslint-disable class-methods-use-this */
+  userService: IUserService;
+
+  emailService: IEmailService | null;
+
+  constructor(
+    userService: IUserService,
+    emailService: IEmailService | null = null,
+  ) {
+    this.userService = userService;
+    this.emailService = emailService;
+  }
 
   async getSchedulingById(id: string): Promise<SchedulingDTO> {
     let scheduling: Scheduling | null;
@@ -163,6 +175,98 @@ class SchedulingService implements ISchedulingService {
     }
 
     return schedulingDtos;
+  }
+
+  async sendEmailVerificationAfterSchedulingADonation(
+    email: string,
+    schedule: SchedulingDTO,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendEmailVerificationAfterSchedulingADonation but this instance of AuthService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    try {
+      const accountName = await this.userService.getUserByEmail(email);
+      //Proposed drop off info
+      const days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      const startTime: Date = schedule.startTime;
+      const endTime: Date = schedule.endTime;
+
+      const donationDay: string = days[startTime.getDay()];
+      const donationMonth: string = months[startTime.getMonth()];
+      const startTimePeriod: string = startTime.getHours() < 11 ? "am" : "pm";
+      const endTimePeriod: string = endTime.getHours() < 11 ? "am" : "pm";
+
+      const startTimeString: string = `${
+        startTime.getHours() === 0 ? 12 : startTime.getHours() % 12
+      }:${startTime.getMinutes()}${startTimePeriod}`;
+      const endTimeString: string = `${
+        endTime.getHours() === 0 ? 12 : endTime.getHours() % 12
+      }:${endTime.getMinutes()}${endTimePeriod}`;
+
+      // TO DO: how do we properly style this?
+      const emailBody = `
+      <b>Hey there ${accountName}!</b>
+      <br/>
+      Thank you for scheduling a donation to your local community fridge.
+      <br/>
+      Here is a summary of your upcoming donation:
+      <br/>
+
+      <h3>Proposed dropoff time</h3>
+      <p>${donationDay}, ${donationMonth} ${startTime.getDate()} </p>
+      <p>${startTimeString} - ${endTimeString}</p>
+      <p> placeholder for frequency </p>
+      <br/>
+
+      <h3>Volunteer information</h3>
+      ${schedule.volunteerNeeded ? "<p>Volunteer needed</p>" : ""}
+      ${schedule.isPickup ? "<p>Pickup required</p>" : ""}
+      ${schedule.notes ? schedule.notes : ""}
+
+      <h3>Donation information</h3>
+      ${schedule.size ? schedule.size : ""}
+      ${schedule.categories.map((s) => {
+        return `${s}, `;
+      })}
+      `;
+
+      this.emailService.sendEmail(
+        email,
+        "Your Donation Information",
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm donation details of donation scheduled by ${email}`,
+      );
+      throw error;
+    }
   }
 
   async createScheduling(

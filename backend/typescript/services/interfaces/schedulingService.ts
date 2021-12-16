@@ -33,6 +33,18 @@ interface ISchedulingService {
   getSchedulings(): Promise<Array<SchedulingDTO>>;
 
   /**
+   * Generate an email with donation information to be sent after user schedules
+   * a donation
+   * @param email email of user that scheduled the donation
+   * @param schedule schedule object that contains information on scheduled donation
+   * @throws Error if unable to send email
+   */
+  sendEmailVerificationAfterSchedulingADonation(
+    email: string,
+    schedule: SchedulingDTO,
+  ): Promise<void>;
+
+  /**
    * Create scheduling
    * @param scheduling CreateSchedulingDTO object containing scheduling info
    * @returns a SchedulingDTO with the created scheduling information
