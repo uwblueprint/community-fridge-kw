@@ -257,6 +257,10 @@ const SelectDateTime = ({
     setDate(selectedDateObj);
     setShowTimeSlots(getTimeSlot("")); // reset timeslots
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
+    setFormErrors({
+      ...formErrors,
+      date: "",
+    })
   };
 
   const handleChangeRecurringDate = (
