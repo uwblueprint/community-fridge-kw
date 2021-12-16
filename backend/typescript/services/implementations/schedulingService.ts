@@ -3,15 +3,19 @@ import { Op } from "sequelize";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IUserService from "../interfaces/userService";
+import IDonorService from "../interfaces/donorService";
 import {
   SchedulingDTO,
   CreateSchedulingDTO,
   UpdateSchedulingDTO,
   Frequency,
+  UserDonorDTO,
 } from "../../types";
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import schedulingRouter from "../../rest/schedulingRoutes";
+import e from "express";
 
 const Logger = logger(__filename);
 
@@ -33,12 +37,16 @@ class SchedulingService implements ISchedulingService {
 
   emailService: IEmailService | null;
 
+  donorService: IDonorService;
+
   constructor(
     userService: IUserService,
     emailService: IEmailService | null = null,
+    donorService: IDonorService,
   ) {
     this.userService = userService;
     this.emailService = emailService;
+    this.donorService = donorService;
   }
 
   async getSchedulingById(id: string): Promise<SchedulingDTO> {
@@ -222,12 +230,37 @@ class SchedulingService implements ISchedulingService {
       const startTimePeriod: string = startTime.getHours() < 11 ? "am" : "pm";
       const endTimePeriod: string = endTime.getHours() < 11 ? "am" : "pm";
 
+      // dropoff time interval string
       const startTimeString: string = `${
         startTime.getHours() === 0 ? 12 : startTime.getHours() % 12
       }:${startTime.getMinutes()}${startTimePeriod}`;
       const endTimeString: string = `${
         endTime.getHours() === 0 ? 12 : endTime.getHours() % 12
       }:${endTime.getMinutes()}${endTimePeriod}`;
+
+      // frequency string
+      // e.g. Weekly on <day of week> until <recurringDonationEndDate>
+      let frequencyString: string = "One-time donation";
+      if (schedule.frequency !== Frequency.ONE_TIME) {
+        const recurringDonationEndDateString: string = `${
+          days[schedule.recurringDonationEndDate!.getDay()]
+        }, ${
+          months[schedule.recurringDonationEndDate!.getDay()]
+        } ${schedule.recurringDonationEndDate!.getDate()}`;
+        if (schedule.frequency === Frequency.DAILY) {
+          frequencyString = "Daily until " + recurringDonationEndDateString;
+        } else if (schedule.frequency === Frequency.WEEKLY) {
+          frequencyString =
+            "Weekly on " +
+            donationDay +
+            "s until " +
+            recurringDonationEndDateString;
+        } else {
+          frequencyString =
+            `Monthly on the ${schedule.recurringDonationEndDate!.getDate()} until ` +
+            recurringDonationEndDateString;
+        }
+      }
 
       // TO DO: how do we properly style this?
       const emailBody = `
@@ -241,7 +274,7 @@ class SchedulingService implements ISchedulingService {
       <h3>Proposed dropoff time</h3>
       <p>${donationDay}, ${donationMonth} ${startTime.getDate()} </p>
       <p>${startTimeString} - ${endTimeString}</p>
-      <p> placeholder for frequency </p>
+      <p> ${frequencyString} </p>
       <br/>
 
       <h3>Volunteer information</h3>
@@ -459,8 +492,8 @@ class SchedulingService implements ISchedulingService {
       );
       throw error;
     }
-
-    return {
+    // send email
+    const retNewSchedule: SchedulingDTO = {
       id: String(newScheduling.id),
       donorId: String(newScheduling.donor_id),
       categories: newScheduling.categories,
@@ -479,6 +512,15 @@ class SchedulingService implements ISchedulingService {
       recurringDonationEndDate: newScheduling.recurring_donation_end_date,
       notes: newScheduling.notes,
     };
+    const currDonor: UserDonorDTO = await this.donorService.getDonorById(
+      scheduling.donorId,
+    );
+    this.sendEmailVerificationAfterSchedulingADonation(
+      currDonor.email,
+      retNewSchedule,
+    );
+
+    return retNewSchedule;
   }
 
   // TODO: handle case when times are updated (change status to pending?)
