@@ -41,8 +41,14 @@ const Account = (): JSX.Element => {
   }
 
   return (
-    <>
-      <Container pl="42px" pr="42px" pt="0.5rem">
+    <Container
+      centerContent
+      pl="42px"
+      pr="42px"
+      pt="0.5rem"
+      maxWidth={{ base: "default", md: "70%" }}
+    >
+      <Box>
         <Text mt="67px" textStyle="mobileHeader1">
           My Account
         </Text>
@@ -59,17 +65,19 @@ const Account = (): JSX.Element => {
               placeholder="Enter name of business"
               variant="unstyled"
               size="sm"
+              color="hubbard.100"
+              fontWeight="500"
             />
           </Box>
           <Text
-            mt="2rem"
+            mt={{ base: "2rem", md: "3rem" }}
             mb="1em"
             textStyle="mobileBodyBold"
             color="hubbard.100"
           >
             Point of Contact
           </Text>
-          <HStack>
+          <HStack spacing={{ base: "default", md: "80px" }}>
             <Box>
               <Text>First name</Text>
               <Input
@@ -79,9 +87,11 @@ const Account = (): JSX.Element => {
                 placeholder="Enter first name"
                 variant="unstyled"
                 size="sm"
+                color="hubbard.100"
+                fontWeight="500"
               />
             </Box>
-            <Box mt="1.5rem">
+            <Box mt="2rem">
               <Text>Last name</Text>
               <Input
                 mt="2"
@@ -90,10 +100,12 @@ const Account = (): JSX.Element => {
                 placeholder="Enter last name"
                 variant="unstyled"
                 size="sm"
+                color="hubbard.100"
+                fontWeight="500"
               />
             </Box>
           </HStack>
-          <Box mt="1.5rem">
+          <Box mt={{ base: "2rem", md: "3rem" }}>
             <Text>Phone number</Text>
             <Input
               mt="2"
@@ -103,9 +115,11 @@ const Account = (): JSX.Element => {
               placeholder="Enter phone number"
               variant="unstyled"
               size="sm"
+              color="hubbard.100"
+              fontWeight="500"
             />
           </Box>
-          <Box mt="1.5rem">
+          <Box mt={{ base: "2rem", md: "3rem" }}>
             <Text>Email address</Text>
             <Input
               mt="2"
@@ -114,16 +128,18 @@ const Account = (): JSX.Element => {
               placeholder="Enter email"
               variant="unstyled"
               size="sm"
+              color="hubbard.100"
+              fontWeight="500"
             />
           </Box>
-          <Box mt="1.5rem">
+          <Box mt={{ base: "2rem", md: "3rem" }}>
             <Button mt="2" variant="navigation" onClick={navigateToDashboard}>
               View Scheduled Donations
             </Button>
           </Box>
         </FormControl>
-      </Container>
-    </>
+      </Box>
+    </Container>
   );
 };
 

@@ -12,7 +12,7 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
   const { authenticatedUser } = useContext(AuthContext);
   const history = useHistory();
   return (
-    <Container p="30px">
+    <Container p="30px" maxWidth={{ base: "default", md: "70%" }}>
       <Text textStyle="mobileHeader2" mt="2em">
         Thank you for scheduling a donation!
       </Text>
@@ -20,7 +20,7 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
         See you at the fridge on {new Date(startTime).toDateString()} at{" "}
         {new Date(startTime).toLocaleTimeString()}!
       </Text>
-      <Text textStyle="mobileBody" mt="2em">
+      <Text textStyle="mobileBody" mt="1em">
         We really appreciate your support. Your donation will help feed someone
         who needs the food. We have sent you an email confirmation to{" "}
         {authenticatedUser!.email}.
@@ -28,14 +28,17 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
       <Img
         src={ThankYouPageFridge}
         alt="Community Fridge Thank You Page"
-        marginBottom="50px"
+        mt="2em"
+        mb="3em"
         width="100%"
+        maxWidth="600px"
       />
       <HStack>
         <Button
           onClick={() => history.push(Routes.DASHBOARD_PAGE)}
           variant="navigation"
           w="100%"
+          maxWidth="500px"
         >
           View Dashboard
         </Button>
