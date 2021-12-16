@@ -5,6 +5,7 @@ import {
   validatePrimitive,
   validateDate,
   validateCategories,
+  validateRecurringDonationEndDate,
 } from "./util";
 
 export const createSchedulingDtoValidator = async (
@@ -79,6 +80,20 @@ export const createSchedulingDtoValidator = async (
       .status(400)
       .send(getApiValidationError("recurringDonationEndDate", "Date string"));
   }
+  // Check that recurring donation end date is within 6 months of start date
+  if (
+    req.body.recurringDonationEndDate &&
+    !validateRecurringDonationEndDate(
+      req.body.startTime,
+      req.body.recurringDonationEndDate,
+    )
+  ) {
+    return res
+      .status(400)
+      .send(
+        "recurring donation end date must be within 6 months of start date",
+      );
+  }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));
   }
@@ -144,6 +159,20 @@ export const updateSchedulingDtoValidator = async (
     return res
       .status(400)
       .send(getApiValidationError("recurringDonationEndDate", "Date string"));
+  }
+  // Check that recurring donation end date is within 6 months of start date
+  if (
+    req.body.recurringDonationEndDate &&
+    !validateRecurringDonationEndDate(
+      req.body.startTime,
+      req.body.recurringDonationEndDate,
+    )
+  ) {
+    return res
+      .status(400)
+      .send(
+        "recurring donation end date must be within 6 months of start date",
+      );
   }
   if (
     req.body.volunteerNeeded &&

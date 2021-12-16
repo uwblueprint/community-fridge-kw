@@ -3,13 +3,14 @@ import {
   Checkbox,
   Container,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import xl from "../../../assets/donation-sizes/lg.png";
@@ -19,6 +20,7 @@ import sm from "../../../assets/donation-sizes/xs.png";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ErrorMessages from "./ErrorMessages";
 import { DonationSizeInterface, SchedulingStepProps } from "./types";
 
 const DonationInformation: any = ({
@@ -29,11 +31,20 @@ const DonationInformation: any = ({
 }: SchedulingStepProps) => {
   const { previous, next, go } = navigation;
   const { id, categories, size } = formValues;
+  const [formErrors, setFormErrors] = useState({
+    categories: "",
+    size: "",
+  });
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
   ) => {
     setForm({ target: { name, value: e } });
+    setFormErrors({
+      ...formErrors,
+      size: "",
+    });
   };
 
   const handleCheckboxChange = (
@@ -48,13 +59,10 @@ const DonationInformation: any = ({
           : categories.filter((string) => item !== string),
       },
     });
-  };
-
-  const onSaveClick = async () => {
-    await SchedulingAPIClient.updateSchedule(id, formValues);
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
+    setFormErrors({
+      ...formErrors,
+      categories: "",
+    });
   };
 
   const DonationSizes: DonationSizeInterface[] = [
@@ -95,6 +103,41 @@ const DonationInformation: any = ({
     "Hygiene products (tampons, pads, soap, etc.)",
   ];
 
+  const validateForm = () => {
+    const newErrors = {
+      categories: "",
+      size: "",
+    };
+    let valid = true;
+
+    if (!categories || categories.length === 0) {
+      valid = false;
+      newErrors.categories = ErrorMessages.requiredField;
+    }
+    if (!size) {
+      valid = false;
+      newErrors.size = ErrorMessages.requiredField;
+    }
+    setFormErrors(newErrors);
+    return valid;
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      next();
+    }
+  };
+
+  const onSaveClick = async () => {
+    if (!validateForm()) {
+      return;
+    }
+    await SchedulingAPIClient.updateSchedule(id, formValues);
+    if (go !== undefined) {
+      go("confirm donation details");
+    }
+  };
+
   return (
     <Container
       p={{ base: "30px", md: "2rem 1rem" }}
@@ -109,12 +152,13 @@ const DonationInformation: any = ({
         values={DonationSizes}
         name="size"
         isRequired
+        error={formErrors.size}
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           handleChange(e, "size");
         }}
       />
 
-      <FormControl isRequired my="50px">
+      <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
         <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
           Type of item(s)
         </FormLabel>
@@ -132,6 +176,7 @@ const DonationInformation: any = ({
             </Checkbox>
           ))}
         </Stack>
+        <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
       </FormControl>
 
       {isBeingEdited ? (
@@ -156,7 +201,7 @@ const DonationInformation: any = ({
           <Button onClick={previous} variant="navigation">
             Back
           </Button>
-          <Button onClick={next} variant="navigation">
+          <Button onClick={handleNext} variant="navigation">
             Next
           </Button>
         </HStack>
