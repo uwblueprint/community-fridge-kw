@@ -70,7 +70,7 @@ const Account = (): JSX.Element => {
             />
           </Box>
           <Text
-            mt={{ base: "2rem", md: "3rem" }}
+            mt={{ base: "40px", md: "54px" }}
             mb="1em"
             textStyle="mobileBodyBold"
             color="hubbard.100"
@@ -105,7 +105,7 @@ const Account = (): JSX.Element => {
               />
             </Box>
           </HStack>
-          <Box mt={{ base: "2rem", md: "3rem" }}>
+          <Box mt={{ base: "24px", md: "40px" }}>
             <Text>Phone number</Text>
             <Input
               mt="2"
@@ -119,7 +119,7 @@ const Account = (): JSX.Element => {
               fontWeight="500"
             />
           </Box>
-          <Box mt={{ base: "2rem", md: "3rem" }}>
+          <Box mt={{ base: "24px", md: "40px" }}>
             <Text>Email address</Text>
             <Input
               mt="2"
@@ -132,8 +132,14 @@ const Account = (): JSX.Element => {
               fontWeight="500"
             />
           </Box>
-          <Box mt={{ base: "2rem", md: "3rem" }}>
-            <Button mt="2" variant="navigation" onClick={navigateToDashboard}>
+          <Box mt={{ base: "66px", md: "56px" }}>
+            <Button
+              width="100%"
+              size="lg"
+              mt="2"
+              variant="navigation"
+              onClick={navigateToDashboard}
+            >
               View Scheduled Donations
             </Button>
           </Box>
