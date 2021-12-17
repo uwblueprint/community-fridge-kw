@@ -2,8 +2,8 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 
-import AuthContext from "../../../contexts/AuthContext";
 import * as Routes from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
 
 interface DonationStepProps {
   title: string;
@@ -18,7 +18,7 @@ const DonationStep = ({
   return (
     <Flex
       paddingBottom="1.5rem"
-      px="1.2rem"
+      px={{ base: "0px", md: "1.2rem" }}
       textAlign={{ md: "center" }}
       width="100%"
     >
@@ -59,7 +59,7 @@ const DonationProcess = (): JSX.Element => {
       <Text mb="1.5rem" color="black.100" textStyle="mobileHeader2">
         The Donation Process
       </Text>
-      <Flex direction={{ base: "column", md: "row" }} padding="30px">
+      <Flex direction={{ base: "column", md: "row" }}>
         <DonationStep
           stepNumber={1}
           title="Create an account"

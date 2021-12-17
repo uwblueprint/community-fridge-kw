@@ -1,4 +1,12 @@
-import { Box, Button, Container, Flex, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Flex,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -15,7 +23,7 @@ const Home = (): JSX.Element => {
       <Container
         maxWidth={{ base: "default", md: "70%" }}
         px={{ base: "42px", md: "0px" }}
-        pt="73px"
+        pt={{ base: "55px", md: "121px" }}
       >
         <Image
           src="drawer-logo.png"
@@ -34,13 +42,13 @@ const Home = (): JSX.Element => {
 
             <Text marginBottom="30px" textStyle="mobileBody">
               Community fridges are public repositories of fresh, donated foods
-              that anyone can take from for free.
+              that anyone can take from for free. Community fridges are public
+              repositories of fresh, donated foods.
             </Text>
             <Button
               size="lg"
               onClick={() => history.push(SCHEDULING_PAGE)}
               variant="navigation"
-              width="100%"
             >
               Schedule a food dropoff
             </Button>
@@ -59,6 +67,11 @@ const Home = (): JSX.Element => {
         <Box maxWidth={{ base: "default", md: "70%" }} marginLeft="-7.5rem">
           {/* TODO: Add back after styling fix <ViewDonations isPublicView /> */}
         </Box>
+        <Divider
+          color="hubbard.100"
+          mt={{ base: "0px", md: "40px" }}
+          opacity={{ base: "0%", md: "100%" }}
+        />
         <DonationProcess />
         <VolunteerRoles />
       </Container>
