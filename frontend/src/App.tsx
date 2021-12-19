@@ -14,6 +14,7 @@ import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import ViewDonations from "./components/pages/ViewDonations";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
+import Action from "./components/auth/Action";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
 import customTheme from "./theme/index";
@@ -51,6 +52,7 @@ const App = (): React.ReactElement => {
             />
             <Route exact path={Routes.DASHBOARD_PAGE} component={Dashboard} />
             <Route exact path={Routes.SCHEDULING_PAGE} component={Scheduling} />
+            <Route path="/action" component={Action} />
             <Route exact path="*" component={NotFound} />
           </Switch>
           <Footer />

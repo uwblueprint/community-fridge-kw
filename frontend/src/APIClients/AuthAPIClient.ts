@@ -70,7 +70,7 @@ const register = async (
       { firstName, lastName, email, phoneNumber, password, role, businessName },
       { withCredentials: true },
     );
-    localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(data));
+    // localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(data));
     return data;
   } catch (error) {
     return null;

@@ -21,13 +21,12 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import { LANDING_PAGE, LOGIN_PAGE } from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import {
   checkForLowerCase,
@@ -49,7 +48,6 @@ const AccountDetails = ({
   formValues: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const { setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
   const { previous, next } = navigation;
   const [isDesktop] = useMediaQuery("(min-width: 768px)");
@@ -94,8 +92,6 @@ const AccountDetails = ({
       onOpen();
       return false;
     }
-    await setAuthenticatedUser(user);
-
     return next();
   };
 
