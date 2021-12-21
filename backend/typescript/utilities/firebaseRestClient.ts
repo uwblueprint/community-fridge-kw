@@ -1,4 +1,5 @@
 import fetch, { Response } from "node-fetch";
+import { StringLiteralLike } from "typescript";
 
 import { Token } from "../types";
 import logger from "./logger";
@@ -11,6 +12,8 @@ const FIREBASE_REFRESH_TOKEN_URL =
   "https://securetoken.googleapis.com/v1/token";
 const FIREBASE_OAUTH_SIGN_IN_URL =
   "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp";
+const FIREBASE_CONFIRM_EMAIL_VERIFICATION_URL =
+  "https://identitytoolkit.googleapis.com/v1/accounts:update";
 
 type PasswordSignInResponse = {
   idToken: string;
@@ -60,6 +63,15 @@ type RequestError = {
   };
 };
 
+type ConfirmEmailVerificationResponse = {
+  email: string;
+  displayName: string;
+  photoUrl: string;
+  passwordHash: string;
+  providerUserInfo: JSON[];
+  emailVerified: boolean;
+};
+
 const FirebaseRestClient = {
   // Docs: https://firebase.google.com/docs/reference/rest/auth/#section-sign-in-email-password
   signInWithPassword: async (
@@ -81,9 +93,8 @@ const FirebaseRestClient = {
       },
     );
 
-    const responseJson:
-      | PasswordSignInResponse
-      | RequestError = await response.json();
+    const responseJson: PasswordSignInResponse | RequestError =
+      await response.json();
 
     if (!response.ok) {
       const errorMessage = [
@@ -123,9 +134,8 @@ const FirebaseRestClient = {
       },
     );
 
-    const responseJson:
-      | OAuthSignInResponse
-      | RequestError = await response.json();
+    const responseJson: OAuthSignInResponse | RequestError =
+      await response.json();
 
     if (!response.ok) {
       const errorMessage = [
@@ -155,9 +165,8 @@ const FirebaseRestClient = {
       },
     );
 
-    const responseJson:
-      | RefreshTokenResponse
-      | RequestError = await response.json();
+    const responseJson: RefreshTokenResponse | RequestError =
+      await response.json();
 
     if (!response.ok) {
       const errorMessage = [
@@ -175,6 +184,40 @@ const FirebaseRestClient = {
       accessToken: (responseJson as RefreshTokenResponse).id_token,
       refreshToken: (responseJson as RefreshTokenResponse).refresh_token,
     };
+  },
+
+  //Docs: https://firebase.google.com/docs/reference/rest/auth/#section-send-email-verification
+  confirmEmailVerificationCode: async (
+    oobCode: string,
+  ): Promise<ConfirmEmailVerificationResponse> => {
+    const response: Response = await fetch(
+      `${FIREBASE_CONFIRM_EMAIL_VERIFICATION_URL}?key=${process.env.FIREBASE_WEB_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          oobCode,
+        }),
+      },
+    );
+
+    const responseJson: ConfirmEmailVerificationResponse | RequestError =
+      await response.json();
+
+    if (!response.ok) {
+      const errorMessage = [
+        "Failed to confirm email verification code reason =",
+        `${response.status},`,
+        "error message =",
+        (responseJson as RequestError).error.message,
+      ];
+      Logger.error(errorMessage.join(" "));
+
+      throw new Error("Failed to confirm email code via Firebase REST API");
+    }
+    return responseJson as ConfirmEmailVerificationResponse;
   },
 };
 

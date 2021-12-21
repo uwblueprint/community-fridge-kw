@@ -82,6 +82,8 @@ interface IAuthService {
     accessToken: string,
     requestedEmail: string,
   ): Promise<boolean>;
+
+  verifyEmail(oobCode: string): Promise<any>;
 }
 
 export default IAuthService;

@@ -70,7 +70,6 @@ const register = async (
       { firstName, lastName, email, phoneNumber, password, role, businessName },
       { withCredentials: true },
     );
-    // localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(data));
     return data;
   } catch (error) {
     return null;
@@ -113,7 +112,21 @@ const refresh = async (): Promise<boolean> => {
   }
 };
 
+const confirmEmailVerification = async (oobCode: string): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/confirmEmailVerification/${oobCode}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
+  confirmEmailVerification,
   login,
   logout,
   loginWithGoogle,
