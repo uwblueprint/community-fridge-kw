@@ -60,7 +60,7 @@ const ConfirmDetails = ({
           variant="ghost"
           aria-label="back"
         >
-          <ArrowBackIcon />
+          <ArrowBackIcon width="24px" height="24px" />
         </IconButton>
       ) : (
         <SchedulingProgressBar activeStep={3} totalSteps={4} />

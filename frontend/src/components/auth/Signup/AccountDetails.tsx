@@ -121,7 +121,7 @@ const AccountDetails = ({
         aria-label="go back"
         onClick={previous}
       >
-        <ArrowBackIcon />
+        <ArrowBackIcon width="24px" height="24px" />
       </IconButton>
       <IconButton
         float="right"

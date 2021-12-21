@@ -1,4 +1,4 @@
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { CheckIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { Center, Text } from "@chakra-ui/react";
 import React from "react";
 
@@ -6,7 +6,7 @@ const CheckMarkOrClose = (isTrue: boolean): JSX.Element => {
   return isTrue ? (
     <CheckIcon color="spinach.100" />
   ) : (
-    <CloseIcon color="tomato.100" />
+    <SmallCloseIcon color="tomato.100" />
   );
 };
 
