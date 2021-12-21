@@ -1,3 +1,4 @@
+import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -20,19 +21,14 @@ import {
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React, { useContext, useReducer, useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
-import {
-  DASHBOARD_PAGE,
-  LANDING_PAGE,
-  LOGIN_PAGE,
-} from "../../../constants/Routes";
+import { LANDING_PAGE, LOGIN_PAGE } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
-import { BackArrow, CloseIcon } from "../../common/icons";
 import {
   checkForLowerCase,
   checkForNumbers,
@@ -125,7 +121,7 @@ const AccountDetails = ({
         aria-label="go back"
         onClick={previous}
       >
-        <BackArrow />
+        <ArrowBackIcon />
       </IconButton>
       <IconButton
         float="right"
@@ -134,7 +130,7 @@ const AccountDetails = ({
         onClick={() => history.push(LANDING_PAGE)}
         backgroundColor="transparent"
       >
-        {!isDesktop && <CloseIcon color="#111111" />}
+        {!isDesktop && <CloseIcon color="black.100" />}
       </IconButton>
       <Text mt="67px" textStyle="mobileHeader1">
         Account details

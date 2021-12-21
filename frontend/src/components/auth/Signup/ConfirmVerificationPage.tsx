@@ -1,9 +1,9 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import { Button, Container, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
 import { DASHBOARD_PAGE, LANDING_PAGE } from "../../../constants/Routes";
-import { CloseIcon } from "../../common/icons";
 
 const ConfirmVerificationPage = () => {
   const history = useHistory();
@@ -17,7 +17,7 @@ const ConfirmVerificationPage = () => {
         backgroundColor="transparent"
         onClick={() => history.push(LANDING_PAGE)}
       >
-        <CloseIcon color="#111111" />
+        <CloseIcon color="black.100" />
       </IconButton>
       <Container centerContent pl="42px" pr="42px" pt="73px">
         <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">

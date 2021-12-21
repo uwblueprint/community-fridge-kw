@@ -1,3 +1,4 @@
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Button,
   Container,
@@ -12,7 +13,7 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link as ReactLink } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
@@ -23,8 +24,6 @@ import {
   LOGIN_PAGE,
 } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import { Role } from "../../types/AuthTypes";
-import { CloseIcon, MenuIcon } from "./icons";
 
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,7 +55,7 @@ const Header = (): JSX.Element => {
           backgroundColor="transparent"
           display={{ base: "inline", md: "none" }}
         >
-          <MenuIcon />
+          <HamburgerIcon color="black.100" />
         </IconButton>
         <Image
           objectFit="none"
@@ -109,7 +108,7 @@ const Header = (): JSX.Element => {
               backgroundColor="transparent"
               onClick={onClose}
             >
-              <CloseIcon color="black" />
+              <CloseIcon color="black.100" />
             </IconButton>
             <Image
               w="120px"
