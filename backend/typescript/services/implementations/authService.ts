@@ -212,8 +212,6 @@ class AuthService implements IAuthService {
         .auth()
         .getUser(decodedIdToken.uid);
 
-      console.log("email verified: ", firebaseUser.emailVerified);
-
       return (
         firebaseUser.emailVerified && String(tokenUserId) === requestedUserId
       );
