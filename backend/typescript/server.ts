@@ -6,10 +6,8 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 
 import sequelize from "./models";
-import nodemailerConfig from "./nodemailer.config";
 import authRouter from "./rest/authRoutes";
 import donorRouter from "./rest/donorRoutes";
-import entityRouter from "./rest/entityRoutes";
 import userRouter from "./rest/userRoutes";
 import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
@@ -35,7 +33,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter);
-app.use("/entities", entityRouter);
 app.use("/donors", donorRouter);
 app.use("/users", userRouter);
 app.use("/volunteers", volunteerRouter);
