@@ -144,8 +144,10 @@ authRouter.post(
 
 authRouter.post("/confirmEmailVerification/:oobCode", async (req, res) => {
   try {
-    await authService.verifyEmail(req.params.oobCode);
-    res.status(204).send();
+    const response = await authService.verifyEmail(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
   } catch (error) {
     res.status(500).json({ error: getErrorMessage(error) });
   }

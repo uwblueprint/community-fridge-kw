@@ -39,13 +39,17 @@ class AuthService implements IAuthService {
   }
 
   /* eslint-disable class-methods-use-this */
-  async verifyEmail(oobCode: string): Promise<any> {
+  async verifyEmail(oobCode: string): Promise<boolean> {
     try {
-      await FirebaseRestClient.confirmEmailVerificationCode(oobCode);
-      return true;
+      const response = await FirebaseRestClient.confirmEmailVerificationCode(
+        oobCode,
+      );
+      if (response.emailVerified) {
+        return true;
+      }
+      return false;
     } catch (error) {
-      Logger.error(`Failed to verify email for user with OOB code ${oobCode}`);
-      throw error;
+      return false;
     }
   }
 
@@ -181,8 +185,9 @@ class AuthService implements IAuthService {
     roles: Set<Role>,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
-        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
       const userRole = await this.userService.getUserRoleByAuthId(
         decodedIdToken.uid,
       );
@@ -202,8 +207,9 @@ class AuthService implements IAuthService {
     requestedUserId: string,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
-        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
       const tokenUserId = await this.userService.getUserIdByAuthId(
         decodedIdToken.uid,
       );
@@ -225,8 +231,9 @@ class AuthService implements IAuthService {
     requestedEmail: string,
   ): Promise<boolean> {
     try {
-      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken =
-        await firebaseAdmin.auth().verifyIdToken(accessToken, true);
+      const decodedIdToken: firebaseAdmin.auth.DecodedIdToken = await firebaseAdmin
+        .auth()
+        .verifyIdToken(accessToken, true);
 
       const firebaseUser = await firebaseAdmin
         .auth()

@@ -1,5 +1,4 @@
 import fetch, { Response } from "node-fetch";
-import { StringLiteralLike } from "typescript";
 
 import { Token } from "../types";
 import logger from "./logger";
@@ -93,8 +92,9 @@ const FirebaseRestClient = {
       },
     );
 
-    const responseJson: PasswordSignInResponse | RequestError =
-      await response.json();
+    const responseJson:
+      | PasswordSignInResponse
+      | RequestError = await response.json();
 
     if (!response.ok) {
       const errorMessage = [
@@ -134,8 +134,9 @@ const FirebaseRestClient = {
       },
     );
 
-    const responseJson: OAuthSignInResponse | RequestError =
-      await response.json();
+    const responseJson:
+      | OAuthSignInResponse
+      | RequestError = await response.json();
 
     if (!response.ok) {
       const errorMessage = [
@@ -165,8 +166,9 @@ const FirebaseRestClient = {
       },
     );
 
-    const responseJson: RefreshTokenResponse | RequestError =
-      await response.json();
+    const responseJson:
+      | RefreshTokenResponse
+      | RequestError = await response.json();
 
     if (!response.ok) {
       const errorMessage = [
@@ -186,7 +188,7 @@ const FirebaseRestClient = {
     };
   },
 
-  //Docs: https://firebase.google.com/docs/reference/rest/auth/#section-send-email-verification
+  // Docs: https://firebase.google.com/docs/reference/rest/auth/#section-send-email-verification
   confirmEmailVerificationCode: async (
     oobCode: string,
   ): Promise<ConfirmEmailVerificationResponse> => {
@@ -203,8 +205,9 @@ const FirebaseRestClient = {
       },
     );
 
-    const responseJson: ConfirmEmailVerificationResponse | RequestError =
-      await response.json();
+    const responseJson:
+      | ConfirmEmailVerificationResponse
+      | RequestError = await response.json();
 
     if (!response.ok) {
       const errorMessage = [
@@ -217,6 +220,7 @@ const FirebaseRestClient = {
 
       throw new Error("Failed to confirm email code via Firebase REST API");
     }
+    console.log(responseJson);
     return responseJson as ConfirmEmailVerificationResponse;
   },
 };

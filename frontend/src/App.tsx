@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import Action from "./components/auth/Action";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import Footer from "./components/common/Footer";
@@ -14,7 +15,6 @@ import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import ViewDonations from "./components/pages/ViewDonations";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
-import Action from "./components/auth/Action";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
 import customTheme from "./theme/index";
