@@ -120,15 +120,21 @@ const AccountDetails = ({
       >
         <ArrowBackIcon width="24px" height="24px" />
       </IconButton>
-      <IconButton
-        float="right"
-        marginRight="-12px"
-        aria-label="close sign up"
-        onClick={() => history.push(Routes.LANDING_PAGE)}
-        backgroundColor="transparent"
-      >
-        {!isDesktop && <CloseIcon color="black.100" />}
-      </IconButton>
+
+      {!isDesktop && (
+        <>
+          <IconButton
+            float="right"
+            marginRight="-12px"
+            aria-label="close sign up"
+            onClick={() => history.push(Routes.LANDING_PAGE)}
+            backgroundColor="transparent"
+          >
+            <CloseIcon color="black.100" />
+          </IconButton>
+        </>
+      )}
+
       <Text mt="67px" textStyle="mobileHeader1">
         Account details
       </Text>

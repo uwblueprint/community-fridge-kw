@@ -65,14 +65,16 @@ const CreateAccount = ({
   }
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">
-      <IconButton
-        float="right"
-        aria-label="close sign up"
-        onClick={() => history.push(Routes.LOGIN_PAGE)}
-        backgroundColor="transparent"
-      >
-        {!isDesktop && <CloseIcon color="black.100" />}
-      </IconButton>
+      {!isDesktop && (
+        <IconButton
+          float="right"
+          aria-label="close sign up"
+          onClick={() => history.push(Routes.LOGIN_PAGE)}
+          backgroundColor="transparent"
+        >
+          <CloseIcon color="black.100" />
+        </IconButton>
+      )}
       <Text mt="67px" textStyle="mobileHeader1">
         Create an account
       </Text>
