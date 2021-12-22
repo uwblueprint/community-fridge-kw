@@ -188,10 +188,18 @@ const ConfirmDetails = ({
       </Box>
       {!isBeingEdited && (
         <HStack>
-          <Button onClick={previous} variant="navigation">
+          <Button
+            onClick={previous}
+            variant="navigation"
+            width={{ base: "100%", md: "20%" }}
+          >
             Back
           </Button>
-          <Button onClick={onSubmitClick} variant="navigation">
+          <Button
+            onClick={onSubmitClick}
+            variant="navigation"
+            width={{ base: "100%", md: "20%" }}
+          >
             Submit
           </Button>
         </HStack>
