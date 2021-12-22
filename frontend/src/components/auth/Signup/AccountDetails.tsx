@@ -26,7 +26,8 @@ import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
-import { LANDING_PAGE, LOGIN_PAGE } from "../../../constants/Routes";
+import * as Routes from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import {
   checkForLowerCase,
@@ -123,7 +124,7 @@ const AccountDetails = ({
         float="right"
         marginRight="-12px"
         aria-label="close sign up"
-        onClick={() => history.push(LANDING_PAGE)}
+        onClick={() => history.push(Routes.LANDING_PAGE)}
         backgroundColor="transparent"
       >
         {!isDesktop && <CloseIcon color="black.100" />}
@@ -250,7 +251,7 @@ const AccountDetails = ({
               color="squash.100"
               backgroundColor="raddish.100"
               mr={3}
-              onClick={() => history.push(LOGIN_PAGE)}
+              onClick={() => history.push(Routes.LOGIN_PAGE)}
             >
               Return to Log In
             </Button>

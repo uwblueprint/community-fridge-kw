@@ -14,7 +14,7 @@ import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { Redirect, useHistory } from "react-router-dom";
 
-import { DASHBOARD_PAGE, LOGIN_PAGE } from "../../../constants/Routes";
+import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
@@ -61,14 +61,14 @@ const CreateAccount = ({
   };
 
   if (authenticatedUser) {
-    return <Redirect to={DASHBOARD_PAGE} />;
+    return <Redirect to={Routes.DASHBOARD_PAGE} />;
   }
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">
       <IconButton
         float="right"
         aria-label="close sign up"
-        onClick={() => history.push(LOGIN_PAGE)}
+        onClick={() => history.push(Routes.LOGIN_PAGE)}
         backgroundColor="transparent"
       >
         {!isDesktop && <CloseIcon color="black.100" />}

@@ -11,7 +11,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png";
-import { SCHEDULING_PAGE } from "../../../constants/Routes";
+import * as Routes from "../../../constants/Routes";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
 
@@ -47,7 +47,7 @@ const Home = (): JSX.Element => {
             </Text>
             <Button
               size="lg"
-              onClick={() => history.push(SCHEDULING_PAGE)}
+              onClick={() => history.push(Routes.SCHEDULING_PAGE)}
               variant="navigation"
             >
               Schedule a food dropoff
