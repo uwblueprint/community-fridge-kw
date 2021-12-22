@@ -14,11 +14,10 @@ import { Redirect, useHistory } from "react-router-dom";
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import { DASHBOARD_PAGE, LOGIN_PAGE } from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import { Role } from "../../types/AuthTypes";
 
 const Account = (): JSX.Element => {
   const history = useHistory();
-  const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const { authenticatedUser } = useContext(AuthContext);
   const [businessName, setBusinessName] = useState("");
 
   const navigateToDashboard = () => {

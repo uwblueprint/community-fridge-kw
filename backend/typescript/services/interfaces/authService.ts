@@ -82,6 +82,13 @@ interface IAuthService {
     accessToken: string,
     requestedEmail: string,
   ): Promise<boolean>;
+
+  /**
+   * Confirm email verification link is valid and issued to the requested user
+   * @param oobCode user's oob code to verify request
+   * @returns true if email verification confirmation is authorized, false otehrwise
+   */
+  verifyEmail(oobCode: string): Promise<boolean>;
 }
 
 export default IAuthService;

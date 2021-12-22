@@ -39,6 +39,21 @@ class AuthService implements IAuthService {
   }
 
   /* eslint-disable class-methods-use-this */
+  async verifyEmail(oobCode: string): Promise<boolean> {
+    try {
+      const response = await FirebaseRestClient.confirmEmailVerificationCode(
+        oobCode,
+      );
+      if (response.emailVerified) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /* eslint-disable class-methods-use-this */
   async generateTokenOAuth(idToken: string): Promise<AuthDTO> {
     try {
       const googleUser = await FirebaseRestClient.signInWithGoogleOAuth(
@@ -223,7 +238,6 @@ class AuthService implements IAuthService {
       const firebaseUser = await firebaseAdmin
         .auth()
         .getUser(decodedIdToken.uid);
-
       return (
         firebaseUser.emailVerified && decodedIdToken.email === requestedEmail
       );

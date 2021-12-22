@@ -34,7 +34,7 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
           textStyle="mobileBody"
           color="hubbard.100"
         >
-          We sent a verfication email to {email}. Please check your email to
+          We sent a verification email to {email}. Please check your email to
           begin scheduling your first dropoff!
         </Text>
       </Container>

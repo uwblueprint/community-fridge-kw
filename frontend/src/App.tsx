@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import Action from "./components/auth/Action";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import Footer from "./components/common/Footer";
@@ -51,6 +52,7 @@ const App = (): React.ReactElement => {
             />
             <Route exact path={Routes.DASHBOARD_PAGE} component={Dashboard} />
             <Route exact path={Routes.SCHEDULING_PAGE} component={Scheduling} />
+            <Route path={Routes.ACTION} component={Action} />
             <Route exact path="*" component={NotFound} />
           </Switch>
           <Footer />
