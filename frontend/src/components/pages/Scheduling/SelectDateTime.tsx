@@ -260,7 +260,7 @@ const SelectDateTime = ({
     setFormErrors({
       ...formErrors,
       date: "",
-    })
+    });
   };
 
   const handleChangeRecurringDate = (

@@ -1,3 +1,4 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -15,7 +16,6 @@ import { Redirect, useHistory } from "react-router-dom";
 
 import { DASHBOARD_PAGE, LOGIN_PAGE } from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import { CloseIcon } from "../../common/icons";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -71,7 +71,7 @@ const CreateAccount = ({
         onClick={() => history.push(LOGIN_PAGE)}
         backgroundColor="transparent"
       >
-        {!isDesktop && <CloseIcon color="#111111" />}
+        {!isDesktop && <CloseIcon color="black.100" />}
       </IconButton>
       <Text mt="67px" textStyle="mobileHeader1">
         Create an account
