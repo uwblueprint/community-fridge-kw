@@ -52,7 +52,7 @@ const App = (): React.ReactElement => {
             />
             <Route exact path={Routes.DASHBOARD_PAGE} component={Dashboard} />
             <Route exact path={Routes.SCHEDULING_PAGE} component={Scheduling} />
-            <Route path="/action" component={Action} />
+            <Route path={Routes.ACTION} component={Action} />
             <Route exact path="*" component={NotFound} />
           </Switch>
           <Footer />

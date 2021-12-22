@@ -41,7 +41,7 @@ const ConfirmDetails = ({
   };
 
   const getDonorData = async () => {
-    const donorResponse = await DonorAPIClient.getDonorById(
+    const donorResponse = await DonorAPIClient.getDonorByUserId(
       authenticatedUser!.id,
     );
     setForm({ target: { name: "donorId", value: donorResponse.id } });

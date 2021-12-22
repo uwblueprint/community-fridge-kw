@@ -220,7 +220,6 @@ const FirebaseRestClient = {
 
       throw new Error("Failed to confirm email code via Firebase REST API");
     }
-    console.log(responseJson);
     return responseJson as ConfirmEmailVerificationResponse;
   },
 };
