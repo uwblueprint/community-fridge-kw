@@ -85,12 +85,10 @@ schedulingRouter.get("/:id?", async (req, res) => {
     }
 
     try {
-      const schedulings = weekLimit
-        ? await schedulingService.getSchedulingsByDonorId(
-            donorId,
-            Number(weekLimit),
-          )
-        : await schedulingService.getSchedulingsByDonorId(donorId);
+      const schedulings = await schedulingService.getSchedulingsByDonorId(
+        donorId,
+        Number(weekLimit),
+      );
       res.status(200).json(schedulings);
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });

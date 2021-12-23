@@ -70,12 +70,12 @@ class SchedulingService implements ISchedulingService {
 
   async getSchedulingsByDonorId(
     donorId: string,
-    weekLimit?: number,
+    weekLimit: number,
   ): Promise<Array<SchedulingDTO>> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     let schedulings: Array<Scheduling>;
     try {
-      if (weekLimit) {
+      if (weekLimit !== 0) {
         const currentStartDate = new Date();
         const nextDate = new Date();
         nextDate.setDate(nextDate.getDate() + weekLimit * 7);
@@ -83,7 +83,7 @@ class SchedulingService implements ISchedulingService {
           where: {
             donor_id: Number(donorId),
             start_time: {
-              [Op.between]: [currentStartDate, nextDate] as any,
+              [Op.between]: [currentStartDate, nextDate],
             },
           },
           order: [["start_time", "ASC"]],

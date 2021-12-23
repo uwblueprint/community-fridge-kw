@@ -27,12 +27,10 @@ const getScheduleById = async (scheduleId: string): Promise<Schedule> => {
 
 const getScheduleByDonorId = async (
   donorId: string,
-  weekLimit?: string,
+  weekLimit: string,
 ): Promise<Schedule[]> => {
   try {
-    const url = weekLimit
-      ? `/scheduling/?donorId=${donorId}&weekLimit=${weekLimit}`
-      : `/scheduling/?donorId=${donorId}`;
+    const url = `/scheduling/?donorId=${donorId}&weekLimit=${weekLimit}`;
     const { data } = await baseAPIClient.get(url, {
       headers: { Authorization: BEARER_TOKEN },
     });

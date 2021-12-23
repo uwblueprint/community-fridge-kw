@@ -4,12 +4,11 @@ import { Redirect, useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import UPCOMING_WEEK_LIMIT from "../../../constants/DashboardConstants";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Schedule } from "../../../types/SchedulingTypes";
 import DropoffCard from "./components/DropoffCard";
-
-const upcomingWeekLimit = "2";
 
 const Dashboard = (): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
@@ -34,7 +33,7 @@ const Dashboard = (): JSX.Element => {
 
       const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
         donor.id,
-        upcomingWeekLimit,
+        UPCOMING_WEEK_LIMIT,
       );
 
       setSchedules(scheduleResponse);
@@ -69,7 +68,7 @@ const Dashboard = (): JSX.Element => {
       </Text>
       <Text pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
         View all of the upcoming donations that you have scheduled for the next
-        2 weeks
+        two weeks
       </Text>
       <Box display={{ lg: "flex" }} flexDirection="row" flexWrap="wrap">
         {schedules.length > 0 ? (

@@ -45,6 +45,7 @@ const WeeklyEventItemPopUp = ({
     const getNextDropOff = async () => {
       const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
         donor.id,
+        "0", // "0" indicates no weekLimit
       );
       setNextDropOff(
         scheduleResponse.find((nextSchedule) => {

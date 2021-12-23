@@ -22,7 +22,7 @@ interface ISchedulingService {
    */
   getSchedulingsByDonorId(
     donorId: string,
-    weekLimit?: number,
+    weekLimit: number,
   ): Promise<Array<SchedulingDTO>>;
 
   /**
