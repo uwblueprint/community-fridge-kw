@@ -41,7 +41,7 @@ const ConfirmDetails = ({
   };
 
   const getDonorData = async () => {
-    const donorResponse = await DonorAPIClient.getDonorById(
+    const donorResponse = await DonorAPIClient.getDonorByUserId(
       authenticatedUser!.id,
     );
     setForm({ target: { name: "donorId", value: donorResponse.id } });
@@ -60,7 +60,7 @@ const ConfirmDetails = ({
           variant="ghost"
           aria-label="back"
         >
-          <ArrowBackIcon />
+          <ArrowBackIcon width="24px" height="24px" />
         </IconButton>
       ) : (
         <SchedulingProgressBar activeStep={3} totalSteps={4} />

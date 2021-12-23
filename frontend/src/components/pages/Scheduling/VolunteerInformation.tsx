@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   HStack,
@@ -11,11 +12,12 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ErrorMessages from "./ErrorMessages";
 import { SchedulingStepProps } from "./types";
 
 const VolunteerInformation = ({
@@ -38,6 +40,13 @@ const VolunteerInformation = ({
     notes,
   } = formValues;
 
+  const [formErrors, setFormErrors] = useState({
+    volunteerNeeded: "",
+    volunteerTime: "",
+    pickupLocation: "",
+    isPickup: "",
+  });
+
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
     "Pickup (food rescue)",
@@ -48,6 +57,10 @@ const VolunteerInformation = ({
 
   const handleChange = (e: boolean | string, name: string) => {
     setForm({ target: { name, value: e } });
+    setFormErrors({
+      ...formErrors,
+      [name]: "",
+    });
   };
 
   const volunteerNeededRadioValue = () => {
@@ -66,10 +79,48 @@ const VolunteerInformation = ({
     return "";
   };
 
+  const validateForm = () => {
+    const newErrors = {
+      volunteerNeeded: "",
+      volunteerTime: "",
+      pickupLocation: "",
+      isPickup: "",
+    };
+    let valid = true;
+
+    if (volunteerNeeded === undefined) {
+      valid = false;
+      newErrors.volunteerNeeded = ErrorMessages.requiredField;
+    }
+    if (volunteerNeeded && isPickup === undefined) {
+      valid = false;
+      newErrors.isPickup = ErrorMessages.requiredField;
+    }
+    if (volunteerNeeded && !volunteerTime) {
+      valid = false;
+      newErrors.volunteerTime = ErrorMessages.requiredField;
+    }
+    if (volunteerNeeded && isPickup && !pickupLocation) {
+      valid = false;
+      newErrors.pickupLocation = ErrorMessages.requiredField;
+    }
+    setFormErrors(newErrors);
+    return valid;
+  };
+
   const onSaveClick = async () => {
+    if (!validateForm()) {
+      return;
+    }
     await SchedulingAPIClient.updateSchedule(id, formValues);
     if (go !== undefined) {
       go("confirm donation details");
+    }
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      next();
     }
   };
 
@@ -107,6 +158,7 @@ const VolunteerInformation = ({
         values={volunteerNeededValues}
         icons={[]}
         isRequired
+        error={formErrors.volunteerNeeded}
         helperText={volunteerRequiredHelperText}
         onChange={(e: string) => {
           handleChange(e === "Yes", "volunteerNeeded");
@@ -121,12 +173,17 @@ const VolunteerInformation = ({
             values={volunteerAssistanceValues}
             icons={[]}
             isRequired
+            error={formErrors.isPickup}
             onChange={(e: string) => {
               handleChange(e === volunteerAssistanceValues[0], "isPickup");
             }}
           />
           {isPickup && (
-            <FormControl isRequired m="3em 0">
+            <FormControl
+              isRequired
+              isInvalid={!!formErrors.pickupLocation}
+              m="3em 0"
+            >
               <FormLabel>Pickup location:</FormLabel>
               <Input
                 value={pickupLocation}
@@ -135,9 +192,14 @@ const VolunteerInformation = ({
                 size="lg"
                 maxWidth="740px"
               />
+              <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
             </FormControl>
           )}
-          <FormControl isRequired m="3em 0">
+          <FormControl
+            isRequired
+            isInvalid={!!formErrors.volunteerTime}
+            m="3em 0"
+          >
             <FormLabel>
               What is the specific time you require assistance?
             </FormLabel>
@@ -148,6 +210,7 @@ const VolunteerInformation = ({
               size="lg"
               maxWidth="740px"
             />
+            <FormErrorMessage>{formErrors.volunteerTime}</FormErrorMessage>
           </FormControl>
         </>
       )}
@@ -185,7 +248,7 @@ const VolunteerInformation = ({
           <Button onClick={previous} variant="navigation">
             Back
           </Button>
-          <Button onClick={next} variant="navigation">
+          <Button onClick={handleNext} variant="navigation">
             Next
           </Button>
         </HStack>

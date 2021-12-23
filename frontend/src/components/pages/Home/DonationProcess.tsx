@@ -1,5 +1,9 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
+
+import * as Routes from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
 
 interface DonationStepProps {
   title: string;
@@ -14,7 +18,7 @@ const DonationStep = ({
   return (
     <Flex
       paddingBottom="1.5rem"
-      px="1.2rem"
+      px={{ base: "0px", md: "1.2rem" }}
       textAlign={{ md: "center" }}
       width="100%"
     >
@@ -44,6 +48,9 @@ const DonationStep = ({
 };
 
 const DonationProcess = (): JSX.Element => {
+  const history = useHistory();
+  const { authenticatedUser } = useContext(AuthContext);
+
   return (
     <Box mt="57px">
       <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
@@ -52,7 +59,7 @@ const DonationProcess = (): JSX.Element => {
       <Text mb="1.5rem" color="black.100" textStyle="mobileHeader2">
         The Donation Process
       </Text>
-      <Flex direction={{ base: "column", md: "row" }} padding="30px">
+      <Flex direction={{ base: "column", md: "row" }}>
         <DonationStep
           stepNumber={1}
           title="Create an account"
@@ -70,7 +77,17 @@ const DonationProcess = (): JSX.Element => {
         />
       </Flex>
 
-      <Button width="100%" variant="navigation" display={{ md: "none" }}>
+      <Button
+        width="100%"
+        variant="navigation"
+        size="lg"
+        display={{ md: "none" }}
+        onClick={() =>
+          history.push(
+            authenticatedUser ? Routes.SCHEDULING_PAGE : Routes.LOGIN_PAGE,
+          )
+        }
+      >
         Start now
       </Button>
     </Box>

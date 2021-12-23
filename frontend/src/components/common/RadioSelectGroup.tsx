@@ -2,6 +2,7 @@
 import {
   Box,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   HStack,
@@ -22,6 +23,8 @@ interface RadioSelectGroupProps {
   helperText?: string;
   icons: number[];
   isRequired: boolean;
+  isDisabled?: boolean;
+  error?: string;
   onChange: (arg0: any) => void;
 }
 
@@ -29,7 +32,7 @@ const RadioSelectButton = (props: any) => {
   const { getInputProps, getCheckboxProps } = useRadio(props);
   const input = getInputProps();
   const checkbox = getCheckboxProps();
-  const { numIcons, children } = props;
+  const { numIcons, children, invalid } = props;
 
   const RadioButtonStyle = {
     default: {
@@ -47,6 +50,14 @@ const RadioSelectButton = (props: any) => {
       borderColor: "champagne.100",
       textStyle: "mobileBodyBold",
       color: "black.100",
+    },
+    invalid: {
+      color: "tomato.100",
+      borderColor: "tomato.100",
+    },
+    disabled: {
+      cursor: "not-allowed",
+      opacity: 0.4,
     },
   };
 
@@ -68,14 +79,28 @@ const RadioSelectButton = (props: any) => {
   return (
     <Box w="100%" as="label">
       <input {...input} />
-      <Box
-        {...checkbox}
-        {...RadioButtonStyle.default}
-        _checked={RadioButtonStyle.selected}
-      >
-        {children}
-        {iconRender}
-      </Box>
+      {invalid ? (
+        <Box
+          {...checkbox}
+          {...RadioButtonStyle.default}
+          _checked={RadioButtonStyle.selected}
+          {...RadioButtonStyle.invalid}
+          _disabled={RadioButtonStyle.disabled}
+        >
+          {children}
+          {iconRender}
+        </Box>
+      ) : (
+        <Box
+          {...checkbox}
+          {...RadioButtonStyle.default}
+          _checked={RadioButtonStyle.selected}
+          _disabled={RadioButtonStyle.disabled}
+        >
+          {children}
+          {iconRender}
+        </Box>
+      )}
     </Box>
   );
 };
@@ -89,6 +114,8 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
     helperText,
     icons,
     isRequired,
+    isDisabled,
+    error,
     onChange,
   } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -102,6 +129,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       key={v}
       {...getRadioProps({ value: v })}
       numIcons={icons[i]}
+      invalid={!!error}
     >
       {v}
     </RadioSelectButton>
@@ -110,7 +138,13 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   const group = getRootProps();
 
   return (
-    <FormControl isRequired={isRequired} m="2em 0" maxWidth="800px">
+    <FormControl
+      isRequired={isRequired}
+      m="2em 0"
+      maxWidth="800px"
+      isInvalid={!!error}
+      isDisabled={isDisabled}
+    >
       <FormLabel fontWeight="600">{label}</FormLabel>
       <FormHelperText fontSize="16px" color="black.100" mb="20px">
         {helperText}
@@ -131,6 +165,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       <VStack {...group} maxWidth="350px">
         {radioSelectButtons}
       </VStack>
+      <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );
 };
