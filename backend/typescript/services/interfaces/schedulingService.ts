@@ -16,7 +16,7 @@ interface ISchedulingService {
   /**
    * Get all scheduling information associated with donorId
    * @param donorId id associated with donor
-   * @param weekLimit default none but if provided, returns schedules for the upcoming week
+   * @param weekLimit returns schedules for the specified upcoming weeks, 0 indicates no weeklimit
    * @returns array of SchedulingDTOs
    * @throws Error if schedule retrieval fails
    */
