@@ -53,8 +53,6 @@ const schedulingDefaultData = ({
   endTime: "",
   volunteerIds: [],
   frequency: "",
-  isPickup: false,
-  volunteersNeeded: false,
   notes: "",
 } as unknown) as Schedule;
 

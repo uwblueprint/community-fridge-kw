@@ -158,6 +158,7 @@ describe("pg schedulingService", () => {
     const { donorId } = testSchedules[0];
     const res = await schedulingService.getSchedulingsByDonorId(
       donorId.toString(),
+      0,
     );
     expect(res).toMatchObject(
       testSchedules.filter((schedule) => schedule.donorId === donorId),
