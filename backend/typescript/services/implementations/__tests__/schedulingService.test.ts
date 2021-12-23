@@ -82,8 +82,8 @@ const testSchedules = [
     categories: ["Fresh produce"],
     isPickup: false,
     dayPart: "Morning (6am - 11am)",
-    startTime: new Date("2021-03-01T00:08:00.000Z"),
-    endTime: new Date("2021-03-01T00:06:00.000Z"),
+    startTime: new Date("2022-03-01T00:08:00.000Z"),
+    endTime: new Date("2022-03-01T00:06:00.000Z"),
     status: "Pending",
     volunteerNeeded: false,
     frequency: "Monthly",
@@ -158,6 +158,7 @@ describe("pg schedulingService", () => {
     const { donorId } = testSchedules[0];
     const res = await schedulingService.getSchedulingsByDonorId(
       donorId.toString(),
+      0,
     );
     expect(res).toMatchObject(
       testSchedules.filter((schedule) => schedule.donorId === donorId),

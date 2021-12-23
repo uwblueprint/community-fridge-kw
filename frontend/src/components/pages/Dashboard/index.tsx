@@ -4,6 +4,7 @@ import { Redirect, useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import UPCOMING_WEEK_LIMIT from "../../../constants/DashboardConstants";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Schedule } from "../../../types/SchedulingTypes";
@@ -32,6 +33,7 @@ const Dashboard = (): JSX.Element => {
 
       const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
         donor.id,
+        UPCOMING_WEEK_LIMIT,
       );
 
       setSchedules(scheduleResponse);
@@ -65,17 +67,24 @@ const Dashboard = (): JSX.Element => {
         Upcoming Dropoffs
       </Text>
       <Text pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
-        View all of the upcoming donations that you have scheduled{" "}
+        View all of the upcoming donations that you have scheduled for the next
+        two weeks
       </Text>
       <Box display={{ lg: "flex" }} flexDirection="row" flexWrap="wrap">
-        {schedules.length > 0 &&
+        {schedules.length > 0 ? (
           schedules.map((scheduleObject: Schedule, id) => (
             <DropoffCard
               key={id}
               schedule={scheduleObject!}
               onDelete={() => deleteSchedule(scheduleObject!.id)}
             />
-          ))}
+          ))
+        ) : (
+          <Text as="i" pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
+            You currently have no upcoming dropoffs scheduled for the next two
+            weeks.
+          </Text>
+        )}
       </Box>
     </Container>
   );

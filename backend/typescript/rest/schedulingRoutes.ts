@@ -35,6 +35,7 @@ const schedulingService: ISchedulingService = new SchedulingService();
 schedulingRouter.get("/:id?", async (req, res) => {
   const { id } = req.params;
   const { donorId } = req.query;
+  const { weekLimit } = req.query;
   const contentType = req.headers["content-type"];
 
   if (id && donorId) {
@@ -86,6 +87,7 @@ schedulingRouter.get("/:id?", async (req, res) => {
     try {
       const schedulings = await schedulingService.getSchedulingsByDonorId(
         donorId,
+        Number(weekLimit),
       );
       res.status(200).json(schedulings);
     } catch (error: unknown) {
