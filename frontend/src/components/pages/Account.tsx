@@ -4,7 +4,6 @@ import {
   Container,
   FormControl,
   HStack,
-  IconButton,
   Input,
   Text,
 } from "@chakra-ui/react";
@@ -12,7 +11,7 @@ import React, { useContext, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
-import { DASHBOARD_PAGE, LOGIN_PAGE } from "../../constants/Routes";
+import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 
 const Account = (): JSX.Element => {
@@ -21,7 +20,7 @@ const Account = (): JSX.Element => {
   const [businessName, setBusinessName] = useState("");
 
   const navigateToDashboard = () => {
-    history.push(DASHBOARD_PAGE);
+    history.push(Routes.DASHBOARD_PAGE);
   };
 
   React.useEffect(() => {
@@ -36,7 +35,7 @@ const Account = (): JSX.Element => {
   }, [authenticatedUser]);
 
   if (!authenticatedUser) {
-    return <Redirect to={LOGIN_PAGE} />;
+    return <Redirect to={Routes.LOGIN_PAGE} />;
   }
 
   return (

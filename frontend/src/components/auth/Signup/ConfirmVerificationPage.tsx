@@ -3,7 +3,7 @@ import { Button, Container, IconButton, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import { DASHBOARD_PAGE, LANDING_PAGE } from "../../../constants/Routes";
+import * as Routes from "../../../constants/Routes";
 
 const ConfirmVerificationPage = () => {
   const history = useHistory();
@@ -15,7 +15,7 @@ const ConfirmVerificationPage = () => {
         aria-label="close page"
         float="right"
         backgroundColor="transparent"
-        onClick={() => history.push(LANDING_PAGE)}
+        onClick={() => history.push(Routes.LANDING_PAGE)}
       >
         <CloseIcon color="black.100" />
       </IconButton>
@@ -34,7 +34,7 @@ const ConfirmVerificationPage = () => {
         mt="2rem"
         width="100%"
         variant="navigation"
-        onClick={() => history.push(DASHBOARD_PAGE)}
+        onClick={() => history.push(Routes.DASHBOARD_PAGE)}
       >
         Finish
       </Button>

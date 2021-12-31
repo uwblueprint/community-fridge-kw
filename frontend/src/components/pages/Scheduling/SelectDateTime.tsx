@@ -506,10 +506,18 @@ const SelectDateTime = ({
         </VStack>
       ) : (
         <HStack>
-          <Button onClick={previous} variant="navigation">
+          <Button
+            onClick={previous}
+            variant="navigation"
+            width={{ base: "100%", md: "20%" }}
+          >
             Back
           </Button>
-          <Button onClick={handleNext} variant="navigation">
+          <Button
+            onClick={handleNext}
+            variant="navigation"
+            width={{ base: "100%", md: "20%" }}
+          >
             Next
           </Button>
         </HStack>

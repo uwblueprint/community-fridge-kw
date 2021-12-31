@@ -1,4 +1,4 @@
-import { StarIcon, TimeIcon } from "@chakra-ui/icons";
+import { TimeIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import { colorMap } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
 import { Schedule } from "../../../../types/SchedulingTypes";
-import { EllipsisIcon } from "../../../common/icons";
+import { EllipsisIcon, HelpingHandsIcon } from "../../../common/icons";
 import DeleteScheduleModal from "./DeleteScheduleModal";
 
 interface DropoffCardProps {
@@ -34,12 +34,12 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
 
   return (
     <Box
-      width="fit-content"
       mb="24px"
-      mr="24px"
+      mr={{ base: "0px", md: "24px" }}
       border="1px solid"
       borderColor="hubbard.100"
       borderRadius="8px"
+      width={{ base: "default", md: "527px" }}
       onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)}
     >
       <Box pl="6" pr="6" pb="6" pt="4">
@@ -106,7 +106,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
           <Text textStyle="mobileBody">{startTime}</Text>
         </HStack>
         <HStack>
-          <StarIcon color="black.100" />
+          <HelpingHandsIcon />
           <Text textStyle="mobileBodyBold">Volunteers Requested: </Text>
           <Text textStyle="mobileBody">
             {schedule.volunteerNeeded ? "Yes" : "No"}

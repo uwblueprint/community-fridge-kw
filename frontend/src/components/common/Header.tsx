@@ -17,12 +17,7 @@ import React, { useContext } from "react";
 import { Link as ReactLink } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
-import {
-  ACCOUNT_PAGE,
-  DASHBOARD_PAGE,
-  LANDING_PAGE,
-  LOGIN_PAGE,
-} from "../../constants/Routes";
+import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 
 const Header = (): JSX.Element => {
@@ -68,15 +63,15 @@ const Header = (): JSX.Element => {
           direction="row"
           display={{ base: "none", md: "flex" }}
         >
-          <Link as={ReactLink} to={LANDING_PAGE}>
+          <Link as={ReactLink} to={Routes.LANDING_PAGE}>
             Home
           </Link>
           {authenticatedUser ? (
             <>
-              <Link as={ReactLink} to={DASHBOARD_PAGE}>
+              <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
                 Scheduled Donations
               </Link>
-              <Link as={ReactLink} to={ACCOUNT_PAGE}>
+              <Link as={ReactLink} to={Routes.ACCOUNT_PAGE}>
                 My Account
               </Link>
               <Button
@@ -89,7 +84,7 @@ const Header = (): JSX.Element => {
               </Button>
             </>
           ) : (
-            <Link as={ReactLink} to={LOGIN_PAGE}>
+            <Link as={ReactLink} to={Routes.LOGIN_PAGE}>
               Sign In
             </Link>
           )}
@@ -119,15 +114,23 @@ const Header = (): JSX.Element => {
               alt="Community Fridge logo"
             />
             <Stack spacing="1rem" ml="20px">
-              <Link as={ReactLink} to={LANDING_PAGE} onClick={onClose}>
+              <Link as={ReactLink} to={Routes.LANDING_PAGE} onClick={onClose}>
                 Home
               </Link>
               {authenticatedUser ? (
                 <>
-                  <Link as={ReactLink} to={DASHBOARD_PAGE} onClick={onClose}>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.DASHBOARD_PAGE}
+                    onClick={onClose}
+                  >
                     Scheduled Donations
                   </Link>
-                  <Link as={ReactLink} to={ACCOUNT_PAGE} onClick={onClose}>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.ACCOUNT_PAGE}
+                    onClick={onClose}
+                  >
                     My Account
                   </Link>
                   <Button
@@ -142,7 +145,7 @@ const Header = (): JSX.Element => {
                   </Button>
                 </>
               ) : (
-                <Link as={ReactLink} to={LOGIN_PAGE} onClick={onClose}>
+                <Link as={ReactLink} to={Routes.LOGIN_PAGE} onClick={onClose}>
                   Sign In
                 </Link>
               )}

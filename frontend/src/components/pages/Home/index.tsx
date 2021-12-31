@@ -11,7 +11,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png";
-import { SCHEDULING_PAGE } from "../../../constants/Routes";
+import * as Routes from "../../../constants/Routes";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
 
@@ -40,15 +40,20 @@ const Home = (): JSX.Element => {
               Welcome to Community Fridge KW
             </Text>
 
-            <Text marginBottom="30px" textStyle="mobileBody">
+            <Text
+              marginBottom="30px"
+              textStyle="mobileBody"
+              width={{ base: "default", md: "50%" }}
+            >
               Community fridges are public repositories of fresh, donated foods
               that anyone can take from for free. Community fridges are public
               repositories of fresh, donated foods.
             </Text>
             <Button
               size="lg"
-              onClick={() => history.push(SCHEDULING_PAGE)}
+              onClick={() => history.push(Routes.SCHEDULING_PAGE)}
               variant="navigation"
+              width={{ base: "100%", md: "30%" }}
             >
               Schedule a food dropoff
             </Button>
