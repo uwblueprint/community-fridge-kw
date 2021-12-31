@@ -47,7 +47,11 @@ const Dashboard = (): JSX.Element => {
   }
 
   return (
-    <Container maxWidth={{ base: "default", md: "70%" }} pt="73px">
+    <Container
+      maxWidth={{ base: "default", md: "70%" }}
+      px={{ base: "33px", md: "0px" }}
+      pt={{ base: "55px", md: "121px" }}
+    >
       <Text color="black.100" textStyle="mobileHeader1">
         Welcome {authenticatedUser?.firstName}!
       </Text>
