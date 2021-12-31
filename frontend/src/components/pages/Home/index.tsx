@@ -40,7 +40,11 @@ const Home = (): JSX.Element => {
               Welcome to Community Fridge KW
             </Text>
 
-            <Text marginBottom="30px" textStyle="mobileBody">
+            <Text
+              marginBottom="30px"
+              textStyle="mobileBody"
+              width={{ base: "default", md: "50%" }}
+            >
               Community fridges are public repositories of fresh, donated foods
               that anyone can take from for free. Community fridges are public
               repositories of fresh, donated foods.
@@ -49,7 +53,7 @@ const Home = (): JSX.Element => {
               size="lg"
               onClick={() => history.push(Routes.SCHEDULING_PAGE)}
               variant="navigation"
-              width="100%"
+              width={{ base: "100%", md: "30%" }}
             >
               Schedule a food dropoff
             </Button>
