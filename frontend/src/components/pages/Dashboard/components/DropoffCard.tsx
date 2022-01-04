@@ -10,6 +10,7 @@ import {
   MenuList,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -31,6 +32,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
   const history = useHistory();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isDesktop] = useMediaQuery("(min-width: 768px)");
 
   return (
     <Box
@@ -42,12 +44,20 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
       width={{ base: "default", md: "527px" }}
       onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)}
     >
+      <DeleteScheduleModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onDelete={() => {
+          onDelete();
+          onClose();
+        }}
+      />
       <Box pl="6" pr="6" pb="6" pt="4">
         <Box spacing="0" display="flex">
           <Text
             mt="0.5rem"
             mb="16px"
-            textStyle="mobileBodyBold"
+            textStyle={isDesktop ? "desktopSubtitle" : "mobileBodyBold"}
             whiteSpace="nowrap"
             flexGrow={8}
           >
@@ -90,14 +100,6 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
                 </MenuItem>
               </MenuList>
             </Menu>
-            <DeleteScheduleModal
-              isOpen={isOpen}
-              onClose={onClose}
-              onDelete={() => {
-                onDelete();
-                onClose();
-              }}
-            />
           </Box>
         </Box>
         <HStack>

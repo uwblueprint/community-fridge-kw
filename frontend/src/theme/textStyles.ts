@@ -87,6 +87,13 @@ const textStyles = {
   },
   desktopHeader2: {
     fontFamily: "Inter, sans-serif",
+    fontSize: "28px",
+    fontWeight: 700,
+    lineHeight: "38px",
+    color: "black",
+  },
+  desktopHeader3: {
+    fontFamily: "Inter, sans-serif",
     fontWeight: "Bold",
     fontSize: "32px",
     lineHeight: "42px",
