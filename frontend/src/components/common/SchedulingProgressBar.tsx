@@ -2,6 +2,7 @@ import { Container, Flex, useMediaQuery } from "@chakra-ui/react";
 import { Step, Steps } from "chakra-ui-steps";
 import React from "react";
 
+import useViewport from "../../hooks/useViewport";
 import { SchedulingProgessBarProps } from "../pages/Scheduling/types";
 
 const labels = [
@@ -15,7 +16,7 @@ const SchedulingProgressBar = ({
   activeStep,
   totalSteps,
 }: SchedulingProgessBarProps): JSX.Element => {
-  const [isDesktop] = useMediaQuery("(min-width: 48em)");
+  const { isDesktop } = useViewport();
 
   return (
     <>

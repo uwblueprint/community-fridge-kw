@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 
 import { colorMap } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
+import useViewport from "../../../../hooks/useViewport";
 import { Schedule } from "../../../../types/SchedulingTypes";
 import { EllipsisIcon, HelpingHandsIcon } from "../../../common/icons";
 import DeleteScheduleModal from "./DeleteScheduleModal";
@@ -32,7 +33,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
   const history = useHistory();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isDesktop] = useMediaQuery("(min-width: 768px)");
+  const { isDesktop } = useViewport();
 
   return (
     <Box

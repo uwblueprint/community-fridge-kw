@@ -16,6 +16,7 @@ import { Redirect, useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import useViewport from "../../../hooks/useViewport";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -33,7 +34,7 @@ const CreateAccount = ({
   const { firstName, lastName, businessName, phoneNumber } = formData;
   const { authenticatedUser } = useContext(AuthContext);
 
-  const [isDesktop] = useMediaQuery("(min-width: 768px)");
+  const { isDesktop } = useViewport();
 
   const [interaction, setInteraction] = React.useState({
     businessName: false,

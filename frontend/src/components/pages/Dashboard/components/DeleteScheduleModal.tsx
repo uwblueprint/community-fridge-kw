@@ -12,6 +12,8 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
+import useViewport from "../../../../hooks/useViewport";
+
 interface DeleteScheduleModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,7 +24,7 @@ const DeleteScheduleModal = ({
   onClose,
   onDelete,
 }: DeleteScheduleModalProps) => {
-  const [isDesktop] = useMediaQuery("(min-width: 768px)");
+  const { isDesktop } = useViewport();
 
   return (
     <>

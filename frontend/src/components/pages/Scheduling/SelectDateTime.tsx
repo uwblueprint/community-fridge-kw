@@ -23,6 +23,7 @@ import { Redirect } from "react-router-dom";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
@@ -55,7 +56,7 @@ const SelectDateTime = ({
 
   const { authenticatedUser } = useContext(AuthContext);
 
-  const [isDesktop] = useMediaQuery("(min-width: 48em)");
+  const { isDesktop } = useViewport();
 
   enum DayParts {
     EARLY_MORNING = "Early Morning (12am - 6am)",
