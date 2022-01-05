@@ -1,6 +1,6 @@
 import { Box, Button, Container, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
