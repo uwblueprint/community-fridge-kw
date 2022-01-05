@@ -23,9 +23,6 @@ const Dashboard = (): JSX.Element => {
   };
 
   React.useEffect(() => {
-    if (!authenticatedUser) {
-      return;
-    }
     const getSchedules = async () => {
       const donor = await DonorAPIClient.getDonorByUserId(
         authenticatedUser!.id,
@@ -41,10 +38,6 @@ const Dashboard = (): JSX.Element => {
 
     getSchedules();
   }, [authenticatedUser]);
-
-  if (!authenticatedUser) {
-    return <Redirect to={Routes.LOGIN_PAGE} />;
-  }
 
   return (
     <Container

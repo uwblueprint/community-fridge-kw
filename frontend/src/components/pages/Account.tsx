@@ -34,10 +34,6 @@ const Account = (): JSX.Element => {
     getDonor();
   }, [authenticatedUser]);
 
-  if (!authenticatedUser) {
-    return <Redirect to={Routes.LOGIN_PAGE} />;
-  }
-
   return (
     <Container
       centerContent
