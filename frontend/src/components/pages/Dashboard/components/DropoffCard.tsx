@@ -10,12 +10,14 @@ import {
   MenuList,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
 import { colorMap } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
+import useViewport from "../../../../hooks/useViewport";
 import { Schedule } from "../../../../types/SchedulingTypes";
 import { EllipsisIcon, HelpingHandsIcon } from "../../../common/icons";
 import DeleteScheduleModal from "./DeleteScheduleModal";
@@ -31,6 +33,7 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
   const history = useHistory();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isDesktop } = useViewport();
 
   return (
     <Box
@@ -42,12 +45,20 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
       width={{ base: "default", md: "527px" }}
       onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)}
     >
+      <DeleteScheduleModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onDelete={() => {
+          onDelete();
+          onClose();
+        }}
+      />
       <Box pl="6" pr="6" pb="6" pt="4">
         <Box spacing="0" display="flex">
           <Text
             mt="0.5rem"
             mb="16px"
-            textStyle="mobileBodyBold"
+            textStyle={isDesktop ? "desktopSubtitle" : "mobileBodyBold"}
             whiteSpace="nowrap"
             flexGrow={8}
           >
@@ -56,7 +67,6 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
           <Box marginLeft="0px">
             <Menu isLazy>
               <MenuButton
-                zIndex="9999"
                 style={{
                   marginLeft: "6rem",
                   marginBottom: "15px",
@@ -90,14 +100,6 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
                 </MenuItem>
               </MenuList>
             </Menu>
-            <DeleteScheduleModal
-              isOpen={isOpen}
-              onClose={onClose}
-              onDelete={() => {
-                onDelete();
-                onClose();
-              }}
-            />
           </Box>
         </Box>
         <HStack>

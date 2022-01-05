@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
+import useViewport from "../../hooks/useViewport";
 import customTheme from "../../theme";
 import { DonationSizeInterface } from "../pages/Scheduling/types";
 
@@ -88,7 +89,8 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
     value,
     name,
   });
-  const [isDesktop] = useMediaQuery("(min-width: 48em)");
+
+  const { isDesktop } = useViewport();
 
   const radioImageSelectButtons = values.map((v) => (
     <RadioImageSelectButton

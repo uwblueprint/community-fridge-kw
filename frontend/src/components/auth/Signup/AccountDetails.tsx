@@ -28,6 +28,7 @@ import { useHistory } from "react-router-dom";
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import useViewport from "../../../hooks/useViewport";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import {
   checkForLowerCase,
@@ -51,7 +52,7 @@ const AccountDetails = ({
 }) => {
   const history = useHistory();
   const { previous, next } = navigation;
-  const [isDesktop] = useMediaQuery("(min-width: 768px)");
+  const { isDesktop } = useViewport();
   const {
     firstName,
     lastName,

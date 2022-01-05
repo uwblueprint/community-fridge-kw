@@ -8,8 +8,11 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
+
+import useViewport from "../../../../hooks/useViewport";
 
 interface DeleteScheduleModalProps {
   isOpen: boolean;
@@ -21,25 +24,32 @@ const DeleteScheduleModal = ({
   onClose,
   onDelete,
 }: DeleteScheduleModalProps) => {
+  const { isDesktop } = useViewport();
+
   return (
     <>
-      <Modal size="xs" isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal
+        size={isDesktop ? "2xl" : "sm"}
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+      >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent py="52px" px="48px">
           <ModalHeader>
-            <Text textStyle="mobileBodyBold">Cancel Dropoff</Text>
+            <Text textStyle={isDesktop ? "desktopHeader3" : "mobileBodyBold"}>
+              Cancel Dropoff
+            </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody textStyle="mobileBody" color="hubbard.100">
-            Are you sure you want to cancel this scheduled donation?
-            <br />
-            Doing so will alert CF admin and all associated parties that this
-            donation dropoff is cancelled.
+            Are you sure you want to cancel your dropoff? This will remove this
+            occurance and notify CFKW and all the respective parties.
           </ModalBody>
 
           <ModalFooter>
             <Button width="100%" colorScheme="red" onClick={onDelete}>
-              Confirm Cancellation
+              Cancel Dropoff
             </Button>
           </ModalFooter>
         </ModalContent>
