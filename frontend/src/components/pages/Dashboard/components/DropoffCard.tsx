@@ -66,7 +66,6 @@ const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
           <Box marginLeft="0px">
             <Menu isLazy>
               <MenuButton
-                zIndex="9999"
                 style={{
                   marginLeft: "6rem",
                   marginBottom: "15px",

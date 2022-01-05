@@ -42,7 +42,7 @@ const DeleteScheduleModal = ({
           <ModalCloseButton />
           <ModalBody textStyle="mobileBody" color="hubbard.100">
             Are you sure you want to cancel your dropoff? This will remove this
-            occurance and notify all the respective parties.
+            occurance and notify CFKW and all the respective parties.
           </ModalBody>
 
           <ModalFooter>
