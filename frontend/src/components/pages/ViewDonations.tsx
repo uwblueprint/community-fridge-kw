@@ -6,13 +6,13 @@ import {
   IconButton,
   Spacer,
   Text,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 
 import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
+import useViewport from "../../hooks/useViewport";
 import { Schedule } from "../../types/SchedulingTypes";
 import Calendar from "../common/Calendar/Calendar";
 
@@ -21,7 +21,7 @@ const ViewDonations = (): React.ReactElement => {
     Date | DateObject | DateObject[] | null
   >(new Date());
 
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { isMobile } = useViewport();
   const [test, setTest] = useState<any>(0);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
