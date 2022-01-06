@@ -1,10 +1,12 @@
 import {
   Box,
   Button,
+  Center,
   Container,
   FormControl,
   HStack,
   Input,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
@@ -34,6 +36,13 @@ const Account = (): JSX.Element => {
     getDonor();
   }, [authenticatedUser]);
 
+  if (!businessName) {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  }
   return (
     <Container
       centerContent

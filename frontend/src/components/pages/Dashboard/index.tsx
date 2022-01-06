@@ -1,4 +1,4 @@
-import { Box, Button, Container, Text } from "@chakra-ui/react";
+import { Box, Button, Container, Spinner, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -38,6 +38,10 @@ const Dashboard = (): JSX.Element => {
 
     getSchedules();
   }, [authenticatedUser]);
+
+  if (!schedules) {
+    return <Spinner />;
+  }
 
   return (
     <Container
