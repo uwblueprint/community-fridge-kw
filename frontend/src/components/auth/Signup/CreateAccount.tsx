@@ -44,7 +44,12 @@ const CreateAccount = ({
   const [formErrors, setFormErrors] = React.useState(errorMessages);
 
   const validateForm = () => {
-    const newErrors = errorMessages;
+    const newErrors = {
+      businessName: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+    };
     let valid = true;
 
     if (!businessName) {
@@ -68,6 +73,7 @@ const CreateAccount = ({
   };
 
   const handleNext = () => {
+    console.log("here");
     if (validateForm()) {
       next();
     }
@@ -77,7 +83,7 @@ const CreateAccount = ({
     return <Redirect to={Routes.DASHBOARD_PAGE} />;
   }
   return (
-    <Container p={{ base: "30px", md: "2rem 1rem" }}>
+    <Container pl="42px" pr="42px" pt="0.5rem">
       {!isDesktop && (
         <IconButton
           float="right"
