@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
 import { Schedule } from "../../../types/SchedulingTypes";

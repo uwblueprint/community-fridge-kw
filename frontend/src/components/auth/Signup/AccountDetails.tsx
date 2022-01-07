@@ -26,7 +26,6 @@ import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import {

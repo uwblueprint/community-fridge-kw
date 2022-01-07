@@ -8,10 +8,7 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
   const { next } = navigation;
 
   return (
-    <Container
-      p={{ base: "30px", md: "2rem 1rem" }}
-      maxWidth={{ base: "default", md: "70%" }}
-    >
+    <Container variant="responsiveContainer">
       <Text marginBottom="30px" textStyle="mobileHeader2">
         Schedule a donation drop off
       </Text>

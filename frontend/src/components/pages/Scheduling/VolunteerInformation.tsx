@@ -125,10 +125,7 @@ const VolunteerInformation = ({
   };
 
   return (
-    <Container
-      p={{ base: "30px", md: "2rem 1rem" }}
-      maxWidth={{ base: "default", md: "70%" }}
-    >
+    <Container variant="responsiveContainer">
       <SchedulingProgressBar activeStep={2} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em">
         Volunteer Information

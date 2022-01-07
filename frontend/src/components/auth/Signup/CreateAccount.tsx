@@ -77,7 +77,7 @@ const CreateAccount = ({
     return <Redirect to={Routes.DASHBOARD_PAGE} />;
   }
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
+    <Container p={{ base: "30px", md: "2rem 1rem" }}>
       {!isDesktop && (
         <IconButton
           float="right"

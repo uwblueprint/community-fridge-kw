@@ -17,10 +17,8 @@ import moment from "moment";
 import React, { useContext, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import InputIcon from "react-multi-date-picker/components/input_icon";
-import { Redirect } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
@@ -118,10 +116,6 @@ const SelectDateTime = ({
     };
     fetchSchedules();
   }, [authenticatedUser]);
-
-  if (!authenticatedUser) {
-    return <Redirect to={Routes.LANDING_PAGE} />;
-  }
 
   const getIconsPerTimeSlot = (selectedDayPart: string, selectedDate: Date) => {
     const iconsPerTimeSlot = [0, 0, 0, 0, 0] as number[];
@@ -325,10 +319,7 @@ const SelectDateTime = ({
   };
 
   return (
-    <Container
-      p={{ base: "30px", md: "2rem 1rem" }}
-      maxWidth={{ base: "default", md: "70%" }}
-    >
+    <Container variant="responsiveContainer">
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         Date and Time

@@ -52,7 +52,7 @@ const ConfirmDetails = ({
     getDonorData();
   }, [currentSchedule.id]);
   return (
-    <Container maxWidth={{ base: "default", md: "70%" }} p="30px">
+    <Container variant="responsiveContainer">
       {isBeingEdited ? (
         <IconButton
           onClick={() => history.push(Routes.DASHBOARD_PAGE)}

@@ -45,7 +45,7 @@ const ViewDonations = (): React.ReactElement => {
   return (
     <Container
       pt="1.5rem"
-      maxWidth={{ base: "default", md: "70%" }}
+      variant="baseContainer"
       px={isMobile ? "2rem" : "1rem"}
     >
       <Flex

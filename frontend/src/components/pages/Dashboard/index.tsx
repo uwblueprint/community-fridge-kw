@@ -39,16 +39,12 @@ const Dashboard = (): JSX.Element => {
     getSchedules();
   }, [authenticatedUser]);
 
-  if (!schedules) {
+  if (!schedules || schedules === null) {
     return <Spinner />;
   }
 
   return (
-    <Container
-      maxWidth={{ base: "default", md: "70%" }}
-      px={{ base: "33px", md: "0px" }}
-      pt={{ base: "55px", md: "121px" }}
-    >
+    <Container variant="dashboardContainer">
       <Text color="black.100" textStyle="mobileHeader1">
         Welcome {authenticatedUser?.firstName}!
       </Text>

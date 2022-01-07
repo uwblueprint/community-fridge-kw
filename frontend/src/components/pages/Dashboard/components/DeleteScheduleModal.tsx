@@ -28,7 +28,7 @@ const DeleteScheduleModal = ({
   return (
     <>
       <Modal
-        size={isDesktop ? "2xl" : "sm"}
+        size={isDesktop ? "2xl" : "xs"}
         isOpen={isOpen}
         onClose={onClose}
         isCentered
