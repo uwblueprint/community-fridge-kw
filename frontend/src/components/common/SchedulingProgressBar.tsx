@@ -1,4 +1,4 @@
-import { Container, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Step, Steps } from "chakra-ui-steps";
 import React from "react";
 

@@ -12,7 +12,7 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
   const { authenticatedUser } = useContext(AuthContext);
   const history = useHistory();
   return (
-    <Container p="30px" maxWidth={{ base: "default", md: "70%" }}>
+    <Container variant="responsiveContainer">
       <Text textStyle="mobileHeader2" mt="2em">
         Thank you for scheduling a donation!
       </Text>

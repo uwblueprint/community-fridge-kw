@@ -1,9 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
-import { Redirect } from "react-router-dom";
 
-import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
 import { Schedule } from "../../../types/SchedulingTypes";
 import ConfirmDetails from "./ConfirmDetails";
 import DonationInformation from "./DonationInformation";
@@ -67,16 +64,10 @@ const Scheduling = ({
   });
   const { id } = step;
 
-  const { authenticatedUser } = useContext(AuthContext);
-
   // Scroll to top of page at each step in flow
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
-
-  if (!authenticatedUser) {
-    return <Redirect to={Routes.LOGIN_PAGE} />;
-  }
 
   switch (id) {
     case "get started scheduling":
@@ -133,7 +124,7 @@ const Scheduling = ({
         />
       );
     default:
-      return null;
+      return <></>;
   }
 };
 

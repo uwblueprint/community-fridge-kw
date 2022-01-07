@@ -1,3 +1,4 @@
+import { Center } from "@chakra-ui/react";
 import React from "react";
 
 import AuthAPIClient from "../../APIClients/AuthAPIClient";
@@ -23,7 +24,7 @@ const Action = () => {
   return emailVerified ? (
     <ConfirmVerificationPage />
   ) : (
-    <div>Sorry, there was a problem verifying the email.</div>
+    <Center>Sorry, there was a problem verifying the email.</Center>
   );
 };
 export default Action;

@@ -11,24 +11,27 @@ import {
   Input,
   Select,
   Text,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useContext, useState } from "react";
-import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 import InputIcon from "react-multi-date-picker/components/input_icon";
-import { Redirect } from "react-router-dom";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
-import { SchedulingStepProps } from "./types";
+import {
+  dayParts,
+  DayPartsEnum,
+  frequencies,
+  SchedulingStepProps,
+  timeRanges,
+} from "./types";
 
 const SelectDateTime = ({
   formValues,
@@ -58,68 +61,17 @@ const SelectDateTime = ({
 
   const { isDesktop } = useViewport();
 
-  enum DayParts {
-    EARLY_MORNING = "Early Morning (12am - 6am)",
-    MORNING = "Morning (6am - 11am)",
-    AFTERNOON = "Afternoon (11am - 4pm)",
-    EVENING = "Evening (4pm - 9pm)",
-    NIGHT = "Night (9pm - 12am)",
-  }
-
-  const dayParts = [
-    DayParts.EARLY_MORNING,
-    DayParts.MORNING,
-    DayParts.AFTERNOON,
-    DayParts.EVENING,
-    DayParts.NIGHT,
-  ];
-
-  const timeRanges = {
-    earlyMorning: [
-      "12:00 AM - 1:00 AM",
-      "1:00 AM - 2:00 AM",
-      "2:00 AM - 3:00 AM",
-      "3:00 AM - 4:00 AM",
-      "4:00 AM - 5:00 AM",
-      "5:00 AM - 6:00 AM",
-    ],
-    morning: [
-      "6:00 AM - 7:00 AM",
-      "7:00 AM - 8:00 AM",
-      "8:00 AM - 9:00 AM",
-      "9:00 AM - 10:00 AM",
-      "10:00 AM - 11:00 AM",
-    ],
-    afternoon: [
-      "11:00 AM - 12:00 PM",
-      "12:00 PM - 1:00 PM",
-      "1:00 PM - 2:00 PM",
-      "2:00 PM - 3:00 PM",
-      "3:00 PM - 4:00 PM",
-    ],
-    evening: [
-      "4:00 PM - 5:00 PM",
-      "5:00 PM - 6:00 PM",
-      "6:00 PM - 7:00 PM",
-      "7:00 PM - 8:00 PM",
-      "8:00 PM - 9:00 PM",
-    ],
-    night: ["9:00 PM - 10:00 PM", "10:00 PM - 11:00 PM", "11:00 PM - 12:00 AM"],
-  };
-
-  const frequencies = ["One time donation", "Daily", "Weekly", "Monthly"];
-
   const getTimeSlot = (selectedDayPart: string) => {
     switch (selectedDayPart) {
-      case DayParts.EARLY_MORNING:
+      case DayPartsEnum.EARLY_MORNING:
         return timeRanges.earlyMorning;
-      case DayParts.MORNING:
+      case DayPartsEnum.MORNING:
         return timeRanges.morning;
-      case DayParts.AFTERNOON:
+      case DayPartsEnum.AFTERNOON:
         return timeRanges.afternoon;
-      case DayParts.EVENING:
+      case DayPartsEnum.EVENING:
         return timeRanges.evening;
-      case DayParts.NIGHT:
+      case DayPartsEnum.NIGHT:
         return timeRanges.night;
       default:
         return null;
@@ -164,10 +116,6 @@ const SelectDateTime = ({
     };
     fetchSchedules();
   }, [authenticatedUser]);
-
-  if (!authenticatedUser) {
-    return <Redirect to={Routes.LANDING_PAGE} />;
-  }
 
   const getIconsPerTimeSlot = (selectedDayPart: string, selectedDate: Date) => {
     const iconsPerTimeSlot = [0, 0, 0, 0, 0] as number[];
@@ -371,10 +319,7 @@ const SelectDateTime = ({
   };
 
   return (
-    <Container
-      p={{ base: "30px", md: "2rem 1rem" }}
-      maxWidth={{ base: "default", md: "70%" }}
-    >
+    <Container variant="responsiveContainer">
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         Date and Time

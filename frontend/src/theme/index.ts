@@ -1,9 +1,9 @@
 import { extendTheme } from "@chakra-ui/react";
 import { StepsStyleConfig as Steps } from "chakra-ui-steps";
-import React from "react";
 
 import colors from "./colors";
 import Button from "./components/Button";
+import Container from "./components/Container";
 import textStyles from "./textStyles";
 
 const customTheme = extendTheme({
@@ -17,6 +17,7 @@ const customTheme = extendTheme({
   components: {
     Button,
     Steps,
+    Container,
   },
   config: {
     initialColorMode: "light",

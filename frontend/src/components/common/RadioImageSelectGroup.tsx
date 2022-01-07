@@ -8,7 +8,6 @@ import {
   HStack,
   Image,
   Text,
-  useMediaQuery,
   useRadio,
   useRadioGroup,
   VStack,

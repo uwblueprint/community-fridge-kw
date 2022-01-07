@@ -1,14 +1,9 @@
-import {
-  Badge,
-  Container,
-  Text,
-  useDisclosure,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import { Badge, Container, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import { colorMap, convertTime } from "../../../constants/DaysInWeek";
+import useViewport from "../../../hooks/useViewport";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import WeeklyEventItemPopUp from "./WeeklyEventItemPopUp";
@@ -22,7 +17,7 @@ const DefaultWeeklyEventItem = ({
   schedule,
   date,
 }: DefaultWeeklyEventItemProps) => {
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { isMobile } = useViewport();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [donor, setDonor] = useState<DonorResponse>();
 

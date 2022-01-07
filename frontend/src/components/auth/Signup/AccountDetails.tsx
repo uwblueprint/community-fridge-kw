@@ -19,7 +19,6 @@ import {
   Stack,
   Text,
   useDisclosure,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
@@ -27,7 +26,6 @@ import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import {

@@ -15,13 +15,13 @@ import {
   ModalOverlay,
   Spacer,
   Text,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import { colorMap, convertTime } from "../../../constants/DaysInWeek";
+import useViewport from "../../../hooks/useViewport";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 
@@ -38,7 +38,7 @@ const WeeklyEventItemPopUp = ({
   schedule,
   donor,
 }: WeeklyEventItemPopUpProps) => {
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { isMobile } = useViewport();
   const [nextDropOff, setNextDropOff] = useState<string | undefined>(undefined);
 
   useEffect(() => {

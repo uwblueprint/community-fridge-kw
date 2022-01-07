@@ -1,6 +1,6 @@
-import { Box, Button, Container, Text } from "@chakra-ui/react";
+import { Box, Button, Container, Spinner, Text } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -23,9 +23,6 @@ const Dashboard = (): JSX.Element => {
   };
 
   React.useEffect(() => {
-    if (!authenticatedUser) {
-      return;
-    }
     const getSchedules = async () => {
       const donor = await DonorAPIClient.getDonorByUserId(
         authenticatedUser!.id,
@@ -42,16 +39,12 @@ const Dashboard = (): JSX.Element => {
     getSchedules();
   }, [authenticatedUser]);
 
-  if (!authenticatedUser) {
-    return <Redirect to={Routes.LOGIN_PAGE} />;
+  if (!schedules || schedules === null) {
+    return <Spinner />;
   }
 
   return (
-    <Container
-      maxWidth={{ base: "default", md: "70%" }}
-      px={{ base: "33px", md: "0px" }}
-      pt={{ base: "55px", md: "121px" }}
-    >
+    <Container variant="dashboardContainer">
       <Text color="black.100" textStyle="mobileHeader1">
         Welcome {authenticatedUser?.firstName}!
       </Text>

@@ -1,5 +1,4 @@
 import { useMediaQuery } from "@chakra-ui/react";
-import React from "react";
 
 type ViewportType = {
   isMobile: boolean;

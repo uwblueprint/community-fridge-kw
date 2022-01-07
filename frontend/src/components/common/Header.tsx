@@ -33,7 +33,7 @@ const Header = (): JSX.Element => {
   };
 
   return (
-    <Container pt="1.5rem" maxWidth={{ base: "default", md: "70%" }}>
+    <Container pt="1.5rem" variant="baseContainer">
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="row"

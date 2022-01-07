@@ -1,8 +1,9 @@
-import { Grid, HStack, Text, useMediaQuery, VStack } from "@chakra-ui/react";
+import { Grid, HStack, Text, VStack } from "@chakra-ui/react";
 import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 import daysInWeek from "../../../constants/DaysInWeek";
+import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 
 type State = {
@@ -83,7 +84,7 @@ export function WeeklyBody<EventItem>({
   schedules,
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const { isMobile } = useViewport();
   const { locale, week } = useWeeklyCalendar();
   const daysToRender = daysInWeek({ locale });
 

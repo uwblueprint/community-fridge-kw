@@ -8,7 +8,6 @@ import {
   IconButton,
   Input,
   Text,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
@@ -36,27 +35,45 @@ const CreateAccount = ({
 
   const { isDesktop } = useViewport();
 
-  const [interaction, setInteraction] = React.useState({
-    businessName: false,
-    firstName: false,
-    lastName: false,
-    phoneNumber: false,
-  });
+  const errorMessages = {
+    businessName: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+  };
+  const [formErrors, setFormErrors] = React.useState(errorMessages);
 
-  const checkValidation = () => {
+  const validateForm = () => {
+    const newErrors = {
+      businessName: "",
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+    };
+    let valid = true;
+
     if (!businessName) {
-      setInteraction({ ...interaction, businessName: true });
+      valid = false;
+      newErrors.businessName = "Please enter the name of your business.";
     }
     if (!firstName) {
-      setInteraction({ ...interaction, firstName: true });
+      valid = false;
+      newErrors.firstName = "Please enter a first name.";
     }
     if (!lastName) {
-      setInteraction({ ...interaction, lastName: true });
+      valid = false;
+      newErrors.lastName = "Please enter a last name.";
     }
     if (!phoneNumber) {
-      setInteraction({ ...interaction, phoneNumber: true });
+      valid = false;
+      newErrors.phoneNumber = "Please enter a valid phone number.";
     }
-    if (businessName && firstName && lastName && phoneNumber) {
+    setFormErrors(newErrors);
+    return valid;
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
       next();
     }
   };
@@ -90,21 +107,16 @@ const CreateAccount = ({
             Organization
           </Text>
           <MandatoryInputDescription label="Name of Business" />
-          <FormControl isInvalid={!businessName && interaction.businessName}>
+          <FormControl isRequired isInvalid={!!formErrors.businessName}>
             <Input
               validate="Required"
               mt="2"
               value={businessName}
-              onChange={(e) => {
-                setForm(e);
-                setInteraction({ ...interaction, businessName: true });
-              }}
+              onChange={setForm}
               name="businessName"
               placeholder="i.e. Lettuce Garden"
             />
-            <FormErrorMessage>
-              Please enter the name of your business.
-            </FormErrorMessage>
+            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
           </FormControl>
         </Box>
 
@@ -117,61 +129,50 @@ const CreateAccount = ({
           Point of Contact
         </Text>
         <Box>
-          <FormControl isInvalid={!firstName && interaction.firstName}>
+          <FormControl isRequired isInvalid={!!formErrors.firstName}>
             <MandatoryInputDescription label="First Name" />
             <Input
               mt="2"
               value={firstName}
-              onChange={(e) => {
-                setForm(e);
-                setInteraction({ ...interaction, firstName: true });
-              }}
+              onChange={setForm}
               name="firstName"
               placeholder="i.e. Jane"
             />
-            <FormErrorMessage>Please enter a first name.</FormErrorMessage>
+            <FormErrorMessage>{formErrors.firstName}</FormErrorMessage>
           </FormControl>
         </Box>
         <Box mt="1rem">
-          <FormControl isInvalid={!lastName && interaction.lastName}>
+          <FormControl isInvalid={!!formErrors.lastName}>
             <MandatoryInputDescription label="Last Name" />
             <Input
               mt="2"
               value={lastName}
-              onChange={(e) => {
-                setForm(e);
-                setInteraction({ ...interaction, lastName: true });
-              }}
+              onChange={setForm}
               name="lastName"
               placeholder="i.e. Doe"
             />
-            <FormErrorMessage>Please enter a last name.</FormErrorMessage>
+            <FormErrorMessage>{formErrors.lastName}</FormErrorMessage>
           </FormControl>
         </Box>
         <Box mt="1rem">
-          <FormControl isInvalid={!phoneNumber && interaction.phoneNumber}>
+          <FormControl isInvalid={!!formErrors.phoneNumber}>
             <MandatoryInputDescription label="Phone Number" />
             <Input
               mt="2"
               type="tel"
               value={phoneNumber}
               name="phoneNumber"
-              onChange={(e) => {
-                setForm(e);
-                setInteraction({ ...interaction, phoneNumber: true });
-              }}
+              onChange={setForm}
               placeholder="i.e. 999-999-999"
             />
-            <FormErrorMessage>
-              Please enter a valid phone number.
-            </FormErrorMessage>
+            <FormErrorMessage>{formErrors.phoneNumber}</FormErrorMessage>
           </FormControl>
         </Box>
         <Box mt="1rem">
           <Button
             mt="1.5"
             variant="navigation"
-            onClick={checkValidation}
+            onClick={handleNext}
             width="100%"
           >
             Next

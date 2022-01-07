@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Action from "./components/auth/Action";
 import Login from "./components/auth/Login";
+import PrivateRoute from "./components/auth/PrivateRoute";
 import Signup from "./components/auth/Signup";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
@@ -39,19 +40,31 @@ const App = (): React.ReactElement => {
             <Route exact path={Routes.LOGIN_PAGE} component={Login} />
             <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
             <Route exact path={Routes.LANDING_PAGE} component={Home} />
-            <Route exact path={Routes.ACCOUNT_PAGE} component={Account} />
+            <PrivateRoute
+              exact
+              path={Routes.ACCOUNT_PAGE}
+              component={Account}
+            />
             <Route
               exact
               path={Routes.VIEW_DONATIONS}
               component={ViewDonations}
             />
-            <Route
+            <PrivateRoute
               exact
               path={Routes.DASHBOARD_SCHEDULE_EDIT_PAGE}
               component={EditDashboardSchedulePage}
             />
-            <Route exact path={Routes.DASHBOARD_PAGE} component={Dashboard} />
-            <Route exact path={Routes.SCHEDULING_PAGE} component={Scheduling} />
+            <PrivateRoute
+              exact
+              path={Routes.DASHBOARD_PAGE}
+              component={Dashboard}
+            />
+            <PrivateRoute
+              exact
+              path={Routes.SCHEDULING_PAGE}
+              component={Scheduling as React.FC}
+            />
             <Route path={Routes.ACTION} component={Action} />
             <Route exact path="*" component={NotFound} />
           </Switch>

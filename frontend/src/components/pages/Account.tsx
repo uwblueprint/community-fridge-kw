@@ -1,14 +1,16 @@
 import {
   Box,
   Button,
+  Center,
   Container,
   FormControl,
   HStack,
   Input,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import * as Routes from "../../constants/Routes";
@@ -34,18 +36,15 @@ const Account = (): JSX.Element => {
     getDonor();
   }, [authenticatedUser]);
 
-  if (!authenticatedUser) {
-    return <Redirect to={Routes.LOGIN_PAGE} />;
+  if (!businessName) {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
   }
-
   return (
-    <Container
-      centerContent
-      pl="42px"
-      pr="42px"
-      pt="0.5rem"
-      maxWidth={{ base: "default", md: "70%" }}
-    >
+    <Container centerContent variant="baseContainer">
       <Box>
         <Text mt="67px" textStyle="mobileHeader1">
           My Account

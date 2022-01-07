@@ -8,7 +8,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -29,7 +28,7 @@ const DeleteScheduleModal = ({
   return (
     <>
       <Modal
-        size={isDesktop ? "2xl" : "sm"}
+        size={isDesktop ? "2xl" : "xs"}
         isOpen={isOpen}
         onClose={onClose}
         isCentered
