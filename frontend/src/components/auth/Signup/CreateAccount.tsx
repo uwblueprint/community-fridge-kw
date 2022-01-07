@@ -73,7 +73,6 @@ const CreateAccount = ({
   };
 
   const handleNext = () => {
-    console.log("here");
     if (validateForm()) {
       next();
     }
