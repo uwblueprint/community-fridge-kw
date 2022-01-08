@@ -12,9 +12,6 @@ import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
 
 import testSql from "../../../testUtils/testDb";
-import schedulingRouter from "../../../rest/schedulingRoutes";
-
-type SchedulingKey = keyof typeof Scheduling;
 
 const testUsersDb = [
   {
