@@ -164,12 +164,54 @@ class AuthService implements IAuthService {
         .auth()
         .generateEmailVerificationLink(email);
       const emailBody = `
-      Hello,
-      <br><br>
-      Please click the following link to verify your email and activate your account.
-      <strong>This link is only valid for 1 hour.</strong>
-      <br><br>
-      <a href=${emailVerificationLink}>Verify email</a>`;
+      <html>
+      <head>
+         <link
+                        href="https://fonts.googleapis.com/css2?family=Inter"
+                        rel="stylesheet"
+                        />
+                    <style>
+                        body {
+                        font-family: "Inter";
+                        }
+                    </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Welcome Email</title>
+      </head>
+      <body>
+         <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey neighbour!</h2>
+        <p>Thank you for getting involved with mutual aid through Community Fridge
+          KW. We’re thrilled to have you.
+          <br />
+          <br />
+          Please confirm that this is the email address (${email}) you would like
+          to use to schedule donations with Community Fridge KW by clicking
+          “Verify”.
+        </p>
+         <table cellspacing="0" cellpadding="0"> <tr> 
+      <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
+        <a href=${emailVerificationLink} style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
+        <span style="color: #FAFCFE;">
+          Verify
+        </span>
+        </a>
+      </td> 
+      </tr> </table> 
+        <h5 style="font-weight: bold; font-size: 16px;
+      line-height: 22px; color: #6C6C84;">How does this work?</h5>
+        <p style="color:#6C6C84">This is a one-time URL that lets you confirm your
+          identity that lasts for 1 hour. <br/> If you didn't request this verification
+          link, you can safely ignore this email.
+        </p>
+       <div style="width: 100%"> <div style=" float:left; color: #6C6C84">Don't see a button above? </div><a style=" color: #C31887" href=${emailVerificationLink}> Verify yourself here</a></div>
+        <p style="margin-top: 50px">Sincerely,</p>
+        <p>Community Fridge KW</p>   
+      </body>
+    </html>
+      `;
 
       this.emailService.sendEmail(email, "Verify your email", emailBody);
     } catch (error) {
