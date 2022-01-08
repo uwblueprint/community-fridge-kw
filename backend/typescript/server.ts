@@ -15,9 +15,9 @@ import EmailService from "./services/implementations/emailService";
 import IEmailService from "./services/interfaces/emailService";
 
 const clientHost = new RegExp(
-  "https://communityfridgekw(--([A-Za-z0-9-])+-[A-Za-z0-9]+)?.web.app",
+  "https://communityfridgekw(--([A-Za-z0-9-])+-[A-Za-z0-9]+)?.web.app", 
 );
-const CORS_ALLOW_LIST = ["http://localhost:3000", clientHost];
+const CORS_ALLOW_LIST = ["http://localhost:3000", clientHost, "https://communityfridgekw.firebaseapp.com", "https://community-fridge-kw.web.app","https://communityfridgekw.web.app"];
 
 const CORS_OPTIONS: cors.CorsOptions = {
   origin: CORS_ALLOW_LIST,
