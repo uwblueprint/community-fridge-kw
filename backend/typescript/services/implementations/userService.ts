@@ -212,6 +212,7 @@ class UserService implements IUserService {
           first_name: user.firstName,
           last_name: user.lastName,
           role: user.role,
+          phone_number: user.phoneNumber,
         },
         {
           where: { id: userId },

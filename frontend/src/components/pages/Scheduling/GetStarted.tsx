@@ -28,7 +28,13 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
         width="100%"
         maxWidth="600px"
       />
-      <Button onClick={next} variant="navigation" w="100%" maxWidth="500px">
+      <Button
+        onClick={next}
+        variant="navigation"
+        w="100%"
+        maxWidth="500px"
+        size="lg"
+      >
         Get started
       </Button>
     </Container>

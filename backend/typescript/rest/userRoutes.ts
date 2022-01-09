@@ -17,91 +17,99 @@ import getErrorMessage from "../utilities/errorMessageUtil";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const userRouter: Router = Router();
-userRouter.use(isAuthorizedByRole(new Set([Role.ADMIN])));
 
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
 
-/* Get all users, optionally filter by a userId or email query parameter to retrieve a single user */
-userRouter.get("/", async (req, res) => {
-  const { userId, email } = req.query;
-  const contentType = req.headers["content-type"];
+/* Get all users, optionally filter by a userId or email query parameter to retrieve a single user [admin only] */
+userRouter.get(
+  "/",
+  isAuthorizedByRole(new Set([Role.ADMIN])),
+  async (req, res) => {
+    const { userId, email } = req.query;
+    const contentType = req.headers["content-type"];
 
-  if (userId && email) {
-    await sendResponseByMimeType(res, 400, contentType, [
-      {
-        error: "Cannot query by both userId and email.",
-      },
-    ]);
-    return;
-  }
-
-  if (!userId && !email) {
-    try {
-      const users = await userService.getUsers();
-      await sendResponseByMimeType<UserDTO>(res, 200, contentType, users);
-    } catch (error: unknown) {
-      await sendResponseByMimeType(res, 500, contentType, [
+    if (userId && email) {
+      await sendResponseByMimeType(res, 400, contentType, [
         {
-          error: getErrorMessage(error),
+          error: "Cannot query by both userId and email.",
         },
       ]);
+      return;
     }
-    return;
-  }
 
-  if (userId) {
-    if (typeof userId !== "string") {
-      res
-        .status(400)
-        .json({ error: "userId query parameter must be a string." });
-    } else {
+    if (!userId && !email) {
       try {
-        const user = await userService.getUserById(userId);
-        res.status(200).json(user);
+        const users = await userService.getUsers();
+        await sendResponseByMimeType<UserDTO>(res, 200, contentType, users);
       } catch (error: unknown) {
-        res.status(500).json({ error: getErrorMessage(error) });
+        await sendResponseByMimeType(res, 500, contentType, [
+          {
+            error: getErrorMessage(error),
+          },
+        ]);
+      }
+      return;
+    }
+
+    if (userId) {
+      if (typeof userId !== "string") {
+        res
+          .status(400)
+          .json({ error: "userId query parameter must be a string." });
+      } else {
+        try {
+          const user = await userService.getUserById(userId);
+          res.status(200).json(user);
+        } catch (error: unknown) {
+          res.status(500).json({ error: getErrorMessage(error) });
+        }
+      }
+      return;
+    }
+
+    if (email) {
+      if (typeof email !== "string") {
+        res
+          .status(400)
+          .json({ error: "email query parameter must be a string." });
+      } else {
+        try {
+          const user = await userService.getUserByEmail(email);
+          res.status(200).json(user);
+        } catch (error: unknown) {
+          res.status(500).json({ error: getErrorMessage(error) });
+        }
       }
     }
-    return;
-  }
-
-  if (email) {
-    if (typeof email !== "string") {
-      res
-        .status(400)
-        .json({ error: "email query parameter must be a string." });
-    } else {
-      try {
-        const user = await userService.getUserByEmail(email);
-        res.status(200).json(user);
-      } catch (error: unknown) {
-        res.status(500).json({ error: getErrorMessage(error) });
-      }
-    }
-  }
-});
+  },
+);
 
 /* Create a user */
-userRouter.post("/", createUserDtoValidator, async (req, res) => {
-  try {
-    const newUser = await userService.createUser({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      role: req.body.role,
-      phoneNumber: req.body.phoneNumber,
-      password: req.body.password,
-    });
+userRouter.post(
+  "/",
+  createUserDtoValidator,
+  isAuthorizedByRole(new Set([Role.ADMIN])),
+  async (req, res) => {
+    try {
+      const newUser = await userService.createUser({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        role: req.body.role,
+        phoneNumber: req.body.phoneNumber,
+        password: req.body.password,
+      });
 
-    await authService.sendEmailVerificationLink(req.body.email);
+      await authService.sendEmailVerificationLink(req.body.email);
 
-    res.status(201).json(newUser);
-  } catch (error: unknown) {
-    res.status(500).json({ error: getErrorMessage(error) });
-  }
-});
+      res.status(201).json(newUser);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  },
+);
 
 /* Update the user with the specified userId */
 userRouter.put("/:userId", updateUserDtoValidator, async (req, res) => {
@@ -120,49 +128,55 @@ userRouter.put("/:userId", updateUserDtoValidator, async (req, res) => {
 });
 
 /* Delete a user by userId or email, specified through a query parameter */
-userRouter.delete("/", async (req, res) => {
-  const { userId, email } = req.query;
+userRouter.delete(
+  "/",
+  isAuthorizedByRole(new Set([Role.ADMIN])),
+  async (req, res) => {
+    const { userId, email } = req.query;
 
-  if (userId && email) {
-    res.status(400).json({ error: "Cannot delete by both userId and email." });
-    return;
-  }
-
-  if (userId) {
-    if (typeof userId !== "string") {
+    if (userId && email) {
       res
         .status(400)
-        .json({ error: "userId query parameter must be a string." });
-    } else {
-      try {
-        await userService.deleteUserById(userId);
-        res.status(204).send();
-      } catch (error: unknown) {
-        res.status(500).json({ error: getErrorMessage(error) });
-      }
+        .json({ error: "Cannot delete by both userId and email." });
+      return;
     }
-    return;
-  }
 
-  if (email) {
-    if (typeof email !== "string") {
-      res
-        .status(400)
-        .json({ error: "email query parameter must be a string." });
-    } else {
-      try {
-        await userService.deleteUserByEmail(email);
-        res.status(204).send();
-      } catch (error: unknown) {
-        res.status(500).json({ error: getErrorMessage(error) });
+    if (userId) {
+      if (typeof userId !== "string") {
+        res
+          .status(400)
+          .json({ error: "userId query parameter must be a string." });
+      } else {
+        try {
+          await userService.deleteUserById(userId);
+          res.status(204).send();
+        } catch (error: unknown) {
+          res.status(500).json({ error: getErrorMessage(error) });
+        }
       }
+      return;
     }
-    return;
-  }
 
-  res
-    .status(400)
-    .json({ error: "Must supply one of userId or email as query parameter." });
-});
+    if (email) {
+      if (typeof email !== "string") {
+        res
+          .status(400)
+          .json({ error: "email query parameter must be a string." });
+      } else {
+        try {
+          await userService.deleteUserByEmail(email);
+          res.status(204).send();
+        } catch (error: unknown) {
+          res.status(500).json({ error: getErrorMessage(error) });
+        }
+      }
+      return;
+    }
+
+    res.status(400).json({
+      error: "Must supply one of userId or email as query parameter.",
+    });
+  },
+);
 
 export default userRouter;
