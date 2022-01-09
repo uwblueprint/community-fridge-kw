@@ -7,6 +7,10 @@ import Container from "./components/Container";
 import textStyles from "./textStyles";
 
 const customTheme = extendTheme({
+  fonts: {
+    heading: "Inter, sans-serif",
+    body: "Inter, sans-serif",
+  },
   textStyles,
   colors,
   breakpoints: {

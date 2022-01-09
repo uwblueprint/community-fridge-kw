@@ -80,7 +80,7 @@ const Login = (): React.ReactElement => {
             Dont have an account? &nbsp;
           </Text>
           <Text
-            fontWeight="bold"
+            textStyle={["mobileSmall", "desktopSmall"]}
             color="champagne.100"
             display="inline-block"
             textDecorationLine="underline"
