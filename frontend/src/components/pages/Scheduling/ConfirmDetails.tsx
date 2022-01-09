@@ -71,7 +71,7 @@ const ConfirmDetails = ({
         </Text>
       ) : (
         <Text textStyle="mobileHeader2" mt="2em">
-          Confirm Donation Details
+          Schedule a donation dropoff
         </Text>
       )}
 
@@ -81,6 +81,7 @@ const ConfirmDetails = ({
         pb="6px"
         pl="14px"
         pr="14px"
+        mt="12px"
         color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
         backgroundColor={`${(colorMap as any)[currentSchedule?.frequency]}.50`}
       >

@@ -39,6 +39,7 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
           variant="navigation"
           w="100%"
           maxWidth="500px"
+          size="lg"
         >
           View Dashboard
         </Button>

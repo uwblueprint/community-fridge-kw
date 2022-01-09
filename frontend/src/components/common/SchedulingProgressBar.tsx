@@ -19,24 +19,26 @@ const SchedulingProgressBar = ({
   const { isDesktop } = useViewport();
 
   return (
-    <>
-      <Flex flexDir="column" width="100%">
-        <Steps
-          activeStep={activeStep}
-          responsive={false}
-          colorScheme="raddish"
-          size="sm"
-        >
-          {[...Array(totalSteps)].map((e, i) => {
-            return isDesktop ? (
-              <Step key={i} label={labels[i]} colorScheme="raddish" />
-            ) : (
-              <Step key={i} colorScheme="raddish" />
-            );
-          })}
-        </Steps>
-      </Flex>
-    </>
+    <Flex
+      flexDir="column"
+      width="100%"
+      marginTop={{ base: "32px", md: "64px" }}
+    >
+      <Steps
+        activeStep={activeStep}
+        responsive={false}
+        colorScheme="raddish"
+        size="sm"
+      >
+        {[...Array(totalSteps)].map((e, i) => {
+          return isDesktop ? (
+            <Step key={i} label={labels[i]} colorScheme="raddish" />
+          ) : (
+            <Step key={i} colorScheme="raddish" />
+          );
+        })}
+      </Steps>
+    </Flex>
   );
 };
 
