@@ -19,10 +19,8 @@ const Footer = (): JSX.Element => (
         align={{ md: "left" }}
         mr={{ base: "0px", md: "10%" }}
       >
-        <Text textStyle="mobileHeader1">Community Fridge</Text>
-        <Text mt={{ base: 4 }}>
-          Helping facilitate access to food and reduce food waste
-        </Text>
+        <Text textStyle="mobileHeader1">Community Fridge KW</Text>
+        <Text mt={{ base: 4 }}>Take what you need, leave what you can.</Text>
       </VStack>
 
       <VStack
@@ -34,7 +32,7 @@ const Footer = (): JSX.Element => (
           Location
         </Text>
         <Text mt={{ base: 4 }}>
-          The Kitchener Market: <br />
+          Kitchener Market: <br />
           300 King Street East, <br />
           Kitchener, ON N2H 2V5 <br />
           (647) 607-1312
@@ -47,7 +45,7 @@ const Footer = (): JSX.Element => (
         mr={{ base: "0%", md: "10%" }}
       >
         <Text color="raddish.100" textStyle="mobileHeader3">
-          Follow Us
+          Contact Us
         </Text>
         <Flex mt={{ base: 4 }}>
           <Link href="https://www.facebook.com/CommunityFridgeKW/">

@@ -53,7 +53,7 @@ const VolunteerInformation = ({
     "Unloading (on site)",
   ];
   const volunteerRequiredHelperText =
-    "A volunteer is a community fridge member who will assist with donation dropoffs. Information of the volunteer assigned will be provided.";
+    "A Community Fridge KW volunteer can assist with donation drop-offs.";
 
   const handleChange = (e: boolean | string, name: string) => {
     setForm({ target: { name, value: e } });
@@ -150,7 +150,7 @@ const VolunteerInformation = ({
       </Box>
       <RadioSelectGroup
         name="volunteer-required"
-        label="Do you require a volunteer?"
+        label="Do you require volunteer assistance?"
         value={volunteerNeededRadioValue()}
         values={volunteerNeededValues}
         icons={[]}
@@ -165,7 +165,7 @@ const VolunteerInformation = ({
         <>
           <RadioSelectGroup
             name="is-pickup"
-            label="What do you require volunteer assistance for?"
+            label="Which type of assistance is required?"
             value={isPickupRadioValue()}
             values={volunteerAssistanceValues}
             icons={[]}
