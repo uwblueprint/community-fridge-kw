@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { snakeCase } from "lodash";
 import { Op } from "sequelize";
 import ISchedulingService from "../interfaces/schedulingService";
@@ -14,8 +15,6 @@ import {
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
-import schedulingRouter from "../../rest/schedulingRoutes";
-import e from "express";
 
 const Logger = logger(__filename);
 
@@ -198,7 +197,7 @@ class SchedulingService implements ISchedulingService {
 
     try {
       const accountName = await this.userService.getUserByEmail(email);
-      //Proposed drop off info
+      // Proposed drop off info
       const days = [
         "Sunday",
         "Monday",
@@ -222,8 +221,8 @@ class SchedulingService implements ISchedulingService {
         "November",
         "December",
       ];
-      const startTime: Date = schedule.startTime;
-      const endTime: Date = schedule.endTime;
+      const { startTime } = schedule;
+      const { endTime } = schedule;
 
       const donationDay: string = days[startTime.getDay()];
       const donationMonth: string = months[startTime.getMonth()];
@@ -231,34 +230,28 @@ class SchedulingService implements ISchedulingService {
       const endTimePeriod: string = endTime.getHours() < 11 ? "am" : "pm";
 
       // dropoff time interval string
-      const startTimeString: string = `${
+      const startTimeString = `${
         startTime.getHours() === 0 ? 12 : startTime.getHours() % 12
       }:${startTime.getMinutes()}${startTimePeriod}`;
-      const endTimeString: string = `${
+      const endTimeString = `${
         endTime.getHours() === 0 ? 12 : endTime.getHours() % 12
       }:${endTime.getMinutes()}${endTimePeriod}`;
 
       // frequency string
       // e.g. Weekly on <day of week> until <recurringDonationEndDate>
-      let frequencyString: string = "One-time donation";
+      let frequencyString = "One-time donation";
       if (schedule.frequency !== Frequency.ONE_TIME) {
-        const recurringDonationEndDateString: string = `${
+        const recurringDonationEndDateString = `${
           days[schedule.recurringDonationEndDate!.getDay()]
         }, ${
           months[schedule.recurringDonationEndDate!.getDay()]
         } ${schedule.recurringDonationEndDate!.getDate()}`;
         if (schedule.frequency === Frequency.DAILY) {
-          frequencyString = "Daily until " + recurringDonationEndDateString;
+          frequencyString = `Daily until ${recurringDonationEndDateString}`;
         } else if (schedule.frequency === Frequency.WEEKLY) {
-          frequencyString =
-            "Weekly on " +
-            donationDay +
-            "s until " +
-            recurringDonationEndDateString;
+          frequencyString = `Weekly on ${donationDay}s until ${recurringDonationEndDateString}`;
         } else {
-          frequencyString =
-            `Monthly on the ${schedule.recurringDonationEndDate!.getDate()} until ` +
-            recurringDonationEndDateString;
+          frequencyString = `Monthly on the ${schedule.recurringDonationEndDate!.getDate()} until ${recurringDonationEndDateString}`;
         }
       }
 
