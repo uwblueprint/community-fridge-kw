@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import * as Routes from "../../constants/Routes";
@@ -23,6 +23,7 @@ import AuthContext from "../../contexts/AuthContext";
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const history = useHistory();
 
   const onLogOutClick = async () => {
     const success = await authAPIClient.logout(authenticatedUser?.id);
@@ -84,9 +85,12 @@ const Header = (): JSX.Element => {
               </Button>
             </>
           ) : (
-            <Link as={ReactLink} to={Routes.LOGIN_PAGE}>
+            <Button
+              variant="navigation"
+              onClick={() => history.push(Routes.LOGIN_PAGE)}
+            >
               Sign In
-            </Link>
+            </Button>
           )}
         </Stack>
       </Flex>
@@ -145,7 +149,15 @@ const Header = (): JSX.Element => {
                   </Button>
                 </>
               ) : (
-                <Button variant="navigation">Sign In</Button>
+                <Button
+                  variant="navigation"
+                  onClick={() => {
+                    history.push(Routes.LOGIN_PAGE);
+                    onClose();
+                  }}
+                >
+                  Sign In
+                </Button>
               )}
             </Stack>
           </DrawerBody>
