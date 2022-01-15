@@ -10,8 +10,7 @@ export const convertTime = (dateToConvert: string): string => {
 };
 
 export const colorMap = {
-  "One Time": "spinach",
-  "One time donation": "spinach",
+  "One time": "spinach",
   Daily: "h20",
   Weekly: "onion",
   Monthly: "turnip",
