@@ -44,7 +44,7 @@ const Account = (): JSX.Element => {
     );
   }
   return (
-    <Container centerContent variant="baseContainer">
+    <Container centerContent variant="responsiveContainer">
       <Box>
         <Text mt="67px" textStyle="mobileHeader1">
           My Account

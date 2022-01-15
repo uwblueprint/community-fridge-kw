@@ -55,7 +55,7 @@ const testSchedules = [
     status: "Pending",
     volunteerNeeded: true,
     volunteerTime: "8:00 AM",
-    frequency: "One time donation",
+    frequency: "One time",
     notes: "these are the notes",
   },
   {
