@@ -6,6 +6,7 @@ import {
   FormHelperText,
   FormLabel,
   Img,
+  Radio,
   useRadio,
   useRadioGroup,
   VStack,
@@ -130,6 +131,13 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       numIcons={icons[i]}
       invalid={!!error}
     >
+      <Radio
+        isChecked={v === value}
+        mr="16px"
+        colorScheme="raddish"
+        size="md"
+        mt="3px"
+      />
       {v}
     </RadioSelectButton>
   ));
