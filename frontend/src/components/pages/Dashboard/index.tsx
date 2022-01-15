@@ -49,7 +49,7 @@ const Dashboard = (): JSX.Element => {
         Welcome {authenticatedUser?.firstName}!
       </Text>
       <Text pt="0.8rem" textStyle="mobileBody">
-        Thank you for your efforts in volunteering with the community fridge
+        Thank you for supporting your local community fridge!{" "}
       </Text>
       <Button
         mt="1.5rem"
@@ -61,7 +61,7 @@ const Dashboard = (): JSX.Element => {
         Schedule new donation
       </Button>
       <Text mt="4rem" textStyle="mobileHeader1">
-        Upcoming Dropoffs
+        Your Upcoming Donations
       </Text>
       <Text pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
         View all of the upcoming donations that you have scheduled for the next
@@ -78,7 +78,7 @@ const Dashboard = (): JSX.Element => {
           ))
         ) : (
           <Text as="i" pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
-            You currently have no upcoming dropoffs scheduled for the next two
+            You currently have no upcoming donations scheduled for the next two
             weeks.
           </Text>
         )}

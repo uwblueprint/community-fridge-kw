@@ -21,9 +21,8 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
         {new Date(startTime).toLocaleTimeString()}!
       </Text>
       <Text textStyle="mobileBody" mt="1em">
-        We really appreciate your support. Your donation will help feed someone
-        who needs the food. We have sent you an email confirmation to{" "}
-        {authenticatedUser!.email}.
+        We appreciate your support and dedication! An email confirmation has
+        been sent to {authenticatedUser!.email}.
       </Text>
       <Img
         src={ThankYouPageFridge}

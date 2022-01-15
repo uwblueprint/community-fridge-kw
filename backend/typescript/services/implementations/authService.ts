@@ -163,6 +163,7 @@ class AuthService implements IAuthService {
       const emailVerificationLink = await firebaseAdmin
         .auth()
         .generateEmailVerificationLink(email);
+
       const emailBody = `
       <html>
       <head>
@@ -187,9 +188,7 @@ class AuthService implements IAuthService {
           KW. We’re thrilled to have you.
           <br />
           <br />
-          Please confirm that this is the email address (${email}) you would like
-          to use to schedule donations with Community Fridge KW by clicking
-          “Verify”.
+          Click "Verify" to confirm that this is the email address (${email}) you would like to use to schedule donations with Community Fridge KW.
         </p>
          <table cellspacing="0" cellpadding="0"> <tr> 
       <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
@@ -203,11 +202,13 @@ class AuthService implements IAuthService {
         <h5 style="font-weight: bold; font-size: 16px;
       line-height: 22px; color: #6C6C84;">How does this work?</h5>
         <p style="color:#6C6C84">This is a one-time URL that lets you confirm your
-          identity that lasts for 1 hour. <br/> If you didn't request this verification
-          link, you can safely ignore this email.
+          identity that lasts for 1 hour.
         </p>
        <div style="width: 100%"> <div style=" float:left; color: #6C6C84">Don't see a button above? </div><a style=" color: #C31887" href=${emailVerificationLink}> Verify yourself here</a></div>
-        <p style="margin-top: 50px">Sincerely,</p>
+       <div> If you didn't request this verification
+       link, you can safely ignore this email.</div>
+     
+       <p style="margin-top: 50px">Sincerely,</p>
         <p>Community Fridge KW</p>   
       </body>
     </html>

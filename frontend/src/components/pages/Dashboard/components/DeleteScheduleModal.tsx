@@ -37,13 +37,13 @@ const DeleteScheduleModal = ({
         <ModalContent py="52px" px="48px">
           <ModalHeader>
             <Text textStyle={isDesktop ? "desktopHeader3" : "mobileBodyBold"}>
-              Cancel Dropoff
+              Cancel Donation
             </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody textStyle="mobileBody" color="hubbard.100">
-            Are you sure you want to cancel your dropoff? This will remove this
-            occurance and notify CFKW and all the respective parties.
+            Are you sure you want to cancel your donation? This will remove all
+            linked occurances and notify all respective parties, including CFKW.
           </ModalBody>
 
           <ModalFooter>

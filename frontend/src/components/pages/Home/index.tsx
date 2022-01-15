@@ -45,17 +45,17 @@ const Home = (): JSX.Element => {
               textStyle="mobileBody"
               width={{ base: "default", md: "50%" }}
             >
-              Community fridges are public repositories of fresh, donated foods
-              that anyone can take from for free. Community fridges are public
-              repositories of fresh, donated foods.
+              We’re a grassroots mutual aid initiative committed to establishing
+              public repositories of fresh food and essential items in
+              Kitchener-Waterloo that anyone can take from for free, anytime.
             </Text>
             <Button
               size="lg"
               onClick={() => history.push(Routes.SCHEDULING_PAGE)}
               variant="navigation"
-              width={{ base: "100%", md: "30%" }}
+              width={{ base: "100%", md: "50%", xl: "30%" }}
             >
-              Schedule a food dropoff
+              Schedule a food donation
             </Button>
           </Box>
           <Image
