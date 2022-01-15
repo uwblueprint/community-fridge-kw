@@ -145,9 +145,7 @@ const Header = (): JSX.Element => {
                   </Button>
                 </>
               ) : (
-                <Link as={ReactLink} to={Routes.LOGIN_PAGE} onClick={onClose}>
-                  Sign In
-                </Link>
+                <Button variant="navigation">Sign In</Button>
               )}
             </Stack>
           </DrawerBody>

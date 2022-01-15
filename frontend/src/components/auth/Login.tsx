@@ -19,9 +19,16 @@ import { AuthenticatedUser } from "../../types/AuthTypes";
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const [{ email, password }, setValue] = useForm({ email: "", password: "" });
+  const [
+    isIncorrectLoginCredentails,
+    setIsIncorrectLoginCredentails,
+  ] = React.useState(false);
 
   const onLogInClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(email, password);
+    if (user === null) {
+      setIsIncorrectLoginCredentails(true);
+    }
     setAuthenticatedUser(user);
   };
 
@@ -63,6 +70,16 @@ const Login = (): React.ReactElement => {
         <Text mt="1rem" color="hubbard.100" textStyle="mobileSmall">
           Forgot password?
         </Text>
+        {isIncorrectLoginCredentails && (
+          <Text
+            my="48px"
+            textStyle={["mobileSmall", "desktopSmall"]}
+            color="tomato.100"
+          >
+            An incorrect email address or password was entered. Please try
+            again!
+          </Text>
+        )}
         <Box mt="1rem">
           <Button
             width="100%"

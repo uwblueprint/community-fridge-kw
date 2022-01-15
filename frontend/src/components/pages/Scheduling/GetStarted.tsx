@@ -12,14 +12,16 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
       <Text marginBottom="30px" textStyle="mobileHeader2">
         Schedule a donation drop-off
       </Text>
-      <Text marginBottom="1rem" textStyle="mobileBody">
-        Submit general information on the food you are planning to donate. Pick
-        the date and time you’re available to come in.
+      <Text marginBottom="1rem" textStyle="mobileBody" color="hubbard.100">
+        Submit information for your upcoming planned donation(s) to the
+        community fridge. Pick the date and time window in which you hope to
+        make your donation.
       </Text>
-      <Text marginBottom="30px" textStyle="mobileBody">
-        Availabilities are based upon ensuring consistent food stock in the
-        fridge for as long as possible. Contact admin for specific time
-        requests.
+      <Text marginBottom="30px" textStyle="mobileBody" color="hubbard.100">
+        Our goal is to maintain a consistent stock of donated food in the fridge
+        & pantry, at any given time, on any given day. The scheduling tool
+        enables us to space out donations - effectively maximizing your impact
+        on community
       </Text>
       <Img
         src={cfImage}
