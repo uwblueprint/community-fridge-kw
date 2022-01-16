@@ -8,7 +8,7 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
   const { next } = navigation;
 
   return (
-    <Container variant="responsiveContainer">
+    <Container variant="dashboardContainer">
       <Text marginBottom="30px" textStyle="mobileHeader2">
         Schedule a donation drop-off
       </Text>

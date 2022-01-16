@@ -1,131 +1,110 @@
-import { TimeIcon } from "@chakra-ui/icons";
-import {
-  Badge,
-  Box,
-  HStack,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { CheckIcon, RepeatIcon } from "@chakra-ui/icons";
+import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react";
+import { format, isToday, isTomorrow } from "date-fns";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import { colorMap } from "../../../../constants/DaysInWeek";
+import { getFrequencyColor } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
-import useViewport from "../../../../hooks/useViewport";
 import { Schedule } from "../../../../types/SchedulingTypes";
-import { EllipsisIcon, HelpingHandsIcon } from "../../../common/icons";
-import DeleteScheduleModal from "./DeleteScheduleModal";
+import { DonationFrequency } from "../../Scheduling/types";
 
-interface DropoffCardProps {
-  schedule: Schedule;
-  onDelete: () => void;
-}
+const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
+  const {
+    startTime,
+    endTime,
+    id,
+    frequency,
+    volunteerNeeded,
+    recurringDonationEndDate,
+  } = schedule;
+  const frequencyColorScheme = getFrequencyColor(frequency);
+  const startDateLocal = new Date(startTime);
+  const startTimeLocal = format(new Date(startTime), "K:mm aa");
+  const endTimeLocal = format(new Date(endTime), "K:mm aa");
+  const formattedRecurringEndDate = format(
+    new Date(recurringDonationEndDate),
+    "MMM d, yyyy",
+  );
 
-const DropoffCard = ({ schedule, onDelete }: DropoffCardProps): JSX.Element => {
-  const startDate = new Date(schedule.startTime).toDateString();
-  const startTime = new Date(schedule.startTime).toLocaleTimeString();
+  const dateHeadingText = (startDate: Date) => {
+    if (isToday(startDate)) {
+      return "Today";
+    }
+    if (isTomorrow(startDate)) {
+      return "Tomorrow";
+    }
+    return format(startDate, "MMM d, yyyy");
+  };
+
   const history = useHistory();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isDesktop } = useViewport();
 
   return (
     <Box
       mb="24px"
       mr={{ base: "0px", md: "24px" }}
-      border="1px solid"
-      borderColor="hubbard.100"
-      borderRadius="8px"
-      width={{ base: "default", md: "527px" }}
-      onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)}
+      borderLeft={`7px solid ${getFrequencyColor(frequency)}`}
+      boxShadow="2px 2px 12px rgba(0, 0, 0, 0.08)"
+      width={{ base: "default", md: "100%" }}
+      onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${id}`)}
     >
-      <DeleteScheduleModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onDelete={() => {
-          onDelete();
-          onClose();
-        }}
-      />
-      <Box pl="6" pr="6" pb="6" pt="4">
-        <Box spacing="0" display="flex">
-          <Text
-            mt="0.5rem"
-            mb="16px"
-            textStyle={isDesktop ? "desktopSubtitle" : "mobileBodyBold"}
-            whiteSpace="nowrap"
-            flexGrow={8}
-          >
-            {startDate}
-          </Text>
-          <Box marginLeft="0px">
-            <Menu isLazy>
-              <MenuButton
-                style={{
-                  marginLeft: "6rem",
-                  marginBottom: "15px",
-                  marginRight: "0px",
-                }}
-                as={IconButton}
-                aria-label="options"
-                icon={<EllipsisIcon />}
-                variant="ghost"
-                backgroundColor="transparent"
-                onClick={(e) => e.stopPropagation()}
-              />
-              <MenuList p={0} minW="0" w="94px">
-                <MenuItem
-                  onClick={() =>
-                    history.push(`${Routes.DASHBOARD_PAGE}/${schedule.id}`)
-                  }
-                  textStyle="mobileSmall"
-                >
-                  Edit
-                </MenuItem>
-                <MenuItem
-                  textStyle="mobileSmall"
-                  color="tomato.100"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onOpen();
-                  }}
-                >
-                  Cancel
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </Box>
-        </Box>
-        <HStack>
-          <TimeIcon color="black.100" />
-          <Text textStyle="mobileBodyBold">Time: </Text>
-          <Text textStyle="mobileBody">{startTime}</Text>
-        </HStack>
-        <HStack>
-          <HelpingHandsIcon />
-          <Text textStyle="mobileBodyBold">Volunteers Requested: </Text>
-          <Text textStyle="mobileBody">
-            {schedule.volunteerNeeded ? "Yes" : "No"}
-          </Text>
-        </HStack>
-        {schedule.frequency && (
-          <Badge
-            borderRadius="8px"
-            py="6px"
-            px="14px"
-            mt="16px"
-            color={`${(colorMap as any)[schedule.frequency]}.100`}
-            backgroundColor={`${(colorMap as any)[schedule.frequency]}.50`}
-          >
-            {schedule.frequency}
-          </Badge>
+      <Stack
+        direction={["column", "row"]}
+        pl="6"
+        pr="6"
+        pb="6"
+        pt="4"
+        display={["default", "flex"]}
+        spacing={["0", "4"]}
+        alignItems="center"
+      >
+        <Text
+          minWidth="150px"
+          textTransform="uppercase"
+          textStyle="mobileSmall"
+          color="hubbard.100"
+          pb={["6px", "0px"]}
+        >
+          {dateHeadingText(startDateLocal)}
+        </Text>
+        <Text
+          textStyle="mobileHeader4"
+          whiteSpace="nowrap"
+          minWidth="250px"
+          pb={["18px", "0px"]}
+        >
+          {`${startTimeLocal}-${endTimeLocal}`}
+        </Text>
+        {volunteerNeeded && (
+          <HStack minWidth="250px" pb={["12px", "0px"]}>
+            <CheckIcon color={frequencyColorScheme} />
+            <Text textStyle="mobileBody">Volunteers Requested</Text>
+          </HStack>
         )}
-      </Box>
+        <HStack>
+          <RepeatIcon
+            color={frequencyColorScheme}
+            mb={[
+              frequency !== DonationFrequency.ONE_TIME ? "24px" : "0px",
+              "0px",
+            ]}
+          />
+          <Text>
+            <Box
+              as="span"
+              textStyle="mobileBodyBold"
+              color={frequencyColorScheme}
+            >
+              {frequency === DonationFrequency.ONE_TIME
+                ? "One Time"
+                : frequency}
+            </Box>
+            {frequency === DonationFrequency.ONE_TIME
+              ? ` Donation`
+              : ` Donation ending on ${formattedRecurringEndDate}`}
+          </Text>
+        </HStack>
+      </Stack>
     </Box>
   );
 };
