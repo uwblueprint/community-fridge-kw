@@ -40,7 +40,9 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        secure:
+          process.env.NODE_ENV === "production" ||
+          process.env.NODE_ENV === "staging",
       })
       .status(200)
       .json(rest);
@@ -87,7 +89,9 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        secure:
+          process.env.NODE_ENV === "production" ||
+          process.env.NODE_ENV === "staging",
       })
       .status(200)
       .json(rest);
@@ -105,7 +109,9 @@ authRouter.post("/refresh", async (req, res) => {
       .cookie("refreshToken", token.refreshToken, {
         httpOnly: true,
         sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+        secure:
+          process.env.NODE_ENV === "production" ||
+          process.env.NODE_ENV === "staging",
       })
       .status(200)
       .json({ accessToken: token.accessToken });

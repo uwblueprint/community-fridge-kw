@@ -10,7 +10,8 @@ export const SQLOptions = (
   modelPath: string[],
   testdb: boolean,
 ): SequelizeOptions => {
-  return process.env.NODE_ENV === "production"
+  return process.env.NODE_ENV === "production" ||
+    process.env.NODE_ENV === "staging"
     ? {
         dialect: "postgres",
         protocol: "postgres",
