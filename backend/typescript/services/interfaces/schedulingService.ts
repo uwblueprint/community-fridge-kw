@@ -58,6 +58,13 @@ interface ISchedulingService {
    * @throws Error if scheduling deletion fails
    */
   deleteSchedulingById(id: string): Promise<void>;
+
+  /**
+   * Delete a scheduling by recurring_donation_id
+   * @param reucrring_donation_id recurring donation id
+   * @throws Error if recurring donation deletion fails
+   */
+  deleteSchedulingByRecurringDonationId(recurring_donation_id: string): Promise<void>;
 }
 
 export default ISchedulingService;
