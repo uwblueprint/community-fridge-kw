@@ -184,6 +184,22 @@ const ConfirmDetails = ({
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
+      <Box m="3em 0" pl="0" align="left">
+        <Text textStyle="mobileHeader2">Danger Zone</Text>
+        <Text textStyle="mobileBody">
+          To cancel this schedule donation, click below.
+        </Text>
+        <Button
+          mt="1.5rem"
+          size="lg"
+          width={{ lg: "30%", base: "100%" }}
+          variant="deleteDonation"
+          onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+        >
+        Cancel donation
+        </Button>
+
+      </Box>
       {!isBeingEdited && (
         <HStack>
           <Button
