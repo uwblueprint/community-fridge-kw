@@ -113,8 +113,8 @@ const ConfirmDetails = ({
           Edit
         </Button>
         <Box>
-          <Text textStyle="mobileHeader2">Drop-off Information</Text>
-          <Text textstyle="mobilePretitleBold" color="hubbard.100">Proposed drop-off time</Text>
+          <Text textStyle="mobileHeader3">Drop-off Information</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Proposed drop-off time</Text>
           <Text textStyle="mobileBody">
             {new Date(currentSchedule.startTime).toDateString()}
           </Text>
@@ -122,7 +122,7 @@ const ConfirmDetails = ({
             {new Date(currentSchedule.startTime).toLocaleTimeString()}-
             {new Date(currentSchedule.endTime).toLocaleTimeString()}
           </Text>
-          <Text textstyle="mobilePretitleBold" color="hubbard.100">Frequency</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Frequency</Text>
           <Text textStyle="mobileBodyBold" color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}>{currentSchedule.frequency}</Text>
         </Box>
       </Box>
@@ -144,10 +144,10 @@ const ConfirmDetails = ({
           Edit
         </Button>
         <Box>
-          <Text textStyle="mobileHeader2">Donation Information</Text>
-          <Text textstyle="mobilePretitleBold" color="hubbard.100">Size</Text>
+          <Text textStyle="mobileHeader3">Donation Information</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Size</Text>
           <Text textStyle="mobileBody">{currentSchedule.size}</Text>
-          <Text textstyle="mobilePretitleBold" color="hubbard.100">Item Category</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Item Category</Text>
           <Text textStyle="mobileBody">
             {currentSchedule.categories.join(", ")}
           </Text>
@@ -171,41 +171,41 @@ const ConfirmDetails = ({
           Edit
         </Button>
         <Box>
-          <Text textStyle="mobileHeader2">Volunteer Information</Text>
-          <Text textstyle="mobilePretitleBold" color="hubbard.100">Volunteer Needed</Text>
+          <Text textStyle="mobileHeader3">Volunteer Information</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Volunteer Needed</Text>
           <Text textStyle="mobileBody">{currentSchedule.volunteerNeeded? "Yes": "No"}</Text>
-          <Text textstyle="mobilePretitleBold" color="hubbard.100">Pickup Needed</Text>
+          <Text textStyle="mobileSmall"color="hubbard.100" pt="1em">Pickup Needed</Text>
           <Text textStyle="mobileBody">{currentSchedule.isPickup? "Yes": "No"}</Text>
 
           
           {currentSchedule.isPickup && (
             <Box> 
-              <Text textstyle="mobilePretitleBold" color="hubbard.100">Address</Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Address</Text>
               <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text> 
              </Box>
           )}
           
-          <Text textstyle="mobilePretitleBold" color="hubbard.100">Additional notes</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Additional notes</Text>
           <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
         </Box>
       </Box>
 
       <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader2">Donor Information</Text>
-        <Text textstyle="mobilePretitleBold" color="hubbard.100">Name</Text>
+        <Text textStyle="mobileHeader3" >Donor Information</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Name</Text>
         <Text textStyle="mobileBody">
           {currentDonor.firstName} {currentDonor.lastName}
         </Text>
-        <Text textstyle="mobilePretitleBold" color="hubbard.100">Email</Text>
+        <Text textStyle="mobileSmall"color="hubbard.100" pt="1em">Email</Text>
         <Text textStyle="mobileBody">{currentDonor.email}</Text>
-        <Text textstyle="mobilePretitleBold" color="hubbard.100">Phone</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Phone</Text>
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
-        <Text textstyle="mobilePretitleBold" color="hubbard.100">Organization</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Organization</Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
       {isBeingEdited && (
         <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader2">Danger Zone</Text>
+        <Text textStyle="mobileHeader3" pb="0.8em">Danger Zone</Text>
         <Text textStyle="mobileBody">
           To cancel this schedule donation, click below.
         </Text>
