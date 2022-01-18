@@ -5,6 +5,7 @@ import {
   Spinner,
   Stack,
   Text,
+  Flex,
   VStack,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
@@ -102,10 +103,6 @@ const Dashboard = (): JSX.Element => {
               </Text>
             </Box>
           </Flex>
-          // <Text as="i" pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
-            // You currently have no upcoming donations scheduled for the next two
-            // weeks.
-          // </Text>
         )}
       </Box>
     </Container>

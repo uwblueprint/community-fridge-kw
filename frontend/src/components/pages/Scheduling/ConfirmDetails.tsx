@@ -40,6 +40,12 @@ const ConfirmDetails = ({
     next();
   };
 
+  const onDeleteClick = async () => {
+    await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+    history.push(`${Routes.DASHBOARD_PAGE}`);
+    
+  }
+
   const getDonorData = async () => {
     const donorResponse = await DonorAPIClient.getDonorByUserId(
       authenticatedUser!.id,
@@ -51,6 +57,7 @@ const ConfirmDetails = ({
   useEffect(() => {
     getDonorData();
   }, [currentSchedule.id]);
+  
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
@@ -194,7 +201,7 @@ const ConfirmDetails = ({
           size="lg"
           width={{ lg: "30%", base: "100%" }}
           variant="deleteDonation"
-          onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+          onClick={onDeleteClick}
         >
         Cancel donation
         </Button>
