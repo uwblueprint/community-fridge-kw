@@ -20,7 +20,13 @@ const Button = {
       fontSize: "16px",
       py: "12px",
       px: "53px",
-    }
+    },
+    edit: {
+      color: "hubbard.100",
+      fontSize: "16px",
+      fontWeight: 300,
+      textDecoration: "underline",
+    },
   },
 };
 

@@ -100,13 +100,13 @@ const ConfirmDetails = ({
         align="left"
         mt="2rem"
         mb="2rem"
-        display={{ lg: "flex" }}
+        display={{ sm: "flex" }}
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
         <Button
           pl="0"
-          variant="ghost"
+          variant="edit"
           color="hubbard.100"
           onClick={() => go && go("date and time")}
         >
@@ -131,13 +131,13 @@ const ConfirmDetails = ({
         pl="0"
         align="left"
         mb="2rem"
-        display={{ lg: "flex" }}
+        display={{ sm: "flex" }}
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
         <Button
           pl="0"
-          variant="ghost"
+          variant="edit"
           color="hubbard.100"
           onClick={() => go && go("donation information")}
         >
@@ -158,13 +158,13 @@ const ConfirmDetails = ({
         pl="0"
         align="left"
         mb="2rem"
-        display={{ lg: "flex" }}
+        display={{ sm: "flex" }}
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
         <Button
           pl="0"
-          variant="ghost"
+          variant="edit"
           color="hubbard.100"
           onClick={() => go && go("volunteer information")}
         >
