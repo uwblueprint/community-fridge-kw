@@ -98,7 +98,6 @@ const ConfirmDetails = ({
         flexDirection="row-reverse"
       >
         <Button
-          rightIcon={<EditIcon />}
           pl="0"
           variant="ghost"
           color="hubbard.100"
@@ -128,7 +127,6 @@ const ConfirmDetails = ({
         flexDirection="row-reverse"
       >
         <Button
-          rightIcon={<EditIcon />}
           pl="0"
           variant="ghost"
           color="hubbard.100"
@@ -154,7 +152,6 @@ const ConfirmDetails = ({
         flexDirection="row-reverse"
       >
         <Button
-          rightIcon={<EditIcon />}
           pl="0"
           variant="ghost"
           color="hubbard.100"
