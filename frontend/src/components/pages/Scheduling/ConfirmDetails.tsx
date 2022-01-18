@@ -78,7 +78,7 @@ const ConfirmDetails = ({
         </Text>
       ) : (
         <Text textStyle="mobileHeader2" mt="2em">
-          Schedule a donation dropoff
+          Confirm Donation Details
         </Text>
       )}
 
@@ -113,7 +113,8 @@ const ConfirmDetails = ({
           Edit
         </Button>
         <Box>
-          <Text textStyle="mobileHeader2">Proposed dropoff time</Text>
+          <Text textStyle="mobileHeader2">Drop-off Information</Text>
+          <Text textstyle="mobilePretitleBold" color="hubbard.100">Proposed drop-off time</Text>
           <Text textStyle="mobileBody">
             {new Date(currentSchedule.startTime).toDateString()}
           </Text>
@@ -121,7 +122,8 @@ const ConfirmDetails = ({
             {new Date(currentSchedule.startTime).toLocaleTimeString()}-
             {new Date(currentSchedule.endTime).toLocaleTimeString()}
           </Text>
-          <Text textStyle="mobileBody">{currentSchedule.frequency}</Text>
+          <Text textstyle="mobilePretitleBold" color="hubbard.100">Frequency</Text>
+          <Text textStyle="mobileBodyBold" color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}>{currentSchedule.frequency}</Text>
         </Box>
       </Box>
 
@@ -143,7 +145,9 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader2">Donation Information</Text>
+          <Text textstyle="mobilePretitleBold" color="hubbard.100">Size</Text>
           <Text textStyle="mobileBody">{currentSchedule.size}</Text>
+          <Text textstyle="mobilePretitleBold" color="hubbard.100">Item Category</Text>
           <Text textStyle="mobileBody">
             {currentSchedule.categories.join(", ")}
           </Text>
@@ -168,30 +172,39 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader2">Volunteer Information</Text>
-          {currentSchedule.volunteerNeeded && (
-            <Text textStyle="mobileBody">Volunteer required</Text>
-          )}
-          {currentSchedule.isPickup && (
-            <Text textStyle="mobileBody">Pickup required</Text>
-          )}
-          <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text>
+          <Text textstyle="mobilePretitleBold" color="hubbard.100">Volunteer Needed</Text>
+          <Text textStyle="mobileBody">{currentSchedule.volunteerNeeded? "Yes": "No"}</Text>
+          <Text textstyle="mobilePretitleBold" color="hubbard.100">Pickup Needed</Text>
+          <Text textStyle="mobileBody">{currentSchedule.isPickup? "Yes": "No"}</Text>
 
-          <Text textStyle="mobileBody">
-            Additional notes: {currentSchedule.notes}
-          </Text>
+          
+          {currentSchedule.isPickup && (
+            <Box> 
+              <Text textstyle="mobilePretitleBold" color="hubbard.100">Address</Text>
+              <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text> 
+             </Box>
+          )}
+          
+          <Text textstyle="mobilePretitleBold" color="hubbard.100">Additional notes</Text>
+          <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
         </Box>
       </Box>
 
       <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader2">Donor information</Text>
+        <Text textStyle="mobileHeader2">Donor Information</Text>
+        <Text textstyle="mobilePretitleBold" color="hubbard.100">Name</Text>
         <Text textStyle="mobileBody">
           {currentDonor.firstName} {currentDonor.lastName}
         </Text>
+        <Text textstyle="mobilePretitleBold" color="hubbard.100">Email</Text>
         <Text textStyle="mobileBody">{currentDonor.email}</Text>
+        <Text textstyle="mobilePretitleBold" color="hubbard.100">Phone</Text>
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
+        <Text textstyle="mobilePretitleBold" color="hubbard.100">Organization</Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
-      <Box m="3em 0" pl="0" align="left">
+      {isBeingEdited && (
+        <Box m="3em 0" pl="0" align="left">
         <Text textStyle="mobileHeader2">Danger Zone</Text>
         <Text textStyle="mobileBody">
           To cancel this schedule donation, click below.
@@ -205,8 +218,8 @@ const ConfirmDetails = ({
         >
         Cancel donation
         </Button>
-
       </Box>
+      )}   
       {!isBeingEdited && (
         <HStack>
           <Button
