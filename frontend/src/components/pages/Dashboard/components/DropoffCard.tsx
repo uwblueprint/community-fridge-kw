@@ -1,5 +1,5 @@
-import { CheckIcon, RepeatIcon } from "@chakra-ui/icons";
-import { Box, HStack, Stack, Text, VStack } from "@chakra-ui/react";
+import { CheckIcon, CloseIcon, RepeatIcon } from "@chakra-ui/icons";
+import { Box, HStack, Stack, Text } from "@chakra-ui/react";
 import { format, isToday, isTomorrow } from "date-fns";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -75,20 +75,19 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
         >
           {`${startTimeLocal}-${endTimeLocal}`}
         </Text>
-        {volunteerNeeded && (
+        {volunteerNeeded ? (
           <HStack minWidth="250px" pb={["12px", "0px"]}>
             <CheckIcon color={frequencyColorScheme} />
             <Text textStyle="mobileBody">Volunteers Requested</Text>
           </HStack>
+        ) : (
+          <HStack minWidth="250px" pb={["12px", "0px"]}>
+            <CloseIcon w={3} color={frequencyColorScheme} mr="4px" />
+            <Text textStyle="mobileBody">No Volunteers Needed</Text>
+          </HStack>
         )}
         <HStack>
-          <RepeatIcon
-            color={frequencyColorScheme}
-            mb={[
-              frequency !== DonationFrequency.ONE_TIME ? "24px" : "0px",
-              "0px",
-            ]}
-          />
+          <RepeatIcon color={frequencyColorScheme} />
           <Text>
             <Box
               as="span"
