@@ -93,6 +93,17 @@ const testSchedules = [
   },
 ];
 
+const schedules = testSchedules.map((schedule) => {
+  const scheduleSnakeCase: Record<
+    string,
+    string | string[] | boolean | number | Date | undefined
+  > = {};
+  Object.entries(schedule).forEach(([key, value]) => {
+    scheduleSnakeCase[snakeCase(key)] = value;
+  });
+  return scheduleSnakeCase;
+});
+
 describe("pg schedulingService", () => {
   let schedulingService: SchedulingService;
 
@@ -109,17 +120,6 @@ describe("pg schedulingService", () => {
   });
 
   test("getSchedules", async () => {
-    const schedules = testSchedules.map((schedule) => {
-      const scheduleSnakeCase: Record<
-        string,
-        string | string[] | boolean | number | Date | undefined
-      > = {};
-      Object.entries(schedule).forEach(([key, value]) => {
-        scheduleSnakeCase[snakeCase(key)] = value;
-      });
-      return scheduleSnakeCase;
-    });
-
     await Scheduling.bulkCreate(schedules);
 
     const res = await schedulingService.getSchedulings();
@@ -128,17 +128,6 @@ describe("pg schedulingService", () => {
   });
 
   test("getSchedulesByDonorId", async () => {
-    const schedules = testSchedules.map((schedule) => {
-      const scheduleSnakeCase: Record<
-        string,
-        string | string[] | boolean | number | Date | undefined
-      > = {};
-      Object.entries(schedule).forEach(([key, value]) => {
-        scheduleSnakeCase[snakeCase(key)] = value;
-      });
-      return scheduleSnakeCase;
-    });
-
     await Scheduling.bulkCreate(schedules);
     const { donorId } = testSchedules[0];
     const res = await schedulingService.getSchedulingsByDonorId(
@@ -151,17 +140,6 @@ describe("pg schedulingService", () => {
   });
 
   test("getScheduleById", async () => {
-    const schedules = testSchedules.map((schedule) => {
-      const scheduleSnakeCase: Record<
-        string,
-        string | string[] | boolean | number | Date | undefined
-      > = {};
-      Object.entries(schedule).forEach(([key, value]) => {
-        scheduleSnakeCase[snakeCase(key)] = value;
-      });
-      return scheduleSnakeCase;
-    });
-
     await Scheduling.bulkCreate(schedules);
     const res = await schedulingService.getSchedulingById("1");
     expect(res).toMatchObject(testSchedules[0]);
@@ -359,17 +337,6 @@ describe("pg schedulingService", () => {
   });
 
   test("updateScheduling", async () => {
-    const schedules = testSchedules.map((schedule) => {
-      const scheduleSnakeCase: Record<
-        string,
-        string | string[] | boolean | number | Date | undefined
-      > = {};
-      Object.entries(schedule).forEach(([key, value]) => {
-        scheduleSnakeCase[snakeCase(key)] = value;
-      });
-      return scheduleSnakeCase;
-    });
-
     await Scheduling.bulkCreate(schedules);
 
     // Updating one of each type of field
@@ -393,17 +360,6 @@ describe("pg schedulingService", () => {
   });
 
   test("deleteScheduling", async () => {
-    const schedules = testSchedules.map((schedule) => {
-      const scheduleSnakeCase: Record<
-        string,
-        string | string[] | boolean | number | Date | undefined
-      > = {};
-      Object.entries(schedule).forEach(([key, value]) => {
-        scheduleSnakeCase[snakeCase(key)] = value;
-      });
-      return scheduleSnakeCase;
-    });
-
     await Scheduling.bulkCreate(schedules);
 
     const schedulingToDelete: Scheduling | null = await Scheduling.findOne();
@@ -421,17 +377,6 @@ describe("pg schedulingService", () => {
   });
 
   test("deleteRecurringScheduling", async () => {
-    const schedules = testSchedules.map((schedule) => {
-      const scheduleSnakeCase: Record<
-        string,
-        string | string[] | boolean | number | Date | undefined
-      > = {};
-      Object.entries(schedule).forEach(([key, value]) => {
-        scheduleSnakeCase[snakeCase(key)] = value;
-      });
-      return scheduleSnakeCase;
-    });
-
     await Scheduling.bulkCreate(schedules);
 
     const recurringIdCount = schedules.filter((schedule) => schedule.recurring_donation_id === RECURRING_DONATION_ID).length;
