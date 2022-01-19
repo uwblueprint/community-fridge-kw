@@ -40,7 +40,7 @@ const seedSchedules = [
     status: "Approved",
     volunteer_needed: true,
     volunteer_time: "8:00 AM",
-    frequency: "One time",
+    frequency: "One time donation",
     notes: "these are the notes",
     createdAt: new Date(1636226732806),
     updatedAt: new Date(1636226732806),

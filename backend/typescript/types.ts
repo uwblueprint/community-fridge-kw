@@ -20,7 +20,7 @@ export enum DayPart {
 }
 
 export enum Frequency {
-  ONE_TIME = "One time",
+  ONE_TIME = "One time donation",
   DAILY = "Daily",
   WEEKLY = "Weekly",
   MONTHLY = "Monthly",

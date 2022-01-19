@@ -67,7 +67,7 @@ export default class Scheduling extends Model {
 
   @AllowNull(false)
   @Column({
-    type: DataType.ENUM("One time", "Daily", "Weekly", "Monthly"),
+    type: DataType.ENUM("One time donation", "Daily", "Weekly", "Monthly"),
   })
   frequency!: Frequency;
 
