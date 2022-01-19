@@ -7,6 +7,7 @@ import {
   HStack,
   IconButton,
   Text,
+  Stack,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -72,29 +73,23 @@ const ConfirmDetails = ({
       ) : (
         <SchedulingProgressBar activeStep={3} totalSteps={4} />
       )}
-      {isBeingEdited ? (
-        <Text textStyle="mobileHeader1" mt="2em">
-          Donation Details
-        </Text>
-      ) : (
-        <Text textStyle="mobileHeader2" mt="2em">
-          Confirm Donation Details
-        </Text>
-      )}
 
-      <Badge
-        borderRadius="full"
-        pt="6px"
-        pb="6px"
-        pl="14px"
-        pr="14px"
-        mt="12px"
-        color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
-        backgroundColor={`${(colorMap as any)[currentSchedule?.frequency]}.50`}
-      >
-        {currentSchedule?.frequency}
-      </Badge>
-
+        
+        <Text textStyle="mobileHeader1" mt="1em" direction="row" display={{ md: "flex" }}> 
+          {isBeingEdited? "Donation Details": "Confirm Donation Details"}
+          <Badge
+            borderRadius="12px"
+            pl="18px"
+            pr="18px"
+            pt="-5px"
+            pb="-5px"
+            ml={{sm: "2em"}}
+            color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
+            backgroundColor={`${(colorMap as any)[currentSchedule?.frequency]}.50`}
+          >   
+          {currentSchedule?.frequency}
+          </Badge>
+        </Text>
       <Box
         pl="0"
         align="left"
