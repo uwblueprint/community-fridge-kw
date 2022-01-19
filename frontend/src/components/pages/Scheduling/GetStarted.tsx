@@ -8,9 +8,9 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
   const { next } = navigation;
 
   return (
-    <Container variant="responsiveContainer">
-      <Text marginTop="4rem" marginBottom="30px" textStyle="mobileHeader2">
-        Schedule new donation drop-off
+    <Container variant="dashboardContainer">
+      <Text marginBottom="30px" textStyle="mobileHeader2">
+        Schedule a donation drop-off
       </Text>
       <Text marginBottom="1rem" textStyle="mobileBody" color="hubbard.100">
         Submit information for your upcoming planned donation(s) to the
