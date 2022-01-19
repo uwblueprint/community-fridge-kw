@@ -23,6 +23,7 @@ import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
 import BackButton from "./BackButton";
 import { DonationSizeInterface, SchedulingStepProps } from "./types";
+import NextButton from "./NextButton";
 
 const DonationInformation: any = ({
   formValues,
@@ -53,6 +54,16 @@ const DonationInformation: any = ({
     setShowItemTypes(true);
   };
 
+  const checkSubmit = (e: React.ChangeEvent<HTMLInputElement>, item: string) => {
+    const newCategories = e.target.checked ? [...categories, item] : categories.filter((category) => category !== item);
+    
+    if (newCategories.length > 0) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  }
+
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     item: string,
@@ -70,9 +81,7 @@ const DonationInformation: any = ({
       categories: "",
     });
 
-    if (categories.length > 0) {
-      setCanSubmit(true);
-    }
+    checkSubmit(e, item);
   };
 
   const DonationSizes: DonationSizeInterface[] = [
@@ -84,18 +93,18 @@ const DonationInformation: any = ({
     {
       image: md,
       size: "Medium",
-      description: "Approximately fills one shelf of the fridge/pantry",
+      description: "Fills approximately one shelf of the fridge/pantry",
     },
     {
       image: lg,
       size: "Large",
-      description: "Approximately fills two shelves of the fridge/pantry",
+      description: "Fills approximately two shelves of the fridge/pantry",
     },
     {
       image: xl,
       size: "Extra-large",
       description:
-        "Approximately fills four shelves of the fridge/ pantry (full capacity)",
+        "Fills approximately four shelves of the fridge/pantry",
     },
   ];
 
@@ -190,26 +199,12 @@ const DonationInformation: any = ({
         </Stack>
         <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
       </FormControl>}
-      <div style={{display: "flex", justifyContent: "flex-end"}}>
-          {isBeingEdited ? (
-            <Button
-              onClick={() => go && go("confirm donation details")}
-              variant="cancelNavigation"
-              w={{ md: "300px" }}
-            >
-              Cancel
-            </Button>
-          ) : (
-            <Button
-              isDisabled={!canSubmit}
-              onClick={handleNext}
-              variant="navigation"
-              width={{ md: "300px" }}
-            >
-              Next
-            </Button>
-          )}
-        </div>
+      <NextButton 
+        isBeingEdited={isBeingEdited}
+        go={go}
+        canSubmit={canSubmit}
+        handleNext={handleNext}
+      />
     </Container>
   );
 };
