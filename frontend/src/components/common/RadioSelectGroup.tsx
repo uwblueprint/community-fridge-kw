@@ -172,15 +172,15 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
           slot without a pre-existing donor.
         </FormHelperText>
       )}
-      {isDesktop ? (
-        <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full" {...group}>
-          {radioSelectButtons}
-        </SimpleGrid>
-      ) : (
-        <VStack {...group} maxWidth="350px">
-          {radioSelectButtons}
-        </VStack>
-      )}
+      <Grid
+        templateRows={{ base: "repeat(4, 1fr)", md: "repeat(2, 1fr)" }}
+        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+        rowGap={6}
+        columnGap={16}
+        {...group}
+      >
+        {radioSelectButtons}
+      </Grid>
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );
