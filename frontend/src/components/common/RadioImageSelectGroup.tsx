@@ -38,7 +38,7 @@ const RadioImageSelectButton = (props: any) => {
       cursor: "pointer",
       borderWidth: "1px",
       borderRadius: "6",
-      borderColor: "hubbard.100",
+      borderColor: "#D8DDE0",
       boxShadow: "md",
       padding: "12px",
       color: "hubbard.100",
@@ -112,6 +112,10 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
         </VStack>
       ) : (
         <HStack>
+          <Box width="70%">
+            <Text textStyle="mobileBody"> {v.size}</Text>
+            <Text textStyle="mobileSmall">{v.description}</Text>
+          </Box>
           <Box height="100px" width="100px">
             <Image
               objectFit="fill"
@@ -119,10 +123,6 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
               alt="Size image"
               display="inline"
             />
-          </Box>
-          <Box width="70%">
-            <Text textStyle="mobileBody"> {v.size}</Text>
-            <Text textStyle="mobileSmall">{v.description}</Text>
           </Box>
         </HStack>
       )}
