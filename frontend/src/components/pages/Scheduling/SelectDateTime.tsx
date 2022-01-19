@@ -34,6 +34,8 @@ import {
   SchedulingStepProps,
   timeRanges,
 } from "./types";
+import BackButton from "./BackButton";
+import NextButton from "./NextButton";
 
 const SelectDateTime = ({
   formValues,
@@ -172,6 +174,7 @@ const SelectDateTime = ({
         ...formErrors,
         dayPart: "",
       });
+      checkSubmit(true);
     } else if (name === "frequency") {
       const val = e.toString();
       if (val === "One time donation") {
@@ -216,6 +219,7 @@ const SelectDateTime = ({
       ...formErrors,
       timeRange: "",
     });
+    checkSubmit(true);
   };
 
   const handleDateSelect = (selectedDate: DateObject) => {
@@ -230,6 +234,8 @@ const SelectDateTime = ({
       ...formErrors,
       date: "",
     });
+
+    checkSubmit(false);
 
     // update frequency labels
     const newFrequencyLabels = [...frequencies];
@@ -353,24 +359,11 @@ const SelectDateTime = ({
 
   return (
     <Container variant="responsiveContainer">
-      <Box mt={10}>
-        {isBeingEdited ? (
-          <Button
-            onClick={onSaveClick}
-            variant="navigation"
-          >
-          Save Changes
-        </Button>
-        ) : (
-        <Button
-          onClick={previous}
-          paddingLeft="0 !important"
-          backgroundColor="transparent"
-        >
-          <ArrowBackIcon w={8} h={5}/> Back
-        </Button>
-        )}
-      </Box>
+      <BackButton 
+        isBeingEdited={isBeingEdited}
+        onSaveClick={onSaveClick}
+        previous={previous}
+      />
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         {isDesktop ? "Drop-off date and time" : "Date and Time"}
@@ -458,6 +451,7 @@ const SelectDateTime = ({
           <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full">
             <GridItem colSpan={1}>
               <DatePicker
+                editable={false}
                 value={recurringEndDate}
                 onChange={handleChangeRecurringDate}
                 placeholder="MM-DD-YYYY"
@@ -469,26 +463,12 @@ const SelectDateTime = ({
           </FormErrorMessage>
         </FormControl>
       )}
-        <div style={{display: "flex", justifyContent: "flex-end"}}>
-          {isBeingEdited ? (
-            <Button
-              onClick={() => go && go("confirm donation details")}
-              variant="cancelNavigation"
-              w={{ md: "300px" }}
-            >
-              Cancel
-            </Button>
-          ) : (
-            <Button
-              isDisabled={!canSubmit}
-              onClick={handleNext}
-              variant="navigation"
-              width={{ md: "300px" }}
-            >
-              Next
-            </Button>
-          )}
-        </div>
+      <NextButton 
+        isBeingEdited={isBeingEdited}
+        go={go}
+        canSubmit={canSubmit}
+        handleNext={handleNext}
+        />
     </Container>
   );
 };
