@@ -184,13 +184,10 @@ const ConfirmDetails = ({
               <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text> 
              </Box>
           )}
-          {(currentSchedule.notes !== "") && (
-            <Box>
-              <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Additional notes</Text>
+          <Box>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Additional notes</Text>
             <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
-            </Box>
-          )}
-
+          </Box>
         </Box>
       </Box>
 
