@@ -115,7 +115,7 @@ const SelectDateTime = ({
     if (isDesktop && isOneTimeDonation) {
       setForm({ target: { name: "frequency", value: "One time donation" } });
     }
-
+    
     // fetch schedules
     const fetchSchedules = async () => {
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
@@ -152,6 +152,13 @@ const SelectDateTime = ({
     setIcons(getIconsPerTimeSlot(selectedDayPart, selectedDate));
   };
 
+  const checkSubmit = (hasRecurringDonationEndDate: boolean) => {
+    const reccurring = hasRecurringDonationEndDate ? frequency && recurringDonationEndDate : true;
+    const valuesFilled = date && dayPart && timeRange && reccurring;
+
+    return valuesFilled ? setCanSubmit(true) : setCanSubmit(false);
+  }
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | string,
     name: string,
@@ -169,10 +176,10 @@ const SelectDateTime = ({
       const val = e.toString();
       if (val === "One time donation") {
         setIsOneTimeDonation(true);
-        setCanSubmit(true);
+        checkSubmit(false);
       } else {
         setIsOneTimeDonation(false);
-        setCanSubmit(false);
+        checkSubmit(true);
       }
       setFormErrors({
         ...formErrors,
@@ -239,7 +246,6 @@ const SelectDateTime = ({
   const handleChangeRecurringDate = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setRecurringEndDate(selectedDateObj);
-    setCanSubmit(true);
 
     const recurringDate = new Date(selectedDateObj);
     setForm({
@@ -252,6 +258,8 @@ const SelectDateTime = ({
       ...formErrors,
       recurringDonationEndDate: "",
     });
+
+    checkSubmit(false);
   };
 
   const validateForm = () => {
