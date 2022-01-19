@@ -50,6 +50,13 @@ export const dayParts = [
   DayPartsEnum.NIGHT,
 ];
 
+export enum DonationFrequency {
+  ONE_TIME = "One time",
+  DAILY = "Daily",
+  WEEKLY = "Weekly",
+  MONTHLY = "Monthly",
+}
+
 export const timeRanges = {
   earlyMorning: [
     "12:00 AM - 1:00 AM",

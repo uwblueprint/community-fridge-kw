@@ -16,6 +16,20 @@ export const colorMap = {
   Monthly: "turnip",
 };
 
+export const getFrequencyColor = (frequency: string): string => {
+  switch (frequency) {
+    case "One time":
+      return "#317C71";
+    case "Daily":
+      return "#496DB6";
+    case "Weekly":
+      return "#8557BC";
+    case "Monthly":
+      return "#BC577B";
+    default:
+      return "";
+  }
+};
 type DaysInWeekProps = {
   locale?: Locale;
 };
