@@ -5,8 +5,10 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  Grid,
   Img,
   Radio,
+  SimpleGrid,
   useRadio,
   useRadioGroup,
   VStack,
@@ -14,6 +16,7 @@ import {
 import React from "react";
 
 import personIcon from "../../assets/personIcon.svg";
+import useViewport from "../../hooks/useViewport";
 
 interface RadioSelectGroupProps {
   name: string;
@@ -39,7 +42,7 @@ const RadioSelectButton = (props: any) => {
       cursor: "pointer",
       borderWidth: "1px",
       borderRadius: "6",
-      borderColor: "hubbard.100",
+      borderColor: "#D8DDE0",
       boxShadow: "md",
       padding: "12px",
       color: "hubbard.100",
@@ -143,35 +146,41 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   ));
 
   const group = getRootProps();
+  const { isDesktop } = useViewport();
 
   return (
     <FormControl
       isRequired={isRequired}
       m="2em 0"
-      maxWidth="800px"
       isInvalid={!!error}
       isDisabled={isDisabled}
     >
       <FormLabel fontWeight="600">{label}</FormLabel>
-      <FormHelperText fontSize="16px" color="black.100" mb="20px">
+      <FormHelperText fontSize="16px" color="hubbard.100" mb="20px">
         {helperText}
       </FormHelperText>
       {name === "timeRanges" && (
-        <FormHelperText fontSize="14px" color="black.100" mb="20px">
+        <FormHelperText fontSize="14px" color="hubbard.100" mb="20px">
           Each{" "}
           <Img
             src={personIcon}
             alt="person icon"
-            width="15.75px"
+            width="14px"
             display="inline"
           />{" "}
           represents an already signed up donor. Please try to choose a time
           slot without a pre-existing donor.
         </FormHelperText>
       )}
-      <VStack {...group} maxWidth="350px">
-        {radioSelectButtons}
-      </VStack>
+      {isDesktop ? (
+        <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full" {...group}>
+          {radioSelectButtons}
+        </SimpleGrid>
+      ) : (
+        <VStack {...group} maxWidth="350px">
+          {radioSelectButtons}
+        </VStack>
+      )}
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );

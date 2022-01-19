@@ -21,24 +21,26 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
         Our goal is to maintain a consistent stock of donated food in the fridge
         & pantry, at any given time, on any given day. The scheduling tool
         enables us to space out donations - effectively maximizing your impact
-        on community
+        on the community.
       </Text>
-      <Img
-        src={cfImage}
-        alt="Community Fridge"
-        marginBottom="50px"
-        width="100%"
-        maxWidth="600px"
-      />
-      <Button
-        onClick={next}
-        variant="navigation"
-        w="100%"
-        maxWidth="500px"
-        size="lg"
-      >
-        Get started
-      </Button>
+      <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+        <Img
+          src={cfImage}
+          alt="Community Fridge"
+          marginBottom="50px"
+          width="100%"
+          maxWidth="600px"
+        />
+          <Button
+            onClick={next}
+            variant="navigation"
+            w="100%"
+            maxWidth="500px"
+            size="lg"
+          >
+            Get started
+          </Button>
+      </div>
     </Container>
   );
 };
