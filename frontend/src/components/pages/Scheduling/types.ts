@@ -12,6 +12,7 @@ export interface SchedulingStepProps {
   setForm: SetForm;
   isBeingEdited?: boolean;
 }
+
 export interface DonationSizeInterface {
   image: string;
   size: string;
@@ -20,6 +21,21 @@ export interface DonationSizeInterface {
 export interface SchedulingProgessBarProps {
   activeStep: number;
   totalSteps: number;
+}
+
+export interface BackButtonProps {
+  isBeingEdited?: boolean;
+  onSaveClick: () => void;
+  previous?: () => void;
+  children?: React.ReactNode;
+}
+
+export interface NextButtonProps {
+  isBeingEdited?: boolean;
+  go?: (step: string | number) => void;
+  canSubmit: boolean;
+  handleNext: () => void;
+  children?: React.ReactNode;
 }
 
 export enum DayPartsEnum {
