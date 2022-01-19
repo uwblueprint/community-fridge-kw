@@ -440,7 +440,6 @@ class SchedulingService implements ISchedulingService {
 
   async deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string): Promise<void> {
-      console.log(Scheduling);
     try {
       const numsDestroyed = await Scheduling.destroy({
         where: { recurring_donation_id: recurring_donation_id},
