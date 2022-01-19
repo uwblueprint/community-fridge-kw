@@ -99,14 +99,12 @@ const ViewDonations = (): React.ReactElement => {
             </IconButton>
           </HStack>
         ) : (
-          <Flex pt="4rem" width="72rem">
-            <HStack py="1.2rem">
+          <Flex pt="4rem" width="60rem">
+            <HStack pt="1.2rem" pb="2.5rem">
               <Text textStyle="desktopHeader">
-                Week of{" "}
                 {selectedDay?.toLocaleString(undefined, {
                   year: "numeric",
                   month: "long",
-                  day: "numeric",
                 })}
               </Text>
               <DatePicker
@@ -122,7 +120,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="previous week"
               onClick={() => {
-                changeDays(-7);
+                changeDays(-1);
               }}
             >
               <ChevronLeftIcon />
@@ -131,7 +129,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="next week"
               onClick={() => {
-                changeDays(7);
+                changeDays(1);
               }}
             >
               <ChevronRightIcon />

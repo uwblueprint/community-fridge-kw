@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import React from "react";
 
 import { Schedule } from "../../../types/SchedulingTypes";
+import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
 import DefaultWeeklyEventItem from "./WeeklyEventItems";
 
@@ -20,15 +21,7 @@ const Calendar = ({
         selectedDay={selectedDay}
         schedules={schedules}
         renderItem={({ schedule, showingFullWeek }) => (
-          <DefaultWeeklyEventItem
-            key={JSON.stringify(schedule)}
-            schedule={schedule}
-            date={
-              showingFullWeek
-                ? format(new Date(schedule!.startTime as string), "MMM do k:mm")
-                : format(new Date(schedule!.startTime as string), "k:mm")
-            }
-          />
+          <DropoffCard key={JSON.stringify(schedule)} schedule={schedule} />
         )}
       />
     </WeeklyCalendar>
