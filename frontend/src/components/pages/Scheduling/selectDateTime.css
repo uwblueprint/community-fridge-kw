@@ -27,15 +27,20 @@
   position: absolute !important; 
 }
 
-.rmdp-week-day, .rmdp-day.rmdp-today span {
+.rmdp-week-day {
   color: #000 !important;
 }
 
+.rmdp-day.rmdp-today.rmdp-selected span {
+  color: #fff !important;
+}
+
 .rmdp-day.rmdp-today span {
+  color: #000 !important;
   background-color: transparent !important;
 }
 
-.rmdp-day.rmdp-selected span {
+.rmdp-day.rmdp-selected span, .rmdp-day.rmdp-selected.rmdp-today span {
   background-color: #C31887 !important;
 }
 

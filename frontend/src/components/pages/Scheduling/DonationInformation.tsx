@@ -57,6 +57,16 @@ const DonationInformation: any = ({
     setCanSubmit(!!newCategories.length);
   };
 
+  const checkSubmit = (e: React.ChangeEvent<HTMLInputElement>, item: string) => {
+    const newCategories = e.target.checked ? [...categories, item] : categories.filter((category) => category !== item);
+    
+    if (newCategories.length > 0) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  }
+
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     item: string,
@@ -157,7 +167,7 @@ const DonationInformation: any = ({
       <NextButton
         isBeingEdited={isBeingEdited}
         go={go}
-        canSubmit={getSubmitState()}
+        canSubmit={canSubmit}
         handleNext={handleNext}
       />
     </Container>

@@ -173,8 +173,8 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
         </FormHelperText>
       )}
       <Grid
-        templateRows={{ base: "repeat(4, 1fr)", md: "repeat(2, 1fr)" }}
-        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+        templateRows={{ md: "repeat(2, 1fr)" }}
+        templateColumns={{ md: "repeat(2, 1fr)" }}
         rowGap={6}
         columnGap={16}
         {...group}
