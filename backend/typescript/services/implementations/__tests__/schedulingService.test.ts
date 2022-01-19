@@ -379,15 +379,19 @@ describe("pg schedulingService", () => {
   test("deleteRecurringScheduling", async () => {
     await Scheduling.bulkCreate(schedules);
 
-    const recurringIdCount = schedules.filter((schedule) => schedule.recurring_donation_id === RECURRING_DONATION_ID).length;
+    const recurringIdCount = schedules.filter(
+      (schedule) => schedule.recurring_donation_id === RECURRING_DONATION_ID,
+    ).length;
 
     const res = await schedulingService.deleteSchedulingByRecurringDonationId(
-      RECURRING_DONATION_ID
+      RECURRING_DONATION_ID,
     );
     const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll();
     schedulingsDbAfterDelete.forEach((scheduling: Scheduling) => {
       expect(scheduling.recurring_donation_id).not.toBe(RECURRING_DONATION_ID);
     });
-    expect(schedulingsDbAfterDelete.length).toBe(testSchedules.length - recurringIdCount);
+    expect(schedulingsDbAfterDelete.length).toBe(
+      testSchedules.length - recurringIdCount,
+    );
   });
 });

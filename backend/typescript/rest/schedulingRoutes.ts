@@ -129,10 +129,10 @@ schedulingRouter.delete("/:id?", async (req, res) => {
   if (recurringDonationId) {
     try {
       await schedulingService.deleteSchedulingByRecurringDonationId(
-        recurringDonationId as string
+        recurringDonationId as string,
       );
       res.status(204).send();
-    } catch(error: unknown) {
+    } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });
     }
   } else if (id) {
