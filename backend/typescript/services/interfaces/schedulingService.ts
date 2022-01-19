@@ -36,7 +36,7 @@ interface ISchedulingService {
    * Generate an email with donation information to be sent after user schedules
    * a donation
    * @param email email of user that scheduled the donation
-   * @param schedule schedule object that contains information on scheduled donation
+   * @param schedule object that contains information on scheduled donation
    * @throws Error if unable to send email
    */
   sendEmailVerificationAfterSchedulingADonation(

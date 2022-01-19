@@ -1,6 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import { snakeCase } from "lodash";
 import { Op } from "sequelize";
+import dayjs from "dayjs";
+import ordinal from "ordinal";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IUserService from "../interfaces/userService";
@@ -196,90 +198,131 @@ class SchedulingService implements ISchedulingService {
     }
 
     try {
-      const accountName = await this.userService.getUserByEmail(email);
+      const { firstName } = await this.userService.getUserByEmail(email);
+
       // Proposed drop off info
-      const days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-      const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
       const { startTime } = schedule;
       const { endTime } = schedule;
 
-      const donationDay: string = days[startTime.getDay()];
-      const donationMonth: string = months[startTime.getMonth()];
-      const startTimePeriod: string = startTime.getHours() < 11 ? "am" : "pm";
-      const endTimePeriod: string = endTime.getHours() < 11 ? "am" : "pm";
+      // get string in en-us form e.g."4/20/2012, 5:10:30 PM"
+      const startTimeString: string = new Date(
+        dayjs(startTime).format("MM/DD/YYYY, HH:mm A"),
+      ).toLocaleString("en-US", {
+        timeZone: "EST",
+      });
 
-      // dropoff time interval string
-      const startTimeString = `${
-        startTime.getHours() === 0 ? 12 : startTime.getHours() % 12
-      }:${startTime.getMinutes()}${startTimePeriod}`;
-      const endTimeString = `${
-        endTime.getHours() === 0 ? 12 : endTime.getHours() % 12
-      }:${endTime.getMinutes()}${endTimePeriod}`;
+      const endTimeString: string = new Date(
+        dayjs(endTime).format("MM/DD/YYYY, HH:mm A"),
+      ).toLocaleString("en-US", {
+        timeZone: "EST",
+      });
 
       // frequency string
       // e.g. Weekly on <day of week> until <recurringDonationEndDate>
       let frequencyString = "One-time donation";
       if (schedule.frequency !== Frequency.ONE_TIME) {
-        const recurringDonationEndDateString = `${
-          days[schedule.recurringDonationEndDate!.getDay()]
-        }, ${
-          months[schedule.recurringDonationEndDate!.getDay()]
-        } ${schedule.recurringDonationEndDate!.getDate()}`;
+        const recurringDonationEndDateString: string = new Date(
+          dayjs(schedule.recurringDonationEndDate).format(
+            "MM/DD/YYYY, HH:mm A",
+          ),
+        ).toLocaleString("en-US", { timeZone: "EST" });
+        const recurringDonationEndDateStringFormatted: string = dayjs(
+          recurringDonationEndDateString,
+        ).format("MMMM, D YYYY");
         if (schedule.frequency === Frequency.DAILY) {
-          frequencyString = `Daily until ${recurringDonationEndDateString}`;
+          frequencyString = `Daily until ${recurringDonationEndDateStringFormatted}`;
         } else if (schedule.frequency === Frequency.WEEKLY) {
-          frequencyString = `Weekly on ${donationDay}s until ${recurringDonationEndDateString}`;
+          frequencyString = `Weekly on ${dayjs(startTimeString).format(
+            "dddd",
+          )}s until ${recurringDonationEndDateStringFormatted}`;
         } else {
-          frequencyString = `Monthly on the ${schedule.recurringDonationEndDate!.getDate()} until ${recurringDonationEndDateString}`;
+          frequencyString = `Monthly on the ${ordinal(
+            Number(dayjs(startTimeString).format("D")),
+          )} until ${recurringDonationEndDateStringFormatted}`;
         }
       }
 
       // TO DO: how do we properly style this?
       const emailBody = `
-      <b>Hey there ${accountName}!</b>
-      <br/>
-      Thank you for scheduling a donation to your local community fridge.
-      <br/>
-      Here is a summary of your upcoming donation:
-      <br/>
-
-      <h3>Proposed dropoff time</h3>
-      <p>${donationDay}, ${donationMonth} ${startTime.getDate()} </p>
-      <p>${startTimeString} - ${endTimeString}</p>
-      <p> ${frequencyString} </p>
-      <br/>
-
-      <h3>Volunteer information</h3>
-      ${schedule.volunteerNeeded ? "<p>Volunteer needed</p>" : ""}
-      ${schedule.isPickup ? "<p>Pickup required</p>" : ""}
-      ${schedule.notes ? schedule.notes : ""}
-
-      <h3>Donation information</h3>
-      ${schedule.size ? schedule.size : ""}
-      ${schedule.categories.map((s) => {
-        return `${s}, `;
-      })}
+      <html>
+      <head>
+         <link
+                        href="https://fonts.googleapis.com/css2?family=Inter"
+                        rel="stylesheet"
+                        />
+                    <style>
+                        body {
+                        font-family: "Inter";
+                        }
+                    </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Donation Details Email</title>
+      </head>
+      <body>
+         <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey there ${firstName}!</h2>
+        <pstyle="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;>Thank you for scheduling a donation to your local community fridge.
+          <br />
+          <br />
+          Here is a summary of your upcoming donation:
+        </p>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+                            Proposed drop-off time
+                        </h2>
+                        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                            ${dayjs(startTimeString).format("dddd, MMMM D")}
+                            <br />
+                            ${dayjs(startTimeString).format("h:mma")} - ${dayjs(
+        endTimeString,
+      ).format("h:mm a")}
+      <br />
+      ${frequencyString}
+                        </p>
+                        <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+                            Volunteer information
+                        </h2>
+                        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                            ${
+                              schedule.volunteerNeeded
+                                ? "Volunteer required"
+                                : ""
+                            }
+                            <br/>
+                            ${schedule.isPickup ? "Pickup required" : ""}
+                            <br/>
+                            ${schedule.isPickup ? schedule.pickupLocation : ""}
+                            <br/>
+                            ${
+                              schedule.notes
+                                ? `Additional Notes: ${schedule.notes}`
+                                : ""
+                            }
+                        </p>
+                    </td>
+                    <td>
+                        <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+                            Donation information
+                        </h2>
+                        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                            ${schedule.size}
+                            <br/>
+                            ${schedule.categories.join(", ")}
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+     
+       <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
+        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;>Community Fridge KW</p>   
+      </body>
+    </html>
       `;
 
       this.emailService.sendEmail(

@@ -12,6 +12,13 @@ import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
 
 import testSql from "../../../testUtils/testDb";
+import IUserService from "../../interfaces/userService";
+import UserService from "../userService";
+import nodemailerConfig from "../../../nodemailer.config";
+import IEmailService from "../../interfaces/emailService";
+import EmailService from "../emailService";
+import IDonorService from "../../interfaces/donorService";
+import DonorService from "../donorService";
 
 const RECURRING_DONATION_ID = "1";
 
@@ -109,7 +116,14 @@ describe("pg schedulingService", () => {
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
-    schedulingService = new SchedulingService();
+    const userService: IUserService = new UserService();
+    const emailService: IEmailService = new EmailService(nodemailerConfig);
+    const donorService: IDonorService = new DonorService();
+    schedulingService = new SchedulingService(
+      userService,
+      emailService,
+      donorService,
+    );
     await User.bulkCreate(testUsersDb);
     await Donor.bulkCreate(testDonorsDb);
   });
