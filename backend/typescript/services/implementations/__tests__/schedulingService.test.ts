@@ -13,6 +13,8 @@ import SchedulingService from "../schedulingService";
 
 import testSql from "../../../testUtils/testDb";
 
+const RECURRING_DONATION_ID = "1";
+
 const testUsersDb = [
   {
     first_name: "Test",
@@ -71,6 +73,7 @@ const testSchedules = [
     status: "Pending",
     volunteerNeeded: false,
     frequency: "Daily",
+    recurringDonationId: RECURRING_DONATION_ID,
     recurringDonationEndDate: new Date("2021-09-03T00:00:00.000Z"),
     notes: "these are the copied notes",
   },
@@ -84,24 +87,8 @@ const testSchedules = [
     status: "Pending",
     volunteerNeeded: false,
     frequency: "Monthly",
+    recurringDonationId: RECURRING_DONATION_ID,
     recurringDonationEndDate: new Date("2021-10-01T00:06:00.000Z"),
-    notes: "these are the copied notes",
-  },
-];
-
-const invalidTestSchedule = [
-  {
-    donorId: "2",
-    categories: ["Non-perishables"],
-    size: "medium",
-    isPickup: true,
-    pickupLocation: "copied location",
-    dayPart: "Morning (6am - 11am)",
-    startTime: new Date("2021-10-30T00:50:00.000Z"),
-    endTime: new Date("2021-10-30T00:00:00.000Z"),
-    status: "Pending",
-    volunteerNeeded: false,
-    frequency: "Weekly",
     notes: "these are the copied notes",
   },
 ];
@@ -136,6 +123,7 @@ describe("pg schedulingService", () => {
     await Scheduling.bulkCreate(schedules);
 
     const res = await schedulingService.getSchedulings();
+
     expect(res).toMatchObject(testSchedules);
   });
 
@@ -430,5 +418,31 @@ describe("pg schedulingService", () => {
       });
       expect(schedulingsDbAfterDelete.length).toBe(testSchedules.length - 1);
     }
+  });
+
+  test("deleteRecurringScheduling", async () => {
+    const schedules = testSchedules.map((schedule) => {
+      const scheduleSnakeCase: Record<
+        string,
+        string | string[] | boolean | number | Date | undefined
+      > = {};
+      Object.entries(schedule).forEach(([key, value]) => {
+        scheduleSnakeCase[snakeCase(key)] = value;
+      });
+      return scheduleSnakeCase;
+    });
+
+    await Scheduling.bulkCreate(schedules);
+
+    const recurringIdCount = schedules.filter((schedule) => schedule.recurring_donation_id === RECURRING_DONATION_ID).length;
+
+    const res = await schedulingService.deleteSchedulingByRecurringDonationId(
+      RECURRING_DONATION_ID
+    );
+    const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll();
+    schedulingsDbAfterDelete.forEach((scheduling: Scheduling) => {
+      expect(scheduling.recurring_donation_id).not.toBe(RECURRING_DONATION_ID);
+    });
+    expect(schedulingsDbAfterDelete.length).toBe(testSchedules.length - recurringIdCount);
   });
 });
