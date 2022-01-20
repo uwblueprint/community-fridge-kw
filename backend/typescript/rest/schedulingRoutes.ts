@@ -119,10 +119,23 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
   }
 });
 
-/* Delete scheduling by id */
-schedulingRouter.delete("/:id", async (req, res) => {
+/* Delete scheduling by id (e.g. /scheduling/63)
+  and takes optional query for recurring donation 
+  id to delete by recurring donations (e.g. /scheduling/63?recurringDonationId=1)
+*/
+schedulingRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
-  if (id) {
+  const { recurringDonationId } = req.query;
+  if (recurringDonationId) {
+    try {
+      await schedulingService.deleteSchedulingByRecurringDonationId(
+        recurringDonationId as string,
+      );
+      res.status(204).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  } else if (id) {
     try {
       await schedulingService.deleteSchedulingById(id);
       res.status(204).send();

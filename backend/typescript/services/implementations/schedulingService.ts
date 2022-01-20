@@ -437,6 +437,26 @@ class SchedulingService implements ISchedulingService {
       throw error;
     }
   }
+
+  async deleteSchedulingByRecurringDonationId(
+    recurring_donation_id: string,
+  ): Promise<void> {
+    try {
+      const numsDestroyed = await Scheduling.destroy({
+        where: { recurring_donation_id },
+      });
+      if (numsDestroyed <= 0) {
+        throw new Error(
+          `scheduling with recurring_donation_id ${recurring_donation_id} was not deleted.`,
+        );
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to delete scheduling. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
 }
 
 export default SchedulingService;
