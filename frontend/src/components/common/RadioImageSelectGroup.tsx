@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import {
   Box,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -62,6 +63,7 @@ const RadioImageSelectButton = (props: any) => {
       <input {...input} />
       {invalid ? (
         <Box
+          h="100%" 
           {...checkbox}
           {...RadioButtonStyle.default}
           _checked={RadioButtonStyle.selected}
@@ -71,6 +73,7 @@ const RadioImageSelectButton = (props: any) => {
         </Box>
       ) : (
         <Box
+          h="100%" 
           {...checkbox}
           {...RadioButtonStyle.default}
           _checked={RadioButtonStyle.selected}
@@ -100,7 +103,16 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
     >
       {isDesktop ? (
         <VStack p="20px">
-          <Text textStyle="mobileBody">{v.size}</Text>
+          <Flex alignItems="flex-start">
+            <Radio
+              isChecked={v.size === value}
+              mx="10px"
+              colorScheme="raddish"
+              size="md"
+              mt="8px"
+            />
+            <Text textStyle="mobileBody">{v.size}</Text>
+          </Flex>
           <Image
             objectFit="fill"
             src={v.image}
@@ -145,12 +157,11 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
         Size/quantity of donation
       </FormLabel>
       <Grid
-        templateRows={{ base: "repeat(4, 1fr)", md: "repeat(2, 1fr)" }}
-        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+        templateRows={{ base: "repeat(4, 1fr)", md: "repeat(1, 1fr)", lg: "repeat(1, 1fr)" }}
+        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(4, 4fr)" }}
         rowGap={4}
         columnGap={6}
         {...group}
-        maxWidth="600px"
       >
         {radioImageSelectButtons}
       </Grid>
