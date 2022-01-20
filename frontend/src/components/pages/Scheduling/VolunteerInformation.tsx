@@ -12,6 +12,7 @@ import {
   Textarea,
   VStack,
 } from "@chakra-ui/react";
+import { format } from "date-fns";
 import React, { useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -149,10 +150,10 @@ const VolunteerInformation = ({
         maxWidth="500px"
       >
         <Text textStyle="mobileHeader4">Proposed Drop-off Time</Text>
-        <Text textStyle="mobileBody">{new Date(startTime).toLocaleDateString([], {weekday: 'long', month: 'long', day: 'numeric' })}</Text>
+        <Text textStyle="mobileBody">{format(new Date(startTime), "EEEE, MMMM d")}</Text>
         <Text textStyle="mobileBody">
-          {new Date(startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).replace(/^(?:00:)?0?/, '')}-
-          {new Date(endTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}).replace(/^(?:00:)?0?/, '')}
+          {format(new Date(startTime), "h:mm aa")}-
+          {format(new Date(endTime), "h:mm aa")}
         </Text>
         <Text textStyle="mobileBody">{frequency}</Text>
       </Box>
