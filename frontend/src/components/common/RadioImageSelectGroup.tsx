@@ -39,7 +39,7 @@ const RadioImageSelectButton = (props: any) => {
       cursor: "pointer",
       borderWidth: "1px",
       borderRadius: "6",
-      borderColor: "#D8DDE0",
+      borderColor: "mold.100",
       boxShadow: "md",
       padding: "12px",
       color: "hubbard.100",
