@@ -19,7 +19,7 @@ import {
 import moment from "moment";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { format } from "date-fns";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
@@ -240,10 +240,10 @@ const SelectDateTime = ({
     // update frequency labels
     const newFrequencyLabels = [...frequencies];
     newFrequencyLabels.forEach((freq, i) => {
-      if (freq === "Weekly") {
-        newFrequencyLabels[i] = `Weekly on ${selectedDateObj.toLocaleString('en-us', {  weekday: 'long' })}s`;
-      } else if (freq === "Monthly") {
-        newFrequencyLabels[i] = `Monthly on the ${selectedDateObj.getDate()}`;
+      if (freq === frequencies[2]) {
+        newFrequencyLabels[i] = `Weekly on ${format(new Date(selectedDateObj), "EEEE")}s`;
+      } else if (freq === frequencies[3]) {
+        newFrequencyLabels[i] = `Monthly on the ${format(new Date(selectedDateObj), "do")}`;
       }
     });
     setFrequencyLabels(newFrequencyLabels);

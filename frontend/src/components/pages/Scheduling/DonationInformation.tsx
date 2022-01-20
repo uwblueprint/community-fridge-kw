@@ -38,7 +38,7 @@ const DonationInformation: any = ({
     size: "",
   });
 
-  const [showItemTypes, setShowItemTypes] = useState<boolean>(false);
+  const [showDonationItemTypes, setShowDonationItemTypes] = useState<boolean>(false);
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
 
   const handleChange = (
@@ -51,17 +51,12 @@ const DonationInformation: any = ({
       size: "",
     });
 
-    setShowItemTypes(true);
+    setShowDonationItemTypes(true);
   };
 
   const checkSubmit = (e: React.ChangeEvent<HTMLInputElement>, item: string) => {
     const newCategories = e.target.checked ? [...categories, item] : categories.filter((category) => category !== item);
-    
-    if (newCategories.length > 0) {
-      setCanSubmit(true);
-    } else {
-      setCanSubmit(false);
-    }
+    setCanSubmit(!!newCategories.length);
   }
 
   const handleCheckboxChange = (
@@ -179,7 +174,7 @@ const DonationInformation: any = ({
         }}
       />
 
-      {showItemTypes && <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
+      {showDonationItemTypes && <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
         <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
           Type of item(s)
         </FormLabel>
