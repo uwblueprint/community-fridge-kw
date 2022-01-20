@@ -107,15 +107,15 @@ const SelectDateTime = ({
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
-    frequency === "One time donation" || frequency === "",
+    frequency === frequencies[0] || frequency === "",
   );
   const [recurringEndDate, setRecurringEndDate] = useState<Date>(new Date(startTime));
 
   React.useEffect(() => {
-    // Need to set frequency here since "One time donation"
+    // Need to set frequency here since "One time"
     // is default value in desktop dropdown
     if (isDesktop && isOneTimeDonation) {
-      setForm({ target: { name: "frequency", value: "One time donation" } });
+      setForm({ target: { name: "frequency", value: frequencies[0] } });
     }
     
     // fetch schedules
@@ -177,7 +177,7 @@ const SelectDateTime = ({
       checkSubmit(true);
     } else if (name === "frequency") {
       const val = e.toString();
-      if (val === "One time donation") {
+      if (val === frequencies[0]) {
         setIsOneTimeDonation(true);
         checkSubmit(false);
       } else {
@@ -294,7 +294,7 @@ const SelectDateTime = ({
     if (!frequency) {
       valid = false;
       newErrors.frequency = ErrorMessages.requiredField;
-    } else if (frequency !== "One time donation") {
+    } else if (frequency !== frequencies[0]) {
       if (!recurringDonationEndDate) {
         valid = false;
         newErrors.recurringDonationEndDate = ErrorMessages.requiredField;
