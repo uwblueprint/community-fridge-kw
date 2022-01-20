@@ -71,6 +71,7 @@ const Dashboard = (): JSX.Element => {
           Schedule new donation
         </Button>
       </Stack>
+<<<<<<< HEAD
       <Box
         display={{ lg: "flex" }}
         flexDirection="row"
@@ -108,6 +109,52 @@ const Dashboard = (): JSX.Element => {
             </Box>
           </Flex>
         )}
+=======
+      <Text mt="4rem" textStyle="mobileHeader2" pb="0px">
+        {`${month} ${year}`}
+      </Text>
+      <Box display={{ lg: "flex" }} flexDirection="row" flexWrap="wrap">
+        <Box
+          display={{ lg: "flex" }}
+          flexDirection="row"
+          flexWrap="wrap"
+          marginTop={["60px", "70px"]}
+        >
+          {schedules.length > 0 ? (
+            schedules.map((scheduleObject: Schedule, id) => (
+              <DropoffCard key={id} schedule={scheduleObject!} />
+            ))
+          ) : (
+            <Box>
+              <Box 
+                display={{ lg: "flex" }}
+                flexWrap="wrap"
+                backgroundColor="squash.100"
+                padding={{ base: "0px", md: "3rem" }}
+              >
+                <Text
+                  p={{ base: "28px", md: "0px" }}
+                  color="black.500"
+                  textStyle="mobileBody"
+                >
+                  You currently have no upcoming donations scheduled! &nbsp;
+                </Text>
+                <Text
+                  pl={{ base: "28px", md: "0px" }}
+                  pr={{ base: "28px", md: "0px" }}
+                  pb={{ base: "28px", md: "0px" }}
+                  color="black.500"
+                  textStyle="mobileBody"
+                >
+                  Schedule a donation today to start giving back. 
+                </Text>
+              </Box>
+              <Box>{}</Box>
+   
+              </Box>
+          )}
+        </Box>
+>>>>>>> d5371af (changed text spacing again)
       </Box>
     </Container>
   );

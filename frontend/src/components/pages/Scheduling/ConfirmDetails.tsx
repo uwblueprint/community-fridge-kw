@@ -107,15 +107,16 @@ const ConfirmDetails = ({
       ) : (
         <SchedulingProgressBar activeStep={3} totalSteps={4} />
       )}
-        <Text textStyle="mobileHeader1" mt="1em" direction="row" display={{ md: "flex" }}> 
+        <Text textStyle="mobileHeader2" mt="1em" direction="row" display={{ md: "flex" }} mb="1em" > 
           {isBeingEdited? "Donation Details": "Confirm Donation Details"}
+          &nbsp;&nbsp;&nbsp;
           <Badge
             borderRadius="11px"
             pl="18px"
             pr="18px"
             pt="-5px"
             pb="-5px"
-            ml={{sm: "2em"}}
+            ml={{md: "5px"}}
             color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
             backgroundColor={`${(colorMap as any)[currentSchedule?.frequency]}.50`}
           >   
@@ -141,14 +142,14 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader3">Drop-off Information</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Proposed Drop-off Time</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Proposed Drop-off Time</Text>
           <Text textStyle="mobileBody">
             {dateText(startDateLocal)}
           </Text>
           <Text textStyle="mobileBody">
             {`${startTimeLocal} - ${endTimeLocal}`}
           </Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Frequency</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Frequency</Text>
           <HStack spacing='4px'>
           <Text textStyle="mobileBodyBold" color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}>{currentSchedule.frequency}</Text>
           <Text>{currentSchedule.frequency==="Weekly"? ` on ${dayText(startDateLocal)}s`: '' }</Text>
@@ -156,9 +157,12 @@ const ConfirmDetails = ({
 
           {nextDateText(startDateLocal) !== null || currentSchedule.frequency !== "One time"? (
             <Box>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Next Drop-Off</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Next Drop-Off</Text>
           <Text textStyle="mobileBody">
             {nextDateText(startDateLocal)}
+          </Text>
+          <Text textStyle="mobileBody">
+            {`${startTimeLocal} - ${endTimeLocal}`}
           </Text> </Box>): null}
         </Box>
       </Box>
@@ -181,9 +185,9 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader3">Donation Information</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Size</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Size</Text>
           <Text textStyle="mobileBody">{currentSchedule.size}</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Item Category</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Item Category</Text>
           <Text textStyle="mobileBody">
             {currentSchedule.categories.join(", ")}
           </Text>
@@ -208,20 +212,20 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader3">Volunteer Information</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Volunteer Needed</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Volunteer Needed</Text>
           <Text textStyle="mobileBody">{currentSchedule.volunteerNeeded? "Yes": "No"}</Text>
-          <Text textStyle="mobileSmall"color="hubbard.100" pt="1em">Pickup Needed</Text>
+          <Text textStyle="mobileSmall"color="hubbard.100" pt="1.4em">Pickup Needed</Text>
           <Text textStyle="mobileBody">{currentSchedule.isPickup? "Yes": "No"}</Text>
 
           
           {currentSchedule.isPickup && (
             <Box> 
-              <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Address</Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Address</Text>
               <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text> 
              </Box>
           )}
           <Box>
-            <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Additional notes</Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Additional notes</Text>
             <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
           </Box>
         </Box>
@@ -229,15 +233,15 @@ const ConfirmDetails = ({
 
       <Box m="3em 0" pl="0" align="left">
         <Text textStyle="mobileHeader3" >Donor Information</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Name</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Name</Text>
         <Text textStyle="mobileBody">
           {currentDonor.firstName} {currentDonor.lastName}
         </Text>
-        <Text textStyle="mobileSmall"color="hubbard.100" pt="1em">Email</Text>
+        <Text textStyle="mobileSmall"color="hubbard.100" pt="1.4em">Email</Text>
         <Text textStyle="mobileBody">{currentDonor.email}</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Phone</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Phone</Text>
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Organization</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Organization</Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
       {isBeingEdited && (
