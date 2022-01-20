@@ -1,7 +1,7 @@
 .rmdp-mobile.rmdp-wrapper {
-    border: none !important;
-    margin-top: 25px;
-    margin-bottom: 25px;
+  border: none;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 .rmdp-mobile.desktop .rmdp-day-picker > div {

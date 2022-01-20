@@ -16,7 +16,7 @@ export default function BackButton({isBeingEdited, onSaveClick, previous}: BackB
         ) : (
         <Button
           onClick={previous}
-          paddingLeft="0 !important"
+          paddingLeft="0"
           backgroundColor="transparent"
         >
           <ArrowBackIcon w={8} h={5}/> Back
