@@ -8,9 +8,11 @@ import {
   IconButton,
   Text,
   Stack,
+  Flex,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { format, isToday, isTomorrow, add, isBefore} from "date-fns";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -55,6 +57,38 @@ const ConfirmDetails = ({
     setCurrentDonor(donorResponse);
   };
 
+  const startDateLocal = new Date(currentSchedule.startTime);
+  const endDateLocal = new Date(currentSchedule.recurringDonationEndDate);
+  const startTimeLocal = format(new Date(currentSchedule.startTime), "K:mm aa");
+  const endTimeLocal = format(new Date(currentSchedule.endTime), "K:mm aa");
+  
+  const dayText = (startDate: Date) => {
+    return format(startDate, "eeee");
+  }
+  const dateText = (startDate: Date) => {
+    return format(startDate, "MMMM d, yyyy");
+  }
+
+  const nextDateText = (startDate: Date) => {
+    let addOptions = {};
+    switch(currentSchedule.frequency) {
+      case "Weekly":
+        addOptions = {weeks: 1,}
+        break;
+      case "Daily":
+        addOptions = {days: 1,}
+        break;
+      case "Monthly":
+        addOptions = {months: 1,}
+        break;
+      default: break;
+    }
+    const result = add(startDate, addOptions);
+    if (!isBefore(result, endDateLocal)) return null;
+    return dateText(result);
+
+  }
+
   useEffect(() => {
     getDonorData();
   }, [currentSchedule.id]);
@@ -73,12 +107,10 @@ const ConfirmDetails = ({
       ) : (
         <SchedulingProgressBar activeStep={3} totalSteps={4} />
       )}
-
-        
         <Text textStyle="mobileHeader1" mt="1em" direction="row" display={{ md: "flex" }}> 
           {isBeingEdited? "Donation Details": "Confirm Donation Details"}
           <Badge
-            borderRadius="12px"
+            borderRadius="11px"
             pl="18px"
             pr="18px"
             pt="-5px"
@@ -109,16 +141,25 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader3">Drop-off Information</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Proposed drop-off time</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Proposed Drop-off Time</Text>
           <Text textStyle="mobileBody">
-            {new Date(currentSchedule.startTime).toDateString()}
+            {dateText(startDateLocal)}
           </Text>
           <Text textStyle="mobileBody">
-            {new Date(currentSchedule.startTime).toLocaleTimeString()}-
-            {new Date(currentSchedule.endTime).toLocaleTimeString()}
+            {`${startTimeLocal} - ${endTimeLocal}`}
           </Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Frequency</Text>
+          <HStack spacing='4px'>
           <Text textStyle="mobileBodyBold" color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}>{currentSchedule.frequency}</Text>
+          <Text>{currentSchedule.frequency==="Weekly"? ` on ${dayText(startDateLocal)}s`: '' }</Text>
+          </HStack>
+
+          {nextDateText(startDateLocal) !== null || currentSchedule.frequency !== "One time"? (
+            <Box>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1em">Next Drop-Off</Text>
+          <Text textStyle="mobileBody">
+            {nextDateText(startDateLocal)}
+          </Text> </Box>): null}
         </Box>
       </Box>
 
