@@ -17,3 +17,5 @@ export const VIEW_DONATIONS = "/view-donations";
 export const ACCOUNT_PAGE = "/account";
 
 export const ACTION = "/action";
+
+export const USER_MANAGEMENT_PAGE = "/user-management";
