@@ -111,6 +111,13 @@ const schedules = testSchedules.map((schedule) => {
   return scheduleSnakeCase;
 });
 
+jest.mock("nodemailer", () => {
+  const createTransport = jest.fn().mockReturnValue({
+    sendMail: jest.fn(),
+  });
+  return { createTransport };
+});
+
 describe("pg schedulingService", () => {
   let schedulingService: SchedulingService;
 
