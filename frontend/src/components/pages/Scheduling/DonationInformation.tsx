@@ -38,8 +38,9 @@ const DonationInformation: any = ({
     size: "",
   });
 
-  const [showDonationItemTypes, setShowDonationItemTypes] = useState<boolean>(false);
-  const [canSubmit, setCanSubmit] = useState<boolean>(false);
+  const getSubmitState = () => {
+    return !!formValues.size && !!formValues.categories.length;
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -50,14 +51,7 @@ const DonationInformation: any = ({
       ...formErrors,
       size: "",
     });
-
-    setShowDonationItemTypes(true);
   };
-
-  const checkSubmit = (e: React.ChangeEvent<HTMLInputElement>, item: string) => {
-    const newCategories = e.target.checked ? [...categories, item] : categories.filter((category) => category !== item);
-    setCanSubmit(!!newCategories.length);
-  }
 
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -75,8 +69,6 @@ const DonationInformation: any = ({
       ...formErrors,
       categories: "",
     });
-
-    checkSubmit(e, item);
   };
 
   const DonationSizes: DonationSizeInterface[] = [
@@ -174,7 +166,7 @@ const DonationInformation: any = ({
         }}
       />
 
-      {showDonationItemTypes && <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
+      {!!formValues.size && <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
         <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
           Type of item(s)
         </FormLabel>
@@ -182,7 +174,7 @@ const DonationInformation: any = ({
           {categoriesOptions.map((item, i) => (
             <Checkbox
               key={i}
-              colorScheme="black"
+              colorScheme="raddish"
               isChecked={categories.includes(item)}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleCheckboxChange(e, item);
@@ -197,7 +189,7 @@ const DonationInformation: any = ({
       <NextButton 
         isBeingEdited={isBeingEdited}
         go={go}
-        canSubmit={canSubmit}
+        canSubmit={getSubmitState()}
         handleNext={handleNext}
       />
     </Container>

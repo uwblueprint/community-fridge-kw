@@ -87,6 +87,11 @@ const SelectDateTime = ({
     return moment(time24Hour, "HH:mm").format("h:mm A");
   };
 
+  const getSubmitState = () => {
+    const filled = !!dayPart && !!startTime && !!endTime && !!frequency;
+    return frequency === frequencies[0] ? filled : filled && !!recurringDonationEndDate;
+  }
+
   // setting state initial values
   const [date, setDate] = useState<Date>(new Date(startTime));
   const [timeRange, setTimeRange] = useState(
@@ -102,7 +107,6 @@ const SelectDateTime = ({
   const [showTimeofDay, setShowTimeofDay] = useState<boolean>(
     false
   );
-  const [canSubmit, setCanSubmit] = useState<boolean>(false);
 
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -148,13 +152,6 @@ const SelectDateTime = ({
     setIcons(getIconsPerTimeSlot(selectedDayPart, selectedDate));
   };
 
-  const checkSubmit = (hasRecurringDonationEndDate: boolean) => {
-    const reccurring = hasRecurringDonationEndDate ? (frequency !== "" && recurringDonationEndDate !== "") : true;
-    const valuesFilled = date && dayPart && timeRange && reccurring;
-
-    return valuesFilled ? setCanSubmit(true) : setCanSubmit(false);
-  }
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | string,
     name: string,
@@ -168,15 +165,12 @@ const SelectDateTime = ({
         ...formErrors,
         dayPart: "",
       });
-      checkSubmit(true);
     } else if (name === "frequency") {
       const val = e.toString();
       if (val === frequencies[0]) {
         setIsOneTimeDonation(true);
-        checkSubmit(false);
       } else {
         setIsOneTimeDonation(false);
-        checkSubmit(true);
       }
       setFormErrors({
         ...formErrors,
@@ -213,7 +207,6 @@ const SelectDateTime = ({
       ...formErrors,
       timeRange: "",
     });
-    checkSubmit(true);
   };
 
   const handleDateSelect = (selectedDate: DateObject) => {
@@ -228,8 +221,6 @@ const SelectDateTime = ({
       ...formErrors,
       date: "",
     });
-
-    checkSubmit(false);
 
     // update frequency labels
     const newFrequencyLabels = [...frequencies];
@@ -258,8 +249,6 @@ const SelectDateTime = ({
       ...formErrors,
       recurringDonationEndDate: "",
     });
-
-    checkSubmit(false);
   };
 
   const validateForm = () => {
@@ -455,7 +444,7 @@ const SelectDateTime = ({
       <NextButton 
         isBeingEdited={isBeingEdited}
         go={go}
-        canSubmit={canSubmit}
+        canSubmit={getSubmitState()}
         handleNext={handleNext}
         />
     </Container>
