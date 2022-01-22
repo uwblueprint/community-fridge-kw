@@ -13,15 +13,11 @@ import {
 import React, { ChangeEvent, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import xl from "../../../assets/donation-sizes/lg.png";
-import lg from "../../../assets/donation-sizes/md.png";
-import md from "../../../assets/donation-sizes/sm.png";
-import sm from "../../../assets/donation-sizes/xs.png";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
-import { DonationSizeInterface, SchedulingStepProps } from "./types";
+import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 
 const DonationInformation: any = ({
   formValues,
@@ -64,44 +60,6 @@ const DonationInformation: any = ({
       categories: "",
     });
   };
-
-  const DonationSizes: DonationSizeInterface[] = [
-    {
-      image: sm,
-      size: "Small",
-      description: "Fills less than a shelf of the fridge/pantry",
-    },
-    {
-      image: md,
-      size: "Medium",
-      description: "Approximately fills one shelf of the fridge/pantry",
-    },
-    {
-      image: lg,
-      size: "Large",
-      description: "Approximately fills two shelves of the fridge/pantry",
-    },
-    {
-      image: xl,
-      size: "Extra-large",
-      description:
-        "Approximately fills four shelves of the fridge/ pantry (full capacity)",
-    },
-  ];
-
-  const categoriesOptions = [
-    "Dry packaged goods",
-    "Non-perishables",
-    "Fresh produce",
-    "Bread and baked goods",
-    "Oil, spreads, and seasoning",
-    "Tea and coffee",
-    "Frozen meals",
-    "Prepared meals",
-    "Non-alcoholic drinks and juices",
-    "Essential items (masks, hand sanitizer, bags)",
-    "Hygiene products (tampons, pads, soap, etc.)",
-  ];
 
   const validateForm = () => {
     const newErrors = {
