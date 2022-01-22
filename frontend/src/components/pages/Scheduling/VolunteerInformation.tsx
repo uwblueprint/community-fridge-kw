@@ -219,7 +219,6 @@ const VolunteerInformation = ({
               What is the specific time you require assistance?
             </FormLabel>
             <Input
-              colorScheme="raddish"
               value={volunteerTime}
               type="time"
               onChange={(e) => {

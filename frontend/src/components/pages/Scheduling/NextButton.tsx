@@ -9,7 +9,6 @@ export default function NextButton({isBeingEdited, go, canSubmit, handleNext}: N
         <Button
           onClick={() => go && go("confirm donation details")}
           variant="cancelNavigation"
-          w={{ md: "300px" }}
         >
           Cancel
         </Button>
@@ -18,7 +17,6 @@ export default function NextButton({isBeingEdited, go, canSubmit, handleNext}: N
           isDisabled={!canSubmit}
           onClick={handleNext}
           variant="navigation"
-          width={{ md: "300px" }}
         >
           Next
         </Button>
