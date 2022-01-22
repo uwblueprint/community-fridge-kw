@@ -390,7 +390,10 @@ const SelectDateTime = ({
             }}
           >
             {frequencies.map((freq, i) => (
-              <option key={i} value={freq}>
+              <option
+                key={i}
+                value={freq === "Monthly (every 4 weeks)" ? "Monthly" : freq}
+              >
                 {freq}
               </option>
             ))}

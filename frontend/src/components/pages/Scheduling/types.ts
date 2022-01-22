@@ -74,4 +74,9 @@ export const timeRanges = {
   night: ["9:00 PM - 10:00 PM", "10:00 PM - 11:00 PM", "11:00 PM - 12:00 AM"],
 };
 
-export const frequencies = ["One time", "Daily", "Weekly", "Monthly"];
+export const frequencies = [
+  "One time",
+  "Daily",
+  "Weekly",
+  "Monthly (every 4 weeks)",
+];
