@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   Spinner,
   Stack,
   Text,
@@ -77,10 +78,30 @@ const Dashboard = (): JSX.Element => {
             <DropoffCard key={id} schedule={scheduleObject!} />
           ))
         ) : (
-          <Text as="i" pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
-            You currently have no upcoming donations scheduled for the next two
-            weeks.
-          </Text>
+          <Flex paddingTop="1.5rem">
+            <Box
+              display={{ lg: "flex" }}
+              width={{ base: "default", md: "100%" }}
+              backgroundColor="squash.100"
+              padding={{ base: "0px", md: "3rem" }}
+            >
+              <Text
+                p={{ base: "28px", md: "0px" }}
+                color="black.500"
+                textStyle="mobileBody"
+              >
+                You currently have no upcoming donations scheduled! &nbsp;
+              </Text>
+              <Text
+                pl={{ base: "28px", md: "0px" }}
+                px={{ base: "28px", md: "0px" }}
+                color="black.500"
+                textStyle="mobileBody"
+              >
+                Schedule a donation today to start giving back.
+              </Text>
+            </Box>
+          </Flex>
         )}
       </Box>
     </Container>

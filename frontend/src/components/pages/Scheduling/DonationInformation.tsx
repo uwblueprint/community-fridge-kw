@@ -13,16 +13,12 @@ import {
 import React, { ChangeEvent, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import xl from "../../../assets/donation-sizes/lg.png";
-import lg from "../../../assets/donation-sizes/md.png";
-import md from "../../../assets/donation-sizes/sm.png";
-import sm from "../../../assets/donation-sizes/xs.png";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
 import BackButton from "./BackButton";
-import { DonationSizeInterface, SchedulingStepProps } from "./types";
+import { categoriesOptions, DonationSizes, DonationSizeInterface, SchedulingStepProps } from "./types";
 import NextButton from "./NextButton";
 
 const DonationInformation: any = ({
@@ -108,7 +104,6 @@ const DonationInformation: any = ({
     "Essential items (masks, hand sanitizer, bags)",
     "Hygiene products (tampons, pads, soap, etc.)",
   ];
-
   const validateForm = () => {
     const newErrors = {
       categories: "",
