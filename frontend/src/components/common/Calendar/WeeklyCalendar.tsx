@@ -96,84 +96,48 @@ export function WeeklyBody<EventItem>({
     const newDate = new Date();
     newDate.setDate(datePassed.getDate() + i);
     return newDate;
-  }
+  };
 
   return (
     <>
-      {isMobile ? (
-        <Grid templateColumns="repeat(2, 1fr)" gap={2}>
-          {schedules.map((schedule) => {
-            const scheduledDate = new Date(schedule?.startTime as string);
+      {[...Array(isMobile ? 1 : 3)].map((_, i) => {
+        return (
+          <div key={i}>
+            <VStack justifyItems="flex-start" alignContent="start" pb="5rem">
+              <DayButton
+                day={{
+                  day: selectedDay.getDay() + i,
+                  label: ithDay(selectedDay, i).toLocaleString("en-us", {
+                    weekday: "long",
+                  }),
+                }}
+              />
 
-            if (
-              schedule === null ||
-              scheduledDate === null ||
-              scheduledDate.getDate() !== selectedDay!.getDate() ||
-              scheduledDate.getMonth() !== selectedDay!.getMonth() ||
-              scheduledDate.getFullYear() !== selectedDay!.getFullYear()
-            ) {
-              return null;
-            }
+              {schedules.map((schedule) => {
+                const currentDate = setDay(week, selectedDay.getDay() + i, {
+                  locale,
+                });
+                const scheduledDate = new Date(schedule?.startTime as string);
 
-            return renderItem({
-              schedule,
-              showingFullWeek: selectedDay === undefined,
-            });
-          })}
-        </Grid>
-      ) : (
-        <>
-          <>
-            {[...Array(3)].map((_, i) => {
-              return (
-                <div key={i}>
-                  <VStack
-                    justifyItems="flex-start"
-                    alignContent="start"
-                    pb="5rem"
-                  >
-                    <DayButton
-                      day={{
-                        day: selectedDay.getDay() + i,
-                        label: ithDay(selectedDay, i).toLocaleString("en-us", {
-                          weekday: "long",
-                        }),
-                      }}
-                    />
+                if (
+                  schedule === null ||
+                  scheduledDate === null ||
+                  scheduledDate.getDate() !== currentDate.getDate() ||
+                  scheduledDate.getMonth() !== currentDate.getMonth() ||
+                  scheduledDate.getFullYear() !== currentDate.getFullYear()
+                ) {
+                  return null;
+                }
 
-                    {schedules.map((schedule) => {
-                      const currentDate = setDay(
-                        week,
-                        selectedDay.getDay() + i,
-                        { locale },
-                      );
-                      const scheduledDate = new Date(
-                        schedule?.startTime as string,
-                      );
-
-                      if (
-                        schedule === null ||
-                        scheduledDate === null ||
-                        scheduledDate.getDate() !== currentDate.getDate() ||
-                        scheduledDate.getMonth() !== currentDate.getMonth() ||
-                        scheduledDate.getFullYear() !==
-                          currentDate.getFullYear()
-                      ) {
-                        return null;
-                      }
-
-                      return renderItem({
-                        schedule,
-                        showingFullWeek: selectedDay === undefined,
-                      });
-                    })}
-                  </VStack>
-                </div>
-              );
-            })}
-          </>
-        </>
-      )}
+                return renderItem({
+                  schedule,
+                  showingFullWeek: selectedDay === undefined,
+                });
+              })}
+            </VStack>
+          </div>
+        );
+      })}
     </>
   );
 }
