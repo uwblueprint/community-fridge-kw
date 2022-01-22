@@ -25,12 +25,9 @@ const schedulingRouter: Router = Router();
 // Commenting out authorization for now
 // schedulingRouter.use(isAuthorizedByRole(new Set(["Admin"])));
 
-const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
-const authService: IAuthService = new AuthService(userService, emailService);
 const donorService: IDonorService = new DonorService();
 const schedulingService: ISchedulingService = new SchedulingService(
-  userService,
   emailService,
   donorService,
 );

@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import ordinal from "ordinal";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
-import IUserService from "../interfaces/userService";
 import IDonorService from "../interfaces/donorService";
 import {
   SchedulingDTO,
@@ -34,18 +33,15 @@ function toSnakeCase(
 }
 
 class SchedulingService implements ISchedulingService {
-  userService: IUserService;
 
   emailService: IEmailService | null;
 
   donorService: IDonorService;
 
   constructor(
-    userService: IUserService,
     emailService: IEmailService | null = null,
     donorService: IDonorService,
   ) {
-    this.userService = userService;
     this.emailService = emailService;
     this.donorService = donorService;
   }

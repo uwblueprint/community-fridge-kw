@@ -123,14 +123,9 @@ describe("pg schedulingService", () => {
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
-    const userService: IUserService = new UserService();
     const emailService: IEmailService = new EmailService(nodemailerConfig);
     const donorService: IDonorService = new DonorService();
-    schedulingService = new SchedulingService(
-      userService,
-      emailService,
-      donorService,
-    );
+    schedulingService = new SchedulingService(emailService, donorService);
     await User.bulkCreate(testUsersDb);
     await Donor.bulkCreate(testDonorsDb);
   });
