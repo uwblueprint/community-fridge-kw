@@ -8,6 +8,7 @@ import {
   IconButton,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { add, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
@@ -47,15 +48,22 @@ const ConfirmDetails = ({
     next();
   };
 
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const onDeleteClick = async (isRecurring = false) => {
-    if (isRecurring) {
+  const onDeleteClick = async (isOneTimeEvent = true) => {
+    if (isOneTimeEvent) {
+      await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+    } else {
       await SchedulingAPIClient.deleteScheduleByRecurringId(
         currentSchedule?.recurringDonationId,
       );
-    } else {
-      await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
     }
+    toast({
+      title: isOneTimeEvent ? "Donation cancelled successfully" : "Donations cancelled successfully",
+      status: 'success',
+      duration: 7000,
+      isClosable: true,
+    })
     history.push(`${Routes.DASHBOARD_PAGE}`);
   };
 
@@ -103,6 +111,7 @@ const ConfirmDetails = ({
     getDonorData();
   }, [currentSchedule.id]);
 
+  console.log(currentSchedule);
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
@@ -318,14 +327,14 @@ const ConfirmDetails = ({
           >
             Cancel donation
           </Button>
-          {currentSchedule.recurringDonationId ? (
-            <DeleteRecurringModal
+          {currentSchedule.recurringDonationId === "null" ? (
+            <DeleteScheduleModal
               isOpen={isOpen}
               onClose={onClose}
               onDelete={onDeleteClick}
             />
           ) : (
-            <DeleteScheduleModal
+            <DeleteRecurringModal
               isOpen={isOpen}
               onClose={onClose}
               onDelete={onDeleteClick}

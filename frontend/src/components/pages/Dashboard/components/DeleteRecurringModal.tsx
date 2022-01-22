@@ -61,7 +61,7 @@ const DeleteRecurringModal = ({
             <Button
               width="100%"
               colorScheme="red"
-              onClick={() => onDelete(radioValue === "all")}
+              onClick={() => onDelete(radioValue === "this")}
             >
               Cancel Donation
             </Button>
