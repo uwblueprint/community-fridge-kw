@@ -92,10 +92,13 @@ export function WeeklyBody<EventItem>({
   const { locale, week } = useWeeklyCalendar();
   const daysToRender = daysInWeek({ locale });
 
-  const ithDay = (datePassed: Date, i: number): Date => {
-    const newDate = new Date();
-    newDate.setDate(datePassed.getDate() + i);
-    return newDate;
+  const getDay = (datePassed: Date, i: number): string => {
+    const datePassedDay = datePassed.getDay();
+    const updatedDay = (datePassedDay + i) % 7;
+
+    const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+
+    return days[updatedDay];
   };
 
   return (
@@ -107,9 +110,7 @@ export function WeeklyBody<EventItem>({
               <DayButton
                 day={{
                   day: selectedDay.getDay() + i,
-                  label: ithDay(selectedDay, i).toLocaleString("en-us", {
-                    weekday: "long",
-                  }),
+                  label: getDay(selectedDay, i),
                 }}
               />
 
