@@ -31,6 +31,7 @@ import {
   dayParts,
   DayPartsEnum,
   frequencies,
+  DonationFrequency,
   SchedulingStepProps,
   timeRanges,
 } from "./types";
@@ -89,7 +90,7 @@ const SelectDateTime = ({
 
   const getSubmitState = () => {
     const filled = !!dayPart && !!startTime && !!endTime && !!frequency;
-    return frequency === frequencies[0] ? filled : filled && !!recurringDonationEndDate;
+    return frequency === DonationFrequency.DAILY ? filled : filled && !!recurringDonationEndDate;
   }
 
   // setting state initial values
@@ -100,7 +101,6 @@ const SelectDateTime = ({
   const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(
     getTimeSlot(dayPart),
   );
-  const [frequencyLabels, setFrequencyLabels] = useState<string[]>(frequencies);
   const [showTimeofDay, setShowTimeofDay] = useState<boolean>(
     false
   );
@@ -108,6 +108,18 @@ const SelectDateTime = ({
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [recurringEndDate, setRecurringEndDate] = useState<Date>(new Date(startTime));
+
+  const getFrequencyLabels = () => {
+    const newFrequencyLabels = [...frequencies];
+    newFrequencyLabels.forEach((freq, i) => {
+      if (freq === DonationFrequency.WEEKLY) {
+        newFrequencyLabels[i] = `Weekly on ${format(new Date(date), "EEEE")}s`;
+      } else if (freq === DonationFrequency.MONTHLY) {
+        newFrequencyLabels[i] = `Monthly on the ${format(new Date(date), "do")}`;
+      }
+    });
+    return newFrequencyLabels;
+  }
 
   React.useEffect(() => {
     // fetch schedules
@@ -195,7 +207,7 @@ const SelectDateTime = ({
       timeRange: "",
     });
   };
-  
+
   const handleDateSelect = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setDate(selectedDateObj);
@@ -206,17 +218,6 @@ const SelectDateTime = ({
       ...formErrors,
       date: "",
     });
-
-    // update frequency labels
-    const newFrequencyLabels = [...frequencies];
-    newFrequencyLabels.forEach((freq, i) => {
-      if (freq === frequencies[2]) {
-        newFrequencyLabels[i] = `Weekly on ${format(new Date(selectedDateObj), "EEEE")}s`;
-      } else if (freq === frequencies[3]) {
-        newFrequencyLabels[i] = `Monthly on the ${format(new Date(selectedDateObj), "do")}`;
-      }
-    });
-    setFrequencyLabels(newFrequencyLabels);
   };
 
   const handleChangeRecurringDate = (selectedDate: DateObject) => {
@@ -262,7 +263,7 @@ const SelectDateTime = ({
     if (!frequency) {
       valid = false;
       newErrors.frequency = ErrorMessages.requiredField;
-    } else if (frequency !== frequencies[0]) {
+    } else if (frequency !== DonationFrequency.ONE_TIME) {
       if (!recurringDonationEndDate) {
         valid = false;
         newErrors.recurringDonationEndDate = ErrorMessages.requiredField;
@@ -387,7 +388,7 @@ const SelectDateTime = ({
             label="Select frequency"
             helperText="How often will this donation occur?"
             value={frequency}
-            values={frequencyLabels}
+            values={getFrequencyLabels()}
             icons={[]}
             isRequired
             isDisabled={isBeingEdited}
@@ -399,7 +400,7 @@ const SelectDateTime = ({
           <FormErrorMessage>{formErrors.frequency}</FormErrorMessage>
         </FormControl>
       )}
-      {((!!frequency && frequency !== frequencies[0]) && !!startTime && !!dayPart) && (
+      {((!!frequency && frequency !== DonationFrequency.ONE_TIME) && !!startTime && !!dayPart) && (
         <FormControl
           isRequired
           isInvalid={!!formErrors.recurringDonationEndDate}
