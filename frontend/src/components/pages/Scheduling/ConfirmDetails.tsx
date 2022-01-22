@@ -7,6 +7,7 @@ import {
   HStack,
   IconButton,
   Text,
+  useDisclosure
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -19,6 +20,8 @@ import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import { SchedulingStepProps } from "./types";
+import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
+import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
 
 const ConfirmDetails = ({
   formValues,
@@ -34,10 +37,16 @@ const ConfirmDetails = ({
     {} as DonorResponse,
   );
   const currentSchedule = formValues;
-
   const onSubmitClick = async () => {
     await SchedulingAPIClient.createSchedule(currentSchedule);
     next();
+  };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const onDeleteClick = async () => {
+    // await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+    // history.push(`${Routes.DASHBOARD_PAGE}`);
   };
 
   const getDonorData = async () => {
@@ -187,6 +196,38 @@ const ConfirmDetails = ({
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
+      {isBeingEdited && (
+        <Box m="3em 0" pl="0" align="left">
+          <Text textStyle="mobileHeader3" pb="0.8em">
+            Danger Zone
+          </Text>
+          <Text textStyle="mobileBody">
+            To cancel this schedule donation, click below.
+          </Text>
+          <Button
+            mt="1.5rem"
+            size="lg"
+            width={{ lg: "30%", base: "100%" }}
+            variant="deleteDonation"
+            onClick={onOpen}
+          >
+            Cancel donation
+          </Button>
+          {currentSchedule.recurringDonationId ? (
+            <DeleteRecurringModal 
+              isOpen={isOpen}
+              onClose={onClose}
+              onDelete={onDeleteClick}
+            />
+          ) : (
+            <DeleteScheduleModal 
+              isOpen={isOpen}
+              onClose={onClose}
+              onDelete={onDeleteClick}
+            />
+          )}
+        </Box>
+      )}
       {!isBeingEdited && (
         <HStack>
           <Button

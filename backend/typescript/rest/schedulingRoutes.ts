@@ -120,12 +120,21 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
 });
 
 /* Delete scheduling by id (e.g. /scheduling/63)
-  and takes optional query for recurring donation 
-  id to delete by recurring donations (e.g. /scheduling/63?recurringDonationId=1)
+  or deletes by recurring donation id (e.g. /scheduling?recurringDonationId=1)
 */
 schedulingRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
   const { recurringDonationId } = req.query;
+  const contentType = req.headers["content-type"];
+
+  if (id && recurringDonationId) {
+    await sendResponseByMimeType(res, 400, contentType, [
+        {
+          error: "Cannot delete by both id and recurringSchedulingId",
+        },
+      ]);
+      return;
+  } 
   if (recurringDonationId) {
     try {
       await schedulingService.deleteSchedulingByRecurringDonationId(
