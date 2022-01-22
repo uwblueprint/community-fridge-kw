@@ -1,5 +1,5 @@
 import { Box, Grid, HStack, Text, VStack } from "@chakra-ui/react";
-import { format, setDay, startOfWeek } from "date-fns";
+import { format, isThursday, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 import daysInWeek from "../../../constants/DaysInWeek";
@@ -92,6 +92,12 @@ export function WeeklyBody<EventItem>({
   const { locale, week } = useWeeklyCalendar();
   const daysToRender = daysInWeek({ locale });
 
+  const ithDay = (datePassed: Date, i: number): Date => {
+    const newDate = new Date();
+    newDate.setDate(datePassed.getDate() + i);
+    return newDate;
+  }
+
   return (
     <>
       {isMobile ? (
@@ -129,7 +135,7 @@ export function WeeklyBody<EventItem>({
                     <DayButton
                       day={{
                         day: selectedDay.getDay() + i,
-                        label: selectedDay.toLocaleString("en-us", {
+                        label: ithDay(selectedDay, i).toLocaleString("en-us", {
                           weekday: "long",
                         }),
                       }}
