@@ -14,17 +14,9 @@
   padding: 20px !important;
 }
 
-.rmdp-left, .rmdp-right {
-  display: none !important;
-}
-
 .rmdp-header {
   font-weight: 600;
   padding-left: 4px;
-}
-
-.rmdp-header > div {
-  position: absolute !important; 
 }
 
 .rmdp-week-day {
@@ -50,4 +42,23 @@
 .rmdp-input {
   width: 100%;
   height: 40px !important;
+}
+
+.rmdp-arrow {
+  border: solid #C31887 !important;
+  border-width: 0 2px 2px 0 !important;
+  margin-top: 6px; 
+}
+
+.rmdp-arrow:hover {
+  border: solid #fff !important;
+  border-width: 0 2px 2px 0 !important;
+}
+
+.rmdp-arrow-container:hover {
+  background-color: #C31887 !important;
+}
+
+.rmdp-arrow-container.disabled.rmdp-right, .rmdp-arrow-container.disabled.rmdp-left {
+ display: none !important;
 }
