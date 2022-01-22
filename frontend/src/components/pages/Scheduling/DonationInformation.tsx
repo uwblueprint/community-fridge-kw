@@ -18,6 +18,7 @@ import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
 import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
+import BackButton from "./BackButton";
 
 const DonationInformation: any = ({
   formValues,
@@ -32,6 +33,9 @@ const DonationInformation: any = ({
     size: "",
   });
 
+  const [showItemTypes, setShowItemTypes] = useState<boolean>(false);
+  const [canSubmit, setCanSubmit] = useState<boolean>(false);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -41,6 +45,8 @@ const DonationInformation: any = ({
       ...formErrors,
       size: "",
     });
+
+    setShowItemTypes(true);
   };
 
   const handleCheckboxChange = (
@@ -59,6 +65,10 @@ const DonationInformation: any = ({
       ...formErrors,
       categories: "",
     });
+
+    if (categories.length > 0) {
+      setCanSubmit(true);
+    }
   };
 
   const validateForm = () => {
@@ -98,6 +108,11 @@ const DonationInformation: any = ({
 
   return (
     <Container variant="responsiveContainer">
+      <BackButton 
+        isBeingEdited={isBeingEdited}
+        onSaveClick={onSaveClick}
+        previous={previous}
+      />
       <SchedulingProgressBar activeStep={1} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em">
         Donation Information
@@ -113,7 +128,7 @@ const DonationInformation: any = ({
         }}
       />
 
-      <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
+      {showItemTypes && <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
         <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
           Type of item(s)
         </FormLabel>
@@ -132,43 +147,27 @@ const DonationInformation: any = ({
           ))}
         </Stack>
         <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
-      </FormControl>
-
-      {isBeingEdited ? (
-        <VStack alignItems="flex-start">
-          <Button
-            onClick={onSaveClick}
-            variant="navigation"
-            w={{ base: "100%", md: "350px" }}
-          >
-            Save Changes
-          </Button>
-          <Button
-            onClick={() => go && go("confirm donation details")}
-            variant="cancelNavigation"
-            w={{ base: "100%", md: "350px" }}
-          >
-            Cancel
-          </Button>
-        </VStack>
-      ) : (
-        <HStack>
-          <Button
-            onClick={previous}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Back
-          </Button>
-          <Button
-            onClick={handleNext}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Next
-          </Button>
-        </HStack>
-      )}
+      </FormControl>}
+      <div style={{display: "flex", justifyContent: "flex-end"}}>
+          {isBeingEdited ? (
+            <Button
+              onClick={() => go && go("confirm donation details")}
+              variant="cancelNavigation"
+              w={{ md: "300px" }}
+            >
+              Cancel
+            </Button>
+          ) : (
+            <Button
+              isDisabled={!canSubmit}
+              onClick={handleNext}
+              variant="navigation"
+              width={{ md: "300px" }}
+            >
+              Next
+            </Button>
+          )}
+        </div>
     </Container>
   );
 };
