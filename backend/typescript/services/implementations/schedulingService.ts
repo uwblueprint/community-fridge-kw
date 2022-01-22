@@ -33,7 +33,6 @@ function toSnakeCase(
 }
 
 class SchedulingService implements ISchedulingService {
-
   emailService: IEmailService | null;
 
   donorService: IDonorService;
@@ -188,7 +187,7 @@ class SchedulingService implements ISchedulingService {
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
-        "Attempted to call sendEmailVerificationAfterSchedulingADonation but this instance of AuthService does not have an EmailService instance";
+        "Attempted to call sendEmailVerificationAfterSchedulingADonation but this instance of SchedulingService does not have an EmailService instance";
       Logger.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -197,8 +196,7 @@ class SchedulingService implements ISchedulingService {
       const { firstName } = donor;
 
       // Proposed drop off info
-      const { startTime } = schedule;
-      const { endTime } = schedule;
+      const { startTime, endTime } = schedule;
 
       // get string in en-us form e.g."4/20/2012, 5:10:30 PM"
       const startTimeString: string = new Date(
