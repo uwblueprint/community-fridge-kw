@@ -4,15 +4,15 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   HStack,
   IconButton,
-  Text,
   Stack,
-  Flex,
+  Text,
 } from "@chakra-ui/react";
+import { add, format, isBefore, isToday, isTomorrow } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { format, isToday, isTomorrow, add, isBefore} from "date-fns";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -46,8 +46,7 @@ const ConfirmDetails = ({
   const onDeleteClick = async () => {
     await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
     history.push(`${Routes.DASHBOARD_PAGE}`);
-    
-  }
+  };
 
   const getDonorData = async () => {
     const donorResponse = await DonorAPIClient.getDonorByUserId(
@@ -61,38 +60,38 @@ const ConfirmDetails = ({
   const endDateLocal = new Date(currentSchedule.recurringDonationEndDate);
   const startTimeLocal = format(new Date(currentSchedule.startTime), "K:mm aa");
   const endTimeLocal = format(new Date(currentSchedule.endTime), "K:mm aa");
-  
+
   const dayText = (startDate: Date) => {
     return format(startDate, "eeee");
-  }
+  };
   const dateText = (startDate: Date) => {
     return format(startDate, "MMMM d, yyyy");
-  }
+  };
 
   const nextDateText = (startDate: Date) => {
     let addOptions = {};
-    switch(currentSchedule.frequency) {
+    switch (currentSchedule.frequency) {
       case "Weekly":
-        addOptions = {weeks: 1,}
+        addOptions = { weeks: 1 };
         break;
       case "Daily":
-        addOptions = {days: 1,}
+        addOptions = { days: 1 };
         break;
       case "Monthly":
-        addOptions = {months: 1,}
+        addOptions = { months: 1 };
         break;
-      default: break;
+      default:
+        break;
     }
     const result = add(startDate, addOptions);
     if (!isBefore(result, endDateLocal)) return null;
     return dateText(result);
-
-  }
+  };
 
   useEffect(() => {
     getDonorData();
   }, [currentSchedule.id]);
-  
+
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
@@ -107,22 +106,30 @@ const ConfirmDetails = ({
       ) : (
         <SchedulingProgressBar activeStep={3} totalSteps={4} />
       )}
-        <Text textStyle="mobileHeader2" mt="1em" direction="row" display={{ md: "flex" }} mb="1em" > 
-          {isBeingEdited? "Donation Details": "Confirm Donation Details"}
-          &nbsp;&nbsp;&nbsp;
-          <Badge
-            borderRadius="11px"
-            pl="18px"
-            pr="18px"
-            pt="-5px"
-            pb="-5px"
-            ml={{md: "5px"}}
-            color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
-            backgroundColor={`${(colorMap as any)[currentSchedule?.frequency]}.50`}
-          >   
+      <Text
+        textStyle="mobileHeader2"
+        mt="1em"
+        direction="row"
+        display={{ md: "flex" }}
+        mb="1em"
+      >
+        {isBeingEdited ? "Donation Details" : "Confirm Donation Details"}
+        &nbsp;&nbsp;&nbsp;
+        <Badge
+          borderRadius="11px"
+          pl="18px"
+          pr="18px"
+          pt="-5px"
+          pb="-5px"
+          ml={{ md: "5px" }}
+          color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
+          backgroundColor={`${
+            (colorMap as any)[currentSchedule?.frequency]
+          }.50`}
+        >
           {currentSchedule?.frequency}
-          </Badge>
-        </Text>
+        </Badge>
+      </Text>
       <Box
         pl="0"
         align="left"
@@ -142,28 +149,42 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader3">Drop-off Information</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Proposed Drop-off Time</Text>
-          <Text textStyle="mobileBody">
-            {dateText(startDateLocal)}
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+            Proposed Drop-off Time
           </Text>
+          <Text textStyle="mobileBody">{dateText(startDateLocal)}</Text>
           <Text textStyle="mobileBody">
             {`${startTimeLocal} - ${endTimeLocal}`}
           </Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Frequency</Text>
-          <HStack spacing='4px'>
-          <Text textStyle="mobileBodyBold" color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}>{currentSchedule.frequency}</Text>
-          <Text>{currentSchedule.frequency==="Weekly"? ` on ${dayText(startDateLocal)}s`: '' }</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+            Frequency
+          </Text>
+          <HStack spacing="4px">
+            <Text
+              textStyle="mobileBodyBold"
+              color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
+            >
+              {currentSchedule.frequency}
+            </Text>
+            <Text>
+              {currentSchedule.frequency === "Weekly"
+                ? ` on ${dayText(startDateLocal)}s`
+                : ""}
+            </Text>
           </HStack>
 
-          {nextDateText(startDateLocal) !== null || currentSchedule.frequency !== "One time"? (
+          {nextDateText(startDateLocal) !== null ||
+          currentSchedule.frequency !== "One time" ? (
             <Box>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Next Drop-Off</Text>
-          <Text textStyle="mobileBody">
-            {nextDateText(startDateLocal)}
-          </Text>
-          <Text textStyle="mobileBody">
-            {`${startTimeLocal} - ${endTimeLocal}`}
-          </Text> </Box>): null}
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Next Drop-Off
+              </Text>
+              <Text textStyle="mobileBody">{nextDateText(startDateLocal)}</Text>
+              <Text textStyle="mobileBody">
+                {`${startTimeLocal} - ${endTimeLocal}`}
+              </Text>{" "}
+            </Box>
+          ) : null}
         </Box>
       </Box>
 
@@ -185,9 +206,13 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader3">Donation Information</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Size</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+            Size
+          </Text>
           <Text textStyle="mobileBody">{currentSchedule.size}</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Item Category</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+            Item Category
+          </Text>
           <Text textStyle="mobileBody">
             {currentSchedule.categories.join(", ")}
           </Text>
@@ -212,55 +237,78 @@ const ConfirmDetails = ({
         </Button>
         <Box>
           <Text textStyle="mobileHeader3">Volunteer Information</Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Volunteer Needed</Text>
-          <Text textStyle="mobileBody">{currentSchedule.volunteerNeeded? "Yes": "No"}</Text>
-          <Text textStyle="mobileSmall"color="hubbard.100" pt="1.4em">Pickup Needed</Text>
-          <Text textStyle="mobileBody">{currentSchedule.isPickup? "Yes": "No"}</Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+            Volunteer Needed
+          </Text>
+          <Text textStyle="mobileBody">
+            {currentSchedule.volunteerNeeded ? "Yes" : "No"}
+          </Text>
+          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+            Pickup Needed
+          </Text>
+          <Text textStyle="mobileBody">
+            {currentSchedule.isPickup ? "Yes" : "No"}
+          </Text>
 
-          
           {currentSchedule.isPickup && (
-            <Box> 
-              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Address</Text>
-              <Text textStyle="mobileBody">{currentSchedule.pickupLocation}</Text> 
-             </Box>
+            <Box>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Address
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.pickupLocation}
+              </Text>
+            </Box>
           )}
           <Box>
-            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Additional notes</Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Additional notes
+            </Text>
             <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
           </Box>
         </Box>
       </Box>
 
       <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader3" >Donor Information</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Name</Text>
+        <Text textStyle="mobileHeader3">Donor Information</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+          Name
+        </Text>
         <Text textStyle="mobileBody">
           {currentDonor.firstName} {currentDonor.lastName}
         </Text>
-        <Text textStyle="mobileSmall"color="hubbard.100" pt="1.4em">Email</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+          Email
+        </Text>
         <Text textStyle="mobileBody">{currentDonor.email}</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Phone</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+          Phone
+        </Text>
         <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">Organization</Text>
+        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+          Organization
+        </Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
       {isBeingEdited && (
         <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader3" pb="0.8em">Danger Zone</Text>
-        <Text textStyle="mobileBody">
-          To cancel this schedule donation, click below.
-        </Text>
-        <Button
-          mt="1.5rem"
-          size="lg"
-          width={{ lg: "30%", base: "100%" }}
-          variant="deleteDonation"
-          onClick={onDeleteClick}
-        >
-        Cancel donation
-        </Button>
-      </Box>
-      )}   
+          <Text textStyle="mobileHeader3" pb="0.8em">
+            Danger Zone
+          </Text>
+          <Text textStyle="mobileBody">
+            To cancel this schedule donation, click below.
+          </Text>
+          <Button
+            mt="1.5rem"
+            size="lg"
+            width={{ lg: "30%", base: "100%" }}
+            variant="deleteDonation"
+            onClick={onDeleteClick}
+          >
+            Cancel donation
+          </Button>
+        </Box>
+      )}
       {!isBeingEdited && (
         <HStack>
           <Button

@@ -2,10 +2,14 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   Spinner,
   Stack,
   Text,
+<<<<<<< HEAD
   Flex,
+=======
+>>>>>>> b38d96a (linting)
   VStack,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
@@ -45,8 +49,8 @@ const Dashboard = (): JSX.Element => {
     return <Spinner />;
   }
 
-  const date = new Date();  // 2009-11-10
-  const month = date.toLocaleString('default', { month: 'long' })   
+  const date = new Date(); // 2009-11-10
+  const month = date.toLocaleString("default", { month: "long" });
   const year = date.getFullYear();
 
   return (
@@ -126,7 +130,7 @@ const Dashboard = (): JSX.Element => {
             ))
           ) : (
             <Box>
-              <Box 
+              <Box
                 display={{ lg: "flex" }}
                 flexWrap="wrap"
                 backgroundColor="squash.100"
@@ -146,12 +150,11 @@ const Dashboard = (): JSX.Element => {
                   color="black.500"
                   textStyle="mobileBody"
                 >
-                  Schedule a donation today to start giving back. 
+                  Schedule a donation today to start giving back.
                 </Text>
               </Box>
               <Box>{}</Box>
-   
-              </Box>
+            </Box>
           )}
         </Box>
 >>>>>>> d5371af (changed text spacing again)
