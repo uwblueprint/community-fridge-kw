@@ -195,8 +195,7 @@ const SelectDateTime = ({
       timeRange: "",
     });
   };
-
-  console.log(formValues);
+  
   const handleDateSelect = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setDate(selectedDateObj);
