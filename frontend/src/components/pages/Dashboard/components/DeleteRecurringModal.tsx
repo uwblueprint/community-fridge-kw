@@ -16,15 +16,10 @@ import React, { useState } from "react";
 
 import useViewport from "../../../../hooks/useViewport";
 
-export enum DeleteDonationsEnum {
-    THIS_DONATION = "this donation",
-    ALL_DONATIONS = "all donations"
-};
-
 interface DeleteRecurringModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onDelete: () => void;
+    onDelete: (isRecurrring?: boolean) => void;
 }
 const DeleteRecurringModal = ({
     isOpen,
@@ -32,7 +27,7 @@ const DeleteRecurringModal = ({
     onDelete,
 }: DeleteRecurringModalProps) => {
 const { isDesktop } = useViewport();
-const [radioValue, setRadioValue] = useState(DeleteDonationsEnum.THIS_DONATION);
+const [radioValue, setRadioValue] = useState('this');
 
 return (
     <>
@@ -46,7 +41,7 @@ return (
             <ModalContent py="52px" px="48px">
             <ModalHeader>
                 <Text textStyle={isDesktop ? "desktopHeader3" : "mobileBodyBold"}>
-                Cancel Recurring Donation
+                    Cancel Recurring Donation
                 </Text>
             </ModalHeader>
             <ModalCloseButton />
@@ -63,8 +58,8 @@ return (
                 </RadioGroup>
             </ModalBody>
             <ModalFooter>
-                <Button width="100%" colorScheme="red" onClick={onDelete}>
-                Cancel Donation
+                <Button width="100%" colorScheme="red" onClick={() => onDelete(radioValue === "all")}>
+                    Cancel Donation
                 </Button>
             </ModalFooter>
             </ModalContent>

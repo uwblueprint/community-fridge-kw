@@ -84,6 +84,17 @@ const deleteSchedule = async (scheduleId: string): Promise<boolean> => {
   }
 };
 
+const deleteScheduleByRecurringId = async (recurringDonationId: string): Promise<boolean> => {
+  try {
+    await baseAPIClient.delete(`/scheduling?recurringDonationId=${recurringDonationId}`, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   getSchedules,
   getScheduleById,
@@ -91,4 +102,5 @@ export default {
   createSchedule,
   updateSchedule,
   deleteSchedule,
+  deleteScheduleByRecurringId
 };

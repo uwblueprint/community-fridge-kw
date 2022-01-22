@@ -20,13 +20,9 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-<<<<<<< HEAD
-import { SchedulingStepProps } from "./types";
+import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
-=======
-import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
->>>>>>> c52576e9c7e08db6a3e8b178a11f69f64f16bec4
 
 const ConfirmDetails = ({
   formValues,
@@ -42,29 +38,23 @@ const ConfirmDetails = ({
     {} as DonorResponse,
   );
   const currentSchedule = formValues;
-<<<<<<< HEAD
-=======
   const { description } = DonationSizes.filter(
     (category) => category.size === currentSchedule.size,
   )[0];
 
->>>>>>> c52576e9c7e08db6a3e8b178a11f69f64f16bec4
   const onSubmitClick = async () => {
     await SchedulingAPIClient.createSchedule(currentSchedule);
     next();
   };
 
-<<<<<<< HEAD
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const onDeleteClick = async () => {
-    // await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
-    // history.push(`${Routes.DASHBOARD_PAGE}`);
-=======
-  const onDeleteClick = async () => {
-    await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+  const onDeleteClick = async (isRecurring = false) => {
+    if (isRecurring) {
+      await SchedulingAPIClient.deleteScheduleByRecurringId(currentSchedule?.recurringDonationId);
+    } else {
+      await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+    }
     history.push(`${Routes.DASHBOARD_PAGE}`);
->>>>>>> c52576e9c7e08db6a3e8b178a11f69f64f16bec4
   };
 
   const getDonorData = async () => {
