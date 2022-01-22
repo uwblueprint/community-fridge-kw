@@ -132,4 +132,4 @@ export const categoriesOptions = [
   "Hygiene products (tampons, pads, soap, etc.)",
 ];
 
-export const frequencies = ["One time", "Daily", "Weekly", "Monthly"];
+export const frequencies = ["One time donation", "Daily", "Weekly", "Monthly"];

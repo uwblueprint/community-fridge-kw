@@ -18,7 +18,7 @@ import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
 import BackButton from "./BackButton";
-import { categoriesOptions, DonationSizes, DonationSizeInterface, SchedulingStepProps } from "./types";
+import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 import NextButton from "./NextButton";
 
 const DonationInformation: any = ({
@@ -67,43 +67,6 @@ const DonationInformation: any = ({
     });
   };
 
-  const DonationSizes: DonationSizeInterface[] = [
-    {
-      image: sm,
-      size: "Small",
-      description: "Fills less than a shelf of the fridge/pantry",
-    },
-    {
-      image: md,
-      size: "Medium",
-      description: "Fills approximately one shelf of the fridge/pantry",
-    },
-    {
-      image: lg,
-      size: "Large",
-      description: "Fills approximately two shelves of the fridge/pantry",
-    },
-    {
-      image: xl,
-      size: "Extra-large",
-      description:
-        "Fills approximately four shelves of the fridge/pantry",
-    },
-  ];
-
-  const categoriesOptions = [
-    "Dry packaged goods",
-    "Non-perishables",
-    "Fresh produce",
-    "Bread and baked goods",
-    "Oil, spreads, and seasoning",
-    "Tea and coffee",
-    "Frozen meals",
-    "Prepared meals",
-    "Non-alcoholic drinks and juices",
-    "Essential items (masks, hand sanitizer, bags)",
-    "Hygiene products (tampons, pads, soap, etc.)",
-  ];
   const validateForm = () => {
     const newErrors = {
       categories: "",
