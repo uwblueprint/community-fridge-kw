@@ -45,10 +45,6 @@ const Dashboard = (): JSX.Element => {
     return <Spinner />;
   }
 
-  const date = new Date(); // 2009-11-10
-  const month = date.toLocaleString("default", { month: "long" });
-  const year = date.getFullYear();
-
   return (
     <Container variant="dashboardContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">
