@@ -27,8 +27,10 @@ const UserManagementPage = (): JSX.Element => {
       (donor) =>
         donor.businessName.toLowerCase().includes(search.toLowerCase()) ||
         donor.email.toLowerCase().includes(search.toLowerCase()) ||
-        donor.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        donor.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        donor.firstName
+          .toLowerCase()
+          .concat(" ", donor.lastName.toLowerCase())
+          .includes(search.toLowerCase()) ||
         donor.phoneNumber.toLowerCase().includes(search.toLowerCase()),
     );
   }, [search, donors]);
