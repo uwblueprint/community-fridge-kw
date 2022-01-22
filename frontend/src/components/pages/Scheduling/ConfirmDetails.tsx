@@ -7,7 +7,7 @@ import {
   HStack,
   IconButton,
   Text,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import { add, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
@@ -20,9 +20,9 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
+import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
   formValues,
@@ -50,7 +50,9 @@ const ConfirmDetails = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const onDeleteClick = async (isRecurring = false) => {
     if (isRecurring) {
-      await SchedulingAPIClient.deleteScheduleByRecurringId(currentSchedule?.recurringDonationId);
+      await SchedulingAPIClient.deleteScheduleByRecurringId(
+        currentSchedule?.recurringDonationId,
+      );
     } else {
       await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
     }
@@ -317,13 +319,13 @@ const ConfirmDetails = ({
             Cancel donation
           </Button>
           {currentSchedule.recurringDonationId ? (
-            <DeleteRecurringModal 
+            <DeleteRecurringModal
               isOpen={isOpen}
               onClose={onClose}
               onDelete={onDeleteClick}
             />
           ) : (
-            <DeleteScheduleModal 
+            <DeleteScheduleModal
               isOpen={isOpen}
               onClose={onClose}
               onDelete={onDeleteClick}

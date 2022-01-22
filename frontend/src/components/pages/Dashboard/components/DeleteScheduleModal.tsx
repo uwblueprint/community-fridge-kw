@@ -42,7 +42,8 @@ const DeleteScheduleModal = ({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody textStyle="mobileBody" color="hubbard.100">
-            Are you sure you want to cancel your donation? This will remove all linked occurances and notify the donor.
+            Are you sure you want to cancel your donation? This will remove all
+            linked occurances and notify the donor.
           </ModalBody>
           <ModalFooter>
             <Button width="100%" colorScheme="red" onClick={onDelete}>
