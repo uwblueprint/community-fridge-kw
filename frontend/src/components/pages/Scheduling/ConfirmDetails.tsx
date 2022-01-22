@@ -1,16 +1,14 @@
-import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
   Button,
   Container,
-  Flex,
   HStack,
   IconButton,
-  Stack,
   Text,
 } from "@chakra-ui/react";
-import { add, format, isBefore, isToday, isTomorrow } from "date-fns";
+import { add, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -21,7 +19,7 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import { SchedulingStepProps } from "./types";
+import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
   formValues,
@@ -37,6 +35,9 @@ const ConfirmDetails = ({
     {} as DonorResponse,
   );
   const currentSchedule = formValues;
+  const { description } = DonationSizes.filter(
+    (category) => category.size === currentSchedule.size,
+  )[0];
 
   const onSubmitClick = async () => {
     await SchedulingAPIClient.createSchedule(currentSchedule);
@@ -68,16 +69,16 @@ const ConfirmDetails = ({
     return format(startDate, "MMMM d, yyyy");
   };
 
-  const nextDateText = (startDate: Date) => {
+  const nextDropoffDateText = (startDate: Date) => {
     let addOptions = {};
     switch (currentSchedule.frequency) {
-      case "Weekly":
+      case DonationFrequency.WEEKLY:
         addOptions = { weeks: 1 };
         break;
-      case "Daily":
+      case DonationFrequency.DAILY:
         addOptions = { days: 1 };
         break;
-      case "Monthly":
+      case DonationFrequency.MONTHLY:
         addOptions = { months: 1 };
         break;
       default:
@@ -117,10 +118,8 @@ const ConfirmDetails = ({
         &nbsp;&nbsp;&nbsp;
         <Badge
           borderRadius="11px"
-          pl="18px"
-          pr="18px"
-          pt="-5px"
-          pb="-5px"
+          px="18px"
+          py="-5px"
           ml={{ md: "5px" }}
           color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
           backgroundColor={`${
@@ -167,19 +166,21 @@ const ConfirmDetails = ({
               {currentSchedule.frequency}
             </Text>
             <Text>
-              {currentSchedule.frequency === "Weekly"
+              {currentSchedule.frequency === DonationFrequency.WEEKLY
                 ? ` on ${dayText(startDateLocal)}s`
                 : ""}
             </Text>
           </HStack>
 
-          {nextDateText(startDateLocal) !== null ||
-          currentSchedule.frequency !== "One time" ? (
+          {nextDropoffDateText(startDateLocal) !== null ||
+          currentSchedule.frequency !== DonationFrequency.ONE_TIME ? (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Next Drop-Off
               </Text>
-              <Text textStyle="mobileBody">{nextDateText(startDateLocal)}</Text>
+              <Text textStyle="mobileBody">
+                {nextDropoffDateText(startDateLocal)}
+              </Text>
               <Text textStyle="mobileBody">
                 {`${startTimeLocal} - ${endTimeLocal}`}
               </Text>{" "}
@@ -209,7 +210,7 @@ const ConfirmDetails = ({
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Size
           </Text>
-          <Text textStyle="mobileBody">{currentSchedule.size}</Text>
+          <Text textStyle="mobileBody">{`${currentSchedule.size} - ${description}`}</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Item Category
           </Text>

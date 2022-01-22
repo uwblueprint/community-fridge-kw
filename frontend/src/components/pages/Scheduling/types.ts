@@ -1,5 +1,9 @@
 import { NavigationProps, SetForm } from "react-hooks-helper";
 
+import xl from "../../../assets/donation-sizes/lg.png";
+import lg from "../../../assets/donation-sizes/md.png";
+import md from "../../../assets/donation-sizes/sm.png";
+import sm from "../../../assets/donation-sizes/xs.png";
 import { Schedule } from "../../../types/SchedulingTypes";
 
 export interface SchedulingStepProps {
@@ -73,5 +77,43 @@ export const timeRanges = {
   ],
   night: ["9:00 PM - 10:00 PM", "10:00 PM - 11:00 PM", "11:00 PM - 12:00 AM"],
 };
+
+export const DonationSizes: DonationSizeInterface[] = [
+  {
+    image: sm,
+    size: "Small",
+    description: "Fills less than a shelf of the fridge/pantry",
+  },
+  {
+    image: md,
+    size: "Medium",
+    description: "Approximately fills one shelf of the fridge/pantry",
+  },
+  {
+    image: lg,
+    size: "Large",
+    description: "Approximately fills two shelves of the fridge/pantry",
+  },
+  {
+    image: xl,
+    size: "Extra-large",
+    description:
+      "Approximately fills four shelves of the fridge/ pantry (full capacity)",
+  },
+];
+
+export const categoriesOptions = [
+  "Dry packaged goods",
+  "Non-perishables",
+  "Fresh produce",
+  "Bread and baked goods",
+  "Oil, spreads, and seasoning",
+  "Tea and coffee",
+  "Frozen meals",
+  "Prepared meals",
+  "Non-alcoholic drinks and juices",
+  "Essential items (masks, hand sanitizer, bags)",
+  "Hygiene products (tampons, pads, soap, etc.)",
+];
 
 export const frequencies = ["One time", "Daily", "Weekly", "Monthly"];

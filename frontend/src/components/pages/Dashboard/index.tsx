@@ -94,8 +94,7 @@ const Dashboard = (): JSX.Element => {
               </Text>
               <Text
                 pl={{ base: "28px", md: "0px" }}
-                pr={{ base: "28px", md: "0px" }}
-                pb={{ base: "28px", md: "0px" }}
+                px={{ base: "28px", md: "0px" }}
                 color="black.500"
                 textStyle="mobileBody"
               >
