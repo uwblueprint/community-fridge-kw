@@ -50,9 +50,6 @@ const VolunteerInformation = ({
     isPickup: "",
   });
   
-  const [showAdditionalNotes, setShowAdditionalNotes] = useState<boolean>(false);
-  const [showTime, setShowTime] = useState<boolean>(false);
-
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
     "Pick up (food rescue)",
@@ -61,7 +58,6 @@ const VolunteerInformation = ({
   const volunteerRequiredHelperText =
     "A volunteer is a community fridge member who will assist with donation drop-offs. Information of the volunteer assigned will be provided.";
 
-  console.log(formValues);
   const getSubmitState = () => {
     if (volunteerNeeded && isPickup) {
       return !!pickupLocation && !!volunteerTime;
@@ -178,7 +174,6 @@ const VolunteerInformation = ({
         helperText={volunteerRequiredHelperText}
         onChange={(e: string) => {
           handleChange(e === "Yes", "volunteerNeeded");
-          setShowAdditionalNotes(e === "No");
         }}
       />
       {volunteerNeeded && (
@@ -193,8 +188,6 @@ const VolunteerInformation = ({
             error={formErrors.isPickup}
             onChange={(e: string) => {
               handleChange(e === volunteerAssistanceValues[0], "isPickup");
-              setShowAdditionalNotes(e === volunteerAssistanceValues[1]);
-              setShowTime(e === volunteerAssistanceValues[1]);
             }}
           />
           {isPickup && (
@@ -208,7 +201,6 @@ const VolunteerInformation = ({
                 value={pickupLocation}
                 onChange={(e) => {
                   handleChange(e.target.value, "pickupLocation")
-                  setShowTime(e.target.value !== "");
                 }}
                 placeholder="Enter location"
                 size="lg"
@@ -217,7 +209,7 @@ const VolunteerInformation = ({
               <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
             </FormControl>
           )}
-          {showTime && ( 
+          {(!!pickupLocation || (!isPickup && isPickup !== undefined)) && ( 
           <FormControl
             isRequired
             isInvalid={!!formErrors.volunteerTime}
@@ -232,7 +224,6 @@ const VolunteerInformation = ({
               type="time"
               onChange={(e) => {
                 handleChange(e.target.value, "volunteerTime");
-                setShowAdditionalNotes(true);
               }}
               placeholder="Enter time"
               size="lg"
@@ -243,7 +234,8 @@ const VolunteerInformation = ({
           )}
         </>
       )}
-      {showAdditionalNotes && (
+      
+      {((!volunteerNeeded && volunteerNeeded !== undefined) || !!volunteerTime) && (
       <FormControl m="3em 0">
         <FormLabel>Additional notes</FormLabel>
         <FormHelperText mb="1em">

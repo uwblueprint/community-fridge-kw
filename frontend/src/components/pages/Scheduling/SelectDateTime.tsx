@@ -101,18 +101,12 @@ const SelectDateTime = ({
     getTimeSlot(dayPart),
   );
   const [frequencyLabels, setFrequencyLabels] = useState<string[]>(frequencies);
-  const [showFrequency, setShowFrequency] = useState<boolean>(
-    false
-  );
   const [showTimeofDay, setShowTimeofDay] = useState<boolean>(
     false
   );
 
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
-    frequency === frequencies[0] || frequency === "",
-  );
   const [recurringEndDate, setRecurringEndDate] = useState<Date>(new Date(startTime));
 
   React.useEffect(() => {
@@ -166,12 +160,6 @@ const SelectDateTime = ({
         dayPart: "",
       });
     } else if (name === "frequency") {
-      const val = e.toString();
-      if (val === frequencies[0]) {
-        setIsOneTimeDonation(true);
-      } else {
-        setIsOneTimeDonation(false);
-      }
       setFormErrors({
         ...formErrors,
         frequency: "",
@@ -182,7 +170,6 @@ const SelectDateTime = ({
   // splits timeRange into startTime and endTime in formValues
   const handleTimeRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTimeRange(e.toString());
-    setShowFrequency(true);
     const timeRangeSelected = e.toString();
     const tokens = timeRangeSelected.split(" - ");
 
@@ -209,13 +196,12 @@ const SelectDateTime = ({
     });
   };
 
+  console.log(formValues);
   const handleDateSelect = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setDate(selectedDateObj);
     setShowTimeofDay(true);
     setShowTimeSlots(getTimeSlot("")); // reset timeslots
-    setShowFrequency(false);
-    setIsOneTimeDonation(true);
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
     setFormErrors({
       ...formErrors,
@@ -355,7 +341,7 @@ const SelectDateTime = ({
         />
         <FormErrorMessage>{formErrors.date}</FormErrorMessage>
       </FormControl>
-      {showTimeofDay && (
+      {(showTimeofDay || dayPart) && (
         <RadioSelectGroup
           name="dayPart"
           label="Select time of day"
@@ -369,7 +355,7 @@ const SelectDateTime = ({
           }}
         />
       )}
-      {showTimeSlots && (
+      {(!!dayPart && showTimeSlots) && (
         <RadioSelectGroup
           name="timeRanges"
           label="Select drop-off time"
@@ -390,9 +376,7 @@ const SelectDateTime = ({
           please contact Community Fridge admin.
         </Text>
       )}
-
-
-      {showFrequency && (
+      {(!!startTime && !!dayPart) && (
         <FormControl
           isRequired
           isDisabled={isBeingEdited}
@@ -416,7 +400,7 @@ const SelectDateTime = ({
           <FormErrorMessage>{formErrors.frequency}</FormErrorMessage>
         </FormControl>
       )}
-      {!isOneTimeDonation && (
+      {((!!frequency && frequency !== frequencies[0]) && !!startTime && !!dayPart) && (
         <FormControl
           isRequired
           isInvalid={!!formErrors.recurringDonationEndDate}
