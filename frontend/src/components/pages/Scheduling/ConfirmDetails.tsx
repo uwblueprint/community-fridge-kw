@@ -112,8 +112,7 @@ const ConfirmDetails = ({
   useEffect(() => {
     getDonorData();
   }, [currentSchedule.id]);
-
-  console.log(currentSchedule);
+  
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
