@@ -112,12 +112,6 @@ const SelectDateTime = ({
   const [recurringEndDate, setRecurringEndDate] = useState<Date>(new Date(startTime));
 
   React.useEffect(() => {
-    // Need to set frequency here since "One time"
-    // is default value in desktop dropdown
-    if (isDesktop && isOneTimeDonation) {
-      setForm({ target: { name: "frequency", value: frequencies[0] } });
-    }
-    
     // fetch schedules
     const fetchSchedules = async () => {
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
@@ -155,7 +149,7 @@ const SelectDateTime = ({
   };
 
   const checkSubmit = (hasRecurringDonationEndDate: boolean) => {
-    const reccurring = hasRecurringDonationEndDate ? frequency && recurringDonationEndDate : true;
+    const reccurring = hasRecurringDonationEndDate ? (frequency !== "" && recurringDonationEndDate !== "") : true;
     const valuesFilled = date && dayPart && timeRange && reccurring;
 
     return valuesFilled ? setCanSubmit(true) : setCanSubmit(false);
@@ -451,7 +445,9 @@ const SelectDateTime = ({
           <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full">
             <GridItem colSpan={1}>
               <DatePicker
+                className="frequency-date"
                 editable={false}
+                minDate={getSunday(today)}
                 value={recurringEndDate}
                 onChange={handleChangeRecurringDate}
                 placeholder="MM-DD-YYYY"

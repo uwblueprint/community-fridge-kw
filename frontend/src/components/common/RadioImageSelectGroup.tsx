@@ -124,7 +124,7 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
           <Text textStyle="mobileSmall">{v.description}</Text>
         </VStack>
       ) : (
-        <HStack style={{alignItems: "flex-start"}}>
+        <HStack alignItems="flex-start">
           <Radio
             isChecked={v.size === value}
             mx="10px"
