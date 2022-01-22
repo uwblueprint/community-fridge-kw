@@ -339,16 +339,9 @@ const SelectDateTime = ({
   };
 
   const today = new Date();
-  const getSunday = (d: Date) => {
-    const day = d.getDay();
-    const diff = d.getDate() - day; // adjust when day is sunday
-    return new Date(d.setDate(diff));
-  };
-
   const getMaxDate = () => {
-    const sunday = getSunday(today);
-    const diff = sunday.getDate() + 13;
-    return new Date(sunday.setDate(diff));
+    const diff = today.getDate() + 13;
+    return new Date(today.setDate(diff));
   };
 
   return (
@@ -366,7 +359,7 @@ const SelectDateTime = ({
         <FormLabel fontWeight="600">Select date</FormLabel>
         <Calendar
           className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile" }
-          minDate={getSunday(today)}
+          minDate={new Date().setDate(today.getDate())}
           maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
@@ -447,7 +440,7 @@ const SelectDateTime = ({
               <DatePicker
                 className="frequency-date"
                 editable={false}
-                minDate={getSunday(today)}
+                minDate={new Date().setDate(today.getDate())}
                 value={recurringEndDate}
                 onChange={handleChangeRecurringDate}
                 placeholder="MM-DD-YYYY"
