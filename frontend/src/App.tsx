@@ -11,6 +11,7 @@ import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
+import ResetPassword from "./components/auth/ResetPassword/index";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
@@ -72,6 +73,11 @@ const App = (): React.ReactElement => {
               component={Scheduling as React.FC}
             />
             <Route path={Routes.ACTION} component={Action} />
+            <Route
+              exact
+              path={Routes.FORGET_PASSWORD}
+              component={ResetPassword}
+            />
             <Route exact path="*" component={NotFound} />
           </Switch>
           <Footer />

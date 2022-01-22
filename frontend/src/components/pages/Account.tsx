@@ -41,6 +41,10 @@ const Account = (): JSX.Element => {
   const [isSavingData, setIsSavingData] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const changePassword = () => {
+    history.push(Routes.FORGET_PASSWORD);
+  };
+
   React.useEffect(() => {
     if (!authenticatedUser) {
       return;
@@ -404,6 +408,17 @@ const Account = (): JSX.Element => {
               width="100%"
               size="lg"
               mt="2"
+              variant="changePassword"
+              onClick={changePassword}
+            >
+              Change Password
+            </Button>
+          </Box>
+          <Box mt={{ base: "25px", md: "16px" }}>
+            <Button
+              width="100%"
+              size="lg"
+              mt="0"
               variant="navigation"
             >
               Change Password

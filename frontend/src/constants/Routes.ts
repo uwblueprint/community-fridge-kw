@@ -19,3 +19,5 @@ export const ACCOUNT_PAGE = "/account";
 export const ACTION = "/action";
 
 export const USER_MANAGEMENT_PAGE = "/user-management";
+
+export const FORGET_PASSWORD = "/forget-password";

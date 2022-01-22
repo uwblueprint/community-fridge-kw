@@ -11,6 +11,7 @@ enum EmailVerificationResponse {
 
 const Action = () => {
   const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get("mode");
   const oobCode = urlParams.get("oobCode");
   const [emailVerified, setEmailVerified] = React.useState("");
 

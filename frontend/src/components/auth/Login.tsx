@@ -72,7 +72,7 @@ const Login = (): React.ReactElement => {
           />
         </Box>
         <Text mt="1rem" color="hubbard.100" textStyle="mobileSmall">
-          Forgot password?
+        <Link to={Routes.FORGET_PASSWORD}> Forgot password? </Link>
         </Text>
         {isIncorrectLoginCredentails && (
           <Text
