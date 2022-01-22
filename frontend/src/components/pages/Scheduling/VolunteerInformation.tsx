@@ -49,7 +49,7 @@ const VolunteerInformation = ({
     pickupLocation: "",
     isPickup: "",
   });
-  const [canSubmit, setCanSubmit] = useState<boolean>(false);
+  
   const [showAdditionalNotes, setShowAdditionalNotes] = useState<boolean>(false);
   const [showTime, setShowTime] = useState<boolean>(false);
 
@@ -61,6 +61,16 @@ const VolunteerInformation = ({
   const volunteerRequiredHelperText =
     "A volunteer is a community fridge member who will assist with donation drop-offs. Information of the volunteer assigned will be provided.";
 
+  console.log(formValues);
+  const getSubmitState = () => {
+    if (volunteerNeeded && isPickup) {
+      return !!pickupLocation && !!volunteerTime;
+    } 
+    
+    return volunteerNeeded ? !!volunteerTime : true;
+  };
+
+    
   const handleChange = (e: boolean | string, name: string) => {
     setForm({ target: { name, value: e } });
     setFormErrors({
@@ -169,7 +179,6 @@ const VolunteerInformation = ({
         onChange={(e: string) => {
           handleChange(e === "Yes", "volunteerNeeded");
           setShowAdditionalNotes(e === "No");
-          setCanSubmit(e === "No");
         }}
       />
       {volunteerNeeded && (
@@ -218,12 +227,12 @@ const VolunteerInformation = ({
               What is the specific time you require assistance?
             </FormLabel>
             <Input
+              colorScheme="raddish"
               value={volunteerTime}
               type="time"
               onChange={(e) => {
                 handleChange(e.target.value, "volunteerTime");
                 setShowAdditionalNotes(true);
-                setCanSubmit(true);
               }}
               placeholder="Enter time"
               size="lg"
@@ -251,7 +260,7 @@ const VolunteerInformation = ({
       <NextButton 
         isBeingEdited={isBeingEdited}
         go={go}
-        canSubmit={canSubmit}
+        canSubmit={getSubmitState()}
         handleNext={handleNext}
       />
     </Container>
