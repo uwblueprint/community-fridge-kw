@@ -90,7 +90,7 @@ const SelectDateTime = ({
 
   const getSubmitState = () => {
     const filled = !!dayPart && !!startTime && !!endTime && !!frequency;
-    return frequency === DonationFrequency.DAILY ? filled : filled && !!recurringDonationEndDate;
+    return frequency === DonationFrequency.ONE_TIME ? filled : filled && !!recurringDonationEndDate;
   }
 
   // setting state initial values
