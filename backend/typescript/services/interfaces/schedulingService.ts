@@ -2,6 +2,7 @@ import {
   SchedulingDTO,
   CreateSchedulingDTO,
   UpdateSchedulingDTO,
+  UserDonorDTO,
 } from "../../types";
 
 interface ISchedulingService {
@@ -40,7 +41,7 @@ interface ISchedulingService {
    * @throws Error if unable to send email
    */
   sendEmailVerificationAfterSchedulingADonation(
-    email: string,
+    email: UserDonorDTO,
     schedule: SchedulingDTO,
   ): Promise<void>;
 

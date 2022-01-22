@@ -187,7 +187,7 @@ class SchedulingService implements ISchedulingService {
   }
 
   async sendEmailVerificationAfterSchedulingADonation(
-    email: string,
+    donor: UserDonorDTO,
     schedule: SchedulingDTO,
   ): Promise<void> {
     if (!this.emailService) {
@@ -198,7 +198,7 @@ class SchedulingService implements ISchedulingService {
     }
 
     try {
-      const { firstName } = await this.userService.getUserByEmail(email);
+      const { firstName } = donor;
 
       // Proposed drop off info
       const { startTime } = schedule;
@@ -326,13 +326,13 @@ class SchedulingService implements ISchedulingService {
       `;
 
       this.emailService.sendEmail(
-        email,
+        donor.email,
         "Your Donation Information",
         emailBody,
       );
     } catch (error) {
       Logger.error(
-        `Failed to generate email to confirm donation details of donation scheduled by ${email}`,
+        `Failed to generate email to confirm donation details of donation scheduled by ${donor.email}`,
       );
       throw error;
     }
@@ -552,7 +552,7 @@ class SchedulingService implements ISchedulingService {
       scheduling.donorId,
     );
     this.sendEmailVerificationAfterSchedulingADonation(
-      currDonor.email,
+      currDonor,
       retNewSchedule,
     );
 
