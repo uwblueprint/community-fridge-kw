@@ -129,12 +129,12 @@ schedulingRouter.delete("/:id?", async (req, res) => {
 
   if (id && recurringDonationId) {
     await sendResponseByMimeType(res, 400, contentType, [
-        {
-          error: "Cannot delete by both id and recurringSchedulingId",
-        },
-      ]);
-      return;
-  } 
+      {
+        error: "Cannot delete by both id and recurringSchedulingId",
+      },
+    ]);
+    return;
+  }
   if (recurringDonationId) {
     try {
       await schedulingService.deleteSchedulingByRecurringDonationId(

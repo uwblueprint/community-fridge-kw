@@ -19,7 +19,7 @@ import useViewport from "../../../../hooks/useViewport";
 interface DeleteRecurringModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onDelete: (isRecurrring?: boolean) => void;
+  onDelete: (isOneTimeEvent?: boolean) => void;
 }
 const DeleteRecurringModal = ({
   isOpen,
@@ -27,7 +27,7 @@ const DeleteRecurringModal = ({
   onDelete,
 }: DeleteRecurringModalProps) => {
   const { isDesktop } = useViewport();
-  const [radioValue, setRadioValue] = useState("this");
+  const [deleteScheduleValue, setDeleteScheduleValue] = useState("this");
 
   return (
     <>
@@ -46,7 +46,10 @@ const DeleteRecurringModal = ({
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody textStyle="mobileBody" color="hubbard.100">
-            <RadioGroup onChange={setRadioValue} value={radioValue}>
+            <RadioGroup
+              onChange={setDeleteScheduleValue}
+              value={deleteScheduleValue}
+            >
               <Stack>
                 <Radio size="lg" colorScheme="red" value="this">
                   This donation
@@ -61,7 +64,7 @@ const DeleteRecurringModal = ({
             <Button
               width="100%"
               colorScheme="red"
-              onClick={() => onDelete(radioValue === "this")}
+              onClick={() => onDelete(deleteScheduleValue === "this")}
             >
               Cancel Donation
             </Button>

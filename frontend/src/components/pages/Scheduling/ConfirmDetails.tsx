@@ -59,11 +59,13 @@ const ConfirmDetails = ({
       );
     }
     toast({
-      title: isOneTimeEvent ? "Donation cancelled successfully" : "Donations cancelled successfully",
-      status: 'success',
+      title: isOneTimeEvent
+        ? "Donation cancelled successfully"
+        : "Donations cancelled successfully",
+      status: "success",
       duration: 7000,
       isClosable: true,
-    })
+    });
     history.push(`${Routes.DASHBOARD_PAGE}`);
   };
 
