@@ -7,6 +7,7 @@ import {
   Grid,
   HStack,
   Image,
+  Radio,
   Text,
   useRadio,
   useRadioGroup,
@@ -111,7 +112,14 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
           <Text textStyle="mobileSmall">{v.description}</Text>
         </VStack>
       ) : (
-        <HStack>
+        <HStack style={{alignItems: "flex-start"}}>
+          <Radio
+            isChecked={v.size === value}
+            mx="10px"
+            colorScheme="raddish"
+            size="md"
+            mt="8px"
+          />
           <Box width="70%">
             <Text textStyle="mobileBody"> {v.size}</Text>
             <Text textStyle="mobileSmall">{v.description}</Text>

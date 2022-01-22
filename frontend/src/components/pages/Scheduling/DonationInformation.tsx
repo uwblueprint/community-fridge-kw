@@ -19,6 +19,7 @@ import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
 import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 import BackButton from "./BackButton";
+import NextButton from "./NextButton";
 
 const DonationInformation: any = ({
   formValues,
@@ -49,6 +50,16 @@ const DonationInformation: any = ({
     setShowItemTypes(true);
   };
 
+  const checkSubmit = (e: React.ChangeEvent<HTMLInputElement>, item: string) => {
+    const newCategories = e.target.checked ? [...categories, item] : categories.filter((category) => category !== item);
+    
+    if (newCategories.length > 0) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  }
+
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     item: string,
@@ -66,9 +77,7 @@ const DonationInformation: any = ({
       categories: "",
     });
 
-    if (categories.length > 0) {
-      setCanSubmit(true);
-    }
+    checkSubmit(e, item);
   };
 
   const validateForm = () => {
@@ -148,26 +157,12 @@ const DonationInformation: any = ({
         </Stack>
         <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
       </FormControl>}
-      <div style={{display: "flex", justifyContent: "flex-end"}}>
-          {isBeingEdited ? (
-            <Button
-              onClick={() => go && go("confirm donation details")}
-              variant="cancelNavigation"
-              w={{ md: "300px" }}
-            >
-              Cancel
-            </Button>
-          ) : (
-            <Button
-              isDisabled={!canSubmit}
-              onClick={handleNext}
-              variant="navigation"
-              width={{ md: "300px" }}
-            >
-              Next
-            </Button>
-          )}
-        </div>
+      <NextButton 
+        isBeingEdited={isBeingEdited}
+        go={go}
+        canSubmit={canSubmit}
+        handleNext={handleNext}
+      />
     </Container>
   );
 };
