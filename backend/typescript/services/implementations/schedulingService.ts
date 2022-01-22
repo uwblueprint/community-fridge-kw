@@ -316,7 +316,7 @@ class SchedulingService implements ISchedulingService {
         // loop for calculations if frequency is MONTHLY
         else {
           const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setMonth(nextDay.getMonth() + 1);
+          nextDay.setDate(nextDay.getDate() + 28);
 
           while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
             const newStartTime: Date = new Date(nextDay);
@@ -344,7 +344,7 @@ class SchedulingService implements ISchedulingService {
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setMonth(nextDay.getMonth() + 1);
+            nextDay.setDate(nextDay.getDate() + 28);
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }
