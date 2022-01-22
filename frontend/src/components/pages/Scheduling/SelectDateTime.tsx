@@ -167,6 +167,7 @@ const SelectDateTime = ({
       showDropOffTimes(e.toString(), date);
       setForm({ target: { name: "startTime", value: "" } });
       setForm({ target: { name: "endTime", value: "" } });
+      setTimeRange("");
       setFormErrors({
         ...formErrors,
         dayPart: "",
@@ -214,6 +215,8 @@ const SelectDateTime = ({
     setShowTimeofDay(true);
     setShowTimeSlots(getTimeSlot("")); // reset timeslots
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
+    setForm({ target: { name: "startTime", value: "" } });
+    setForm({ target: { name: "endTime", value: "" } });
     setFormErrors({
       ...formErrors,
       date: "",
