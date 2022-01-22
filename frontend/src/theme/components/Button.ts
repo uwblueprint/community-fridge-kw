@@ -26,7 +26,7 @@ const Button = {
       fontSize: "16px",
       fontWeight: 300,
       textDecoration: "underline",
-    }
+    },
   },
 };
 
