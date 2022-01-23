@@ -71,7 +71,7 @@ const Home = (): JSX.Element => {
           />
         </Flex>
         <Box>
-          <ViewDonations />
+          <ViewDonations isAdminView={false} />
         </Box>
         <Divider
           color="hubbard.100"

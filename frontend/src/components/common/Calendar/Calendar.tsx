@@ -7,11 +7,13 @@ import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
 type CalendarProps = {
   selectedDay: Date;
   schedules: Schedule[];
+  isAdminView: boolean;
 };
 
 const Calendar = ({
   selectedDay,
   schedules,
+  isAdminView,
 }: CalendarProps): React.ReactElement => {
   return (
     <WeeklyCalendar week={selectedDay}>
@@ -22,7 +24,7 @@ const Calendar = ({
           <CalendarInfoCard
             key={JSON.stringify(schedule)}
             schedule={schedule}
-            isAdminView={false}
+            isAdminView={isAdminView}
           />
         )}
       />

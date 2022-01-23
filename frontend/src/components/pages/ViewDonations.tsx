@@ -16,7 +16,11 @@ import useViewport from "../../hooks/useViewport";
 import { Schedule } from "../../types/SchedulingTypes";
 import Calendar from "../common/Calendar/Calendar";
 
-const ViewDonations = (): React.ReactElement => {
+const ViewDonations = ({
+  isAdminView,
+}: {
+  isAdminView: boolean;
+}): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
   >(new Date());
@@ -133,6 +137,7 @@ const ViewDonations = (): React.ReactElement => {
           key={selectedDay?.toString()}
           selectedDay={selectedDay as Date}
           schedules={schedules}
+          isAdminView={isAdminView}
         />
       </Flex>
     </Container>
