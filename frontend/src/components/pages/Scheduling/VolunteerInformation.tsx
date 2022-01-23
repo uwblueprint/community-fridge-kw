@@ -1,16 +1,13 @@
 import {
   Box,
-  Button,
   Container,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
-  HStack,
   Input,
   Text,
   Textarea,
-  VStack,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useState } from "react";
@@ -156,7 +153,9 @@ const VolunteerInformation = ({
         maxWidth="500px"
       >
         <Text textStyle="mobileHeader4">Proposed Drop-off Time</Text>
-        <Text textStyle="mobileBody">{format(new Date(startTime), "EEEE, MMMM d")}</Text>
+        <Text textStyle="mobileBody">
+          {format(new Date(startTime),"EEEE, MMMM d")}
+        </Text>
         <Text textStyle="mobileBody">
           {format(new Date(startTime), "h:mm aa")}-
           {format(new Date(endTime), "h:mm aa")}

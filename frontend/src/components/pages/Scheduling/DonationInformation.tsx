@@ -17,8 +17,8 @@ import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
-import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 import BackButton from "./BackButton";
+import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 import NextButton from "./NextButton";
 
 const DonationInformation: any = ({

@@ -7,6 +7,8 @@ import {
   HStack,
   IconButton,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { add, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
@@ -19,6 +21,8 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
+import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -44,8 +48,25 @@ const ConfirmDetails = ({
     next();
   };
 
-  const onDeleteClick = async () => {
-    await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const onDeleteClick = async (isOneTimeEvent = true) => {
+    if (isOneTimeEvent) {
+      await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+    } else {
+      await SchedulingAPIClient.deleteScheduleByRecurringId(
+        currentSchedule?.recurringDonationId,
+        currentSchedule.startTime,
+      );
+    }
+    toast({
+      title: isOneTimeEvent
+        ? "Donation cancelled successfully"
+        : "Donations cancelled successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
     history.push(`${Routes.DASHBOARD_PAGE}`);
   };
 
@@ -92,7 +113,6 @@ const ConfirmDetails = ({
   useEffect(() => {
     getDonorData();
   }, [currentSchedule.id]);
-
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
@@ -304,10 +324,23 @@ const ConfirmDetails = ({
             size="lg"
             width={{ lg: "30%", base: "100%" }}
             variant="deleteDonation"
-            onClick={onDeleteClick}
+            onClick={onOpen}
           >
             Cancel donation
           </Button>
+          {currentSchedule.recurringDonationId === "null" ? (
+            <DeleteScheduleModal
+              isOpen={isOpen}
+              onClose={onClose}
+              onDelete={onDeleteClick}
+            />
+          ) : (
+            <DeleteRecurringModal
+              isOpen={isOpen}
+              onClose={onClose}
+              onDelete={onDeleteClick}
+            />
+          )}
         </Box>
       )}
       {!isBeingEdited && (

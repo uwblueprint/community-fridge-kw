@@ -2,19 +2,13 @@ import "react-multi-date-picker/styles/layouts/mobile.css";
 import "./selectDateTime.css";
 
 import {
-  Box,
-  Button,
   Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
   GridItem,
-  HStack,
-  Input,
-  Select,
   SimpleGrid,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useContext, useState } from "react";
@@ -29,11 +23,10 @@ import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
 import {
   dayParts,
-  DayPartsEnum,
   frequencies,
   DonationFrequency,
   SchedulingStepProps,
-  timeRanges,
+  getTimeSlot,
 } from "./types";
 import BackButton from "./BackButton";
 import NextButton from "./NextButton";
@@ -65,23 +58,6 @@ const SelectDateTime = ({
   const { authenticatedUser } = useContext(AuthContext);
 
   const { isDesktop } = useViewport();
-
-  const getTimeSlot = (selectedDayPart: string) => {
-    switch (selectedDayPart) {
-      case DayPartsEnum.EARLY_MORNING:
-        return timeRanges.earlyMorning;
-      case DayPartsEnum.MORNING:
-        return timeRanges.morning;
-      case DayPartsEnum.AFTERNOON:
-        return timeRanges.afternoon;
-      case DayPartsEnum.EVENING:
-        return timeRanges.evening;
-      case DayPartsEnum.NIGHT:
-        return timeRanges.night;
-      default:
-        return null;
-    }
-  };
 
   const get12HTimeString = (time: string) => {
     const time24Hour = `${new Date(time).getHours().toString()}:00`;

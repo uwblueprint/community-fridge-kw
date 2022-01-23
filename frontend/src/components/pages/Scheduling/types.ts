@@ -132,4 +132,21 @@ export const categoriesOptions = [
   "Hygiene products (tampons, pads, soap, etc.)",
 ];
 
+export const getTimeSlot = (selectedDayPart: string) => {
+  switch (selectedDayPart) {
+    case DayPartsEnum.EARLY_MORNING:
+      return timeRanges.earlyMorning;
+    case DayPartsEnum.MORNING:
+      return timeRanges.morning;
+    case DayPartsEnum.AFTERNOON:
+      return timeRanges.afternoon;
+    case DayPartsEnum.EVENING:
+      return timeRanges.evening;
+    case DayPartsEnum.NIGHT:
+      return timeRanges.night;
+    default:
+      return null;
+  }
+};
+
 export const frequencies = ["One time donation", "Daily", "Weekly", "Monthly"];
