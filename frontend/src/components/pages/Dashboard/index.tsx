@@ -44,6 +44,7 @@ const Dashboard = (): JSX.Element => {
   if (!schedules || schedules === null) {
     return <Spinner />;
   }
+  
   return (
     <Container variant="dashboardContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">

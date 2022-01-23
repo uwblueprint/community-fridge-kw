@@ -120,7 +120,8 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
 });
 
 /* Delete scheduling by id (e.g. /scheduling/63)
-  or deletes by recurring donation id (e.g. /scheduling?recurringDonationId=1)
+  or deletes by recurring donation id 
+  (e.g. /scheduling?recurringDonationId=1?currentDate=2022-01-31T05:00:00.000Z)
 */
 schedulingRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
