@@ -12,6 +12,7 @@ export interface SchedulingStepProps {
   setForm: SetForm;
   isBeingEdited?: boolean;
 }
+
 export interface DonationSizeInterface {
   image: string;
   size: string;
@@ -20,6 +21,21 @@ export interface DonationSizeInterface {
 export interface SchedulingProgessBarProps {
   activeStep: number;
   totalSteps: number;
+}
+
+export interface BackButtonProps {
+  isBeingEdited?: boolean;
+  onSaveClick: () => void;
+  previous?: () => void;
+  children?: React.ReactNode;
+}
+
+export interface NextButtonProps {
+  isBeingEdited?: boolean;
+  go?: (step: string | number) => void;
+  canSubmit: boolean;
+  handleNext: () => void;
+  children?: React.ReactNode;
 }
 
 export enum DayPartsEnum {
@@ -39,7 +55,7 @@ export const dayParts = [
 ];
 
 export enum DonationFrequency {
-  ONE_TIME = "One time",
+  ONE_TIME = "One time donation",
   DAILY = "Daily",
   WEEKLY = "Weekly",
   MONTHLY = "Monthly",
@@ -116,4 +132,21 @@ export const categoriesOptions = [
   "Hygiene products (tampons, pads, soap, etc.)",
 ];
 
-export const frequencies = ["One time", "Daily", "Weekly", "Monthly"];
+export const getTimeSlot = (selectedDayPart: string) => {
+  switch (selectedDayPart) {
+    case DayPartsEnum.EARLY_MORNING:
+      return timeRanges.earlyMorning;
+    case DayPartsEnum.MORNING:
+      return timeRanges.morning;
+    case DayPartsEnum.AFTERNOON:
+      return timeRanges.afternoon;
+    case DayPartsEnum.EVENING:
+      return timeRanges.evening;
+    case DayPartsEnum.NIGHT:
+      return timeRanges.night;
+    default:
+      return null;
+  }
+};
+
+export const frequencies = ["One time donation", "Daily", "Weekly", "Monthly"];

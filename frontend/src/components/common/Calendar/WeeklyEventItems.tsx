@@ -40,7 +40,7 @@ const DefaultWeeklyEventItem = ({
             color="#FAFCFE"
             borderWidth="0.05rem"
             borderRadius="0.5rem"
-            borderColor="#D8DDE0"
+            borderColor="mold.100"
             alignItems="center"
             centerContent
             py={isMobile ? "1.25rem" : "1.5rem"}

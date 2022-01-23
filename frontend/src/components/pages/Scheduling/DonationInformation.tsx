@@ -17,7 +17,9 @@ import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
+import BackButton from "./BackButton";
 import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
+import NextButton from "./NextButton";
 
 const DonationInformation: any = ({
   formValues,
@@ -31,6 +33,10 @@ const DonationInformation: any = ({
     categories: "",
     size: "",
   });
+
+  const getSubmitState = () => {
+    return !!formValues.size && !!formValues.categories.length;
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -98,6 +104,11 @@ const DonationInformation: any = ({
 
   return (
     <Container variant="responsiveContainer">
+      <BackButton 
+        isBeingEdited={isBeingEdited}
+        onSaveClick={onSaveClick}
+        previous={previous}
+      />
       <SchedulingProgressBar activeStep={1} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em">
         Donation Information
@@ -113,7 +124,7 @@ const DonationInformation: any = ({
         }}
       />
 
-      <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
+      {!!formValues.size && <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
         <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
           Type of item(s)
         </FormLabel>
@@ -121,7 +132,7 @@ const DonationInformation: any = ({
           {categoriesOptions.map((item, i) => (
             <Checkbox
               key={i}
-              colorScheme="black"
+              colorScheme="raddish"
               isChecked={categories.includes(item)}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleCheckboxChange(e, item);
@@ -132,43 +143,13 @@ const DonationInformation: any = ({
           ))}
         </Stack>
         <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
-      </FormControl>
-
-      {isBeingEdited ? (
-        <VStack alignItems="flex-start">
-          <Button
-            onClick={onSaveClick}
-            variant="navigation"
-            w={{ base: "100%", md: "350px" }}
-          >
-            Save Changes
-          </Button>
-          <Button
-            onClick={() => go && go("confirm donation details")}
-            variant="cancelNavigation"
-            w={{ base: "100%", md: "350px" }}
-          >
-            Cancel
-          </Button>
-        </VStack>
-      ) : (
-        <HStack>
-          <Button
-            onClick={previous}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Back
-          </Button>
-          <Button
-            onClick={handleNext}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Next
-          </Button>
-        </HStack>
-      )}
+      </FormControl>}
+      <NextButton 
+        isBeingEdited={isBeingEdited}
+        go={go}
+        canSubmit={getSubmitState()}
+        handleNext={handleNext}
+      />
     </Container>
   );
 };
