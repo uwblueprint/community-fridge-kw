@@ -19,6 +19,7 @@ import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import { colorMap } from "../../../constants/DaysInWeek";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
@@ -117,7 +118,13 @@ const ConfirmDetails = ({
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
         <IconButton
-          onClick={() => history.push(Routes.DASHBOARD_PAGE)}
+          onClick={() =>
+            history.push(
+              authenticatedUser?.role === Role.DONOR
+                ? Routes.DASHBOARD_PAGE
+                : Routes.VIEW_DONATIONS,
+            )
+          }
           marginLeft="-12px"
           variant="ghost"
           aria-label="back"

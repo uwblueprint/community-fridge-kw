@@ -15,7 +15,7 @@ import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
-import ViewDonations from "./components/pages/ViewDonations";
+import ViewDonationsPage from "./components/pages/ViewDonationsPage";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
@@ -54,7 +54,7 @@ const App = (): React.ReactElement => {
             <Route
               exact
               path={Routes.VIEW_DONATIONS}
-              component={ViewDonations}
+              component={ViewDonationsPage}
             />
             <PrivateRoute
               exact

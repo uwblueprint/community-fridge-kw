@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 
 import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png";
 import * as Routes from "../../../constants/Routes";
+import ViewDonations from "../ViewDonations";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
 
@@ -69,8 +70,8 @@ const Home = (): JSX.Element => {
             alt="Community Fridge Image"
           />
         </Flex>
-        <Box maxWidth={{ base: "default", md: "70%" }} marginLeft="-7.5rem">
-          {/* TODO: Add back after styling fix <ViewDonations isPublicView /> */}
+        <Box>
+          <ViewDonations isAdminView={false} />
         </Box>
         <Divider
           color="hubbard.100"
