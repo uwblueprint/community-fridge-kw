@@ -62,10 +62,12 @@ interface ISchedulingService {
   /**
    * Delete a scheduling by recurring_donation_id
    * @param reucrring_donation_id recurring donation id
+   * @param current_date the current date of the recurrring donation
    * @throws Error if recurring donation deletion fails
    */
   deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string,
+    current_date: string,
   ): Promise<void>;
 }
 

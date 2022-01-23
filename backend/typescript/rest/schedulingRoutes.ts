@@ -124,7 +124,7 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
 */
 schedulingRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
-  const { recurringDonationId } = req.query;
+  const { recurringDonationId, currentDate } = req.query;
   const contentType = req.headers["content-type"];
 
   if (id && recurringDonationId) {
@@ -136,9 +136,10 @@ schedulingRouter.delete("/:id?", async (req, res) => {
     return;
   }
   if (recurringDonationId) {
-    try {
+    try { 
       await schedulingService.deleteSchedulingByRecurringDonationId(
         recurringDonationId as string,
+        currentDate as string
       );
       res.status(204).send();
     } catch (error: unknown) {

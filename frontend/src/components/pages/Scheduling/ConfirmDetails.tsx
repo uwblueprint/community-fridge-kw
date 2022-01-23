@@ -56,6 +56,7 @@ const ConfirmDetails = ({
     } else {
       await SchedulingAPIClient.deleteScheduleByRecurringId(
         currentSchedule?.recurringDonationId,
+        currentSchedule.startTime
       );
     }
     toast({
@@ -112,7 +113,6 @@ const ConfirmDetails = ({
   useEffect(() => {
     getDonorData();
   }, [currentSchedule.id]);
-  
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
