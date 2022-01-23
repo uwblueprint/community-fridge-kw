@@ -16,7 +16,11 @@ import useViewport from "../../hooks/useViewport";
 import { Schedule } from "../../types/SchedulingTypes";
 import Calendar from "../common/Calendar/Calendar";
 
-const ViewDonations = (): React.ReactElement => {
+const ViewDonations = ({
+  isAdminView,
+}: {
+  isAdminView: boolean;
+}): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
   >(new Date());
@@ -43,11 +47,7 @@ const ViewDonations = (): React.ReactElement => {
   };
 
   return (
-    <Container
-      pt="1.5rem"
-      variant="baseContainer"
-      px={isMobile ? "2rem" : "1rem"}
-    >
+    <Container alignContent="left" variant="calendarContainer">
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="column"
@@ -59,9 +59,6 @@ const ViewDonations = (): React.ReactElement => {
           pt="1.4rem"
         >
           Upcoming Scheduled Fridge Donations
-        </Text>
-        <Text textStyle={isMobile ? "mobileSmall" : "desktopSmall"} pt="1.4rem">
-          Select a card to see more details pertaining to the upcoming donation.
         </Text>
         {isMobile ? (
           <HStack py="1.2rem">
@@ -99,14 +96,12 @@ const ViewDonations = (): React.ReactElement => {
             </IconButton>
           </HStack>
         ) : (
-          <Flex pt="4rem" width="72rem">
-            <HStack py="1.2rem">
+          <Flex pt="4rem" width="60rem">
+            <HStack pt="1.2rem" pb="2.5rem">
               <Text textStyle="desktopHeader">
-                Week of{" "}
                 {selectedDay?.toLocaleString(undefined, {
                   year: "numeric",
                   month: "long",
-                  day: "numeric",
                 })}
               </Text>
               <DatePicker
@@ -122,7 +117,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="previous week"
               onClick={() => {
-                changeDays(-7);
+                changeDays(-1);
               }}
             >
               <ChevronLeftIcon />
@@ -131,7 +126,7 @@ const ViewDonations = (): React.ReactElement => {
               backgroundColor="transparent"
               aria-label="next week"
               onClick={() => {
-                changeDays(7);
+                changeDays(1);
               }}
             >
               <ChevronRightIcon />
@@ -142,6 +137,7 @@ const ViewDonations = (): React.ReactElement => {
           key={selectedDay?.toString()}
           selectedDay={selectedDay as Date}
           schedules={schedules}
+          isAdminView={isAdminView}
         />
       </Flex>
     </Container>

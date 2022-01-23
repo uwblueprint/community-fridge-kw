@@ -1,0 +1,64 @@
+.rmdp-mobile.rmdp-wrapper {
+  border: none;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.rmdp-mobile.desktop .rmdp-day-picker > div {
+  width: 50vw;
+}
+  
+.rmdp-calendar {
+  background-color: #FAFCFE;
+  border-radius: 10px;
+  padding: 20px !important;
+}
+
+.rmdp-header {
+  font-weight: 600;
+  padding-left: 4px;
+}
+
+.rmdp-week-day {
+  color: #000 !important;
+}
+
+.rmdp-day.rmdp-today.rmdp-selected span {
+  color: #fff !important;
+}
+
+.rmdp-day.rmdp-today span {
+  color: #000 !important;
+  background-color: transparent !important;
+}
+
+.rmdp-day.rmdp-selected span, .rmdp-day.rmdp-selected.rmdp-today span {
+  background-color: #C31887 !important;
+}
+
+.rmdp-container {
+  width: 100%;
+}
+.rmdp-input {
+  width: 100%;
+  height: 40px !important;
+}
+
+.rmdp-arrow {
+  border: solid #C31887 !important;
+  border-width: 0 2px 2px 0 !important;
+  margin-top: 6px; 
+}
+
+.rmdp-arrow:hover {
+  border: solid #fff !important;
+  border-width: 0 2px 2px 0 !important;
+}
+
+.rmdp-arrow-container:hover {
+  background-color: #C31887 !important;
+}
+
+.rmdp-arrow-container.disabled.rmdp-right, .rmdp-arrow-container.disabled.rmdp-left {
+ display: none !important;
+}

@@ -119,10 +119,34 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
   }
 });
 
-/* Delete scheduling by id */
-schedulingRouter.delete("/:id", async (req, res) => {
+/* Delete scheduling by id (e.g. /scheduling/63)
+  or deletes by recurring donation id 
+  (e.g. /scheduling?recurringDonationId=1?currentDate=2022-01-31T05:00:00.000Z)
+*/
+schedulingRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
-  if (id) {
+  const { recurringDonationId, currentDate } = req.query;
+  const contentType = req.headers["content-type"];
+
+  if (id && recurringDonationId) {
+    await sendResponseByMimeType(res, 400, contentType, [
+      {
+        error: "Cannot delete by both id and recurringSchedulingId",
+      },
+    ]);
+    return;
+  }
+  if (recurringDonationId) {
+    try {
+      await schedulingService.deleteSchedulingByRecurringDonationId(
+        recurringDonationId as string,
+        currentDate as string,
+      );
+      res.status(204).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  } else if (id) {
     try {
       await schedulingService.deleteSchedulingById(id);
       res.status(204).send();
