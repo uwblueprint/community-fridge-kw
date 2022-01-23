@@ -440,10 +440,17 @@ class SchedulingService implements ISchedulingService {
 
   async deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string,
+    current_date: string,
   ): Promise<void> {
     try {
+      const deletionPastDate = new Date(current_date);
       const numsDestroyed = await Scheduling.destroy({
-        where: { recurring_donation_id },
+        where: {
+          recurring_donation_id,
+          start_time: {
+            [Op.gte]: deletionPastDate,
+          },
+        },
       });
       if (numsDestroyed <= 0) {
         throw new Error(
