@@ -27,7 +27,7 @@ import { useHistory } from "react-router-dom";
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
-import { AuthenticatedUser } from "../../../types/AuthTypes";
+import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
 import {
   checkForLowerCase,
   checkForNumbers,
@@ -59,7 +59,6 @@ const AccountDetails = ({
     confirmPassword,
     businessName,
     password,
-    role,
   } = formValues;
   const [showPassword, setShowPassword] = useState(false);
 
@@ -69,6 +68,17 @@ const AccountDetails = ({
     password: false,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const getSignupRole = (signupEmail: string) => {
+    if (
+      signupEmail === "communityfridgekw@gmail.com" ||
+      signupEmail.match("^[A-Za-z0-9._%+-]+@uwblueprint.org")
+    ) {
+      return Role.ADMIN;
+    }
+    return Role.DONOR;
+  };
+
   const onSignupClick = async () => {
     if (!email) {
       setInteraction({ ...interaction, email: true });
@@ -79,6 +89,7 @@ const AccountDetails = ({
     if (!password || !email || password !== confirmPassword) {
       return false;
     }
+    const role = await getSignupRole(email);
     const user: AuthenticatedUser = await authAPIClient.register(
       firstName,
       lastName,

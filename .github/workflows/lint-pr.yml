@@ -2,7 +2,9 @@ name: "PR Title Validation"
 
 on:
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - staging
 
   workflow_dispatch:
 

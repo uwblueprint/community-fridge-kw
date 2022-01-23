@@ -1,23 +1,19 @@
 import "react-multi-date-picker/styles/layouts/mobile.css";
-import "react-multi-date-picker/styles/colors/purple.css";
+import "./selectDateTime.css";
 
 import {
-  Button,
   Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
-  Input,
-  Select,
+  GridItem,
+  SimpleGrid,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
 import React, { useContext, useState } from "react";
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import InputIcon from "react-multi-date-picker/components/input_icon";
-
+import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
+import { format } from "date-fns";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
@@ -27,11 +23,13 @@ import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import ErrorMessages from "./ErrorMessages";
 import {
   dayParts,
-  DayPartsEnum,
   frequencies,
+  DonationFrequency,
   SchedulingStepProps,
-  timeRanges,
+  getTimeSlot,
 } from "./types";
+import BackButton from "./BackButton";
+import NextButton from "./NextButton";
 
 const SelectDateTime = ({
   formValues,
@@ -61,27 +59,15 @@ const SelectDateTime = ({
 
   const { isDesktop } = useViewport();
 
-  const getTimeSlot = (selectedDayPart: string) => {
-    switch (selectedDayPart) {
-      case DayPartsEnum.EARLY_MORNING:
-        return timeRanges.earlyMorning;
-      case DayPartsEnum.MORNING:
-        return timeRanges.morning;
-      case DayPartsEnum.AFTERNOON:
-        return timeRanges.afternoon;
-      case DayPartsEnum.EVENING:
-        return timeRanges.evening;
-      case DayPartsEnum.NIGHT:
-        return timeRanges.night;
-      default:
-        return null;
-    }
-  };
-
   const get12HTimeString = (time: string) => {
     const time24Hour = `${new Date(time).getHours().toString()}:00`;
     return moment(time24Hour, "HH:mm").format("h:mm A");
   };
+
+  const getSubmitState = () => {
+    const filled = !!dayPart && !!startTime && !!endTime && !!frequency;
+    return frequency === DonationFrequency.ONE_TIME ? filled : filled && !!recurringDonationEndDate;
+  }
 
   // setting state initial values
   const [date, setDate] = useState<Date>(new Date(startTime));
@@ -91,24 +77,27 @@ const SelectDateTime = ({
   const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(
     getTimeSlot(dayPart),
   );
+  const [showTimeofDay, setShowTimeofDay] = useState<boolean>(
+    false
+  );
+
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
-    frequency === "One time" || frequency === "",
-  );
-  const [recurringEndDate, setRecurringEndDate] = useState<string>(
-    recurringDonationEndDate
-      ? moment(recurringDonationEndDate).format("MM/DD/YYYY")
-      : "",
-  );
+  const [recurringEndDate, setRecurringEndDate] = useState<Date>(new Date(startTime));
+
+  const getFrequencyLabels = () => {
+    const newFrequencyLabels = [...frequencies];
+    newFrequencyLabels.forEach((freq, i) => {
+      if (freq === DonationFrequency.WEEKLY) {
+        newFrequencyLabels[i] = `Weekly on ${format(new Date(date), "EEEE")}s`;
+      } else if (freq === DonationFrequency.MONTHLY) {
+        newFrequencyLabels[i] = `Monthly on the ${format(new Date(date), "do")}`;
+      }
+    });
+    return newFrequencyLabels;
+  }
 
   React.useEffect(() => {
-    // Need to set frequency here since "One time"
-    // is default value in desktop dropdown
-    if (isDesktop && isOneTimeDonation) {
-      setForm({ target: { name: "frequency", value: "One time" } });
-    }
-
     // fetch schedules
     const fetchSchedules = async () => {
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
@@ -154,17 +143,12 @@ const SelectDateTime = ({
       showDropOffTimes(e.toString(), date);
       setForm({ target: { name: "startTime", value: "" } });
       setForm({ target: { name: "endTime", value: "" } });
+      setTimeRange("");
       setFormErrors({
         ...formErrors,
         dayPart: "",
       });
     } else if (name === "frequency") {
-      const val = e.toString();
-      if (val === "One time") {
-        setIsOneTimeDonation(true);
-      } else {
-        setIsOneTimeDonation(false);
-      }
       setFormErrors({
         ...formErrors,
         frequency: "",
@@ -204,19 +188,22 @@ const SelectDateTime = ({
   const handleDateSelect = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setDate(selectedDateObj);
+    setShowTimeofDay(true);
     setShowTimeSlots(getTimeSlot("")); // reset timeslots
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
+    setForm({ target: { name: "startTime", value: "" } });
+    setForm({ target: { name: "endTime", value: "" } });
     setFormErrors({
       ...formErrors,
       date: "",
     });
   };
 
-  const handleChangeRecurringDate = (
-    e: React.ChangeEvent<HTMLInputElement> | string,
-  ) => {
-    setRecurringEndDate(e.toString());
-    const recurringDate = new Date(e.toString());
+  const handleChangeRecurringDate = (selectedDate: DateObject) => {
+    const selectedDateObj = selectedDate.toDate();
+    setRecurringEndDate(selectedDateObj);
+
+    const recurringDate = new Date(selectedDateObj);
     setForm({
       target: {
         name: "recurringDonationEndDate",
@@ -255,7 +242,7 @@ const SelectDateTime = ({
     if (!frequency) {
       valid = false;
       newErrors.frequency = ErrorMessages.requiredField;
-    } else if (frequency !== "One time") {
+    } else if (frequency !== DonationFrequency.ONE_TIME) {
       if (!recurringDonationEndDate) {
         valid = false;
         newErrors.recurringDonationEndDate = ErrorMessages.requiredField;
@@ -306,53 +293,51 @@ const SelectDateTime = ({
   };
 
   const today = new Date();
-  const getSunday = (d: Date) => {
-    const day = d.getDay();
-    const diff = d.getDate() - day; // adjust when day is sunday
-    return new Date(d.setDate(diff));
-  };
-
   const getMaxDate = () => {
-    const sunday = getSunday(today);
-    const diff = sunday.getDate() + 13;
-    return new Date(sunday.setDate(diff));
+    const diff = today.getDate() + 13;
+    return new Date(today.setDate(diff));
   };
 
   return (
     <Container variant="responsiveContainer">
+      <BackButton 
+        isBeingEdited={isBeingEdited}
+        onSaveClick={onSaveClick}
+        previous={previous}
+      />
       <SchedulingProgressBar activeStep={0} totalSteps={4} />
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
-        Date and Time
+        {isDesktop ? "Drop-off date and time" : "Date and Time"}
       </Text>
       <FormControl isRequired isInvalid={!!formErrors.date}>
-        <FormLabel fontWeight="600">Select date of donation</FormLabel>
-        <DatePicker
-          render={<InputIcon style={{ height: "3em" }} />}
-          className="rmdp-mobile purple"
-          minDate={getSunday(today)}
+        <FormLabel fontWeight="600">Select date</FormLabel>
+        <Calendar
+          className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile" }
+          minDate={new Date().setDate(today.getDate())}
           maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
         />
         <FormErrorMessage>{formErrors.date}</FormErrorMessage>
       </FormControl>
-      <RadioSelectGroup
-        name="dayPart"
-        label="What time of day would you like to drop off your donation?"
-        value={dayPart}
-        values={dayParts}
-        icons={[]}
-        isRequired
-        error={formErrors.dayPart}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          handleChange(e, "dayPart");
-        }}
-      />
-      {showTimeSlots && (
+      {(showTimeofDay || dayPart) && (
+        <RadioSelectGroup
+          name="dayPart"
+          label="Select time of day"
+          value={dayPart}
+          values={dayParts}
+          icons={[]}
+          isRequired
+          error={formErrors.dayPart}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            handleChange(e, "dayPart");
+          }}
+        />
+      )}
+      {(!!dayPart && showTimeSlots) && (
         <RadioSelectGroup
           name="timeRanges"
-          label="Select drop off time"
-          helperText="From the options below, select your first choice."
+          label="Select drop-off time"
           value={timeRange}
           values={showTimeSlots}
           icons={icons}
@@ -370,23 +355,25 @@ const SelectDateTime = ({
           please contact Community Fridge admin.
         </Text>
       )}
-
-      {isDesktop ? (
+      {(!!startTime && !!dayPart) && (
         <FormControl
           isRequired
           isDisabled={isBeingEdited}
           isInvalid={!!formErrors.frequency}
           mb="2em"
         >
-          <FormLabel fontWeight="600">
-            How often will this donation occur?
-          </FormLabel>
-          <Select
-            maxWidth="350px"
-            size="lg"
+          <RadioSelectGroup
+            name="frequency"
+            label="Select frequency"
+            helperText="How often will this donation occur?"
             value={frequency}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              handleChange(e.target.value, "frequency");
+            values={getFrequencyLabels()}
+            icons={[]}
+            isRequired
+            isDisabled={isBeingEdited}
+            error={formErrors.frequency}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleChange(e, "frequency");
             }}
           >
             {frequencies.map((freq, i) => (
@@ -400,77 +387,38 @@ const SelectDateTime = ({
           </Select>
           <FormErrorMessage>{formErrors.frequency}</FormErrorMessage>
         </FormControl>
-      ) : (
-        <RadioSelectGroup
-          name="frequency"
-          label="Select frequency"
-          helperText="How often will this donation occur?"
-          value={frequency}
-          values={frequencies}
-          icons={[]}
-          isRequired
-          isDisabled={isBeingEdited}
-          error={formErrors.frequency}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            handleChange(e, "frequency");
-          }}
-        />
       )}
-      {!isOneTimeDonation && (
+      {((!!frequency && frequency !== DonationFrequency.ONE_TIME) && !!startTime && !!dayPart) && (
         <FormControl
           isRequired
           isInvalid={!!formErrors.recurringDonationEndDate}
           mb="3em"
         >
           <FormLabel fontWeight="600">Proposed end date</FormLabel>
-          <Input
-            isDisabled={isBeingEdited}
-            value={recurringEndDate}
-            onChange={(e) => handleChangeRecurringDate(e.target.value)}
-            placeholder="MM/DD/YYYY"
-            maxWidth="350px"
-            size="lg"
-          />
+          <FormLabel fontWeight="400">Date</FormLabel>
+          <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full">
+            <GridItem colSpan={1}>
+              <DatePicker
+                className="frequency-date"
+                editable={false}
+                minDate={new Date().setDate(today.getDate())}
+                value={recurringEndDate}
+                onChange={handleChangeRecurringDate}
+                placeholder="MM-DD-YYYY"
+              />
+            </GridItem>
+          </SimpleGrid>
           <FormErrorMessage>
             {formErrors.recurringDonationEndDate}
           </FormErrorMessage>
         </FormControl>
       )}
-      {isBeingEdited ? (
-        <VStack alignItems="flex-start">
-          <Button
-            onClick={onSaveClick}
-            variant="navigation"
-            w={{ base: "100%", md: "350px" }}
-          >
-            Save Changes
-          </Button>
-          <Button
-            onClick={() => go && go("confirm donation details")}
-            variant="cancelNavigation"
-            w={{ base: "100%", md: "350px" }}
-          >
-            Cancel
-          </Button>
-        </VStack>
-      ) : (
-        <HStack>
-          <Button
-            onClick={previous}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Back
-          </Button>
-          <Button
-            onClick={handleNext}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Next
-          </Button>
-        </HStack>
-      )}
+      <NextButton 
+        isBeingEdited={isBeingEdited}
+        go={go}
+        canSubmit={getSubmitState()}
+        handleNext={handleNext}
+        />
     </Container>
   );
 };

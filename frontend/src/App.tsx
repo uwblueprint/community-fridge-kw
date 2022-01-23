@@ -14,7 +14,8 @@ import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboar
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
-import ViewDonations from "./components/pages/ViewDonations";
+import UserManagement from "./components/pages/UserManagement";
+import ViewDonationsPage from "./components/pages/ViewDonationsPage";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
@@ -42,13 +43,18 @@ const App = (): React.ReactElement => {
             <Route exact path={Routes.LANDING_PAGE} component={Home} />
             <PrivateRoute
               exact
+              path={Routes.USER_MANAGEMENT_PAGE}
+              component={UserManagement}
+            />
+            <PrivateRoute
+              exact
               path={Routes.ACCOUNT_PAGE}
               component={Account}
             />
             <Route
               exact
               path={Routes.VIEW_DONATIONS}
-              component={ViewDonations}
+              component={ViewDonationsPage}
             />
             <PrivateRoute
               exact
