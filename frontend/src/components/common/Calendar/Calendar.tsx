@@ -4,7 +4,6 @@ import React from "react";
 import { Schedule } from "../../../types/SchedulingTypes";
 import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
-import DefaultWeeklyEventItem from "./WeeklyEventItems";
 
 type CalendarProps = {
   selectedDay: Date;
@@ -20,7 +19,7 @@ const Calendar = ({
       <WeeklyBody
         selectedDay={selectedDay}
         schedules={schedules}
-        renderItem={({ schedule, showingFullWeek }) => (
+        renderItem={({ schedule }) => (
           <DropoffCard key={JSON.stringify(schedule)} schedule={schedule} />
         )}
       />

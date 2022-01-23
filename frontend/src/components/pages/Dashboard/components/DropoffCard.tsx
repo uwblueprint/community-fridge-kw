@@ -47,6 +47,7 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
       boxShadow="2px 2px 12px rgba(0, 0, 0, 0.08)"
       width={{ base: "default", md: "100%" }}
       onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${id}`)}
+      overflow="hidden"
     >
       <Stack
         direction={["column", "row"]}
@@ -59,7 +60,7 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
         alignItems="center"
       >
         <Text
-          minWidth="150px"
+          minWidth="125px"
           textTransform="uppercase"
           textStyle="mobileSmall"
           color="hubbard.100"
@@ -70,18 +71,18 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
         <Text
           textStyle="mobileHeader4"
           whiteSpace="nowrap"
-          minWidth="250px"
+          minWidth="225px"
           pb={["18px", "0px"]}
         >
           {`${startTimeLocal}-${endTimeLocal}`}
         </Text>
         {volunteerNeeded ? (
-          <HStack minWidth="250px" pb={["12px", "0px"]}>
+          <HStack minWidth="225px" pb={["12px", "0px"]}>
             <CheckIcon color={frequencyColorScheme} />
             <Text textStyle="mobileBody">Volunteers Requested</Text>
           </HStack>
         ) : (
-          <HStack minWidth="250px" pb={["12px", "0px"]}>
+          <HStack minWidth="225px" pb={["12px", "0px"]}>
             <CloseIcon w={3} color={frequencyColorScheme} mr="4px" />
             <Text textStyle="mobileBody">No Volunteers Needed</Text>
           </HStack>

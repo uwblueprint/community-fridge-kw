@@ -1,8 +1,7 @@
-import { Box, Grid, HStack, Text, VStack } from "@chakra-ui/react";
-import { format, isThursday, setDay, startOfWeek } from "date-fns";
+import { Box, HStack, Text, VStack } from "@chakra-ui/react";
+import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
-import daysInWeek from "../../../constants/DaysInWeek";
 import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 
@@ -56,7 +55,7 @@ type DayButtonProps = {
 };
 
 const DayButton = ({ day }: DayButtonProps) => {
-  const { locale, week, selectedDay } = useWeeklyCalendar();
+  const { locale, week } = useWeeklyCalendar();
 
   const currentDate = setDay(week, day.day, { locale });
 
@@ -90,7 +89,6 @@ export function WeeklyBody<EventItem>({
 }: WeeklyBodyProps<EventItem>) {
   const { isMobile } = useViewport();
   const { locale, week } = useWeeklyCalendar();
-  const daysToRender = daysInWeek({ locale });
 
   const getDay = (datePassed: Date, i: number): string => {
     const datePassedDay = datePassed.getDay();

@@ -43,11 +43,7 @@ const ViewDonations = (): React.ReactElement => {
   };
 
   return (
-    <Container
-      pt="1.5rem"
-      variant="baseContainer"
-      px={isMobile ? "2rem" : "1rem"}
-    >
+    <Container alignContent="left" variant="calendarContainer">
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="column"
@@ -59,9 +55,6 @@ const ViewDonations = (): React.ReactElement => {
           pt="1.4rem"
         >
           Upcoming Scheduled Fridge Donations
-        </Text>
-        <Text textStyle={isMobile ? "mobileSmall" : "desktopSmall"} pt="1.4rem">
-          Select a card to see more details pertaining to the upcoming donation.
         </Text>
         {isMobile ? (
           <HStack py="1.2rem">
