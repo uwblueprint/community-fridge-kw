@@ -27,7 +27,7 @@ const DeleteRecurringModal = ({
   onDelete,
 }: DeleteRecurringModalProps) => {
   const { isDesktop } = useViewport();
-  const [deleteScheduleValue, setDeleteScheduleValue] = useState("this");
+  const [deleteScheduleValue, setDeleteScheduleValue] = useState("deleteOne");
 
   return (
     <>
@@ -51,10 +51,10 @@ const DeleteRecurringModal = ({
               value={deleteScheduleValue}
             >
               <Stack>
-                <Radio size="lg" colorScheme="red" value="this">
+                <Radio size="lg" colorScheme="red" value="deleteOne">
                   This donation
                 </Radio>
-                <Radio size="lg" colorScheme="red" value="all">
+                <Radio size="lg" colorScheme="red" value="deleteAll">
                   This and all following donations
                 </Radio>
               </Stack>
@@ -64,7 +64,7 @@ const DeleteRecurringModal = ({
             <Button
               width="100%"
               colorScheme="red"
-              onClick={() => onDelete(deleteScheduleValue === "this")}
+              onClick={() => onDelete(deleteScheduleValue === "deleteOne")}
             >
               Cancel Donation
             </Button>
