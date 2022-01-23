@@ -132,4 +132,33 @@ export const categoriesOptions = [
   "Hygiene products (tampons, pads, soap, etc.)",
 ];
 
-export const frequencies = ["One time", "Daily", "Weekly", "Monthly"];
+export const getTimeSlot = (selectedDayPart: string) => {
+  switch (selectedDayPart) {
+    case DayPartsEnum.EARLY_MORNING:
+      return timeRanges.earlyMorning;
+    case DayPartsEnum.MORNING:
+      return timeRanges.morning;
+    case DayPartsEnum.AFTERNOON:
+      return timeRanges.afternoon;
+    case DayPartsEnum.EVENING:
+      return timeRanges.evening;
+    case DayPartsEnum.NIGHT:
+      return timeRanges.night;
+    default:
+      return null;
+  }
+};
+
+export const getSunday = (d: Date) => {
+  const day = d.getDay();
+  const diff = d.getDate() - day; // adjust when day is sunday
+  return new Date(d.setDate(diff));
+};
+
+export const getMaxDate = () => {
+  const sunday = getSunday(new Date());
+  const diff = sunday.getDate() + 13;
+  return new Date(sunday.setDate(diff));
+};
+
+export const frequencies = ["One time donation", "Daily", "Weekly", "Monthly"];

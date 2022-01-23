@@ -23,7 +23,13 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
         enables us to space out donations - effectively maximizing your impact
         on the community.
       </Text>
-      <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
         <Img
           src={cfImage}
           alt="Community Fridge"
@@ -31,15 +37,15 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
           width="100%"
           maxWidth="600px"
         />
-          <Button
-            onClick={next}
-            variant="navigation"
-            w="100%"
-            maxWidth="500px"
-            size="lg"
-          >
-            Get started
-          </Button>
+        <Button
+          onClick={next}
+          variant="navigation"
+          w="100%"
+          maxWidth="500px"
+          size="lg"
+        >
+          Get started
+        </Button>
       </div>
     </Container>
   );

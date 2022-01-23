@@ -31,7 +31,9 @@ const DonationInformation: any = ({
     size: "",
   });
 
-  const [showDonationItemTypes, setShowDonationItemTypes] = useState<boolean>(false);
+  const [showDonationItemTypes, setShowDonationItemTypes] = useState<boolean>(
+    false,
+  );
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
 
   const handleChange = (
@@ -45,10 +47,15 @@ const DonationInformation: any = ({
     });
   };
 
-  const checkSubmit = (e: React.ChangeEvent<HTMLInputElement>, item: string) => {
-    const newCategories = e.target.checked ? [...categories, item] : categories.filter((category) => category !== item);
+  const checkSubmit = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    item: string,
+  ) => {
+    const newCategories = e.target.checked
+      ? [...categories, item]
+      : categories.filter((category) => category !== item);
     setCanSubmit(!!newCategories.length);
-  }
+  };
 
   const handleCheckboxChange = (
     e: React.ChangeEvent<HTMLInputElement>,

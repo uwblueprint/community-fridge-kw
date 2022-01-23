@@ -2,40 +2,37 @@ import "react-multi-date-picker/styles/layouts/mobile.css";
 import "./selectDateTime.css";
 
 import {
-  Box,
-  Button,
   Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
   GridItem,
-  HStack,
-  Input,
-  Select,
   SimpleGrid,
   Text,
-  VStack,
 } from "@chakra-ui/react";
+import { format } from "date-fns";
 import moment from "moment";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
-import { format } from "date-fns";
+
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import BackButton from "./BackButton";
 import ErrorMessages from "./ErrorMessages";
+import NextButton from "./NextButton";
 import {
   dayParts,
-  DayPartsEnum,
+  DonationFrequency,
   frequencies,
+  getMaxDate,
+  getSunday,
+  getTimeSlot,
   SchedulingStepProps,
-  timeRanges,
 } from "./types";
-import BackButton from "./BackButton";
-import NextButton from "./NextButton";
 
 const SelectDateTime = ({
   formValues,
@@ -65,23 +62,7 @@ const SelectDateTime = ({
 
   const { isDesktop } = useViewport();
 
-  const getTimeSlot = (selectedDayPart: string) => {
-    switch (selectedDayPart) {
-      case DayPartsEnum.EARLY_MORNING:
-        return timeRanges.earlyMorning;
-      case DayPartsEnum.MORNING:
-        return timeRanges.morning;
-      case DayPartsEnum.AFTERNOON:
-        return timeRanges.afternoon;
-      case DayPartsEnum.EVENING:
-        return timeRanges.evening;
-      case DayPartsEnum.NIGHT:
-        return timeRanges.night;
-      default:
-        return null;
-    }
-  };
-
+  const today = new Date();
   const get12HTimeString = (time: string) => {
     const time24Hour = `${new Date(time).getHours().toString()}:00`;
     return moment(time24Hour, "HH:mm").format("h:mm A");
@@ -96,12 +77,8 @@ const SelectDateTime = ({
     getTimeSlot(dayPart),
   );
   const [frequencyLabels, setFrequencyLabels] = useState<string[]>(frequencies);
-  const [showFrequency, setShowFrequency] = useState<boolean>(
-    false
-  );
-  const [showTimeofDay, setShowTimeofDay] = useState<boolean>(
-    false
-  );
+  const [showFrequency, setShowFrequency] = useState<boolean>(false);
+  const [showTimeofDay, setShowTimeofDay] = useState<boolean>(false);
   const [canSubmit, setCanSubmit] = useState<boolean>(false);
 
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
@@ -109,7 +86,9 @@ const SelectDateTime = ({
   const [isOneTimeDonation, setIsOneTimeDonation] = useState<boolean>(
     frequency === frequencies[0] || frequency === "",
   );
-  const [recurringEndDate, setRecurringEndDate] = useState<Date>(new Date(startTime));
+  const [recurringEndDate, setRecurringEndDate] = useState<Date>(
+    new Date(startTime),
+  );
 
   React.useEffect(() => {
     // fetch schedules
@@ -149,11 +128,12 @@ const SelectDateTime = ({
   };
 
   const checkSubmit = (hasRecurringDonationEndDate: boolean) => {
-    const reccurring = hasRecurringDonationEndDate ? (frequency !== "" && recurringDonationEndDate !== "") : true;
+    const reccurring = hasRecurringDonationEndDate
+      ? frequency !== "" && recurringDonationEndDate !== ""
+      : true;
     const valuesFilled = date && dayPart && timeRange && reccurring;
-
     return valuesFilled ? setCanSubmit(true) : setCanSubmit(false);
-  }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | string,
@@ -234,10 +214,16 @@ const SelectDateTime = ({
     // update frequency labels
     const newFrequencyLabels = [...frequencies];
     newFrequencyLabels.forEach((freq, i) => {
-      if (freq === frequencies[2]) {
-        newFrequencyLabels[i] = `Weekly on ${format(new Date(selectedDateObj), "EEEE")}s`;
-      } else if (freq === frequencies[3]) {
-        newFrequencyLabels[i] = `Monthly on the ${format(new Date(selectedDateObj), "do")}`;
+      if (freq === DonationFrequency.WEEKLY) {
+        newFrequencyLabels[i] = `Weekly on ${format(
+          new Date(selectedDateObj),
+          "EEEE",
+        )}s`;
+      } else if (freq === DonationFrequency.MONTHLY) {
+        newFrequencyLabels[i] = `Monthly on the ${format(
+          new Date(selectedDateObj),
+          "do",
+        )}`;
       }
     });
     setFrequencyLabels(newFrequencyLabels);
@@ -338,22 +324,9 @@ const SelectDateTime = ({
     }
   };
 
-  const today = new Date();
-  const getSunday = (d: Date) => {
-    const day = d.getDay();
-    const diff = d.getDate() - day; // adjust when day is sunday
-    return new Date(d.setDate(diff));
-  };
-
-  const getMaxDate = () => {
-    const sunday = getSunday(today);
-    const diff = sunday.getDate() + 13;
-    return new Date(sunday.setDate(diff));
-  };
-
   return (
     <Container variant="responsiveContainer">
-      <BackButton 
+      <BackButton
         isBeingEdited={isBeingEdited}
         onSaveClick={onSaveClick}
         previous={previous}
@@ -365,7 +338,7 @@ const SelectDateTime = ({
       <FormControl isRequired isInvalid={!!formErrors.date}>
         <FormLabel fontWeight="600">Select date</FormLabel>
         <Calendar
-          className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile" }
+          className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile"}
           minDate={getSunday(today)}
           maxDate={getMaxDate()}
           value={date}
@@ -408,7 +381,6 @@ const SelectDateTime = ({
           please contact Community Fridge admin.
         </Text>
       )}
-
 
       {showFrequency && (
         <FormControl
@@ -459,12 +431,12 @@ const SelectDateTime = ({
           </FormErrorMessage>
         </FormControl>
       )}
-      <NextButton 
+      <NextButton
         isBeingEdited={isBeingEdited}
         go={go}
         canSubmit={canSubmit}
         handleNext={handleNext}
-        />
+      />
     </Container>
   );
 };
