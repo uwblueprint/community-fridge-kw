@@ -385,6 +385,7 @@ describe("pg schedulingService", () => {
 
     const res = await schedulingService.deleteSchedulingByRecurringDonationId(
       RECURRING_DONATION_ID,
+      testSchedules[1].startTime.toISOString()
     );
     const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll();
     schedulingsDbAfterDelete.forEach((scheduling: Scheduling) => {

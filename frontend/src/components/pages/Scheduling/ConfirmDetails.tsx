@@ -56,7 +56,7 @@ const ConfirmDetails = ({
     } else {
       await SchedulingAPIClient.deleteScheduleByRecurringId(
         currentSchedule?.recurringDonationId,
-        currentSchedule.startTime
+        currentSchedule.startTime,
       );
     }
     toast({

@@ -445,7 +445,7 @@ class SchedulingService implements ISchedulingService {
     try {
       const deletionPastDate = new Date(current_date);
       const numsDestroyed = await Scheduling.destroy({
-        where: { 
+        where: {
           recurring_donation_id,
           start_time: {
             [Op.gte]: deletionPastDate,
