@@ -16,7 +16,7 @@ import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import BackButton from "./BackButton";
 import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
-import {categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
+import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 
 const DonationInformation: any = ({
   formValues,
