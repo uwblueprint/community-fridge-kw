@@ -1,8 +1,7 @@
-import { format } from "date-fns";
 import React from "react";
 
 import { Schedule } from "../../../types/SchedulingTypes";
-import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
+import CalendarInfoCard from "./CalendarInfoCard";
 import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
 
 type CalendarProps = {
@@ -20,7 +19,11 @@ const Calendar = ({
         selectedDay={selectedDay}
         schedules={schedules}
         renderItem={({ schedule }) => (
-          <DropoffCard key={JSON.stringify(schedule)} schedule={schedule} />
+          <CalendarInfoCard
+            key={JSON.stringify(schedule)}
+            schedule={schedule}
+            isAdminView={false}
+          />
         )}
       />
     </WeeklyCalendar>
