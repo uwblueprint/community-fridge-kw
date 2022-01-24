@@ -7,11 +7,11 @@ const Button = {
       py: "20px",
       px: "53px",
       _disabled: {
-        background: 'hubbard.100',
+        background: "hubbard.100",
       },
       _hover: {
         _disabled: {
-          background: 'hubbard.100',
+          background: "hubbard.100",
         },
       },
     },
@@ -38,20 +38,20 @@ const Button = {
       width: "12.73px",
       background: "none",
       marginBottom: "10px",
-    deleteDonation: {
-      background: "tomato.100",
-      color: "squash.100",
-      fontSize: "16px",
-      py: "12px",
-      px: "53px",
+      deleteDonation: {
+        background: "tomato.100",
+        color: "squash.100",
+        fontSize: "16px",
+        py: "12px",
+        px: "53px",
+      },
+      edit: {
+        color: "hubbard.100",
+        fontSize: "16px",
+        fontWeight: 300,
+        textDecoration: "underline",
+      },
     },
-    edit: {
-      color: "hubbard.100",
-      fontSize: "16px",
-      fontWeight: 300,
-      textDecoration: "underline",
-    },
-  }
   },
 };
 
