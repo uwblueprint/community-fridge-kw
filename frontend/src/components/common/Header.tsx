@@ -19,6 +19,7 @@ import { Link as ReactLink, useHistory } from "react-router-dom";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
+import { Role } from "../../types/AuthTypes";
 
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,12 +54,14 @@ const Header = (): JSX.Element => {
         >
           <HamburgerIcon color="black.100" />
         </IconButton>
-        <Image
-          objectFit="none"
-          src="header-logo.png"
-          alt="Community Fridge logo"
-          display="inline"
-        />
+        <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+          <Image
+            objectFit="none"
+            src="header-logo.png"
+            alt="Community Fridge logo"
+            display="inline"
+          />
+        </Link>
         <Stack
           spacing="2rem"
           direction="row"
@@ -69,9 +72,21 @@ const Header = (): JSX.Element => {
           </Link>
           {authenticatedUser ? (
             <>
-              <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
-                Scheduled Donations
-              </Link>
+              {authenticatedUser.role === Role.DONOR && (
+                <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
+                  Scheduled Donations
+                </Link>
+              )}
+              {authenticatedUser.role === Role.ADMIN && (
+                <>
+                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                    User Management
+                  </Link>
+                  <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
+                    View Donations
+                  </Link>
+                </>
+              )}
               <Link as={ReactLink} to={Routes.ACCOUNT_PAGE}>
                 My Account
               </Link>

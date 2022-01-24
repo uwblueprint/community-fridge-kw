@@ -30,6 +30,9 @@ const colors = {
   hubbard: {
     100: "#6C6C84",
   },
+  mold: {
+    100: "#D8DDE0",
+  },
   dorian: {
     100: "#ECF1F4",
   },

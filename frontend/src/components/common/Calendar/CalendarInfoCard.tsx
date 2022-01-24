@@ -1,25 +1,34 @@
-import { CheckIcon, CloseIcon, RepeatIcon } from "@chakra-ui/icons";
+import { RepeatIcon } from "@chakra-ui/icons";
 import { Box, HStack, Stack, Text } from "@chakra-ui/react";
-import { format, isToday, isTomorrow } from "date-fns";
+import { format } from "date-fns";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import { getFrequencyColor } from "../../../../constants/DaysInWeek";
-import * as Routes from "../../../../constants/Routes";
-import { Schedule } from "../../../../types/SchedulingTypes";
-import { DonationFrequency } from "../../Scheduling/types";
+import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import { getFrequencyColor } from "../../../constants/DaysInWeek";
+import * as Routes from "../../../constants/Routes";
+import { Schedule } from "../../../types/SchedulingTypes";
+import { DonationFrequency } from "../../pages/Scheduling/types";
+import { FridgeIcon, PersonIcon } from "../icons";
 
-const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
+const CalendarInfoCard = ({
+  schedule,
+  isAdminView = false,
+}: {
+  schedule: Schedule;
+  isAdminView: boolean;
+}): JSX.Element => {
   const {
     startTime,
     endTime,
     id,
+    donorId,
     frequency,
-    volunteerNeeded,
+    size,
     recurringDonationEndDate,
   } = schedule;
+  const [businessName, setBusinessName] = React.useState("");
   const frequencyColorScheme = getFrequencyColor(frequency);
-  const startDateLocal = new Date(startTime);
   const startTimeLocal = format(new Date(startTime), "K:mm aa");
   const endTimeLocal = format(new Date(endTime), "K:mm aa");
   const formattedRecurringEndDate = format(
@@ -27,17 +36,18 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
     "MMM d, yyyy",
   );
 
-  const dateHeadingText = (startDate: Date) => {
-    if (isToday(startDate)) {
-      return "Today";
-    }
-    if (isTomorrow(startDate)) {
-      return "Tomorrow";
-    }
-    return format(startDate, "MMM d, yyyy");
-  };
-
   const history = useHistory();
+
+  React.useEffect(() => {
+    const getDonor = async () => {
+      const donorResponse = await DonorAPIClient.getDonorById(
+        schedule!.donorId,
+      );
+      setBusinessName(donorResponse.businessName);
+    };
+
+    getDonor();
+  }, [donorId]);
 
   return (
     <Box
@@ -46,7 +56,9 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
       borderLeft={`7px solid ${getFrequencyColor(frequency)}`}
       boxShadow="2px 2px 12px rgba(0, 0, 0, 0.08)"
       width={{ base: "default", md: "100%" }}
-      onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${id}`)}
+      onClick={() =>
+        isAdminView && history.push(`${Routes.DASHBOARD_PAGE}/${id}`)
+      }
       overflow="hidden"
     >
       <Stack
@@ -60,15 +72,6 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
         alignItems="center"
       >
         <Text
-          minWidth="125px"
-          textTransform="uppercase"
-          textStyle="mobileSmall"
-          color="hubbard.100"
-          pb={["6px", "0px"]}
-        >
-          {dateHeadingText(startDateLocal)}
-        </Text>
-        <Text
           textStyle="mobileHeader4"
           whiteSpace="nowrap"
           minWidth="225px"
@@ -76,17 +79,14 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
         >
           {`${startTimeLocal}-${endTimeLocal}`}
         </Text>
-        {volunteerNeeded ? (
-          <HStack minWidth="225px" pb={["12px", "0px"]}>
-            <CheckIcon color={frequencyColorScheme} />
-            <Text textStyle="mobileBody">Volunteers Requested</Text>
-          </HStack>
-        ) : (
-          <HStack minWidth="225px" pb={["12px", "0px"]}>
-            <CloseIcon w={3} color={frequencyColorScheme} mr="4px" />
-            <Text textStyle="mobileBody">No Volunteers Needed</Text>
-          </HStack>
-        )}
+        <HStack minWidth="225px" pb={["12px", "0px"]}>
+          <PersonIcon color={frequencyColorScheme} />
+          <Text textStyle="mobileBody">{businessName}</Text>
+        </HStack>
+        <HStack minWidth="225px" pb={["12px", "0px"]}>
+          <FridgeIcon color={frequencyColorScheme} />
+          <Text textStyle="mobileBody">{`${size} Donation`}</Text>
+        </HStack>
         <HStack>
           <RepeatIcon color={frequencyColorScheme} />
           <Text>
@@ -109,4 +109,4 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
   );
 };
 
-export default DropoffCard;
+export default CalendarInfoCard;

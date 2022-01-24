@@ -1,33 +1,30 @@
-import { format } from "date-fns";
 import React from "react";
 
 import { Schedule } from "../../../types/SchedulingTypes";
+import CalendarInfoCard from "./CalendarInfoCard";
 import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
-import DefaultWeeklyEventItem from "./WeeklyEventItems";
 
 type CalendarProps = {
   selectedDay: Date;
   schedules: Schedule[];
+  isAdminView: boolean;
 };
 
 const Calendar = ({
   selectedDay,
   schedules,
+  isAdminView,
 }: CalendarProps): React.ReactElement => {
   return (
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
         selectedDay={selectedDay}
         schedules={schedules}
-        renderItem={({ schedule, showingFullWeek }) => (
-          <DefaultWeeklyEventItem
+        renderItem={({ schedule }) => (
+          <CalendarInfoCard
             key={JSON.stringify(schedule)}
             schedule={schedule}
-            date={
-              showingFullWeek
-                ? format(new Date(schedule!.startTime as string), "MMM do k:mm")
-                : format(new Date(schedule!.startTime as string), "k:mm")
-            }
+            isAdminView={isAdminView}
           />
         )}
       />

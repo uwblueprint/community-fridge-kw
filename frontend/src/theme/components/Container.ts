@@ -5,6 +5,11 @@ const Container = {
       pt: "0.5rem",
       maxWidth: ["default", "70%"],
     },
+    calendarContainer: {
+      px: "0px",
+      py: "0px",
+      maxWidth: ["default", "100%"],
+    },
     responsiveContainer: {
       px: ["42px", "0px"],
       maxWidth: ["default", "70%"],

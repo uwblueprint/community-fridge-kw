@@ -1,4 +1,13 @@
-import { Box, Button, Container, Spinner, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Spinner,
+  Stack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -14,13 +23,6 @@ const Dashboard = (): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const history = useHistory();
-
-  const deleteSchedule = async (id: string) => {
-    await SchedulingAPIClient.deleteSchedule(id);
-    if (schedules) {
-      setSchedules(schedules.filter((s) => s?.id !== id));
-    }
-  };
 
   React.useEffect(() => {
     const getSchedules = async () => {
@@ -45,42 +47,61 @@ const Dashboard = (): JSX.Element => {
 
   return (
     <Container variant="dashboardContainer">
-      <Text color="black.100" textStyle="mobileHeader1">
-        Welcome {authenticatedUser?.firstName}!
-      </Text>
-      <Text pt="0.8rem" textStyle="mobileBody">
-        Thank you for supporting your local community fridge!{" "}
-      </Text>
-      <Button
-        mt="1.5rem"
-        size="lg"
-        width={{ lg: "30%", base: "100%" }}
-        variant="navigation"
-        onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+      <Stack direction={["column", "row"]} justifyContent="space-between">
+        <VStack alignItems="left">
+          <Text color="black.100" textStyle="mobileHeader1">
+            My Upcoming Donations
+          </Text>
+          <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
+            Thank you for supporting your local community fridge!{" "}
+          </Text>
+        </VStack>
+        <Button
+          float="right"
+          mt="1.5rem"
+          size="lg"
+          width={{ lg: "30%", base: "100%" }}
+          variant="navigation"
+          onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+        >
+          Schedule new donation
+        </Button>
+      </Stack>
+      <Box
+        display={{ lg: "flex" }}
+        flexDirection="row"
+        flexWrap="wrap"
+        marginTop={["60px", "70px"]}
       >
-        Schedule new donation
-      </Button>
-      <Text mt="4rem" textStyle="mobileHeader1">
-        Your Upcoming Donations
-      </Text>
-      <Text pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
-        View all of the upcoming donations that you have scheduled for the next
-        two weeks
-      </Text>
-      <Box display={{ lg: "flex" }} flexDirection="row" flexWrap="wrap">
         {schedules.length > 0 ? (
           schedules.map((scheduleObject: Schedule, id) => (
-            <DropoffCard
-              key={id}
-              schedule={scheduleObject!}
-              onDelete={() => deleteSchedule(scheduleObject!.id)}
-            />
+            <DropoffCard key={id} schedule={scheduleObject!} />
           ))
         ) : (
-          <Text as="i" pt="0.8rem" textStyle="mobileBody" mb="1.5rem">
-            You currently have no upcoming donations scheduled for the next two
-            weeks.
-          </Text>
+          <Flex paddingTop="1.5rem">
+            <Box
+              display={{ lg: "flex" }}
+              width={{ base: "default", md: "100%" }}
+              backgroundColor="squash.100"
+              padding={{ base: "0px", md: "3rem" }}
+            >
+              <Text
+                p={{ base: "28px", md: "0px" }}
+                color="black.500"
+                textStyle="mobileBody"
+              >
+                You currently have no upcoming donations scheduled! &nbsp;
+              </Text>
+              <Text
+                pl={{ base: "28px", md: "0px" }}
+                px={{ base: "28px", md: "0px" }}
+                color="black.500"
+                textStyle="mobileBody"
+              >
+                Schedule a donation today to start giving back.
+              </Text>
+            </Box>
+          </Flex>
         )}
       </Box>
     </Container>
