@@ -29,6 +29,8 @@ function toSnakeCase(
 class SchedulingService implements ISchedulingService {
   /* eslint-disable class-methods-use-this */
 
+  static nextRecurringDonationId = 1;
+
   async getSchedulingById(id: string): Promise<SchedulingDTO> {
     let scheduling: Scheduling | null;
 
@@ -190,26 +192,10 @@ class SchedulingService implements ISchedulingService {
           notes: scheduling.notes,
         });
       } else {
-        // TO DO: refactor & optimize code, replace use of this.getSchedulings()
         // get new recurring donation id
-        const dbCurrentSchedules: SchedulingDTO[] = await this.getSchedulings();
-        const recurringDonationIds = dbCurrentSchedules.map((item) => {
-          return item.recurringDonationId;
-        });
-
-        const arrayRecurringDonationIds: number[] = [];
-        for (let i = 0; i < recurringDonationIds.length; i += 1) {
-          if (recurringDonationIds[i] === "null") {
-            arrayRecurringDonationIds.push(0);
-          } else {
-            arrayRecurringDonationIds.push(Number(recurringDonationIds[i]));
-          }
-        }
-
         const newRecurringDonationId: number =
-          arrayRecurringDonationIds.length > 0
-            ? Math.max(...arrayRecurringDonationIds) + 1
-            : 1;
+          SchedulingService.nextRecurringDonationId;
+        SchedulingService.nextRecurringDonationId += 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
