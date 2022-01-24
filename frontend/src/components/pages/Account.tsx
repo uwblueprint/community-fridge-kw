@@ -1,3 +1,4 @@
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -5,36 +6,94 @@ import {
   Container,
   FormControl,
   HStack,
+  IconButton,
+  Img,
   Input,
+  Spacer,
   Spinner,
   Text,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
+import { useForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
+import pencilIcon from "../../assets/pencilIcon.svg";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
+import { AuthenticatedDonor } from "../../types/AuthTypes";
 
 const Account = (): JSX.Element => {
   const history = useHistory();
   const { authenticatedUser } = useContext(AuthContext);
-  const [businessName, setBusinessName] = useState("");
-
-  const navigateToDashboard = () => {
-    history.push(Routes.DASHBOARD_PAGE);
-  };
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [donor, setDonor] = useState({});
 
   React.useEffect(() => {
     if (!authenticatedUser) {
       return;
     }
     const getDonor = async () => {
-      const donor = await DonorAPIClient.getDonorByUserId(authenticatedUser.id);
-      setBusinessName(donor.businessName);
+      const res = await DonorAPIClient.getDonorByUserId(authenticatedUser.id);
+      setDonor(res);
     };
     getDonor();
   }, [authenticatedUser]);
+
+  const accountData = ({
+    id: authenticatedUser!.id,
+    firstName: authenticatedUser!.firstName,
+    lastName: authenticatedUser!.lastName,
+    email: authenticatedUser!.email,
+    phoneNumber: authenticatedUser!.phoneNumber,
+    businessName: donor.businessName,
+  } as unknown) as AuthenticatedDonor;
+
+  const [formValues, setForm] = useForm(accountData);
+
+  const navigateToDashboard = () => {
+    history.push(Routes.DASHBOARD_PAGE);
+  };
+
+  const changeEditMode = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement> | string,
+    name: string,
+  ) => {
+    setForm({ target: { name, value: e } });
+    if (name === "businessName") {
+      setBusinessName(e.toString());
+    }
+  };
+
+  const EditInfoButton = (props: any) => {
+    return !isEditing ? (
+      <Button
+        variant="editInfo"
+        rightIcon={
+          <Img
+            src={pencilIcon}
+            alt="pencil icon"
+            width="12px"
+            display="inline"
+          />
+        }
+        onClick={changeEditMode}
+      >
+        Edit
+      </Button>
+    ) : (
+      <IconButton
+        variant="cancelEditInfo"
+        aria-label="Cancel editing"
+        icon={<CloseIcon />}
+        onClick={changeEditMode}
+      />
+    );
+  };
 
   if (!businessName) {
     return (
@@ -46,10 +105,15 @@ const Account = (): JSX.Element => {
   return (
     <Container centerContent variant="responsiveContainer">
       <Box>
-        <Text mt="67px" textStyle="mobileHeader1">
-          My Account
-        </Text>
-        <FormControl mt="2rem" isReadOnly>
+        <HStack align="flex-end">
+          <Text mt="67px" textStyle="mobileHeader1">
+            My Account
+          </Text>
+          <Spacer />
+          <EditInfoButton />
+        </HStack>
+
+        <FormControl mt="2rem" isReadOnly={!isEditing}>
           <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
             Organization
           </Text>
@@ -60,10 +124,8 @@ const Account = (): JSX.Element => {
               value={businessName}
               name="businessName"
               placeholder="Enter name of business"
-              variant="unstyled"
-              size="sm"
-              color="hubbard.100"
-              fontWeight="500"
+              variant={isEditing ? "customFilled" : "unstyled"}
+              onChange={(e) => handleChange(e.target.value, "businessName")}
             />
           </Box>
           <Text
@@ -74,31 +136,27 @@ const Account = (): JSX.Element => {
           >
             Point of Contact
           </Text>
-          <HStack spacing={{ base: "default", md: "80px" }}>
+          <HStack spacing={{ base: "16px" }}>
             <Box>
               <Text>First name</Text>
               <Input
                 mt="2"
-                value={authenticatedUser!.firstName}
+                value={formValues!.firstName}
                 name="firstName"
                 placeholder="Enter first name"
-                variant="unstyled"
-                size="sm"
-                color="hubbard.100"
-                fontWeight="500"
+                variant={isEditing ? "customFilled" : "unstyled"}
+                onChange={(e) => handleChange(e.target.value, "firstName")}
               />
             </Box>
             <Box mt="2rem">
               <Text>Last name</Text>
               <Input
                 mt="2"
-                value={authenticatedUser!.lastName}
+                value={formValues!.lastName}
                 name="lastName"
                 placeholder="Enter last name"
-                variant="unstyled"
-                size="sm"
-                color="hubbard.100"
-                fontWeight="500"
+                variant={isEditing ? "customFilled" : "unstyled"}
+                onChange={(e) => handleChange(e.target.value, "lastName")}
               />
             </Box>
           </HStack>
@@ -107,26 +165,22 @@ const Account = (): JSX.Element => {
             <Input
               mt="2"
               type="tel"
-              value={authenticatedUser!.phoneNumber}
+              value={formValues!.phoneNumber}
               name="phoneNumber"
               placeholder="Enter phone number"
-              variant="unstyled"
-              size="sm"
-              color="hubbard.100"
-              fontWeight="500"
+              variant={isEditing ? "customFilled" : "unstyled"}
+              onChange={(e) => handleChange(e.target.value, "phoneNumber")}
             />
           </Box>
           <Box mt={{ base: "24px", md: "40px" }}>
             <Text>Email address</Text>
             <Input
               mt="2"
-              value={authenticatedUser!.email}
+              value={formValues!.email}
               name="email"
               placeholder="Enter email"
-              variant="unstyled"
-              size="sm"
-              color="hubbard.100"
-              fontWeight="500"
+              variant={isEditing ? "customFilled" : "unstyled"}
+              onChange={(e) => handleChange(e.target.value, "email")}
             />
           </Box>
           <Box mt={{ base: "66px", md: "56px" }}>
