@@ -10,26 +10,28 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
+import { format } from "date-fns";
 import moment from "moment";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
-import { format } from "date-fns";
+
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import ErrorMessages from "./ErrorMessages";
-import {
-  dayParts,
-  frequencies,
-  DonationFrequency,
-  SchedulingStepProps,
-  getTimeSlot,
-} from "./types";
 import BackButton from "./BackButton";
+import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
+import {
+  convertFrequencyString,
+  dayParts,
+  DonationFrequency,
+  frequencies,
+  getTimeSlot,
+  SchedulingStepProps,
+} from "./types";
 
 const SelectDateTime = ({
   formValues,
@@ -66,8 +68,10 @@ const SelectDateTime = ({
 
   const getSubmitState = () => {
     const filled = !!dayPart && !!startTime && !!endTime && !!frequency;
-    return frequency === DonationFrequency.ONE_TIME ? filled : filled && !!recurringDonationEndDate;
-  }
+    return frequency === DonationFrequency.ONE_TIME
+      ? filled
+      : filled && !!recurringDonationEndDate;
+  };
 
   // setting state initial values
   const [date, setDate] = useState<Date>(new Date(startTime));
@@ -77,13 +81,13 @@ const SelectDateTime = ({
   const [showTimeSlots, setShowTimeSlots] = useState<string[] | null>(
     getTimeSlot(dayPart),
   );
-  const [showTimeofDay, setShowTimeofDay] = useState<boolean>(
-    false
-  );
+  const [showTimeofDay, setShowTimeofDay] = useState<boolean>(false);
 
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [recurringEndDate, setRecurringEndDate] = useState<Date>(new Date(startTime));
+  const [recurringEndDate, setRecurringEndDate] = useState<Date>(
+    new Date(startTime),
+  );
 
   const getFrequencyLabels = () => {
     const newFrequencyLabels = [...frequencies];
@@ -91,11 +95,24 @@ const SelectDateTime = ({
       if (freq === DonationFrequency.WEEKLY) {
         newFrequencyLabels[i] = `Weekly on ${format(new Date(date), "EEEE")}s`;
       } else if (freq === DonationFrequency.MONTHLY) {
-        newFrequencyLabels[i] = `Monthly on the ${format(new Date(date), "do")}`;
+        newFrequencyLabels[i] = `Monthly on the ${format(
+          new Date(date),
+          "do",
+        )}`;
       }
     });
     return newFrequencyLabels;
-  }
+  };
+
+  const convert = (freq: string) => {
+    let freqReturn = freq;
+    if (freq === DonationFrequency.WEEKLY) {
+      freqReturn = `Weekly on ${format(new Date(date), "EEEE")}s`;
+    } else if (freq === DonationFrequency.MONTHLY) {
+      freqReturn = `Monthly on the ${format(new Date(date), "do")}`;
+    }
+    return freqReturn;
+  };
 
   React.useEffect(() => {
     // fetch schedules
@@ -300,7 +317,7 @@ const SelectDateTime = ({
 
   return (
     <Container variant="responsiveContainer">
-      <BackButton 
+      <BackButton
         isBeingEdited={isBeingEdited}
         onSaveClick={onSaveClick}
         previous={previous}
@@ -312,7 +329,7 @@ const SelectDateTime = ({
       <FormControl isRequired isInvalid={!!formErrors.date}>
         <FormLabel fontWeight="600">Select date</FormLabel>
         <Calendar
-          className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile" }
+          className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile"}
           minDate={new Date().setDate(today.getDate())}
           maxDate={getMaxDate()}
           value={date}
@@ -334,7 +351,7 @@ const SelectDateTime = ({
           }}
         />
       )}
-      {(!!dayPart && showTimeSlots) && (
+      {!!dayPart && showTimeSlots && (
         <RadioSelectGroup
           name="timeRanges"
           label="Select drop-off time"
@@ -355,7 +372,7 @@ const SelectDateTime = ({
           please contact Community Fridge admin.
         </Text>
       )}
-      {(!!startTime && !!dayPart) && (
+      {!!startTime && !!dayPart && (
         <FormControl
           isRequired
           isDisabled={isBeingEdited}
@@ -366,50 +383,53 @@ const SelectDateTime = ({
             name="frequency"
             label="Select frequency"
             helperText="How often will this donation occur?"
-            value={frequency}
+            value={convert(frequency)}
             values={getFrequencyLabels()}
             icons={[]}
             isRequired
             isDisabled={isBeingEdited}
             error={formErrors.frequency}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              handleChange(e, "frequency");
+              handleChange(convertFrequencyString(e.toString()), "frequency");
             }}
           />
           <FormErrorMessage>{formErrors.frequency}</FormErrorMessage>
         </FormControl>
       )}
-      {((!!frequency && frequency !== DonationFrequency.ONE_TIME) && !!startTime && !!dayPart) && (
-        <FormControl
-          isRequired
-          isInvalid={!!formErrors.recurringDonationEndDate}
-          mb="3em"
-        >
-          <FormLabel fontWeight="600">Proposed end date</FormLabel>
-          <FormLabel fontWeight="400">Date</FormLabel>
-          <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full">
-            <GridItem colSpan={1}>
-              <DatePicker
-                className="frequency-date"
-                editable={false}
-                minDate={new Date().setDate(today.getDate())}
-                value={recurringEndDate}
-                onChange={handleChangeRecurringDate}
-                placeholder="MM-DD-YYYY"
-              />
-            </GridItem>
-          </SimpleGrid>
-          <FormErrorMessage>
-            {formErrors.recurringDonationEndDate}
-          </FormErrorMessage>
-        </FormControl>
-      )}
-      <NextButton 
+      {!!frequency &&
+        frequency !== DonationFrequency.ONE_TIME &&
+        !!startTime &&
+        !!dayPart && (
+          <FormControl
+            isRequired
+            isInvalid={!!formErrors.recurringDonationEndDate}
+            mb="3em"
+          >
+            <FormLabel fontWeight="600">Proposed end date</FormLabel>
+            <FormLabel fontWeight="400">Date</FormLabel>
+            <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full">
+              <GridItem colSpan={1}>
+                <DatePicker
+                  className="frequency-date"
+                  editable={false}
+                  minDate={new Date().setDate(today.getDate())}
+                  value={recurringEndDate}
+                  onChange={handleChangeRecurringDate}
+                  placeholder="MM-DD-YYYY"
+                />
+              </GridItem>
+            </SimpleGrid>
+            <FormErrorMessage>
+              {formErrors.recurringDonationEndDate}
+            </FormErrorMessage>
+          </FormControl>
+        )}
+      <NextButton
         isBeingEdited={isBeingEdited}
         go={go}
         canSubmit={getSubmitState()}
         handleNext={handleNext}
-        />
+      />
     </Container>
   );
 };
