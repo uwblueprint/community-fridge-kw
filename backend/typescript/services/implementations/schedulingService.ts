@@ -272,8 +272,8 @@ class SchedulingService implements ISchedulingService {
                  ${dayjs(startTimeString).format("dddd, MMMM D")}
                  <br />
                  ${dayjs(startTimeString).format("h:mma")} - ${dayjs(
-                 endTimeString,
-                 ).format("h:mm a")}
+        endTimeString,
+      ).format("h:mm a")}
                  <br />
                  ${frequencyString}
              </p>
@@ -297,21 +297,13 @@ class SchedulingService implements ISchedulingService {
          Volunteer information
      </h2>
      <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-         ${
-         schedule.volunteerNeeded
-         ? "Volunteer required"
-         : ""
-     }
+         ${schedule.volunteerNeeded ? "Volunteer required" : ""}
      <br/>
      ${schedule.isPickup ? "Pickup required" : ""}
      <br/>
      ${schedule.isPickup ? schedule.pickupLocation : ""}
      <br/>
-     ${
-     schedule.notes
-     ? `Additional Notes: ${schedule.notes}`
-     : ""
-     }
+     ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
      </p>
      
      
