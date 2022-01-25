@@ -12,6 +12,13 @@ import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
 
 import testSql from "../../../testUtils/testDb";
+import IUserService from "../../interfaces/userService";
+import UserService from "../userService";
+import nodemailerConfig from "../../../nodemailer.config";
+import IEmailService from "../../interfaces/emailService";
+import EmailService from "../emailService";
+import IDonorService from "../../interfaces/donorService";
+import DonorService from "../donorService";
 
 const RECURRING_DONATION_ID = "1";
 
@@ -104,12 +111,21 @@ const schedules = testSchedules.map((schedule) => {
   return scheduleSnakeCase;
 });
 
+jest.mock("nodemailer", () => {
+  const createTransport = jest.fn().mockReturnValue({
+    sendMail: jest.fn(),
+  });
+  return { createTransport };
+});
+
 describe("pg schedulingService", () => {
   let schedulingService: SchedulingService;
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
-    schedulingService = new SchedulingService();
+    const emailService: IEmailService = new EmailService(nodemailerConfig);
+    const donorService: IDonorService = new DonorService();
+    schedulingService = new SchedulingService(emailService, donorService);
     await User.bulkCreate(testUsersDb);
     await Donor.bulkCreate(testDonorsDb);
   });
