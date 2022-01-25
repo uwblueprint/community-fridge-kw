@@ -46,8 +46,6 @@ class SchedulingService implements ISchedulingService {
     this.donorService = donorService;
   }
 
-  static nextRecurringDonationId = 1;
-
   async getSchedulingById(id: string): Promise<SchedulingDTO> {
     let scheduling: Scheduling | null;
 
@@ -349,9 +347,8 @@ class SchedulingService implements ISchedulingService {
         });
       } else {
         // get new recurring donation id
-        const newRecurringDonationId: number =
-          SchedulingService.nextRecurringDonationId;
-        SchedulingService.nextRecurringDonationId += 1;
+        const newRecurringDonationId =
+          Number(await Scheduling.max("recurring_donation_id")) + 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
