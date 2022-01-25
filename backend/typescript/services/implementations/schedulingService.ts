@@ -12,6 +12,7 @@ import {
   UpdateSchedulingDTO,
   Frequency,
   UserDonorDTO,
+  donationSizeDescriptions,
 } from "../../types";
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
@@ -220,23 +221,19 @@ class SchedulingService implements ISchedulingService {
             "MM/DD/YYYY, HH:mm A",
           ),
         ).toLocaleString("en-US", { timeZone: "EST" });
-        const recurringDonationEndDateStringFormatted: string = dayjs(
-          recurringDonationEndDateString,
-        ).format("MMMM, D YYYY");
         if (schedule.frequency === Frequency.DAILY) {
-          frequencyString = `Daily until ${recurringDonationEndDateStringFormatted}`;
+          frequencyString = `Daily`;
         } else if (schedule.frequency === Frequency.WEEKLY) {
           frequencyString = `Weekly on ${dayjs(startTimeString).format(
             "dddd",
-          )}s until ${recurringDonationEndDateStringFormatted}`;
+          )}`;
         } else {
           frequencyString = `Monthly on the ${ordinal(
             Number(dayjs(startTimeString).format("D")),
-          )} until ${recurringDonationEndDateStringFormatted}`;
+          )}`;
         }
       }
 
-      // TO DO: how do we properly style this?
       const emailBody = `
       <html >
       <head>
@@ -283,7 +280,9 @@ class SchedulingService implements ISchedulingService {
              Donation information
          </h2>
          <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-             ${schedule.size}
+             ${schedule.size} - ${donationSizeDescriptions.get(
+        schedule.size ?? "",
+      )}
              <br/>
              ${schedule.categories.join(", ")}
          </p>
