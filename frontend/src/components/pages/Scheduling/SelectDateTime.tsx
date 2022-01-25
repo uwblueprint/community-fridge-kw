@@ -104,7 +104,7 @@ const SelectDateTime = ({
     return newFrequencyLabels;
   };
 
-  const convert = (freq:string) => {
+  const convert = (freq: string) => {
     let freqReturn = freq;
     if (freq === DonationFrequency.WEEKLY) {
       freqReturn = `Weekly on ${format(new Date(date), "EEEE")}s`;
@@ -112,7 +112,7 @@ const SelectDateTime = ({
       freqReturn = `Monthly on the ${format(new Date(date), "do")}`;
     }
     return freqReturn;
-  }
+  };
 
   React.useEffect(() => {
     // fetch schedules

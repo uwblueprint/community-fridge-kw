@@ -55,7 +55,7 @@ export const dayParts = [
 ];
 
 export enum DonationFrequency {
-  ONE_TIME = "One time donation",
+  ONE_TIME = "One time",
   DAILY = "Daily",
   WEEKLY = "Weekly",
   MONTHLY = "Monthly",
