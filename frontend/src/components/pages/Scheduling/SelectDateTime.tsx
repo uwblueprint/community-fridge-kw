@@ -104,6 +104,16 @@ const SelectDateTime = ({
     return newFrequencyLabels;
   };
 
+  const convert = (freq:string) => {
+    let freqReturn = freq;
+    if (freq === DonationFrequency.WEEKLY) {
+      freqReturn = `Weekly on ${format(new Date(date), "EEEE")}s`;
+    } else if (freq === DonationFrequency.MONTHLY) {
+      freqReturn = `Monthly on the ${format(new Date(date), "do")}`;
+    }
+    return freqReturn;
+  }
+
   React.useEffect(() => {
     // fetch schedules
     const fetchSchedules = async () => {
@@ -373,7 +383,7 @@ const SelectDateTime = ({
             name="frequency"
             label="Select frequency"
             helperText="How often will this donation occur?"
-            value={frequency}
+            value={convert(frequency)}
             values={getFrequencyLabels()}
             icons={[]}
             isRequired
