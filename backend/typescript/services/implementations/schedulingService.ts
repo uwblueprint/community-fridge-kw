@@ -251,14 +251,14 @@ class SchedulingService implements ISchedulingService {
      <body>
         <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
          style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
-         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey there ${firstName}!</h2>
-         <pstyle="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;>Thank you for scheduling a donation to your local community fridge.
+         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717;">Hey there ${firstName}!</h2>
+         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
          <br />
          <br />
          Here is a summary of your upcoming donation:
      </p>
      
-     <div style="display: flex; flex-direction: row; align-content: flex-start;">
+     <div style="display: flex; flex-direction: row; align-content: flex-start; gap: 20px;">
          <div>
              <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
                  Proposed drop-off time
