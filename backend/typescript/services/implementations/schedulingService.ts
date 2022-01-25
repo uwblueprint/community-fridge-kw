@@ -346,26 +346,9 @@ class SchedulingService implements ISchedulingService {
           notes: scheduling.notes,
         });
       } else {
-        // TO DO: refactor & optimize code, replace use of this.getSchedulings()
         // get new recurring donation id
-        const dbCurrentSchedules: SchedulingDTO[] = await this.getSchedulings();
-        const recurringDonationIds = dbCurrentSchedules.map((item) => {
-          return item.recurringDonationId;
-        });
-
-        const arrayRecurringDonationIds: number[] = [];
-        for (let i = 0; i < recurringDonationIds.length; i += 1) {
-          if (recurringDonationIds[i] === "null") {
-            arrayRecurringDonationIds.push(0);
-          } else {
-            arrayRecurringDonationIds.push(Number(recurringDonationIds[i]));
-          }
-        }
-
-        const newRecurringDonationId: number =
-          arrayRecurringDonationIds.length > 0
-            ? Math.max(...arrayRecurringDonationIds) + 1
-            : 1;
+        const newRecurringDonationId =
+          Number(await Scheduling.max("recurring_donation_id")) + 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
@@ -472,7 +455,7 @@ class SchedulingService implements ISchedulingService {
         // loop for calculations if frequency is MONTHLY
         else {
           const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setMonth(nextDay.getMonth() + 1);
+          nextDay.setDate(nextDay.getDate() + 28);
 
           while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
             const newStartTime: Date = new Date(nextDay);
@@ -500,7 +483,7 @@ class SchedulingService implements ISchedulingService {
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setMonth(nextDay.getMonth() + 1);
+            nextDay.setDate(nextDay.getDate() + 28);
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }

@@ -307,7 +307,7 @@ describe("pg schedulingService", () => {
     const monthlySchedulingToCreate: CreateSchedulingDTO = {
       ...dailySchedulingToCreate,
       frequency: Frequency.MONTHLY,
-      recurringDonationEndDate: new Date("2021-02-28T00:00:00.000Z"),
+      recurringDonationEndDate: new Date("2022-01-12T00:00:00.000Z"),
       startTime: new Date("September 1, 2021 11:00:00"),
       endTime: new Date("September 1, 2021 12:00:00"),
     };
@@ -323,16 +323,12 @@ describe("pg schedulingService", () => {
       },
     );
     // calculate expected number of donations associated with this monthly donation
-    let monthlySchedulingObjectsNum = 0;
-    const dateIncrementor: Date = new Date(currStartDate);
-    dateIncrementor.setHours(0, 0, 0, 0);
-    while (
-      dateIncrementor.valueOf() <=
-      weeklySchedulingToCreate.recurringDonationEndDate!.valueOf()
-    ) {
-      monthlySchedulingObjectsNum += 1;
-      dateIncrementor.setMonth(dateIncrementor.getMonth() + 1);
-    }
+    const monthlySchedulingObjectsNum =
+      Math.floor(
+        (monthlySchedulingToCreate.recurringDonationEndDate!.getTime() -
+          startTime.getTime()) /
+          (28 * 1000 * 60 * 60 * 24),
+      ) + 1;
 
     expect(monthlySchedules.length).toEqual(monthlySchedulingObjectsNum);
 
@@ -341,8 +337,8 @@ describe("pg schedulingService", () => {
       const tempStartDate: Date = new Date(currStartDate);
       const tempEndDate: Date = new Date(currEndDate);
       // check that start and end dates are correct
-      tempStartDate.setMonth(currStartDate.getMonth() + i);
-      tempEndDate.setMonth(currEndDate.getMonth() + i);
+      tempStartDate.setDate(currStartDate.getDate() + i * 28);
+      tempEndDate.setDate(currStartDate.getDate() + i * 28);
       expect(monthlySchedules[i].startTime).toEqual(tempStartDate);
       expect(monthlySchedules[i].endTime).toEqual(tempEndDate);
       // verify recurring donation id is the same for all scheduling objects
