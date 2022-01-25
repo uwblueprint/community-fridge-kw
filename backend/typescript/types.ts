@@ -40,6 +40,16 @@ export const Categories = new Set([
   "Hygiene products (tampons, pads, soap, etc.)",
 ]);
 
+export const donationSizeDescriptions = new Map<string, string>([
+  ["Small", "Fills less than a shelf of the fridge/pantry"],
+  ["Medium", "Approximately fills one shelf of the fridge/pantry"],
+  ["Large", "Approximately fills two shelves of the fridge/pantry"],
+  [
+    "Extra-large",
+    "Approximately fills four shelves of the fridge/ pantry (full capacity)",
+  ],
+]);
+
 export type Token = {
   accessToken: string;
   refreshToken: string;
