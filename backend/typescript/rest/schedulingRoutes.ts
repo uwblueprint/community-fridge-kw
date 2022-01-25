@@ -17,16 +17,20 @@ import ISchedulingService from "../services/interfaces/schedulingService";
 import { SchedulingDTO } from "../types";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 import getErrorMessage from "../utilities/errorMessageUtil";
+import IDonorService from "../services/interfaces/donorService";
+import DonorService from "../services/implementations/donorService";
 
 const schedulingRouter: Router = Router();
 
 // Commenting out authorization for now
 // schedulingRouter.use(isAuthorizedByRole(new Set(["Admin"])));
 
-const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
-const authService: IAuthService = new AuthService(userService, emailService);
-const schedulingService: ISchedulingService = new SchedulingService();
+const donorService: IDonorService = new DonorService();
+const schedulingService: ISchedulingService = new SchedulingService(
+  emailService,
+  donorService,
+);
 
 /* Get all schedulings, optionally filter by:
   - id, through URI (ex. /scheduling/1)

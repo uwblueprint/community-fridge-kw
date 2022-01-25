@@ -46,7 +46,7 @@ const VolunteerInformation = ({
     pickupLocation: "",
     isPickup: "",
   });
-  
+
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
     "Pick up (food rescue)",
@@ -58,12 +58,11 @@ const VolunteerInformation = ({
   const getSubmitState = () => {
     if (volunteerNeeded && isPickup) {
       return !!pickupLocation && !!volunteerTime;
-    } 
-    
+    }
+
     return volunteerNeeded ? !!volunteerTime : true;
   };
 
-    
   const handleChange = (e: boolean | string, name: string) => {
     setForm({ target: { name, value: e } });
     setFormErrors({
@@ -135,7 +134,7 @@ const VolunteerInformation = ({
 
   return (
     <Container variant="responsiveContainer">
-      <BackButton 
+      <BackButton
         isBeingEdited={isBeingEdited}
         onSaveClick={onSaveClick}
         previous={previous}
@@ -154,7 +153,7 @@ const VolunteerInformation = ({
       >
         <Text textStyle="mobileHeader4">Proposed Drop-off Time</Text>
         <Text textStyle="mobileBody">
-          {format(new Date(startTime),"EEEE, MMMM d")}
+          {format(new Date(startTime), "EEEE, MMMM d")}
         </Text>
         <Text textStyle="mobileBody">
           {format(new Date(startTime), "h:mm aa")}-
@@ -199,7 +198,7 @@ const VolunteerInformation = ({
               <Input
                 value={pickupLocation}
                 onChange={(e) => {
-                  handleChange(e.target.value, "pickupLocation")
+                  handleChange(e.target.value, "pickupLocation");
                 }}
                 placeholder="Enter location"
                 size="lg"
@@ -208,46 +207,47 @@ const VolunteerInformation = ({
               <FormErrorMessage>{formErrors.pickupLocation}</FormErrorMessage>
             </FormControl>
           )}
-          {(!!pickupLocation || (!isPickup && isPickup !== undefined)) && ( 
-          <FormControl
-            isRequired
-            isInvalid={!!formErrors.volunteerTime}
-            m="3em 0"
-          >
-            <FormLabel>
-              What is the specific time you require assistance?
-            </FormLabel>
-            <Input
-              value={volunteerTime}
-              type="time"
-              onChange={(e) => {
-                handleChange(e.target.value, "volunteerTime");
-              }}
-              placeholder="Enter time"
-              size="lg"
-              maxWidth="740px"
-            />
-            <FormErrorMessage>{formErrors.volunteerTime}</FormErrorMessage>
-          </FormControl>
+          {(!!pickupLocation || (!isPickup && isPickup !== undefined)) && (
+            <FormControl
+              isRequired
+              isInvalid={!!formErrors.volunteerTime}
+              m="3em 0"
+            >
+              <FormLabel>
+                What is the specific time you require assistance?
+              </FormLabel>
+              <Input
+                value={volunteerTime}
+                type="time"
+                onChange={(e) => {
+                  handleChange(e.target.value, "volunteerTime");
+                }}
+                placeholder="Enter time"
+                size="lg"
+                maxWidth="740px"
+              />
+              <FormErrorMessage>{formErrors.volunteerTime}</FormErrorMessage>
+            </FormControl>
           )}
         </>
       )}
-      
-      {((!volunteerNeeded && volunteerNeeded !== undefined) || !!volunteerTime) && (
-      <FormControl m="3em 0">
-        <FormLabel>Additional notes</FormLabel>
-        <FormHelperText mb="1em">
-          Any notes added will be visible to admin.
-        </FormHelperText>
-        <Textarea
-          value={notes}
-          onChange={(e) => handleChange(e.target.value, "notes")}
-          placeholder="Add any information about pick-up, drop-off, or any comments for Admin."
-          maxWidth="740px"
-        />
-      </FormControl>
+
+      {((!volunteerNeeded && volunteerNeeded !== undefined) ||
+        !!volunteerTime) && (
+        <FormControl m="3em 0">
+          <FormLabel>Additional notes</FormLabel>
+          <FormHelperText mb="1em">
+            Any notes added will be visible to admin.
+          </FormHelperText>
+          <Textarea
+            value={notes}
+            onChange={(e) => handleChange(e.target.value, "notes")}
+            placeholder="Add any information about pick-up, drop-off, or any comments for Admin."
+            maxWidth="740px"
+          />
+        </FormControl>
       )}
-      <NextButton 
+      <NextButton
         isBeingEdited={isBeingEdited}
         go={go}
         canSubmit={getSubmitState()}

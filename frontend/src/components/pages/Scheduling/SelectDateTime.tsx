@@ -25,6 +25,7 @@ import BackButton from "./BackButton";
 import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
 import {
+  convertFrequencyString,
   dayParts,
   DonationFrequency,
   frequencies,
@@ -94,13 +95,23 @@ const SelectDateTime = ({
       if (freq === DonationFrequency.WEEKLY) {
         newFrequencyLabels[i] = `Weekly on ${format(new Date(date), "EEEE")}s`;
       } else if (freq === DonationFrequency.MONTHLY) {
-        newFrequencyLabels[i] = `Monthly on ${format(
+        newFrequencyLabels[i] = `Monthly on the ${format(
           new Date(date),
-          "EEEE",
-        )}s (every 4 weeks)`;
+          "do",
+        )}`;
       }
     });
     return newFrequencyLabels;
+  };
+
+  const convert = (freq: string) => {
+    let freqReturn = freq;
+    if (freq === DonationFrequency.WEEKLY) {
+      freqReturn = `Weekly on ${format(new Date(date), "EEEE")}s`;
+    } else if (freq === DonationFrequency.MONTHLY) {
+      freqReturn = `Monthly on the ${format(new Date(date), "do")}`;
+    }
+    return freqReturn;
   };
 
   React.useEffect(() => {
@@ -372,14 +383,14 @@ const SelectDateTime = ({
             name="frequency"
             label="Select frequency"
             helperText="How often will this donation occur?"
-            value={frequency}
+            value={convert(frequency)}
             values={getFrequencyLabels()}
             icons={[]}
             isRequired
             isDisabled={isBeingEdited}
             error={formErrors.frequency}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              handleChange(e, "frequency");
+              handleChange(convertFrequencyString(e.toString()), "frequency");
             }}
           />
           <FormErrorMessage>{formErrors.frequency}</FormErrorMessage>
