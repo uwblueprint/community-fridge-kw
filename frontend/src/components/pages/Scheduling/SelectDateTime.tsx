@@ -95,10 +95,10 @@ const SelectDateTime = ({
       if (freq === DonationFrequency.WEEKLY) {
         newFrequencyLabels[i] = `Weekly on ${format(new Date(date), "EEEE")}s`;
       } else if (freq === DonationFrequency.MONTHLY) {
-        newFrequencyLabels[i] = `Monthly on the ${format(
+        newFrequencyLabels[i] = `Monthly (every 4 weeks) on  ${format(
           new Date(date),
-          "do",
-        )}`;
+          "EEEE",
+        )}s`;
       }
     });
     return newFrequencyLabels;
@@ -109,7 +109,10 @@ const SelectDateTime = ({
     if (freq === DonationFrequency.WEEKLY) {
       freqReturn = `Weekly on ${format(new Date(date), "EEEE")}s`;
     } else if (freq === DonationFrequency.MONTHLY) {
-      freqReturn = `Monthly on the ${format(new Date(date), "do")}`;
+      freqReturn = `Monthly (every 4 weeks) on  ${format(
+        new Date(date),
+        "EEEE",
+      )}s`;
     }
     return freqReturn;
   };
