@@ -23,9 +23,11 @@ import { useHistory } from "react-router-dom";
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import UserAPIClient from "../../APIClients/UserAPIClient";
 import pencilIcon from "../../assets/pencilIcon.svg";
+import { AUTHENTICATED_USER_KEY } from "../../constants/AuthConstants";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { DonorResponse } from "../../types/DonorTypes";
+import { setLocalStorageObjProperty } from "../../utils/LocalStorageUtils";
 import ConfirmCancelEditModal from "../common/UserManagement/ConfirmCancelEditModal";
 import ErrorMessages from "./Scheduling/ErrorMessages";
 
@@ -157,13 +159,25 @@ const Account = (): JSX.Element => {
 
     setIsEditing(false);
 
-    // update authenticatedUser to reflect changes
+    // update authenticatedUser and local storage to reflect changes
     const user = {
       accessToken: authenticatedUser!.accessToken,
       ...updatedUser,
     };
     setAuthenticatedUser(user);
     console.log("new auth user", authenticatedUser);
+
+    const keys = Object.keys(user);
+    const values = Object.values(user);
+    for (let i = 0; i < keys.length; i += 1) {
+      if (
+        keys[i] === "firstName" ||
+        keys[i] === "lastName" ||
+        keys[i] === "phoneNumber"
+      ) {
+        setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, keys[i], values[i]);
+      }
+    }
   };
 
   const EditInfoButton = (props: any) => {
