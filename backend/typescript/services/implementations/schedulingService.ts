@@ -199,37 +199,22 @@ class SchedulingService implements ISchedulingService {
       // Proposed drop off info
       const { startTime, endTime } = schedule;
 
-      // get string in en-us form e.g."4/20/2012, 5:10:30 PM"
-      const startTimeString: string = new Date(
-        dayjs(startTime).format("MM/DD/YYYY, HH:mm A"),
-      ).toLocaleString("en-US", {
-        timeZone: "EST",
-      });
+      const startDayString: string = dayjs(startTime).format("dddd, MMMM D");
 
-      const endTimeString: string = new Date(
-        dayjs(endTime).format("MM/DD/YYYY, HH:mm A"),
-      ).toLocaleString("en-US", {
-        timeZone: "EST",
-      });
+      const startTimeString: string = dayjs(startTime).format("h:mm A");
+      const endTimeString: string = dayjs(endTime).format("h:mm A");
 
       // frequency string
       // e.g. Weekly on <day of week> until <recurringDonationEndDate>
       let frequencyString = "One-time donation";
       if (schedule.frequency !== Frequency.ONE_TIME) {
-        const recurringDonationEndDateString: string = new Date(
-          dayjs(schedule.recurringDonationEndDate).format(
-            "MM/DD/YYYY, HH:mm A",
-          ),
-        ).toLocaleString("en-US", { timeZone: "EST" });
         if (schedule.frequency === Frequency.DAILY) {
           frequencyString = `Daily`;
         } else if (schedule.frequency === Frequency.WEEKLY) {
-          frequencyString = `Weekly on ${dayjs(startTimeString).format(
-            "dddd",
-          )}`;
+          frequencyString = `Weekly on ${dayjs(startTime).format("dddd")}`;
         } else {
           frequencyString = `Monthly on the ${ordinal(
-            Number(dayjs(startTimeString).format("D")),
+            Number(dayjs(startTime).format("D")),
           )}`;
         }
       }
@@ -266,11 +251,9 @@ class SchedulingService implements ISchedulingService {
                  Proposed drop-off time
              </h2>
              <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                 ${dayjs(startTimeString).format("dddd, MMMM D")}
+                 ${startDayString}
                  <br />
-                 ${dayjs(startTimeString).format("h:mma")} - ${dayjs(
-        endTimeString,
-      ).format("h:mm a")}
+                 ${startTimeString} - ${endTimeString}
                  <br />
                  ${frequencyString}
              </p>
