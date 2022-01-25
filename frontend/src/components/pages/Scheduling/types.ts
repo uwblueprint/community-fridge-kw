@@ -149,4 +149,17 @@ export const getTimeSlot = (selectedDayPart: string) => {
   }
 };
 
-export const frequencies = ["One time donation", "Daily", "Weekly", "Monthly"];
+export const convertFrequencyString = (frequencyString: string) => {
+  let result;
+  if (frequencyString.includes(DonationFrequency.WEEKLY)) {
+    result = DonationFrequency.WEEKLY;
+    return result;
+  }
+  if (frequencyString.includes(DonationFrequency.MONTHLY)) {
+    result = DonationFrequency.MONTHLY;
+    return result;
+  }
+  return frequencyString;
+};
+
+export const frequencies = ["One time", "Daily", "Weekly", "Monthly"];

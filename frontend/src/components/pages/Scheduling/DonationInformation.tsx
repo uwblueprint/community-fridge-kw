@@ -16,10 +16,10 @@ import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import ErrorMessages from "./ErrorMessages";
 import BackButton from "./BackButton";
-import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
+import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
+import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 
 const DonationInformation: any = ({
   formValues,
@@ -104,7 +104,7 @@ const DonationInformation: any = ({
 
   return (
     <Container variant="responsiveContainer">
-      <BackButton 
+      <BackButton
         isBeingEdited={isBeingEdited}
         onSaveClick={onSaveClick}
         previous={previous}
@@ -124,27 +124,29 @@ const DonationInformation: any = ({
         }}
       />
 
-      {!!formValues.size && <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
-        <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
-          Type of item(s)
-        </FormLabel>
-        <Stack spacing={2} direction="column" size="lg" mt="10px">
-          {categoriesOptions.map((item, i) => (
-            <Checkbox
-              key={i}
-              colorScheme="raddish"
-              isChecked={categories.includes(item)}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleCheckboxChange(e, item);
-              }}
-            >
-              {item}
-            </Checkbox>
-          ))}
-        </Stack>
-        <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
-      </FormControl>}
-      <NextButton 
+      {!!formValues.size && (
+        <FormControl isRequired isInvalid={!!formErrors.categories} my="50px">
+          <FormLabel fontSize={customTheme.textStyles.mobileHeader4.fontSize}>
+            Type of item(s)
+          </FormLabel>
+          <Stack spacing={2} direction="column" size="lg" mt="10px">
+            {categoriesOptions.map((item, i) => (
+              <Checkbox
+                key={i}
+                colorScheme="raddish"
+                isChecked={categories.includes(item)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleCheckboxChange(e, item);
+                }}
+              >
+                {item}
+              </Checkbox>
+            ))}
+          </Stack>
+          <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
+        </FormControl>
+      )}
+      <NextButton
         isBeingEdited={isBeingEdited}
         go={go}
         canSubmit={getSubmitState()}

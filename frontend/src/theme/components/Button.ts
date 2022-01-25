@@ -7,11 +7,11 @@ const Button = {
       py: "20px",
       px: "53px",
       _disabled: {
-        background: 'hubbard.100',
+        background: "hubbard.100",
       },
       _hover: {
         _disabled: {
-          background: 'hubbard.100',
+          background: "hubbard.100",
         },
       },
     },
