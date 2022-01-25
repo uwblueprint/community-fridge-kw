@@ -198,11 +198,22 @@ class SchedulingService implements ISchedulingService {
 
       // Proposed drop off info
       const { startTime, endTime } = schedule;
+      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
+        timeZone: "EST",
+      });
 
-      const startDayString: string = dayjs(startTime).format("dddd, MMMM D");
+      const startDayString: string = dayjs(startTimeToLocalDate).format(
+        "dddd, MMMM D",
+      );
 
-      const startTimeString: string = dayjs(startTime).format("h:mm A");
-      const endTimeString: string = dayjs(endTime).format("h:mm A");
+      const startTimeString: string = dayjs(startTimeToLocalDate).format(
+        "h:mm A",
+      );
+      const endTimeString: string = dayjs(
+        endTime.toLocaleString("en-US", {
+          timeZone: "EST",
+        }),
+      ).format("h:mm A");
 
       // frequency string
       // e.g. Weekly on <day of week> until <recurringDonationEndDate>
@@ -211,10 +222,12 @@ class SchedulingService implements ISchedulingService {
         if (schedule.frequency === Frequency.DAILY) {
           frequencyString = `Daily`;
         } else if (schedule.frequency === Frequency.WEEKLY) {
-          frequencyString = `Weekly on ${dayjs(startTime).format("dddd")}`;
+          frequencyString = `Weekly on ${dayjs(startTimeToLocalDate).format(
+            "dddd",
+          )}`;
         } else {
           frequencyString = `Monthly on the ${ordinal(
-            Number(dayjs(startTime).format("D")),
+            Number(dayjs(startTimeToLocalDate).format("D")),
           )}`;
         }
       }
