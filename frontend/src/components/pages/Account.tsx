@@ -1,4 +1,4 @@
-import { CloseIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -207,8 +207,20 @@ const Account = (): JSX.Element => {
         discardChanges={discardChanges}
       />
       <Box>
+        {!isEditing ? (
+          <Box mt={10}>
+            <Button
+              onClick={navigateToDashboard}
+              paddingLeft="0"
+              backgroundColor="transparent"
+            >
+              <ArrowBackIcon w={8} h={5} /> Back
+            </Button>
+          </Box>
+        ) : null}
+
         <HStack align="flex-end">
-          <Text mt="67px" textStyle="mobileHeader1">
+          <Text mt="1em" textStyle="mobileHeader1">
             My Account
           </Text>
           <Spacer />
