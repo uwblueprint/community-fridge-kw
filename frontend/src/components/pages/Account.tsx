@@ -34,7 +34,6 @@ import ErrorMessages from "./Scheduling/ErrorMessages";
 const Account = (): JSX.Element => {
   const history = useHistory();
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
-  console.log("init auth user", authenticatedUser);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [businessName, setBusinessName] = useState("");
   const [donor, setDonor] = useState<DonorResponse>();
@@ -165,7 +164,6 @@ const Account = (): JSX.Element => {
       ...updatedUser,
     };
     setAuthenticatedUser(user);
-    console.log("new auth user", authenticatedUser);
 
     const keys = Object.keys(user);
     const values = Object.values(user);
