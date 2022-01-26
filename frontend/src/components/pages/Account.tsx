@@ -37,6 +37,7 @@ const Account = (): JSX.Element => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [businessName, setBusinessName] = useState("");
   const [donor, setDonor] = useState<DonorResponse>();
+  const [isSavingData, setIsSavingData] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   React.useEffect(() => {
@@ -76,6 +77,7 @@ const Account = (): JSX.Element => {
   };
 
   const changeEditMode = () => {
+    setIsSavingData(false);
     setIsEditing(!isEditing);
   };
 
@@ -140,23 +142,27 @@ const Account = (): JSX.Element => {
   const onSubmitClick = async () => {
     if (!validateForm()) return;
 
+    setIsSavingData(true);
+
     // format user request data object
     const userData = {
       id: authenticatedUser!.id,
       role: authenticatedUser!.role,
       ...formValues,
     };
+
+    // update user values
     const updatedUser = await UserAPIClient.updateUserById(
       authenticatedUser!.id,
       {
         userData,
       },
     );
-    await DonorAPIClient.updateDonorById(authenticatedUser!.id, {
+
+    // update donor values
+    const updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
       businessName,
     });
-
-    setIsEditing(false);
 
     // update authenticatedUser and local storage to reflect changes
     const user = {
@@ -176,6 +182,12 @@ const Account = (): JSX.Element => {
         setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, keys[i], values[i]);
       }
     }
+
+    // handle loading spinner state
+    if (updatedUser && updatedDonor) {
+      setIsSavingData(false);
+    }
+    setIsEditing(false);
   };
 
   const EditInfoButton = (props: any) => {
@@ -349,8 +361,9 @@ const Account = (): JSX.Element => {
               mt="2"
               variant="navigation"
               onClick={onSubmitClick}
+              isDisabled={isSavingData}
             >
-              Save Changes
+              {isSavingData ? <Spinner /> : "Save Changes"}
             </Button>
           </Box>
         ) : (
