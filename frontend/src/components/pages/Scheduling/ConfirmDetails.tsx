@@ -10,7 +10,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { add, format, isBefore, differenceInDays } from "date-fns";
+import { add, differenceInDays, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -123,7 +123,10 @@ const ConfirmDetails = ({
         break;
     }
     const result = add(startDate, addOptions);
-    if (differenceInDays(endDateLocal, result) >= 0 && isBefore(result, endDateLocal)) {
+    if (
+      differenceInDays(endDateLocal, result) >= 0 &&
+      isBefore(result, endDateLocal)
+    ) {
       return dateText(result);
     }
     return null;
@@ -217,9 +220,8 @@ const ConfirmDetails = ({
             </Text>
           </HStack>
 
-          {(nextDropoffDateText(startDateLocal)=== null ||
-          currentSchedule.frequency === DonationFrequency.ONE_TIME)? null :
-          (
+          {nextDropoffDateText(startDateLocal) === null ||
+          currentSchedule.frequency === DonationFrequency.ONE_TIME ? null : (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Next Drop-Off
