@@ -218,6 +218,7 @@ const SelectDateTime = ({
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
     setForm({ target: { name: "startTime", value: "" } });
     setForm({ target: { name: "endTime", value: "" } });
+    setForm({ target: { name: "frequency", value: "" } });
     setFormErrors({
       ...formErrors,
       date: "",
@@ -263,6 +264,12 @@ const SelectDateTime = ({
       // Null endTime means a timeRange was not selected in the form
       valid = false;
       newErrors.timeRange = ErrorMessages.requiredField;
+    }
+    const startTimeDate = new Date(startTime);
+    const currentTime = new Date();
+    if (startTimeDate < currentTime) {
+      valid = false;
+      newErrors.timeRange = ErrorMessages.invalidStartTime;
     }
     if (!frequency) {
       valid = false;
