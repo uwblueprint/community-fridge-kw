@@ -189,7 +189,12 @@ const SelectDateTime = ({
     newStartTime.setMonth(date.getMonth());
     newStartTime.setFullYear(date.getFullYear());
 
-    newEndTime.setDate(date.getDate());
+    if (convertedEndTime === "00:00") {
+      // for midnight edge case
+      newEndTime.setDate(date.getDate() + 1);
+    } else {
+      newEndTime.setDate(date.getDate());
+    }
     newEndTime.setMonth(date.getMonth());
     newEndTime.setFullYear(date.getFullYear());
 
