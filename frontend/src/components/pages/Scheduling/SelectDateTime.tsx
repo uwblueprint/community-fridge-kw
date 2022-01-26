@@ -220,7 +220,11 @@ const SelectDateTime = ({
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
     setForm({ target: { name: "startTime", value: "" } });
     setForm({ target: { name: "endTime", value: "" } });
-    setForm({ target: { name: "frequency", value: "" } });
+    
+    if (!isBeingEdited) {
+      setForm({ target: { name: "frequency", value: "" } });
+    }
+    
     setFormErrors({
       ...formErrors,
       date: "",
