@@ -188,13 +188,18 @@ const SelectDateTime = ({
 
     const newStartTime = new Date(`11/11/1970 ${convertedStartTime}`);
     const newEndTime = new Date(`11/11/1970 ${convertedEndTime}`);
-    newStartTime.setDate(date.getDate());
-    newStartTime.setMonth(date.getMonth());
     newStartTime.setFullYear(date.getFullYear());
+    newStartTime.setMonth(date.getMonth());
+    newStartTime.setDate(date.getDate());
 
-    newEndTime.setDate(date.getDate());
-    newEndTime.setMonth(date.getMonth());
     newEndTime.setFullYear(date.getFullYear());
+    newEndTime.setMonth(date.getMonth());
+    if (convertedEndTime === "00:00") {
+      // for midnight edge case
+      newEndTime.setDate(date.getDate() + 1);
+    } else {
+      newEndTime.setDate(date.getDate());
+    }
 
     setForm({ target: { name: "startTime", value: newStartTime.toString() } });
     setForm({ target: { name: "endTime", value: newEndTime.toString() } });
