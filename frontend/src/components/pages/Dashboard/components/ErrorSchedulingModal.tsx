@@ -1,18 +1,12 @@
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
-  Text,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-
+import React from "react";
 
 interface ErrorSchedulingModalProps {
   isOpen: boolean;
@@ -22,7 +16,6 @@ const ErrorSchedulingModal = ({
   isOpen,
   onClose,
 }: ErrorSchedulingModalProps) => {
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
