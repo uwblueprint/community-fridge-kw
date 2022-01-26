@@ -70,7 +70,6 @@ const ViewDonations = ({
               })}
             </Text>
             <DatePicker
-              minDate={new Date()}
               value={selectedDay}
               onChange={(e: DateObject) => {
                 setSelectedDay(e?.toDate?.());
