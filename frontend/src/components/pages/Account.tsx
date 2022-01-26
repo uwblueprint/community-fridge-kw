@@ -13,8 +13,11 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
+import UserAPIClient from "../../APIClients/UserAPIClient";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
+import { Role } from "../../types/AuthTypes";
+import { DonorResponse } from "../../types/DonorTypes";
 
 const Account = (): JSX.Element => {
   const history = useHistory();
@@ -30,7 +33,30 @@ const Account = (): JSX.Element => {
       return;
     }
     const getDonor = async () => {
-      const donor = await DonorAPIClient.getDonorByUserId(authenticatedUser.id);
+      let donor: DonorResponse = {
+        id: "",
+        businessName: "",
+        firstName: "",
+        lastName: "",
+        role: "",
+        email: "",
+        phoneNumber: "",
+        userId: "",
+      };
+      if (authenticatedUser.role === Role.ADMIN) {
+        const userResponse = await UserAPIClient.getUserById(
+          authenticatedUser.id,
+        );
+        donor = {
+          ...userResponse,
+          businessName: "Community Fridge KW",
+          firstName: "Admin",
+          lastName: "Admin",
+          userId: "",
+        };
+      } else {
+        donor = await DonorAPIClient.getDonorByUserId(authenticatedUser.id);
+      }
       setBusinessName(donor.businessName);
     };
     getDonor();
