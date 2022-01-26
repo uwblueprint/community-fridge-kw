@@ -10,7 +10,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { add, format, isBefore } from "date-fns";
+import { add, format, isBefore, differenceInDays } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -108,20 +108,25 @@ const ConfirmDetails = ({
     let addOptions = {};
     switch (currentSchedule.frequency) {
       case DonationFrequency.WEEKLY:
+        console.log("weekly");
         addOptions = { weeks: 1 };
         break;
       case DonationFrequency.DAILY:
         addOptions = { days: 1 };
+        console.log("daily");
         break;
       case DonationFrequency.MONTHLY:
+        console.log("monthly");
         addOptions = { months: 1 };
         break;
       default:
         break;
     }
     const result = add(startDate, addOptions);
-    if (!isBefore(result, endDateLocal)) return null;
-    return dateText(result);
+    if (differenceInDays(endDateLocal, result) >= 0 && isBefore(result, endDateLocal)) {
+      return dateText(result);
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -212,8 +217,9 @@ const ConfirmDetails = ({
             </Text>
           </HStack>
 
-          {nextDropoffDateText(startDateLocal) !== null ||
-          currentSchedule.frequency !== DonationFrequency.ONE_TIME ? (
+          {(nextDropoffDateText(startDateLocal)=== null ||
+          currentSchedule.frequency === DonationFrequency.ONE_TIME)? null :
+          (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Next Drop-Off
@@ -225,7 +231,7 @@ const ConfirmDetails = ({
                 {`${startTimeLocal} - ${endTimeLocal}`}
               </Text>{" "}
             </Box>
-          ) : null}
+          )}
         </Box>
       </Box>
 
