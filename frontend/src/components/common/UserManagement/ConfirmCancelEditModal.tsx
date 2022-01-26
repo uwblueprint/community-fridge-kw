@@ -23,7 +23,6 @@ const ConfirmCancelEditModal = ({
   onClose,
   discardChanges,
 }: ConfirmCancelEditModalProps) => {
-  const { isDesktop } = useViewport();
 
   return (
     <>
