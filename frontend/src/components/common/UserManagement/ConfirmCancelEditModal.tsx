@@ -36,7 +36,7 @@ const ConfirmCancelEditModal = ({
         <ModalContent p="1.3em">
           <ModalCloseButton />
           <ModalHeader>
-            <Text textStyle={isDesktop ? "desktopHeader3" : "mobileBodyBold"}>
+            <Text textStyle={{ base: "mobileBodyBold", md: "desktopHeader3" }}>
               Are you sure you want to leave the page?
             </Text>
           </ModalHeader>
