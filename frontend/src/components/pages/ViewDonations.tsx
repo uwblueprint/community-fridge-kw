@@ -26,7 +26,6 @@ const ViewDonations = ({
   >(new Date());
 
   const { isMobile } = useViewport();
-  const today = new Date();
   const [test, setTest] = useState<any>(0);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
