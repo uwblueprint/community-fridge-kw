@@ -26,6 +26,7 @@ import pencilIcon from "../../assets/pencilIcon.svg";
 import { AUTHENTICATED_USER_KEY } from "../../constants/AuthConstants";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
+import { Role } from "../../types/AuthTypes";
 import { DonorResponse } from "../../types/DonorTypes";
 import { setLocalStorageObjProperty } from "../../utils/LocalStorageUtils";
 import ConfirmCancelEditModal from "../common/UserManagement/ConfirmCancelEditModal";
@@ -45,9 +46,34 @@ const Account = (): JSX.Element => {
       return;
     }
     const getDonor = async () => {
-      const res = await DonorAPIClient.getDonorByUserId(authenticatedUser.id);
-      setDonor(res);
-      setBusinessName(res.businessName);
+      let donorResponse: DonorResponse = {
+        id: "",
+        businessName: "",
+        firstName: "",
+        lastName: "",
+        role: "",
+        email: "",
+        phoneNumber: "",
+        userId: "",
+      };
+      if (authenticatedUser.role === Role.ADMIN) {
+        const userResponse = await UserAPIClient.getUserById(
+          authenticatedUser.id,
+        );
+        donorResponse = {
+          ...userResponse,
+          businessName: "Community Fridge KW",
+          firstName: "Admin",
+          lastName: "Admin",
+          userId: "",
+        };
+      } else {
+        donorResponse = await DonorAPIClient.getDonorByUserId(
+          authenticatedUser.id,
+        );
+      }
+      setDonor(donorResponse);
+      setBusinessName(donorResponse.businessName);
     };
     getDonor();
   }, [authenticatedUser]);
