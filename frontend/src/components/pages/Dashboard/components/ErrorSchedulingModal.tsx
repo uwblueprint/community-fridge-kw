@@ -19,7 +19,7 @@ const ErrorSchedulingModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent pb="20px">
         <ModalHeader>Donation could not be scheduled</ModalHeader>
         <ModalCloseButton />
         <ModalBody textStyle="mobileBody">
