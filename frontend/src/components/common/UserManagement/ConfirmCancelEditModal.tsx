@@ -27,7 +27,7 @@ const ConfirmCancelEditModal = ({
   return (
     <>
       <Modal
-        size={isDesktop ? "2xl" : "xs"}
+        size={{ base: "xs", md: "2xl" }}
         isOpen={isOpen}
         onClose={onClose}
         isCentered
