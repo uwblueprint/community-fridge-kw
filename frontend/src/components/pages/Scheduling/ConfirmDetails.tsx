@@ -61,11 +61,13 @@ const ConfirmDetails = ({
   } = useDisclosure();
 
   const onSubmitClick = async () => {
-    try {
-      await SchedulingAPIClient.createSchedule(currentSchedule);
-    } catch (error) {
+    const schedule = await SchedulingAPIClient.createSchedule(currentSchedule);
+
+    if (!schedule.id) {
       onErrorSchedulingOpen();
+      return;
     }
+
     next();
   };
 
@@ -384,12 +386,12 @@ const ConfirmDetails = ({
           >
             Submit
           </Button>
+          <ErrorSchedulingModal
+            isOpen={isErrorSchedulingOpen}
+            onClose={onErrorSchedulingClose}
+          />
         </HStack>
       )}
-      <ErrorSchedulingModal
-        isOpen={isErrorSchedulingOpen}
-        onClose={onErrorSchedulingClose}
-      />
     </Container>
   );
 };
