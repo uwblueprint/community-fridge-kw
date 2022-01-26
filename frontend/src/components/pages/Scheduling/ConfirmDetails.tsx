@@ -24,6 +24,7 @@ import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
+import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -44,13 +45,25 @@ const ConfirmDetails = ({
     (category) => category.size === currentSchedule.size,
   )[0];
 
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isErrorSchedulingOpen,
+    onOpen: onErrorSchedulingOpen,
+    onClose: onErrorSchedulingClose,
+  } = useDisclosure();
+
   const onSubmitClick = async () => {
-    await SchedulingAPIClient.createSchedule(currentSchedule);
+    const schedule = await SchedulingAPIClient.createSchedule(currentSchedule);
+
+    if (!schedule.id) {
+      onErrorSchedulingOpen();
+      return;
+    }
+
     next();
   };
 
-  const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const onDeleteClick = async (isOneTimeEvent = true) => {
     if (isOneTimeEvent) {
       await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
@@ -366,6 +379,10 @@ const ConfirmDetails = ({
           >
             Submit
           </Button>
+          <ErrorSchedulingModal
+            isOpen={isErrorSchedulingOpen}
+            onClose={onErrorSchedulingClose}
+          />
         </HStack>
       )}
     </Container>

@@ -22,6 +22,23 @@ const Button = {
       size: "lg",
       width: "100%",
     },
+    editInfo: {
+      border: "none",
+      color: "hubbard.100",
+      fontSize: "14px",
+      height: "20px",
+      width: "28px",
+      background: "none",
+      marginBottom: "10px",
+    },
+    cancelEditInfo: {
+      border: "none",
+      color: "black.100",
+      height: "12.73px",
+      width: "12.73px",
+      background: "none",
+      marginBottom: "10px",
+    },
     deleteDonation: {
       background: "tomato.100",
       color: "squash.100",

@@ -5,6 +5,7 @@ const ErrorMessages = {
   recurringEndDateAfterStartDate:
     "The recurring donation end date must be after the selected start date.",
   invalidRecurringDonationEndDateFormat: "Required format: MM/DD/YYYY",
+  invalidStartTime: "Scheduled donation time should be after the current time",
 };
 
 export default ErrorMessages;
