@@ -17,8 +17,10 @@ import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import BackButton from "./BackButton";
+import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
+import SaveButton from "./SaveChangesButton";
 import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 
 const DonationInformation: any = ({
@@ -104,12 +106,14 @@ const DonationInformation: any = ({
 
   return (
     <Container variant="responsiveContainer">
-      <BackButton
-        isBeingEdited={isBeingEdited}
-        onSaveClick={onSaveClick}
-        previous={previous}
-      />
-      <SchedulingProgressBar activeStep={1} totalSteps={4} />
+      {isBeingEdited ? (
+        <CancelButton go={go} />
+      ) : (
+        <>
+          <SchedulingProgressBar activeStep={1} totalSteps={4} />
+          <BackButton previous={previous} />
+        </>
+      )}
       <Text textStyle="mobileHeader2" mt="2em">
         Donation Information
       </Text>
@@ -146,12 +150,11 @@ const DonationInformation: any = ({
           <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
         </FormControl>
       )}
-      <NextButton
-        isBeingEdited={isBeingEdited}
-        go={go}
-        canSubmit={getSubmitState()}
-        handleNext={handleNext}
-      />
+      {isBeingEdited ? (
+        <SaveButton onSaveClick={onSaveClick} />
+      ) : (
+        <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
+      )}
     </Container>
   );
 };
