@@ -395,7 +395,13 @@ const Account = (): JSX.Element => {
           </Box>
         ) : (
           <Box mt={{ base: "66px", md: "56px" }}>
-            <Button isDisabled width="100%" size="lg" mt="2" variant="navigation">
+            <Button
+              isDisabled
+              width="100%"
+              size="lg"
+              mt="2"
+              variant="navigation"
+            >
               Change Password
             </Button>
           </Box>
