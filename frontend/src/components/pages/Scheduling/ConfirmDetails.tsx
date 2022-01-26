@@ -94,8 +94,8 @@ const ConfirmDetails = ({
 
   const startDateLocal = new Date(currentSchedule.startTime);
   const endDateLocal = new Date(currentSchedule.recurringDonationEndDate);
-  const startTimeLocal = format(new Date(currentSchedule.startTime), "K:mm aa");
-  const endTimeLocal = format(new Date(currentSchedule.endTime), "K:mm aa");
+  const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
+  const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mm aa");
 
   const dayText = (startDate: Date) => {
     return format(startDate, "eeee");
