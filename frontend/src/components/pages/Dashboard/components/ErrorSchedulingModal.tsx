@@ -27,11 +27,10 @@ const ErrorSchedulingModal = ({
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Sign up failed</ModalHeader>
+        <ModalHeader>Donation could not be scheduled</ModalHeader>
         <ModalCloseButton />
         <ModalBody textStyle="mobileBody">
-          Sorry, something went wrong. Please try again later and check all
-          fields have correct formatting.
+          Sorry, something went wrong with our system. Please try again.
         </ModalBody>
       </ModalContent>
     </Modal>
