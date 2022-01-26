@@ -23,11 +23,12 @@ const ConfirmCancelEditModal = ({
   onClose,
   discardChanges,
 }: ConfirmCancelEditModalProps) => {
+  const { isDesktop } = useViewport();
 
   return (
     <>
       <Modal
-        size={{ base: "xs", md: "2xl" }}
+        size={isDesktop ? "2xl" : "xs"}
         isOpen={isOpen}
         onClose={onClose}
         isCentered
