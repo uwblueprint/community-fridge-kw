@@ -21,6 +21,22 @@ type UserResponse = {
   email: string;
 };
 
+const getUserById = async (id: string): Promise<UserResponse> => {
+  const bearerToken = `Bearer ${getLocalStorageObjProperty(
+    AUTHENTICATED_USER_KEY,
+    "accessToken",
+  )}`;
+
+  try {
+    const { data } = await baseAPIClient.get(`/users/${id}`, {
+      headers: { Authorization: bearerToken },
+    });
+    return data;
+  } catch (error) {
+    return error as UserResponse;
+  }
+};
+
 const updateUserById = async (
   id: string,
   {
@@ -44,4 +60,4 @@ const updateUserById = async (
   }
 };
 
-export default { updateUserById };
+export default { getUserById, updateUserById };
