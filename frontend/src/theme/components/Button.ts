@@ -38,19 +38,19 @@ const Button = {
       width: "12.73px",
       background: "none",
       marginBottom: "10px",
-      deleteDonation: {
-        background: "tomato.100",
-        color: "squash.100",
-        fontSize: "16px",
-        py: "12px",
-        px: "53px",
-      },
-      edit: {
-        color: "hubbard.100",
-        fontSize: "16px",
-        fontWeight: 300,
-        textDecoration: "underline",
-      },
+    },
+    deleteDonation: {
+      background: "tomato.100",
+      color: "squash.100",
+      fontSize: "16px",
+      py: "12px",
+      px: "53px",
+    },
+    edit: {
+      color: "hubbard.100",
+      fontSize: "16px",
+      fontWeight: 300,
+      textDecoration: "underline",
     },
   },
 };
