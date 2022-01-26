@@ -95,10 +95,10 @@ const SelectDateTime = ({
       if (freq === DonationFrequency.WEEKLY) {
         newFrequencyLabels[i] = `Weekly on ${format(new Date(date), "EEEE")}s`;
       } else if (freq === DonationFrequency.MONTHLY) {
-        newFrequencyLabels[i] = `Monthly on the ${format(
+        newFrequencyLabels[i] = `Monthly (every 4 weeks) on  ${format(
           new Date(date),
-          "do",
-        )}`;
+          "EEEE",
+        )}s`;
       }
     });
     return newFrequencyLabels;
@@ -109,7 +109,10 @@ const SelectDateTime = ({
     if (freq === DonationFrequency.WEEKLY) {
       freqReturn = `Weekly on ${format(new Date(date), "EEEE")}s`;
     } else if (freq === DonationFrequency.MONTHLY) {
-      freqReturn = `Monthly on the ${format(new Date(date), "do")}`;
+      freqReturn = `Monthly (every 4 weeks) on  ${format(
+        new Date(date),
+        "EEEE",
+      )}s`;
     }
     return freqReturn;
   };
@@ -185,13 +188,18 @@ const SelectDateTime = ({
 
     const newStartTime = new Date(`11/11/1970 ${convertedStartTime}`);
     const newEndTime = new Date(`11/11/1970 ${convertedEndTime}`);
-    newStartTime.setDate(date.getDate());
-    newStartTime.setMonth(date.getMonth());
     newStartTime.setFullYear(date.getFullYear());
+    newStartTime.setMonth(date.getMonth());
+    newStartTime.setDate(date.getDate());
 
-    newEndTime.setDate(date.getDate());
-    newEndTime.setMonth(date.getMonth());
     newEndTime.setFullYear(date.getFullYear());
+    newEndTime.setMonth(date.getMonth());
+    if (convertedEndTime === "00:00") {
+      // for midnight edge case
+      newEndTime.setDate(date.getDate() + 1);
+    } else {
+      newEndTime.setDate(date.getDate());
+    }
 
     setForm({ target: { name: "startTime", value: newStartTime.toString() } });
     setForm({ target: { name: "endTime", value: newEndTime.toString() } });
@@ -210,6 +218,7 @@ const SelectDateTime = ({
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
     setForm({ target: { name: "startTime", value: "" } });
     setForm({ target: { name: "endTime", value: "" } });
+    setForm({ target: { name: "frequency", value: "" } });
     setFormErrors({
       ...formErrors,
       date: "",
@@ -255,6 +264,12 @@ const SelectDateTime = ({
       // Null endTime means a timeRange was not selected in the form
       valid = false;
       newErrors.timeRange = ErrorMessages.requiredField;
+    }
+    const startTimeDate = new Date(startTime);
+    const currentTime = new Date();
+    if (startTimeDate < currentTime) {
+      valid = false;
+      newErrors.timeRange = ErrorMessages.invalidStartTime;
     }
     if (!frequency) {
       valid = false;
