@@ -360,7 +360,6 @@ const Account = (): JSX.Element => {
               size="lg"
               mt="2"
               variant="navigation"
-              // onClick={}
             >
               Change Password
             </Button>
