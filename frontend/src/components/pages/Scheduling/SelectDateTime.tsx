@@ -420,7 +420,7 @@ const SelectDateTime = ({
                 <DatePicker
                   className="frequency-date"
                   editable={false}
-                  minDate={new Date().setDate(today.getDate())}
+                  minDate={new Date().setDate(new Date(startTime).getDate())}
                   value={recurringEndDate}
                   onChange={handleChangeRecurringDate}
                   placeholder="MM-DD-YYYY"
