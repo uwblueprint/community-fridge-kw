@@ -338,7 +338,7 @@ const SelectDateTime = ({
         <FormLabel fontWeight="600">Select date</FormLabel>
         <Calendar
           className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile"}
-          minDate={new Date().setDate(today.getDate())}
+          minDate={new Date()}
           maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
@@ -420,7 +420,7 @@ const SelectDateTime = ({
                 <DatePicker
                   className="frequency-date"
                   editable={false}
-                  minDate={new Date().setDate(new Date(startTime).getDate())}
+                  minDate={new Date(startTime)}
                   value={recurringEndDate}
                   onChange={handleChangeRecurringDate}
                   placeholder="MM-DD-YYYY"
