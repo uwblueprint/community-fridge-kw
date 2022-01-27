@@ -99,7 +99,11 @@ const Account = (): JSX.Element => {
   });
 
   const navigateToDashboard = () => {
-    history.push(Routes.DASHBOARD_PAGE);
+    history.push(
+      authenticatedUser!.role === Role.DONOR
+        ? Routes.DASHBOARD_PAGE
+        : Routes.VIEW_DONATIONS,
+    );
   };
 
   const changeEditMode = () => {

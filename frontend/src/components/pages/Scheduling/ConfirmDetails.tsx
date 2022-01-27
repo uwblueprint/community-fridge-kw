@@ -84,13 +84,17 @@ const ConfirmDetails = ({
       duration: 7000,
       isClosable: true,
     });
-    history.push(`${Routes.DASHBOARD_PAGE}`);
+    history.push(
+      authenticatedUser!.role === Role.DONOR
+        ? `${Routes.DASHBOARD_PAGE}`
+        : `${Routes.VIEW_DONATIONS}`,
+    );
   };
 
   const getDonorData = async () => {
-    const donorResponse = await DonorAPIClient.getDonorByUserId(
-      authenticatedUser!.id,
-    );
+    const donorResponse = isBeingEdited
+      ? await DonorAPIClient.getDonorByUserId(currentSchedule.donorId)
+      : await DonorAPIClient.getDonorById(authenticatedUser!.id);
     setForm({ target: { name: "donorId", value: donorResponse.id } });
     setCurrentDonor(donorResponse);
   };
@@ -194,6 +198,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("date and time")}
         >
           Edit
@@ -253,7 +258,8 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
-          onClick={() => go && go("donation information")}
+          disabled={authenticatedUser?.role !== Role.DONOR}
+          onClick={() => go && go("volunteer information")}
         >
           Edit
         </Button>
@@ -284,6 +290,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("volunteer information")}
         >
           Edit

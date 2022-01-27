@@ -14,7 +14,7 @@ import { Link, Redirect } from "react-router-dom";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import { AuthenticatedUser } from "../../types/AuthTypes";
+import { AuthenticatedUser, Role } from "../../types/AuthTypes";
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
@@ -33,7 +33,11 @@ const Login = (): React.ReactElement => {
   };
 
   if (authenticatedUser) {
-    return <Redirect to={Routes.DASHBOARD_PAGE} />;
+    return authenticatedUser.role === Role.DONOR ? (
+      <Redirect to={Routes.DASHBOARD_PAGE} />
+    ) : (
+      <Redirect to={Routes.VIEW_DONATIONS} />
+    );
   }
 
   return (
