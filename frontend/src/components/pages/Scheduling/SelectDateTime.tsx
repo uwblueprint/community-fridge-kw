@@ -32,6 +32,8 @@ import {
   getTimeSlot,
   SchedulingStepProps,
 } from "./types";
+import CancelButton from "./CancelEditsButton";
+import SaveButton from "./SaveChangesButton";
 
 const SelectDateTime = ({
   formValues,
@@ -218,7 +220,11 @@ const SelectDateTime = ({
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
     setForm({ target: { name: "startTime", value: "" } });
     setForm({ target: { name: "endTime", value: "" } });
-    setForm({ target: { name: "frequency", value: "" } });
+    
+    if (!isBeingEdited) {
+      setForm({ target: { name: "frequency", value: "" } });
+    }
+    
     setFormErrors({
       ...formErrors,
       date: "",
@@ -332,12 +338,14 @@ const SelectDateTime = ({
 
   return (
     <Container variant="responsiveContainer">
-      <BackButton
-        isBeingEdited={isBeingEdited}
-        onSaveClick={onSaveClick}
-        previous={previous}
-      />
-      <SchedulingProgressBar activeStep={0} totalSteps={4} />
+      {isBeingEdited ? (
+        <CancelButton go={go} />
+      ) : (
+        <>
+          <SchedulingProgressBar activeStep={0} totalSteps={4} />
+          <BackButton previous={previous} />
+        </>
+      )}
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         {isDesktop ? "Drop-off date and time" : "Date and Time"}
       </Text>
@@ -441,12 +449,11 @@ const SelectDateTime = ({
             </FormErrorMessage>
           </FormControl>
         )}
-      <NextButton
-        isBeingEdited={isBeingEdited}
-        go={go}
-        canSubmit={getSubmitState()}
-        handleNext={handleNext}
-      />
+      {isBeingEdited ? (
+        <SaveButton onSaveClick={onSaveClick} />
+      ) : (
+        <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
+      )}
     </Container>
   );
 };

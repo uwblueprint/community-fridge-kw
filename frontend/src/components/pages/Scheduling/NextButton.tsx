@@ -1,32 +1,13 @@
 import { Button, Flex } from "@chakra-ui/react";
 import React from "react";
+import { ButtonProps } from "./types";
 
-import { NextButtonProps } from "./types";
-
-export default function NextButton({
-  isBeingEdited,
-  go,
-  canSubmit,
-  handleNext,
-}: NextButtonProps) {
+export default function NextButton({ canSubmit, handleNext }: ButtonProps) {
   return (
     <Flex justify="flex-end">
-      {isBeingEdited ? (
-        <Button
-          onClick={() => go && go("confirm donation details")}
-          variant="cancelNavigation"
-        >
-          Cancel
-        </Button>
-      ) : (
-        <Button
-          isDisabled={!canSubmit}
-          onClick={handleNext}
-          variant="navigation"
-        >
-          Next
-        </Button>
-      )}
+      <Button isDisabled={!canSubmit} onClick={handleNext} variant="navigation">
+        Next
+      </Button>
     </Flex>
   );
 }
