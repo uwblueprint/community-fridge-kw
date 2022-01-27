@@ -86,7 +86,7 @@ const SelectDateTime = ({
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [recurringEndDate, setRecurringEndDate] = useState<Date>(
-    new Date(startTime),
+    new Date(recurringDonationEndDate)
   );
 
   const getFrequencyLabels = () => {
@@ -345,7 +345,7 @@ const SelectDateTime = ({
         <FormLabel fontWeight="600">Select date</FormLabel>
         <Calendar
           className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile"}
-          minDate={new Date().setDate(today.getDate())}
+          minDate={new Date()}
           maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
@@ -429,7 +429,7 @@ const SelectDateTime = ({
                   disabled={isBeingEdited}
                   className="frequency-date"
                   editable={false}
-                  minDate={new Date().setDate(today.getDate())}
+                  minDate={new Date(startTime)}
                   value={recurringEndDate}
                   onChange={handleChangeRecurringDate}
                   placeholder="MM-DD-YYYY"
