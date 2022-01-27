@@ -106,7 +106,7 @@ const VolunteerInformation = ({
       valid = false;
       newErrors.volunteerNeeded = ErrorMessages.requiredField;
     }
-    if (volunteerNeeded && isPickup === undefined) {
+    if (volunteerNeeded && (isPickup === undefined || isPickup === null)) {
       valid = false;
       newErrors.isPickup = ErrorMessages.requiredField;
     }
