@@ -20,8 +20,8 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
   } = schedule;
   const frequencyColorScheme = getFrequencyColor(frequency);
   const startDateLocal = new Date(startTime);
-  const startTimeLocal = format(new Date(startTime), "K:mm aa");
-  const endTimeLocal = format(new Date(endTime), "K:mm aa");
+  const startTimeLocal = format(new Date(startTime), "h:mm aa");
+  const endTimeLocal = format(new Date(endTime), "h:mm aa");
   const formattedRecurringEndDate = format(
     new Date(recurringDonationEndDate),
     "MMM d, yyyy",

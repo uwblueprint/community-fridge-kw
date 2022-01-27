@@ -10,7 +10,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { add, format, isBefore } from "date-fns";
+import { add, differenceInDays, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -94,8 +94,8 @@ const ConfirmDetails = ({
 
   const startDateLocal = new Date(currentSchedule.startTime);
   const endDateLocal = new Date(currentSchedule.recurringDonationEndDate);
-  const startTimeLocal = format(new Date(currentSchedule.startTime), "K:mm aa");
-  const endTimeLocal = format(new Date(currentSchedule.endTime), "K:mm aa");
+  const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
+  const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mm aa");
 
   const dayText = (startDate: Date) => {
     return format(startDate, "eeee");
@@ -120,8 +120,13 @@ const ConfirmDetails = ({
         break;
     }
     const result = add(startDate, addOptions);
-    if (!isBefore(result, endDateLocal)) return null;
-    return dateText(result);
+    if (
+      differenceInDays(endDateLocal, result) >= 0 &&
+      isBefore(result, endDateLocal)
+    ) {
+      return dateText(result);
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -212,8 +217,8 @@ const ConfirmDetails = ({
             </Text>
           </HStack>
 
-          {nextDropoffDateText(startDateLocal) !== null ||
-          currentSchedule.frequency !== DonationFrequency.ONE_TIME ? (
+          {nextDropoffDateText(startDateLocal) === null ||
+          currentSchedule.frequency === DonationFrequency.ONE_TIME ? null : (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Next Drop-Off
@@ -225,7 +230,7 @@ const ConfirmDetails = ({
                 {`${startTimeLocal} - ${endTimeLocal}`}
               </Text>{" "}
             </Box>
-          ) : null}
+          )}
         </Box>
       </Box>
 
