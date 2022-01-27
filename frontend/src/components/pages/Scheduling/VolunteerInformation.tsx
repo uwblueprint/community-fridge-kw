@@ -136,9 +136,6 @@ const VolunteerInformation = ({
 
   const discardChanges = async () => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
-    setForm({ target: { name: "startTime", value: scheduleResponse.startTime } });
-    setForm({ target: { name: "endTime", value: scheduleResponse.endTime } });
-    setForm({ target: { name: "frequency", value: scheduleResponse.frequency } });
     setForm({ target: { name: "volunteerNeeded", value: scheduleResponse.volunteerNeeded } });
     setForm({ target: { name: "volunteerTime", value: scheduleResponse.volunteerTime } });
     setForm({ target: { name: "pickupLocation", value: scheduleResponse.pickupLocation } });
