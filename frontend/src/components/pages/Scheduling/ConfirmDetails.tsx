@@ -92,8 +92,8 @@ const ConfirmDetails = ({
 
   const getDonorData = async () => {
     const donorResponse = isBeingEdited
-      ? await DonorAPIClient.getDonorByUserId(currentSchedule.donorId)
-      : await DonorAPIClient.getDonorById(authenticatedUser!.id);
+      ? await DonorAPIClient.getDonorById(currentSchedule.donorId)
+      : await DonorAPIClient.getDonorByUserId(authenticatedUser!.id);
     setForm({ target: { name: "donorId", value: donorResponse.id } });
     setCurrentDonor(donorResponse);
   };
