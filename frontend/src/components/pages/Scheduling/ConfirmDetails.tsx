@@ -81,7 +81,11 @@ const ConfirmDetails = ({
       duration: 7000,
       isClosable: true,
     });
-    history.push(`${Routes.DASHBOARD_PAGE}`);
+    history.push(
+      authenticatedUser!.role === Role.DONOR
+        ? `${Routes.DASHBOARD_PAGE}`
+        : `${Routes.VIEW_DONATIONS}`,
+    );
   };
 
   const getDonorData = async () => {
@@ -334,7 +338,7 @@ const ConfirmDetails = ({
         </Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
-      {isBeingEdited && authenticatedUser?.role === Role.DONOR && (
+      {isBeingEdited && (
         <Box m="3em 0" pl="0" align="left">
           <Text textStyle="mobileHeader3" pb="0.8em">
             Danger Zone
