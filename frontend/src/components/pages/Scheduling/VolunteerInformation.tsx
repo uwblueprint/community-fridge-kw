@@ -58,6 +58,10 @@ const VolunteerInformation = ({
     "A volunteer is a community fridge member who will assist with donation drop-offs. Information of the volunteer assigned will be provided.";
 
   const getSubmitState = () => {
+    if (volunteerNeeded === null || volunteerNeeded === undefined) {
+      return false;
+    } 
+    
     if (volunteerNeeded && isPickup) {
       return !!pickupLocation && !!volunteerTime;
     }
@@ -102,7 +106,7 @@ const VolunteerInformation = ({
       valid = false;
       newErrors.volunteerNeeded = ErrorMessages.requiredField;
     }
-    if (volunteerNeeded && isPickup === undefined) {
+    if (volunteerNeeded && (isPickup === undefined || isPickup === null)) {
       valid = false;
       newErrors.isPickup = ErrorMessages.requiredField;
     }

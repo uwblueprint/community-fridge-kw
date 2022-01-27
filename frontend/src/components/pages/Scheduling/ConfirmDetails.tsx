@@ -10,7 +10,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { add, format, isBefore } from "date-fns";
+import { add, differenceInDays, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -24,6 +24,8 @@ import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
+import BackButton from "./BackButton";
+import SaveButton from "./SaveChangesButton";
 import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
 import BackButton from "./BackButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
@@ -82,21 +84,25 @@ const ConfirmDetails = ({
       duration: 7000,
       isClosable: true,
     });
-    history.push(`${Routes.DASHBOARD_PAGE}`);
+    history.push(
+      authenticatedUser!.role === Role.DONOR
+        ? `${Routes.DASHBOARD_PAGE}`
+        : `${Routes.VIEW_DONATIONS}`,
+    );
   };
 
   const getDonorData = async () => {
-    const donorResponse = await DonorAPIClient.getDonorByUserId(
-      authenticatedUser!.id,
-    );
+    const donorResponse = isBeingEdited
+      ? await DonorAPIClient.getDonorByUserId(currentSchedule.donorId)
+      : await DonorAPIClient.getDonorById(authenticatedUser!.id);
     setForm({ target: { name: "donorId", value: donorResponse.id } });
     setCurrentDonor(donorResponse);
   };
 
   const startDateLocal = new Date(currentSchedule.startTime);
   const endDateLocal = new Date(currentSchedule.recurringDonationEndDate);
-  const startTimeLocal = format(new Date(currentSchedule.startTime), "K:mm aa");
-  const endTimeLocal = format(new Date(currentSchedule.endTime), "K:mm aa");
+  const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
+  const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mm aa");
 
   const dayText = (startDate: Date) => {
     return format(startDate, "eeee");
@@ -121,8 +127,13 @@ const ConfirmDetails = ({
         break;
     }
     const result = add(startDate, addOptions);
-    if (!isBefore(result, endDateLocal)) return null;
-    return dateText(result);
+    if (
+      differenceInDays(endDateLocal, result) >= 0 &&
+      isBefore(result, endDateLocal)
+    ) {
+      return dateText(result);
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -187,6 +198,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("date and time")}
         >
           Edit
@@ -217,8 +229,8 @@ const ConfirmDetails = ({
             </Text>
           </HStack>
 
-          {nextDropoffDateText(startDateLocal) !== null ||
-          currentSchedule.frequency !== DonationFrequency.ONE_TIME ? (
+          {nextDropoffDateText(startDateLocal) === null ||
+          currentSchedule.frequency === DonationFrequency.ONE_TIME ? null : (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Next Drop-Off
@@ -230,7 +242,7 @@ const ConfirmDetails = ({
                 {`${startTimeLocal} - ${endTimeLocal}`}
               </Text>{" "}
             </Box>
-          ) : null}
+          )}
         </Box>
       </Box>
 
@@ -246,7 +258,8 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
-          onClick={() => go && go("donation information")}
+          disabled={authenticatedUser?.role !== Role.DONOR}
+          onClick={() => go && go("volunteer information")}
         >
           Edit
         </Button>
@@ -277,6 +290,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("volunteer information")}
         >
           Edit
@@ -289,14 +303,18 @@ const ConfirmDetails = ({
           <Text textStyle="mobileBody">
             {currentSchedule.volunteerNeeded ? "Yes" : "No"}
           </Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Pickup Needed
-          </Text>
-          <Text textStyle="mobileBody">
-            {currentSchedule.isPickup ? "Yes" : "No"}
-          </Text>
+          {currentSchedule.volunteerNeeded && (
+            <>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Pickup Needed
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.isPickup ? "Yes" : "No"}
+              </Text>
+            </>
+          )}
 
-          {currentSchedule.isPickup && (
+          {currentSchedule.volunteerNeeded && currentSchedule.isPickup && (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Address
