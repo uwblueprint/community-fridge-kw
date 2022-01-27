@@ -6,7 +6,6 @@ import {
   Container,
   Flex,
   HStack,
-  IconButton,
   Text,
   useDisclosure,
   useToast,
@@ -25,9 +24,8 @@ import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
-import BackButton from "./BackButton";
-import SaveButton from "./SaveChangesButton";
 import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
+import BackButton from "./BackButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -134,19 +132,19 @@ const ConfirmDetails = ({
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
         <Box mt={10}>
-        <Button
-          onClick={() =>
-            history.push(
-              authenticatedUser?.role === Role.DONOR
-                ? Routes.DASHBOARD_PAGE
-                : Routes.VIEW_DONATIONS,
-            )
-          }
-          paddingLeft="0" 
-          backgroundColor="transparent"
-        >
-        <ArrowBackIcon w={8} h={5} /> Back
-        </Button>
+          <Button
+            onClick={() =>
+              history.push(
+                authenticatedUser?.role === Role.DONOR
+                  ? Routes.DASHBOARD_PAGE
+                  : Routes.VIEW_DONATIONS,
+              )
+            }
+            paddingLeft="0"
+            backgroundColor="transparent"
+          >
+            <ArrowBackIcon w={8} h={5} /> Back
+          </Button>
         </Box>
       ) : (
         <>
@@ -372,15 +370,15 @@ const ConfirmDetails = ({
       )}
       {!isBeingEdited && (
         <HStack>
-        <Flex justify="flex-end">
-          <Button onClick={onSubmitClick} variant="navigation">
-            Submit
-          </Button>
-        </Flex>
-        <ErrorSchedulingModal
-          isOpen={isErrorSchedulingOpen}
-          onClose={onErrorSchedulingClose}
-        />
+          <Flex justify="flex-end">
+            <Button onClick={onSubmitClick} variant="navigation">
+              Submit
+            </Button>
+          </Flex>
+          <ErrorSchedulingModal
+            isOpen={isErrorSchedulingOpen}
+            onClose={onErrorSchedulingClose}
+          />
         </HStack>
       )}
     </Container>

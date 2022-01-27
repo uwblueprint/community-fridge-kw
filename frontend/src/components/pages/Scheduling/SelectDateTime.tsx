@@ -2,9 +2,7 @@ import "react-multi-date-picker/styles/layouts/mobile.css";
 import "./selectDateTime.css";
 
 import {
-  CloseButton,
   Container,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -24,8 +22,10 @@ import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import BackButton from "./BackButton";
+import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
+import SaveButton from "./SaveChangesButton";
 import {
   convertFrequencyString,
   dayParts,
@@ -34,8 +34,6 @@ import {
   getTimeSlot,
   SchedulingStepProps,
 } from "./types";
-import CancelButton from "./CancelEditsButton";
-import SaveButton from "./SaveChangesButton";
 
 const SelectDateTime = ({
   formValues,
@@ -222,11 +220,11 @@ const SelectDateTime = ({
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
     setForm({ target: { name: "startTime", value: "" } });
     setForm({ target: { name: "endTime", value: "" } });
-    
+
     if (!isBeingEdited) {
       setForm({ target: { name: "frequency", value: "" } });
     }
-    
+
     setFormErrors({
       ...formErrors,
       date: "",
@@ -342,10 +340,19 @@ const SelectDateTime = ({
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
 
     setForm({ target: { name: "dayPart", value: scheduleResponse.dayPart } });
-    setForm({ target: { name: "frequency", value: scheduleResponse.frequency } });
-    setForm({ target: { name: "startTime", value: scheduleResponse.startTime } });
+    setForm({
+      target: { name: "frequency", value: scheduleResponse.frequency },
+    });
+    setForm({
+      target: { name: "startTime", value: scheduleResponse.startTime },
+    });
     setForm({ target: { name: "endTime", value: scheduleResponse.endTime } });
-    setForm({ target: { name: "recurringDonationEndDate", value: scheduleResponse.recurringDonationEndDate } });
+    setForm({
+      target: {
+        name: "recurringDonationEndDate",
+        value: scheduleResponse.recurringDonationEndDate,
+      },
+    });
 
     return go && go("confirm donation details");
   };
