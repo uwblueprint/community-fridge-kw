@@ -284,14 +284,18 @@ const ConfirmDetails = ({
           <Text textStyle="mobileBody">
             {currentSchedule.volunteerNeeded ? "Yes" : "No"}
           </Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Pickup Needed
-          </Text>
-          <Text textStyle="mobileBody">
-            {currentSchedule.isPickup ? "Yes" : "No"}
-          </Text>
+          {currentSchedule.volunteerNeeded && (
+            <>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Pickup Needed
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.isPickup ? "Yes" : "No"}
+              </Text>
+            </>
+          )}
 
-          {currentSchedule.isPickup && (
+          {currentSchedule.volunteerNeeded && currentSchedule.isPickup && (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Address
