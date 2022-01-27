@@ -108,15 +108,12 @@ const ConfirmDetails = ({
     let addOptions = {};
     switch (currentSchedule.frequency) {
       case DonationFrequency.WEEKLY:
-        console.log("weekly");
         addOptions = { weeks: 1 };
         break;
       case DonationFrequency.DAILY:
         addOptions = { days: 1 };
-        console.log("daily");
         break;
       case DonationFrequency.MONTHLY:
-        console.log("monthly");
         addOptions = { months: 1 };
         break;
       default:
