@@ -27,7 +27,6 @@ import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
 import BackButton from "./BackButton";
 import SaveButton from "./SaveChangesButton";
 import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
-import BackButton from "./BackButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
