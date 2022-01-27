@@ -2,7 +2,9 @@ import "react-multi-date-picker/styles/layouts/mobile.css";
 import "./selectDateTime.css";
 
 import {
+  CloseButton,
   Container,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -336,10 +338,22 @@ const SelectDateTime = ({
     return new Date(today.setDate(diff));
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+
+    setForm({ target: { name: "dayPart", value: scheduleResponse.dayPart } });
+    setForm({ target: { name: "frequency", value: scheduleResponse.frequency } });
+    setForm({ target: { name: "startTime", value: scheduleResponse.startTime } });
+    setForm({ target: { name: "endTime", value: scheduleResponse.endTime } });
+    setForm({ target: { name: "recurringDonationEndDate", value: scheduleResponse.recurringDonationEndDate } });
+
+    return go && go("confirm donation details");
+  };
+
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
-        <CancelButton go={go} />
+        <CancelButton discardChanges={discardChanges} />
       ) : (
         <>
           <SchedulingProgressBar activeStep={0} totalSteps={4} />
