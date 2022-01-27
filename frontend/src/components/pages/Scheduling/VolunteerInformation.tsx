@@ -138,10 +138,33 @@ const VolunteerInformation = ({
     }
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+    setForm({
+      target: {
+        name: "volunteerNeeded",
+        value: scheduleResponse.volunteerNeeded,
+      },
+    });
+    setForm({
+      target: { name: "volunteerTime", value: scheduleResponse.volunteerTime },
+    });
+    setForm({
+      target: {
+        name: "pickupLocation",
+        value: scheduleResponse.pickupLocation,
+      },
+    });
+    setForm({ target: { name: "isPickup", value: scheduleResponse.isPickup } });
+    setForm({ target: { name: "notes", value: scheduleResponse.notes } });
+
+    return go && go("confirm donation details");
+  };
+
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
-        <CancelButton go={go} />
+        <CancelButton discardChanges={discardChanges} />
       ) : (
         <>
           <SchedulingProgressBar activeStep={2} totalSteps={4} />

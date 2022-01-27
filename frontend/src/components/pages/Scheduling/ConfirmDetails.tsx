@@ -6,7 +6,6 @@ import {
   Container,
   Flex,
   HStack,
-  IconButton,
   Text,
   useDisclosure,
   useToast,
@@ -93,8 +92,8 @@ const ConfirmDetails = ({
 
   const getDonorData = async () => {
     const donorResponse = isBeingEdited
-      ? await DonorAPIClient.getDonorByUserId(currentSchedule.donorId)
-      : await DonorAPIClient.getDonorById(authenticatedUser!.id);
+      ? await DonorAPIClient.getDonorById(currentSchedule.donorId)
+      : await DonorAPIClient.getDonorByUserId(authenticatedUser!.id);
     setForm({ target: { name: "donorId", value: donorResponse.id } });
     setCurrentDonor(donorResponse);
   };
@@ -143,19 +142,19 @@ const ConfirmDetails = ({
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
         <Box mt={10}>
-        <Button
-          onClick={() =>
-            history.push(
-              authenticatedUser?.role === Role.DONOR
-                ? Routes.DASHBOARD_PAGE
-                : Routes.VIEW_DONATIONS,
-            )
-          }
-          paddingLeft="0" 
-          backgroundColor="transparent"
-        >
-        <ArrowBackIcon w={8} h={5} /> Back
-        </Button>
+          <Button
+            onClick={() =>
+              history.push(
+                authenticatedUser?.role === Role.DONOR
+                  ? Routes.DASHBOARD_PAGE
+                  : Routes.VIEW_DONATIONS,
+              )
+            }
+            paddingLeft="0"
+            backgroundColor="transparent"
+          >
+            <ArrowBackIcon w={8} h={5} /> Back
+          </Button>
         </Box>
       ) : (
         <>
@@ -388,15 +387,15 @@ const ConfirmDetails = ({
       )}
       {!isBeingEdited && (
         <HStack>
-        <Flex justify="flex-end">
-          <Button onClick={onSubmitClick} variant="navigation">
-            Submit
-          </Button>
-        </Flex>
-        <ErrorSchedulingModal
-          isOpen={isErrorSchedulingOpen}
-          onClose={onErrorSchedulingClose}
-        />
+          <Flex justify="flex-end">
+            <Button onClick={onSubmitClick} variant="navigation">
+              Submit
+            </Button>
+          </Flex>
+          <ErrorSchedulingModal
+            isOpen={isErrorSchedulingOpen}
+            onClose={onErrorSchedulingClose}
+          />
         </HStack>
       )}
     </Container>

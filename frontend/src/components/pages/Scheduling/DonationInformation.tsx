@@ -1,14 +1,11 @@
 import {
-  Button,
   Checkbox,
   Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   Stack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 
@@ -104,10 +101,19 @@ const DonationInformation: any = ({
     }
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+    setForm({
+      target: { name: "categories", value: scheduleResponse.categories },
+    });
+    setForm({ target: { name: "size", value: scheduleResponse.size } });
+    return go && go("confirm donation details");
+  };
+
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
-        <CancelButton go={go} />
+        <CancelButton discardChanges={discardChanges} />
       ) : (
         <>
           <SchedulingProgressBar activeStep={1} totalSteps={4} />

@@ -26,7 +26,7 @@ export interface SchedulingProgessBarProps {
 export interface ButtonProps {
   onSaveClick?: () => void;
   isBeingEdited?: boolean;
-  go?: (step: string | number) => void;
+  discardChanges?: () => Promise<void | undefined>;
   canSubmit?: boolean;
   handleNext?: () => void;
   previous?: () => void;
