@@ -10,7 +10,7 @@ const ConfirmVerificationPage = () => {
   const history = useHistory();
 
   return (
-    <Container centerContent pl="42px" pr="42px" pt="31px">
+    <Container pl="42px" pr="42px" pt="31px">
       <IconButton
         display={{ md: "none" }}
         aria-label="close page"
@@ -20,9 +20,10 @@ const ConfirmVerificationPage = () => {
       >
         <CloseIcon color="black.100" />
       </IconButton>
+      <Container centerContent>
       <Image
-          width="75%"
-          height="75%"
+          width="80%"
+          height="80%"
           src={confirmVerificationImage}
           alt="Verification email image"
           
@@ -46,6 +47,8 @@ const ConfirmVerificationPage = () => {
       >
         Finish
       </Button>
+      </Container>
+      
     </Container>
   );
 };
