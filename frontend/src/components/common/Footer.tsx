@@ -7,12 +7,11 @@ const Footer = (): JSX.Element => (
   <>
     <Divider pt={{ base: "79px", md: "117px" }} />
     <Container
-      maxWidth={{ base: "default", md: "70%", lg: "80%" }}
+      maxWidth={{ lg: "80%" }}
       py="4rem"
-      pl={{ base: "2rem", md: "0px" }}
-      pr={{ base: "4rem", md: "0px" }}
       display={{ md: "flex" }}
       justifyContent="space-evenly"
+      variant="baseContainer"
     >
       <VStack
         mt={{ base: 4, md: 0 }}

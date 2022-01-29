@@ -35,13 +35,14 @@ const Header = (): JSX.Element => {
   };
 
   return (
-    <Container pt="1.5rem" variant="baseContainer">
+    <Container variant="headerContainer">
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
-        display={{ base: "inline", md: "flex" }}
+        display="flex"
+        float={{ base: "left", md: "none" }}
       >
         <IconButton
           w="24px"
@@ -60,6 +61,7 @@ const Header = (): JSX.Element => {
             src="header-logo.png"
             alt="Community Fridge logo"
             display="inline"
+            maxWidth="100vw"
           />
         </Link>
         <Stack
@@ -107,7 +109,7 @@ const Header = (): JSX.Element => {
             </>
           ) : (
             <>
-              <Link as={ReactLink} to={Routes.LANDING_PAGE} onClick={onClose}>
+              <Link as={ReactLink} to={Routes.LANDING_PAGE}>
                 Home
               </Link>
               <Button
@@ -158,17 +160,17 @@ const Header = (): JSX.Element => {
                       >
                         Home
                       </Link>
-                      <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
+                      <Link as={ReactLink} to={Routes.DASHBOARD_PAGE} onClick={onClose}>
                         Scheduled Donations
                       </Link>
                     </>
                   )}
                   {authenticatedUser.role === Role.ADMIN && (
                     <>
-                      <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                      <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE} onClick={onClose}>
                         User Management
                       </Link>
-                      <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
+                      <Link as={ReactLink} to={Routes.VIEW_DONATIONS} onClick={onClose}>
                         View Donations
                       </Link>
                     </>
