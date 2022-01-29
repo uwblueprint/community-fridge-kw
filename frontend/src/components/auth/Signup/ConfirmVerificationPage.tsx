@@ -1,7 +1,8 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Button, Container, IconButton, Text } from "@chakra-ui/react";
+import { Button, Container, IconButton, Text, Image } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import confirmVerificationImage from "../../../assets/authentication_complete.svg"
 
 import * as Routes from "../../../constants/Routes";
 
@@ -19,6 +20,13 @@ const ConfirmVerificationPage = () => {
       >
         <CloseIcon color="black.100" />
       </IconButton>
+      <Image
+          width="75%"
+          height="75%"
+          src={confirmVerificationImage}
+          alt="Verification email image"
+          
+        />
       <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">
         Thank you for verifying your email address!
       </Text>

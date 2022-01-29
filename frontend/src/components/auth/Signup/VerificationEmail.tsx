@@ -1,10 +1,11 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Container, IconButton, Text } from "@chakra-ui/react";
+import { Container, IconButton, Text, Image } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
-
+import verificationEmailImage from "../../../assets/authentication_incomplete.svg"
 import * as Routes from "../../../constants/Routes";
 import { SignUpFormProps } from "./types";
+
 
 interface VerificationPageProps {
   formValues: SignUpFormProps;
@@ -25,6 +26,13 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
         <CloseIcon color="black.100" />
       </IconButton>
       <Container centerContent>
+        <Image
+          width="70%"
+          height="70%"
+          src={verificationEmailImage}
+          alt="Verification email image"
+          
+        />
         <Text mt="2rem" textAlign="center" textStyle="mobileHeader1">
           Please verify your email address!
         </Text>

@@ -23,6 +23,7 @@ import customTheme from "./theme/index";
 import { AuthenticatedUser } from "./types/AuthTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
 
+
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
     AUTHENTICATED_USER_KEY,
