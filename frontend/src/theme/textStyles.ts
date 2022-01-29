@@ -128,5 +128,10 @@ const textStyles = {
     fontWeight: 500,
     lineHeight: "22px",
   },
+  iconNumber: {
+    fontSize: "45px",
+    fontWeight: 500,
+    lineHeight: "54px",
+  },
 };
 export default textStyles;
