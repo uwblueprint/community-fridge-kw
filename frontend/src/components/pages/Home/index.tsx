@@ -54,7 +54,7 @@ const Home = (): JSX.Element => {
               size="lg"
               onClick={() => history.push(Routes.SCHEDULING_PAGE)}
               variant="navigation"
-              width={{ base: "100%", md: "50%", xl: "30%" }}
+              width={{ base: "100%", md: "75%", xl: "30%" }}
             >
               Schedule a food donation
             </Button>
