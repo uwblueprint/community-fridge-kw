@@ -10,7 +10,7 @@ const ConfirmVerificationPage = () => {
   const history = useHistory();
 
   return (
-    <Container dashboardVariant>
+    <Container variant="dashboardVariant">
       <IconButton
         display={{ md: "none" }}
         aria-label="close page"
