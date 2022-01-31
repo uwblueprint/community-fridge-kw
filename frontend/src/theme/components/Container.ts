@@ -1,23 +1,23 @@
 const Container = {
   variants: {
+    headerContainer: {
+      maxWidth: { base: "default", md: "70%" },
+      px: { base: "42px", md: "0px" },
+      py: "1.5em",
+    },
     baseContainer: {
-      px: "32px",
-      pt: "0.5rem",
-      maxWidth: ["default", "70%"],
+      maxWidth: { base: "default", md: "70%" },
+      px: { base: "42px", md: "0px" },
+      pt: ["55px", "121px"],
     },
     calendarContainer: {
       px: "0px",
       py: "0px",
-      maxWidth: ["default", "100%"],
+      maxWidth: "100%",
     },
     responsiveContainer: {
-      px: ["42px", "0px"],
-      maxWidth: ["default", "70%"],
-    },
-    dashboardContainer: {
-      px: ["42px", "0px"],
-      pt: ["55px", "121px"],
-      maxWidth: ["default", "70%"],
+      maxWidth: { base: "default", md: "70%" },
+      px: { base: "42px", md: "0px" },
     },
   },
 };
