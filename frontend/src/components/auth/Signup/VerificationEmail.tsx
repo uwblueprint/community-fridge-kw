@@ -15,7 +15,7 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
   const history = useHistory();
   const { email } = formValues;
   return (
-    <Container pl="42px" pr="42px" pt="31px">
+    <Container dashboardVariant>
       <IconButton
         aria-label="close page"
         float="right"
