@@ -34,7 +34,7 @@ const DonationStep = ({
         color="hubbard.100"
         textAlign="center"
         marginRight="12px"
-        marginTop={{base: "0px", md: "12px"}}
+        verticalAlign="top"
         marginBottom="12px"
         
       >

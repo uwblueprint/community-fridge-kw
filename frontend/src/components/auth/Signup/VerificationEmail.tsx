@@ -45,6 +45,14 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
           We sent a verification email to {email}. Please check your email to
           begin scheduling your first dropoff!
         </Text>
+        <Text
+          textAlign="center"
+          textStyle="mobileBodyBold"
+          mt="1rem"
+        >
+        Please verify your email within the hour or you will need to 
+        contact admin for account creation.
+        </Text>
       </Container>
     </Container>
   );
