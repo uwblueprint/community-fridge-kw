@@ -21,11 +21,7 @@ const Home = (): JSX.Element => {
 
   return (
     <>
-      <Container
-        maxWidth={{ base: "default", md: "70%" }}
-        px={{ base: "42px", md: "0px" }}
-        pt={{ base: "55px", md: "121px" }}
-      >
+      <Container variant="baseContainer">
         <Image
           src="drawer-logo.png"
           alt="Community Fridge logo"
@@ -36,7 +32,7 @@ const Home = (): JSX.Element => {
           display={{ base: "inline", md: "none" }}
         />
         <Flex>
-          <Box>
+          <Box width="100%">
             <Text align="left" marginBottom="13px" textStyle="mobileHeader1">
               Welcome to Community Fridge KW
             </Text>
@@ -44,7 +40,7 @@ const Home = (): JSX.Element => {
             <Text
               marginBottom="30px"
               textStyle="mobileBody"
-              width={{ base: "default", md: "50%" }}
+              width={{ base: "100%", md: "50%" }}
             >
               We’re a grassroots mutual aid initiative committed to establishing
               public repositories of fresh food and essential items in

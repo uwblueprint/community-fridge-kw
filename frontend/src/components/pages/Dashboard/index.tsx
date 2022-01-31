@@ -46,7 +46,7 @@ const Dashboard = (): JSX.Element => {
   }
 
   return (
-    <Container variant="dashboardContainer">
+    <Container variant="baseContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">
         <VStack alignItems="left">
           <Text color="black.100" textStyle="mobileHeader1">
