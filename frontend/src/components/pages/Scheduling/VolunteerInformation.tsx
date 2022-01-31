@@ -60,8 +60,8 @@ const VolunteerInformation = ({
   const getSubmitState = () => {
     if (volunteerNeeded === null || volunteerNeeded === undefined) {
       return false;
-    }
-
+    } 
+    
     if (volunteerNeeded && isPickup) {
       return !!pickupLocation && !!volunteerTime;
     }
