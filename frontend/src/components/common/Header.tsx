@@ -56,8 +56,17 @@ const Header = (): JSX.Element => {
           <HamburgerIcon color="black.100" />
         </IconButton>
         {authenticatedUser?.role === Role.DONOR ? (
-        <>
-        <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+          <>
+            <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+              <Image
+                objectFit="none"
+                src="header-logo.png"
+                alt="Community Fridge logo"
+                display="inline"
+              />
+            </Link>
+          </>
+        ) : (
           <Image
             objectFit="none"
             src="header-logo.png"
@@ -65,14 +74,6 @@ const Header = (): JSX.Element => {
             display="inline"
             maxWidth="100vw"
           />
-        </Link>
-        </>) : (
-           <Image
-           objectFit="none"
-           src="header-logo.png"
-           alt="Community Fridge logo"
-           display="inline"
-         />
         )}
         <Stack
           spacing="2rem"
@@ -177,7 +178,7 @@ const Header = (): JSX.Element => {
                   )}
                   {authenticatedUser.role === Role.ADMIN && (
                     <>
-                       <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
+                      <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
                         View Donations
                       </Link>
                       <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
