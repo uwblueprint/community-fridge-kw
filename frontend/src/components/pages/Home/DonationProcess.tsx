@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text, Stack } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -22,21 +22,20 @@ const DonationStep = ({
       textAlign={{ md: "center" }}
       width="100%"
       alignItems="center"
-      direction={{base: "row", md: "column"}}
+      direction={{ base: "row", md: "column" }}
     >
       <Text
-        width={{base: "22px", md: "70px"}}
-        height={{base: "22px", md: "70px"}}
-        lineHeight={{base: "22px", md: "70px"}}
+        width={{ base: "22px", md: "70px" }}
+        height={{ base: "22px", md: "70px" }}
+        lineHeight={{ base: "22px", md: "70px" }}
         borderRadius="100%"
         backgroundColor="cottonCandy.100"
-        textStyle={{base: "mobileSmall", md: "iconNumber"}}
+        textStyle={{ base: "mobileSmall", md: "iconNumber" }}
         color="hubbard.100"
         textAlign="center"
         marginRight="12px"
         verticalAlign="top"
         marginBottom="12px"
-        
       >
         {stepNumber}
       </Text>

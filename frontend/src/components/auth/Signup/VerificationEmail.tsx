@@ -1,11 +1,11 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Container, IconButton, Text, Image } from "@chakra-ui/react";
+import { Container, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import verificationEmailImage from "../../../assets/authentication_incomplete.svg"
+
+import verificationEmailImage from "../../../assets/authentication_incomplete.svg";
 import * as Routes from "../../../constants/Routes";
 import { SignUpFormProps } from "./types";
-
 
 interface VerificationPageProps {
   formValues: SignUpFormProps;
@@ -31,7 +31,6 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
           height="70%"
           src={verificationEmailImage}
           alt="Verification email image"
-          
         />
         <Text mt="2rem" textAlign="center" textStyle="mobileHeader1">
           Please verify your email address!
@@ -45,13 +44,9 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
           We sent a verification email to {email}. Please check your email to
           begin scheduling your first dropoff!
         </Text>
-        <Text
-          textAlign="center"
-          textStyle="mobileBodyBold"
-          mt="1rem"
-        >
-        Please verify your email within the hour or you will need to 
-        contact admin for account creation.
+        <Text textAlign="center" textStyle="mobileBodyBold" mt="1rem">
+          Please verify your email within the hour or you will need to contact
+          admin for account creation.
         </Text>
       </Container>
     </Container>
