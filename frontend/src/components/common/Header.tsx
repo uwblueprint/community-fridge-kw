@@ -160,17 +160,29 @@ const Header = (): JSX.Element => {
                       >
                         Home
                       </Link>
-                      <Link as={ReactLink} to={Routes.DASHBOARD_PAGE} onClick={onClose}>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.DASHBOARD_PAGE}
+                        onClick={onClose}
+                      >
                         Scheduled Donations
                       </Link>
                     </>
                   )}
                   {authenticatedUser.role === Role.ADMIN && (
                     <>
-                      <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE} onClick={onClose}>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.USER_MANAGEMENT_PAGE}
+                        onClick={onClose}
+                      >
                         User Management
                       </Link>
-                      <Link as={ReactLink} to={Routes.VIEW_DONATIONS} onClick={onClose}>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.VIEW_DONATIONS}
+                        onClick={onClose}
+                      >
                         View Donations
                       </Link>
                     </>

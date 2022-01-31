@@ -37,11 +37,7 @@ const Footer = (): JSX.Element => (
         </Text>
       </VStack>
 
-      <VStack
-        mt={{ base: "48px", md: 0 }}
-        align={{ md: "left" }}
-        mr={{ base: "0%", md: "10%" }}
-      >
+      <VStack mt={{ base: "48px", md: 0 }} align={{ md: "left" }}>
         <Text color="raddish.100" textStyle="mobileHeader3">
           Contact Us
         </Text>
