@@ -3,6 +3,7 @@ import {
   CreateSchedulingDTO,
   UpdateSchedulingDTO,
   UserDonorDTO,
+  DonorDTO,
 } from "../../types";
 
 interface ISchedulingService {
@@ -42,6 +43,18 @@ interface ISchedulingService {
    */
   sendEmailVerificationAfterSchedulingADonation(
     email: UserDonorDTO,
+    schedule: SchedulingDTO,
+  ): Promise<void>;
+
+  /**
+   * Generate an email with donation information to be sent to admin after a
+   * donation is scheduled
+   * @param donor  object that contains donor information
+   * @param schedule object that contains information on scheduled donation
+   * @throws Error if unable to send email
+   */
+  sendAdminEmailVerificationAfterDonationScheduled(
+    donor: UserDonorDTO,
     schedule: SchedulingDTO,
   ): Promise<void>;
 
