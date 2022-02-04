@@ -271,7 +271,7 @@ class SchedulingService implements ISchedulingService {
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${schedule.size} - ${donationSizeDescriptions.get(
-                schedule.size ?? "")}
+                schedule.size ?? "",)}
                 <br />
                 ${schedule.categories.join(", ")}
               </p>
@@ -281,7 +281,10 @@ class SchedulingService implements ISchedulingService {
             <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                ${schedule.volunteerNeeded ? "Volunteer required": "Volunteer not required"}
+                ${schedule.volunteerNeeded 
+                  ? "Volunteer required"
+                  : "Volunteer not required"
+                }
                 <br />
                 ${schedule.isPickup ? "Pickup required" : "Pickup not required"}
                 <br />
