@@ -232,6 +232,11 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
+      const volunteerTimeString: string = dayjs(schedule.volunteerTime).format(
+        "h:mm A",
+      );
+
+
       const emailBody = `<html>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet" />
@@ -284,7 +289,7 @@ class SchedulingService implements ISchedulingService {
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${
                   schedule.volunteerNeeded
-                    ? `<br>Volunteer required at ${schedule.volunteerTime}</br>`
+                    ? `<br>Volunteer required at ${volunteerTimeString}</br>`
                     : "Volunteer not required"
                 }
                 <br />
