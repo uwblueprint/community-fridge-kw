@@ -328,7 +328,7 @@ class SchedulingService implements ISchedulingService {
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
-        "Attempted to call sendEmailVerificationAfterSchedulingADonation but this instance of SchedulingService does not have an EmailService instance";
+        "Attempted to call sendAdminEmailVerificationAfterDonationScheduled but this instance of SchedulingService does not have an EmailService instance";
       Logger.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -336,7 +336,7 @@ class SchedulingService implements ISchedulingService {
     try {
       const { firstName, lastName } = donor;
       // HARD CODED TEST ADMIN EMAIL
-      const adminEmail = "j76peng@uwaterloo.ca";
+      const adminEmail = "jessiepeng@uwblueprint.org";
 
       // Proposed drop off info
       const { startTime, endTime } = schedule;
@@ -393,16 +393,14 @@ class SchedulingService implements ISchedulingService {
      <body>
         <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
          style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
-         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717;"> ${firstName} ${lastName} has scheduled a donation for ${startDayString} at ${startTimeString}!</h2>
-         <br />
-         <br />
-         Here is a summary of their donation:
+         <p style=" font-size: 20px; line-height: 22px; color: #171717; margin-bottom: 35px"> ${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>
+         <p style=" font-size: 15px; line-height: 18px; color: #171717;">Here is a summary of their donation: </p>
      </p>
      
-     <div style="display: flex; flex-direction: row; align-content: flex-start; gap: 20px;">
+     <div style="align-content: flex-start; ">
          <div>
-             <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-                 Proposed donation time
+             <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717; margin-top: 10px; margin-bottom: -14px">
+                 Proposed drop-off time
              </h2>
              <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                  ${startDayString}
@@ -413,36 +411,29 @@ class SchedulingService implements ISchedulingService {
              </p>
          </div>
          <div>
-            <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+            <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717; margin-top: 20px; margin-bottom: -14px">
              Donation information
-         </h2>
-         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+            </h2>
+            <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
              ${schedule.size} - ${donationSizeDescriptions.get(
-        schedule.size ?? "",
-      )}
+              schedule.size ?? "",
+              )}
              <br/>
              ${schedule.categories.join(", ")}
-         </p>
-     
-     
+            </p>
+          </div>
+          <div>
+            <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717; margin-top: 20px; margin-bottom: -14px">
+            Volunteer information
+            </h2>
+            <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                ${schedule.volunteerNeeded ? "Volunteer required" : ""}
+            ${schedule.isPickup ? "<br/> Pickup required" : ""}
+            ${schedule.isPickup ? `<br/> ${schedule.pickupLocation}` : ""}
+            ${schedule.notes ? `<br/> Additional Notes: ${schedule.notes}` : ""}
+            </p>
+          </div>
      </div>
-     </div>
-     
-     
-     <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-         Volunteer information
-     </h2>
-     <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-         ${schedule.volunteerNeeded ? "Volunteer required" : ""}
-     <br/>
-     ${schedule.isPickup ? "Pickup required" : ""}
-     <br/>
-     ${schedule.isPickup ? schedule.pickupLocation : ""}
-     <br/>
-     ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
-     </p>
-     
-     
      <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
      <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>   
      </body>
