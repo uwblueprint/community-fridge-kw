@@ -255,7 +255,7 @@ class SchedulingService implements ISchedulingService {
         <title>Donation Details Email</title>
       </head>
       <body>
-        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png style="min-width: 100px; width: 25%; margin-bottom: 20px;" alt=" CFKW Logo" /></p>
+        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png style="min-width: 100px; max-width: 200px; width: 25%; margin-bottom: 20px;" alt=" CFKW Logo" /></p>
         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;"><strong>Hey there ${firstName}!</strong></p>
         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
           <br />
