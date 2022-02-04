@@ -271,8 +271,8 @@ class SchedulingService implements ISchedulingService {
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${schedule.size} - ${donationSizeDescriptions.get(
-                schedule.size ?? "",
-                )}
+        schedule.size ?? "",
+      )}
                 <br />
                 ${schedule.categories.join(", ")}
               </p>
@@ -283,9 +283,9 @@ class SchedulingService implements ISchedulingService {
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${
-                  schedule.volunteerNeeded 
-                  ? "Volunteer required" 
-                  : "Volunteer not required"
+                  schedule.volunteerNeeded
+                    ? "Volunteer required"
+                    : "Volunteer not required"
                 }
                 <br />
                 ${schedule.isPickup ? "Pickup required" : "Pickup not required"}
@@ -299,7 +299,7 @@ class SchedulingService implements ISchedulingService {
         <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>
       </body>
-    </html>`;
+      </html>`;
 
       this.emailService.sendEmail(
         donor.email,
