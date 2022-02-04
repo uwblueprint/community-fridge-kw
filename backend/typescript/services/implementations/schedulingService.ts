@@ -284,7 +284,7 @@ class SchedulingService implements ISchedulingService {
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${
                   schedule.volunteerNeeded
-                    ? "Volunteer required"
+                    ? `<br>Volunteer required at ${schedule.volunteerTime}</br>`
                     : "Volunteer not required"
                 }
                 <br />
