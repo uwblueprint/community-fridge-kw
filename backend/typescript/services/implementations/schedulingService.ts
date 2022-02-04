@@ -374,71 +374,72 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
-      const emailBody = `
-      <html >
+      const emailBody = `<html>
       <head>
-        <link
-        href="https://fonts.googleapis.com/css2?family=Inter"
-        rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet" />
         <style>
-         body {
-             font-family: "Inter";
-         }
-     </style>
-     <meta charset="utf-8" />
-     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-     <title>Donation Details Email</title>
-     </head>
-     <body>
-        <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
-         style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
-         <p style=" font-size: 20px; line-height: 22px; color: #171717; margin-bottom: 35px"> ${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>
-         <p style=" font-size: 15px; line-height: 18px; color: #171717;">Here is a summary of their donation: </p>
-     </p>
-     
-     <div style="align-content: flex-start; ">
-         <div>
-             <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717; margin-top: 10px; margin-bottom: -14px">
-                 Proposed drop-off time
-             </h2>
-             <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                 ${startDayString}
-                 <br />
-                 ${startTimeString} - ${endTimeString}
-                 <br />
-                 ${frequencyString}
-             </p>
-         </div>
-         <div>
-            <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717; margin-top: 20px; margin-bottom: -14px">
-             Donation information
-            </h2>
-            <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-             ${schedule.size} - ${donationSizeDescriptions.get(
-              schedule.size ?? "",
-              )}
-             <br/>
-             ${schedule.categories.join(", ")}
-            </p>
-          </div>
-          <div>
-            <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717; margin-top: 20px; margin-bottom: -14px">
-            Volunteer information
-            </h2>
-            <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                ${schedule.volunteerNeeded ? "Volunteer required" : ""}
-            ${schedule.isPickup ? "<br/> Pickup required" : ""}
-            ${schedule.isPickup ? `<br/> ${schedule.pickupLocation}` : ""}
-            ${schedule.notes ? `<br/> Additional Notes: ${schedule.notes}` : ""}
-            </p>
-          </div>
-     </div>
-     <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
-     <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>   
-     </body>
-     </html>
-      `;
+          body {
+            font-family: "Inter";
+            margin: 1.5em;
+          }
+        </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Donation Details Email</title>
+      </head>
+      <body>
+        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png style="min-width: 100px; width: 25%; margin-bottom: 20px;" alt=" CFKW Logo" /></p>
+        <p style="font-weight: 400; font-size: 18px; line-height: 24px; color: #171717;">${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>
+          <br />
+          <p style"font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Here is a summary of your upcoming donation: </p>
+        </p>
+        <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
+          <tr>
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+              <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+                Proposed drop-off time
+              </h2>
+              <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                ${startDayString}
+                <br />
+                ${startTimeString} - ${endTimeString}
+                <br />
+                ${frequencyString}
+              </p>
+            </td>
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+              <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
+              <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                ${schedule.size} - ${donationSizeDescriptions.get(
+        schedule.size ?? "",
+      )}
+                <br />
+                ${schedule.categories.join(", ")}
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+              <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
+              <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                ${
+                  schedule.volunteerNeeded
+                    ? "Volunteer required"
+                    : "Volunteer not required"
+                }
+                <br />
+                ${schedule.isPickup ? "Pickup required" : "Pickup not required"}
+                <br />
+                ${schedule.isPickup ? `${schedule.pickupLocation}<br />` : ""}
+                ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
+              </p>
+            </td>
+          </tr>
+        </table>
+        <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
+        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>
+      </body>
+      </html>`;
 
       this.emailService.sendEmail(
         adminEmail,
