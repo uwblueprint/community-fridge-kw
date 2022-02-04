@@ -96,7 +96,7 @@ const ViewDonations = ({
             </IconButton>
           </HStack>
         ) : (
-          <Flex pt="4rem" pb="2.5rem" width="60rem" alignItems="center">
+          <Flex pt="4rem" pb="2.5rem" width="inherit" alignItems="center">
             <HStack alignSelf="center">
               <Text textStyle="desktopHeader" whiteSpace="nowrap">
                 {selectedDay?.toLocaleString(undefined, {
