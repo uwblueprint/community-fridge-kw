@@ -255,7 +255,7 @@ class SchedulingService implements ISchedulingService {
         </p>
         <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
           <tr>
-            <td style="display: inline-block; padding-right: 2em;">
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
                 Proposed drop-off time
               </h2>
@@ -267,7 +267,7 @@ class SchedulingService implements ISchedulingService {
                 ${frequencyString}
               </p>
             </td>
-            <td style="display: inline-block; padding-right: 2em;">
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${schedule.size} - ${donationSizeDescriptions.get(
@@ -278,14 +278,14 @@ class SchedulingService implements ISchedulingService {
             </td>
           </tr>
           <tr>
-            <td style="display: inline-block; padding-right: 2em;">
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${schedule.volunteerNeeded ? "Volunteer required": "Volunteer not required"}
                 <br />
                 ${schedule.isPickup ? "Pickup required" : "Pickup not required"}
                 <br />
-                ${schedule.isPickup ? `${schedule.pickupLocation}<br />}` : ""}
+                ${schedule.isPickup ? `${schedule.pickupLocation}<br />` : ""}
                 ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
               </p>
             </td>
