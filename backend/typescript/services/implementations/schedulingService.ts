@@ -232,9 +232,16 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
-      const volunteerTimeString: string = dayjs(schedule.volunteerTime).format(
-        "h:mm A",
-      );
+      const volunteerTimeString = () => {
+        if (!!schedule.volunteerTime) {
+          const time_part_array = schedule.volunteerTime.split(":");
+          const AmOrPm = parseInt(time_part_array[0]) >= 12 ? 'PM' : 'AM';
+          const hour = parseInt(time_part_array[0]) % 12 || 12;
+          time_part_array[0] = String(hour);
+          const formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + AmOrPm;
+          return formatted_time;
+        }
+      }
 
 
       const emailBody = `<html>
@@ -256,7 +263,7 @@ class SchedulingService implements ISchedulingService {
         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
           <br />
           <br />
-          Here is a summary of your upcoming donation:
+          <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Here is a summary of your upcoming donation:</p>
         </p>
         <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
           <tr>
