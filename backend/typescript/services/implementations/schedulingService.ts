@@ -238,8 +238,8 @@ class SchedulingService implements ISchedulingService {
         const AmOrPm = parseInt(timePartArray[0], 10) >= 12 ? "PM" : "AM";
         const hour = parseInt(timePartArray[0], 10) % 12 || 12;
         timePartArray[0] = String(hour);
-        volunteerTimeString = 
-        timePartArray[0] + ":" + timePartArray[1] + " " + AmOrPm;
+        
+        volunteerTimeString = `${timePartArray.join(":")} ${AmOrPm}`;
       }
 
       const emailBody = `<html>
