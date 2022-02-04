@@ -374,6 +374,14 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
+      if (!!schedule.volunteerTime) {
+        const time_part_array = schedule.volunteerTime.split(":");
+        const AmOrPm = parseInt(time_part_array[0]) >= 12 ? 'PM' : 'AM';
+        const hour = parseInt(time_part_array[0]) % 12 || 12;
+        time_part_array[0] = String(hour);
+        schedule.volunteerTime = time_part_array[0] + ':' + time_part_array[1] + ' ' + AmOrPm;
+      }
+
       const emailBody = `<html>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet" />
@@ -388,10 +396,11 @@ class SchedulingService implements ISchedulingService {
         <title>Donation Details Email</title>
       </head>
       <body>
-        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png style="min-width: 100px; width: 25%; margin-bottom: 20px;" alt=" CFKW Logo" /></p>
+      <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
+      style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
         <p style="font-weight: 400; font-size: 18px; line-height: 24px; color: #171717;">${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>
           <br />
-          <p style"font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Here is a summary of your upcoming donation: </p>
+          <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Here is a summary of your upcoming donation: </p>
         </p>
         <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
           <tr>
@@ -422,11 +431,11 @@ class SchedulingService implements ISchedulingService {
             <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
               <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                ${
-                  schedule.volunteerNeeded
-                    ? "Volunteer required"
-                    : "Volunteer not required"
-                }
+              ${
+                schedule.volunteerNeeded
+                  ? `<strong>Volunteer required at ${schedule.volunteerTime}</strong>`
+                  : "Volunteer not required"
+              }
                 <br />
                 ${schedule.isPickup ? "Pickup required" : "Pickup not required"}
                 <br />
