@@ -61,8 +61,8 @@ const ViewDonations = ({
           Upcoming Scheduled Fridge Donations
         </Text>
         {isMobile ? (
-          <HStack py="1.2rem">
-            <Text textStyle="mobileHeader4">
+          <HStack py="1.2rem" width="inherit" alignItems="center">
+            <Text textStyle="mobileHeader4" whiteSpace="nowrap">
               {selectedDay?.toLocaleString(undefined, {
                 year: "numeric",
                 month: "long",
