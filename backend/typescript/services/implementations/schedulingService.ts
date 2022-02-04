@@ -232,15 +232,12 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
-      const volunteerTimeString = () => {
-        if (!!schedule.volunteerTime) {
-          const time_part_array = schedule.volunteerTime.split(":");
-          const AmOrPm = parseInt(time_part_array[0]) >= 12 ? 'PM' : 'AM';
-          const hour = parseInt(time_part_array[0]) % 12 || 12;
-          time_part_array[0] = String(hour);
-          const formatted_time = time_part_array[0] + ':' + time_part_array[1] + ' ' + AmOrPm;
-          return formatted_time;
-        }
+      if (!!schedule.volunteerTime) {
+        const time_part_array = schedule.volunteerTime.split(":");
+        const AmOrPm = parseInt(time_part_array[0]) >= 12 ? 'PM' : 'AM';
+        const hour = parseInt(time_part_array[0]) % 12 || 12;
+        time_part_array[0] = String(hour);
+        schedule.volunteerTime = time_part_array[0] + ':' + time_part_array[1] + ' ' + AmOrPm;
       }
 
 
@@ -296,7 +293,7 @@ class SchedulingService implements ISchedulingService {
               <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                 ${
                   schedule.volunteerNeeded
-                    ? `<br>Volunteer required at ${volunteerTimeString}</br>`
+                    ? `<strong>Volunteer required at ${schedule.volunteerTime}</strong>`
                     : "Volunteer not required"
                 }
                 <br />
