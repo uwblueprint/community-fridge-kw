@@ -3,6 +3,7 @@ import { snakeCase } from "lodash";
 import { Op } from "sequelize";
 import dayjs from "dayjs";
 import ordinal from "ordinal";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
@@ -17,7 +18,6 @@ import {
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const Logger = logger(__filename);
 
@@ -234,6 +234,7 @@ class SchedulingService implements ISchedulingService {
       }
 
       dayjs.extend(customParseFormat);
+      
       const volunteerTimeString = dayjs(schedule.volunteerTime, "HH:mm").format("h:mm A") ?? "";
 
       const emailBody = `<html>
