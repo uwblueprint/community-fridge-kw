@@ -11,6 +11,13 @@ import {
   IconButton,
   Img,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
   Spinner,
   Text,
@@ -29,7 +36,7 @@ import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
 import { DonorResponse } from "../../types/DonorTypes";
 import { setLocalStorageObjProperty } from "../../utils/LocalStorageUtils";
-import ConfirmCancelEditModal from "../common/UserManagement/ConfirmCancelEditModal";
+import ConfirmCancelEditModal from "../common/UserManagement/EditAccountModal";
 import ErrorMessages from "./Scheduling/ErrorMessages";
 
 const Account = (): JSX.Element => {
@@ -39,6 +46,8 @@ const Account = (): JSX.Element => {
   const [businessName, setBusinessName] = useState("");
   const [donor, setDonor] = useState<DonorResponse>();
   const [isSavingData, setIsSavingData] = useState(false);
+  const [isTouched, setIsTouched] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<"cancel" | "error" | "">("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   React.useEffect(() => {
@@ -119,6 +128,12 @@ const Account = (): JSX.Element => {
     if (name === "businessName") {
       setBusinessName(e.toString());
     }
+    setIsTouched(true);
+  };
+
+  const handleCancel = () => {
+    setModalType("cancel");
+    onOpen();
   };
 
   const discardChanges = () => {
@@ -136,6 +151,7 @@ const Account = (): JSX.Element => {
       lastName: "",
       phoneNumber: "",
     });
+    setIsTouched(false);
   };
 
   const validateForm = () => {
@@ -189,10 +205,20 @@ const Account = (): JSX.Element => {
       },
     );
 
+    if (!updatedUser) {
+      setModalType("error");
+      onOpen();
+    }
+
     // update donor values
     const updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
       businessName,
     });
+
+    if (!updatedDonor) {
+      setModalType("error");
+      onOpen();
+    }
 
     // update authenticatedUser and local storage to reflect changes
     const user = {
@@ -218,6 +244,7 @@ const Account = (): JSX.Element => {
       setIsSavingData(false);
     }
     setIsEditing(false);
+    setIsTouched(false);
   };
 
   const EditInfoButton = () => {
@@ -242,7 +269,7 @@ const Account = (): JSX.Element => {
         variant="cancelEditInfo"
         aria-label="Cancel editing"
         icon={<CloseIcon />}
-        onClick={onOpen}
+        onClick={handleCancel}
       />
     );
   };
@@ -254,12 +281,14 @@ const Account = (): JSX.Element => {
       </Center>
     );
   }
+
   return (
     <Container centerContent variant="responsiveContainer">
       <ConfirmCancelEditModal
         isOpen={isOpen}
         onClose={onClose}
         discardChanges={discardChanges}
+        type={modalType}
       />
       <Box>
         {!isEditing ? (
@@ -392,7 +421,7 @@ const Account = (): JSX.Element => {
               mt="2"
               variant="navigation"
               onClick={onSubmitClick}
-              isDisabled={isSavingData}
+              isDisabled={isSavingData || !isTouched}
             >
               {isSavingData ? <Spinner /> : "Save Changes"}
             </Button>

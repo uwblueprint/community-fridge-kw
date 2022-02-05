@@ -13,16 +13,18 @@ import React from "react";
 
 import useViewport from "../../../hooks/useViewport";
 
-interface ConfirmCancelEditModalProps {
+interface EditAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
   discardChanges: () => void;
+  type: "cancel" | "error" | "";
 }
-const ConfirmCancelEditModal = ({
+const EditAccountModal = ({
   isOpen,
   onClose,
   discardChanges,
-}: ConfirmCancelEditModalProps) => {
+  type,
+}: EditAccountModalProps) => {
   const { isDesktop } = useViewport();
 
   return (
@@ -35,14 +37,18 @@ const ConfirmCancelEditModal = ({
       >
         <ModalOverlay />
         <ModalContent p="1.3em">
-          <ModalCloseButton />
+          {type === "cancel" ? <ModalCloseButton /> : null}
           <ModalHeader>
             <Text textStyle={{ base: "mobileBodyBold", md: "desktopHeader3" }}>
-              Are you sure you want to leave the page?
+              {type === "cancel"
+                ? "Are you sure you want to leave the page?"
+                : "Edit information failed"}
             </Text>
           </ModalHeader>
           <ModalBody textStyle="mobileBody" color="hubbard.100">
-            Any changes made to account information will not be saved.
+            {type === "cancel"
+              ? "Any changes made to account information will not be saved."
+              : "Something went wrong. Please try again."}
           </ModalBody>
           <ModalFooter>
             <Button
@@ -51,7 +57,7 @@ const ConfirmCancelEditModal = ({
               variant="navigation"
               onClick={discardChanges}
             >
-              Discard changes
+              {type === "cancel" ? "Discard changes" : "OK"}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -60,4 +66,4 @@ const ConfirmCancelEditModal = ({
   );
 };
 
-export default ConfirmCancelEditModal;
+export default EditAccountModal;
