@@ -11,15 +11,6 @@ const ConfirmVerificationPage = () => {
 
   return (
     <Container variant="dashboardVariant">
-      <IconButton
-        display={{ md: "none" }}
-        aria-label="close page"
-        float="right"
-        backgroundColor="transparent"
-        onClick={() => history.push(Routes.LANDING_PAGE)}
-      >
-        <CloseIcon color="black.100" />
-      </IconButton>
       <Container centerContent>
         <Image
           width="80%"
