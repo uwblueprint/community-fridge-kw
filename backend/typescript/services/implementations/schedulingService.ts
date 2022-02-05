@@ -235,8 +235,8 @@ class SchedulingService implements ISchedulingService {
 
       dayjs.extend(customParseFormat);
 
-      
-      const volunteerTimeString = dayjs(schedule.volunteerTime, "HH:mm").format("h:mm A") ?? "";
+      const volunteerTimeString = 
+      dayjs(schedule.volunteerTime, "HH:mm").format("h:mm A") ?? "";
 
       const emailBody = `<html>
       <head>
