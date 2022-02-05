@@ -31,6 +31,7 @@ const Action = () => {
     }
   };
 
+<<<<<<< HEAD
   const confirmPasswordReset = async () => {
     const confirmPasswordResetResponse = await AuthAPIClient.verifyPasswordResetCode(
       oobCode ?? "",
@@ -49,6 +50,10 @@ const Action = () => {
         <Spinner />
       </Center>
     );
+=======
+  if (emailVerified === EmailVerificationResponse.SUCCESS) {
+    return <ConfirmVerificationPage />;
+>>>>>>> 136c326 (fix lint issues)
   }
   if (mode === ActionModes.PASSWORD_RESET) {
     confirmPasswordReset();
