@@ -66,7 +66,7 @@ const DeleteRecurringModal = ({
               colorScheme="red"
               onClick={() => onDelete(deleteScheduleValue === "deleteOne")}
             >
-              Cancel Donation
+              Cancel donation
             </Button>
           </ModalFooter>
         </ModalContent>

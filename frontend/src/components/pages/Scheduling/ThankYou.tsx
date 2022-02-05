@@ -1,4 +1,5 @@
 import { Button, Container, HStack, Img, Text } from "@chakra-ui/react";
+import { format } from "date-fns";
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -13,16 +14,25 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
   const history = useHistory();
   return (
     <Container variant="responsiveContainer">
-      <Text textStyle="mobileHeader2" mt="2em">
+      <Text
+        textStyle={{ base: "mobileHeader2", md: "desktopHeader2" }}
+        mt="2em"
+      >
         Thank you for scheduling a donation!
       </Text>
-      <Text textStyle="mobileHeader4" mt="2em">
-        See you at the fridge on {new Date(startTime).toDateString()} at{" "}
-        {new Date(startTime).toLocaleTimeString()}!
-      </Text>
-      <Text textStyle="mobileBody" mt="1em">
+      <Text textStyle="mobileBody" mt="1em" color="hubbard.100">
         We appreciate your support and dedication! An email confirmation has
         been sent to {authenticatedUser!.email}.
+      </Text>
+      <Text
+        textStyle="mobileHeader4"
+        mt="2em"
+        color="hubbard.100"
+        fontWeight="bold"
+      >
+        See you at the fridge on{" "}
+        {format(new Date(startTime), "eeee MMMM d, yyyy")} at{" "}
+        {format(new Date(startTime), "h:mm aa")}!
       </Text>
       <Img
         src={ThankYouPageFridge}
