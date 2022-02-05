@@ -1,6 +1,6 @@
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
-import { Status, UpdateVolunteerDTO, UserVolunteerDTO, VolunteerDTO } from "../../types";
+import { UpdateVolunteerDTO, UserVolunteerDTO, VolunteerDTO } from "../../types";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import logger from "../../utilities/logger";
 import IVolunteerService from "../interfaces/volunteerService";
