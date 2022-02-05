@@ -2,7 +2,7 @@ import { snakeCase } from "lodash";
 import User from "../../../models/user.model";
 import UserService from "../userService";
 
-import { Role, UserDTO, VolunteerDTO } from "../../../types";
+import { Role, Status, UserDTO, VolunteerDTO } from "../../../types";
 
 import testSql from "../../../testUtils/testDb";
 import VolunteerService from "../volunteerService";
@@ -32,9 +32,11 @@ const testUsers = [
 const testVolunteers = [
   {
     user_id: "1",
+    status: Status.PENDING,
   },
   {
     user_id: "2",
+    status: Status.PENDING,
   },
 ];
 
@@ -47,6 +49,7 @@ const testUserVolunteers = [
     role: Role.VOLUNTEER,
     phoneNumber: "111-111-1111",
     userId: "1",
+    status: Status.PENDING,
   },
   {
     id: "2",
@@ -55,6 +58,8 @@ const testUserVolunteers = [
     lastName: "Darling",
     role: Role.VOLUNTEER,
     phoneNumber: "111-111-1111",
+    userId: "2",
+    status: Status.PENDING,
   },
 ];
 
@@ -96,10 +101,12 @@ describe("Testing VolunteerService Functions", () => {
     // pass in the id of a user (1)
     const mockCreateVolunteerDTO = {
       userId: "1",
+      status: Status.PENDING,
     };
     const expectedVolunteer = {
       id: 3,
       userId: "1",
+      status: Status.PENDING,
     };
 
     // add the new volunteer to the array with id 3 and userId of what was passed (1)
