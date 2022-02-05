@@ -33,8 +33,6 @@ const ForgetPassword = ({
   const { step, navigation }: UseStepType = useStep({ steps, initialStep });
   const { id } = step;
 
-  //todo: figure out how to add rest of signup flow to navigation
-
   switch (id) {
     case "forgot password":
       return (

@@ -89,6 +89,13 @@ interface IAuthService {
    * @returns true if email verification confirmation is authorized, false otehrwise
    */
   verifyEmail(oobCode: string): Promise<boolean>;
+
+    /**
+   * Confirm password reset verification link is valid and issued to the requested user
+   * @param oobCode user's oob code to verify request
+   * @returns true if password reset verification confirmation is authorized, false otehrwise
+   */
+  verifyPasswordReset(oobCode: string): Promise<boolean>;
 }
 
 export default IAuthService;

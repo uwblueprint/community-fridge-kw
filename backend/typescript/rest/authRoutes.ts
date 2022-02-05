@@ -159,4 +159,15 @@ authRouter.post("/confirmEmailVerification/:oobCode", async (req, res) => {
   }
 });
 
+authRouter.post("/confirmPasswordVerification/:oobCode", async (req, res) => {
+  try {
+    const response = await authService.verifyPasswordReset(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
 export default authRouter;

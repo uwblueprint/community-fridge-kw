@@ -85,10 +85,12 @@ const resetPassword = async (email: string | undefined): Promise<boolean> => {
     await baseAPIClient.post(
       `/auth/resetPassword/${email}`,
       {},
-      { headers: { Authorization: bearerToken } },
+      { withCredentials: true },
     );
+    console.log(bearerToken ?? "e");
     return true;
   } catch (error) {
+    console.log("hi");
     return false;
   }
 };
@@ -125,8 +127,22 @@ const confirmEmailVerification = async (oobCode: string): Promise<boolean> => {
   }
 };
 
+const confirmPasswordReset = async (oobCode: string): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/confirmPasswordReset/${oobCode}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   confirmEmailVerification,
+  confirmPasswordReset,
   login,
   logout,
   loginWithGoogle,

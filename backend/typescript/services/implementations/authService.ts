@@ -54,6 +54,21 @@ class AuthService implements IAuthService {
   }
 
   /* eslint-disable class-methods-use-this */
+  async verifyPasswordReset(oobCode: string): Promise<boolean> {
+    try {
+      const response = await FirebaseRestClient.confirmPasswordResetVerificationCode(
+        oobCode,
+      );
+      if (response.passwordResetVerified) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /* eslint-disable class-methods-use-this */
   async generateTokenOAuth(idToken: string): Promise<AuthDTO> {
     try {
       const googleUser = await FirebaseRestClient.signInWithGoogleOAuth(
@@ -134,13 +149,57 @@ class AuthService implements IAuthService {
         .auth()
         .generatePasswordResetLink(email);
       const emailBody = `
-      Hello,
-      <br><br>
-      We have received a password reset request for your account.
-      Please click the following link to reset it.
-      <strong>This link is only valid for 1 hour.</strong>
-      <br><br>
-      <a href=${resetLink}>Reset Password</a>`;
+      <html>
+      <head>
+         <link
+                        href="https://fonts.googleapis.com/css2?family=Inter"
+                        rel="stylesheet"
+                        />
+                    <style>
+                        body {
+                        font-family: "Inter";
+                        }
+                    </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Welcome Email</title>
+      </head>
+      <body>
+        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/>
+        </p>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi there,</h2>
+        <p> 
+          This is an email verifying your request to change your password for Community Fridge. Please click on “Change Password” if you’d like to create a new password for the Community Fridge KW platform. 
+        </p>
+        <table cellspacing = "0" cellpadding = "0"> <tr>
+          <td align="center" width = "255" height = "44" bgcolor = "#C31887" style = "-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;" >
+            <a href=${resetLink} style = "font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block" >
+              <span style="color: #FAFCFE;" >
+                Change password
+              </span>
+            </a>
+          </td> 
+        </tr></table >
+        <h5 style="font-weight: bold; font-size: 16px; line-height: 22px; color: #6C6C84;">
+          How does this work?
+        </h5>
+        <p style = "color:#6C6C84">
+          This is a one - time URL that lets you confirm your identity.
+        </p>
+        <div style = "width: 100%">
+          <div style= " float:left; color: #6C6C84">
+            Don't see a button above? 
+          </div>
+          <a style=" color: #C31887" href=${resetLink}> Verify yourself here</a>
+        </div>
+        <div> 
+          If you didn't request this verification link, you can safely ignore this email.
+        </div>
+        <p style = "margin-top: 50px"> Sincerely, </p>
+        <p> Community Fridge KW </p>   
+      </body>
+      </html>;`
 
       this.emailService.sendEmail(email, "Your Password Reset Link", emailBody);
     } catch (error) {
