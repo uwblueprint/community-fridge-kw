@@ -1,8 +1,7 @@
 import { snakeCase } from "lodash";
 import User from "../../../models/user.model";
-import UserService from "../userService";
 
-import { Role, Status, UserDTO, VolunteerDTO } from "../../../types";
+import { Role, Status, VolunteerDTO } from "../../../types";
 
 import testSql from "../../../testUtils/testDb";
 import VolunteerService from "../volunteerService";
