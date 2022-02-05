@@ -10,12 +10,14 @@ import {
 import User from "../../../models/user.model";
 import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
+import Volunteer from "../../../models/volunteer.model";
 
 import testSql from "../../../testUtils/testDb";
 import {
   RECURRING_DONATION_ID,
   testUsersDb,
   testDonorsDb,
+  testVolunteersDb,
   testSchedules,
 } from "../../../testUtils/schedulingService";
 import nodemailerConfig from "../../../nodemailer.config";
@@ -52,6 +54,7 @@ describe("pg schedulingService", () => {
     schedulingService = new SchedulingService(emailService, donorService);
     await User.bulkCreate(testUsersDb);
     await Donor.bulkCreate(testDonorsDb);
+    await Volunteer.bulkCreate(testVolunteersDb);
   });
 
   afterAll(async () => {
@@ -279,6 +282,7 @@ describe("pg schedulingService", () => {
     const newCategories = ["Tea and coffee"];
     const newVolunteerNeeded = !testSchedules[1].volunteerNeeded;
     const newStartTime: Date = new Date("October 13, 2022 12:00:00");
+    const newVolunteerId: number = 2;
 
     const resString = await schedulingService.updateSchedulingById("1", {
       categories: newCategories,
@@ -289,10 +293,14 @@ describe("pg schedulingService", () => {
     const resDate = await schedulingService.updateSchedulingById("3", {
       startTime: newStartTime,
     });
+    const resVolunteer = await schedulingService.updateSchedulingById("4", {
+      volunteerId: newVolunteerId,
+    });
 
     expect(resString.categories).toStrictEqual(newCategories);
     expect(resNum.volunteerNeeded).toBe(newVolunteerNeeded);
     expect(resDate.startTime).toEqual(newStartTime);
+    expect(resVolunteer.volunteerId).toEqual(newVolunteerId);
   });
 
   test("deleteScheduling", async () => {
