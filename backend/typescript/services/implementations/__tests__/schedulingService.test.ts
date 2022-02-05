@@ -282,7 +282,7 @@ describe("pg schedulingService", () => {
     const newCategories = ["Tea and coffee"];
     const newVolunteerNeeded = !testSchedules[1].volunteerNeeded;
     const newStartTime: Date = new Date("October 13, 2022 12:00:00");
-    const newVolunteerId: number = 2;
+    const newVolunteerId = 2;
 
     const resString = await schedulingService.updateSchedulingById("1", {
       categories: newCategories,
