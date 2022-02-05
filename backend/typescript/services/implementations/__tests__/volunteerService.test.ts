@@ -1,8 +1,7 @@
 import { snakeCase } from "lodash";
 import User from "../../../models/user.model";
-import UserService from "../userService";
 
-import { Role, Status, UserDTO, VolunteerDTO } from "../../../types";
+import { Role, Status, VolunteerDTO } from "../../../types";
 
 import testSql from "../../../testUtils/testDb";
 import VolunteerService from "../volunteerService";
@@ -50,6 +49,29 @@ const testUserVolunteers = [
     phoneNumber: "111-111-1111",
     userId: "1",
     status: Status.PENDING,
+  },
+  {
+    id: "2",
+    email: "test2@test.com",
+    firstName: "Wendy",
+    lastName: "Darling",
+    role: Role.VOLUNTEER,
+    phoneNumber: "111-111-1111",
+    userId: "2",
+    status: Status.PENDING,
+  },
+];
+
+const testUpdatedUserVolunteers = [
+  {
+    id: "1",
+    email: "test1@test.com",
+    firstName: "Peter",
+    lastName: "Pan",
+    role: Role.VOLUNTEER,
+    phoneNumber: "111-111-1111",
+    userId: "1",
+    status: Status.APPROVED,
   },
   {
     id: "2",
@@ -127,6 +149,19 @@ describe("Testing VolunteerService Functions", () => {
     res.forEach((volunteer: VolunteerDTO, i: number) => {
       expect(volunteer).toMatchObject(testUserVolunteers[i]);
     });
+  });
+
+  it("updateVolunteerById", async () => {
+    const mockUpdateVolunteerDTO = {
+      userId: "1",
+      status: Status.APPROVED,
+    };
+
+    await volunteerService.updateVolunteerById("1", mockUpdateVolunteerDTO);
+
+    const res = await volunteerService.getVolunteerByID("1");
+
+    expect(res).toMatchObject(testUpdatedUserVolunteers[0]);
   });
 
   it("deleteVolunteerByID", async () => {

@@ -92,7 +92,7 @@ export type AuthDTO = Token & UserDTO;
 
 export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
-export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
+export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id" | "userId">;
 
 export type SchedulingDTO = {
   id: string;

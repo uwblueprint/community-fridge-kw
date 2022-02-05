@@ -1,4 +1,4 @@
-import { VolunteerDTO, UserVolunteerDTO } from "../../types";
+import { VolunteerDTO, UserVolunteerDTO, UpdateVolunteerDTO } from "../../types";
 
 interface IVolunteerService {
   /**
@@ -22,6 +22,22 @@ interface IVolunteerService {
    * @throws Error if volunteer retrieval fails
    */
   getVolunteers(): Promise<Array<UserVolunteerDTO>>;
+
+  /**
+   * Update a volunteer by volunteerID.
+   * @param id volunteer's id
+   * @param volunteer the volunteer to be updated
+   * @throws Error if volunteer update fails
+   */
+  updateVolunteerById(id: string, volunteer: UpdateVolunteerDTO): Promise<void>;
+
+  /**
+   * Update a volunteer by userID.
+   * @param userId id associated with user
+   * @param volunteer the volunteer to be updated
+   * @throws Error if volunteer update fails
+   */
+  updateVolunteerByUserId(userId: string, volunteer: UpdateVolunteerDTO): Promise<void>;
 
   /**
    * Delete a volunteer by id

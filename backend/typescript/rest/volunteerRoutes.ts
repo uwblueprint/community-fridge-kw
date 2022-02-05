@@ -56,8 +56,43 @@ volunteerRouter.get("/:volunteerID", async (req, res) => {
   }
 });
 
+// volunteerRouter.put("/:volunteerID", async (req, res) => {
+//   const { id } = req.query;
+// });
+
+// TODO: ADD VALIDATOR
 volunteerRouter.put("/:volunteerID", async (req, res) => {
-  const { id } = req.query;
+  try {
+    await volunteerService.updateVolunteerById(req.params.id, {
+      status: req.body.status,
+    });
+
+    res.status(201).send();
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+volunteerRouter.put("/:id", async (req, res) => {
+  const { userId } = req.query;
+
+  if (userId) {
+    if (typeof userId !== "string") {
+      res
+        .status(400)
+        .json({ error: "userId query parameter must be a string" });
+      return;
+    }
+    try {
+      await volunteerService.updateVolunteerByUserId(userId, {
+        status: req.body.status,
+      });
+
+      res.status(201).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
 });
 
 volunteerRouter.delete("/:volunteerID", async (req, res) => {

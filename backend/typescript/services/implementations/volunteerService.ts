@@ -1,6 +1,6 @@
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
-import { Status, UserVolunteerDTO, VolunteerDTO } from "../../types";
+import { Status, UpdateVolunteerDTO, UserVolunteerDTO, VolunteerDTO } from "../../types";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import logger from "../../utilities/logger";
 import IVolunteerService from "../interfaces/volunteerService";
@@ -106,6 +106,54 @@ class VolunteerService implements IVolunteerService {
     }
 
     return userVolunteerDTOs;
+  }
+
+  async updateVolunteerById(id: string, volunteer: UpdateVolunteerDTO): Promise<void> {
+    try {
+      const updateResult = await Volunteer.update(
+        {
+          status: volunteer.status,
+        },
+        {
+          where: { id },
+          returning: true,
+        },
+      );
+
+      // check number of rows affected
+      if (updateResult[0] < 1) {
+        throw new Error(`id ${id} not found.`);
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to update volunteer. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateVolunteerByUserId(userId: string, volunteer: UpdateVolunteerDTO): Promise<void> {
+    try {
+      const updateResult = await Volunteer.update(
+        {
+          status: volunteer.status,
+        },
+        {
+          where: { userId },
+          returning: true,
+        },
+      );
+
+      // check number of rows affected
+      if (updateResult[0] < 1) {
+        throw new Error(`userId ${userId} not found.`);
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to update volunteer. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
   }
 
   async deleteVolunteerByID(id: string): Promise<void> {
