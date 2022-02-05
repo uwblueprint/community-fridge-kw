@@ -39,23 +39,13 @@ interface ISchedulingService {
    * a donation
    * @param email email of user that scheduled the donation
    * @param schedule object that contains information on scheduled donation
+   * @param isAdmin if email is directed to admin
    * @throws Error if unable to send email
    */
   sendEmailVerificationAfterSchedulingADonation(
     email: UserDonorDTO,
     schedule: SchedulingDTO,
-  ): Promise<void>;
-
-  /**
-   * Generate an email with donation information to be sent to admin after a
-   * donation is scheduled
-   * @param donor  object that contains donor information
-   * @param schedule object that contains information on scheduled donation
-   * @throws Error if unable to send email
-   */
-  sendAdminEmailVerificationAfterDonationScheduled(
-    donor: UserDonorDTO,
-    schedule: SchedulingDTO,
+    isAdmin: Boolean,
   ): Promise<void>;
 
   /**
