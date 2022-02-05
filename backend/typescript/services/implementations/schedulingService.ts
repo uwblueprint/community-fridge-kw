@@ -63,10 +63,6 @@ class SchedulingService implements ISchedulingService {
       throw error;
     }
 
-    // TODO: retrieve volunteer ids from scheduling-volunteer
-    // table and add to returned object once volunteer table is created
-    const volunteerIds: number[] = [];
-
     return {
       id: String(scheduling.id),
       donorId: String(scheduling.donor_id),
@@ -80,11 +76,11 @@ class SchedulingService implements ISchedulingService {
       status: scheduling.status,
       volunteerNeeded: scheduling.volunteer_needed,
       volunteerTime: scheduling.volunteer_time,
-      volunteerIds,
       frequency: scheduling.frequency,
       recurringDonationId: String(scheduling.recurring_donation_id),
       recurringDonationEndDate: scheduling.recurring_donation_end_date,
       notes: scheduling.notes,
+      volunteerId: scheduling.volunteer_id,
     };
   }
 
@@ -131,11 +127,11 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
-          volunteerIds: [],
           frequency: scheduling.frequency,
           recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
+          volunteerId: scheduling.volunteer_id,
         };
       });
     } catch (error) {
@@ -168,11 +164,11 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
-          volunteerIds: [],
           frequency: scheduling.frequency,
           recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
+          volunteerId: scheduling.volunteer_id,
         };
       });
     } catch (error) {
@@ -579,7 +575,6 @@ class SchedulingService implements ISchedulingService {
       status: newScheduling.status,
       volunteerNeeded: newScheduling.volunteer_needed,
       volunteerTime: newScheduling.volunteer_time,
-      volunteerIds: [],
       frequency: newScheduling.frequency,
       recurringDonationId: String(newScheduling.recurring_donation_id),
       recurringDonationEndDate: newScheduling.recurring_donation_end_date,
@@ -627,11 +622,11 @@ class SchedulingService implements ISchedulingService {
         status: updatedScheduling.status,
         volunteerNeeded: updatedScheduling.volunteer_needed,
         volunteerTime: updatedScheduling.volunteer_time,
-        volunteerIds: [],
         frequency: updatedScheduling.frequency,
         recurringDonationId: String(updatedScheduling.recurring_donation_id),
         recurringDonationEndDate: updatedScheduling.recurring_donation_end_date,
         notes: updatedScheduling.notes,
+        volunteerId: updatedScheduling.volunteer_id,
       };
 
       this.sendScheduledDonationEmail(true, updatedSchedulingDTO, false);
