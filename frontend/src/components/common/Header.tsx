@@ -98,11 +98,11 @@ const Header = (): JSX.Element => {
               )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
+                    <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
+                    View Donations
+                  </Link>
                   <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
                     User Management
-                  </Link>
-                  <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
-                    View Donations
                   </Link>
                 </>
               )}
