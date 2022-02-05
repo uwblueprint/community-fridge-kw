@@ -82,6 +82,7 @@ const DonationProcess = (): JSX.Element => {
       <Button
         width="100%"
         variant="navigation"
+        height="100%"
         size="lg"
         display={{ md: "none" }}
         onClick={() =>
