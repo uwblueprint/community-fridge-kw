@@ -17,6 +17,7 @@ import {
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const Logger = logger(__filename);
 
@@ -232,14 +233,8 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
-      let volunteerTimeString = "";
-      if (schedule.volunteerTime) {
-        const timePartArray = schedule.volunteerTime.split(":");
-        const AmOrPm = parseInt(timePartArray[0], 10) >= 12 ? "PM" : "AM";
-        const hour = parseInt(timePartArray[0], 10) % 12 || 12;
-        timePartArray[0] = String(hour);
-        volunteerTimeString = `${timePartArray.join(":")} ${AmOrPm}`;
-      }
+      dayjs.extend(customParseFormat);
+      const volunteerTimeString = dayjs(schedule.volunteerTime, "HH:mm").format("h:mm A") ?? "";
 
       const emailBody = `<html>
       <head>
