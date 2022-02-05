@@ -48,7 +48,7 @@ const Action = () => {
   return emailVerified ? (
     <ConfirmVerificationPage />
   ) : passwordResetVerified ? (
-    <NewPassword/>
+   <></>
   ): (
       <Center>Sorry, there was a problem verifying the email.</Center >
   );
