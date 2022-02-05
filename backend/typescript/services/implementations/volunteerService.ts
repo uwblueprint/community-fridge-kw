@@ -1,6 +1,6 @@
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
-import { UserVolunteerDTO, VolunteerDTO } from "../../types";
+import { Status, UserVolunteerDTO, VolunteerDTO } from "../../types";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import logger from "../../utilities/logger";
 import IVolunteerService from "../interfaces/volunteerService";
@@ -29,6 +29,7 @@ class VolunteerService implements IVolunteerService {
     return {
       id: newVolunteer.id,
       userId: String(newVolunteer.user_id),
+      status: newVolunteer.status,
     };
   }
 
@@ -65,6 +66,7 @@ class VolunteerService implements IVolunteerService {
       role: user.role,
       phoneNumber: user.phone_number,
       userId: String(volunteer.user_id),
+      status: volunteer.status,
     };
   }
 
@@ -92,6 +94,7 @@ class VolunteerService implements IVolunteerService {
             role: user.role,
             phoneNumber: user.phone_number,
             userId: String(volunteer.user_id),
+            status: volunteer.status,
           };
         }),
       );

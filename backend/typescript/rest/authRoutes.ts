@@ -16,7 +16,7 @@ import IDonorService from "../services/interfaces/donorService";
 import IEmailService from "../services/interfaces/emailService";
 import IUserService from "../services/interfaces/userService";
 import IVolunteerService from "../services/interfaces/volunteerService";
-import { Role } from "../types";
+import { Role, Status } from "../types";
 import getErrorMessage from "../utilities/errorMessageUtil";
 
 const authRouter: Router = Router();
@@ -66,6 +66,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
     if (req.body.role === Role.VOLUNTEER) {
       await volunteerService.createVolunteer({
         userId: user.id,
+        status: req.body.status,
       });
     }
     if (req.body.role === "Donor") {

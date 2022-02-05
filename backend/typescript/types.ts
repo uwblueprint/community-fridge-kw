@@ -75,6 +75,7 @@ export type DonorDTO = {
 export type VolunteerDTO = {
   id: string;
   userId: string;
+  status: Status;
 };
 
 export type UserDonorDTO = UserDTO & DonorDTO;
