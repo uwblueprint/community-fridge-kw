@@ -45,7 +45,7 @@ interface ISchedulingService {
   sendEmailVerificationAfterSchedulingADonation(
     email: UserDonorDTO,
     schedule: SchedulingDTO,
-    isAdmin: Boolean,
+    isAdmin: boolean,
   ): Promise<void>;
 
   /**
