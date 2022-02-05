@@ -36,13 +36,29 @@ interface ISchedulingService {
   /**
    * Generate an email with donation information to be sent after user schedules
    * a donation
-   * @param email email of user that scheduled the donation
+   * @param donor that scheduled the donation
    * @param schedule object that contains information on scheduled donation
    * @throws Error if unable to send email
    */
   sendEmailVerificationAfterSchedulingADonation(
-    email: UserDonorDTO,
+    donor: UserDonorDTO,
     schedule: SchedulingDTO,
+  ): Promise<void>;
+
+  /**
+   * Generate an email with donation information to be sent after user schedules
+   * a donation
+   * @param donor that scheduled the donation
+   * @param schedule object that contains information on cancelled donation
+   * @param isRecurringDonation 0 if the cancelled donation is a one-time donation, 1 otherwise
+   * @param isAdminDeleted 0 if donor that scheduled donation is cancelling donation, 1 otherwise
+   * @throws Error if unable to send email
+   */
+  sendEmailAfterSchedulingCancellation(
+    donor: UserDonorDTO,
+    schedule: SchedulingDTO,
+    isRecurringDonation: number,
+    isAdminDeleted: number,
   ): Promise<void>;
 
   /**
