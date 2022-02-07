@@ -29,8 +29,8 @@ const CalendarInfoCard = ({
   } = schedule;
   const [businessName, setBusinessName] = React.useState("");
   const frequencyColorScheme = getFrequencyColor(frequency);
-  const startTimeLocal = format(new Date(startTime), "K:mm aa");
-  const endTimeLocal = format(new Date(endTime), "K:mm aa");
+  const startTimeLocal = format(new Date(startTime), "h:mm aa");
+  const endTimeLocal = format(new Date(endTime), "h:mm aa");
   const formattedRecurringEndDate = format(
     new Date(recurringDonationEndDate),
     "MMM d, yyyy",

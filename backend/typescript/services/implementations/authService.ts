@@ -181,7 +181,7 @@ class AuthService implements IAuthService {
         <title>Welcome Email</title>
       </head>
       <body>
-         <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+         <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
                         style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey neighbour!</h2>
         <p>Thank you for getting involved with mutual aid through Community Fridge

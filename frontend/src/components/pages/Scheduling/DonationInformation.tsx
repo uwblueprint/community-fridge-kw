@@ -1,14 +1,11 @@
 import {
-  Button,
   Checkbox,
   Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   Stack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 
@@ -17,8 +14,10 @@ import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import BackButton from "./BackButton";
+import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
+import SaveButton from "./SaveChangesButton";
 import { categoriesOptions, DonationSizes, SchedulingStepProps } from "./types";
 
 const DonationInformation: any = ({
@@ -102,14 +101,25 @@ const DonationInformation: any = ({
     }
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+    setForm({
+      target: { name: "categories", value: scheduleResponse.categories },
+    });
+    setForm({ target: { name: "size", value: scheduleResponse.size } });
+    return go && go("confirm donation details");
+  };
+
   return (
     <Container variant="responsiveContainer">
-      <BackButton
-        isBeingEdited={isBeingEdited}
-        onSaveClick={onSaveClick}
-        previous={previous}
-      />
-      <SchedulingProgressBar activeStep={1} totalSteps={4} />
+      {isBeingEdited ? (
+        <CancelButton discardChanges={discardChanges} />
+      ) : (
+        <>
+          <SchedulingProgressBar activeStep={1} totalSteps={4} />
+          <BackButton previous={previous} />
+        </>
+      )}
       <Text textStyle="mobileHeader2" mt="2em">
         Donation Information
       </Text>
@@ -146,12 +156,11 @@ const DonationInformation: any = ({
           <FormErrorMessage>{formErrors.categories}</FormErrorMessage>
         </FormControl>
       )}
-      <NextButton
-        isBeingEdited={isBeingEdited}
-        go={go}
-        canSubmit={getSubmitState()}
-        handleNext={handleNext}
-      />
+      {isBeingEdited ? (
+        <SaveButton onSaveClick={onSaveClick} />
+      ) : (
+        <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
+      )}
     </Container>
   );
 };

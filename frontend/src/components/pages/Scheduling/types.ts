@@ -23,18 +23,13 @@ export interface SchedulingProgessBarProps {
   totalSteps: number;
 }
 
-export interface BackButtonProps {
+export interface ButtonProps {
+  onSaveClick?: () => void;
   isBeingEdited?: boolean;
-  onSaveClick: () => void;
+  discardChanges?: () => Promise<void | undefined>;
+  canSubmit?: boolean;
+  handleNext?: () => void;
   previous?: () => void;
-  children?: React.ReactNode;
-}
-
-export interface NextButtonProps {
-  isBeingEdited?: boolean;
-  go?: (step: string | number) => void;
-  canSubmit: boolean;
-  handleNext: () => void;
   children?: React.ReactNode;
 }
 

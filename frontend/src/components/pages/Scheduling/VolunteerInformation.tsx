@@ -16,8 +16,10 @@ import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import BackButton from "./BackButton";
+import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
+import SaveButton from "./SaveChangesButton";
 import { SchedulingStepProps } from "./types";
 
 const VolunteerInformation = ({
@@ -56,6 +58,10 @@ const VolunteerInformation = ({
     "A volunteer is a community fridge member who will assist with donation drop-offs. Information of the volunteer assigned will be provided.";
 
   const getSubmitState = () => {
+    if (volunteerNeeded === null || volunteerNeeded === undefined) {
+      return false;
+    }
+
     if (volunteerNeeded && isPickup) {
       return !!pickupLocation && !!volunteerTime;
     }
@@ -100,7 +106,7 @@ const VolunteerInformation = ({
       valid = false;
       newErrors.volunteerNeeded = ErrorMessages.requiredField;
     }
-    if (volunteerNeeded && isPickup === undefined) {
+    if (volunteerNeeded && (isPickup === undefined || isPickup === null)) {
       valid = false;
       newErrors.isPickup = ErrorMessages.requiredField;
     }
@@ -132,14 +138,39 @@ const VolunteerInformation = ({
     }
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+    setForm({
+      target: {
+        name: "volunteerNeeded",
+        value: scheduleResponse.volunteerNeeded,
+      },
+    });
+    setForm({
+      target: { name: "volunteerTime", value: scheduleResponse.volunteerTime },
+    });
+    setForm({
+      target: {
+        name: "pickupLocation",
+        value: scheduleResponse.pickupLocation,
+      },
+    });
+    setForm({ target: { name: "isPickup", value: scheduleResponse.isPickup } });
+    setForm({ target: { name: "notes", value: scheduleResponse.notes } });
+
+    return go && go("confirm donation details");
+  };
+
   return (
     <Container variant="responsiveContainer">
-      <BackButton
-        isBeingEdited={isBeingEdited}
-        onSaveClick={onSaveClick}
-        previous={previous}
-      />
-      <SchedulingProgressBar activeStep={2} totalSteps={4} />
+      {isBeingEdited ? (
+        <CancelButton discardChanges={discardChanges} />
+      ) : (
+        <>
+          <SchedulingProgressBar activeStep={2} totalSteps={4} />
+          <BackButton previous={previous} />
+        </>
+      )}
       <Text textStyle="mobileHeader2" mt="2em">
         Volunteer Information
       </Text>
@@ -247,12 +278,11 @@ const VolunteerInformation = ({
           />
         </FormControl>
       )}
-      <NextButton
-        isBeingEdited={isBeingEdited}
-        go={go}
-        canSubmit={getSubmitState()}
-        handleNext={handleNext}
-      />
+      {isBeingEdited ? (
+        <SaveButton onSaveClick={onSaveClick} />
+      ) : (
+        <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
+      )}
     </Container>
   );
 };

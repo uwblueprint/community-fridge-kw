@@ -35,13 +35,14 @@ const Header = (): JSX.Element => {
   };
 
   return (
-    <Container pt="1.5rem" variant="baseContainer">
+    <Container variant="headerContainer">
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
-        display={{ base: "inline", md: "flex" }}
+        display="flex"
+        float={{ base: "left", md: "none" }}
       >
         <IconButton
           w="24px"
@@ -54,36 +55,54 @@ const Header = (): JSX.Element => {
         >
           <HamburgerIcon color="black.100" />
         </IconButton>
-        <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <>
+            <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+              <Image
+                objectFit="none"
+                src="header-logo.png"
+                alt="Community Fridge logo"
+                display="inline"
+              />
+            </Link>
+          </>
+        ) : (
           <Image
             objectFit="none"
             src="header-logo.png"
             alt="Community Fridge logo"
             display="inline"
+            maxWidth="100vw"
           />
-        </Link>
+        )}
         <Stack
           spacing="2rem"
           direction="row"
           display={{ base: "none", md: "flex" }}
         >
-          <Link as={ReactLink} to={Routes.LANDING_PAGE}>
-            Home
-          </Link>
           {authenticatedUser ? (
             <>
               {authenticatedUser.role === Role.DONOR && (
-                <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
-                  Scheduled Donations
-                </Link>
+                <>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.LANDING_PAGE}
+                    onClick={onClose}
+                  >
+                    Home
+                  </Link>
+                  <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
+                    My Scheduled Donations
+                  </Link>
+                </>
               )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
-                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
-                    User Management
-                  </Link>
                   <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
                     View Donations
+                  </Link>
+                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                    User Management
                   </Link>
                 </>
               )}
@@ -100,12 +119,20 @@ const Header = (): JSX.Element => {
               </Button>
             </>
           ) : (
-            <Button
-              variant="navigation"
-              onClick={() => history.push(Routes.LOGIN_PAGE)}
-            >
-              Sign In
-            </Button>
+            <>
+              <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+                Home
+              </Link>
+              <Button
+                variant="navigation"
+                onClick={() => {
+                  history.push(Routes.LOGIN_PAGE);
+                  onClose();
+                }}
+              >
+                Sign In
+              </Button>
+            </>
           )}
         </Stack>
       </Flex>
@@ -133,18 +160,32 @@ const Header = (): JSX.Element => {
               alt="Community Fridge logo"
             />
             <Stack spacing="1rem" ml="20px">
-              <Link as={ReactLink} to={Routes.LANDING_PAGE} onClick={onClose}>
-                Home
-              </Link>
               {authenticatedUser ? (
                 <>
-                  <Link
-                    as={ReactLink}
-                    to={Routes.DASHBOARD_PAGE}
-                    onClick={onClose}
-                  >
-                    Scheduled Donations
-                  </Link>
+                  {authenticatedUser.role === Role.DONOR && (
+                    <>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.LANDING_PAGE}
+                        onClick={onClose}
+                      >
+                        Home
+                      </Link>
+                      <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
+                        My Scheduled Donations
+                      </Link>
+                    </>
+                  )}
+                  {authenticatedUser.role === Role.ADMIN && (
+                    <>
+                      <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
+                        View Donations
+                      </Link>
+                      <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                        User Management
+                      </Link>
+                    </>
+                  )}
                   <Link
                     as={ReactLink}
                     to={Routes.ACCOUNT_PAGE}
@@ -164,15 +205,24 @@ const Header = (): JSX.Element => {
                   </Button>
                 </>
               ) : (
-                <Button
-                  variant="navigation"
-                  onClick={() => {
-                    history.push(Routes.LOGIN_PAGE);
-                    onClose();
-                  }}
-                >
-                  Sign In
-                </Button>
+                <>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.LANDING_PAGE}
+                    onClick={onClose}
+                  >
+                    Home
+                  </Link>
+                  <Button
+                    variant="navigation"
+                    onClick={() => {
+                      history.push(Routes.LOGIN_PAGE);
+                      onClose();
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                </>
               )}
             </Stack>
           </DrawerBody>

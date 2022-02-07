@@ -22,8 +22,10 @@ import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import BackButton from "./BackButton";
+import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
 import NextButton from "./NextButton";
+import SaveButton from "./SaveChangesButton";
 import {
   convertFrequencyString,
   dayParts,
@@ -86,7 +88,7 @@ const SelectDateTime = ({
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [recurringEndDate, setRecurringEndDate] = useState<Date>(
-    new Date(startTime),
+    new Date(recurringDonationEndDate),
   );
 
   const getFrequencyLabels = () => {
@@ -218,7 +220,11 @@ const SelectDateTime = ({
     setForm({ target: { name: "dayPart", value: "" } }); // reset daypart
     setForm({ target: { name: "startTime", value: "" } });
     setForm({ target: { name: "endTime", value: "" } });
-    setForm({ target: { name: "frequency", value: "" } });
+
+    if (!isBeingEdited) {
+      setForm({ target: { name: "frequency", value: "" } });
+    }
+
     setFormErrors({
       ...formErrors,
       date: "",
@@ -330,14 +336,37 @@ const SelectDateTime = ({
     return new Date(today.setDate(diff));
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+
+    setForm({ target: { name: "dayPart", value: scheduleResponse.dayPart } });
+    setForm({
+      target: { name: "frequency", value: scheduleResponse.frequency },
+    });
+    setForm({
+      target: { name: "startTime", value: scheduleResponse.startTime },
+    });
+    setForm({ target: { name: "endTime", value: scheduleResponse.endTime } });
+    setForm({
+      target: {
+        name: "recurringDonationEndDate",
+        value: scheduleResponse.recurringDonationEndDate,
+      },
+    });
+
+    return go && go("confirm donation details");
+  };
+
   return (
     <Container variant="responsiveContainer">
-      <BackButton
-        isBeingEdited={isBeingEdited}
-        onSaveClick={onSaveClick}
-        previous={previous}
-      />
-      <SchedulingProgressBar activeStep={0} totalSteps={4} />
+      {isBeingEdited ? (
+        <CancelButton discardChanges={discardChanges} />
+      ) : (
+        <>
+          <SchedulingProgressBar activeStep={0} totalSteps={4} />
+          <BackButton previous={previous} />
+        </>
+      )}
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
         {isDesktop ? "Drop-off date and time" : "Date and Time"}
       </Text>
@@ -345,7 +374,7 @@ const SelectDateTime = ({
         <FormLabel fontWeight="600">Select date</FormLabel>
         <Calendar
           className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile"}
-          minDate={new Date().setDate(today.getDate())}
+          minDate={new Date()}
           maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
@@ -418,6 +447,7 @@ const SelectDateTime = ({
           <FormControl
             isRequired
             isInvalid={!!formErrors.recurringDonationEndDate}
+            isDisabled={isBeingEdited}
             mb="3em"
           >
             <FormLabel fontWeight="600">Proposed end date</FormLabel>
@@ -425,9 +455,10 @@ const SelectDateTime = ({
             <SimpleGrid columns={2} columnGap={16} rowGap={6} w="full">
               <GridItem colSpan={1}>
                 <DatePicker
+                  disabled={isBeingEdited}
                   className="frequency-date"
                   editable={false}
-                  minDate={new Date().setDate(today.getDate())}
+                  minDate={new Date(startTime)}
                   value={recurringEndDate}
                   onChange={handleChangeRecurringDate}
                   placeholder="MM-DD-YYYY"
@@ -439,12 +470,11 @@ const SelectDateTime = ({
             </FormErrorMessage>
           </FormControl>
         )}
-      <NextButton
-        isBeingEdited={isBeingEdited}
-        go={go}
-        canSubmit={getSubmitState()}
-        handleNext={handleNext}
-      />
+      {isBeingEdited ? (
+        <SaveButton onSaveClick={onSaveClick} />
+      ) : (
+        <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
+      )}
     </Container>
   );
 };

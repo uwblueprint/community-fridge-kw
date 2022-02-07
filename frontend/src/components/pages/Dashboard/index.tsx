@@ -46,11 +46,11 @@ const Dashboard = (): JSX.Element => {
   }
 
   return (
-    <Container variant="dashboardContainer">
+    <Container variant="baseContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">
         <VStack alignItems="left">
           <Text color="black.100" textStyle="mobileHeader1">
-            My Upcoming Donations
+            My Scheduled Donations
           </Text>
           <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
             Thank you for supporting your local community fridge!{" "}

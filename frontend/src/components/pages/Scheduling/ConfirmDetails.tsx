@@ -4,13 +4,13 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   HStack,
-  IconButton,
   Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { add, format, isBefore } from "date-fns";
+import { add, differenceInDays, format, isBefore } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -24,6 +24,9 @@ import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
+import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
+import BackButton from "./BackButton";
+import SaveButton from "./SaveChangesButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -44,13 +47,25 @@ const ConfirmDetails = ({
     (category) => category.size === currentSchedule.size,
   )[0];
 
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isErrorSchedulingOpen,
+    onOpen: onErrorSchedulingOpen,
+    onClose: onErrorSchedulingClose,
+  } = useDisclosure();
+
   const onSubmitClick = async () => {
-    await SchedulingAPIClient.createSchedule(currentSchedule);
+    const schedule = await SchedulingAPIClient.createSchedule(currentSchedule);
+
+    if (!schedule.id) {
+      onErrorSchedulingOpen();
+      return;
+    }
+
     next();
   };
 
-  const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const onDeleteClick = async (isOneTimeEvent = true) => {
     if (isOneTimeEvent) {
       await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
@@ -68,21 +83,25 @@ const ConfirmDetails = ({
       duration: 7000,
       isClosable: true,
     });
-    history.push(`${Routes.DASHBOARD_PAGE}`);
+    history.push(
+      authenticatedUser!.role === Role.DONOR
+        ? `${Routes.DASHBOARD_PAGE}`
+        : `${Routes.VIEW_DONATIONS}`,
+    );
   };
 
   const getDonorData = async () => {
-    const donorResponse = await DonorAPIClient.getDonorByUserId(
-      authenticatedUser!.id,
-    );
+    const donorResponse = isBeingEdited
+      ? await DonorAPIClient.getDonorById(currentSchedule.donorId)
+      : await DonorAPIClient.getDonorByUserId(authenticatedUser!.id);
     setForm({ target: { name: "donorId", value: donorResponse.id } });
     setCurrentDonor(donorResponse);
   };
 
   const startDateLocal = new Date(currentSchedule.startTime);
   const endDateLocal = new Date(currentSchedule.recurringDonationEndDate);
-  const startTimeLocal = format(new Date(currentSchedule.startTime), "K:mm aa");
-  const endTimeLocal = format(new Date(currentSchedule.endTime), "K:mm aa");
+  const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
+  const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mm aa");
 
   const dayText = (startDate: Date) => {
     return format(startDate, "eeee");
@@ -107,8 +126,13 @@ const ConfirmDetails = ({
         break;
     }
     const result = add(startDate, addOptions);
-    if (!isBefore(result, endDateLocal)) return null;
-    return dateText(result);
+    if (
+      differenceInDays(endDateLocal, result) >= 0 &&
+      isBefore(result, endDateLocal)
+    ) {
+      return dateText(result);
+    }
+    return null;
   };
 
   useEffect(() => {
@@ -117,22 +141,26 @@ const ConfirmDetails = ({
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
-        <IconButton
-          onClick={() =>
-            history.push(
-              authenticatedUser?.role === Role.DONOR
-                ? Routes.DASHBOARD_PAGE
-                : Routes.VIEW_DONATIONS,
-            )
-          }
-          marginLeft="-12px"
-          variant="ghost"
-          aria-label="back"
-        >
-          <ArrowBackIcon width="24px" height="24px" />
-        </IconButton>
+        <Box mt={10}>
+          <Button
+            onClick={() =>
+              history.push(
+                authenticatedUser?.role === Role.DONOR
+                  ? Routes.DASHBOARD_PAGE
+                  : Routes.VIEW_DONATIONS,
+              )
+            }
+            paddingLeft="0"
+            backgroundColor="transparent"
+          >
+            <ArrowBackIcon w={8} h={5} /> Back
+          </Button>
+        </Box>
       ) : (
-        <SchedulingProgressBar activeStep={3} totalSteps={4} />
+        <>
+          <BackButton previous={previous} />
+          <SchedulingProgressBar activeStep={3} totalSteps={4} />
+        </>
       )}
       <Text
         textStyle="mobileHeader2"
@@ -169,6 +197,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("date and time")}
         >
           Edit
@@ -199,8 +228,8 @@ const ConfirmDetails = ({
             </Text>
           </HStack>
 
-          {nextDropoffDateText(startDateLocal) !== null ||
-          currentSchedule.frequency !== DonationFrequency.ONE_TIME ? (
+          {nextDropoffDateText(startDateLocal) === null ||
+          currentSchedule.frequency === DonationFrequency.ONE_TIME ? null : (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Next Drop-Off
@@ -212,7 +241,7 @@ const ConfirmDetails = ({
                 {`${startTimeLocal} - ${endTimeLocal}`}
               </Text>{" "}
             </Box>
-          ) : null}
+          )}
         </Box>
       </Box>
 
@@ -228,6 +257,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("donation information")}
         >
           Edit
@@ -259,6 +289,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("volunteer information")}
         >
           Edit
@@ -271,14 +302,18 @@ const ConfirmDetails = ({
           <Text textStyle="mobileBody">
             {currentSchedule.volunteerNeeded ? "Yes" : "No"}
           </Text>
-          <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Pickup Needed
-          </Text>
-          <Text textStyle="mobileBody">
-            {currentSchedule.isPickup ? "Yes" : "No"}
-          </Text>
+          {currentSchedule.volunteerNeeded && (
+            <>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Pickup Needed
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.isPickup ? "Yes" : "No"}
+              </Text>
+            </>
+          )}
 
-          {currentSchedule.isPickup && (
+          {currentSchedule.volunteerNeeded && currentSchedule.isPickup && (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Address
@@ -352,20 +387,15 @@ const ConfirmDetails = ({
       )}
       {!isBeingEdited && (
         <HStack>
-          <Button
-            onClick={previous}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Back
-          </Button>
-          <Button
-            onClick={onSubmitClick}
-            variant="navigation"
-            width={{ base: "100%", md: "20%" }}
-          >
-            Submit
-          </Button>
+          <Flex justify="flex-end">
+            <Button onClick={onSubmitClick} variant="navigation">
+              Submit
+            </Button>
+          </Flex>
+          <ErrorSchedulingModal
+            isOpen={isErrorSchedulingOpen}
+            onClose={onErrorSchedulingClose}
+          />
         </HStack>
       )}
     </Container>
