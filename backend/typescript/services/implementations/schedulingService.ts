@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { snakeCase } from "lodash";
-import { Op, Sequelize } from "sequelize";
+import { Op } from "sequelize";
 import dayjs from "dayjs";
 import ordinal from "ordinal";
 import ISchedulingService from "../interfaces/schedulingService";
@@ -613,21 +613,26 @@ class SchedulingService implements ISchedulingService {
     }
     // Update recurring donation end date only occurs if it is not the only object left with that recurrring id
     const remainingDonations = await Scheduling.count({
-      where: { recurring_donation_id }
-    })
+      where: { recurring_donation_id },
+    });
     if (remainingDonations >= 1) {
       try {
-          const recurringDonationEndDate = await Scheduling.max("start_time", {
-            where: { recurring_donation_id }
-          })
-          await Scheduling.update({
-            recurring_donation_end_date: recurringDonationEndDate
-          }, {
+        const recurringDonationEndDate = await Scheduling.max("start_time", {
+          where: { recurring_donation_id },
+        });
+        await Scheduling.update(
+          {
+            recurring_donation_end_date: recurringDonationEndDate,
+          },
+          {
             where: { recurring_donation_id },
-          });
+          },
+        );
       } catch (error) {
         Logger.error(
-          `Failed to update recurring donation end date. Reason = ${getErrorMessage(error)}`,
+          `Failed to update recurring donation end date. Reason = ${getErrorMessage(
+            error,
+          )}`,
         );
         throw error;
       }
