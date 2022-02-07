@@ -17,7 +17,12 @@ import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";
 import IDonorService from "../../interfaces/donorService";
 import DonorService from "../donorService";
-import { RECURRING_DONATION_ID, testUsersDb, testDonorsDb, testSchedules } from "../testUtils/schedulingService.testUtils";
+import {
+  RECURRING_DONATION_ID,
+  testUsersDb,
+  testDonorsDb,
+  testSchedules,
+} from "../testUtils/schedulingService.testUtils";
 
 const schedules = testSchedules.map((schedule) => {
   const scheduleSnakeCase: Record<
@@ -334,10 +339,12 @@ describe("pg schedulingService", () => {
       testSchedules[3].startTime.toISOString(),
     );
     const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll({
-      where: { recurring_donation_id: RECURRING_DONATION_ID }
+      where: { recurring_donation_id: RECURRING_DONATION_ID },
     });
     schedulingsDbAfterDelete.forEach((scheduling: Scheduling) => {
-      expect(scheduling.recurring_donation_end_date).toStrictEqual(testSchedules[2].startTime);
+      expect(scheduling.recurring_donation_end_date).toStrictEqual(
+        testSchedules[2].startTime,
+      );
     });
-  })
+  });
 });
