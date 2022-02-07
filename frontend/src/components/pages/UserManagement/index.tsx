@@ -45,7 +45,7 @@ const UserManagementPage = (): JSX.Element => {
   }, []);
 
   return (
-    <Container variant="dashboardContainer">
+    <Container variant="baseContainer">
       <Text mb="40px" textStyle="desktopHeader2">
         User Management
       </Text>

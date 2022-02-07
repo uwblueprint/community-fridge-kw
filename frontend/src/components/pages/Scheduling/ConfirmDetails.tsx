@@ -258,7 +258,7 @@ const ConfirmDetails = ({
           variant="edit"
           color="hubbard.100"
           disabled={authenticatedUser?.role === Role.DONOR}
-          onClick={() => go && go("volunteer information")}
+          onClick={() => go && go("donation information")}
         >
           Edit
         </Button>
