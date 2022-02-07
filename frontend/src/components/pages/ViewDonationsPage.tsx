@@ -5,7 +5,7 @@ import ViewDonations from "./ViewDonations";
 
 const ViewDonationsPage = () => {
   return (
-    <Container variant="baseContainer">
+    <Container variant="responsiveContainer">
       <ViewDonations isAdminView />
     </Container>
   );
