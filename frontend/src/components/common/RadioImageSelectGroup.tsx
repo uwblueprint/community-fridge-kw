@@ -105,6 +105,7 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
         <VStack p="20px">
           <Flex alignItems="flex-start">
             <Radio
+              {...getRadioProps({ value: v.size })}
               isChecked={v.size === value}
               mx="10px"
               colorScheme="raddish"
@@ -126,6 +127,7 @@ const RadioImageSelectGroup = (props: RadioImageSelectGroupProps) => {
       ) : (
         <HStack alignItems="flex-start">
           <Radio
+            {...getRadioProps({ value: v.size })}
             isChecked={v.size === value}
             mx="10px"
             colorScheme="raddish"
