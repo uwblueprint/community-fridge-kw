@@ -21,11 +21,7 @@ baseAPIClient.interceptors.request.use(async (config: AxiosRequestConfig) => {
   ) {
     const decodedToken = jwt.decode(authHeaderParts[1]) as DecodedJWT;
 
-    if (
-      decodedToken &&
-      (typeof decodedToken === "string" ||
-        decodedToken.exp >= Math.round(new Date().getTime() / 1000))
-    ) {
+    if (decodedToken) {
       const { data } = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/auth/refresh`,
         {},
