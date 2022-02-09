@@ -22,7 +22,6 @@ import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
 import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
 import ModifyRecurringModal from "../Dashboard/components/ModifyRecurringDonationModal";
