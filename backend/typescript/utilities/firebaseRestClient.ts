@@ -227,7 +227,7 @@ const FirebaseRestClient = {
     return responseJson as ConfirmEmailVerificationResponse;
   },
 
-  confirmPasswordResetVerificationCode : async (
+  confirmPasswordResetVerificationCode: async (
     oobCode: string,
   ): Promise<ConfirmPasswordResetVerificationResponse> => {
     const response: Response = await fetch(
@@ -256,7 +256,9 @@ const FirebaseRestClient = {
       ];
       Logger.error(errorMessage.join(" "));
 
-      throw new Error("Failed to confirm password reset verification code via Firebase REST API");
+      throw new Error(
+        "Failed to confirm password reset verification code via Firebase REST API",
+      );
     }
     return responseJson as ConfirmPasswordResetVerificationResponse;
   },

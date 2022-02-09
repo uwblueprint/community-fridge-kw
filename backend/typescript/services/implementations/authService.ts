@@ -199,7 +199,7 @@ class AuthService implements IAuthService {
         <p style = "margin-top: 50px"> Sincerely, </p>
         <p> Community Fridge KW </p>   
       </body>
-      </html>;`
+      </html>;`;
 
       this.emailService.sendEmail(email, "Your Password Reset Link", emailBody);
     } catch (error) {
