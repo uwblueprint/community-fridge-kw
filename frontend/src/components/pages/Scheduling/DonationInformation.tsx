@@ -6,6 +6,7 @@ import {
   FormLabel,
   Stack,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 
@@ -13,6 +14,7 @@ import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
@@ -32,7 +34,7 @@ const DonationInformation: any = ({
     categories: "",
     size: "",
   });
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const getSubmitState = () => {
     return !!formValues.size && !!formValues.categories.length;
   };
@@ -157,7 +159,21 @@ const DonationInformation: any = ({
         </FormControl>
       )}
       {isBeingEdited ? (
-        <SaveButton onSaveClick={onSaveClick} />
+        <>
+          {formValues.recurringDonationId !== "null" ? (
+            <>
+              <SaveButton onSaveClick={onOpen} />
+              <ModifyRecurringDonationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onModification={onSaveClick}
+                modificationType="update"
+              />
+            </>
+          ) : (
+            <SaveButton onSaveClick={onSaveClick} />
+          )}
+        </>
       ) : (
         <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
       )}

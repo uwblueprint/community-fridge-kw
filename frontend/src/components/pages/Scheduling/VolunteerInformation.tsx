@@ -8,6 +8,7 @@ import {
   Input,
   Text,
   Textarea,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useState } from "react";
@@ -15,6 +16,7 @@ import React, { useState } from "react";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
@@ -29,7 +31,7 @@ const VolunteerInformation = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next, go } = navigation;
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     id,
     startTime,
@@ -279,7 +281,21 @@ const VolunteerInformation = ({
         </FormControl>
       )}
       {isBeingEdited ? (
-        <SaveButton onSaveClick={onSaveClick} />
+        <>
+          {formValues.recurringDonationId !== "null" ? (
+            <>
+              <SaveButton onSaveClick={onOpen} />
+              <ModifyRecurringDonationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onModification={onSaveClick}
+                modificationType="update"
+              />
+            </>
+          ) : (
+            <SaveButton onSaveClick={onSaveClick} />
+          )}
+        </>
       ) : (
         <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
       )}

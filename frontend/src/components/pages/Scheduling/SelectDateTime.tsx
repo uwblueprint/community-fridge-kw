@@ -9,6 +9,7 @@ import {
   GridItem,
   SimpleGrid,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import moment from "moment";
@@ -34,6 +35,7 @@ import {
   getTimeSlot,
   SchedulingStepProps,
 } from "./types";
+import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 
 const SelectDateTime = ({
   formValues,
@@ -50,6 +52,7 @@ const SelectDateTime = ({
     endTime,
     recurringDonationEndDate,
   } = formValues;
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [formErrors, setFormErrors] = useState({
     date: "",
@@ -471,7 +474,21 @@ const SelectDateTime = ({
           </FormControl>
         )}
       {isBeingEdited ? (
-        <SaveButton onSaveClick={onSaveClick} />
+        <>
+          {formValues.recurringDonationId !== "null" ? (
+            <>
+              <SaveButton onSaveClick={onOpen} />
+              <ModifyRecurringDonationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onModification={onSaveClick}
+                modificationType="update"
+              />
+            </>
+          ) : (
+            <SaveButton onSaveClick={onSaveClick} />
+          )}
+        </>
       ) : (
         <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
       )}
