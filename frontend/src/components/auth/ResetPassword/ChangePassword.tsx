@@ -13,12 +13,12 @@ import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
+import authAPIClient from "../../../APIClients/AuthAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import MandatoryInputDescription from "../Signup/components/MandatoryInputDescription";
 import { RequestPasswordChangeFormProps } from "./types";
-import authAPIClient from "../../../APIClients/AuthAPIClient";
 
 const ChangePassword = ({
   formData,
@@ -47,10 +47,8 @@ const ChangePassword = ({
     if (!email) {
       return false;
     }
-    console.log(email)
-    await authAPIClient.resetPassword(
-      email
-    );
+    console.log(email);
+    await authAPIClient.resetPassword(email);
 
     // console.log("hi");
     return next();
@@ -58,54 +56,54 @@ const ChangePassword = ({
 
   return (
     <div>
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      {!isDesktop && (
-        <IconButton
-          float="right"
-          aria-label="close sign up"
-          onClick={() => history.push(Routes.LOGIN_PAGE)}
-          backgroundColor="transparent"
-        >
-          <CloseIcon color="black.100" />
-        </IconButton>
-      )}
-      <Text mt="67px" textStyle="mobileHeader1">
-        Change Password
-      </Text>
-      <Text textStyle="mobileSmall" color="hubbard.100">
-        Enter the email you registered with to send a password change request.
-      </Text>
-
-      <FormControl mt="2rem" isInvalid={!email && interaction.email}>
-        <Box>
-          <MandatoryInputDescription label="Enter the email address you registered with" />
-          <Input
-            mt="2"
-            value={email}
-            onChange={(e) => {
-              setInteraction({ ...interaction, email: true });
-              setForm(e);
-            }}
-            name="email"
-            placeholder="Enter email address"
-          />
-          <FormErrorMessage>
-            Please enter a valid email address.
-          </FormErrorMessage>
-        </Box>
-        <Box mt="3rem">
-          <Button
-            mt="2"
-            variant="navigation"
-            onClick={onSendRequestClick}
-            width="100%"
+      <Container pl="42px" pr="42px" pt="0.5rem">
+        {!isDesktop && (
+          <IconButton
+            float="right"
+            aria-label="close sign up"
+            onClick={() => history.push(Routes.LOGIN_PAGE)}
+            backgroundColor="transparent"
           >
-            Send password change request
-          </Button>
-        </Box>
-    </FormControl>
-   </Container>
-   </div>
+            <CloseIcon color="black.100" />
+          </IconButton>
+        )}
+        <Text mt="67px" textStyle="mobileHeader1">
+          Change Password
+        </Text>
+        <Text textStyle="mobileSmall" color="hubbard.100">
+          Enter the email you registered with to send a password change request.
+        </Text>
+
+        <FormControl mt="2rem" isInvalid={!email && interaction.email}>
+          <Box>
+            <MandatoryInputDescription label="Enter the email address you registered with" />
+            <Input
+              mt="2"
+              value={email}
+              onChange={(e) => {
+                setInteraction({ ...interaction, email: true });
+                setForm(e);
+              }}
+              name="email"
+              placeholder="Enter email address"
+            />
+            <FormErrorMessage>
+              Please enter a valid email address.
+            </FormErrorMessage>
+          </Box>
+          <Box mt="3rem">
+            <Button
+              mt="2"
+              variant="navigation"
+              onClick={onSendRequestClick}
+              width="100%"
+            >
+              Send password change request
+            </Button>
+          </Box>
+        </FormControl>
+      </Container>
+    </div>
   );
 };
 

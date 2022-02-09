@@ -402,28 +402,25 @@ const Account = (): JSX.Element => {
             </Button>
           </Box>
         ) : (
-          <Box mt={{ base: "66px", md: "56px" }}>
-            <Button
-              isDisabled
-              width="100%"
-              size="lg"
-              mt="2"
-              variant="changePassword"
-              onClick={changePassword}
-            >
-              Change Password
-            </Button>
-          </Box>
-          <Box mt={{ base: "25px", md: "16px" }}>
-            <Button
-              width="100%"
-              size="lg"
-              mt="0"
-              variant="navigation"
-            >
-              Change Password
-            </Button>
-          </Box>
+          <>
+            <Box mt={{ base: "66px", md: "56px" }}>
+              <Button
+                isDisabled
+                width="100%"
+                size="lg"
+                mt="2"
+                variant="changePassword"
+                onClick={changePassword}
+              >
+                Change Password
+              </Button>
+            </Box>
+            <Box mt={{ base: "25px", md: "16px" }}>
+              <Button width="100%" size="lg" mt="0" variant="navigation">
+                Change Password
+              </Button>
+            </Box>
+          </>
         )}
       </Box>
     </Container>

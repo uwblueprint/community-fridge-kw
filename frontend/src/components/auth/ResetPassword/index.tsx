@@ -1,9 +1,10 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
-import ChangePassword from "./ChangePassword"
-import VerificationPage from "./VerificationEmail";
-import AuthContext from "../../../contexts/AuthContext";
+
 import authAPIClient from "../../../APIClients/AuthAPIClient";
+import AuthContext from "../../../contexts/AuthContext";
+import ChangePassword from "./ChangePassword";
+import VerificationPage from "./VerificationEmail";
 
 const steps = [
   { id: "forgot password" },
@@ -17,11 +18,7 @@ interface UseStepType {
   navigation: NavigationProps | any;
 }
 
-const ForgetPassword = ({
-  initialStep
-}: {
-  initialStep: number;
-}) =>  {
+const ForgetPassword = ({ initialStep }: { initialStep: number }) => {
   const [formValues, setForm] = useForm({
     email: "",
     newPassword: "",
@@ -43,11 +40,7 @@ const ForgetPassword = ({
         />
       );
     case "verification email":
-      return (
-        <VerificationPage
-          formValues={formValues}
-        />
-      );
+      return <VerificationPage formValues={formValues} />;
     default:
       return null;
   }

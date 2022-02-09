@@ -1,5 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Container, IconButton, Text, Image } from "@chakra-ui/react";
+import { Container, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -41,7 +41,8 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
           textStyle="mobileBody"
           color="hubbard.100"
         >
-          We sent a password change request through email to {email}. Please check your email for further information.
+          We sent a password change request through email to {email}. Please
+          check your email for further information.
         </Text>
       </Container>
     </Container>

@@ -16,41 +16,48 @@ const Action = () => {
   const oobCode = urlParams.get("oobCode");
 
   const [emailVerified, setEmailVerified] = React.useState(false);
-  const [passwordResetVerified, setPasswordResetVerified] = React.useState(false);
+  const [passwordResetVerified, setPasswordResetVerified] = React.useState(
+    false,
+  );
+
+  const confirmEmailVerification = async () => {
+    const confirmEmailVerificationResponse = await AuthAPIClient.confirmEmailVerification(
+      oobCode ?? "",
+    );
+    if (confirmEmailVerificationResponse) {
+      setEmailVerified(true);
+    }
+  };
+
+  const confirmPasswordReset = async () => {
+    const confirmPasswordResetResponse = await AuthAPIClient.confirmPasswordReset(
+      oobCode ?? "",
+    );
+    if (confirmPasswordResetResponse) {
+      setPasswordResetVerified(true);
+    }
+  };
 
   if (mode === "verifyEmail") {
-    const confirmEmailVerification = async () => {
-      const confirmEmailVerificationResponse = await AuthAPIClient.confirmEmailVerification(
-        oobCode ?? "",
-      );
-      if (confirmEmailVerificationResponse) {
-        setEmailVerified(true);
-      }
-    };
-    React.useEffect(() => {
-      confirmEmailVerification();
-    }, []);
+    confirmEmailVerification();
+    return emailVerified ? (
+      <ConfirmVerificationPage />
+    ) : (
+      <Center>
+        <Spinner />
+      </Center>
+    );
   }
-  else if (mode === "passwordReset") {
-    const confirmPasswordReset = async () => {
-      const confirmPasswordResetResponse = await AuthAPIClient.confirmPasswordReset(
-        oobCode ?? "",
-      );
-      if (confirmPasswordResetResponse) {
-        setPasswordResetVerified(true);
-      }
-    };
-    React.useEffect(() => {
-      confirmPasswordReset();
-    }, []);
+  if (mode === "passwordReset") {
+    confirmPasswordReset();
+    return (
+      <Center>
+        {passwordResetVerified
+          ? "Password Reset Verified"
+          : "Password Reset Verification Failed"}
+      </Center>
+    );
   }
-
-  return emailVerified ? (
-    <ConfirmVerificationPage />
-  ) : passwordResetVerified ? (
-   <></>
-  ): (
-      <Center>Sorry, there was a problem verifying the email.</Center >
-  );
+  return <></>;
 };
 export default Action;
