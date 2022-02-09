@@ -61,19 +61,23 @@ volunteerRouter.get("/:volunteerID", async (req, res) => {
 //   const { id } = req.query;
 // });
 
-volunteerRouter.put("/:volunteerID", volunteerDtoValidator, async (req, res) => {
-  try {
-    await volunteerService.updateVolunteerById(req.params.id, {
-      status: req.body.status,
-    });
+volunteerRouter.put(
+  "/:volunteerID",
+  volunteerDtoValidator,
+  async (req, res) => {
+    try {
+      await volunteerService.updateVolunteerById(req.params.id, {
+        status: req.body.status,
+      });
 
-    res.status(201).send();
-  } catch (error: unknown) {
-    res.status(500).json({ error: getErrorMessage(error) });
-  }
-});
+      res.status(201).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  },
+);
 
-volunteerRouter.put("/:id", async (req, res) => {
+volunteerRouter.put("/:id", volunteerDtoValidator, async (req, res) => {
   const { userId } = req.query;
 
   if (userId) {
