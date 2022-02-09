@@ -104,7 +104,12 @@ export function WeeklyBody<EventItem>({
       {[...Array(isMobile ? 1 : 3)].map((_, i) => {
         return (
           <div key={i}>
-            <VStack justifyItems="flex-start" alignContent="start" pb="5rem">
+            <VStack
+              justifyItems="flex-start"
+              alignContent="start"
+              pb="3rem"
+              maxWidth="fit-content"
+            >
               <DayButton
                 day={{
                   day: selectedDay.getDay() + i,
