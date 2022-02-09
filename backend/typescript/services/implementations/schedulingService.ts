@@ -39,6 +39,8 @@ class SchedulingService implements ISchedulingService {
 
   donorService: IDonorService;
 
+  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
+
   constructor(
     emailService: IEmailService | null = null,
     donorService: IDonorService,
@@ -186,6 +188,7 @@ class SchedulingService implements ISchedulingService {
   async sendEmailVerificationAfterSchedulingADonation(
     donor: UserDonorDTO,
     schedule: SchedulingDTO,
+    isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -195,7 +198,7 @@ class SchedulingService implements ISchedulingService {
     }
 
     try {
-      const { firstName } = donor;
+      const { firstName, lastName } = donor;
 
       // Proposed drop off info
       const { startTime, endTime } = schedule;
@@ -252,11 +255,16 @@ class SchedulingService implements ISchedulingService {
         <title>Donation Details Email</title>
       </head>
       <body>
-        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png style="min-width: 100px; max-width: 200px; width: 25%; margin-bottom: 20px;" alt=" CFKW Logo" /></p>
-        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;"><strong>Hey there ${firstName}!</strong></p>
-        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
-          <br />
-          <br />
+        <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png style="min-width: 100px; max-width: 200px; width: 25%; margin-bottom: 20px;" alt=" CFKW Logo" /></p>
+        ${
+          isAdmin
+            ? `<p style="font-weight: 400; font-size: 18px; line-height: 24px; color: #171717;">${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>	
+           <br />`
+            : `<p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;"><strong>Hey there ${firstName}!</strong></p>
+           <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
+            <br />
+            <br />`
+        }
           <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Here is a summary of your upcoming donation:</p>
         </p>
         <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
@@ -308,8 +316,10 @@ class SchedulingService implements ISchedulingService {
       </html>`;
 
       this.emailService.sendEmail(
-        donor.email,
-        "Your Donation Information",
+        isAdmin ? SchedulingService.TEMP_ADMIN_EMAIL : donor.email,
+        isAdmin
+          ? `New Donation Booked - ${startDayString}, ${startTimeString} - ${endTimeString}`
+          : "Your Donation Information",
         emailBody,
       );
     } catch (error) {
@@ -519,6 +529,12 @@ class SchedulingService implements ISchedulingService {
     this.sendEmailVerificationAfterSchedulingADonation(
       currDonor,
       retNewSchedule,
+      false,
+    );
+    this.sendEmailVerificationAfterSchedulingADonation(
+      currDonor,
+      retNewSchedule,
+      true,
     );
 
     return retNewSchedule;
