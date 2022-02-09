@@ -139,7 +139,7 @@ class VolunteerService implements IVolunteerService {
           status: volunteer.status,
         },
         {
-          where: { userId },
+          where: { user_id: userId },
           returning: true,
         },
       );

@@ -172,7 +172,7 @@ describe("Testing VolunteerService Functions", () => {
 
     const res = await volunteerService.getVolunteerByID("2");
 
-    expect(res).toMatchObject(testUpdatedUserVolunteers[0]);
+    expect(res).toMatchObject(testUpdatedUserVolunteers[1]);
   });
 
   it("deleteVolunteerByID", async () => {
