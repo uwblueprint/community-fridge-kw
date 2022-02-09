@@ -39,7 +39,6 @@ const testVolunteers = [
 
 const testUserVolunteers = [
   {
-    id: "1",
     email: "test1@test.com",
     firstName: "Peter",
     lastName: "Pan",
@@ -49,7 +48,6 @@ const testUserVolunteers = [
     status: Status.PENDING,
   },
   {
-    id: "2",
     email: "test2@test.com",
     firstName: "Wendy",
     lastName: "Darling",
@@ -62,7 +60,6 @@ const testUserVolunteers = [
 
 const testUpdatedUserVolunteers = [
   {
-    id: "1",
     email: "test1@test.com",
     firstName: "Peter",
     lastName: "Pan",
@@ -72,7 +69,6 @@ const testUpdatedUserVolunteers = [
     status: Status.APPROVED,
   },
   {
-    id: "2",
     email: "test2@test.com",
     firstName: "Wendy",
     lastName: "Darling",
@@ -82,6 +78,13 @@ const testUpdatedUserVolunteers = [
     status: Status.REJECTED,
   },
 ];
+
+jest.mock("firebase-admin", () => {
+  const auth = jest.fn().mockReturnValue({
+    getUser: jest.fn().mockReturnValue({ email: "test@test.com" }),
+  });
+  return { auth };
+});
 
 describe("Testing VolunteerService Functions", () => {
   let volunteerService: VolunteerService;
@@ -151,7 +154,7 @@ describe("Testing VolunteerService Functions", () => {
 
   it("updateVolunteerById", async () => {
     const mockUpdateVolunteerDTO = {
-      id: "1",
+      userId: "1",
       status: Status.APPROVED,
     };
 
@@ -165,6 +168,7 @@ describe("Testing VolunteerService Functions", () => {
   it("updateVolunteerByUserId", async () => {
     const mockUpdateVolunteerDTO = {
       id: "2",
+      userId: "2",
       status: Status.REJECTED,
     };
 

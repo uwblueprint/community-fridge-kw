@@ -1,4 +1,8 @@
-import { VolunteerDTO, UserVolunteerDTO, UpdateVolunteerDTO } from "../../types";
+import {
+  VolunteerDTO,
+  UserVolunteerDTO,
+  UpdateVolunteerDTO,
+} from "../../types";
 
 interface IVolunteerService {
   /**
@@ -37,7 +41,10 @@ interface IVolunteerService {
    * @param volunteer the volunteer to be updated
    * @throws Error if volunteer update fails
    */
-  updateVolunteerByUserId(userId: string, volunteer: UpdateVolunteerDTO): Promise<void>;
+  updateVolunteerByUserId(
+    userId: string,
+    volunteer: UpdateVolunteerDTO,
+  ): Promise<void>;
 
   /**
    * Delete a volunteer by id

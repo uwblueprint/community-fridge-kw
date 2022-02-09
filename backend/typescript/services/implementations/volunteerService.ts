@@ -1,6 +1,10 @@
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
-import { UpdateVolunteerDTO, UserVolunteerDTO, VolunteerDTO } from "../../types";
+import {
+  UpdateVolunteerDTO,
+  UserVolunteerDTO,
+  VolunteerDTO,
+} from "../../types";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import logger from "../../utilities/logger";
 import IVolunteerService from "../interfaces/volunteerService";
@@ -108,7 +112,10 @@ class VolunteerService implements IVolunteerService {
     return userVolunteerDTOs;
   }
 
-  async updateVolunteerById(id: string, volunteer: UpdateVolunteerDTO): Promise<void> {
+  async updateVolunteerById(
+    id: string,
+    volunteer: UpdateVolunteerDTO,
+  ): Promise<void> {
     try {
       const updateResult = await Volunteer.update(
         {
@@ -132,7 +139,10 @@ class VolunteerService implements IVolunteerService {
     }
   }
 
-  async updateVolunteerByUserId(userId: string, volunteer: UpdateVolunteerDTO): Promise<void> {
+  async updateVolunteerByUserId(
+    userId: string,
+    volunteer: UpdateVolunteerDTO,
+  ): Promise<void> {
     try {
       const updateResult = await Volunteer.update(
         {
