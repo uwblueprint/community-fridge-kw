@@ -10,7 +10,6 @@ import {
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import AuthAPIClient from "../../../APIClients/AuthAPIClient";
 import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png";
 import * as Routes from "../../../constants/Routes";
 import ViewDonations from "../ViewDonations";
@@ -20,21 +19,9 @@ import VolunteerRoles from "./VolunteerRoles";
 const Home = (): JSX.Element => {
   const history = useHistory();
 
-  const onRefreshClick = async () => {
-   await AuthAPIClient.refresh();
-  };
-
   return (
     <>
       <Container variant="baseContainer">
-        <Button
-          width="100%"
-          mt="2"
-          onClick={onRefreshClick}
-          variant="navigation"
-        >
-          Refresh
-        </Button>
         <Image
           src="drawer-logo.png"
           alt="Community Fridge logo"
