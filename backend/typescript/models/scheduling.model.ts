@@ -87,7 +87,7 @@ export default class Scheduling extends Model {
   donor_id!: number;
 
   @ForeignKey(() => Volunteer)
-  @AllowNull(false)
+  @AllowNull(true)
   @Column({ type: DataType.INTEGER })
   volunteer_id!: number;
 
