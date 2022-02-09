@@ -25,6 +25,7 @@ import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
 import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
+import ModifyRecurringModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import SaveButton from "./SaveChangesButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
@@ -377,10 +378,11 @@ const ConfirmDetails = ({
               onDelete={onDeleteClick}
             />
           ) : (
-            <DeleteRecurringModal
+            <ModifyRecurringModal
               isOpen={isOpen}
               onClose={onClose}
-              onDelete={onDeleteClick}
+              onModification={onDeleteClick}
+              modificationType="delete"
             />
           )}
         </Box>

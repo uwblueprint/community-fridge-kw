@@ -16,18 +16,20 @@ import React, { useState } from "react";
 
 import useViewport from "../../../../hooks/useViewport";
 
-interface DeleteRecurringModalProps {
+interface ModifyRecurringModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onDelete: (isOneTimeEvent?: boolean) => void;
+  onModification: (isOneTimeEvent?: boolean) => void;
+  modificationType: string;
 }
-const DeleteRecurringModal = ({
+const ModifyRecurringModal = ({
   isOpen,
   onClose,
-  onDelete,
-}: DeleteRecurringModalProps) => {
+  onModification,
+  modificationType,
+}: ModifyRecurringModalProps) => {
   const { isDesktop } = useViewport();
-  const [deleteScheduleValue, setDeleteScheduleValue] = useState("deleteOne");
+  const [modifyScheduleValue, setmodifyScheduleValue] = useState("one");
 
   return (
     <>
@@ -41,20 +43,21 @@ const DeleteRecurringModal = ({
         <ModalContent py="52px" px="48px">
           <ModalHeader>
             <Text textStyle={isDesktop ? "desktopHeader3" : "mobileBodyBold"}>
-              Cancel Recurring Donation
+              {modificationType[0].toUpperCase() + modificationType.slice(1)}{" "}
+              Donation
             </Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody textStyle="mobileBody" color="hubbard.100">
             <RadioGroup
-              onChange={setDeleteScheduleValue}
-              value={deleteScheduleValue}
+              onChange={setmodifyScheduleValue}
+              value={modifyScheduleValue}
             >
               <Stack>
-                <Radio size="lg" colorScheme="red" value="deleteOne">
+                <Radio size="lg" colorScheme="red" value="one">
                   This donation
                 </Radio>
-                <Radio size="lg" colorScheme="red" value="deleteAll">
+                <Radio size="lg" colorScheme="red" value="all">
                   This and all following donations
                 </Radio>
               </Stack>
@@ -64,9 +67,10 @@ const DeleteRecurringModal = ({
             <Button
               width="100%"
               colorScheme="red"
-              onClick={() => onDelete(deleteScheduleValue === "deleteOne")}
+              onClick={() => onModification(modifyScheduleValue === "one")}
             >
-              Cancel donation
+              {modificationType[0].toUpperCase() + modificationType.slice(1)}{" "}
+              donation
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -75,4 +79,4 @@ const DeleteRecurringModal = ({
   );
 };
 
-export default DeleteRecurringModal;
+export default ModifyRecurringModal;
