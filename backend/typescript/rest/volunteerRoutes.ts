@@ -1,4 +1,5 @@
 import { Router } from "express";
+import volunteerDtoValidator from "../middlewares/validators/volunteerValidator";
 import VolunteerService from "../services/implementations/volunteerService";
 import IVolunteerService from "../services/interfaces/volunteerService";
 import { UserVolunteerDTO } from "../types";
@@ -60,8 +61,7 @@ volunteerRouter.get("/:volunteerID", async (req, res) => {
 //   const { id } = req.query;
 // });
 
-// TODO: ADD VALIDATOR
-volunteerRouter.put("/:volunteerID", async (req, res) => {
+volunteerRouter.put("/:volunteerID", volunteerDtoValidator, async (req, res) => {
   try {
     await volunteerService.updateVolunteerById(req.params.id, {
       status: req.body.status,

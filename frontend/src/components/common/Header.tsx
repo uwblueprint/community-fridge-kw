@@ -55,7 +55,18 @@ const Header = (): JSX.Element => {
         >
           <HamburgerIcon color="black.100" />
         </IconButton>
-        <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <>
+            <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+              <Image
+                objectFit="none"
+                src="header-logo.png"
+                alt="Community Fridge logo"
+                display="inline"
+              />
+            </Link>
+          </>
+        ) : (
           <Image
             objectFit="none"
             src="header-logo.png"
@@ -63,7 +74,7 @@ const Header = (): JSX.Element => {
             display="inline"
             maxWidth="100vw"
           />
-        </Link>
+        )}
         <Stack
           spacing="2rem"
           direction="row"
@@ -81,17 +92,17 @@ const Header = (): JSX.Element => {
                     Home
                   </Link>
                   <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
-                    Scheduled Donations
+                    My Scheduled Donations
                   </Link>
                 </>
               )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
-                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
-                    User Management
-                  </Link>
                   <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
                     View Donations
+                  </Link>
+                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                    User Management
                   </Link>
                 </>
               )}
@@ -160,30 +171,18 @@ const Header = (): JSX.Element => {
                       >
                         Home
                       </Link>
-                      <Link
-                        as={ReactLink}
-                        to={Routes.DASHBOARD_PAGE}
-                        onClick={onClose}
-                      >
-                        Scheduled Donations
+                      <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
+                        My Scheduled Donations
                       </Link>
                     </>
                   )}
                   {authenticatedUser.role === Role.ADMIN && (
                     <>
-                      <Link
-                        as={ReactLink}
-                        to={Routes.USER_MANAGEMENT_PAGE}
-                        onClick={onClose}
-                      >
-                        User Management
-                      </Link>
-                      <Link
-                        as={ReactLink}
-                        to={Routes.VIEW_DONATIONS}
-                        onClick={onClose}
-                      >
+                      <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
                         View Donations
+                      </Link>
+                      <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                        User Management
                       </Link>
                     </>
                   )}

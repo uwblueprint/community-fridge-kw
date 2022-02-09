@@ -9,7 +9,6 @@ import Volunteer from "../../../models/volunteer.model";
 
 const testUsers = [
   {
-    id: "1",
     email: "test1@test.com",
     firstName: "Peter",
     lastName: "Pan",
@@ -18,7 +17,6 @@ const testUsers = [
     phoneNumber: "111-111-1111",
   },
   {
-    id: "2",
     email: "test2@test.com",
     firstName: "Wendy",
     lastName: "Darling",
@@ -30,11 +28,11 @@ const testUsers = [
 
 const testVolunteers = [
   {
-    user_id: "1",
+    userId: "1",
     status: Status.PENDING,
   },
   {
-    user_id: "2",
+    userId: "2",
     status: Status.PENDING,
   },
 ];
@@ -81,7 +79,7 @@ const testUpdatedUserVolunteers = [
     role: Role.VOLUNTEER,
     phoneNumber: "111-111-1111",
     userId: "2",
-    status: Status.PENDING,
+    status: Status.REJECTED,
   },
 ];
 
@@ -153,13 +151,26 @@ describe("Testing VolunteerService Functions", () => {
 
   it("updateVolunteerById", async () => {
     const mockUpdateVolunteerDTO = {
-      userId: "1",
+      id: "1",
       status: Status.APPROVED,
     };
 
     await volunteerService.updateVolunteerById("1", mockUpdateVolunteerDTO);
 
     const res = await volunteerService.getVolunteerByID("1");
+
+    expect(res).toMatchObject(testUpdatedUserVolunteers[0]);
+  });
+
+  it("updateVolunteerByUserId", async () => {
+    const mockUpdateVolunteerDTO = {
+      id: "2",
+      status: Status.REJECTED,
+    };
+
+    await volunteerService.updateVolunteerByUserId("2", mockUpdateVolunteerDTO);
+
+    const res = await volunteerService.getVolunteerByID("2");
 
     expect(res).toMatchObject(testUpdatedUserVolunteers[0]);
   });
