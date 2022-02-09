@@ -111,10 +111,10 @@ export type SchedulingDTO = {
   volunteerNeeded: boolean;
   volunteerTime?: string;
   notes?: string;
-  volunteerId?: number;
+  volunteerId?: number | undefined;
 };
 
-export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerId">;
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id">;
 
 export type UpdateSchedulingDTO = Partial<
   Omit<SchedulingDTO, "id" | "donorId">
