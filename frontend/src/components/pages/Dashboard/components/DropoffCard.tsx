@@ -51,10 +51,7 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
     >
       <Stack
         direction={["column", "row"]}
-        pl="6"
-        pr="6"
-        pb="6"
-        pt="4"
+        p="6"
         display={["default", "flex"]}
         spacing={["0", "4"]}
         alignItems="center"
