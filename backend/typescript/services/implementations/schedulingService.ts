@@ -131,7 +131,7 @@ class SchedulingService implements ISchedulingService {
           recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
-          volunteerId: scheduling.volunteer_id,
+          volunteerId: scheduling.volunteer_id ?? undefined,
         };
       });
     } catch (error) {
@@ -405,6 +405,7 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_id: scheduling.recurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
+          volunteerId: undefined,
         });
       } else {
         // get new recurring donation id
