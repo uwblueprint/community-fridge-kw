@@ -23,10 +23,13 @@ const Logger = logger(__filename);
 
 function toSnakeCase(
   schedule: CreateSchedulingDTO,
-): Record<string, string | string[] | boolean | number | Date | undefined> {
+): Record<
+  string,
+  string | string[] | boolean | number | Date | undefined | null
+> {
   const scheduleSnakeCase: Record<
     string,
-    string | string[] | boolean | number | Date | undefined
+    string | string[] | boolean | number | Date | undefined | null
   > = {};
   Object.entries(schedule).forEach(([key, value]) => {
     scheduleSnakeCase[snakeCase(key)] = value;
@@ -131,7 +134,7 @@ class SchedulingService implements ISchedulingService {
           recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
-          volunteerId: scheduling.volunteer_id ?? undefined,
+          volunteerId: scheduling.volunteer_id,
         };
       });
     } catch (error) {
@@ -405,7 +408,7 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_id: scheduling.recurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
-          volunteerId: undefined,
+          volunteer_id: scheduling.volunteerId,
         });
       } else {
         // get new recurring donation id
@@ -441,11 +444,12 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_id: newRecurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
+          volunteer_id: scheduling.volunteerId,
         });
 
         const schedulesToBeCreated: Record<
           string,
-          string | number | boolean | string[] | Date | undefined
+          string | number | boolean | string[] | Date | undefined | null
         >[] = [];
 
         const originalStartTime: Date = new Date(scheduling.startTime);
@@ -477,7 +481,7 @@ class SchedulingService implements ISchedulingService {
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
@@ -512,7 +516,7 @@ class SchedulingService implements ISchedulingService {
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
@@ -547,7 +551,7 @@ class SchedulingService implements ISchedulingService {
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
@@ -580,6 +584,7 @@ class SchedulingService implements ISchedulingService {
       recurringDonationId: String(newScheduling.recurring_donation_id),
       recurringDonationEndDate: newScheduling.recurring_donation_end_date,
       notes: newScheduling.notes,
+      volunteerId: newScheduling.volunteer_id,
     };
 
     // send email

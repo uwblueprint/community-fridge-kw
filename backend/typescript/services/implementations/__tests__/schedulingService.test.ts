@@ -29,7 +29,7 @@ import DonorService from "../donorService";
 const schedules = testSchedules.map((schedule) => {
   const scheduleSnakeCase: Record<
     string,
-    string | string[] | boolean | number | Date | undefined
+    string | string[] | boolean | number | Date | undefined | null
   > = {};
   Object.entries(schedule).forEach(([key, value]) => {
     scheduleSnakeCase[snakeCase(key)] = value;
@@ -63,9 +63,11 @@ describe("pg schedulingService", () => {
   });
 
   test("getSchedules", async () => {
+    console.log("schedules", schedules);
     await Scheduling.bulkCreate(schedules);
 
     const res = await schedulingService.getSchedulings();
+    console.log("res", res);
 
     expect(res).toMatchObject(testSchedules);
   });
@@ -104,12 +106,11 @@ describe("pg schedulingService", () => {
     };
 
     const res = await schedulingService.createScheduling(schedulingToCreate);
-    console.log("res", res);
 
     const schedulingDbRes: SchedulingDTO | null = await schedulingService.getSchedulingById(
       "1",
     );
-    console.log("schedulingDbRes", schedulingDbRes);
+
     if (schedulingDbRes) {
       const keys = Object.keys(schedulingToCreate);
       keys.forEach((key) => {
