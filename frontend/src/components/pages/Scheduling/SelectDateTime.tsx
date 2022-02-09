@@ -22,6 +22,7 @@ import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
@@ -35,7 +36,6 @@ import {
   getTimeSlot,
   SchedulingStepProps,
 } from "./types";
-import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 
 const SelectDateTime = ({
   formValues,
