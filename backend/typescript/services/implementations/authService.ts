@@ -162,7 +162,7 @@ class AuthService implements IAuthService {
                     </style>
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>Welcome Email</title>
+        <title>Reset Password</title>
       </head>
       <body>
         <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
@@ -185,7 +185,7 @@ class AuthService implements IAuthService {
           How does this work?
         </h5>
         <p style = "color:#6C6C84">
-          This is a one - time URL that lets you confirm your identity.
+          This is a one - time reset link for your password.
         </p>
         <div style = "width: 100%">
           <div style= " float:left; color: #6C6C84">
@@ -194,7 +194,7 @@ class AuthService implements IAuthService {
           <a style=" color: #C31887" href=${resetLink}> Verify yourself here</a>
         </div>
         <div> 
-          If you didn't request this verification link, you can safely ignore this email.
+          If you didn't request this reset link, you can safely ignore this email.
         </div>
         <p style = "margin-top: 50px"> Sincerely, </p>
         <p> Community Fridge KW </p>   

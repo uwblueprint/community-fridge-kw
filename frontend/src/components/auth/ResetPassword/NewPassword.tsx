@@ -1,24 +1,14 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";

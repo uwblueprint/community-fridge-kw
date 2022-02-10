@@ -47,10 +47,7 @@ const ChangePassword = ({
     if (!email) {
       return false;
     }
-    console.log(email);
     await authAPIClient.resetPassword(email);
-
-    // console.log("hi");
     return next();
   };
 
@@ -97,6 +94,7 @@ const ChangePassword = ({
               variant="navigation"
               onClick={onSendRequestClick}
               width="100%"
+              size="lg"
             >
               Send password change request
             </Button>

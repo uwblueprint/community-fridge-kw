@@ -13,6 +13,7 @@ const FIREBASE_OAUTH_SIGN_IN_URL =
   "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp";
 const FIREBASE_CONFIRM_EMAIL_VERIFICATION_URL =
   "https://identitytoolkit.googleapis.com/v1/accounts:update";
+const FIREBASE_VERIFY_PASSWORD_RESET_CODE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:resetPassword";
 
 type PasswordSignInResponse = {
   idToken: string;
@@ -231,7 +232,7 @@ const FirebaseRestClient = {
     oobCode: string,
   ): Promise<ConfirmPasswordResetVerificationResponse> => {
     const response: Response = await fetch(
-      `${FIREBASE_CONFIRM_EMAIL_VERIFICATION_URL}?key=${process.env.FIREBASE_WEB_API_KEY}`,
+      `${FIREBASE_VERIFY_PASSWORD_RESET_CODE_URL}?key=${process.env.FIREBASE_WEB_API_KEY}`,
       {
         method: "POST",
         headers: {

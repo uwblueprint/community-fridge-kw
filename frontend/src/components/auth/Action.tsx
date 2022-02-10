@@ -10,6 +10,11 @@ enum EmailVerificationResponse {
   FAILURE = "FAILURE",
 }
 
+enum ActionModes {
+  EMAIL_VERIFICATION = "verifyEmail",
+  PASSWORD_RESET = "resetPassword",
+}
+
 const Action = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const mode = urlParams.get("mode");
@@ -30,15 +35,16 @@ const Action = () => {
   };
 
   const confirmPasswordReset = async () => {
-    const confirmPasswordResetResponse = await AuthAPIClient.confirmPasswordReset(
+    const confirmPasswordResetResponse = await AuthAPIClient.confirmPasswordResetCode(
       oobCode ?? "",
     );
+    
     if (confirmPasswordResetResponse) {
       setPasswordResetVerified(true);
     }
   };
 
-  if (mode === "verifyEmail") {
+  if (mode === ActionModes.EMAIL_VERIFICATION) {
     confirmEmailVerification();
     return emailVerified ? (
       <ConfirmVerificationPage />
@@ -48,7 +54,7 @@ const Action = () => {
       </Center>
     );
   }
-  if (mode === "passwordReset") {
+  if (mode === ActionModes.PASSWORD_RESET) {
     confirmPasswordReset();
     return (
       <Center>

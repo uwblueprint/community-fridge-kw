@@ -137,7 +137,6 @@ authRouter.post(
 /* Emails a password reset link to the user with the specified email */
 authRouter.post(
   "/resetPassword/:email",
-  isAuthorizedByEmail("email"),
   async (req, res) => {
     try {
       await authService.resetPassword(req.params.email);
@@ -159,7 +158,7 @@ authRouter.post("/confirmEmailVerification/:oobCode", async (req, res) => {
   }
 });
 
-authRouter.post("/confirmPasswordVerification/:oobCode", async (req, res) => {
+authRouter.post("/verifyPasswordResetCode/:oobCode", async (req, res) => {
   try {
     const response = await authService.verifyPasswordReset(req.params.oobCode);
     if (response) {
