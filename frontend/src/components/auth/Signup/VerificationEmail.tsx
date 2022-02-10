@@ -1,8 +1,9 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Container, IconButton, Text } from "@chakra-ui/react";
+import { Container, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import verificationEmailImage from "../../../assets/authentication_incomplete.svg";
 import * as Routes from "../../../constants/Routes";
 import { SignUpFormProps } from "./types";
 
@@ -14,7 +15,7 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
   const history = useHistory();
   const { email } = formValues;
   return (
-    <Container pl="42px" pr="42px" pt="31px">
+    <Container dashboardVariant>
       <IconButton
         aria-label="close page"
         float="right"
@@ -25,6 +26,12 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
         <CloseIcon color="black.100" />
       </IconButton>
       <Container centerContent>
+        <Image
+          width="70%"
+          height="70%"
+          src={verificationEmailImage}
+          alt="Verification email image"
+        />
         <Text mt="2rem" textAlign="center" textStyle="mobileHeader1">
           Please verify your email address!
         </Text>
@@ -36,6 +43,10 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
         >
           We sent a verification email to {email}. Please check your email to
           begin scheduling your first dropoff!
+        </Text>
+        <Text textAlign="center" textStyle="mobileBodyBold" mt="1rem">
+          Please verify your email within the hour or you will need to contact
+          admin for account creation.
         </Text>
       </Container>
     </Container>

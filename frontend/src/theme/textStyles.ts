@@ -128,5 +128,10 @@ const textStyles = {
     fontWeight: 500,
     lineHeight: "22px",
   },
+  desktopIconNumber: {
+    fontSize: "45px",
+    fontWeight: 500,
+    lineHeight: "54px",
+  },
 };
 export default textStyles;

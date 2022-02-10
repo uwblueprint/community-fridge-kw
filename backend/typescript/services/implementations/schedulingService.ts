@@ -3,6 +3,7 @@ import { snakeCase } from "lodash";
 import { Op } from "sequelize";
 import dayjs from "dayjs";
 import ordinal from "ordinal";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
@@ -37,6 +38,8 @@ class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
 
   donorService: IDonorService;
+
+  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -185,6 +188,7 @@ class SchedulingService implements ISchedulingService {
   async sendEmailVerificationAfterSchedulingADonation(
     donor: UserDonorDTO,
     schedule: SchedulingDTO,
+    isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -194,7 +198,7 @@ class SchedulingService implements ISchedulingService {
     }
 
     try {
-      const { firstName } = donor;
+      const { firstName, lastName } = donor;
 
       // Proposed drop off info
       const { startTime, endTime } = schedule;
@@ -232,85 +236,90 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
-      const emailBody = `
-      <html >
+      dayjs.extend(customParseFormat);
+
+      const volunteerTimeString =
+        dayjs(schedule.volunteerTime, "HH:mm").format("h:mm A") ?? "";
+
+      const emailBody = `<html>
       <head>
-        <link
-        href="https://fonts.googleapis.com/css2?family=Inter"
-        rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet" />
         <style>
-         body {
-             font-family: "Inter";
-         }
-     </style>
-     <meta charset="utf-8" />
-     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-     <title>Donation Details Email</title>
-     </head>
-     <body>
-        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
-         style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
-         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717;">Hey there ${firstName}!</h2>
-         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
-         <br />
-         <br />
-         Here is a summary of your upcoming donation:
-     </p>
-     
-     <div style="display: flex; flex-direction: row; align-content: flex-start; gap: 20px;">
-         <div>
-             <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-                 Proposed drop-off time
-             </h2>
-             <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                 ${startDayString}
-                 <br />
-                 ${startTimeString} - ${endTimeString}
-                 <br />
-                 ${frequencyString}
-             </p>
-         </div>
-         <div>
-            <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-             Donation information
-         </h2>
-         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-             ${schedule.size} - ${donationSizeDescriptions.get(
+          body {
+            font-family: "Inter";
+            margin: 1.5em;
+          }
+        </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Donation Details Email</title>
+      </head>
+      <body>
+        <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png style="min-width: 100px; max-width: 200px; width: 25%; margin-bottom: 20px;" alt=" CFKW Logo" /></p>
+        ${
+          isAdmin
+            ? `<p style="font-weight: 400; font-size: 18px; line-height: 24px; color: #171717;">${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>	
+           <br />`
+            : `<p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;"><strong>Hey there ${firstName}!</strong></p>
+           <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
+            <br />
+            <br />`
+        }
+          <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Here is a summary of your upcoming donation:</p>
+        </p>
+        <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
+          <tr>
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+              <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+                Proposed drop-off time
+              </h2>
+              <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                ${startDayString}
+                <br />
+                ${startTimeString} - ${endTimeString}
+                <br />
+                ${frequencyString}
+              </p>
+            </td>
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+              <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
+              <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                ${schedule.size} - ${donationSizeDescriptions.get(
         schedule.size ?? "",
       )}
-             <br/>
-             ${schedule.categories.join(", ")}
-         </p>
-     
-     
-     </div>
-     </div>
-     
-     
-     <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-         Volunteer information
-     </h2>
-     <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-         ${schedule.volunteerNeeded ? "Volunteer required" : ""}
-     <br/>
-     ${schedule.isPickup ? "Pickup required" : ""}
-     <br/>
-     ${schedule.isPickup ? schedule.pickupLocation : ""}
-     <br/>
-     ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
-     </p>
-     
-     
-     <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
-     <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>   
-     </body>
-     </html>
-      `;
+                <br />
+                ${schedule.categories.join(", ")}
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+              <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
+              <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                ${
+                  schedule.volunteerNeeded
+                    ? `<strong>Volunteer required at ${volunteerTimeString}</strong>`
+                    : "Volunteer not required"
+                }
+                <br />
+                ${schedule.isPickup ? "Pickup required" : "Pickup not required"}
+                <br />
+                ${schedule.isPickup ? `${schedule.pickupLocation}<br />` : ""}
+                ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
+              </p>
+            </td>
+          </tr>
+        </table>
+        <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
+        <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>
+      </body>
+      </html>`;
 
       this.emailService.sendEmail(
-        donor.email,
-        "Your Donation Information",
+        isAdmin ? SchedulingService.TEMP_ADMIN_EMAIL : donor.email,
+        isAdmin
+          ? `New Donation Booked - ${startDayString}, ${startTimeString} - ${endTimeString}`
+          : "Your Donation Information",
         emailBody,
       );
     } catch (error) {
@@ -347,8 +356,14 @@ class SchedulingService implements ISchedulingService {
         });
       } else {
         // get new recurring donation id
-        const newRecurringDonationId =
-          Number(await Scheduling.max("recurring_donation_id")) + 1;
+        let newRecurringDonationId: number | null = await Scheduling.max(
+          "recurring_donation_id",
+        );
+        newRecurringDonationId =
+          newRecurringDonationId === null ||
+          Number.isNaN(newRecurringDonationId)
+            ? 1
+            : newRecurringDonationId + 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
@@ -520,6 +535,12 @@ class SchedulingService implements ISchedulingService {
     this.sendEmailVerificationAfterSchedulingADonation(
       currDonor,
       retNewSchedule,
+      false,
+    );
+    this.sendEmailVerificationAfterSchedulingADonation(
+      currDonor,
+      retNewSchedule,
+      true,
     );
 
     return retNewSchedule;
@@ -533,7 +554,9 @@ class SchedulingService implements ISchedulingService {
     try {
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
-        updatesSnakeCase[snakeCase(key)] = value;
+        if (key !== "recurringDonationId") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
