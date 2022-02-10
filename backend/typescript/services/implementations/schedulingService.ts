@@ -359,9 +359,11 @@ class SchedulingService implements ISchedulingService {
         let newRecurringDonationId: number | null = await Scheduling.max(
           "recurring_donation_id",
         );
-
         newRecurringDonationId =
-          newRecurringDonationId !== null ? newRecurringDonationId + 1 : 1;
+          newRecurringDonationId === null ||
+          Number.isNaN(newRecurringDonationId)
+            ? 1
+            : newRecurringDonationId + 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
