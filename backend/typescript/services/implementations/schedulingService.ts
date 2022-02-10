@@ -360,9 +360,8 @@ class SchedulingService implements ISchedulingService {
           "recurring_donation_id",
         );
 
-        newRecurringDonationId = newRecurringDonationId
-          ? newRecurringDonationId + 1
-          : 1;
+        newRecurringDonationId =
+          newRecurringDonationId !== null ? newRecurringDonationId + 1 : 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
