@@ -356,8 +356,14 @@ class SchedulingService implements ISchedulingService {
         });
       } else {
         // get new recurring donation id
-        const newRecurringDonationId =
-          Number(await Scheduling.max("recurring_donation_id")) + 1;
+        let newRecurringDonationId: number | null = await Scheduling.max(
+          "recurring_donation_id",
+        );
+        newRecurringDonationId =
+          newRecurringDonationId === null ||
+          Number.isNaN(newRecurringDonationId)
+            ? 1
+            : newRecurringDonationId + 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
@@ -548,7 +554,9 @@ class SchedulingService implements ISchedulingService {
     try {
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
-        updatesSnakeCase[snakeCase(key)] = value;
+        if (key !== "recurringDonationId") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
