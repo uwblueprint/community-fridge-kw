@@ -40,6 +40,35 @@ const getScheduleByDonorId = async (
   }
 };
 
+const getScheduleByVolunteerId = async (
+  volunteerId: string,
+  weekLimit: string,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/?volunteerId=${volunteerId}&weekLimit=${weekLimit}`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
+const getAllSchedulesThatNeedVolunteers = async (): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/?volunteerNeeded=true`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
+
+
 const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
   try {
     const { data } = await baseAPIClient.post(

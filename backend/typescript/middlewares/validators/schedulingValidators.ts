@@ -197,12 +197,10 @@ export const updateSchedulingDtoValidator = async (
     return res.status(400).send(getApiValidationError("notes", "string"));
   }
   if (
-    req.body.volunteer_id &&
-    !validatePrimitive(req.body.volunteer_id, "integer")
+    req.body.volunteerId &&
+    !validatePrimitive(req.body.volunteerId, "string")
   ) {
-    return res
-      .status(400)
-      .send(getApiValidationError("volunteerId", "integer"));
+    return res.status(400).send(getApiValidationError("volunteerId", "string"));
   }
 
   return next();

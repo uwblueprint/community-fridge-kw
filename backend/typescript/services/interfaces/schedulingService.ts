@@ -27,10 +27,11 @@ interface ISchedulingService {
 
   /**
    * Get all scheduling information (possibly paginated in the future)
+   * @param volunteerNeeded returns schedules that need volunteers
    * @returns array of SchedulingDTOs
    * @throws Error if scheduling retrieval fails
    */
-  getSchedulings(): Promise<Array<SchedulingDTO>>;
+  getSchedulings(volunteerNeeded: boolean): Promise<Array<SchedulingDTO>>;
 
   /**
    * Generate an email with donation information to be sent after user schedules
@@ -83,6 +84,18 @@ interface ISchedulingService {
     recurring_donation_id: string,
     current_date: string,
   ): Promise<void>;
+
+  /**
+   * Get all scheduling information associated with volunteerId
+   * @param volunteerId id associated with volunteer
+   * @param weekLimit returns schedules for the specified upcoming weeks, 0 indicates no weeklimit
+   * @returns array of SchedulingDTOs
+   * @throws Error if schedule retrieval fails
+   */
+  getSchedulingsByVolunteerId(
+    volunteerId: string,
+    weekLimit: number,
+  ): Promise<Array<SchedulingDTO>>;
 }
 
 export default ISchedulingService;

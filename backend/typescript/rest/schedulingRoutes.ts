@@ -29,26 +29,34 @@ const schedulingService: ISchedulingService = new SchedulingService(
 
 /* Get all schedulings, optionally filter by:
   - id, through URI (ex. /scheduling/1)
-  - donorId, through query param (ex. /scheduling/?donorId=1)
+  - donorId or volunteerId, through query param (ex. /scheduling/?donorId=1)
 */
 schedulingRouter.get("/:id?", async (req, res) => {
   const { id } = req.params;
-  const { donorId } = req.query;
-  const { weekLimit } = req.query;
+  const { donorId, volunteerId, weekLimit, volunteerNeeded } = req.query;
   const contentType = req.headers["content-type"];
 
-  if (id && donorId) {
+  if (
+    (id && donorId) ||
+    (id && volunteerId) ||
+    (donorId && volunteerId) ||
+    (id && volunteerNeeded) ||
+    (volunteerId && volunteerNeeded) ||
+    (donorId && volunteerNeeded)
+  ) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot query by both id and donorId.",
+        error: "Cannot query by multiple parameters.",
       },
     ]);
     return;
   }
 
-  if (!id && !donorId) {
+  if (!id && !donorId && !volunteerId) {
     try {
-      const schedulings = await schedulingService.getSchedulings();
+      const schedulings = await schedulingService.getSchedulings(
+        !!volunteerNeeded,
+      );
       await sendResponseByMimeType<SchedulingDTO>(
         res,
         200,
@@ -86,6 +94,25 @@ schedulingRouter.get("/:id?", async (req, res) => {
     try {
       const schedulings = await schedulingService.getSchedulingsByDonorId(
         donorId,
+        Number(weekLimit),
+      );
+      res.status(200).json(schedulings);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+
+  if (volunteerId) {
+    if (typeof volunteerId !== "string") {
+      res
+        .status(400)
+        .json({ error: "volunteerId query parameter must be a string" });
+      return;
+    }
+
+    try {
+      const schedulings = await schedulingService.getSchedulingsByVolunteerId(
+        volunteerId,
         Number(weekLimit),
       );
       res.status(200).json(schedulings);
