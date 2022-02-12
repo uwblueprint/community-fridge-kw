@@ -111,7 +111,7 @@ export type SchedulingDTO = {
   volunteerNeeded: boolean;
   volunteerTime?: string;
   notes?: string;
-  volunteerId?: number | null;
+  volunteerId?: string;
 };
 
 export type CreateSchedulingDTO = Omit<SchedulingDTO, "id">;
