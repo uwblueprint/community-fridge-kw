@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { nextTick } from "process";
 import { getApiValidationError, validatePrimitive } from "./util";
-import { Role } from "../../types";
+import { Role, Status } from "../../types";
 /* eslint-disable-next-line import/prefer-default-export */
 export const loginRequestValidator = async (
   req: Request,
@@ -45,10 +45,11 @@ export const registerRequestValidator = async (
   }
 
   if (req.body.role === Role.VOLUNTEER) {
+    if (!Object.values(Status).includes(req.body.status)) {
+      return res.status(400).send(getApiValidationError("status", "Status"));
+    }
     return next();
-  }
-
-  if (req.body.role === "Donor") {
+  } else if (req.body.role === Role.DONOR) {
     if (
       req.body.facebookLink &&
       !validatePrimitive(req.body.facebookLink, "string")

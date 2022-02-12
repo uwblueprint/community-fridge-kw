@@ -11,7 +11,7 @@ const volunteerDtoValidator = async (
     return res.status(400).send(getApiValidationError("userId", "string"));
   }
   if (!Object.values(Status).includes(req.body.status)) {
-    return res.status(400).send(getApiValidationError("status", "string"));
+    return res.status(400).send(getApiValidationError("status", "Status"));
   }
 
   return next();
