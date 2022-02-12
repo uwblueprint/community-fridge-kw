@@ -37,23 +37,59 @@ class VolunteerService implements IVolunteerService {
     };
   }
 
-  async getVolunteerByID(volunteerId: string): Promise<UserVolunteerDTO> {
+  async getVolunteerById(volunteerId: string): Promise<UserVolunteerDTO> {
+    let volunteer: Volunteer | null;
+    let user: User | null;
+
+    try {
+      volunteer = await Volunteer.findByPk(Number(volunteerId), {
+        include: User,
+      });
+
+      if (!volunteer) {
+        throw new Error(`volunteerId ${volunteerId} not found.`);
+      }
+
+      user = volunteer.user;
+      if (!user) {
+        throw new Error(`userId ${volunteer.user_id} not found.`);
+      }
+    } catch (error: unknown) {
+      Logger.error(
+        `Failed to get volunteer. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return {
+      id: String(volunteer.id),
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      role: user.role,
+      phoneNumber: user.phone_number,
+      userId: String(volunteer.user_id),
+      status: volunteer.status,
+    };
+  }
+
+  async getVolunteerByUserId(userId: string): Promise<UserVolunteerDTO> {
     let volunteer: Volunteer | null;
     let user: User | null;
 
     try {
       volunteer = await Volunteer.findOne({
-        where: { user_id: Number(volunteerId) },
+        where: { user_id: Number(userId) },
         include: User,
       });
 
       if (!volunteer) {
-        throw new Error(`volunteerID ${volunteerId} not found.`);
+        throw new Error(`volunteer with userId ${userId} not found.`);
       }
 
       user = volunteer.user;
       if (!user) {
-        throw new Error(`userID ${volunteer.user_id} not found.`);
+        throw new Error(`volunteer with userID ${userId} not found.`);
       }
     } catch (error: unknown) {
       Logger.error(

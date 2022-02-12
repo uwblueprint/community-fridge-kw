@@ -138,8 +138,8 @@ describe("Testing VolunteerService Functions", () => {
     expect(res).toEqual(expectedVolunteer);
   });
 
-  it("getVolunteerByID", async () => {
-    const res = await volunteerService.getVolunteerByID("1");
+  it("getVolunteerById", async () => {
+    const res = await volunteerService.getVolunteerById("1");
 
     expect(res).toMatchObject(testUserVolunteers[0]);
   });
@@ -160,7 +160,7 @@ describe("Testing VolunteerService Functions", () => {
 
     await volunteerService.updateVolunteerById("1", mockUpdateVolunteerDTO);
 
-    const res = await volunteerService.getVolunteerByID("1");
+    const res = await volunteerService.getVolunteerById("1");
 
     expect(res).toMatchObject(testUpdatedUserVolunteers[0]);
   });
@@ -174,7 +174,7 @@ describe("Testing VolunteerService Functions", () => {
 
     await volunteerService.updateVolunteerByUserId("2", mockUpdateVolunteerDTO);
 
-    const res = await volunteerService.getVolunteerByID("2");
+    const res = await volunteerService.getVolunteerById("2");
 
     expect(res).toMatchObject(testUpdatedUserVolunteers[1]);
   });
