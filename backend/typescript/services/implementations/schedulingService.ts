@@ -52,7 +52,7 @@ function cancellationEmail(mainLine: string, name: string) {
  <title>Donation Details Email</title>
  </head>
  <body>
-    <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+    <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
      style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
      <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717;">Hey there ${name}!</h2>
      <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">${mainLine}
@@ -60,7 +60,7 @@ function cancellationEmail(mainLine: string, name: string) {
  
  <table cellspacing="0" cellpadding="0"> <tr> 
       <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
-        <a href="google.com" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
+        <a href="https://communityfridgekw.web.app/" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
         <span style="color: #FAFCFE;">
           View Dashboard
         </span>
@@ -742,6 +742,36 @@ class SchedulingService implements ISchedulingService {
     current_date: string,
   ): Promise<void> {
     try {
+      let schedule;
+      const scheduleRet = await Scheduling.findOne({
+        where: { recurring_donation_id: Number(recurring_donation_id) },
+      });
+      if (scheduleRet == null) {
+        throw new Error(
+          `scheduling with recurring_donation_id ${recurring_donation_id} does not exist.`,
+        );
+      } else {
+        schedule = {
+          id: String(scheduleRet!.id),
+          donorId: String(scheduleRet!.donor_id),
+          categories: scheduleRet!.categories,
+          size: scheduleRet!.size,
+          isPickup: scheduleRet!.is_pickup,
+          pickupLocation: scheduleRet!.pickup_location,
+          dayPart: scheduleRet!.day_part,
+          startTime: scheduleRet!.start_time,
+          endTime: scheduleRet!.end_time,
+          status: scheduleRet!.status,
+          volunteerNeeded: scheduleRet!.volunteer_needed,
+          volunteerTime: scheduleRet!.volunteer_time,
+          volunteerIds: [],
+          frequency: scheduleRet!.frequency,
+          recurringDonationId: String(scheduleRet!.recurring_donation_id),
+          recurringDonationEndDate: scheduleRet!.recurring_donation_end_date,
+          notes: scheduleRet!.notes,
+        };
+      }
+
       const deletionPastDate = new Date(current_date);
       const numsDestroyed = await Scheduling.destroy({
         where: {
@@ -756,6 +786,12 @@ class SchedulingService implements ISchedulingService {
           `scheduling with recurring_donation_id ${recurring_donation_id} was not deleted.`,
         );
       }
+      this.sendEmailAfterSchedulingCancellation(
+        await this.donorService.getDonorById(schedule.donorId),
+        schedule,
+        1,
+        0,
+      );
     } catch (error) {
       Logger.error(
         `Failed to delete scheduling. Reason = ${getErrorMessage(error)}`,
