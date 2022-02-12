@@ -7,9 +7,6 @@ const volunteerDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (!validatePrimitive(req.body.userId, "string")) {
-    return res.status(400).send(getApiValidationError("userId", "string"));
-  }
   if (!Object.values(Status).includes(req.body.status)) {
     return res.status(400).send(getApiValidationError("status", "string"));
   }
