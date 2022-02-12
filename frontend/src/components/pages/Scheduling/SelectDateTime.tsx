@@ -88,7 +88,7 @@ const SelectDateTime = ({
   const [icons, setIcons] = useState<number[]>([0, 0, 0, 0, 0]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [recurringEndDate, setRecurringEndDate] = useState<Date>(
-    new Date(recurringDonationEndDate)
+    new Date(recurringDonationEndDate),
   );
 
   const getFrequencyLabels = () => {

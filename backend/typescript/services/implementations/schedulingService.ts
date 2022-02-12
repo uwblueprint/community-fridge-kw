@@ -3,6 +3,7 @@ import { snakeCase } from "lodash";
 import { Op } from "sequelize";
 import dayjs from "dayjs";
 import ordinal from "ordinal";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
@@ -37,6 +38,8 @@ class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
 
   donorService: IDonorService;
+
+  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -208,8 +211,14 @@ class SchedulingService implements ISchedulingService {
         });
       } else {
         // get new recurring donation id
-        const newRecurringDonationId =
-          Number(await Scheduling.max("recurring_donation_id")) + 1;
+        let newRecurringDonationId: number | null = await Scheduling.max(
+          "recurring_donation_id",
+        );
+        newRecurringDonationId =
+          newRecurringDonationId === null ||
+          Number.isNaN(newRecurringDonationId)
+            ? 1
+            : newRecurringDonationId + 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
@@ -557,7 +566,9 @@ class SchedulingService implements ISchedulingService {
     try {
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
-        updatesSnakeCase[snakeCase(key)] = value;
+        if (key !== "recurringDonationId") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },

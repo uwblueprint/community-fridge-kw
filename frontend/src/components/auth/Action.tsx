@@ -28,7 +28,6 @@ const Action = () => {
     confirmEmailVerification();
   }, []);
 
-
   if (emailVerified === EmailVerificationResponse.SUCCESS) {
     return <ConfirmVerificationPage />;
   }

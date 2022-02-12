@@ -3,6 +3,7 @@ import {
   CreateSchedulingDTO,
   UpdateSchedulingDTO,
   UserDonorDTO,
+  DonorDTO,
 } from "../../types";
 
 interface ISchedulingService {
