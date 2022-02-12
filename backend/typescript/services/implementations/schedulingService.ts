@@ -743,12 +743,16 @@ class SchedulingService implements ISchedulingService {
   ): Promise<void> {
     try {
       let schedule;
+      const deletionPastDate = new Date(current_date);
       const scheduleRet = await Scheduling.findOne({
-        where: { recurring_donation_id: Number(recurring_donation_id) },
+        where: {
+          recurring_donation_id,
+          start_time: deletionPastDate,
+        },
       });
       if (scheduleRet == null) {
         throw new Error(
-          `scheduling with recurring_donation_id ${recurring_donation_id} does not exist.`,
+          `scheduling with recurring_donation_id ${recurring_donation_id} with start time ${deletionPastDate} does not exist.`,
         );
       } else {
         schedule = {
@@ -771,8 +775,6 @@ class SchedulingService implements ISchedulingService {
           notes: scheduleRet!.notes,
         };
       }
-
-      const deletionPastDate = new Date(current_date);
       const numsDestroyed = await Scheduling.destroy({
         where: {
           recurring_donation_id,
