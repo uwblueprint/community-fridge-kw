@@ -1,83 +1,17 @@
 import { snakeCase } from "lodash";
 import User from "../../../models/user.model";
 
-import { Role, Status, VolunteerDTO } from "../../../types";
+import { Status, VolunteerDTO } from "../../../types";
 
 import testSql from "../../../testUtils/testDb";
+import {
+  testUsers,
+  testVolunteers,
+  testUserVolunteers,
+  testUpdatedUserVolunteers,
+} from "../../../testUtils/volunteerService";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
-
-const testUsers = [
-  {
-    email: "test1@test.com",
-    firstName: "Peter",
-    lastName: "Pan",
-    authId: "123",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-  },
-  {
-    email: "test2@test.com",
-    firstName: "Wendy",
-    lastName: "Darling",
-    authId: "321",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-  },
-];
-
-const testVolunteers = [
-  {
-    userId: "1",
-    status: Status.PENDING,
-  },
-  {
-    userId: "2",
-    status: Status.PENDING,
-  },
-];
-
-const testUserVolunteers = [
-  {
-    email: "test1@test.com",
-    firstName: "Peter",
-    lastName: "Pan",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-    userId: "1",
-    status: Status.PENDING,
-  },
-  {
-    email: "test2@test.com",
-    firstName: "Wendy",
-    lastName: "Darling",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-    userId: "2",
-    status: Status.PENDING,
-  },
-];
-
-const testUpdatedUserVolunteers = [
-  {
-    email: "test1@test.com",
-    firstName: "Peter",
-    lastName: "Pan",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-    userId: "1",
-    status: Status.APPROVED,
-  },
-  {
-    email: "test2@test.com",
-    firstName: "Wendy",
-    lastName: "Darling",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-    userId: "2",
-    status: Status.REJECTED,
-  },
-];
 
 jest.mock("firebase-admin", () => {
   const auth = jest.fn().mockReturnValue({
@@ -154,7 +88,6 @@ describe("Testing VolunteerService Functions", () => {
 
   it("updateVolunteerById", async () => {
     const mockUpdateVolunteerDTO = {
-      userId: "1",
       status: Status.APPROVED,
     };
 
@@ -167,8 +100,6 @@ describe("Testing VolunteerService Functions", () => {
 
   it("updateVolunteerByUserId", async () => {
     const mockUpdateVolunteerDTO = {
-      id: "2",
-      userId: "2",
       status: Status.REJECTED,
     };
 
