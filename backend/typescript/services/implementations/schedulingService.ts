@@ -680,7 +680,7 @@ class SchedulingService implements ISchedulingService {
           cancellationEmail(donorMainLine, donor.firstName),
         );
         this.emailService.sendEmail(
-          "luol.linna@gmail.com",
+          "communityfridgekw@gmail.com",
           `${donor.businessName} Donation Cancellation Confirmation`,
           cancellationEmail(adminMainLine, "Community Fridge KW"),
         );
@@ -701,7 +701,7 @@ class SchedulingService implements ISchedulingService {
           cancellationEmail(donorMainLine, donor.firstName),
         );
         this.emailService.sendEmail(
-          "luol.linna@gmail.com",
+          "communityfridgekw@gmail.com",
           `${donor.businessName} Donation Cancellation`,
           cancellationEmail(adminMainLine, "Community Fridge KW"),
         );
