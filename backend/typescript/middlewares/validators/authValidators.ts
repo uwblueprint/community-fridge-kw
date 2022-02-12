@@ -49,7 +49,8 @@ export const registerRequestValidator = async (
       return res.status(400).send(getApiValidationError("status", "Status"));
     }
     return next();
-  } else if (req.body.role === Role.DONOR) {
+  }
+  if (req.body.role === Role.DONOR) {
     if (
       req.body.facebookLink &&
       !validatePrimitive(req.body.facebookLink, "string")
