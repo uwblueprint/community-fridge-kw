@@ -12,17 +12,17 @@ import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
 
 import testSql from "../../../testUtils/testDb";
-import nodemailerConfig from "../../../nodemailer.config";
-import IEmailService from "../../interfaces/emailService";
-import EmailService from "../emailService";
-import IDonorService from "../../interfaces/donorService";
-import DonorService from "../donorService";
 import {
   RECURRING_DONATION_ID,
   testUsersDb,
   testDonorsDb,
   testSchedules,
-} from "../testUtils/schedulingService.testUtils";
+} from "../../../testUtils/schedulingService";
+import nodemailerConfig from "../../../nodemailer.config";
+import IEmailService from "../../interfaces/emailService";
+import EmailService from "../emailService";
+import IDonorService from "../../interfaces/donorService";
+import DonorService from "../donorService";
 
 const schedules = testSchedules.map((schedule) => {
   const scheduleSnakeCase: Record<
