@@ -169,4 +169,18 @@ authRouter.post("/verifyPasswordResetCode/:oobCode", async (req, res) => {
   }
 });
 
+authRouter.post("/confirmPasswordReset/:newPassword?", async(req,res) => {
+
+  const oobCode = req.query.oobCode?.toString() ?? "";
+
+  try {
+    const response = await authService.confirmPasswordReset(req.params.newPassword, oobCode);
+    if (response) {
+      res.status(204).send();
+    } 
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+})
+
 export default authRouter;

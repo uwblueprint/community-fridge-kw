@@ -59,11 +59,27 @@ class AuthService implements IAuthService {
       const response = await FirebaseRestClient.confirmPasswordResetVerificationCode(
         oobCode,
       );
-      if (response.passwordResetVerified) {
+      if (!!response.email) {
         return true;
       }
       return false;
     } catch (error) {
+      return false;
+    }
+  }
+
+  async confirmPasswordReset(newPassword: string, oobCode: string): Promise<boolean> {
+    try {
+      const response = await FirebaseRestClient.confirmPasswordReset(
+        newPassword, oobCode
+      );
+    
+    if (!!response.email) {
+      return true;
+    }
+    return false;
+  }
+    catch(error){
       return false;
     }
   }
@@ -281,6 +297,9 @@ class AuthService implements IAuthService {
       throw error;
     }
   }
+
+
+
 
   async isAuthorizedByRole(
     accessToken: string,

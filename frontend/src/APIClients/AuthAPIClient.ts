@@ -121,7 +121,7 @@ const confirmEmailVerification = async (oobCode: string): Promise<boolean> => {
   }
 };
 
-const confirmPasswordResetCode = async (oobCode: string): Promise<boolean> => {
+const verifyPasswordResetCode = async (oobCode: string): Promise<boolean> => {
   try {
     await baseAPIClient.post(
       `/auth/verifyPasswordResetCode/${oobCode}`,
@@ -134,9 +134,26 @@ const confirmPasswordResetCode = async (oobCode: string): Promise<boolean> => {
   }
 };
 
+const confirmPasswordReset = async (
+  oobCode: string,
+  newPassword: string,
+): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/confirmPasswordReset/${newPassword}?oobCode=${oobCode}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   confirmEmailVerification,
-  confirmPasswordResetCode,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
   login,
   logout,
   loginWithGoogle,

@@ -1,5 +1,6 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import React from "react";
+import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
 import AuthAPIClient from "../../APIClients/AuthAPIClient";
 import NewPassword from "./ResetPassword/NewPassword";
@@ -35,10 +36,9 @@ const Action = () => {
   };
 
   const confirmPasswordReset = async () => {
-    const confirmPasswordResetResponse = await AuthAPIClient.confirmPasswordResetCode(
+    const confirmPasswordResetResponse = await AuthAPIClient.verifyPasswordResetCode(
       oobCode ?? "",
     );
-    
     if (confirmPasswordResetResponse) {
       setPasswordResetVerified(true);
     }
@@ -56,11 +56,14 @@ const Action = () => {
   }
   if (mode === ActionModes.PASSWORD_RESET) {
     confirmPasswordReset();
+
     return (
       <Center>
-        {passwordResetVerified
-          ? "Password Reset Verified"
-          : "Password Reset Verification Failed"}
+        {passwordResetVerified ? (
+          <NewPassword oobCode={oobCode ?? ""} />
+        ) : (
+          "Password Reset Verification Failed"
+        )}
       </Center>
     );
   }

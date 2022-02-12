@@ -19,7 +19,6 @@ const PasswordChanged = () => {
         <CloseIcon color="black.100" />
       </IconButton>
       <Container centerContent>
-        {/* todo: replace image */}
         <Image
           objectFit="none"
           src="header-logo.png"
