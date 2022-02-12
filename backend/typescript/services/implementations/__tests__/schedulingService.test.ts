@@ -63,24 +63,31 @@ describe("pg schedulingService", () => {
   });
 
   test("getSchedules", async () => {
-    console.log("schedules", schedules);
     await Scheduling.bulkCreate(schedules);
 
-    const res = await schedulingService.getSchedulings(false);
-    console.log("res", res);
+    const res = await schedulingService.getSchedulings();
 
     expect(res).toMatchObject(testSchedules);
   });
 
-  test("getSchedulesVolunteerNeeded", async () => {
-    console.log("schedules", schedules);
+  test("getSchedulesVolunteerNeededTrue", async () => {
     await Scheduling.bulkCreate(schedules);
 
     const res = await schedulingService.getSchedulings(true);
-    console.log("res", res);
 
     const volunteersNeededTestSchedules = testSchedules.filter(
       (schedule) => schedule.volunteerNeeded,
+    );
+    expect(res).toMatchObject(volunteersNeededTestSchedules);
+  });
+
+  test("getSchedulesVolunteerNeededFalse", async () => {
+    await Scheduling.bulkCreate(schedules);
+
+    const res = await schedulingService.getSchedulings(false);
+
+    const volunteersNeededTestSchedules = testSchedules.filter(
+      (schedule) => !schedule.volunteerNeeded,
     );
     expect(res).toMatchObject(volunteersNeededTestSchedules);
   });
@@ -182,9 +189,7 @@ describe("pg schedulingService", () => {
     const resDaily = await schedulingService.createScheduling(
       dailySchedulingToCreate,
     );
-    const dailySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings(
-      false,
-    );
+    const dailySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings();
     // filter out one-time donation schedule
     const dailySchedules: SchedulingDTO[] = dailySchedulingDbRes.filter(
       (item) => {
@@ -228,9 +233,7 @@ describe("pg schedulingService", () => {
     const resWeekly = await schedulingService.createScheduling(
       weeklySchedulingToCreate,
     );
-    const weeklySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings(
-      false,
-    );
+    const weeklySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings();
     // filter for only schedules associated with this weekly donation
     const weeklySchedules: SchedulingDTO[] = weeklySchedulingDbRes.filter(
       (item) => {
@@ -274,9 +277,7 @@ describe("pg schedulingService", () => {
     const resMonthly = await schedulingService.createScheduling(
       monthlySchedulingToCreate,
     );
-    const resMonthlySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings(
-      false,
-    );
+    const resMonthlySchedulingDbRes: SchedulingDTO[] = await schedulingService.getSchedulings();
     // filter for only scheduling objects associated with this monthly donation
     const monthlySchedules: SchedulingDTO[] = resMonthlySchedulingDbRes.filter(
       (item) => {

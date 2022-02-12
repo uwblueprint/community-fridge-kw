@@ -27,11 +27,11 @@ interface ISchedulingService {
 
   /**
    * Get all scheduling information (possibly paginated in the future)
-   * @param volunteerNeeded returns schedules that need volunteers
+   * @param volunteerNeeded returns schedules that require/don't volunteers
    * @returns array of SchedulingDTOs
    * @throws Error if scheduling retrieval fails
    */
-  getSchedulings(volunteerNeeded: boolean): Promise<Array<SchedulingDTO>>;
+  getSchedulings(volunteerNeeded?: boolean): Promise<Array<SchedulingDTO>>;
 
   /**
    * Generate an email with donation information to be sent after user schedules

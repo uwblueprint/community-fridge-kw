@@ -148,14 +148,14 @@ class SchedulingService implements ISchedulingService {
   }
 
   async getSchedulings(
-    volunteerNeeded: boolean,
+    volunteerNeeded?: boolean,
   ): Promise<Array<SchedulingDTO>> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
       const schedulings: Array<Scheduling> = await Scheduling.findAll({
-        where: volunteerNeeded
+        where: volunteerNeeded != undefined
           ? {
-              volunteer_needed: true,
+              volunteer_needed: volunteerNeeded,
             }
           : {},
         order: [["start_time", "ASC"]],
