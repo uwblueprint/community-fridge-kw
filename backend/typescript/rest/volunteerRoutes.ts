@@ -57,47 +57,47 @@ volunteerRouter.get("/:volunteerID", async (req, res) => {
   }
 });
 
-// volunteerRouter.put("/:volunteerID", async (req, res) => {
-//   const { id } = req.query;
-// });
-
 volunteerRouter.put(
-  "/:volunteerID",
+  "/:id?",
   volunteerDtoValidator,
   async (req, res) => {
-    try {
-      await volunteerService.updateVolunteerById(req.params.id, {
-        status: req.body.status,
-      });
+    const { id } = req.params;
+    const { userId } = req.query;
+    const contentType = req.headers["content-type"];
 
-      res.status(201).send();
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
+    if (id && userId) {
+      await sendResponseByMimeType(res, 400, contentType, [
+        {
+          error: "Cannot update by both id and userId",
+        },
+      ]);
+      return;
+    }
+    if (id) {
+      try {
+        await volunteerService.updateVolunteerById(id, {
+          status: req.body.status,
+        });
+  
+        res.status(201).send();
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
+    } else if (userId) {
+      try {
+        await volunteerService.updateVolunteerByUserId(userId as string, {
+          status: req.body.status,
+        });
+  
+        res.status(201).send();
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
+    } else {
+      res.status(400).json({ error: "Must supply id as request parameter." });
     }
   },
 );
-
-volunteerRouter.put("/:id", volunteerDtoValidator, async (req, res) => {
-  const { userId } = req.query;
-
-  if (userId) {
-    if (typeof userId !== "string") {
-      res
-        .status(400)
-        .json({ error: "userId query parameter must be a string" });
-      return;
-    }
-    try {
-      await volunteerService.updateVolunteerByUserId(userId, {
-        status: req.body.status,
-      });
-
-      res.status(201).send();
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-  }
-});
 
 volunteerRouter.delete("/:volunteerID", async (req, res) => {
   const { volunteerID } = req.params;
