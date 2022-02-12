@@ -122,7 +122,7 @@ volunteerRouter.delete("/:volunteerId", async (req, res) => {
   const { volunteerId } = req.params;
 
   try {
-    await volunteerService.deleteVolunteerByID(volunteerId);
+    await volunteerService.deleteVolunteerById(volunteerId);
     res.status(204).send();
   } catch (error: unknown) {
     res.status(500).send(getErrorMessage(error));

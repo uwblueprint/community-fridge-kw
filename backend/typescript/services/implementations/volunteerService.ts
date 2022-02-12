@@ -89,7 +89,7 @@ class VolunteerService implements IVolunteerService {
 
       user = volunteer.user;
       if (!user) {
-        throw new Error(`volunteer with userID ${userId} not found.`);
+        throw new Error(`volunteer with userId ${userId} not found.`);
       }
     } catch (error: unknown) {
       Logger.error(
@@ -202,7 +202,7 @@ class VolunteerService implements IVolunteerService {
     }
   }
 
-  async deleteVolunteerByID(id: string): Promise<void> {
+  async deleteVolunteerById(id: string): Promise<void> {
     try {
       const deletedRole: Volunteer | null = await Volunteer.findByPk(
         Number(id),

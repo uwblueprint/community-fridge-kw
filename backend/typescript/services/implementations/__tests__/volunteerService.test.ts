@@ -110,8 +110,8 @@ describe("Testing VolunteerService Functions", () => {
     expect(res).toMatchObject(testUpdatedUserVolunteers[1]);
   });
 
-  it("deleteVolunteerByID", async () => {
-    await volunteerService.deleteVolunteerByID("1");
+  it("deleteVolunteerById", async () => {
+    await volunteerService.deleteVolunteerById("1");
 
     const res = await volunteerService.getVolunteers();
 

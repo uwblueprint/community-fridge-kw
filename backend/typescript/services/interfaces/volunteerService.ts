@@ -45,7 +45,7 @@ interface IVolunteerService {
   updateVolunteerById(id: string, volunteer: UpdateVolunteerDTO): Promise<void>;
 
   /**
-   * Update a volunteer by userID.
+   * Update a volunteer by userId.
    * @param userId id associated with user
    * @param volunteer the volunteer to be updated
    * @throws Error if volunteer update fails
@@ -60,7 +60,7 @@ interface IVolunteerService {
    * @param volunteerId volunteer's volunteerId
    * @throws Error if volunteer deletion fails
    */
-  deleteVolunteerByID(id: string): Promise<void>;
+  deleteVolunteerById(id: string): Promise<void>;
 }
 
 export default IVolunteerService;
