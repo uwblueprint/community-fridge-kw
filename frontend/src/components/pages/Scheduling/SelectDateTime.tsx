@@ -323,11 +323,15 @@ const SelectDateTime = ({
     }
   };
 
-  const onSaveClick = async () => {
+  const onSaveClick = async (isOneTimeEvent = true) => {
     if (!validateForm()) {
       return;
     }
-    await SchedulingAPIClient.updateSchedule(id, formValues);
+    if (isOneTimeEvent) {
+      await SchedulingAPIClient.updateSchedule(id, formValues);
+    } else {
+      console.log("call update API client for recurring donations here!");
+    }
     if (go !== undefined) {
       go("confirm donation details");
     }
