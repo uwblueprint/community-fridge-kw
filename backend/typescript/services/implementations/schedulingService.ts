@@ -153,11 +153,12 @@ class SchedulingService implements ISchedulingService {
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
       const schedulings: Array<Scheduling> = await Scheduling.findAll({
-        where: volunteerNeeded != undefined
-          ? {
-              volunteer_needed: volunteerNeeded,
-            }
-          : {},
+        where:
+          volunteerNeeded !== undefined
+            ? {
+                volunteer_needed: volunteerNeeded,
+              }
+            : {},
         order: [["start_time", "ASC"]],
       });
       schedulingDtos = schedulings.map((scheduling) => {
