@@ -55,9 +55,11 @@ const getScheduleByVolunteerId = async (
   }
 };
 
-const getAllSchedulesThatNeedVolunteers = async (): Promise<Schedule[]> => {
+const getAllSchedulesThatNeedVolunteers = async (
+  volunteerNeeded: boolean,
+): Promise<Schedule[]> => {
   try {
-    const url = `/scheduling/?volunteerNeeded=true`;
+    const url = `/scheduling/?volunteerNeeded=${volunteerNeeded}`;
     const { data } = await baseAPIClient.get(url, {
       headers: { Authorization: BEARER_TOKEN },
     });
@@ -66,8 +68,6 @@ const getAllSchedulesThatNeedVolunteers = async (): Promise<Schedule[]> => {
     return error as Schedule[];
   }
 };
-
-
 
 const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
   try {

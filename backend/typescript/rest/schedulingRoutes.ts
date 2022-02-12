@@ -52,13 +52,14 @@ schedulingRouter.get("/:id?", async (req, res) => {
     return;
   }
 
-  const getScheduleType = volunteerNeeded? (volunteerNeeded=="true"? true: false) : null;
-  console.log("boolean type", getScheduleType);
-  console.log("volunteer needed string", volunteerNeeded)
+  const getScheduleType =
+    volunteerNeeded !== undefined ? volunteerNeeded === "true" : undefined;
 
   if (!id && !donorId && !volunteerId) {
     try {
-      const schedulings = await schedulingService.getSchedulings(getScheduleType ? getScheduleType: undefined);
+      const schedulings = await schedulingService.getSchedulings(
+        getScheduleType,
+      );
       await sendResponseByMimeType<SchedulingDTO>(
         res,
         200,
