@@ -197,6 +197,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("date and time")}
         >
           Edit
@@ -256,6 +257,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("donation information")}
         >
           Edit
@@ -287,6 +289,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
+          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("volunteer information")}
         >
           Edit

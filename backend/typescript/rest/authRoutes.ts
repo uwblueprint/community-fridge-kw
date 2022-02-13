@@ -39,7 +39,7 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "strict",
         secure:
           process.env.NODE_ENV === "production" ||
           process.env.NODE_ENV === "staging",
@@ -88,7 +88,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "strict",
         secure:
           process.env.NODE_ENV === "production" ||
           process.env.NODE_ENV === "staging",
@@ -108,7 +108,7 @@ authRouter.post("/refresh", async (req, res) => {
     res
       .cookie("refreshToken", token.refreshToken, {
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "strict",
         secure:
           process.env.NODE_ENV === "production" ||
           process.env.NODE_ENV === "staging",
@@ -135,22 +135,45 @@ authRouter.post(
 );
 
 /* Emails a password reset link to the user with the specified email */
-authRouter.post(
-  "/resetPassword/:email",
-  isAuthorizedByEmail("email"),
-  async (req, res) => {
-    try {
-      await authService.resetPassword(req.params.email);
-      res.status(204).send();
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-  },
-);
+authRouter.post("/resetPassword/:email", async (req, res) => {
+  try {
+    await authService.resetPassword(req.params.email);
+    res.status(204).send();
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
 
 authRouter.post("/confirmEmailVerification/:oobCode", async (req, res) => {
   try {
     const response = await authService.verifyEmail(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/verifyPasswordResetCode/:oobCode", async (req, res) => {
+  try {
+    const response = await authService.verifyPasswordReset(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
+  const oobCode = req.query.oobCode?.toString() ?? "";
+
+  try {
+    const response = await authService.confirmPasswordReset(
+      req.params.newPassword,
+      oobCode,
+    );
     if (response) {
       res.status(204).send();
     }

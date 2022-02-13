@@ -135,7 +135,6 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       invalid={!!error}
     >
       <Radio
-        {...getRadioProps({ value: v })}
         isChecked={v === value}
         mr="16px"
         colorScheme="raddish"
@@ -147,6 +146,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
   ));
 
   const group = getRootProps();
+  const { isDesktop } = useViewport();
 
   return (
     <FormControl

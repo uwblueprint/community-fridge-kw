@@ -52,9 +52,10 @@ const CalendarInfoCard = ({
   return (
     <Box
       mb="24px"
+      mr={{ base: "0px", md: "24px" }}
       borderLeft={`7px solid ${getFrequencyColor(frequency)}`}
       boxShadow="2px 2px 12px rgba(0, 0, 0, 0.08)"
-      width="100%"
+      width={{ base: "default", md: "100%" }}
       onClick={() =>
         isAdminView && history.push(`${Routes.DASHBOARD_PAGE}/${id}`)
       }
@@ -62,7 +63,10 @@ const CalendarInfoCard = ({
     >
       <Stack
         direction={["column", "row"]}
-        p="6"
+        pl="6"
+        pr="6"
+        pb="6"
+        pt="4"
         display={["default", "flex"]}
         spacing={["0", "4"]}
         alignItems="center"

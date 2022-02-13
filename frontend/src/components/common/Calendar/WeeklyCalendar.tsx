@@ -108,7 +108,7 @@ export function WeeklyBody<EventItem>({
               justifyItems="flex-start"
               alignContent="start"
               pb="3rem"
-              width="100%"
+              maxWidth="fit-content"
             >
               <DayButton
                 day={{
