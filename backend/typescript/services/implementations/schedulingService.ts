@@ -626,31 +626,26 @@ class SchedulingService implements ISchedulingService {
       );
       throw error;
     }
-    // Update recurring donation end date only occurs if it is not the only object left with that recurrring id
-    const remainingDonations = await Scheduling.count({
-      where: { recurring_donation_id },
-    });
-    if (remainingDonations >= 1) {
-      try {
-        const recurringDonationEndDate = await Scheduling.max("start_time", {
+    // Update recurring donation end date
+    try {
+      const recurringDonationEndDate = await Scheduling.max("start_time", {
+        where: { recurring_donation_id },
+      });
+      await Scheduling.update(
+        {
+          recurring_donation_end_date: recurringDonationEndDate,
+        },
+        {
           where: { recurring_donation_id },
-        });
-        await Scheduling.update(
-          {
-            recurring_donation_end_date: recurringDonationEndDate,
-          },
-          {
-            where: { recurring_donation_id },
-          },
-        );
-      } catch (error) {
-        Logger.error(
-          `Failed to update recurring donation end date. Reason = ${getErrorMessage(
-            error,
-          )}`,
-        );
-        throw error;
-      }
+        },
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to update recurring donation end date. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
     }
   }
 }
