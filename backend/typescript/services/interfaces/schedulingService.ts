@@ -60,8 +60,8 @@ interface ISchedulingService {
   sendEmailAfterSchedulingCancellation(
     donor: UserDonorDTO,
     schedule: SchedulingDTO,
-    isRecurringDonation: number,
-    isAdminDeleted: number,
+    isRecurringDonation: boolean,
+    isAdminDeleted: boolean,
   ): Promise<void>;
 
   /**

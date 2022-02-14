@@ -640,8 +640,8 @@ class SchedulingService implements ISchedulingService {
   async sendEmailAfterSchedulingCancellation(
     donor: UserDonorDTO,
     schedule: SchedulingDTO,
-    isRecurringDonation: number,
-    isAdminDeleted: number,
+    isRecurringDonation: boolean,
+    isAdminDeleted: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -726,8 +726,8 @@ class SchedulingService implements ISchedulingService {
       this.sendEmailAfterSchedulingCancellation(
         await this.donorService.getDonorById(schedule.donorId),
         schedule,
-        0,
-        0,
+        false,
+        false,
       );
     } catch (error) {
       Logger.error(
@@ -791,8 +791,8 @@ class SchedulingService implements ISchedulingService {
       this.sendEmailAfterSchedulingCancellation(
         await this.donorService.getDonorById(schedule.donorId),
         schedule,
-        1,
-        0,
+        true,
+        false,
       );
     } catch (error) {
       Logger.error(
