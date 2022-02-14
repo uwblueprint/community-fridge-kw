@@ -169,7 +169,7 @@ authRouter.post("/verifyPasswordResetCode/:oobCode", async (req, res) => {
 
 authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
   const { oobCode } = req.query;
- 
+
   try {
     const response = await authService.confirmPasswordReset(
       req.params.newPassword,
