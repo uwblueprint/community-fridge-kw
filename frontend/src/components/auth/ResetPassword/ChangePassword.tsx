@@ -41,8 +41,6 @@ const ChangePassword = ({
   const onSendRequestClick = async () => {
     if (!email) {
       setInteraction({ ...interaction, email: true });
-    }
-    if (!email) {
       return false;
     }
     await authAPIClient.resetPassword(email);
