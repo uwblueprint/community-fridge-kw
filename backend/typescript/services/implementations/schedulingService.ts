@@ -599,7 +599,7 @@ class SchedulingService implements ISchedulingService {
     schedulingId: string,
   ): Promise<void> {
     await this.updateSchedulingById(schedulingId, scheduling);
-    const startTimeDate = new Date(scheduling.startTime!);
+    const startTimeDate = new Date();
     try {
       const schedulings: Array<Scheduling> = await Scheduling.findAll({
         where: {
