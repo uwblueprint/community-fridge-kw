@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { isAuthorizedByEmail, isAuthorizedByUserId } from "../middlewares/auth";
+import { isAuthorizedByUserId } from "../middlewares/auth";
 import {
   loginRequestValidator,
   registerRequestValidator,
@@ -18,6 +18,7 @@ import IUserService from "../services/interfaces/userService";
 import IVolunteerService from "../services/interfaces/volunteerService";
 import { Role } from "../types";
 import getErrorMessage from "../utilities/errorMessageUtil";
+import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const authRouter: Router = Router();
 const userService: IUserService = new UserService();
@@ -39,7 +40,7 @@ authRouter.post("/login", loginRequestValidator, async (req, res) => {
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
         secure:
           process.env.NODE_ENV === "production" ||
           process.env.NODE_ENV === "staging",
@@ -88,7 +89,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
         secure:
           process.env.NODE_ENV === "production" ||
           process.env.NODE_ENV === "staging",
@@ -108,7 +109,7 @@ authRouter.post("/refresh", async (req, res) => {
     res
       .cookie("refreshToken", token.refreshToken, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
         secure:
           process.env.NODE_ENV === "production" ||
           process.env.NODE_ENV === "staging",
@@ -167,12 +168,12 @@ authRouter.post("/verifyPasswordResetCode/:oobCode", async (req, res) => {
 });
 
 authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
-  const oobCode = req.query.oobCode?.toString() ?? "";
-
+  const { oobCode } = req.query;
+ 
   try {
     const response = await authService.confirmPasswordReset(
       req.params.newPassword,
-      oobCode,
+      oobCode as string,
     );
     if (response) {
       res.status(204).send();

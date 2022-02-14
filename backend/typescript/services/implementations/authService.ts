@@ -68,6 +68,7 @@ class AuthService implements IAuthService {
     }
   }
 
+  /* eslint-disable class-methods-use-this */
   async confirmPasswordReset(
     newPassword: string,
     oobCode: string,

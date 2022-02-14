@@ -1,17 +1,12 @@
 import { Router } from "express";
 
-import { isAuthorizedByRole } from "../middlewares/auth";
 import {
   createSchedulingDtoValidator,
   updateSchedulingDtoValidator,
 } from "../middlewares/validators/schedulingValidators";
 import nodemailerConfig from "../nodemailer.config";
-import AuthService from "../services/implementations/authService";
 import EmailService from "../services/implementations/emailService";
-import UserService from "../services/implementations/userService";
 import SchedulingService from "../services/implementations/schedulingService";
-import IUserService from "../services/interfaces/userService";
-import IAuthService from "../services/interfaces/authService";
 import IEmailService from "../services/interfaces/emailService";
 import ISchedulingService from "../services/interfaces/schedulingService";
 import { SchedulingDTO } from "../types";
