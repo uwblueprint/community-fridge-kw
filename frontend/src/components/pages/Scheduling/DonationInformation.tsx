@@ -100,7 +100,10 @@ const DonationInformation: any = ({
     if (isOneTimeEvent) {
       await SchedulingAPIClient.updateSchedule(id, formValues);
     } else {
-      console.log("call update API client for recurring donations here!");
+      await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
+        id,
+        formValues,
+      );
     }
     if (go !== undefined) {
       go("confirm donation details");

@@ -110,16 +110,36 @@ schedulingRouter.post("/", createSchedulingDtoValidator, async (req, res) => {
   }
 });
 
-/* Update the scheduling instance by id */
+/* Update the scheduling instance by id or updates by recurring donation id  */
 schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
-  try {
-    const updatedScheduling = await schedulingService.updateSchedulingById(
-      req.params.id,
-      req.body,
-    );
-    res.status(200).json(updatedScheduling);
-  } catch (error: unknown) {
-    res.status(500).json({ error: getErrorMessage(error) });
+  const { id } = req.params;
+  const { recurringDonationId } = req.query;
+
+  if (recurringDonationId && id) {
+    try {
+      await schedulingService.updateSchedulingByRecurringDonationId(
+        recurringDonationId as string,
+        req.body,
+        id,
+      );
+      res.status(204).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  } else if (id) {
+    try {
+      const updatedScheduling = await schedulingService.updateSchedulingById(
+        id,
+        req.body,
+      );
+      res.status(200).json(updatedScheduling);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  } else {
+    res.status(400).json({
+      error: "Must supply id or recurringDonationId as request parameter.",
+    });
   }
 });
 
@@ -135,7 +155,7 @@ schedulingRouter.delete("/:id?", async (req, res) => {
   if (id && recurringDonationId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot delete by both id and recurringSchedulingId",
+        error: "Cannot delete by both id and recurringDonationId",
       },
     ]);
     return;

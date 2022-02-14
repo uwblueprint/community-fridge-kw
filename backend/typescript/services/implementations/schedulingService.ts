@@ -593,6 +593,55 @@ class SchedulingService implements ISchedulingService {
     }
   }
 
+  async updateSchedulingByRecurringDonationId(
+    recurringDonationId: string,
+    scheduling: UpdateSchedulingDTO,
+    schedulingId: string,
+  ): Promise<void> {
+    await this.updateSchedulingById(schedulingId, scheduling);
+    const startTimeDate = new Date(scheduling.startTime!);
+    try {
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
+        where: {
+          recurring_donation_id: Number(recurringDonationId),
+          start_time: {
+            [Op.gte]: startTimeDate,
+          },
+        },
+        order: [["start_time", "ASC"]],
+      });
+      schedulings.forEach(async (schedule) => {
+        const newStartTime: Date = new Date(schedule.start_time);
+        const editedStartTime: Date = new Date(scheduling.startTime!);
+        newStartTime.setHours(editedStartTime.getHours());
+        const newEndTime: Date = new Date(schedule.end_time);
+        const editedEndDate: Date = new Date(scheduling.endTime!);
+        newEndTime.setHours(editedEndDate.getHours());
+        const updatedScheduling = scheduling;
+        updatedScheduling.startTime = newStartTime;
+        updatedScheduling.endTime = newEndTime;
+        const updatesSnakeCase: Record<string, unknown> = {};
+        Object.entries(updatedScheduling).forEach(([key, value]) => {
+          if (key !== "id") {
+            updatesSnakeCase[snakeCase(key)] = value;
+          }
+        });
+        const updateResult = await Scheduling.update(updatesSnakeCase, {
+          where: { id: schedule.id },
+          returning: true,
+        });
+        if (updateResult[0] < 1) {
+          throw new Error(`schedulingId ${schedulingId} not found.`);
+        }
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to update scheduling. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
   async deleteSchedulingById(id: string): Promise<void> {
     try {
       const numDestroyed = await Scheduling.destroy({

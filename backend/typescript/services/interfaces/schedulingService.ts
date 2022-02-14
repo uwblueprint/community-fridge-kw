@@ -69,6 +69,17 @@ interface ISchedulingService {
   ): Promise<SchedulingDTO>;
 
   /**
+   * update schedulings by recurring_donation_id
+   * @param reucrring_donation_id recurring donation id
+   * @throws Error if recurring donation deletion fails
+   */
+  updateSchedulingByRecurringDonationId(
+    recurring_donation_id: string,
+    scheduling: UpdateSchedulingDTO,
+    schedulingId: string,
+  ): Promise<void>;
+
+  /**
    * Delete a scheduling by id
    * @param id scheduling id
    * @throws Error if scheduling deletion fails
