@@ -634,6 +634,27 @@ class SchedulingService implements ISchedulingService {
       );
       throw error;
     }
+    // Update recurring donation end date
+    try {
+      const recurringDonationEndDate = await Scheduling.max("start_time", {
+        where: { recurring_donation_id },
+      });
+      await Scheduling.update(
+        {
+          recurring_donation_end_date: recurringDonationEndDate,
+        },
+        {
+          where: { recurring_donation_id },
+        },
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to update recurring donation end date. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
   }
 }
 
