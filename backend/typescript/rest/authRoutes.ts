@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { isAuthorizedByEmail, isAuthorizedByUserId } from "../middlewares/auth";
+import { isAuthorizedByUserId } from "../middlewares/auth";
 import {
   loginRequestValidator,
   registerRequestValidator,
@@ -18,6 +18,7 @@ import IUserService from "../services/interfaces/userService";
 import IVolunteerService from "../services/interfaces/volunteerService";
 import { Role } from "../types";
 import getErrorMessage from "../utilities/errorMessageUtil";
+import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const authRouter: Router = Router();
 const userService: IUserService = new UserService();
@@ -135,22 +136,45 @@ authRouter.post(
 );
 
 /* Emails a password reset link to the user with the specified email */
-authRouter.post(
-  "/resetPassword/:email",
-  isAuthorizedByEmail("email"),
-  async (req, res) => {
-    try {
-      await authService.resetPassword(req.params.email);
-      res.status(204).send();
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-  },
-);
+authRouter.post("/resetPassword/:email", async (req, res) => {
+  try {
+    await authService.resetPassword(req.params.email);
+    res.status(204).send();
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
 
 authRouter.post("/confirmEmailVerification/:oobCode", async (req, res) => {
   try {
     const response = await authService.verifyEmail(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/verifyPasswordResetCode/:oobCode", async (req, res) => {
+  try {
+    const response = await authService.verifyPasswordReset(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
+  const { oobCode } = req.query;
+
+  try {
+    const response = await authService.confirmPasswordReset(
+      req.params.newPassword,
+      oobCode as string,
+    );
     if (response) {
       res.status(204).send();
     }

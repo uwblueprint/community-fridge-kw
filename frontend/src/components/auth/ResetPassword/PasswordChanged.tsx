@@ -1,15 +1,24 @@
-import { Button, Container, Image, Text } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+import { Container, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
 import confirmVerificationImage from "../../../assets/authentication_complete.svg";
 import * as Routes from "../../../constants/Routes";
 
-const ConfirmVerificationPage = () => {
+const PasswordChanged = () => {
   const history = useHistory();
-
   return (
-    <Container variant="dashboardVariant">
+    <Container pl="42px" pr="42px" pt="31px">
+      <IconButton
+        aria-label="close page"
+        float="right"
+        backgroundColor="transparent"
+        onClick={() => history.push(Routes.LANDING_PAGE)}
+        display={{ md: "none" }}
+      >
+        <CloseIcon color="black.100" />
+      </IconButton>
       <Container centerContent>
         <Image
           width="80%"
@@ -17,8 +26,8 @@ const ConfirmVerificationPage = () => {
           src={confirmVerificationImage}
           alt="Verification email image"
         />
-        <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">
-          Thank you for verifying your email address!
+        <Text mt="2rem" textAlign="center" textStyle="mobileHeader1">
+          Your password has been changed!
         </Text>
         <Text
           mt="1rem"
@@ -26,19 +35,11 @@ const ConfirmVerificationPage = () => {
           textStyle="mobileBody"
           color="hubbard.100"
         >
-          Almost done! Click &ldquo;Finish&rdquo; to contine.
+          Your password has been changed!
         </Text>
-        <Button
-          mt="2rem"
-          width="100%"
-          variant="navigation"
-          onClick={() => history.push(Routes.DASHBOARD_PAGE)}
-        >
-          Finish
-        </Button>
       </Container>
     </Container>
   );
 };
 
-export default ConfirmVerificationPage;
+export default PasswordChanged;
