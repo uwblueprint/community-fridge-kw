@@ -2,7 +2,6 @@ import {
   SchedulingDTO,
   CreateSchedulingDTO,
   UpdateSchedulingDTO,
-  UserDonorDTO,
 } from "../../types";
 
 interface ISchedulingService {
@@ -32,6 +31,20 @@ interface ISchedulingService {
    * @throws Error if scheduling retrieval fails
    */
   getSchedulings(): Promise<Array<SchedulingDTO>>;
+
+  /**
+   * Generate an email with donation information to be sent after user schedules
+   * a donation
+   * @param updated if email is regarding an update made to the schedule
+   * @param schedule object that contains information on scheduled donation
+   * @param isAdmin if email is directed to admin
+   * @throws Error if unable to send email
+   */
+  sendScheduledDonationEmail(
+    updated: boolean,
+    schedule: SchedulingDTO,
+    isAdmin: boolean,
+  ): Promise<void>;
 
   /**
    * Create scheduling
