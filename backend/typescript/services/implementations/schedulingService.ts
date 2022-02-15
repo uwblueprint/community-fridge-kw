@@ -18,7 +18,6 @@ import {
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
-import { up } from "../../migrations/2021.05.30T04.43.57.create-table-example";
 
 const Logger = logger(__filename);
 
@@ -193,7 +192,7 @@ class SchedulingService implements ISchedulingService {
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
-        "Attempted to send updated schedule email but this instance of SchedulingService does not have an EmailService instance";
+        "Attempted to send email regarding schedule creation/changes but this instance of SchedulingService does not have an EmailService instance";
       Logger.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -241,6 +240,11 @@ class SchedulingService implements ISchedulingService {
           )}`;
         }
       }
+
+      dayjs.extend(customParseFormat);
+
+      const volunteerTimeString =
+        dayjs(schedule.volunteerTime, "HH:mm").format("h:mm A") ?? "";
 
       const emailBody = `
         <html>
@@ -292,51 +296,61 @@ class SchedulingService implements ISchedulingService {
               }
               
      
-              <div style="display: flex; flex-direction: row; align-content: flex-start; gap: 40px;">
-                <div style="padding-right: 40px">
-                  <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+              <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
+                <tr>
+                  <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+                    <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
                       Proposed drop-off time
-                  </h2>
-                  <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                    </h2>
+                    <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                       ${startDayString}
                       <br />
                       ${startTimeString} - ${endTimeString}
                       <br />
                       ${frequencyString}
-                  </p>
-                </div>
-              <div>
-                  <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-                    Donation information
-                  </h2>
-                  <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                    </p>
+                  </td>
+                  <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+                    <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
+                    <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                       ${schedule.size} - ${donationSizeDescriptions.get(
         schedule.size ?? "",
       )}
-                  <br/>
-                  ${schedule.categories.join(", ")}
-              </p>
-          </div>
-     </div>
-     
-     
-     <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-         Volunteer information
-     </h2>
-     <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-         ${
-           schedule.volunteerNeeded
-             ? "Volunteer required"
-             : "Volunteer not required"
-         }
-     <br/>
-     ${schedule.isPickup ? "Pickup required" : ""}
-     <br/>
-     ${schedule.isPickup ? schedule.pickupLocation : ""}
-     <br/>
-     ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
-     <br/>
-     </p>
+                    <br />
+                      ${schedule.categories.join(", ")}
+                    </p>
+                  </td>
+              </tr>
+              <tr>
+                <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+                  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
+                  <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                    ${
+                      schedule.volunteerNeeded
+                        ? `<strong>Volunteer required at ${volunteerTimeString}</strong>`
+                        : "Volunteer not required"
+                    }
+                    <br />
+                    ${
+                      schedule.isPickup
+                        ? "Pickup required"
+                        : "Pickup not required"
+                    }
+                    <br />
+                    ${
+                      schedule.isPickup
+                        ? `${schedule.pickupLocation}<br />`
+                        : ""
+                    }
+                    ${
+                      schedule.notes
+                        ? `Additional Notes: ${schedule.notes}`
+                        : ""
+                    }
+                  </p>
+                </td>
+              </tr>
+            </table>
         
      ${
        updated
