@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -16,24 +16,26 @@ const DonationStep = ({
   stepNumber,
 }: DonationStepProps): JSX.Element => {
   return (
-    <Flex
+    <Stack
       paddingBottom="1.5rem"
       px={{ base: "0px", md: "1.2rem" }}
       textAlign={{ md: "center" }}
       width="100%"
+      alignItems="center"
+      direction={{ base: "row", md: "column" }}
     >
       <Text
-        width="22px"
-        height="22px"
-        borderRadius="50%"
+        width={{ base: "22px", md: "70px" }}
+        height={{ base: "22px", md: "70px" }}
+        lineHeight={{ base: "22px", md: "70px" }}
+        borderRadius="100%"
         backgroundColor="cottonCandy.100"
-        textStyle="mobileSmall"
-        flex="1"
-        color="poison.100"
+        textStyle={{ base: "mobileSmall", md: "desktopIconNumber" }}
+        color="hubbard.100"
         textAlign="center"
-        marginRight="11px"
-        marginTop="4px"
-        display={{ base: "inline", md: "none" }}
+        marginRight="12px"
+        verticalAlign="top"
+        marginBottom="12px"
       >
         {stepNumber}
       </Text>
@@ -43,7 +45,7 @@ const DonationStep = ({
         </Text>
         <Text textStyle="mobileSmall">{description}</Text>
       </Box>
-    </Flex>
+    </Stack>
   );
 };
 
@@ -80,6 +82,7 @@ const DonationProcess = (): JSX.Element => {
       <Button
         width="100%"
         variant="navigation"
+        height="100%"
         size="lg"
         display={{ md: "none" }}
         onClick={() =>

@@ -24,9 +24,9 @@ import { DonorResponse } from "../../../types/DonorTypes";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
+import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
 import BackButton from "./BackButton";
 import SaveButton from "./SaveChangesButton";
-import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -197,7 +197,6 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
-          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("date and time")}
         >
           Edit
@@ -257,8 +256,7 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
-          disabled={authenticatedUser?.role !== Role.DONOR}
-          onClick={() => go && go("volunteer information")}
+          onClick={() => go && go("donation information")}
         >
           Edit
         </Button>
@@ -289,7 +287,6 @@ const ConfirmDetails = ({
           pl="0"
           variant="edit"
           color="hubbard.100"
-          disabled={authenticatedUser?.role !== Role.DONOR}
           onClick={() => go && go("volunteer information")}
         >
           Edit
