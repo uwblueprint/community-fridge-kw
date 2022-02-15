@@ -286,9 +286,8 @@ class SchedulingService implements ISchedulingService {
 
               ${
                 !updated && !isAdmin
-                  ? `<strong>Hey there ${firstName}!</strong></p>
+                  ? `<strong>Hey there ${firstName}!</strong>
                   <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
-                  Thank you for scheduling a donation to your local community fridge.
                             <br />
                             <br />
                       Here is a summary of your upcoming donation:`
@@ -351,13 +350,11 @@ class SchedulingService implements ISchedulingService {
                 </td>
               </tr>
             </table>
-        
      ${
        updated
-         ? `<p style="font-weight: 400; font - size: 16px; line - height: 24px; color: #171717; ">If this is an error, please contact the CFKW admin team.</p>`
+         ? `<p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">If this is an error, please contact the CFKW admin team.</p>`
          : ""
      }
-     
      <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
      <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>   
      </body>
