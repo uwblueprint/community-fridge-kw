@@ -3,7 +3,7 @@ export enum Role {
   ADMIN = "Admin",
   VOLUNTEER = "Volunteer",
   DONOR = "Donor",
-}git
+}
 
 export enum Status {
   APPROVED = "Approved",
