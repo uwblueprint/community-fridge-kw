@@ -77,7 +77,7 @@ volunteerRouter.put("/:id?", volunteerDtoValidator, async (req, res) => {
       });
 
       res.status(201).send();
-    } catch (error: unknown) {
+    } catch (error) {
       res.status(500).json({ error: getErrorMessage(error) });
     }
   } else if (userId) {

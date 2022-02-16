@@ -23,7 +23,7 @@ class VolunteerService implements IVolunteerService {
       newVolunteer = await Volunteer.create({
         user_id: volunteer.userId,
       });
-    } catch (error: unknown) {
+    } catch (error) {
       Logger.error(
         `Failed to create volunteer. Reason = ${getErrorMessage(error)}`,
       );
@@ -55,7 +55,7 @@ class VolunteerService implements IVolunteerService {
       if (!user) {
         throw new Error(`userID ${volunteer.user_id} not found.`);
       }
-    } catch (error: unknown) {
+    } catch (error) {
       Logger.error(
         `Failed to get volunteer. Reason = ${getErrorMessage(error)}`,
       );
@@ -102,7 +102,7 @@ class VolunteerService implements IVolunteerService {
           };
         }),
       );
-    } catch (error: unknown) {
+    } catch (error) {
       Logger.error(
         `Failed to get volunteers. Reason = ${getErrorMessage(error)}`,
       );
@@ -183,7 +183,7 @@ class VolunteerService implements IVolunteerService {
       if (numDestroyed <= 0) {
         throw new Error(`id ${id} was not deleted in Postgres.`);
       }
-    } catch (error: unknown) {
+    } catch (error) {
       Logger.error(
         `Failed to delete volunteer. Reason = ${getErrorMessage(error)}`,
       );

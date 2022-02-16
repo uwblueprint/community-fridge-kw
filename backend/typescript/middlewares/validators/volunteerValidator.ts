@@ -7,7 +7,7 @@ const volunteerDtoValidator = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (!Object.values(Status).includes(req.body.status)) {
+  if (req.body.status && !Object.values(Status).includes(req.body.status)) {
     return res.status(400).send(getApiValidationError("status", "Status"));
   }
 
