@@ -5,6 +5,12 @@ export enum Role {
   DONOR = "Donor",
 }
 
+export enum Status {
+  APPROVED = "Approved",
+  PENDING = "Pending",
+  REJECTED = "Rejected",
+}
+
 export type AuthenticatedUser = {
   id: string;
   firstName: string;
@@ -26,6 +32,16 @@ export type AuthenticatedDonor = {
   businessName: string;
   facebookLink?: string;
   instagramLink?: string;
+} | null;
+
+export type AuthenticatedVolunteer = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: Role.VOLUNTEER;
+  accessToken: string;
+  phoneNumber: string;
 } | null;
 
 export type DecodedJWT =
