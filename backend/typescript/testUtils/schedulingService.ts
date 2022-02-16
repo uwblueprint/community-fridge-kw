@@ -67,6 +67,7 @@ export const testSchedules = [
     volunteerTime: "8:00 AM",
     frequency: "One time",
     notes: "these are the notes",
+    volunteerId: "1",
   },
   {
     donorId: "2",
@@ -84,6 +85,7 @@ export const testSchedules = [
     recurringDonationId: RECURRING_DONATION_ID,
     recurringDonationEndDate: new Date("2021-09-03T00:00:00.000Z"),
     notes: "these are the copied notes",
+    volunteerId: "1",
   },
   {
     donorId: "1",
@@ -126,20 +128,5 @@ export const testSchedules = [
     recurringDonationId: RECURRING_DONATION_ID,
     recurringDonationEndDate: new Date("2021-10-01T00:06:00.000Z"),
     notes: "these are the copied notes",
-  },
-  {
-    donorId: "1",
-    categories: ["Dry packaged goods"],
-    size: "medium",
-    isPickup: false,
-    dayPart: "Morning (6am - 11am)",
-    startTime: new Date("2021-09-01T09:00:00.000Z"),
-    endTime: new Date("2021-09-01T00:10:00.000Z"),
-    status: "Pending",
-    volunteerNeeded: true,
-    volunteerTime: "8:00 AM",
-    frequency: "One time",
-    notes: "these are the notes",
-    volunteerId: 1
   },
 ];
