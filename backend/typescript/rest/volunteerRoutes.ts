@@ -50,7 +50,7 @@ volunteerRouter.get("/:volunteerId?", async (req, res) => {
       try {
         const volunteer = await volunteerService.getVolunteerById(volunteerId);
         res.status(200).json(volunteer);
-      } catch (error: unknown) {
+      } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }
     }
@@ -99,7 +99,7 @@ volunteerRouter.put(
         });
 
         res.status(201).send();
-      } catch (error: unknown) {
+      } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }
     } else if (userId) {
@@ -109,7 +109,7 @@ volunteerRouter.put(
         });
 
         res.status(201).send();
-      } catch (error: unknown) {
+      } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }
     } else {
@@ -124,7 +124,7 @@ volunteerRouter.delete("/:volunteerId", async (req, res) => {
   try {
     await volunteerService.deleteVolunteerById(volunteerId);
     res.status(204).send();
-  } catch (error: unknown) {
+  } catch (error) {
     res.status(500).send(getErrorMessage(error));
   }
 });
