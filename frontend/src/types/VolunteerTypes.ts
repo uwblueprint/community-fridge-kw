@@ -1,4 +1,4 @@
-import { Role, Status} from "./AuthTypes";
+import { Role, Status } from "./AuthTypes";
 
 export type VolunteerResponse = {
   id: string;
