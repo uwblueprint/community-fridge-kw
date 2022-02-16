@@ -56,32 +56,12 @@ volunteerRouter.get("/:volunteerId?", async (req, res) => {
     }
   }
 
-<<<<<<< HEAD
-  if (id && userId) {
-    await sendResponseByMimeType(res, 400, contentType, [
-      {
-        error: "Cannot update by both id and userId",
-      },
-    ]);
-    return;
-  }
-  if (id) {
-    try {
-      await volunteerService.updateVolunteerById(id, {
-        status: req.body.status,
-      });
-
-      res.status(201).send();
-    } catch (error) {
-      res.status(500).json({ error: getErrorMessage(error) });
-=======
   if (userId) {
     if (typeof userId !== "string") {
       res
         .status(400)
         .json({ error: "userId query parameter must be a string" });
       return;
->>>>>>> 3d59efcf96786198351f1857df447fdb3a02db6d
     }
     try {
       const volunteer = await volunteerService.getVolunteerByUserId(userId);
