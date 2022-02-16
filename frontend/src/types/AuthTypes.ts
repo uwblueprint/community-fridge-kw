@@ -1,10 +1,14 @@
-import { Status } from "./VolunteerTypes";
-
 export enum Role {
   USER = "User",
   ADMIN = "Admin",
   VOLUNTEER = "Volunteer",
   DONOR = "Donor",
+}git
+
+export enum Status {
+  APPROVED = "Approved",
+  PENDING = "Pending",
+  REJECTED = "Rejected",
 }
 
 export type AuthenticatedUser = {

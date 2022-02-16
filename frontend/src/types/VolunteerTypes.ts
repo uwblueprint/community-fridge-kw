@@ -1,10 +1,4 @@
-import { Role } from "./AuthTypes";
-
-export enum Status {
-  APPROVED = "Approved",
-  PENDING = "Pending",
-  REJECTED = "Rejected",
-}
+import { Role, Status} from "./AuthTypes";
 
 export type VolunteerResponse = {
   id: string;
