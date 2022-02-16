@@ -7,6 +7,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 
@@ -35,6 +36,7 @@ const DonationInformation: any = ({
     size: "",
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
   const getSubmitState = () => {
     return !!formValues.size && !!formValues.categories.length;
   };
@@ -105,6 +107,12 @@ const DonationInformation: any = ({
         formValues,
       );
     }
+    toast({
+      title: "Donation Information updated successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
     if (go !== undefined) {
       go("confirm donation details");
     }

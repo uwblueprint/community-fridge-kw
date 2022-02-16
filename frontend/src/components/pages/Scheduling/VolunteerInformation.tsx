@@ -9,6 +9,7 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useState } from "react";
@@ -50,6 +51,8 @@ const VolunteerInformation = ({
     pickupLocation: "",
     isPickup: "",
   });
+
+  const toast = useToast();
 
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
@@ -136,6 +139,12 @@ const VolunteerInformation = ({
         formValues,
       );
     }
+    toast({
+      title: "Volunteer Information updated successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
     if (go !== undefined) {
       go("confirm donation details");
     }

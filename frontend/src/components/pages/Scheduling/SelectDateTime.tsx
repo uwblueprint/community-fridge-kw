@@ -10,6 +10,7 @@ import {
   SimpleGrid,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import moment from "moment";
@@ -53,6 +54,7 @@ const SelectDateTime = ({
     recurringDonationEndDate,
   } = formValues;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const [formErrors, setFormErrors] = useState({
     date: "",
@@ -335,6 +337,12 @@ const SelectDateTime = ({
         formValues,
       );
     }
+    toast({
+      title: "Drop-off Information updated successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
     if (go !== undefined) {
       go("confirm donation details");
     }
