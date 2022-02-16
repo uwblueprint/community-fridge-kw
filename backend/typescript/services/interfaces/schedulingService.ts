@@ -26,12 +26,31 @@ interface ISchedulingService {
   ): Promise<Array<SchedulingDTO>>;
 
   /**
-   * Get all scheduling information (possibly paginated in the future)
-   * @param volunteerNeeded returns schedules that require/don't volunteers
+   * Get all scheduling information associated with volunteerId
+   * @param volunteerId id associated with volunteer
+   * @returns array of SchedulingDTOs
+   * @throws Error if schedule retrieval fails
+   */
+  getSchedulingsByVolunteerId(
+    volunteerId: string,
+  ): Promise<Array<SchedulingDTO>>;
+
+  /**
+   * Get all scheduling information where volunteer is needed and no volunteer has been assigned
+   * @param isVolunteerSlotFilled? filters if returned schedules have  volunteer slot filled or not
    * @returns array of SchedulingDTOs
    * @throws Error if scheduling retrieval fails
    */
-  getSchedulings(volunteerNeeded?: boolean): Promise<Array<SchedulingDTO>>;
+  getSchedulingsByVolunteersNeeded(
+    isVolunteerSlotFilled?: boolean,
+  ): Promise<Array<SchedulingDTO>>;
+
+  /**
+   * Get all scheduling information (possibly paginated in the future)
+   * @returns array of SchedulingDTOs
+   * @throws Error if scheduling retrieval fails
+   */
+  getSchedulings(): Promise<Array<SchedulingDTO>>;
 
   /**
    * Generate an email with donation information to be sent after user schedules
@@ -84,18 +103,6 @@ interface ISchedulingService {
     recurring_donation_id: string,
     current_date: string,
   ): Promise<void>;
-
-  /**
-   * Get all scheduling information associated with volunteerId
-   * @param volunteerId id associated with volunteer
-   * @param weekLimit returns schedules for the specified upcoming weeks, 0 indicates no weeklimit
-   * @returns array of SchedulingDTOs
-   * @throws Error if schedule retrieval fails
-   */
-  getSchedulingsByVolunteerId(
-    volunteerId: string,
-    weekLimit: number,
-  ): Promise<Array<SchedulingDTO>>;
 }
 
 export default ISchedulingService;

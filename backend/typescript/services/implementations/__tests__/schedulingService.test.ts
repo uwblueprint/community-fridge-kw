@@ -70,10 +70,10 @@ describe("pg schedulingService", () => {
     expect(res).toMatchObject(testSchedules);
   });
 
-  test("getSchedulesVolunteerNeededTrue", async () => {
+  test("getSchedulingsByVolunteersNeeded", async () => {
     await Scheduling.bulkCreate(schedules);
 
-    const res = await schedulingService.getSchedulings(true);
+    const res = await schedulingService.getSchedulingsByVolunteersNeeded();
 
     const volunteersNeededTestSchedules = testSchedules.filter(
       (schedule) => schedule.volunteerNeeded,
@@ -81,13 +81,24 @@ describe("pg schedulingService", () => {
     expect(res).toMatchObject(volunteersNeededTestSchedules);
   });
 
-  test("getSchedulesVolunteerNeededFalse", async () => {
+  test("getSchedulingsByVolunteersNeededTrue", async () => {
     await Scheduling.bulkCreate(schedules);
 
-    const res = await schedulingService.getSchedulings(false);
+    const res = await schedulingService.getSchedulingsByVolunteersNeeded(true);
 
     const volunteersNeededTestSchedules = testSchedules.filter(
-      (schedule) => !schedule.volunteerNeeded,
+      (schedule) => schedule.volunteerNeeded && schedule.volunteerId !== null,
+    );
+    expect(res).toMatchObject(volunteersNeededTestSchedules);
+  });
+
+  test("getSchedulingsByVolunteersNeededFalse", async () => {
+    await Scheduling.bulkCreate(schedules);
+
+    const res = await schedulingService.getSchedulingsByVolunteersNeeded(false);
+
+    const volunteersNeededTestSchedules = testSchedules.filter(
+      (schedule) => schedule.volunteerNeeded && schedule.volunteerId === null,
     );
     expect(res).toMatchObject(volunteersNeededTestSchedules);
   });
@@ -115,7 +126,6 @@ describe("pg schedulingService", () => {
     const { volunteerId } = testSchedules[0];
     const res = await schedulingService.getSchedulingsByVolunteerId(
       (volunteerId ?? "").toString(),
-      0,
     );
     expect(res).toMatchObject(
       testSchedules.filter((schedule) => schedule.volunteerId === volunteerId),

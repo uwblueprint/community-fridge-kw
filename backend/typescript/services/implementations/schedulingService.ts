@@ -147,18 +147,58 @@ class SchedulingService implements ISchedulingService {
     return schedulingDtos;
   }
 
-  async getSchedulings(
-    volunteerNeeded?: boolean,
-  ): Promise<Array<SchedulingDTO>> {
+  async getSchedulingsByVolunteersNeeded(
+    isVolunteerSlotFilled?: boolean,
+  ): Promise<SchedulingDTO[]> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
       const schedulings: Array<Scheduling> = await Scheduling.findAll({
         where:
-          volunteerNeeded !== undefined
+          isVolunteerSlotFilled === undefined
             ? {
-                volunteer_needed: volunteerNeeded,
+                volunteer_needed: true,
               }
-            : {},
+            : {
+                volunteer_needed: true,
+                volunteer_id: isVolunteerSlotFilled ? { [Op.ne]: null } : null,
+              },
+        order: [["start_time", "ASC"]],
+      });
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedulings. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
+  }
+
+  async getSchedulings(): Promise<Array<SchedulingDTO>> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    try {
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
         order: [["start_time", "ASC"]],
       });
       schedulingDtos = schedulings.map((scheduling) => {
@@ -720,32 +760,16 @@ class SchedulingService implements ISchedulingService {
 
   async getSchedulingsByVolunteerId(
     volunteerId: string,
-    weekLimit: number,
   ): Promise<Array<SchedulingDTO>> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     let schedulings: Array<Scheduling>;
     try {
-      if (weekLimit !== 0) {
-        const currentStartDate = new Date();
-        const nextDate = new Date();
-        nextDate.setDate(nextDate.getDate() + weekLimit * 7);
-        schedulings = await Scheduling.findAll({
-          where: {
-            volunteer_id: Number(volunteerId),
-            start_time: {
-              [Op.between]: [currentStartDate, nextDate],
-            },
-          },
-          order: [["start_time", "ASC"]],
-        });
-      } else {
-        schedulings = await Scheduling.findAll({
-          where: {
-            volunteer_id: Number(volunteerId),
-          },
-          order: [["start_time", "ASC"]],
-        });
-      }
+      schedulings = await Scheduling.findAll({
+        where: {
+          volunteer_id: Number(volunteerId),
+        },
+        order: [["start_time", "ASC"]],
+      });
 
       schedulingDtos = schedulings.map((scheduling) => {
         return {
