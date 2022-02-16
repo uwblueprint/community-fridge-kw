@@ -1,72 +1,130 @@
 import { Router } from "express";
+import volunteerDtoValidator from "../middlewares/validators/volunteerValidator";
 import VolunteerService from "../services/implementations/volunteerService";
 import IVolunteerService from "../services/interfaces/volunteerService";
-import { UserVolunteerDTO } from "../types";
 import getErrorMessage from "../utilities/errorMessageUtil";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const volunteerRouter: Router = Router();
 const volunteerService: IVolunteerService = new VolunteerService();
 
-volunteerRouter.get("/", async (req, res) => {
-  const contentType = req.headers["content-type"];
-  try {
-    const volunteers = await volunteerService.getVolunteers();
-    await sendResponseByMimeType<UserVolunteerDTO>(
-      res,
-      200,
-      contentType,
-      volunteers,
-    );
-  } catch (error: unknown) {
-    await sendResponseByMimeType(res, 500, contentType, [
-      {
-        error: getErrorMessage(error),
-      },
-    ]);
-  }
-});
+/* Get all volunteers and optionally filter by:
+  - volunteerId, through URI (ex. /volunteer/1)
+  - userId, through query param (ex. /volunteer/?userId=1)
+*/
+volunteerRouter.get("/:volunteerId?", async (req, res) => {
+  const { volunteerId } = req.params;
+  const { userId } = req.query;
 
-volunteerRouter.get("/:volunteerID", async (req, res) => {
-  const { volunteerID } = req.params;
   const contentType = req.headers["content-type"];
 
-  if (!volunteerID) {
+  if (volunteerId && userId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot query by missing volunteerID.",
+        error: "Cannot query by both volunteerId and userId.",
       },
     ]);
     return;
   }
 
-  if (volunteerID) {
-    if (typeof volunteerID !== "string") {
+  if (!volunteerId && !userId) {
+    try {
+      const volunteers = await volunteerService.getVolunteers();
+      await sendResponseByMimeType(res, 200, contentType, volunteers);
+    } catch (error) {
+      await sendResponseByMimeType(res, 500, contentType, [
+        {
+          error: getErrorMessage(error),
+        },
+      ]);
+    }
+    return;
+  }
+
+  if (volunteerId) {
+    if (typeof volunteerId !== "string") {
       res
         .status(400)
-        .json({ error: "volunteerID query parameter must be a string." });
+        .json({ error: "volunteerId query parameter must be a string." });
     } else {
       try {
-        const volunteer = await volunteerService.getVolunteerByID(volunteerID);
+        const volunteer = await volunteerService.getVolunteerById(volunteerId);
         res.status(200).json(volunteer);
-      } catch (error: unknown) {
+      } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }
     }
   }
+
+  if (userId) {
+    if (typeof userId !== "string") {
+      res
+        .status(400)
+        .json({ error: "userId query parameter must be a string" });
+      return;
+    }
+    try {
+      const volunteer = await volunteerService.getVolunteerByUserId(userId);
+      res.status(200).json(volunteer);
+    } catch (error) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
 });
 
-volunteerRouter.put("/:volunteerID", async (req, res) => {
-  const { id } = req.query;
-});
+/* Update volunteer status by:
+  - id, through URI (ex. /volunteers/1)
+  - userId, through query param (ex. /volunteers/?userId=1)
+*/
+volunteerRouter.put(
+  "/:volunteerId?",
+  volunteerDtoValidator,
+  async (req, res) => {
+    const { volunteerId } = req.params;
+    const { userId } = req.query;
+    const contentType = req.headers["content-type"];
 
-volunteerRouter.delete("/:volunteerID", async (req, res) => {
-  const { volunteerID } = req.params;
+    if (volunteerId && userId) {
+      await sendResponseByMimeType(res, 400, contentType, [
+        {
+          error: "Cannot update by both volunteerId and userId",
+        },
+      ]);
+      return;
+    }
+    if (volunteerId) {
+      try {
+        await volunteerService.updateVolunteerById(volunteerId, {
+          status: req.body.status,
+        });
+
+        res.status(201).send();
+      } catch (error) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
+    } else if (userId) {
+      try {
+        await volunteerService.updateVolunteerByUserId(userId as string, {
+          status: req.body.status,
+        });
+
+        res.status(201).send();
+      } catch (error) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
+    } else {
+      res.status(400).json({ error: "Must supply id as request parameter." });
+    }
+  },
+);
+
+volunteerRouter.delete("/:volunteerId", async (req, res) => {
+  const { volunteerId } = req.params;
 
   try {
-    await volunteerService.deleteVolunteerByID(volunteerID);
+    await volunteerService.deleteVolunteerById(volunteerId);
     res.status(204).send();
-  } catch (error: unknown) {
+  } catch (error) {
     res.status(500).send(getErrorMessage(error));
   }
 });
