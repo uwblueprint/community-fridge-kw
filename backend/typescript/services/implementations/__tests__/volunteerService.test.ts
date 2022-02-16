@@ -1,62 +1,24 @@
 import { snakeCase } from "lodash";
 import User from "../../../models/user.model";
-import UserService from "../userService";
 
-import { Role, UserDTO, VolunteerDTO } from "../../../types";
+import { Status, VolunteerDTO } from "../../../types";
 
 import testSql from "../../../testUtils/testDb";
+import {
+  testUsers,
+  testVolunteers,
+  testUserVolunteers,
+  testUpdatedUserVolunteers,
+} from "../../../testUtils/volunteerService";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
 
-const testUsers = [
-  {
-    id: "1",
-    email: "test1@test.com",
-    firstName: "Peter",
-    lastName: "Pan",
-    authId: "123",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-  },
-  {
-    id: "2",
-    email: "test2@test.com",
-    firstName: "Wendy",
-    lastName: "Darling",
-    authId: "321",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-  },
-];
-
-const testVolunteers = [
-  {
-    user_id: "1",
-  },
-  {
-    user_id: "2",
-  },
-];
-
-const testUserVolunteers = [
-  {
-    id: "1",
-    email: "test1@test.com",
-    firstName: "Peter",
-    lastName: "Pan",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-    userId: "1",
-  },
-  {
-    id: "2",
-    email: "test2@test.com",
-    firstName: "Wendy",
-    lastName: "Darling",
-    role: Role.VOLUNTEER,
-    phoneNumber: "111-111-1111",
-  },
-];
+jest.mock("firebase-admin", () => {
+  const auth = jest.fn().mockReturnValue({
+    getUser: jest.fn().mockReturnValue({ email: "test@test.com" }),
+  });
+  return { auth };
+});
 
 describe("Testing VolunteerService Functions", () => {
   let volunteerService: VolunteerService;
@@ -96,10 +58,12 @@ describe("Testing VolunteerService Functions", () => {
     // pass in the id of a user (1)
     const mockCreateVolunteerDTO = {
       userId: "1",
+      status: Status.PENDING,
     };
     const expectedVolunteer = {
       id: 3,
       userId: "1",
+      status: Status.PENDING,
     };
 
     // add the new volunteer to the array with id 3 and userId of what was passed (1)
@@ -108,8 +72,8 @@ describe("Testing VolunteerService Functions", () => {
     expect(res).toEqual(expectedVolunteer);
   });
 
-  it("getVolunteerByID", async () => {
-    const res = await volunteerService.getVolunteerByID("1");
+  it("getVolunteerById", async () => {
+    const res = await volunteerService.getVolunteerById("1");
 
     expect(res).toMatchObject(testUserVolunteers[0]);
   });
@@ -122,8 +86,32 @@ describe("Testing VolunteerService Functions", () => {
     });
   });
 
-  it("deleteVolunteerByID", async () => {
-    await volunteerService.deleteVolunteerByID("1");
+  it("updateVolunteerById", async () => {
+    const mockUpdateVolunteerDTO = {
+      status: Status.APPROVED,
+    };
+
+    await volunteerService.updateVolunteerById("1", mockUpdateVolunteerDTO);
+
+    const res = await volunteerService.getVolunteerById("1");
+
+    expect(res).toMatchObject(testUpdatedUserVolunteers[0]);
+  });
+
+  it("updateVolunteerByUserId", async () => {
+    const mockUpdateVolunteerDTO = {
+      status: Status.REJECTED,
+    };
+
+    await volunteerService.updateVolunteerByUserId("2", mockUpdateVolunteerDTO);
+
+    const res = await volunteerService.getVolunteerById("2");
+
+    expect(res).toMatchObject(testUpdatedUserVolunteers[1]);
+  });
+
+  it("deleteVolunteerById", async () => {
+    await volunteerService.deleteVolunteerById("1");
 
     const res = await volunteerService.getVolunteers();
 

@@ -66,9 +66,9 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
     if (req.body.role === Role.VOLUNTEER) {
       await volunteerService.createVolunteer({
         userId: user.id,
+        status: req.body.status,
       });
-    }
-    if (req.body.role === "Donor") {
+    } else if (req.body.role === Role.DONOR) {
       await donorService.createDonor({
         userId: user.id,
         businessName: req.body.businessName,
