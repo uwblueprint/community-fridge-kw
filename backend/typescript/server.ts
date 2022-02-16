@@ -12,7 +12,10 @@ import userRouter from "./rest/userRoutes";
 import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
 import EmailService from "./services/implementations/emailService";
-import IEmailService from "./services/interfaces/emailService";
+import nodemailerConfig from "./nodemailer.config";
+import ICronService from "./services/interfaces/cronService";
+import CronService from "./services/implementations/cronService";
+import DonorService from "./services/implementations/donorService";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
 if (process.env.NODE_ENV === "production") {
@@ -50,12 +53,16 @@ sequelize.sync({ force: eraseDatabaseOnSync });
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.applicationDefault(),
 });
-/*
+
 if (process.env.NODE_ENV === "production") {
-  const emailService: IEmailService = new EmailService(nodemailerConfig);
-  emailService.checkReminders();
+  const cronService: ICronService = new CronService(
+    new EmailService(nodemailerConfig),
+    new DonorService(),
+  );
+
+  cronService.checkReminders();
 }
-*/
+
 const PORT = process.env.PORT || 5000;
 app.listen({ port: PORT }, () => {
   /* eslint-disable-next-line no-console */
