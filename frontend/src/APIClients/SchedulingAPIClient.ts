@@ -42,10 +42,9 @@ const getScheduleByDonorId = async (
 
 const getScheduleByVolunteerId = async (
   volunteerId: string,
-  weekLimit: string,
 ): Promise<Schedule[]> => {
   try {
-    const url = `/scheduling/?volunteerId=${volunteerId}&weekLimit=${weekLimit}`;
+    const url = `/scheduling/volunteers/${volunteerId}`;
     const { data } = await baseAPIClient.get(url, {
       headers: { Authorization: BEARER_TOKEN },
     });
@@ -56,10 +55,10 @@ const getScheduleByVolunteerId = async (
 };
 
 const getAllSchedulesThatNeedVolunteers = async (
-  volunteerNeeded: boolean,
+  isVolunteerSlotFilled?: boolean,
 ): Promise<Schedule[]> => {
   try {
-    const url = `/scheduling/?volunteerNeeded=${volunteerNeeded}`;
+    const url = `/scheduling/volunteers/volunteers${ isVolunteerSlotFilled === undefined? ``: `/?isVolunteerSlotFilled=${isVolunteerSlotFilled}`}`;
     const { data } = await baseAPIClient.get(url, {
       headers: { Authorization: BEARER_TOKEN },
     });
