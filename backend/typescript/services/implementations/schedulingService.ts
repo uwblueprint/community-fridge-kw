@@ -188,7 +188,9 @@ class SchedulingService implements ISchedulingService {
       });
     } catch (error) {
       Logger.error(
-        `Failed to get schedulings by volunteers needed. Reason = ${getErrorMessage(error)}`,
+        `Failed to get schedulings by volunteers needed. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
@@ -795,7 +797,9 @@ class SchedulingService implements ISchedulingService {
       });
     } catch (error) {
       Logger.error(
-        `Failed to get schedules by volunteer ID. Reason = ${getErrorMessage(error)}`,
+        `Failed to get schedules by volunteer ID. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
