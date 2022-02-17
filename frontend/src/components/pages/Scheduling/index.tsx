@@ -48,7 +48,7 @@ const schedulingDefaultData = ({
   dayPart: "",
   startTime: "",
   endTime: "",
-  volunteerIds: [],
+  volunteerId: "",
   frequency: "",
   notes: "",
 } as unknown) as Schedule;
