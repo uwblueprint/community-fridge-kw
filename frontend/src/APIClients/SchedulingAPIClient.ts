@@ -58,7 +58,11 @@ const getAllSchedulesThatNeedVolunteers = async (
   isVolunteerSlotFilled?: boolean,
 ): Promise<Schedule[]> => {
   try {
-    const url = `/scheduling/volunteers/volunteers${ isVolunteerSlotFilled === undefined? ``: `/?isVolunteerSlotFilled=${isVolunteerSlotFilled}`}`;
+    const url = `/scheduling/volunteers/volunteers${
+      isVolunteerSlotFilled === undefined
+        ? ``
+        : `/?isVolunteerSlotFilled=${isVolunteerSlotFilled}`
+    }`;
     const { data } = await baseAPIClient.get(url, {
       headers: { Authorization: BEARER_TOKEN },
     });
