@@ -39,7 +39,7 @@ schedulingRouter.get("/:id?", async (req, res) => {
   if (id && donorId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot query by multiple parameters.",
+        error: "Cannot query by both id and donorId.",
       },
     ]);
     return;
