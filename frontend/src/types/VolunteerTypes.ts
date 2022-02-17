@@ -11,6 +11,8 @@ export type VolunteerResponse = {
   status: Status;
 };
 
+export type AuthenticatedVolunteer = VolunteerResponse | null;
+
 export type UpdateVolunteerDataType = {
   status: Status;
 };

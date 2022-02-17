@@ -34,17 +34,6 @@ export type AuthenticatedDonor = {
   instagramLink?: string;
 } | null;
 
-export type AuthenticatedVolunteer = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: Role.VOLUNTEER;
-  accessToken: string;
-  phoneNumber: string;
-  status: Status;
-} | null;
-
 export type DecodedJWT =
   | string
   | null
