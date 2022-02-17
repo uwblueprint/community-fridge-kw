@@ -137,4 +137,6 @@ export default {
   updateSchedule,
   deleteSchedule,
   deleteScheduleByRecurringId,
+  getScheduleByVolunteerId,
+  getAllSchedulesThatNeedVolunteers,
 };

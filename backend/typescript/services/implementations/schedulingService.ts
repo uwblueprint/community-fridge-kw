@@ -152,6 +152,7 @@ class SchedulingService implements ISchedulingService {
   ): Promise<SchedulingDTO[]> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     try {
+      const volunteerIdQuery = isVolunteerSlotFilled ? { [Op.ne]: null } : null;
       const schedulings: Array<Scheduling> = await Scheduling.findAll({
         where:
           isVolunteerSlotFilled === undefined
@@ -160,7 +161,7 @@ class SchedulingService implements ISchedulingService {
               }
             : {
                 volunteer_needed: true,
-                volunteer_id: isVolunteerSlotFilled ? { [Op.ne]: null } : null,
+                volunteer_id: volunteerIdQuery,
               },
         order: [["start_time", "ASC"]],
       });
