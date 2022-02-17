@@ -188,7 +188,7 @@ class SchedulingService implements ISchedulingService {
       });
     } catch (error) {
       Logger.error(
-        `Failed to get schedulings. Reason = ${getErrorMessage(error)}`,
+        `Failed to get schedulings by volunteers needed. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
