@@ -94,6 +94,7 @@ class SchedulingService implements ISchedulingService {
     let schedulingDtos: Array<SchedulingDTO> = [];
     let schedulings: Array<Scheduling>;
     try {
+      
       schedulings = await Scheduling.findAll({
         where: {
           donor_id: Number(donorId),
