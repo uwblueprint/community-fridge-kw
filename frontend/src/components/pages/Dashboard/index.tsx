@@ -13,7 +13,6 @@ import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import UPCOMING_WEEK_LIMIT from "../../../constants/DashboardConstants";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Schedule } from "../../../types/SchedulingTypes";
@@ -32,7 +31,6 @@ const Dashboard = (): JSX.Element => {
 
       const scheduleResponse = await SchedulingAPIClient.getScheduleByDonorId(
         donor.id,
-        UPCOMING_WEEK_LIMIT,
       );
 
       setSchedules(scheduleResponse);

@@ -90,32 +90,16 @@ class SchedulingService implements ISchedulingService {
 
   async getSchedulingsByDonorId(
     donorId: string,
-    weekLimit: number,
   ): Promise<Array<SchedulingDTO>> {
     let schedulingDtos: Array<SchedulingDTO> = [];
     let schedulings: Array<Scheduling>;
     try {
-      if (weekLimit !== 0) {
-        const currentStartDate = new Date();
-        const nextDate = new Date();
-        nextDate.setDate(nextDate.getDate() + weekLimit * 7);
-        schedulings = await Scheduling.findAll({
-          where: {
-            donor_id: Number(donorId),
-            start_time: {
-              [Op.between]: [currentStartDate, nextDate],
-            },
-          },
-          order: [["start_time", "ASC"]],
-        });
-      } else {
-        schedulings = await Scheduling.findAll({
-          where: {
-            donor_id: Number(donorId),
-          },
-          order: [["start_time", "ASC"]],
-        });
-      }
+      schedulings = await Scheduling.findAll({
+        where: {
+          donor_id: Number(donorId),
+        },
+        order: [["start_time", "ASC"]],
+      });
 
       schedulingDtos = schedulings.map((scheduling) => {
         return {
