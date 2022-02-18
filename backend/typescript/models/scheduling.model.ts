@@ -90,7 +90,8 @@ export default class Scheduling extends Model {
   @AllowNull(true)
   @Column({ type: DataType.INTEGER })
   volunteer_id!: number;
-
+@BelongsTo(() => Volunteer)
+  volunteer!: Volunteer;
   @BelongsTo(() => Donor)
   donor!: Donor;
 }
