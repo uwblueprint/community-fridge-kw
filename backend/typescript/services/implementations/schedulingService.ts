@@ -39,7 +39,7 @@ class SchedulingService implements ISchedulingService {
 
   donorService: IDonorService;
 
-  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
+  static ADMIN_EMAIL = "communityfridgekw@gmail.com";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -372,7 +372,7 @@ class SchedulingService implements ISchedulingService {
       }
 
       this.emailService.sendEmail(
-        isAdmin ? SchedulingService.TEMP_ADMIN_EMAIL : email,
+        isAdmin ? SchedulingService.ADMIN_EMAIL : email,
         subject,
         emailBody,
       );
