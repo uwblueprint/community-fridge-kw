@@ -15,6 +15,20 @@ export const testUsersDb = [
     role: "Donor",
     email: "test2@email.com",
   },
+  {
+    first_name: "Test",
+    last_name: "User 3",
+    auth_id: "test id 3",
+    role: "Volunteer",
+    email: "test3@email.com",
+  },
+  {
+    first_name: "Test",
+    last_name: "User 4",
+    auth_id: "test id 4",
+    role: "Volunteer",
+    email: "test4@email.com",
+  },
 ];
 
 export const testDonorsDb = [
@@ -27,6 +41,15 @@ export const testDonorsDb = [
     user_id: 2,
     donor_type: "IndividualDonor",
     business_name: "Test Name 2",
+  },
+];
+
+export const testVolunteersDb = [
+  {
+    user_id: 3,
+  },
+  {
+    user_id: 4,
   },
 ];
 
@@ -44,6 +67,7 @@ export const testSchedules = [
     volunteerTime: "8:00 AM",
     frequency: "One time",
     notes: "these are the notes",
+    volunteerId: "1",
   },
   {
     donorId: "2",
@@ -61,6 +85,7 @@ export const testSchedules = [
     recurringDonationId: RECURRING_DONATION_ID,
     recurringDonationEndDate: new Date("2021-09-03T00:00:00.000Z"),
     notes: "these are the copied notes",
+    volunteerId: "1",
   },
   {
     donorId: "1",
