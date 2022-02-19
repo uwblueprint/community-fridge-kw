@@ -132,6 +132,23 @@ describe("pg schedulingService", () => {
     );
   });
 
+  test("getSchedulesByPickUp", async () => {
+    await Scheduling.bulkCreate(schedules);
+
+    const resPickup = await schedulingService.getSchedulingsByPickUp(true);
+    expect(resPickup).toMatchObject(
+      testSchedules.filter((schedule) => schedule.isPickup === true),
+    );
+
+    const resUnload = await schedulingService.getSchedulingsByPickUp(false);
+    expect(resUnload).toMatchObject(
+      testSchedules.filter(
+        (schedule) =>
+          schedule.isPickup === false && schedule.volunteerNeeded === true,
+      ),
+    );
+  });
+
   test("createScheduling", async () => {
     const startTime: Date = new Date("October 13, 2014 11:13:00");
     const endTime: Date = new Date("October 13, 2014 11:13:00");
