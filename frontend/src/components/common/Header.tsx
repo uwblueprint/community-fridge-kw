@@ -96,6 +96,20 @@ const Header = (): JSX.Element => {
                   </Link>
                 </>
               )}
+              {authenticatedUser.role === Role.VOLUNTEER && (
+                <>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.LANDING_PAGE}
+                    onClick={onClose}
+                  >
+                    Home
+                  </Link>
+                  <Link as={ReactLink} to={Routes.VOLUNTEER_SHIFTS_PAGE}>
+                    My Volunteer Shifts
+                  </Link>
+                </>
+              )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
                   <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
@@ -173,6 +187,20 @@ const Header = (): JSX.Element => {
                       </Link>
                       <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
                         My Scheduled Donations
+                      </Link>
+                    </>
+                  )}
+                  {authenticatedUser.role === Role.VOLUNTEER && (
+                    <>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.LANDING_PAGE}
+                        onClick={onClose}
+                      >
+                        Home
+                      </Link>
+                      <Link as={ReactLink} to={Routes.VOLUNTEER_SHIFTS_PAGE}>
+                        My Volunteer Shifts
                       </Link>
                     </>
                   )}
