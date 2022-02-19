@@ -7,15 +7,19 @@ import {
   ForeignKey,
   AutoIncrement,
   PrimaryKey,
+  BelongsTo,
 } from "sequelize-typescript";
 import Volunteer from "./volunteer.model";
 
-@Table({ tableName: "check_in" })
-export default class Scheduling extends Model {
+@Table({ tableName: "checkin" })
+export default class CheckIn extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column({ type: DataType.INTEGER })
   id!: number;
+
+  @BelongsTo(() => Volunteer)
+  volunteer!: Volunteer;
 
   @ForeignKey(() => Volunteer)
   @Column({ type: DataType.INTEGER })
