@@ -55,7 +55,7 @@ const Header = (): JSX.Element => {
         >
           <HamburgerIcon color="black.100" />
         </IconButton>
-        {authenticatedUser?.role === Role.DONOR ? (
+        {authenticatedUser?.role !== Role.ADMIN ? (
           <>
             <Link as={ReactLink} to={Routes.LANDING_PAGE}>
               <Image
@@ -185,7 +185,11 @@ const Header = (): JSX.Element => {
                       >
                         Home
                       </Link>
-                      <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.DASHBOARD_PAGE}
+                        onClick={onClose}
+                      >
                         My Scheduled Donations
                       </Link>
                     </>
@@ -199,17 +203,29 @@ const Header = (): JSX.Element => {
                       >
                         Home
                       </Link>
-                      <Link as={ReactLink} to={Routes.VOLUNTEER_SHIFTS_PAGE}>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.VOLUNTEER_SHIFTS_PAGE}
+                        onClick={onClose}
+                      >
                         My Volunteer Shifts
                       </Link>
                     </>
                   )}
                   {authenticatedUser.role === Role.ADMIN && (
                     <>
-                      <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.VIEW_DONATIONS}
+                        onClick={onClose}
+                      >
                         View Donations
                       </Link>
-                      <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.USER_MANAGEMENT_PAGE}
+                        onClick={onClose}
+                      >
                         User Management
                       </Link>
                     </>
