@@ -110,11 +110,11 @@ export type SchedulingDTO = {
   recurringDonationEndDate?: Date;
   volunteerNeeded: boolean;
   volunteerTime?: string;
-  volunteerIds: number[];
   notes?: string;
+  volunteerId?: string;
 };
 
-export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerIds">;
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id">;
 
 export type UpdateSchedulingDTO = Partial<
   Omit<SchedulingDTO, "id" | "donorId">
