@@ -21,8 +21,6 @@ const VolunteerShiftsPage = () => {
   return (
     <Container centerContent variant="responsiveContainer">
       {volunteerStatus === Status.PENDING && <PendingPage />}
-      {volunteerStatus === Status.REJECTED && <>Rejected</>}
-      {volunteerStatus === Status.APPROVED && <>Approved</>}
     </Container>
   );
 };
