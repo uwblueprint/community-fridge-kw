@@ -58,7 +58,7 @@ const getAllSchedulesThatNeedVolunteers = async (
   isVolunteerSlotFilled?: boolean,
 ): Promise<Schedule[]> => {
   try {
-    const url = `/scheduling/volunteers/volunteers${
+    const url = `/scheduling/volunteers${
       isVolunteerSlotFilled === undefined
         ? ``
         : `/?isVolunteerSlotFilled=${isVolunteerSlotFilled}`
