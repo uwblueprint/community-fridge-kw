@@ -27,6 +27,80 @@ const schedulingService: ISchedulingService = new SchedulingService(
   donorService,
 );
 
+schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
+  const { volunteerId } = req.params;
+  const { isVolunteerSlotFilled } = req.query;
+  const contentType = req.headers["content-type"];
+
+  if (volunteerId && isVolunteerSlotFilled) {
+    await sendResponseByMimeType(res, 400, contentType, [
+      {
+        error: "Cannot query by multiple parameters.",
+      },
+    ]);
+    return;
+  }
+
+  if (!volunteerId && !isVolunteerSlotFilled) {
+    try {
+      const schedulings = await schedulingService.getSchedulingsByVolunteersNeeded();
+      await sendResponseByMimeType<SchedulingDTO>(
+        res,
+        200,
+        contentType,
+        schedulings,
+      );
+    } catch (error: unknown) {
+      await sendResponseByMimeType(res, 500, contentType, [
+        {
+          error: getErrorMessage(error),
+        },
+      ]);
+    }
+    return;
+  }
+
+  if (volunteerId) {
+    if (typeof volunteerId !== "string") {
+      res
+        .status(400)
+        .json({ error: "volunteerId query parameter must be a string" });
+      return;
+    }
+
+    try {
+      const schedulings = await schedulingService.getSchedulingsByVolunteerId(
+        volunteerId,
+      );
+      res.status(200).json(schedulings);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+
+  if (isVolunteerSlotFilled) {
+    if (
+      typeof isVolunteerSlotFilled !== "string" ||
+      (isVolunteerSlotFilled !== "true" && isVolunteerSlotFilled !== "false")
+    ) {
+      res.status(400).json({
+        error:
+          "volunteerId query parameter must be the string 'true' or 'false'",
+      });
+      return;
+    }
+
+    try {
+      const schedulings = await schedulingService.getSchedulingsByVolunteersNeeded(
+        isVolunteerSlotFilled === "true",
+      );
+      res.status(200).json(schedulings);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+});
+
 /* Get all schedulings, optionally filter by:
   - id, through URI (ex. /scheduling/1)
   - donorId through query param (ex. /scheduling/?donorId=1)
