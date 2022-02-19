@@ -72,6 +72,20 @@ const getAllSchedulesThatNeedVolunteers = async (
   }
 };
 
+const getAllSchedulesByPickupOrUnload = async (
+  isPickUp: boolean,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/pickup/isPickUp=${isPickUp}`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
 const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
   try {
     const { data } = await baseAPIClient.post(
@@ -143,4 +157,5 @@ export default {
   deleteScheduleByRecurringId,
   getScheduleByVolunteerId,
   getAllSchedulesThatNeedVolunteers,
+  getAllSchedulesByPickupOrUnload,
 };

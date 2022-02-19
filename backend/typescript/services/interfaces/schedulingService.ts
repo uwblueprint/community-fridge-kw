@@ -53,6 +53,14 @@ interface ISchedulingService {
   getSchedulings(): Promise<Array<SchedulingDTO>>;
 
   /**
+   * Get all scheduling information where volunteer is needed and no volunteer has been assigned
+   * @param isPickUp filters if schedules requiring volunteers require pickup or not
+   * @returns array of SchedulingDTOs
+   * @throws Error if scheduling retrieval fails
+   */
+  getSchedulingsByPickUp(isPickUp: boolean): Promise<Array<SchedulingDTO>>;
+
+  /**
    * Generate an email with donation information to be sent after user schedules
    * a donation
    * @param updated if email is regarding an update made to the schedule

@@ -235,6 +235,46 @@ class SchedulingService implements ISchedulingService {
     return schedulingDtos;
   }
 
+  async getSchedulingsByPickUp(isPickUp: boolean): Promise<SchedulingDTO[]> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    try {
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
+        where: { is_pickup: isPickUp, volunteer_needed: true },
+        order: [["start_time", "ASC"]],
+      });
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedulings by pickup needed. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
+  }
+
   async sendScheduledDonationEmail(
     updated: boolean,
     schedule: SchedulingDTO,
