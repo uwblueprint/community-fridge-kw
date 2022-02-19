@@ -76,7 +76,7 @@ const getAllSchedulesByPickupOrUnload = async (
   isPickUp: boolean,
 ): Promise<Schedule[]> => {
   try {
-    const url = `/scheduling/pickup/isPickUp=${isPickUp}`;
+    const url = `/scheduling/pickup/${isPickUp}`;
     const { data } = await baseAPIClient.get(url, {
       headers: { Authorization: BEARER_TOKEN },
     });

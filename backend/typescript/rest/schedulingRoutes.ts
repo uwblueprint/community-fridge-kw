@@ -32,6 +32,8 @@ schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
   const { isVolunteerSlotFilled } = req.query;
   const contentType = req.headers["content-type"];
 
+  console.log("volunteer", volunteerId);
+
   if (volunteerId && isVolunteerSlotFilled) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
@@ -101,9 +103,11 @@ schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
   }
 });
 
-schedulingRouter.get("pickup/:isPickUp", async (req, res) => {
+schedulingRouter.get("/pickup/:isPickUp", async (req, res) => {
   const { isPickUp } = req.params;
   const contentType = req.headers["content-type"];
+
+  console.log("pickup", isPickUp);
 
   if (typeof isPickUp !== "string") {
     res.status(400).json({
@@ -132,6 +136,7 @@ schedulingRouter.get("/:id?", async (req, res) => {
   const { donorId, weekLimit } = req.query;
   const contentType = req.headers["content-type"];
 
+  console.log("id", id);
   if (id && donorId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
