@@ -61,8 +61,8 @@ const ViewDonations = ({
           Upcoming Scheduled Fridge Donations
         </Text>
         {isMobile ? (
-          <HStack py="1.2rem">
-            <Text textStyle="mobileHeader4">
+          <HStack py="1.2rem" width="inherit" alignItems="center">
+            <Text textStyle="mobileHeader4" whiteSpace="nowrap">
               {selectedDay?.toLocaleString(undefined, {
                 year: "numeric",
                 month: "long",
@@ -96,9 +96,9 @@ const ViewDonations = ({
             </IconButton>
           </HStack>
         ) : (
-          <Flex pt="4rem" width="60rem">
-            <HStack pt="1.2rem" pb="2.5rem">
-              <Text textStyle="desktopHeader">
+          <Flex pt="4rem" pb="2.5rem" width="inherit" alignItems="center">
+            <HStack alignSelf="center">
+              <Text textStyle="desktopHeader" whiteSpace="nowrap">
                 {selectedDay?.toLocaleString(undefined, {
                   year: "numeric",
                   month: "long",
@@ -113,24 +113,26 @@ const ViewDonations = ({
               />
             </HStack>
             <Spacer />
-            <IconButton
-              backgroundColor="transparent"
-              aria-label="previous week"
-              onClick={() => {
-                changeDays(-1);
-              }}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
-            <IconButton
-              backgroundColor="transparent"
-              aria-label="next week"
-              onClick={() => {
-                changeDays(1);
-              }}
-            >
-              <ChevronRightIcon />
-            </IconButton>
+            <HStack alignSelf="center">
+              <IconButton
+                backgroundColor="transparent"
+                aria-label="previous week"
+                onClick={() => {
+                  changeDays(-1);
+                }}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+              <IconButton
+                backgroundColor="transparent"
+                aria-label="next week"
+                onClick={() => {
+                  changeDays(1);
+                }}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            </HStack>
           </Flex>
         )}
         <Calendar

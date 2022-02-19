@@ -3,6 +3,7 @@ import { snakeCase } from "lodash";
 import { Op } from "sequelize";
 import dayjs from "dayjs";
 import ordinal from "ordinal";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
@@ -37,6 +38,8 @@ class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
 
   donorService: IDonorService;
+
+  static ADMIN_EMAIL = "communityfridgekw@gmail.com";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -182,22 +185,28 @@ class SchedulingService implements ISchedulingService {
     return schedulingDtos;
   }
 
-  async sendEmailVerificationAfterSchedulingADonation(
-    donor: UserDonorDTO,
+  async sendScheduledDonationEmail(
+    updated: boolean,
     schedule: SchedulingDTO,
+    isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
-        "Attempted to call sendEmailVerificationAfterSchedulingADonation but this instance of SchedulingService does not have an EmailService instance";
+        "Attempted to send email regarding schedule creation/changes but this instance of SchedulingService does not have an EmailService instance";
       Logger.error(errorMessage);
       throw new Error(errorMessage);
     }
 
-    try {
-      const { firstName } = donor;
+    const currDonor: UserDonorDTO = await this.donorService.getDonorById(
+      String(schedule.donorId),
+    );
 
-      // Proposed drop off info
+    // Proposed drop off info
+
+    try {
+      const { firstName, lastName, email } = currDonor;
       const { startTime, endTime } = schedule;
+
       const startTimeToLocalDate = startTime.toLocaleString("en-US", {
         timeZone: "EST",
       });
@@ -232,90 +241,146 @@ class SchedulingService implements ISchedulingService {
         }
       }
 
+      dayjs.extend(customParseFormat);
+
+      const volunteerTimeString =
+        dayjs(schedule.volunteerTime, "HH:mm").format("h:mm A") ?? "";
+
       const emailBody = `
-      <html >
-      <head>
-        <link
-        href="https://fonts.googleapis.com/css2?family=Inter"
-        rel="stylesheet"
-        />
-        <style>
-         body {
-             font-family: "Inter";
-         }
-     </style>
-     <meta charset="utf-8" />
-     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-     <title>Donation Details Email</title>
-     </head>
-     <body>
-        <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
-         style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
-         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717;">Hey there ${firstName}!</h2>
-         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
-         <br />
-         <br />
-         Here is a summary of your upcoming donation:
-     </p>
+        <html>
+          <head>
+            <link
+              href="https://fonts.googleapis.com/css2?family=Inter"
+              rel="stylesheet"
+            />
+            <style>
+              body {
+                  font-family: "Inter";
+              }
+            </style>
+            <meta charset="utf-8" />
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            <title>Donation Details Email</title>
+          </head>
+          <body>
+              <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+              style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
+              
+              <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+              
+              ${
+                updated
+                  ? `Your community fridge donation has been edited by the admin team.
+                    <br />
+                    The following details have been updated:
+                    </p>`
+                  : ``
+              }
+
+              ${
+                isAdmin
+                  ? `${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>	
+                    <br />`
+                  : ``
+              }
+
+              ${
+                !updated && !isAdmin
+                  ? `<strong>Hey there ${firstName}!</strong>
+                  <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
+                            <br />
+                            <br />
+                      Here is a summary of your upcoming donation:`
+                  : ``
+              }
+              
      
-     <div style="display: flex; flex-direction: row; align-content: flex-start; gap: 20px;">
-         <div>
-             <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-                 Proposed drop-off time
-             </h2>
-             <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                 ${startDayString}
-                 <br />
-                 ${startTimeString} - ${endTimeString}
-                 <br />
-                 ${frequencyString}
-             </p>
-         </div>
-         <div>
-            <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-             Donation information
-         </h2>
-         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-             ${schedule.size} - ${donationSizeDescriptions.get(
+              <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
+                <tr>
+                  <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+                    <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+                      Proposed drop-off time
+                    </h2>
+                    <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                      ${startDayString}
+                      <br />
+                      ${startTimeString} - ${endTimeString}
+                      <br />
+                      ${frequencyString}
+                    </p>
+                  </td>
+                  <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+                    <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
+                    <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                      ${schedule.size} - ${donationSizeDescriptions.get(
         schedule.size ?? "",
       )}
-             <br/>
-             ${schedule.categories.join(", ")}
-         </p>
-     
-     
-     </div>
-     </div>
-     
-     
-     <h2 style="font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-         Volunteer information
-     </h2>
-     <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-         ${schedule.volunteerNeeded ? "Volunteer required" : ""}
-     <br/>
-     ${schedule.isPickup ? "Pickup required" : ""}
-     <br/>
-     ${schedule.isPickup ? schedule.pickupLocation : ""}
-     <br/>
-     ${schedule.notes ? `Additional Notes: ${schedule.notes}` : ""}
-     </p>
-     
-     
+                    <br />
+                      ${schedule.categories.join(", ")}
+                    </p>
+                  </td>
+              </tr>
+              <tr>
+                <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
+                  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
+                  <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
+                    ${
+                      schedule.volunteerNeeded
+                        ? `<strong>Volunteer required at ${volunteerTimeString}</strong>`
+                        : "Volunteer not required"
+                    }
+                    <br />
+                    ${
+                      schedule.isPickup
+                        ? "Pickup required"
+                        : "Pickup not required"
+                    }
+                    <br />
+                    ${
+                      schedule.isPickup
+                        ? `${schedule.pickupLocation}<br />`
+                        : ""
+                    }
+                    ${
+                      schedule.notes
+                        ? `Additional Notes: ${schedule.notes}`
+                        : ""
+                    }
+                  </p>
+                </td>
+              </tr>
+            </table>
+     ${
+       updated
+         ? `<p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">If this is an error, please contact the CFKW admin team.</p>`
+         : ""
+     }
      <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
      <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>   
      </body>
      </html>
       `;
 
+      let subject = "Your Donation Information";
+
+      if (updated) {
+        subject = `DONATION EDITED - Donation on ${startDayString}`;
+      }
+
+      if (isAdmin) {
+        subject = `New Donation Booked - ${startDayString}, ${startTimeString} - ${endTimeString}`;
+      }
+
       this.emailService.sendEmail(
-        donor.email,
-        "Your Donation Information",
+        isAdmin ? SchedulingService.ADMIN_EMAIL : email,
+        subject,
         emailBody,
       );
     } catch (error) {
       Logger.error(
-        `Failed to generate email to confirm donation details of donation scheduled by ${donor.email}`,
+        `Failed to generate email to confirm ${
+          updated ? "updated" : ""
+        } donation details of donation scheduled by ${currDonor.email}`,
       );
       throw error;
     }
@@ -347,8 +412,14 @@ class SchedulingService implements ISchedulingService {
         });
       } else {
         // get new recurring donation id
-        const newRecurringDonationId =
-          Number(await Scheduling.max("recurring_donation_id")) + 1;
+        let newRecurringDonationId: number | null = await Scheduling.max(
+          "recurring_donation_id",
+        );
+        newRecurringDonationId =
+          newRecurringDonationId === null ||
+          Number.isNaN(newRecurringDonationId)
+            ? 1
+            : newRecurringDonationId + 1;
 
         // end date of recurring donation
         const recurringDonationEndDate: Date = new Date(
@@ -494,7 +565,7 @@ class SchedulingService implements ISchedulingService {
       );
       throw error;
     }
-    // send email
+
     const retNewSchedule: SchedulingDTO = {
       id: String(newScheduling.id),
       donorId: String(newScheduling.donor_id),
@@ -514,13 +585,10 @@ class SchedulingService implements ISchedulingService {
       recurringDonationEndDate: newScheduling.recurring_donation_end_date,
       notes: newScheduling.notes,
     };
-    const currDonor: UserDonorDTO = await this.donorService.getDonorById(
-      scheduling.donorId,
-    );
-    this.sendEmailVerificationAfterSchedulingADonation(
-      currDonor,
-      retNewSchedule,
-    );
+
+    // send email
+    this.sendScheduledDonationEmail(false, retNewSchedule, false);
+    this.sendScheduledDonationEmail(false, retNewSchedule, true);
 
     return retNewSchedule;
   }
@@ -533,7 +601,9 @@ class SchedulingService implements ISchedulingService {
     try {
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
-        updatesSnakeCase[snakeCase(key)] = value;
+        if (key !== "recurringDonationId") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
@@ -543,7 +613,8 @@ class SchedulingService implements ISchedulingService {
         throw new Error(`schedulingId ${schedulingId} not found.`);
       }
       const updatedScheduling = updateResult[1][0];
-      return {
+
+      const updatedSchedulingDTO: SchedulingDTO = {
         id: String(updatedScheduling.id),
         donorId: String(updatedScheduling.donor_id),
         categories: updatedScheduling.categories,
@@ -562,6 +633,10 @@ class SchedulingService implements ISchedulingService {
         recurringDonationEndDate: updatedScheduling.recurring_donation_end_date,
         notes: updatedScheduling.notes,
       };
+
+      this.sendScheduledDonationEmail(true, updatedSchedulingDTO, false);
+
+      return updatedSchedulingDTO;
     } catch (error) {
       Logger.error(
         `Failed to update scheduling. Reason = ${getErrorMessage(error)}`,
@@ -608,6 +683,27 @@ class SchedulingService implements ISchedulingService {
     } catch (error) {
       Logger.error(
         `Failed to delete scheduling. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+    // Update recurring donation end date
+    try {
+      const recurringDonationEndDate = await Scheduling.max("start_time", {
+        where: { recurring_donation_id },
+      });
+      await Scheduling.update(
+        {
+          recurring_donation_end_date: recurringDonationEndDate,
+        },
+        {
+          where: { recurring_donation_id },
+        },
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to update recurring donation end date. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }

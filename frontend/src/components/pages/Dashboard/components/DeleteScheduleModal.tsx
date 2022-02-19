@@ -47,7 +47,7 @@ const DeleteScheduleModal = ({
           </ModalBody>
           <ModalFooter>
             <Button width="100%" colorScheme="red" onClick={onDelete}>
-              Cancel Donation
+              Cancel donation
             </Button>
           </ModalFooter>
         </ModalContent>
