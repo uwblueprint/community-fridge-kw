@@ -80,7 +80,7 @@ export const testSchedules = [
     startTime: new Date("2021-09-01T09:00:00.000Z"),
     endTime: new Date("2021-09-01T00:10:00.000Z"),
     status: "Pending",
-    volunteerNeeded: true,
+    volunteerNeeded: false,
     frequency: "Daily",
     recurringDonationId: RECURRING_DONATION_ID,
     recurringDonationEndDate: new Date("2021-09-03T00:00:00.000Z"),
