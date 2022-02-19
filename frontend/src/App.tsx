@@ -60,11 +60,6 @@ const App = (): React.ReactElement => {
               path={Routes.ACCOUNT_PAGE}
               component={Account}
             />
-            <PrivateRoute
-              exact
-              path={Routes.ACCOUNT_PAGE}
-              component={Account}
-            />
             <Route
               exact
               path={Routes.VIEW_DONATIONS}
