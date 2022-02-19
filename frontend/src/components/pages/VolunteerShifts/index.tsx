@@ -9,13 +9,13 @@ const VolunteerShiftsPage = () => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
   const { authenticatedUser } = useContext(AuthContext);
   
-  const getScheduleData = async () => {
+  const getVolunteerData = async () => {
     const volunteerResponse = await VolunteerAPIClient.getVolunteerByUserId(authenticatedUser!.id);
     setVolunteerStatus(volunteerResponse.status);
   };
 
   useEffect(() => {
-    getScheduleData();
+    getVolunteerData();
   }, []);
 
   return (
