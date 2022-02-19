@@ -27,73 +27,6 @@ const schedulingService: ISchedulingService = new SchedulingService(
   donorService,
 );
 
-/* Get all schedulings, optionally filter by:
-  - id, through URI (ex. /scheduling/1)
-  - donorId through query param (ex. /scheduling/?donorId=1)
-*/
-schedulingRouter.get("/:id?", async (req, res) => {
-  const { id } = req.params;
-  const { donorId, weekLimit } = req.query;
-  const contentType = req.headers["content-type"];
-
-  if (id && donorId) {
-    await sendResponseByMimeType(res, 400, contentType, [
-      {
-        error: "Cannot query by both id and donorId.",
-      },
-    ]);
-    return;
-  }
-
-  if (!id && !donorId) {
-    try {
-      const schedulings = await schedulingService.getSchedulings();
-      await sendResponseByMimeType<SchedulingDTO>(
-        res,
-        200,
-        contentType,
-        schedulings,
-      );
-    } catch (error: unknown) {
-      await sendResponseByMimeType(res, 500, contentType, [
-        {
-          error: getErrorMessage(error),
-        },
-      ]);
-    }
-    return;
-  }
-
-  if (id) {
-    try {
-      const schedulings = await schedulingService.getSchedulingById(id);
-      res.status(200).json(schedulings);
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-    return;
-  }
-
-  if (donorId) {
-    if (typeof donorId !== "string") {
-      res
-        .status(400)
-        .json({ error: "donorId query parameter must be a string" });
-      return;
-    }
-
-    try {
-      const schedulings = await schedulingService.getSchedulingsByDonorId(
-        donorId,
-        Number(weekLimit),
-      );
-      res.status(200).json(schedulings);
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-  }
-});
-
 schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
   const { volunteerId } = req.params;
   const { isVolunteerSlotFilled } = req.query;
@@ -160,6 +93,73 @@ schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
     try {
       const schedulings = await schedulingService.getSchedulingsByVolunteersNeeded(
         isVolunteerSlotFilled === "true",
+      );
+      res.status(200).json(schedulings);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+});
+
+/* Get all schedulings, optionally filter by:
+  - id, through URI (ex. /scheduling/1)
+  - donorId through query param (ex. /scheduling/?donorId=1)
+*/
+schedulingRouter.get("/:id?", async (req, res) => {
+  const { id } = req.params;
+  const { donorId, weekLimit } = req.query;
+  const contentType = req.headers["content-type"];
+
+  if (id && donorId) {
+    await sendResponseByMimeType(res, 400, contentType, [
+      {
+        error: "Cannot query by both id and donorId.",
+      },
+    ]);
+    return;
+  }
+
+  if (!id && !donorId) {
+    try {
+      const schedulings = await schedulingService.getSchedulings();
+      await sendResponseByMimeType<SchedulingDTO>(
+        res,
+        200,
+        contentType,
+        schedulings,
+      );
+    } catch (error: unknown) {
+      await sendResponseByMimeType(res, 500, contentType, [
+        {
+          error: getErrorMessage(error),
+        },
+      ]);
+    }
+    return;
+  }
+
+  if (id) {
+    try {
+      const schedulings = await schedulingService.getSchedulingById(id);
+      res.status(200).json(schedulings);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+    return;
+  }
+
+  if (donorId) {
+    if (typeof donorId !== "string") {
+      res
+        .status(400)
+        .json({ error: "donorId query parameter must be a string" });
+      return;
+    }
+
+    try {
+      const schedulings = await schedulingService.getSchedulingsByDonorId(
+        donorId,
+        Number(weekLimit),
       );
       res.status(200).json(schedulings);
     } catch (error: unknown) {
