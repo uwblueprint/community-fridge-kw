@@ -26,6 +26,26 @@ interface ISchedulingService {
   ): Promise<Array<SchedulingDTO>>;
 
   /**
+   * Get all scheduling information associated with volunteerId
+   * @param volunteerId id associated with volunteer
+   * @returns array of SchedulingDTOs
+   * @throws Error if schedule retrieval fails
+   */
+  getSchedulingsByVolunteerId(
+    volunteerId: string,
+  ): Promise<Array<SchedulingDTO>>;
+
+  /**
+   * Get all scheduling information where volunteer is needed and no volunteer has been assigned
+   * @param isVolunteerSlotFilled? filters if returned schedules have  volunteer slot filled or not
+   * @returns array of SchedulingDTOs
+   * @throws Error if scheduling retrieval fails
+   */
+  getSchedulingsByVolunteersNeeded(
+    isVolunteerSlotFilled?: boolean,
+  ): Promise<Array<SchedulingDTO>>;
+
+  /**
    * Get all scheduling information (possibly paginated in the future)
    * @returns array of SchedulingDTOs
    * @throws Error if scheduling retrieval fails
