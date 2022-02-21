@@ -32,7 +32,6 @@ schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
   const { isVolunteerSlotFilled } = req.query;
   const contentType = req.headers["content-type"];
 
-  console.log("volunteer", volunteerId);
 
   if (volunteerId && isVolunteerSlotFilled) {
     await sendResponseByMimeType(res, 400, contentType, [
