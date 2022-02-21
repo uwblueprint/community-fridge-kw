@@ -1,21 +1,22 @@
-import { CloseIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   IconButton,
   Input,
   Text,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
+import { Role } from "../../../types/AuthTypes";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -28,10 +29,9 @@ const CreateAccount = ({
   formData: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const { next } = navigation;
+  const { previous, next } = navigation;
   const history = useHistory();
-  const { firstName, lastName, businessName, phoneNumber } = formData;
-  const { authenticatedUser } = useContext(AuthContext);
+  const { role, firstName, lastName, businessName, phoneNumber } = formData;
 
   const { isDesktop } = useViewport();
 
@@ -52,7 +52,7 @@ const CreateAccount = ({
     };
     let valid = true;
 
-    if (!businessName) {
+    if (role === Role.DONOR && !businessName) {
       valid = false;
       newErrors.businessName = "Please enter the name of your business.";
     }
@@ -64,7 +64,7 @@ const CreateAccount = ({
       valid = false;
       newErrors.lastName = "Please enter a last name.";
     }
-    if (!phoneNumber) {
+    if (role === Role.DONOR && !phoneNumber) {
       valid = false;
       newErrors.phoneNumber = "Please enter a valid phone number.";
     }
@@ -78,11 +78,17 @@ const CreateAccount = ({
     }
   };
 
-  if (authenticatedUser) {
-    return <Redirect to={Routes.DASHBOARD_PAGE} />;
-  }
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">
+      <IconButton
+        marginLeft="-12px"
+        float="left"
+        backgroundColor="transparent"
+        aria-label="go back"
+        onClick={previous}
+      >
+        <ArrowBackIcon width="24px" height="24px" />
+      </IconButton>
       {!isDesktop && (
         <IconButton
           float="right"
@@ -102,6 +108,7 @@ const CreateAccount = ({
       </Text>
 
       <FormControl mt="2rem" isRequired>
+        {role === Role.DONOR && (
         <Box>
           <Text mb="0.5rem" textStyle="mobileBodyBold" color="hubbard.100">
             Organization
@@ -119,7 +126,7 @@ const CreateAccount = ({
             <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
           </FormControl>
         </Box>
-
+        )}
         <Text
           mt="2rem"
           mb="0.5rem"
@@ -156,7 +163,12 @@ const CreateAccount = ({
         </Box>
         <Box mt="1rem">
           <FormControl isInvalid={!!formErrors.phoneNumber}>
+            {role === Role.DONOR && (
             <MandatoryInputDescription label="Phone Number" />
+            )}
+            {role === Role.VOLUNTEER && (
+              <FormLabel>Phone Number</FormLabel>
+            )}
             <Input
               mt="2"
               type="tel"
@@ -170,7 +182,7 @@ const CreateAccount = ({
         </Box>
         <Box mt="1rem">
           <Button
-            mt="1.5"
+            mt="2"
             variant="navigation"
             onClick={handleNext}
             width="100%"

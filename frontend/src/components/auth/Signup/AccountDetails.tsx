@@ -9,13 +9,6 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
   useDisclosure,
@@ -37,6 +30,7 @@ import {
 } from "../utilities";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import PasswordRequirement from "./components/PasswordRequirement";
+import FailedModal from "./FailedModal";
 import { SignUpFormProps } from "./types";
 
 const AccountDetails = ({
@@ -52,6 +46,7 @@ const AccountDetails = ({
   const { previous, next } = navigation;
   const { isDesktop } = useViewport();
   const {
+    role,
     firstName,
     lastName,
     email,
@@ -76,7 +71,7 @@ const AccountDetails = ({
     ) {
       return Role.ADMIN;
     }
-    return Role.DONOR;
+    return role;
   };
 
   const onSignupClick = async () => {
@@ -89,19 +84,22 @@ const AccountDetails = ({
     if (!password || !email || password !== confirmPassword) {
       return false;
     }
-    const role = await getSignupRole(email);
-    const user: AuthenticatedUser = await authAPIClient.register(
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      password,
-      businessName,
-      role,
-    );
-    if (!user) {
-      onOpen();
-      return false;
+    const updatedRole = await getSignupRole(email);
+
+    if (updatedRole !== Role.VOLUNTEER) {
+      const user: AuthenticatedUser = await authAPIClient.register(
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        businessName,
+        updatedRole,
+      );
+      if (!user) {
+        onOpen();
+        return false;
+      }
     }
     return next();
   };
@@ -251,29 +249,7 @@ const AccountDetails = ({
           </Button>
         </Box>
       </FormControl>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Sign up failed</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody textStyle="mobileBody">
-            Sorry, something went wrong. Please try again later and check all
-            fields have correct formatting.
-          </ModalBody>
-
-          <ModalFooter>
-            <Button
-              width="100%"
-              color="squash.100"
-              backgroundColor="raddish.100"
-              mr={3}
-              onClick={() => history.push(Routes.LOGIN_PAGE)}
-            >
-              Return to Log In
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <FailedModal isOpen={isOpen} onClose={onClose} />
     </Container>
   );
 };
