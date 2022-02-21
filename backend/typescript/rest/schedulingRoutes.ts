@@ -32,7 +32,6 @@ schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
   const { isVolunteerSlotFilled } = req.query;
   const contentType = req.headers["content-type"];
 
-
   if (volunteerId && isVolunteerSlotFilled) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
@@ -106,9 +105,10 @@ schedulingRouter.get("/pickup/:isPickUp", async (req, res) => {
   const { isPickUp } = req.params;
   const contentType = req.headers["content-type"];
 
-  console.log("pickup", isPickUp);
-
-  if (typeof isPickUp !== "string") {
+  if (
+    typeof isPickUp !== "string" ||
+    (isPickUp !== "true" && isPickUp !== "false")
+  ) {
     res.status(400).json({
       error: "isPickUp query parameter must be the string 'true' or 'false'",
     });
