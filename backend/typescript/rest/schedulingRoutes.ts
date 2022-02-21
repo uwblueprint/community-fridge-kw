@@ -135,7 +135,6 @@ schedulingRouter.get("/:id?", async (req, res) => {
   const { donorId, weekLimit } = req.query;
   const contentType = req.headers["content-type"];
 
-  console.log("id", id);
   if (id && donorId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
