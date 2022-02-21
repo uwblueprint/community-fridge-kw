@@ -53,7 +53,7 @@ interface ISchedulingService {
   getSchedulings(): Promise<Array<SchedulingDTO>>;
 
   /**
-   * Get all scheduling information where volunteer is needed and no volunteer has been assigned
+   * Get all scheduling information where it is either pickup or onsite
    * @param isPickUp filters if schedules requiring volunteers require pickup or not
    * @returns array of SchedulingDTOs
    * @throws Error if scheduling retrieval fails
