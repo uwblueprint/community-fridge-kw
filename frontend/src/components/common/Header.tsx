@@ -55,26 +55,14 @@ const Header = (): JSX.Element => {
         >
           <HamburgerIcon color="black.100" />
         </IconButton>
-        {authenticatedUser?.role !== Role.ADMIN ? (
-          <>
-            <Link as={ReactLink} to={Routes.LANDING_PAGE}>
-              <Image
-                objectFit="none"
-                src="header-logo.png"
-                alt="Community Fridge logo"
-                display="inline"
-              />
-            </Link>
-          </>
-        ) : (
+        <Link as={ReactLink} to={Routes.LANDING_PAGE}>
           <Image
             objectFit="none"
             src="header-logo.png"
             alt="Community Fridge logo"
             display="inline"
-            maxWidth="100vw"
           />
-        )}
+        </Link>
         <Stack
           spacing="2rem"
           direction="row"

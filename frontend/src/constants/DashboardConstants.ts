@@ -1,2 +1,2 @@
-const UPCOMING_WEEK_LIMIT = "2";
+const UPCOMING_WEEK_LIMIT = "0";
 export default UPCOMING_WEEK_LIMIT;
