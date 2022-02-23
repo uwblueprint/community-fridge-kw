@@ -6,6 +6,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Grid,
   IconButton,
   Input,
   Text,
@@ -17,6 +18,7 @@ import { useHistory } from "react-router-dom";
 import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
 import { Role } from "../../../types/AuthTypes";
+import HeaderLabel from "../../common/HeaderLabel";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -99,33 +101,31 @@ const CreateAccount = ({
           <CloseIcon color="black.100" />
         </IconButton>
       )}
-      <Text mt="67px" textStyle="mobileHeader1">
-        Create an account
-      </Text>
-      <Text textStyle="mobileSmall" color="hubbard.100">
+      <HeaderLabel text="Create an account" isDesktop={isDesktop} />
+      <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Account information can be edited in the My Account section of the
         platform.
       </Text>
 
       <FormControl mt="2rem" isRequired>
         {role === Role.DONOR && (
-        <Box>
-          <Text mb="0.5rem" textStyle="mobileBodyBold" color="hubbard.100">
-            Organization
-          </Text>
-          <MandatoryInputDescription label="Name of Business" />
-          <FormControl isRequired isInvalid={!!formErrors.businessName}>
-            <Input
-              validate="Required"
-              mt="2"
-              value={businessName}
-              onChange={setForm}
-              name="businessName"
-              placeholder="i.e. Lettuce Garden"
-            />
-            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
-          </FormControl>
-        </Box>
+          <Box>
+            <Text mb="0.5rem" textStyle="mobileBodyBold" color="hubbard.100">
+              Organization
+            </Text>
+            <MandatoryInputDescription label="Name of Business" />
+            <FormControl isRequired isInvalid={!!formErrors.businessName}>
+              <Input
+                validate="Required"
+                mt="2"
+                value={businessName}
+                onChange={setForm}
+                name="businessName"
+                placeholder="i.e. Lettuce Garden"
+              />
+              <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
+            </FormControl>
+          </Box>
         )}
         <Text
           mt="2rem"
@@ -133,41 +133,57 @@ const CreateAccount = ({
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Point of Contact
+          {role === Role.VOLUNTEER
+            ? "Volunteer Information"
+            : "Point of Contact"}
         </Text>
-        <Box>
-          <FormControl isRequired isInvalid={!!formErrors.firstName}>
-            <MandatoryInputDescription label="First Name" />
-            <Input
-              mt="2"
-              value={firstName}
-              onChange={setForm}
-              name="firstName"
-              placeholder="i.e. Jane"
-            />
-            <FormErrorMessage>{formErrors.firstName}</FormErrorMessage>
-          </FormControl>
-        </Box>
-        <Box mt="1rem">
-          <FormControl isInvalid={!!formErrors.lastName}>
-            <MandatoryInputDescription label="Last Name" />
-            <Input
-              mt="2"
-              value={lastName}
-              onChange={setForm}
-              name="lastName"
-              placeholder="i.e. Doe"
-            />
-            <FormErrorMessage>{formErrors.lastName}</FormErrorMessage>
-          </FormControl>
-        </Box>
-        <Box mt="1rem">
+        <Grid
+          templateColumns={{ md: "repeat(2, 1fr)" }}
+          columnGap={16}
+          rowGap={4}
+        >
+          <Box>
+            <FormControl isRequired isInvalid={!!formErrors.firstName}>
+              <MandatoryInputDescription label="First name" />
+              <Input
+                mt="2"
+                value={firstName}
+                onChange={setForm}
+                name="firstName"
+                placeholder="i.e. Jane"
+              />
+              <FormErrorMessage>{formErrors.firstName}</FormErrorMessage>
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControl isInvalid={!!formErrors.lastName}>
+              <MandatoryInputDescription label="Last name" />
+              <Input
+                mt="2"
+                value={lastName}
+                onChange={setForm}
+                name="lastName"
+                placeholder="i.e. Doe"
+              />
+              <FormErrorMessage>{formErrors.lastName}</FormErrorMessage>
+            </FormControl>
+          </Box>
+        </Grid>
+        <Box mt="2rem">
           <FormControl isInvalid={!!formErrors.phoneNumber}>
             {role === Role.DONOR && (
-            <MandatoryInputDescription label="Phone Number" />
+              <MandatoryInputDescription label="Phone number" />
             )}
             {role === Role.VOLUNTEER && (
-              <FormLabel>Phone Number</FormLabel>
+              <Box display="inline">
+                <Text
+                  display="inline-block"
+                  textStyle="mobileBody"
+                  color="black.100"
+                >
+                  Phone number
+                </Text>
+              </Box>
             )}
             <Input
               mt="2"
@@ -180,13 +196,8 @@ const CreateAccount = ({
             <FormErrorMessage>{formErrors.phoneNumber}</FormErrorMessage>
           </FormControl>
         </Box>
-        <Box mt="1rem">
-          <Button
-            mt="2"
-            variant="navigation"
-            onClick={handleNext}
-            width="100%"
-          >
+        <Box mt="2.5rem">
+          <Button mt="2" variant="navigation" onClick={handleNext} width="100%">
             Next
           </Button>
         </Box>

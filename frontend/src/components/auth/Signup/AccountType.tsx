@@ -1,5 +1,6 @@
 import { CloseIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Container,
   FormControl,
@@ -14,6 +15,7 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
 import { Role } from "../../../types/AuthTypes";
+import HeaderLabel from "../../common/HeaderLabel";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import { SignUpFormProps } from "./types";
 
@@ -82,34 +84,35 @@ const AccountType = ({
           <CloseIcon color="black.100" />
         </IconButton>
       )}
-      <Text mt="67px" textStyle="mobileHeader1">
-        Create an account
-      </Text>
-      <Text textStyle="mobileSmall" color="hubbard.100">
+      <HeaderLabel text="Create an account" isDesktop={isDesktop} />
+      <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Thank you for your interest in helping out Community Fridge KW!
       </Text>
 
-      <FormControl mt="2rem" isRequired>
-          <RadioSelectGroup
-            name="role"
-            label="Account Type"
-            value={role}
-            values={roleValues}
-            icons={[]}
-            isRequired
-            error={formErrors.role}
-            onChange={(e: string) => {
+      <FormControl mt="3rem" isRequired>
+        <Text
+          mt="2rem"
+          mb="0.5rem"
+          textStyle="mobileBodyBold"
+          color="hubbard.100"
+        >
+          Account Type
+        </Text>
+        <RadioSelectGroup
+          name="role"
+          value={role}
+          values={roleValues}
+          icons={[]}
+          isRequired
+          error={formErrors.role}
+          onChange={(e: string) => {
             handleChange(e, "role");
-            }}
-          />
-          <Button
-            mt="2"
-            variant="navigation"
-            onClick={handleNext}
-            width="100%"
-          >
-            Next
-          </Button>
+          }}
+          horizontalOnly
+        />
+        <Button mt="2" variant="navigation" onClick={handleNext} width="100%">
+          Next
+        </Button>
       </FormControl>
     </Container>
   );

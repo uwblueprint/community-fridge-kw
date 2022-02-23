@@ -21,6 +21,7 @@ import authAPIClient from "../../../APIClients/AuthAPIClient";
 import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
 import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
+import HeaderLabel from "../../common/HeaderLabel";
 import {
   checkForLowerCase,
   checkForNumbers,
@@ -142,13 +143,10 @@ const AccountDetails = ({
           </IconButton>
         </>
       )}
-
-      <Text mt="67px" textStyle="mobileHeader1">
-        Account details
-      </Text>
+      <HeaderLabel text="Account details" isDesktop={isDesktop} />
       <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>
-          <MandatoryInputDescription label="Email Address" />
+          <MandatoryInputDescription label="Email address" />
           <Input
             mt="2"
             value={email}
@@ -166,7 +164,7 @@ const AccountDetails = ({
       </FormControl>
 
       <Box mt="1rem">
-        <MandatoryInputDescription label="Password" />
+        <MandatoryInputDescription label="New password" />
 
         <FormControl isInvalid={!tempPassword && interaction.password}>
           <InputGroup size="md">
@@ -202,15 +200,15 @@ const AccountDetails = ({
             <Stack alignItems="start" spacing="0">
               <PasswordRequirement
                 state={checkLength(tempPassword)}
-                label="minimum of 12 characters as string"
+                label="minimum of 12 characters"
               />
               <PasswordRequirement
                 state={checkForUpperCase(tempPassword)}
-                label="at least 1 uppercase letter"
+                label="at least 1 upper case letter"
               />
               <PasswordRequirement
                 state={checkForLowerCase(tempPassword)}
-                label="at least 1 lowercase letter"
+                label="at least 1 lower case letter"
               />
               <PasswordRequirement
                 state={checkForNumbers(tempPassword)}

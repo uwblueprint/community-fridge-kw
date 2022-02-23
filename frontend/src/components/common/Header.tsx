@@ -120,7 +120,11 @@ const Header = (): JSX.Element => {
             </>
           ) : (
             <>
-              <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+              <Link
+                as={ReactLink}
+                to={Routes.LANDING_PAGE}
+                style={{ lineHeight: "2.5" }}
+              >
                 Home
               </Link>
               <Button
