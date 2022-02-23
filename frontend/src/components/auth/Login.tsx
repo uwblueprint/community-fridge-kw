@@ -14,6 +14,7 @@ import { Link, Redirect } from "react-router-dom";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
+import useViewport from "../../hooks/useViewport";
 import { AuthenticatedUser, Role } from "../../types/AuthTypes";
 import HeaderLabel from "../common/HeaderLabel";
 
@@ -24,6 +25,8 @@ const Login = (): React.ReactElement => {
     isIncorrectLoginCredentails,
     setIsIncorrectLoginCredentails,
   ] = React.useState(false);
+
+  const { isDesktop } = useViewport();
 
   const onLogInClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(email, password);
