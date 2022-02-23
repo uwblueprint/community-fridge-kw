@@ -1,7 +1,8 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Box, Button, Container, Text } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
 import React from "react";
+import { useHistory } from "react-router-dom";
+
 import * as Routes from "../../../constants/Routes";
 
 const PendingPage = () => {
