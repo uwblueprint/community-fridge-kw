@@ -338,12 +338,6 @@ const SelectDateTime = ({
     }
   };
 
-  const today = new Date();
-  const getMaxDate = () => {
-    const diff = today.getDate() + 13;
-    return new Date(today.setDate(diff));
-  };
-
   const discardChanges = async () => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
 
@@ -383,7 +377,6 @@ const SelectDateTime = ({
         <Calendar
           className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile"}
           minDate={new Date()}
-          maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
         />
