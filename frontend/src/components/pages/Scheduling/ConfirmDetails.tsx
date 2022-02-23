@@ -66,13 +66,19 @@ const ConfirmDetails = ({
   };
 
   const onDeleteClick = async (isOneTimeEvent = true) => {
-    if (isOneTimeEvent) {
-      await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
-    } else {
-      await SchedulingAPIClient.deleteScheduleByRecurringId(
-        currentSchedule?.recurringDonationId,
-        currentSchedule.startTime,
-      );
+    const res = isOneTimeEvent
+      ? await SchedulingAPIClient.deleteSchedule(currentSchedule.id)
+      : await SchedulingAPIClient.deleteScheduleByRecurringId(
+          currentSchedule?.recurringDonationId,
+          currentSchedule.startTime,
+        );
+    if (!res) {
+      toast({
+        title: "Donation could not be cancelled. Please try again",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
     }
     toast({
       title: isOneTimeEvent

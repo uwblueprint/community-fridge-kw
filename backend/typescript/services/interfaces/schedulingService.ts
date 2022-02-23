@@ -76,7 +76,6 @@ interface ISchedulingService {
   updateSchedulingByRecurringDonationId(
     recurring_donation_id: string,
     scheduling: UpdateSchedulingDTO,
-    schedulingId: string,
   ): Promise<void>;
 
   /**

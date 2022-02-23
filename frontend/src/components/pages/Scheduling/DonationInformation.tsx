@@ -30,7 +30,7 @@ const DonationInformation: any = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next, go } = navigation;
-  const { id, categories, size } = formValues;
+  const { id, categories, size, recurringDonationId, startTime } = formValues;
   const [formErrors, setFormErrors] = useState({
     categories: "",
     size: "",
@@ -99,13 +99,22 @@ const DonationInformation: any = ({
     if (!validateForm()) {
       return;
     }
-    if (isOneTimeEvent) {
-      await SchedulingAPIClient.updateSchedule(id, formValues);
-    } else {
-      await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
-        id,
-        formValues,
-      );
+    const editedFields = { categories, size, startTime };
+    const res = isOneTimeEvent
+      ? await SchedulingAPIClient.updateSchedule(id, formValues)
+      : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
+          recurringDonationId,
+          editedFields,
+        );
+
+    if (!res) {
+      toast({
+        title: "Donation Information could not be updated. Please try again",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
     }
     toast({
       title: "Donation Information updated successfully",

@@ -21,12 +21,14 @@ interface ModifyRecurringModalProps {
   onClose: () => void;
   onModification: (isOneTimeEvent?: boolean) => void;
   modificationType: string;
+  isRecurringDisabled?: boolean;
 }
 const ModifyRecurringModal = ({
   isOpen,
   onClose,
   onModification,
   modificationType,
+  isRecurringDisabled = false,
 }: ModifyRecurringModalProps) => {
   const { isDesktop } = useViewport();
   const [modifyScheduleValue, setmodifyScheduleValue] = useState("one");
@@ -57,7 +59,12 @@ const ModifyRecurringModal = ({
                 <Radio size="lg" colorScheme="red" value="one">
                   This donation
                 </Radio>
-                <Radio size="lg" colorScheme="red" value="all">
+                <Radio
+                  size="lg"
+                  colorScheme="red"
+                  value="all"
+                  isDisabled={isRecurringDisabled}
+                >
                   This and all following donations
                 </Radio>
               </Stack>

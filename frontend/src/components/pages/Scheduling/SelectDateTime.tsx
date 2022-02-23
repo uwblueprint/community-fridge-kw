@@ -330,12 +330,16 @@ const SelectDateTime = ({
       return;
     }
     if (isOneTimeEvent) {
-      await SchedulingAPIClient.updateSchedule(id, formValues);
-    } else {
-      await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
-        id,
-        formValues,
-      );
+      const res = await SchedulingAPIClient.updateSchedule(id, formValues);
+      if (!res) {
+        toast({
+          title: "Drop-off Information could not be updated. Please try again",
+          status: "error",
+          duration: 7000,
+          isClosable: true,
+        });
+        return;
+      }
     }
     toast({
       title: "Drop-off Information updated successfully",
@@ -498,6 +502,7 @@ const SelectDateTime = ({
                 onClose={onClose}
                 onModification={onSaveClick}
                 modificationType="update"
+                isRecurringDisabled
               />
             </>
           ) : (

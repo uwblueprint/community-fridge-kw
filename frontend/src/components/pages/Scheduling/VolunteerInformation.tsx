@@ -35,6 +35,7 @@ const VolunteerInformation = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     id,
+    recurringDonationId,
     startTime,
     endTime,
     frequency,
@@ -131,16 +132,32 @@ const VolunteerInformation = ({
     if (!validateForm()) {
       return;
     }
-    if (isOneTimeEvent) {
-      await SchedulingAPIClient.updateSchedule(id, formValues);
-    } else {
-      await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
-        id,
-        formValues,
-      );
+    const editedFields = {
+      volunteerNeeded,
+      volunteerTime,
+      pickupLocation,
+      isPickup,
+      notes,
+      startTime,
+    };
+    const res = isOneTimeEvent
+      ? await SchedulingAPIClient.updateSchedule(id, formValues)
+      : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
+          recurringDonationId,
+          editedFields,
+        );
+
+    if (!res) {
+      toast({
+        title: "Volunteer Information could not be updated",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
     }
     toast({
-      title: "Volunteer Information updated successfully",
+      title: "Volunteer Information updated successfully. Please try again",
       status: "success",
       duration: 7000,
       isClosable: true,

@@ -111,37 +111,50 @@ schedulingRouter.post("/", createSchedulingDtoValidator, async (req, res) => {
 });
 
 /* Update the scheduling instance by id or updates by recurring donation id  */
-schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
-  const { id } = req.params;
-  const { recurringDonationId } = req.query;
+schedulingRouter.put(
+  "/:id?",
+  updateSchedulingDtoValidator,
+  async (req, res) => {
+    const { id } = req.params;
+    const { recurringDonationId } = req.query;
+    const contentType = req.headers["content-type"];
 
-  if (recurringDonationId && id) {
-    try {
-      await schedulingService.updateSchedulingByRecurringDonationId(
-        recurringDonationId as string,
-        req.body,
-        id,
-      );
-      res.status(204).send();
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
+    if (recurringDonationId && id) {
+      await sendResponseByMimeType(res, 400, contentType, [
+        {
+          error: "Cannot delete by both id and recurringDonationId",
+        },
+      ]);
+      return;
     }
-  } else if (id) {
-    try {
-      const updatedScheduling = await schedulingService.updateSchedulingById(
-        id,
-        req.body,
-      );
-      res.status(200).json(updatedScheduling);
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
+    if (id) {
+      try {
+        const updatedScheduling = await schedulingService.updateSchedulingById(
+          id,
+          req.body,
+        );
+        res.status(200).json(updatedScheduling);
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
     }
-  } else {
-    res.status(400).json({
-      error: "Must supply id or recurringDonationId as request parameter.",
-    });
-  }
-});
+    if (recurringDonationId) {
+      try {
+        await schedulingService.updateSchedulingByRecurringDonationId(
+          recurringDonationId as string,
+          req.body,
+        );
+        res.status(204).send();
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
+    } else {
+      res.status(400).json({
+        error: "Must supply id or recurringDonationId as request parameter.",
+      });
+    }
+  },
+);
 
 /* Delete scheduling by id (e.g. /scheduling/63)
   or deletes by recurring donation id 
