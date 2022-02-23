@@ -21,9 +21,9 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
+import ErrorSchedulingModal from "../../common/GeneralErrorModal";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
-import ErrorSchedulingModal from "../Dashboard/components/ErrorSchedulingModal";
 import ModifyRecurringModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
@@ -357,12 +357,6 @@ const ConfirmDetails = ({
       </Box>
       {isBeingEdited && (
         <Box m="3em 0" pl="0" align="left">
-          <Text textStyle="mobileHeader3" pb="0.8em">
-            Danger Zone
-          </Text>
-          <Text textStyle="mobileBody">
-            To cancel this schedule donation, click below.
-          </Text>
           <Button
             mt="1.5rem"
             size="lg"
@@ -396,6 +390,8 @@ const ConfirmDetails = ({
             </Button>
           </Flex>
           <ErrorSchedulingModal
+            headerText="Donation could not be scheduled"
+            bodyText=" Sorry, something went wrong with our system. Please try again."
             isOpen={isErrorSchedulingOpen}
             onClose={onErrorSchedulingClose}
           />

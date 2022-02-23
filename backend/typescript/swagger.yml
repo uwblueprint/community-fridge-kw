@@ -22,14 +22,6 @@ components:
           type: string
         password:
           type: string
-    OAuthLogin:
-      type: object
-      required:
-        - idToken
-      properties:
-        idToken:
-          type: string
-
 
 paths:
   /entities:
@@ -262,7 +254,7 @@ paths:
     post:
       tags:
         - Auth
-      description: Login user. Supply either both email and password, or an Google OAuth idToken.
+      description: Login user. Supply either both email and password.
       requestBody:
         required: true
         content:
@@ -270,7 +262,6 @@ paths:
             schema:
               oneOf:
                 - $ref: '#/components/schemas/PasswordLogin'
-                - $ref: '#/components/schemas/OAuthLogin'
       responses:
         '200':
           description:  Returns access token in response body and sets refreshToken as an httpOnly cookie

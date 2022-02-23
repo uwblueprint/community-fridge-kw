@@ -7,6 +7,7 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import ResetPassword from "./components/auth/ResetPassword/index";
 import Signup from "./components/auth/Signup";
+import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
@@ -17,6 +18,7 @@ import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
 import ViewDonationsPage from "./components/pages/ViewDonationsPage";
+import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
@@ -37,6 +39,7 @@ const App = (): React.ReactElement => {
     <ChakraProvider theme={customTheme}>
       <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
         <Router>
+          <FeedbackBanner />
           <Header />
           <Switch>
             <Route exact path={Routes.LOGIN_PAGE} component={Login} />
@@ -46,6 +49,11 @@ const App = (): React.ReactElement => {
               exact
               path={Routes.USER_MANAGEMENT_PAGE}
               component={UserManagement}
+            />
+            <PrivateRoute
+              exact
+              path={Routes.VOLUNTEER_SHIFTS_PAGE}
+              component={VolunteerShiftsPage}
             />
             <PrivateRoute
               exact

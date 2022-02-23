@@ -40,6 +40,52 @@ const getScheduleByDonorId = async (
   }
 };
 
+const getScheduleByVolunteerId = async (
+  volunteerId: string,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/volunteers/${volunteerId}`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
+const getAllSchedulesThatNeedVolunteers = async (
+  isVolunteerSlotFilled?: boolean,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/volunteers${
+      isVolunteerSlotFilled === undefined
+        ? ``
+        : `/?isVolunteerSlotFilled=${isVolunteerSlotFilled}`
+    }`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
+const getAllSchedulesByPickupOrUnload = async (
+  isPickUp: boolean,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/pickup/${isPickUp}`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
 const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
   try {
     const { data } = await baseAPIClient.post(
@@ -128,4 +174,7 @@ export default {
   updateSchedulesByRecurringDonationId,
   deleteSchedule,
   deleteScheduleByRecurringId,
+  getScheduleByVolunteerId,
+  getAllSchedulesThatNeedVolunteers,
+  getAllSchedulesByPickupOrUnload,
 };

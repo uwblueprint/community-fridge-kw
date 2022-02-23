@@ -18,7 +18,6 @@ import IUserService from "../services/interfaces/userService";
 import IVolunteerService from "../services/interfaces/volunteerService";
 import { Role } from "../types";
 import getErrorMessage from "../utilities/errorMessageUtil";
-import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const authRouter: Router = Router();
 const userService: IUserService = new UserService();
@@ -30,10 +29,10 @@ const donorService: IDonorService = new DonorService();
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/login", loginRequestValidator, async (req, res) => {
   try {
-    const authDTO = req.body.idToken
-      ? // OAuth
-        await authService.generateTokenOAuth(req.body.idToken)
-      : await authService.generateToken(req.body.email, req.body.password);
+    const authDTO = await authService.generateToken(
+      req.body.email,
+      req.body.password,
+    );
 
     const { refreshToken, ...rest } = authDTO;
 
