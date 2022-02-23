@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { Role } from "../../types";
 import { getApiValidationError, validatePrimitive } from "./util";
 
 export const createUserDtoValidator = async (
@@ -18,6 +17,9 @@ export const createUserDtoValidator = async (
   }
   if (!validatePrimitive(req.body.role, "string")) {
     return res.status(400).send(getApiValidationError("role", "string"));
+  }
+  if (!validatePrimitive(req.body.phoneNumber, "string")) {
+    return res.status(400).send(getApiValidationError("phoneNumber", "string"));
   }
   if (!validatePrimitive(req.body.password, "string")) {
     return res.status(400).send(getApiValidationError("password", "string"));

@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Action from "./components/auth/Action";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import ResetPassword from "./components/auth/ResetPassword/index";
 import Signup from "./components/auth/Signup";
 import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
@@ -17,6 +18,7 @@ import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
 import ViewDonationsPage from "./components/pages/ViewDonationsPage";
+import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
@@ -50,6 +52,11 @@ const App = (): React.ReactElement => {
             />
             <PrivateRoute
               exact
+              path={Routes.VOLUNTEER_SHIFTS_PAGE}
+              component={VolunteerShiftsPage}
+            />
+            <PrivateRoute
+              exact
               path={Routes.ACCOUNT_PAGE}
               component={Account}
             />
@@ -74,6 +81,11 @@ const App = (): React.ReactElement => {
               component={Scheduling as React.FC}
             />
             <Route path={Routes.ACTION} component={Action} />
+            <Route
+              exact
+              path={Routes.FORGET_PASSWORD}
+              component={ResetPassword}
+            />
             <Route exact path="*" component={NotFound} />
           </Switch>
           <Footer />

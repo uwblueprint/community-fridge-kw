@@ -75,6 +75,7 @@ export type DonorDTO = {
 export type VolunteerDTO = {
   id: string;
   userId: string;
+  status: Status;
 };
 
 export type UserDonorDTO = UserDTO & DonorDTO;
@@ -91,7 +92,7 @@ export type AuthDTO = Token & UserDTO;
 
 export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
-export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
+export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id" | "userId">;
 
 export type SchedulingDTO = {
   id: string;
@@ -109,11 +110,11 @@ export type SchedulingDTO = {
   recurringDonationEndDate?: Date;
   volunteerNeeded: boolean;
   volunteerTime?: string;
-  volunteerIds: number[];
   notes?: string;
+  volunteerId?: string;
 };
 
-export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerIds">;
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id">;
 
 export type UpdateSchedulingDTO = Partial<
   Omit<SchedulingDTO, "id" | "donorId">

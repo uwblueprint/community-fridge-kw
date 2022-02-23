@@ -11,6 +11,7 @@ import {
 } from "sequelize-typescript";
 import { DayPart, Frequency, Status } from "../types";
 import Donor from "./donor.model";
+import Volunteer from "./volunteer.model";
 
 @Table({ tableName: "scheduling" })
 export default class Scheduling extends Model {
@@ -84,6 +85,14 @@ export default class Scheduling extends Model {
   @AllowNull(false)
   @Column({ type: DataType.INTEGER })
   donor_id!: number;
+
+  @ForeignKey(() => Volunteer)
+  @AllowNull(true)
+  @Column({ type: DataType.INTEGER })
+  volunteer_id!: number;
+
+  @BelongsTo(() => Volunteer)
+  volunteer!: Volunteer;
 
   @BelongsTo(() => Donor)
   donor!: Donor;

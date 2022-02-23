@@ -27,6 +27,7 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
+import AuthAPIClient from "../../APIClients/AuthAPIClient";
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import UserAPIClient from "../../APIClients/UserAPIClient";
 import pencilIcon from "../../assets/pencilIcon.svg";
@@ -114,6 +115,14 @@ const Account = (): JSX.Element => {
         ? Routes.DASHBOARD_PAGE
         : Routes.VIEW_DONATIONS,
     );
+  };
+
+  const onResetPasswordClick = async () => {
+    const success = await AuthAPIClient.logout(authenticatedUser?.id);
+    if (success) {
+      setAuthenticatedUser(null);
+    }
+    history.push(Routes.FORGET_PASSWORD);
   };
 
   const changeEditMode = () => {
@@ -425,11 +434,11 @@ const Account = (): JSX.Element => {
         ) : (
           <Box mt={{ base: "66px", md: "56px" }}>
             <Button
-              isDisabled
               width="100%"
               size="lg"
               mt="2"
               variant="navigation"
+              onClick={onResetPasswordClick}
             >
               Change Password
             </Button>

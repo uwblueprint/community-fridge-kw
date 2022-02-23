@@ -19,3 +19,7 @@ export const ACCOUNT_PAGE = "/account";
 export const ACTION = "/action";
 
 export const USER_MANAGEMENT_PAGE = "/user-management";
+
+export const VOLUNTEER_SHIFTS_PAGE = "/volunteer-shifts";
+
+export const FORGET_PASSWORD = "/forget-password";
