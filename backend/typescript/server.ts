@@ -11,8 +11,7 @@ import donorRouter from "./rest/donorRoutes";
 import userRouter from "./rest/userRoutes";
 import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
-import EmailService from "./services/implementations/emailService";
-import IEmailService from "./services/interfaces/emailService";
+import checkInRouter from "./rest/checkInRoutes";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
 if (process.env.NODE_ENV === "production") {
@@ -42,6 +41,7 @@ app.use("/donors", donorRouter);
 app.use("/users", userRouter);
 app.use("/volunteers", volunteerRouter);
 app.use("/scheduling", schedulingRouter);
+app.use("/checkin", checkInRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const eraseDatabaseOnSync = false;
