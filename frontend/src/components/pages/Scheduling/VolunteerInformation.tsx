@@ -128,51 +128,6 @@ const VolunteerInformation = ({
     return valid;
   };
 
-  const onSaveClick = async (isOneTimeEvent = true) => {
-    if (!validateForm()) {
-      return;
-    }
-    const editedFields = {
-      volunteerNeeded,
-      volunteerTime,
-      pickupLocation,
-      isPickup,
-      notes,
-      startTime,
-    };
-    const res = isOneTimeEvent
-      ? await SchedulingAPIClient.updateSchedule(id, formValues)
-      : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
-          recurringDonationId,
-          editedFields,
-        );
-
-    if (!res) {
-      toast({
-        title: "Volunteer Information could not be updated",
-        status: "error",
-        duration: 7000,
-        isClosable: true,
-      });
-      return;
-    }
-    toast({
-      title: "Volunteer Information updated successfully. Please try again",
-      status: "success",
-      duration: 7000,
-      isClosable: true,
-    });
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
-  };
-
-  const handleNext = () => {
-    if (validateForm()) {
-      next();
-    }
-  };
-
   const discardChanges = async () => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
     setForm({
@@ -194,6 +149,56 @@ const VolunteerInformation = ({
     setForm({ target: { name: "notes", value: scheduleResponse.notes } });
 
     return go && go("confirm donation details");
+  };
+
+  const onSaveRecurringClick = () => {
+    if (!validateForm()) {
+      return;
+    }
+    onOpen();
+  };
+
+  const onSaveClick = async (isOneTimeEvent = true) => {
+    if (!validateForm()) {
+      return;
+    }
+    const editedFields = {
+      volunteerNeeded,
+      volunteerTime: volunteerNeeded ? volunteerTime : null,
+      pickupLocation: volunteerNeeded && isPickup ? pickupLocation : null,
+      isPickup: volunteerNeeded ? isPickup : null,
+      notes,
+      startTime,
+    };
+    const res = isOneTimeEvent
+      ? await SchedulingAPIClient.updateSchedule(id, editedFields)
+      : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
+          recurringDonationId,
+          editedFields,
+        );
+
+    if (!res) {
+      toast({
+        title: "Volunteer Information could not be updated. Please try again",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    toast({
+      title: "Volunteer Information updated successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
+    discardChanges();
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      next();
+    }
   };
 
   return (
@@ -262,7 +267,7 @@ const VolunteerInformation = ({
             >
               <FormLabel>Pickup location:</FormLabel>
               <Input
-                value={pickupLocation}
+                value={pickupLocation!}
                 onChange={(e) => {
                   handleChange(e.target.value, "pickupLocation");
                 }}
@@ -283,7 +288,7 @@ const VolunteerInformation = ({
                 What is the specific time you require assistance?
               </FormLabel>
               <Input
-                value={volunteerTime}
+                value={volunteerTime!}
                 type="time"
                 onChange={(e) => {
                   handleChange(e.target.value, "volunteerTime");
@@ -317,7 +322,7 @@ const VolunteerInformation = ({
         <>
           {formValues.recurringDonationId !== "null" ? (
             <>
-              <SaveButton onSaveClick={onOpen} />
+              <SaveButton onSaveClick={onSaveRecurringClick} />
               <ModifyRecurringDonationModal
                 isOpen={isOpen}
                 onClose={onClose}

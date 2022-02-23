@@ -601,7 +601,9 @@ class SchedulingService implements ISchedulingService {
       const updatesSnakeCase: Record<string, unknown> = {};
       const startDateTime = new Date(scheduling.startTime!);
       Object.entries(scheduling).forEach(([key, value]) => {
-        updatesSnakeCase[snakeCase(key)] = value;
+        if (key !== "startTime") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
       });
 
       const updateResult = await Scheduling.update(updatesSnakeCase, {

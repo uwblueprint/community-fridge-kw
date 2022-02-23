@@ -95,6 +95,15 @@ const DonationInformation: any = ({
     }
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+    setForm({
+      target: { name: "categories", value: scheduleResponse.categories },
+    });
+    setForm({ target: { name: "size", value: scheduleResponse.size } });
+    return go && go("confirm donation details");
+  };
+
   const onSaveClick = async (isOneTimeEvent = true) => {
     if (!validateForm()) {
       return;
@@ -122,18 +131,14 @@ const DonationInformation: any = ({
       duration: 7000,
       isClosable: true,
     });
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
+    discardChanges();
   };
 
-  const discardChanges = async () => {
-    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
-    setForm({
-      target: { name: "categories", value: scheduleResponse.categories },
-    });
-    setForm({ target: { name: "size", value: scheduleResponse.size } });
-    return go && go("confirm donation details");
+  const onSaveRecurringClick = () => {
+    if (!validateForm()) {
+      return;
+    }
+    onOpen();
   };
 
   return (
@@ -186,7 +191,7 @@ const DonationInformation: any = ({
         <>
           {formValues.recurringDonationId !== "null" ? (
             <>
-              <SaveButton onSaveClick={onOpen} />
+              <SaveButton onSaveClick={onSaveRecurringClick} />
               <ModifyRecurringDonationModal
                 isOpen={isOpen}
                 onClose={onClose}

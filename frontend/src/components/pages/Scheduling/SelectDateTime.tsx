@@ -325,6 +325,34 @@ const SelectDateTime = ({
     }
   };
 
+  const discardChanges = async () => {
+    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
+
+    setForm({ target: { name: "dayPart", value: scheduleResponse.dayPart } });
+    setForm({
+      target: { name: "frequency", value: scheduleResponse.frequency },
+    });
+    setForm({
+      target: { name: "startTime", value: scheduleResponse.startTime },
+    });
+    setForm({ target: { name: "endTime", value: scheduleResponse.endTime } });
+    setForm({
+      target: {
+        name: "recurringDonationEndDate",
+        value: scheduleResponse.recurringDonationEndDate,
+      },
+    });
+
+    return go && go("confirm donation details");
+  };
+
+  const onSaveRecurringClick = () => {
+    if (!validateForm()) {
+      return;
+    }
+    onOpen();
+  };
+
   const onSaveClick = async (isOneTimeEvent = true) => {
     if (!validateForm()) {
       return;
@@ -347,36 +375,13 @@ const SelectDateTime = ({
       duration: 7000,
       isClosable: true,
     });
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
+    discardChanges();
   };
 
   const today = new Date();
   const getMaxDate = () => {
     const diff = today.getDate() + 13;
     return new Date(today.setDate(diff));
-  };
-
-  const discardChanges = async () => {
-    const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
-
-    setForm({ target: { name: "dayPart", value: scheduleResponse.dayPart } });
-    setForm({
-      target: { name: "frequency", value: scheduleResponse.frequency },
-    });
-    setForm({
-      target: { name: "startTime", value: scheduleResponse.startTime },
-    });
-    setForm({ target: { name: "endTime", value: scheduleResponse.endTime } });
-    setForm({
-      target: {
-        name: "recurringDonationEndDate",
-        value: scheduleResponse.recurringDonationEndDate,
-      },
-    });
-
-    return go && go("confirm donation details");
   };
 
   return (
@@ -496,7 +501,7 @@ const SelectDateTime = ({
         <>
           {formValues.recurringDonationId !== "null" ? (
             <>
-              <SaveButton onSaveClick={onOpen} />
+              <SaveButton onSaveClick={onSaveRecurringClick} />
               <ModifyRecurringDonationModal
                 isOpen={isOpen}
                 onClose={onClose}
