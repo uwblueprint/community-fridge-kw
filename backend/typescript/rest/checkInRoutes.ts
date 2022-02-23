@@ -9,6 +9,10 @@ const checkInRouter: Router = Router();
 
 const checkInService: ICheckInService = new CheckInService();
 
+/* Delete checkins by id (e.g. /checkin/63)
+  or deletes by start and end date range
+  (e.g. /checkin?startDate=2022-01-31T05:00:00.000Z?endDate=2022-02-31T05:00:00.000Z)
+*/
 checkInRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
   const { startDate, endDate } = req.query;
@@ -42,7 +46,10 @@ checkInRouter.delete("/:id?", async (req, res) => {
   }
   if (startDate && endDate) {
     try {
-      await checkInService.deleteCheckInByDateRange(startDate, endDate);
+      await checkInService.deleteCheckInByDateRange(
+        startDate as string,
+        endDate as string,
+      );
       res.status(204).send();
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });
