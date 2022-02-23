@@ -10,40 +10,40 @@ const checkInRouter: Router = Router();
 const checkInService: ICheckInService = new CheckInService();
 
 checkInRouter.get("/:id?", async (req, res) => {
-    const { id } = req.params;
-    const { volunteerId } = req.query;
-    const contentType = req.headers["content-type"];
+  const { id } = req.params;
+  const { volunteerId } = req.query;
+  const contentType = req.headers["content-type"];
 
-    if (id && volunteerId) {
-        await sendResponseByMimeType(res, 400, contentType, [
-            {
-                error: "Cannot get by both id and volunteerId",
-            },
-            ]);
-        return;
+  if (id && volunteerId) {
+    await sendResponseByMimeType(res, 400, contentType, [
+      {
+        error: "Cannot get by both id and volunteerId",
+      },
+    ]);
+    return;
+  }
+  if (!id && !volunteerId) {
+    try {
+      await checkInService.getAllCheckIns();
+      res.status(204).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
     }
-    if (!id && !volunteerId) {
-        try {
-            await checkInService.getAllCheckIns();
-            res.status(204).send();
-        } catch (error: unknown) {
-            res.status(500).json({ error: getErrorMessage(error) });
-        }
-    } else if (id) {
-        try {
-            await checkInService.getCheckInsById(id);
-            res.status(204).send();
-        } catch (error: unknown) {
-            res.status(500).json({ error: getErrorMessage(error) });
-        }
-    } else if (volunteerId) {
-        try {
-            await checkInService.getCheckInsByVolunteerId(volunteerId as string);
-            res.status(204).send();
-        } catch (error: unknown) {
-            res.status(500).json({ error: getErrorMessage(error) });
-        }
+  } else if (id) {
+    try {
+      await checkInService.getCheckInsById(id);
+      res.status(204).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
     }
+  } else if (volunteerId) {
+    try {
+      await checkInService.getCheckInsByVolunteerId(volunteerId as string);
+      res.status(204).send();
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
 });
 
 /* Delete checkins by id (e.g. /checkin/63)
