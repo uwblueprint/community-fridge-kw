@@ -5,7 +5,9 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Action from "./components/auth/Action";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import ResetPassword from "./components/auth/ResetPassword/index";
 import Signup from "./components/auth/Signup";
+import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
@@ -36,6 +38,7 @@ const App = (): React.ReactElement => {
     <ChakraProvider theme={customTheme}>
       <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
         <Router>
+          <FeedbackBanner />
           <Header />
           <Switch>
             <Route exact path={Routes.LOGIN_PAGE} component={Login} />
@@ -72,6 +75,11 @@ const App = (): React.ReactElement => {
               component={Scheduling as React.FC}
             />
             <Route path={Routes.ACTION} component={Action} />
+            <Route
+              exact
+              path={Routes.FORGET_PASSWORD}
+              component={ResetPassword}
+            />
             <Route exact path="*" component={NotFound} />
           </Switch>
           <Footer />

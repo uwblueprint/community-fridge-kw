@@ -1,17 +1,12 @@
 import { Router } from "express";
 
-import { isAuthorizedByRole } from "../middlewares/auth";
 import {
   createSchedulingDtoValidator,
   updateSchedulingDtoValidator,
 } from "../middlewares/validators/schedulingValidators";
 import nodemailerConfig from "../nodemailer.config";
-import AuthService from "../services/implementations/authService";
 import EmailService from "../services/implementations/emailService";
-import UserService from "../services/implementations/userService";
 import SchedulingService from "../services/implementations/schedulingService";
-import IUserService from "../services/interfaces/userService";
-import IAuthService from "../services/interfaces/authService";
 import IEmailService from "../services/interfaces/emailService";
 import ISchedulingService from "../services/interfaces/schedulingService";
 import { SchedulingDTO } from "../types";
@@ -127,8 +122,8 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
   or deletes by recurring donation id 
   (e.g. /scheduling?recurringDonationId=1?currentDate=2022-01-31T05:00:00.000Z)
 */
-schedulingRouter.delete("/:id?", async (req, res) => {
-  const { id } = req.params;
+schedulingRouter.delete("/:id?:role?", async (req, res) => {
+  const { id, role } = req.params;
   const { recurringDonationId, currentDate } = req.query;
   const contentType = req.headers["content-type"];
 
@@ -145,6 +140,7 @@ schedulingRouter.delete("/:id?", async (req, res) => {
       await schedulingService.deleteSchedulingByRecurringDonationId(
         recurringDonationId as string,
         currentDate as string,
+        role,
       );
       res.status(204).send();
     } catch (error: unknown) {
@@ -152,7 +148,7 @@ schedulingRouter.delete("/:id?", async (req, res) => {
     }
   } else if (id) {
     try {
-      await schedulingService.deleteSchedulingById(id);
+      await schedulingService.deleteSchedulingById(id, role);
       res.status(204).send();
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });

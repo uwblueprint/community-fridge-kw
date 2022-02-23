@@ -12,93 +12,17 @@ import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";
 
 import testSql from "../../../testUtils/testDb";
-import IUserService from "../../interfaces/userService";
-import UserService from "../userService";
+import {
+  RECURRING_DONATION_ID,
+  testUsersDb,
+  testDonorsDb,
+  testSchedules,
+} from "../../../testUtils/schedulingService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";
 import IDonorService from "../../interfaces/donorService";
 import DonorService from "../donorService";
-
-const RECURRING_DONATION_ID = "1";
-
-const testUsersDb = [
-  {
-    first_name: "Test",
-    last_name: "User",
-    auth_id: "test id",
-    role: "Donor",
-    email: "test@email.com",
-  },
-  {
-    first_name: "Test",
-    last_name: "User 2",
-    auth_id: "test id 2",
-    role: "Donor",
-    email: "test2@email.com",
-  },
-];
-
-const testDonorsDb = [
-  {
-    user_id: 1,
-    donor_type: "LocalBusiness",
-    business_name: "Test Name 1",
-  },
-  {
-    user_id: 2,
-    donor_type: "IndividualDonor",
-    business_name: "Test Name 2",
-  },
-];
-
-const testSchedules = [
-  {
-    donorId: "1",
-    categories: ["Dry packaged goods"],
-    size: "medium",
-    isPickup: false,
-    dayPart: "Morning (6am - 11am)",
-    startTime: new Date("2021-09-01T09:00:00.000Z"),
-    endTime: new Date("2021-09-01T00:10:00.000Z"),
-    status: "Pending",
-    volunteerNeeded: true,
-    volunteerTime: "8:00 AM",
-    frequency: "One time",
-    notes: "these are the notes",
-  },
-  {
-    donorId: "2",
-    categories: ["Non-perishables", "Tea and coffee"],
-    size: "medium",
-    isPickup: true,
-    volunteerTime: "8:00 AM",
-    pickupLocation: "location",
-    dayPart: "Morning (6am - 11am)",
-    startTime: new Date("2021-09-01T09:00:00.000Z"),
-    endTime: new Date("2021-09-01T00:10:00.000Z"),
-    status: "Pending",
-    volunteerNeeded: false,
-    frequency: "Daily",
-    recurringDonationId: RECURRING_DONATION_ID,
-    recurringDonationEndDate: new Date("2021-09-03T00:00:00.000Z"),
-    notes: "these are the copied notes",
-  },
-  {
-    donorId: "1",
-    categories: ["Fresh produce"],
-    isPickup: false,
-    dayPart: "Morning (6am - 11am)",
-    startTime: new Date("2022-03-01T00:08:00.000Z"),
-    endTime: new Date("2022-03-01T00:06:00.000Z"),
-    status: "Pending",
-    volunteerNeeded: false,
-    frequency: "Monthly",
-    recurringDonationId: RECURRING_DONATION_ID,
-    recurringDonationEndDate: new Date("2021-10-01T00:06:00.000Z"),
-    notes: "these are the copied notes",
-  },
-];
 
 const schedules = testSchedules.map((schedule) => {
   const scheduleSnakeCase: Record<
@@ -406,5 +330,21 @@ describe("pg schedulingService", () => {
     expect(schedulingsDbAfterDelete.length).toBe(
       testSchedules.length - recurringIdCount,
     );
+  });
+
+  test("deleteRecurringSchedulingChangeEndDate", async () => {
+    await Scheduling.bulkCreate(schedules);
+    const res = await schedulingService.deleteSchedulingByRecurringDonationId(
+      RECURRING_DONATION_ID,
+      testSchedules[3].startTime.toISOString(),
+    );
+    const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll({
+      where: { recurring_donation_id: RECURRING_DONATION_ID },
+    });
+    schedulingsDbAfterDelete.forEach((scheduling: Scheduling) => {
+      expect(scheduling.recurring_donation_end_date).toStrictEqual(
+        testSchedules[2].startTime,
+      );
+    });
   });
 });

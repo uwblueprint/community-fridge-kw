@@ -68,11 +68,15 @@ const ConfirmDetails = ({
 
   const onDeleteClick = async (isOneTimeEvent = true) => {
     if (isOneTimeEvent) {
-      await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
+      await SchedulingAPIClient.deleteSchedule(
+        currentSchedule.id,
+        authenticatedUser!.role,
+      );
     } else {
       await SchedulingAPIClient.deleteScheduleByRecurringId(
         currentSchedule?.recurringDonationId,
         currentSchedule.startTime,
+        authenticatedUser!.role,
       );
     }
     toast({

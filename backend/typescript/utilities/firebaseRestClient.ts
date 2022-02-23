@@ -13,6 +13,8 @@ const FIREBASE_OAUTH_SIGN_IN_URL =
   "https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp";
 const FIREBASE_CONFIRM_EMAIL_VERIFICATION_URL =
   "https://identitytoolkit.googleapis.com/v1/accounts:update";
+const FIREBASE_PASSWORD_RESET_CODE_URL =
+  "https://identitytoolkit.googleapis.com/v1/accounts:resetPassword";
 
 type PasswordSignInResponse = {
   idToken: string;
@@ -70,6 +72,13 @@ type ConfirmEmailVerificationResponse = {
   providerUserInfo: JSON[];
   emailVerified: boolean;
 };
+
+type ConfirmPasswordResetVerificationResponse = {
+  email: string;
+  requestType: string;
+};
+
+type ConfirmPasswordResetResponse = ConfirmPasswordResetVerificationResponse;
 
 const FirebaseRestClient = {
   // Docs: https://firebase.google.com/docs/reference/rest/auth/#section-sign-in-email-password
@@ -222,6 +231,79 @@ const FirebaseRestClient = {
     }
     return responseJson as ConfirmEmailVerificationResponse;
   },
-};
 
+  // Docs: https://firebase.google.com/docs/reference/rest/auth/#section-verify-password-reset-code
+  confirmPasswordResetVerificationCode: async (
+    oobCode: string,
+  ): Promise<ConfirmPasswordResetVerificationResponse> => {
+    const response: Response = await fetch(
+      `${FIREBASE_PASSWORD_RESET_CODE_URL}?key=${process.env.FIREBASE_WEB_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          oobCode,
+        }),
+      },
+    );
+
+    const responseJson:
+      | ConfirmPasswordResetVerificationResponse
+      | RequestError = await response.json();
+
+    if (!response.ok) {
+      const errorMessage = [
+        "Failed to confirm password reset verification code reason =",
+        `${response.status},`,
+        "error message =",
+        (responseJson as RequestError).error.message,
+      ];
+      Logger.error(errorMessage.join(" "));
+
+      throw new Error(
+        "Failed to confirm password reset verification code via Firebase REST API",
+      );
+    }
+    return responseJson as ConfirmPasswordResetVerificationResponse;
+  },
+
+  // Docs: https://firebase.google.com/docs/reference/rest/auth/#section-confirm-reset-password
+  confirmPasswordReset: async (
+    newPassword: string,
+    oobCode: string,
+  ): Promise<ConfirmPasswordResetResponse> => {
+    const response: Response = await fetch(
+      `${FIREBASE_PASSWORD_RESET_CODE_URL}?key=${process.env.FIREBASE_WEB_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          oobCode,
+          newPassword,
+        }),
+      },
+    );
+
+    const responseJson:
+      | ConfirmPasswordResetVerificationResponse
+      | RequestError = await response.json();
+
+    if (!response.ok) {
+      const errorMessage = [
+        "Failed to change new password. Reason =",
+        `${response.status},`,
+        "error message =",
+        (responseJson as RequestError).error.message,
+      ];
+      Logger.error(errorMessage.join(" "));
+
+      throw new Error("Failed to change new password Firebase REST API");
+    }
+    return responseJson as ConfirmPasswordResetVerificationResponse;
+  },
+};
 export default FirebaseRestClient;

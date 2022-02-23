@@ -2,8 +2,6 @@ import {
   SchedulingDTO,
   CreateSchedulingDTO,
   UpdateSchedulingDTO,
-  UserDonorDTO,
-  DonorDTO,
 } from "../../types";
 
 interface ISchedulingService {
@@ -37,13 +35,13 @@ interface ISchedulingService {
   /**
    * Generate an email with donation information to be sent after user schedules
    * a donation
-   * @param donor that scheduled the donation
+   * @param updated if email is regarding an update made to the schedule
    * @param schedule object that contains information on scheduled donation
    * @param isAdmin if email is directed to admin
    * @throws Error if unable to send email
    */
-  sendEmailVerificationAfterSchedulingADonation(
-    donor: UserDonorDTO,
+  sendScheduledDonationEmail(
+    updated: boolean,
     schedule: SchedulingDTO,
     isAdmin: boolean,
   ): Promise<void>;
@@ -51,14 +49,12 @@ interface ISchedulingService {
   /**
    * Generate an email with donation information to be sent after user schedules
    * a donation
-   * @param donor that scheduled the donation
    * @param schedule object that contains information on cancelled donation
-   * @param isRecurringDonation 0 if the cancelled donation is a one-time donation, 1 otherwise
-   * @param isAdminDeleted 0 if donor that scheduled donation is cancelling donation, 1 otherwise
+   * @param isRecurringDonation false if the cancelled donation is a one-time donation, true otherwise
+   * @param isAdminDeleted false if donor that scheduled donation is cancelling donation, true otherwise
    * @throws Error if unable to send email
    */
-  sendEmailAfterSchedulingCancellation(
-    donor: UserDonorDTO,
+  sendSchedulingCancellationEmail(
     schedule: SchedulingDTO,
     isRecurringDonation: boolean,
     isAdminDeleted: boolean,
@@ -87,19 +83,22 @@ interface ISchedulingService {
   /**
    * Delete a scheduling by id
    * @param id scheduling id
+   * @param role of user that is deleting the donation
    * @throws Error if scheduling deletion fails
    */
-  deleteSchedulingById(id: string): Promise<void>;
+  deleteSchedulingById(id: string, role: string): Promise<void>;
 
   /**
    * Delete a scheduling by recurring_donation_id
    * @param reucrring_donation_id recurring donation id
    * @param current_date the current date of the recurrring donation
+   * @param role of user that is deleting the recurring donation
    * @throws Error if recurring donation deletion fails
    */
   deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string,
     current_date: string,
+    role: string,
   ): Promise<void>;
 }
 
