@@ -1,5 +1,6 @@
 import React from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
+import { Role } from "../../../types/AuthTypes";
 
 import AccountDetails from "./AccountDetails";
 import AccountType from "./AccountType";
@@ -17,6 +18,7 @@ const steps = [
 
 interface UseStepType {
   step: number | Step | any;
+  index: number;
   navigation: NavigationProps | any;
 }
 
@@ -35,6 +37,7 @@ const Signup = () => {
 
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
   const { id } = step;
+  const { next } = navigation;
 
   switch (id) {
     case "account type":
@@ -62,13 +65,16 @@ const Signup = () => {
         />
       );
     case "terms conditions":
-      return (
-        <TermsConditions
-          formData={formValues}
-          setForm={setForm}
-          navigation={navigation}
-        />
-      );
+      if (formValues.role === Role.VOLUNTEER) {
+        return (
+          <TermsConditions
+            formData={formValues}
+            setForm={setForm}
+            navigation={navigation}
+          />
+        );
+      }
+      return next();
     case "email verification":
       return <VerificationPage formValues={formValues} />;
     default:
