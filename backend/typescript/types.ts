@@ -136,3 +136,18 @@ export type NodemailerConfig = {
 };
 
 export type SignUpMethod = "PASSWORD" | "GOOGLE";
+
+export type CheckInDTO = {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  notes?: string;
+  volunteerId?: string;
+  isAdmin?: boolean;
+};
+
+export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
+
+export type UpdateCheckInDTO = Partial<
+  Omit<CheckInDTO, "id" | "startDate" | "endDate">
+>;
