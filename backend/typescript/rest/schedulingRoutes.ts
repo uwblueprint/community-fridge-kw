@@ -101,6 +101,31 @@ schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
   }
 });
 
+schedulingRouter.get("/pickup/:isPickUp", async (req, res) => {
+  const { isPickUp } = req.params;
+  const contentType = req.headers["content-type"];
+
+  if (
+    typeof isPickUp !== "string" ||
+    (isPickUp !== "true" && isPickUp !== "false")
+  ) {
+    res.status(400).json({
+      error: "isPickUp query parameter must be the string 'true' or 'false'",
+    });
+    return;
+  }
+
+  try {
+    const isPickUpCheck = isPickUp === "true";
+    const schedulings = await schedulingService.getSchedulingsByPickUp(
+      isPickUpCheck,
+    );
+    res.status(200).json(schedulings);
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
 /* Get all schedulings, optionally filter by:
   - id, through URI (ex. /scheduling/1)
   - donorId through query param (ex. /scheduling/?donorId=1)
