@@ -54,6 +54,7 @@ const Account = (): JSX.Element => {
     if (!authenticatedUser) {
       return;
     }
+    authenticatedUser.role = Role.VOLUNTEER;
     const getDonor = async () => {
       let donorResponse: DonorResponse = {
         id: "",
@@ -205,20 +206,10 @@ const Account = (): JSX.Element => {
       },
     );
 
-    if (!updatedUser) {
-      setModalType("error");
-      onOpen();
-    }
-
     // update donor values
     const updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
       businessName,
     });
-
-    if (!updatedDonor) {
-      setModalType("error");
-      onOpen();
-    }
 
     // update authenticatedUser and local storage to reflect changes
     const user = {
@@ -313,33 +304,38 @@ const Account = (): JSX.Element => {
         <Text textStyle="mobileSmall" color="hubbard.100" mt="1em" mb="2em">
           Edit any account information here.
         </Text>
+        {authenticatedUser?.role !== Role.VOLUNTEER ? (
+          <FormControl
+            isRequired
+            isReadOnly={!isEditing}
+            isInvalid={!!formErrors.businessName}
+          >
+            <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
+              Organization
+            </Text>
 
-        <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
-          Organization
-        </Text>
-        <FormControl
-          isRequired
-          isReadOnly={!isEditing}
-          isInvalid={!!formErrors.businessName}
-        >
-          <FormLabel>Name of business</FormLabel>
-          <Input
-            mt="2"
-            value={businessName}
-            name="businessName"
-            placeholder="Enter name of business"
-            variant={isEditing ? "customFilled" : "unstyled"}
-            onChange={(e) => handleChange(e.target.value, "businessName")}
-          />
-          <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
-        </FormControl>
+            <FormLabel>Name of business</FormLabel>
+            <Input
+              mt="2"
+              value={businessName}
+              name="businessName"
+              placeholder="Enter name of business"
+              variant={isEditing ? "customFilled" : "unstyled"}
+              onChange={(e) => handleChange(e.target.value, "businessName")}
+            />
+            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
+          </FormControl>
+        ) : null}
+
         <Text
           mt={{ base: "40px", md: "54px" }}
           mb="1em"
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Point of Contact
+          {authenticatedUser?.role === Role.VOLUNTEER
+            ? "Volunteer Information"
+            : "Point of Contact"}
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
