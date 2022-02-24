@@ -97,7 +97,7 @@ interface ISchedulingService {
   /**
    * update schedulings by recurring_donation_id
    * @param reucrring_donation_id recurring donation id
-   * @throws Error if recurring donation deletion fails
+   * @throws Error if recurring donation update fails
    */
   updateSchedulingByRecurringDonationId(
     recurring_donation_id: string,

@@ -738,7 +738,10 @@ class SchedulingService implements ISchedulingService {
     scheduling: UpdateSchedulingDTO,
   ): Promise<void> {
     try {
-      const updatesSnakeCase: Record<string, unknown> = {};
+      const updatesSnakeCase: Record<
+        string,
+        Date | string | number | boolean | string[] | undefined | null
+      > = {};
       const startDateTime = new Date(scheduling.startTime!);
       Object.entries(scheduling).forEach(([key, value]) => {
         if (key !== "startTime") {

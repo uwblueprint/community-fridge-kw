@@ -215,7 +215,7 @@ schedulingRouter.put(
     if (recurringDonationId && id) {
       await sendResponseByMimeType(res, 400, contentType, [
         {
-          error: "Cannot delete by both id and recurringDonationId",
+          error: "Cannot edit by both id and recurringDonationId",
         },
       ]);
       return;
@@ -230,8 +230,7 @@ schedulingRouter.put(
       } catch (error: unknown) {
         res.status(500).json({ error: getErrorMessage(error) });
       }
-    }
-    if (recurringDonationId) {
+    } else if (recurringDonationId) {
       try {
         await schedulingService.updateSchedulingByRecurringDonationId(
           recurringDonationId as string,
