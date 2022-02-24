@@ -724,8 +724,6 @@ class SchedulingService implements ISchedulingService {
         volunteerId: String(updatedScheduling.volunteer_id),
       };
 
-      this.sendScheduledDonationEmail(true, updatedSchedulingDTO, false);
-
       return updatedSchedulingDTO;
     } catch (error) {
       Logger.error(
