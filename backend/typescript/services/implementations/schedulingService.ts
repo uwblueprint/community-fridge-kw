@@ -360,7 +360,7 @@ class SchedulingService implements ISchedulingService {
               
               ${
                 updated
-                  ? `Your community fridge donation has been edited by the admin team.
+                  ? `Your community fridge donation has been edited.
                     <br />
                     The following details have been updated:
                     </p>`
