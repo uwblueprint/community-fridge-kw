@@ -110,7 +110,7 @@ const DonationInformation: any = ({
     }
     const editedFields = { categories, size, startTime };
     const res = isOneTimeEvent
-      ? await SchedulingAPIClient.updateSchedule(id, formValues)
+      ? await SchedulingAPIClient.updateSchedule(id, editedFields)
       : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
           recurringDonationId,
           editedFields,

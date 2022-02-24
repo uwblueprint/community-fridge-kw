@@ -365,8 +365,13 @@ const SelectDateTime = ({
     if (!validateForm()) {
       return;
     }
+    const editedFields = {
+      dayPart,
+      startTime,
+      endTime,
+    };
     if (isOneTimeEvent) {
-      const res = await SchedulingAPIClient.updateSchedule(id, formValues);
+      const res = await SchedulingAPIClient.updateSchedule(id, editedFields);
       if (!res) {
         toast({
           title: "Drop-off Information could not be updated. Please try again",
