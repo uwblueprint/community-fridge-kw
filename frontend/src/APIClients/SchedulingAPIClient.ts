@@ -104,7 +104,7 @@ const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
 const updateSchedule = async (
   scheduleId: string,
   fields: UpdatedSchedulingFields,
-): Promise<Schedule> => {
+): Promise<Schedule | boolean> => {
   try {
     const { data } = await baseAPIClient.put(
       `/scheduling/${scheduleId}`,
@@ -115,7 +115,25 @@ const updateSchedule = async (
     );
     return data;
   } catch (error) {
-    return error as Schedule;
+    return false;
+  }
+};
+
+const updateSchedulesByRecurringDonationId = async (
+  recurringDonationId: string,
+  fields: UpdatedSchedulingFields,
+): Promise<boolean> => {
+  try {
+    await baseAPIClient.put(
+      `/scheduling?recurringDonationId=${recurringDonationId}`,
+      {
+        ...fields,
+      },
+      { headers: { Authorization: BEARER_TOKEN } },
+    );
+    return true;
+  } catch (error) {
+    return false;
   }
 };
 
@@ -153,6 +171,7 @@ export default {
   getScheduleByDonorId,
   createSchedule,
   updateSchedule,
+  updateSchedulesByRecurringDonationId,
   deleteSchedule,
   deleteScheduleByRecurringId,
   getScheduleByVolunteerId,
