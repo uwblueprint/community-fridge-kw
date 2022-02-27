@@ -23,10 +23,9 @@ import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import ErrorSchedulingModal from "../../common/GeneralErrorModal";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import DeleteRecurringModal from "../Dashboard/components/DeleteRecurringModal";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
+import ModifyRecurringModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
-import SaveButton from "./SaveChangesButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
 
 const ConfirmDetails = ({
@@ -67,13 +66,19 @@ const ConfirmDetails = ({
   };
 
   const onDeleteClick = async (isOneTimeEvent = true) => {
-    if (isOneTimeEvent) {
-      await SchedulingAPIClient.deleteSchedule(currentSchedule.id);
-    } else {
-      await SchedulingAPIClient.deleteScheduleByRecurringId(
-        currentSchedule?.recurringDonationId,
-        currentSchedule.startTime,
-      );
+    const res = isOneTimeEvent
+      ? await SchedulingAPIClient.deleteSchedule(currentSchedule.id)
+      : await SchedulingAPIClient.deleteScheduleByRecurringId(
+          currentSchedule?.recurringDonationId,
+          currentSchedule.startTime,
+        );
+    if (!res) {
+      toast({
+        title: "Donation could not be cancelled. Please try again",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
     }
     toast({
       title: isOneTimeEvent
@@ -368,10 +373,11 @@ const ConfirmDetails = ({
               onDelete={onDeleteClick}
             />
           ) : (
-            <DeleteRecurringModal
+            <ModifyRecurringModal
               isOpen={isOpen}
               onClose={onClose}
-              onDelete={onDeleteClick}
+              onModification={onDeleteClick}
+              modificationType="delete"
             />
           )}
         </Box>

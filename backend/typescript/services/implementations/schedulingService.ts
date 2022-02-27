@@ -360,7 +360,7 @@ class SchedulingService implements ISchedulingService {
               
               ${
                 updated
-                  ? `Your community fridge donation has been edited by the admin team.
+                  ? `Your community fridge donation has been edited.
                     <br />
                     The following details have been updated:
                     </p>`
@@ -693,9 +693,7 @@ class SchedulingService implements ISchedulingService {
     try {
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
-        if (key !== "recurringDonationId") {
-          updatesSnakeCase[snakeCase(key)] = value;
-        }
+        updatesSnakeCase[snakeCase(key)] = value;
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
@@ -726,9 +724,45 @@ class SchedulingService implements ISchedulingService {
         volunteerId: String(updatedScheduling.volunteer_id),
       };
 
-      this.sendScheduledDonationEmail(true, updatedSchedulingDTO, false);
-
       return updatedSchedulingDTO;
+    } catch (error) {
+      Logger.error(
+        `Failed to update scheduling. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateSchedulingByRecurringDonationId(
+    recurringDonationId: string,
+    scheduling: UpdateSchedulingDTO,
+  ): Promise<void> {
+    try {
+      const updatesSnakeCase: Record<
+        string,
+        Date | string | number | boolean | string[] | undefined | null
+      > = {};
+      const startDateTime = new Date(scheduling.startTime!);
+      Object.entries(scheduling).forEach(([key, value]) => {
+        if (key !== "startTime") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
+      });
+
+      const updateResult = await Scheduling.update(updatesSnakeCase, {
+        where: {
+          recurring_donation_id: Number(recurringDonationId),
+          start_time: {
+            [Op.gte]: startDateTime,
+          },
+        },
+        returning: true,
+      });
+      if (updateResult[0] < 1) {
+        throw new Error(
+          `recurringDonationId ${recurringDonationId} not found.`,
+        );
+      }
     } catch (error) {
       Logger.error(
         `Failed to update scheduling. Reason = ${getErrorMessage(error)}`,
