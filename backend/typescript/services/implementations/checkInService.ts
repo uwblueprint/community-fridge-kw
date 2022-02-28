@@ -4,17 +4,33 @@ import ICheckInService from "../interfaces/checkInService";
 import logger from "../../utilities/logger";
 import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import IEmailService from "../interfaces/emailService";
+import IVolunteerService from "../interfaces/volunteerService";
 
 const Logger = logger(__filename);
 
 class CheckInService implements ICheckInService {
   /* eslint-disable class-methods-use-this */
 
+  emailService: IEmailService | null;
+
+  volunteerService: IVolunteerService | null;
+
+  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
+
+  constructor(
+    emailService: IEmailService | null = null,
+    volunteerService: IVolunteerService | null = null,
+  ) {
+    this.emailService = emailService;
+    this.volunteerService = volunteerService;
+  }
+
   async getAllCheckIns(): Promise<CheckInDTO[]> {
     let checkInDtos: CheckInDTO[] = [];
     try {
       const checkIns = await CheckIn.findAll({
-        order: [["start_time", "ASC"]],
+        order: [["start_date", "ASC"]],
       });
       checkInDtos = checkIns.map((checkIn: CheckIn) => {
         return {
@@ -68,9 +84,9 @@ class CheckInService implements ICheckInService {
     try {
       checkIns = await CheckIn.findAll({
         where: {
-          volunteerId: Number(volunteerId),
+          volunteer_id: Number(volunteerId),
         },
-        order: [["start_time", "ASC"]],
+        order: [["start_date", "ASC"]],
       });
 
       checkInDtos = checkIns.map((checkIn) => {
