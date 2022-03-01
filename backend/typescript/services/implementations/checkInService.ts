@@ -134,9 +134,6 @@ class CheckInService implements ICheckInService {
     const startDateRange = new Date(startDate);
     const endDateRange = new Date(endDate);
 
-    if (startDateRange > endDateRange) {
-      throw new Error(`start date must be before end date.`);
-    }
     try {
       const numsDestroyed = await CheckIn.destroy({
         where: {
