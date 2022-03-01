@@ -127,12 +127,16 @@ class CheckInService implements ICheckInService {
     }
   }
 
-  async deleteCheckInByDateRange(
+  async deleteCheckInsByDateRange(
     startDate: string,
     endDate: string,
   ): Promise<void> {
     const startDateRange = new Date(startDate);
     const endDateRange = new Date(endDate);
+
+    if (startDateRange > endDateRange) {
+      throw new Error(`start date must be before end date.`);
+    }
     try {
       const numsDestroyed = await CheckIn.destroy({
         where: {

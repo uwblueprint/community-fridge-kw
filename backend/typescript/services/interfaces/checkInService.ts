@@ -33,7 +33,7 @@ interface ICheckInService {
    * @param startDate start date of the range
    * @param endDate end date of the range
    */
-  deleteCheckInByDateRange(startDate: string, endDate: string): Promise<void>;
+  deleteCheckInsByDateRange(startDate: string, endDate: string): Promise<void>;
 }
 
 export default ICheckInService;

@@ -73,4 +73,37 @@ describe("pg checkInService", () => {
       testCheckIns.filter((checkIn) => checkIn.volunteerId === volunteerId),
     );
   });
+
+  test("deleteCheckInById", async () => {
+    const checkInToDelete: CheckIn | null = await CheckIn.findOne();
+    expect(checkInToDelete).not.toBeNull();
+    if (checkInToDelete) {
+      const res = await checkInService.deleteCheckInById(
+        checkInToDelete.id.toString(),
+      );
+      const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
+      checkInsDbAfterDelete.forEach((checkIn: CheckIn, i) => {
+        expect(checkIn.id).not.toBe(checkInToDelete.id);
+      });
+      expect(checkInsDbAfterDelete.length).toBe(testCheckIns.length - 1);
+    }
+  });
+
+  test("deleteCheckInsByDateRange", async () => {
+    const startDate = "2021-09-01T09:00:00.000Z";
+    const endDate = "2021-09-07T00:10:00.000Z";
+    const res = await checkInService.deleteCheckInsByDateRange(
+      startDate,
+      endDate,
+    );
+    const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
+    const expected = testCheckIns.filter(
+      (checkIn) =>
+        !(
+          checkIn.startDate >= new Date(startDate) &&
+          checkIn.endDate <= new Date(endDate)
+        ),
+    );
+    expect(checkInsDbAfterDelete.length).toBe(expected.length);
+  });
 });
