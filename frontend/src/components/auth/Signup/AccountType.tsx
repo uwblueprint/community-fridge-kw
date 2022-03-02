@@ -1,6 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Container,
   FormControl,

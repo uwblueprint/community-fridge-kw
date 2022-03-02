@@ -65,16 +65,13 @@ const Signup = () => {
         />
       );
     case "terms conditions":
-      if (formValues.role === Role.VOLUNTEER) {
-        return (
-          <TermsConditions
-            formData={formValues}
-            setForm={setForm}
-            navigation={navigation}
-          />
-        );
-      }
-      return next();
+      return (
+        <TermsConditions
+          formData={formValues}
+          setForm={setForm}
+          navigation={navigation}
+        />
+      );
     case "email verification":
       return <VerificationPage formValues={formValues} />;
     default:
