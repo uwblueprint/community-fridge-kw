@@ -102,7 +102,12 @@ const AccountDetails = ({
         return false;
       }
     }
-    return go && (role === Role.VOLUNTEER ? go("terms conditions") : go("email verification"));
+    return (
+      go &&
+      (role === Role.VOLUNTEER
+        ? go("terms conditions")
+        : go("email verification"))
+    );
   };
 
   const verifyPassword = (input: string) => {
