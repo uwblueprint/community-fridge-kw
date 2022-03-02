@@ -17,13 +17,11 @@ interface EditAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
   discardChanges: () => void;
-  type: "cancel" | "error" | "";
 }
 const EditAccountModal = ({
   isOpen,
   onClose,
   discardChanges,
-  type,
 }: EditAccountModalProps) => {
   const { isDesktop } = useViewport();
 
@@ -37,18 +35,14 @@ const EditAccountModal = ({
       >
         <ModalOverlay />
         <ModalContent p="1.3em">
-          {type === "cancel" ? <ModalCloseButton /> : null}
+          <ModalCloseButton />
           <ModalHeader>
             <Text textStyle={{ base: "mobileBodyBold", md: "desktopHeader3" }}>
-              {type === "cancel"
-                ? "Are you sure you want to leave the page?"
-                : "Edit information failed"}
+              Are you sure you want to leave the page?
             </Text>
           </ModalHeader>
           <ModalBody textStyle="mobileBody" color="hubbard.100">
-            {type === "cancel"
-              ? "Any changes made to account information will not be saved."
-              : "Something went wrong. Please try again."}
+            Any changes made to account information will not be saved.
           </ModalBody>
           <ModalFooter>
             <Button
@@ -57,7 +51,7 @@ const EditAccountModal = ({
               variant="navigation"
               onClick={discardChanges}
             >
-              {type === "cancel" ? "Discard changes" : "OK"}
+              Discard changes
             </Button>
           </ModalFooter>
         </ModalContent>

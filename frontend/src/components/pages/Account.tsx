@@ -41,7 +41,6 @@ const Account = (): JSX.Element => {
   const [donor, setDonor] = useState<DonorResponse>();
   const [isSavingData, setIsSavingData] = useState(false);
   const [isTouched, setIsTouched] = useState<boolean>(false);
-  const [modalType, setModalType] = useState<"cancel" | "error" | "">("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   React.useEffect(() => {
@@ -131,11 +130,6 @@ const Account = (): JSX.Element => {
       setBusinessName(e.toString());
     }
     setIsTouched(true);
-  };
-
-  const handleCancel = () => {
-    setModalType("cancel");
-    onOpen();
   };
 
   const discardChanges = () => {
@@ -261,7 +255,7 @@ const Account = (): JSX.Element => {
         variant="cancelEditInfo"
         aria-label="Cancel editing"
         icon={<CloseIcon />}
-        onClick={handleCancel}
+        onClick={onOpen}
       />
     );
   };
@@ -280,7 +274,6 @@ const Account = (): JSX.Element => {
         isOpen={isOpen}
         onClose={onClose}
         discardChanges={discardChanges}
-        type={modalType}
       />
       <Box>
         {!isEditing ? (
