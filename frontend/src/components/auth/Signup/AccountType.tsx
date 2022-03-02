@@ -1,6 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Container,
   FormControl,
@@ -84,7 +83,7 @@ const AccountType = ({
           <CloseIcon color="black.100" />
         </IconButton>
       )}
-      <HeaderLabel text="Create an account" isDesktop={isDesktop} />
+      <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Thank you for your interest in helping out Community Fridge KW!
       </Text>

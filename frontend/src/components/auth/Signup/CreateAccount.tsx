@@ -5,7 +5,6 @@ import {
   Container,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   Grid,
   IconButton,
   Input,
@@ -101,7 +100,7 @@ const CreateAccount = ({
           <CloseIcon color="black.100" />
         </IconButton>
       )}
-      <HeaderLabel text="Create an account" isDesktop={isDesktop} />
+      <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Account information can be edited in the My Account section of the
         platform.

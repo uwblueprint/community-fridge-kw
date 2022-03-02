@@ -7,7 +7,9 @@ import {
   FormControl,
   FormErrorMessage,
   IconButton,
+  ListItem,
   Text,
+  UnorderedList,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -112,25 +114,54 @@ const TermsConditions = ({
           <CloseIcon color="black.100" />
         </IconButton>
       )}
-      <HeaderLabel text="Code of Conduct" isDesktop={isDesktop} />
+      <HeaderLabel text="Code of Conduct" />
       <Text mt="2rem">
         Please read and accept Community Fridge KW’s terms and conditions before
         signing up for an account.
       </Text>
       <Text mt="2rem" textStyle="mobileSmall" color="hubbard.100">
-        If users abuse your website or mobile app in any way, you can terminate
-        their account. Your &quot;Termination&quot; clause can inform users that
-        their accounts would be terminated if they abuse your service. <br />
-        <br />
-        If users can post content on your website or mobile app (create content
-        and share it on your platform), you can remove any content they created
-        if it infringes copyright. Your Terms and Conditions will inform users
-        that they can only create and/or share content they own rights to. If
-        users can post content on your website or mobile app (create content and
-        share it on your platform), you can remove any content they created if
-        it infringes copyright. Your Terms and Conditions will inform users that
-        they can only create and/or share content they own rights to. CFKW
-        reserves the right to something.
+        At the heart of Community Fridge KW are its volunteers; neighbours that
+        drive all operations with care. Welcome to our community of organizers.
+        CFKW volunteers maintain community fridge locations through daily
+        check-ins; deliver food to community members in need; rescue food from
+        local businesses and farms for the fridge; support in outreach and
+        marketing and much more. Before you get started, we ask that you review
+        our statements of shared principles and values to ensure you feel the
+        same way.
+        <UnorderedList>
+          <ListItem>
+            As volunteers of a mutual aid, grassroots effort such as Community
+            Fridge KW, we position ourselves in the community as facilitators,
+            connectors and allies. We do not uphold or practice a hierarchy,
+            power indifferences or claim to know what’s best for any person.
+          </ListItem>
+          <ListItem>
+            We recognize the vulnerability of those we seek to serve and we
+            strive to offer a source of fresh, free food without judgement,
+            surveillance, data collection, confrontation, or question.
+          </ListItem>
+          <ListItem>
+            The relationships we build and participate in within our community
+            are the lifelines of our work. As volunteers, we have the privilege
+            of cultivating and growing these relationships — a privilege we
+            don’t hold lightly. We strive to treat donors, supporters and hosts
+            with just as much respect, dignity, and agency as the neighbours we
+            seek to serve.
+          </ListItem>
+          <ListItem>
+            We consider ourselves stewards to the community fridge and its sites
+            of service. As stewards, we are eager to maintain compliance with
+            the expectations of both public health and our generous hosts.
+          </ListItem>
+          <ListItem>
+            The work we do is disruptive to traditional resource distribution
+            approaches and often challenges our own personal beliefs and values.
+            We hold space to grapple with this internal conflict for ourselves
+            and each other, so that we may participate in and facilitate
+            processes of unlearning around how we perceive “giving”, “taking”
+            and “sharing”.
+          </ListItem>
+        </UnorderedList>
       </Text>
 
       <FormControl mt="2rem" isRequired isInvalid={!!formErrors.acceptedTerms}>

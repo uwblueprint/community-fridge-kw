@@ -14,7 +14,6 @@ import { Link, Redirect } from "react-router-dom";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
-import useViewport from "../../hooks/useViewport";
 import { AuthenticatedUser, Role } from "../../types/AuthTypes";
 import HeaderLabel from "../common/HeaderLabel";
 
@@ -25,8 +24,6 @@ const Login = (): React.ReactElement => {
     isIncorrectLoginCredentails,
     setIsIncorrectLoginCredentails,
   ] = React.useState(false);
-
-  const { isDesktop } = useViewport();
 
   const onLogInClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(email, password);
@@ -46,7 +43,7 @@ const Login = (): React.ReactElement => {
 
   return (
     <Container p={{ base: "30px", md: "2rem 1rem" }}>
-      <HeaderLabel text="Log in to start scheduling" isDesktop={isDesktop} />
+      <HeaderLabel text="Log in to start scheduling" />
       <FormControl mt="2rem">
         <Box>
           <Text textStyle="mobileBodyBold" color="black.100">

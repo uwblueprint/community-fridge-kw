@@ -44,7 +44,7 @@ const AccountDetails = ({
   setForm: SetForm;
 }) => {
   const history = useHistory();
-  const { previous, next } = navigation;
+  const { previous, go } = navigation;
   const { isDesktop } = useViewport();
   const {
     role,
@@ -102,7 +102,7 @@ const AccountDetails = ({
         return false;
       }
     }
-    return next();
+    return go && (role === Role.VOLUNTEER ? go("terms conditions") : go("email verification"));
   };
 
   const verifyPassword = (input: string) => {
@@ -143,7 +143,7 @@ const AccountDetails = ({
           </IconButton>
         </>
       )}
-      <HeaderLabel text="Account details" isDesktop={isDesktop} />
+      <HeaderLabel text="Account details" />
       <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>
           <MandatoryInputDescription label="Email address" />
