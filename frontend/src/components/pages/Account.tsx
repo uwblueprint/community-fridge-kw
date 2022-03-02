@@ -30,7 +30,7 @@ import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
 import { DonorResponse } from "../../types/DonorTypes";
 import { setLocalStorageObjProperty } from "../../utils/LocalStorageUtils";
-import ConfirmCancelEditModal from "../common/UserManagement/EditAccountModal";
+import EditAccountModal from "../common/UserManagement/EditAccountModal";
 import ErrorMessages from "./Scheduling/ErrorMessages";
 
 const Account = (): JSX.Element => {
@@ -270,7 +270,7 @@ const Account = (): JSX.Element => {
 
   return (
     <Container centerContent variant="responsiveContainer">
-      <ConfirmCancelEditModal
+      <EditAccountModal
         isOpen={isOpen}
         onClose={onClose}
         discardChanges={discardChanges}
