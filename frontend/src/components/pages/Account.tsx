@@ -55,7 +55,6 @@ const Account = (): JSX.Element => {
     if (!authenticatedUser) {
       return;
     }
-    authenticatedUser.role = Role.VOLUNTEER;
     const getDonor = async () => {
       let donorResponse: DonorResponse = {
         id: "",
