@@ -23,10 +23,13 @@ const Logger = logger(__filename);
 
 function toSnakeCase(
   schedule: CreateSchedulingDTO,
-): Record<string, string | string[] | boolean | number | Date | undefined> {
+): Record<
+  string,
+  string | string[] | boolean | number | Date | undefined | null
+> {
   const scheduleSnakeCase: Record<
     string,
-    string | string[] | boolean | number | Date | undefined
+    string | string[] | boolean | number | Date | undefined | null
   > = {};
   Object.entries(schedule).forEach(([key, value]) => {
     scheduleSnakeCase[snakeCase(key)] = value;
@@ -107,10 +110,6 @@ class SchedulingService implements ISchedulingService {
       throw error;
     }
 
-    // TODO: retrieve volunteer ids from scheduling-volunteer
-    // table and add to returned object once volunteer table is created
-    const volunteerIds: number[] = [];
-
     return {
       id: String(scheduling.id),
       donorId: String(scheduling.donor_id),
@@ -124,11 +123,11 @@ class SchedulingService implements ISchedulingService {
       status: scheduling.status,
       volunteerNeeded: scheduling.volunteer_needed,
       volunteerTime: scheduling.volunteer_time,
-      volunteerIds,
       frequency: scheduling.frequency,
       recurringDonationId: String(scheduling.recurring_donation_id),
       recurringDonationEndDate: scheduling.recurring_donation_end_date,
       notes: scheduling.notes,
+      volunteerId: String(scheduling.volunteer_id),
     };
   }
 
@@ -175,16 +174,67 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
-          volunteerIds: [],
           frequency: scheduling.frequency,
           recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
         };
       });
     } catch (error) {
       Logger.error(
         `Failed to get schedules. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
+  }
+
+  async getSchedulingsByVolunteersNeeded(
+    isVolunteerSlotFilled?: boolean,
+  ): Promise<SchedulingDTO[]> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    try {
+      const volunteerIdQuery = isVolunteerSlotFilled ? { [Op.ne]: null } : null;
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
+        where:
+          isVolunteerSlotFilled === undefined
+            ? {
+                volunteer_needed: true,
+              }
+            : {
+                volunteer_needed: true,
+                volunteer_id: volunteerIdQuery,
+              },
+        order: [["start_time", "ASC"]],
+      });
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedulings by volunteers needed. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
@@ -212,16 +262,56 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
-          volunteerIds: [],
           frequency: scheduling.frequency,
           recurringDonationId: String(scheduling.recurring_donation_id),
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
         };
       });
     } catch (error) {
       Logger.error(
         `Failed to get schedulings. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
+  }
+
+  async getSchedulingsByPickUp(isPickUp: boolean): Promise<SchedulingDTO[]> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    try {
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
+        where: { is_pickup: isPickUp, volunteer_needed: true },
+        order: [["start_time", "ASC"]],
+      });
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedulings by pickup needed. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
@@ -314,7 +404,7 @@ class SchedulingService implements ISchedulingService {
               
               ${
                 updated
-                  ? `Your community fridge donation has been edited by the admin team.
+                  ? `Your community fridge donation has been edited.
                     <br />
                     The following details have been updated:
                     </p>`
@@ -453,6 +543,7 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_id: scheduling.recurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
+          volunteer_id: scheduling.volunteerId,
         });
       } else {
         // get new recurring donation id
@@ -488,11 +579,12 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_id: newRecurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
+          volunteer_id: scheduling.volunteerId,
         });
 
         const schedulesToBeCreated: Record<
           string,
-          string | number | boolean | string[] | Date | undefined
+          string | number | boolean | string[] | Date | undefined | null
         >[] = [];
 
         const originalStartTime: Date = new Date(scheduling.startTime);
@@ -524,7 +616,7 @@ class SchedulingService implements ISchedulingService {
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
@@ -559,7 +651,7 @@ class SchedulingService implements ISchedulingService {
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
@@ -594,7 +686,7 @@ class SchedulingService implements ISchedulingService {
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
@@ -623,11 +715,11 @@ class SchedulingService implements ISchedulingService {
       status: newScheduling.status,
       volunteerNeeded: newScheduling.volunteer_needed,
       volunteerTime: newScheduling.volunteer_time,
-      volunteerIds: [],
       frequency: newScheduling.frequency,
       recurringDonationId: String(newScheduling.recurring_donation_id),
       recurringDonationEndDate: newScheduling.recurring_donation_end_date,
       notes: newScheduling.notes,
+      volunteerId: String(newScheduling.volunteer_id),
     };
 
     // send email
@@ -645,9 +737,7 @@ class SchedulingService implements ISchedulingService {
     try {
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
-        if (key !== "recurringDonationId") {
-          updatesSnakeCase[snakeCase(key)] = value;
-        }
+        updatesSnakeCase[snakeCase(key)] = value;
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
@@ -671,14 +761,12 @@ class SchedulingService implements ISchedulingService {
         status: updatedScheduling.status,
         volunteerNeeded: updatedScheduling.volunteer_needed,
         volunteerTime: updatedScheduling.volunteer_time,
-        volunteerIds: [],
         frequency: updatedScheduling.frequency,
         recurringDonationId: String(updatedScheduling.recurring_donation_id),
         recurringDonationEndDate: updatedScheduling.recurring_donation_end_date,
         notes: updatedScheduling.notes,
+        volunteerId: String(updatedScheduling.volunteer_id),
       };
-
-      this.sendScheduledDonationEmail(true, updatedSchedulingDTO, false);
 
       return updatedSchedulingDTO;
     } catch (error) {
@@ -762,6 +850,44 @@ class SchedulingService implements ISchedulingService {
       const donor = await this.donorService.getDonorById(schedule.donorId);
       Logger.error(
         `Failed to generate email to confirm donation cancellation of donation scheduled by ${donor.email}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateSchedulingByRecurringDonationId(
+    recurringDonationId: string,
+    scheduling: UpdateSchedulingDTO,
+  ): Promise<void> {
+    try {
+      const updatesSnakeCase: Record<
+        string,
+        Date | string | number | boolean | string[] | undefined | null
+      > = {};
+      const startDateTime = new Date(scheduling.startTime!);
+      Object.entries(scheduling).forEach(([key, value]) => {
+        if (key !== "startTime") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
+      });
+
+      const updateResult = await Scheduling.update(updatesSnakeCase, {
+        where: {
+          recurring_donation_id: Number(recurringDonationId),
+          start_time: {
+            [Op.gte]: startDateTime,
+          },
+        },
+        returning: true,
+      });
+      if (updateResult[0] < 1) {
+        throw new Error(
+          `recurringDonationId ${recurringDonationId} not found.`,
+        );
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to update scheduling. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
@@ -874,6 +1000,52 @@ class SchedulingService implements ISchedulingService {
       );
       throw error;
     }
+  }
+
+  async getSchedulingsByVolunteerId(
+    volunteerId: string,
+  ): Promise<Array<SchedulingDTO>> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    let schedulings: Array<Scheduling>;
+    try {
+      schedulings = await Scheduling.findAll({
+        where: {
+          volunteer_id: Number(volunteerId),
+        },
+        order: [["start_time", "ASC"]],
+      });
+
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedules by volunteer ID. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
   }
 }
 

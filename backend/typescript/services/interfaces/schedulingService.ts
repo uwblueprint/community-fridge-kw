@@ -26,11 +26,39 @@ interface ISchedulingService {
   ): Promise<Array<SchedulingDTO>>;
 
   /**
+   * Get all scheduling information associated with volunteerId
+   * @param volunteerId id associated with volunteer
+   * @returns array of SchedulingDTOs
+   * @throws Error if schedule retrieval fails
+   */
+  getSchedulingsByVolunteerId(
+    volunteerId: string,
+  ): Promise<Array<SchedulingDTO>>;
+
+  /**
+   * Get all scheduling information where volunteer is needed and no volunteer has been assigned
+   * @param isVolunteerSlotFilled? filters if returned schedules have  volunteer slot filled or not
+   * @returns array of SchedulingDTOs
+   * @throws Error if scheduling retrieval fails
+   */
+  getSchedulingsByVolunteersNeeded(
+    isVolunteerSlotFilled?: boolean,
+  ): Promise<Array<SchedulingDTO>>;
+
+  /**
    * Get all scheduling information (possibly paginated in the future)
    * @returns array of SchedulingDTOs
    * @throws Error if scheduling retrieval fails
    */
   getSchedulings(): Promise<Array<SchedulingDTO>>;
+
+  /**
+   * Get all scheduling information where it is either pickup or onsite
+   * @param isPickUp filters if schedules requiring volunteers require pickup or not
+   * @returns array of SchedulingDTOs
+   * @throws Error if scheduling retrieval fails
+   */
+  getSchedulingsByPickUp(isPickUp: boolean): Promise<Array<SchedulingDTO>>;
 
   /**
    * Generate an email with donation information to be sent after user schedules
@@ -79,6 +107,16 @@ interface ISchedulingService {
     id: string,
     scheduling: UpdateSchedulingDTO,
   ): Promise<SchedulingDTO>;
+
+  /**
+   * update schedulings by recurring_donation_id
+   * @param reucrring_donation_id recurring donation id
+   * @throws Error if recurring donation update fails
+   */
+  updateSchedulingByRecurringDonationId(
+    recurring_donation_id: string,
+    scheduling: UpdateSchedulingDTO,
+  ): Promise<void>;
 
   /**
    * Delete a scheduling by id
