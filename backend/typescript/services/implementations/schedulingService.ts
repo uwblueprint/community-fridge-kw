@@ -947,7 +947,6 @@ class SchedulingService implements ISchedulingService {
           status: scheduleRet!.status,
           volunteerNeeded: scheduleRet!.volunteer_needed,
           volunteerTime: scheduleRet!.volunteer_time,
-          volunteerIds: [],
           frequency: scheduleRet!.frequency,
           recurringDonationId: String(scheduleRet!.recurring_donation_id),
           recurringDonationEndDate: scheduleRet!.recurring_donation_end_date,

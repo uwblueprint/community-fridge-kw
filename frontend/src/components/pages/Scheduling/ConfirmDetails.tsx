@@ -83,15 +83,16 @@ const ConfirmDetails = ({
         duration: 7000,
         isClosable: true,
       });
+    } else {
+      toast({
+        title: isOneTimeEvent
+          ? "Donation cancelled successfully"
+          : "Donations cancelled successfully",
+        status: "success",
+        duration: 7000,
+        isClosable: true,
+      });
     }
-    toast({
-      title: isOneTimeEvent
-        ? "Donation cancelled successfully"
-        : "Donations cancelled successfully",
-      status: "success",
-      duration: 7000,
-      isClosable: true,
-    });
     history.push(
       authenticatedUser!.role === Role.DONOR
         ? `${Routes.DASHBOARD_PAGE}`
