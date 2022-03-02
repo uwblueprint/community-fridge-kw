@@ -921,7 +921,6 @@ class SchedulingService implements ISchedulingService {
     role: string,
   ): Promise<void> {
     try {
-      console.log(`ROLE: ${role}`);
       let schedule;
       const deletionPastDate = new Date(current_date);
       const scheduleRet = await Scheduling.findOne({
