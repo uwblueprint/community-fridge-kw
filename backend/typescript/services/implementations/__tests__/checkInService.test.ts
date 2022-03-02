@@ -1,4 +1,3 @@
-import { snakeCase } from "lodash";
 import CheckIn from "../../../models/checkIn.model";
 import User from "../../../models/user.model";
 import Volunteer from "../../../models/volunteer.model";
@@ -16,17 +15,6 @@ import EmailService from "../emailService";
 import CheckInService from "../checkInService";
 import VolunteerService from "../volunteerService";
 import IVolunteerService from "../../interfaces/volunteerService";
-
-const checkIns = testCheckIns.map((checkIn) => {
-  const checkInSnakeCase: Record<
-    string,
-    string | Date | Date | string | boolean | null
-  > = {};
-  Object.entries(checkIn).forEach(([key, value]) => {
-    checkInSnakeCase[snakeCase(key)] = value;
-  });
-  return checkInSnakeCase;
-});
 
 jest.mock("nodemailer", () => {
   const createTransport = jest.fn().mockReturnValue({

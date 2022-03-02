@@ -1,12 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { DayPart, Frequency, Status } from "../../types";
-import {
-  getApiValidationError,
-  validatePrimitive,
-  validateDate,
-  validateCategories,
-  validateRecurringDonationEndDate,
-} from "./util";
+import { getApiValidationError, validatePrimitive, validateDate } from "./util";
 
 export const createCheckInDtoValidator = async (
   req: Request,
@@ -22,6 +16,18 @@ export const createCheckInDtoValidator = async (
     return res
       .status(400)
       .send(getApiValidationError("endDate", "Date string"));
+  }
+  if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
+    return res.status(400).send(getApiValidationError("notes", "string"));
+  }
+  if (req.body.isAdmin && !validatePrimitive(req.body.isAdmin, "boolean")) {
+    return res.status(400).send(getApiValidationError("isAdmin", "boolean"));
+  }
+  if (
+    req.body.volunteerId &&
+    !validatePrimitive(req.body.volunteerId, "string")
+  ) {
+    return res.status(400).send(getApiValidationError("volunteerId", "string"));
   }
   if (
     new Date(req.body.startDate).getTime() >=
@@ -57,6 +63,15 @@ export const updateCheckInDtoValidator = async (
     return res
       .status(400)
       .send(getApiValidationError("dates", "Date string", false, true));
+  }
+  if (req.body.isAdmin && !validatePrimitive(req.body.isAdmin, "boolean")) {
+    return res.status(400).send(getApiValidationError("isAdmin", "boolean"));
+  }
+  if (
+    req.body.volunteerId &&
+    !validatePrimitive(req.body.volunteerId, "string")
+  ) {
+    return res.status(400).send(getApiValidationError("volunteerId", "string"));
   }
   if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
     return res.status(400).send(getApiValidationError("notes", "string"));
