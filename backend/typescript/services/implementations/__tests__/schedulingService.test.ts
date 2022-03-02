@@ -303,6 +303,7 @@ describe("pg schedulingService", () => {
     if (schedulingToDelete) {
       const res = await schedulingService.deleteSchedulingById(
         schedulingToDelete.id.toString(),
+        "Donor",
       );
       const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll();
       schedulingsDbAfterDelete.forEach((scheduling: Scheduling, i) => {
@@ -322,6 +323,7 @@ describe("pg schedulingService", () => {
     const res = await schedulingService.deleteSchedulingByRecurringDonationId(
       RECURRING_DONATION_ID,
       testSchedules[1].startTime.toISOString(),
+      "Donor",
     );
     const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll();
     schedulingsDbAfterDelete.forEach((scheduling: Scheduling) => {
@@ -337,6 +339,7 @@ describe("pg schedulingService", () => {
     const res = await schedulingService.deleteSchedulingByRecurringDonationId(
       RECURRING_DONATION_ID,
       testSchedules[3].startTime.toISOString(),
+      "Donor",
     );
     const schedulingsDbAfterDelete: Scheduling[] = await Scheduling.findAll({
       where: { recurring_donation_id: RECURRING_DONATION_ID },

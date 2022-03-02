@@ -122,9 +122,9 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
   or deletes by recurring donation id 
   (e.g. /scheduling?recurringDonationId=1?currentDate=2022-01-31T05:00:00.000Z)
 */
-schedulingRouter.delete("/:id?:role?", async (req, res) => {
-  const { id, role } = req.params;
-  const { recurringDonationId, currentDate } = req.query;
+schedulingRouter.delete("/:id?", async (req, res) => {
+  const { id } = req.params;
+  const { recurringDonationId, currentDate, role } = req.query;
   const contentType = req.headers["content-type"];
 
   if (id && recurringDonationId) {
@@ -140,7 +140,7 @@ schedulingRouter.delete("/:id?:role?", async (req, res) => {
       await schedulingService.deleteSchedulingByRecurringDonationId(
         recurringDonationId as string,
         currentDate as string,
-        role,
+        role as string,
       );
       res.status(204).send();
     } catch (error: unknown) {
@@ -148,7 +148,7 @@ schedulingRouter.delete("/:id?:role?", async (req, res) => {
     }
   } else if (id) {
     try {
-      await schedulingService.deleteSchedulingById(id, role);
+      await schedulingService.deleteSchedulingById(id, role as string);
       res.status(204).send();
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });
