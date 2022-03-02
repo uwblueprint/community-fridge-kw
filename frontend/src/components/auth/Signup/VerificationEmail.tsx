@@ -48,6 +48,10 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
           Please verify your email within the hour or you will need to contact
           admin for account creation.
         </Text>
+        <Text textAlign="center" textStyle="mobileBodyBold" mt="1rem">
+          If you do not see an email within minutes, please check your junk
+          folders and add us to your Trusted Senders!
+        </Text>
       </Container>
     </Container>
   );

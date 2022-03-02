@@ -156,7 +156,9 @@ const AccountDetails = ({
             value={email}
             onChange={(e) => {
               setInteraction({ ...interaction, email: true });
-              setForm(e);
+              setForm({
+                target: { name: "email", value: e.target.value.trim() },
+              });
             }}
             name="email"
             placeholder="i.e. janedoe@gmail.com"
