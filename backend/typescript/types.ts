@@ -148,6 +148,4 @@ export type CheckInDTO = {
 
 export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
 
-export type UpdateCheckInDTO = Partial<
-  Omit<CheckInDTO, "id" | "startDate" | "endDate">
->;
+export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;

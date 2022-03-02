@@ -17,29 +17,32 @@ const emailService: IEmailService = new EmailService(nodemailerConfig);
 const volunteerService: IVolunteerService = new VolunteerService();
 
 const checkInRouter: Router = Router();
-const checkInService: ICheckInService = new CheckInService(emailService, volunteerService);
+const checkInService: ICheckInService = new CheckInService(
+  emailService,
+  volunteerService,
+);
 
 /* Create a check in instance */
 checkInRouter.post("/", createCheckInDtoValidator, async (req, res) => {
-    try {
-      const newCheckIn = await checkInService.createCheckIn(req.body);
-      res.status(201).json(newCheckIn);
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-  });
+  try {
+    const newCheckIn = await checkInService.createCheckIn(req.body);
+    res.status(201).json(newCheckIn);
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
 
 /* Update the check in instance by id */
 checkInRouter.put("/:id", updateCheckInDtoValidator, async (req, res) => {
-    try {
-      const updatedCheckIn = await checkInService.updateCheckInById(
-        req.params.id,
-        req.body,
-      );
-      res.status(200).json(updatedCheckIn);
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-  });
+  try {
+    const updatedCheckIn = await checkInService.updateCheckInById(
+      req.params.id,
+      req.body,
+    );
+    res.status(200).json(updatedCheckIn);
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
 
 export default checkInRouter;

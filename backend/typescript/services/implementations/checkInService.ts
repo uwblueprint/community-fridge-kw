@@ -1,11 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { snakeCase } from "lodash";
 import ICheckInService from "../interfaces/checkInService";
-import {
-  CheckInDTO,
-  CreateCheckInDTO,
-  UpdateCheckInDTO,
-} from "../../types";
+import { CheckInDTO, CreateCheckInDTO, UpdateCheckInDTO } from "../../types";
 import logger from "../../utilities/logger";
 import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
@@ -16,10 +12,7 @@ const Logger = logger(__filename);
 
 function toSnakeCase(
   checkIn: CreateCheckInDTO,
-): Record<
-  string,
-  Date | string | boolean | null | undefined
-> {
+): Record<string, Date | string | boolean | null | undefined> {
   const checkInSnakeCase: Record<
     string,
     Date | string | boolean | null | undefined
@@ -30,8 +23,9 @@ function toSnakeCase(
   return checkInSnakeCase;
 }
 class CheckInService implements ICheckInService {
-    emailService: IEmailService | null;
-    volunteerService: IVolunteerService | null;
+  emailService: IEmailService | null;
+
+  volunteerService: IVolunteerService | null;
 
   static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
 
@@ -43,10 +37,8 @@ class CheckInService implements ICheckInService {
     this.volunteerService = volunteerService;
   }
 
-  async createCheckIn(
-    checkIn: CreateCheckInDTO,
-  ): Promise<CheckInDTO> {
-    let newCheckIn: CheckIn;
+  async createCheckIn(checkIn: CreateCheckInDTO): Promise<CheckInDTO> {
+    let firstCheckIn: CheckIn;
     try {
       const originalStartDate: Date = new Date(checkIn.startDate);
       const originalEndDate: Date = new Date(checkIn.endDate);
@@ -60,10 +52,12 @@ class CheckInService implements ICheckInService {
       nextEndDate.setSeconds(originalEndDate.getMilliseconds());
 
       // create first check in
-      newCheckIn = await CheckIn.create({
+      firstCheckIn = await CheckIn.create({
         start_date: nextStartDate,
         end_date: nextEndDate,
-        notes: checkIn.notes
+        notes: checkIn.notes,
+        volunteer_id: checkIn.volunteerId,
+        is_admin: checkIn.isAdmin,
       });
 
       const checkInsToBeCreated: Record<
@@ -74,11 +68,13 @@ class CheckInService implements ICheckInService {
       while (nextEndDate.valueOf() < originalEndDate.valueOf()) {
         nextStartDate.setDate(nextStartDate.getDate() + 1);
         nextEndDate.setDate(nextEndDate.getDate() + 1);
-        
+
         const newCheckIn: CreateCheckInDTO = {
           startDate: nextStartDate,
           endDate: nextEndDate,
-          notes: checkIn.notes
+          notes: checkIn.notes,
+          volunteerId: checkIn.volunteerId,
+          isAdmin: checkIn.isAdmin,
         };
 
         const snakeCaseNewCheckIn: Record<
@@ -97,12 +93,12 @@ class CheckInService implements ICheckInService {
     }
 
     const retNewCheckIn: CheckInDTO = {
-      id: String(newCheckIn.id),
-      startDate: newCheckIn.start_date,
-      endDate: newCheckIn.end_date,
-      notes: newCheckIn.notes,
-      volunteerId: String(newCheckIn.volunteer_id),
-      isAdmin: newCheckIn.is_admin,
+      id: String(firstCheckIn.id),
+      startDate: firstCheckIn.start_date,
+      endDate: firstCheckIn.end_date,
+      notes: firstCheckIn.notes,
+      volunteerId: String(firstCheckIn.volunteer_id),
+      isAdmin: firstCheckIn.is_admin,
     };
 
     return retNewCheckIn;
