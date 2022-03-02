@@ -11,13 +11,6 @@ import {
   IconButton,
   Img,
   Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Spacer,
   Spinner,
   Text,
@@ -312,28 +305,26 @@ const Account = (): JSX.Element => {
         <Text textStyle="mobileSmall" color="hubbard.100" mt="1em" mb="2em">
           Edit any account information here.
         </Text>
-        {authenticatedUser?.role !== Role.VOLUNTEER ? (
-          <FormControl
-            isRequired
-            isReadOnly={!isEditing}
-            isInvalid={!!formErrors.businessName}
-          >
-            <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
-              Organization
-            </Text>
+        <FormControl
+          isRequired
+          isReadOnly={!isEditing}
+          isInvalid={!!formErrors.businessName}
+        >
+          <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
+            Organization
+          </Text>
 
-            <FormLabel>Name of business</FormLabel>
-            <Input
-              mt="2"
-              value={businessName}
-              name="businessName"
-              placeholder="Enter name of business"
-              variant={isEditing ? "customFilled" : "unstyled"}
-              onChange={(e) => handleChange(e.target.value, "businessName")}
-            />
-            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
-          </FormControl>
-        ) : null}
+          <FormLabel>Name of business</FormLabel>
+          <Input
+            mt="2"
+            value={businessName}
+            name="businessName"
+            placeholder="Enter name of business"
+            variant={isEditing ? "customFilled" : "unstyled"}
+            onChange={(e) => handleChange(e.target.value, "businessName")}
+          />
+          <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
+        </FormControl>
 
         <Text
           mt={{ base: "40px", md: "54px" }}
@@ -341,9 +332,7 @@ const Account = (): JSX.Element => {
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          {authenticatedUser?.role === Role.VOLUNTEER
-            ? "Volunteer Information"
-            : "Point of Contact"}
+          Point of Contact
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
