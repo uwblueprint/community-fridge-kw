@@ -24,22 +24,24 @@ checkInRouter.get("/:id?", async (req, res) => {
   }
   if (!id && !volunteerId) {
     try {
-      await checkInService.getAllCheckIns();
-      res.status(204).send();
+      const checkIns = await checkInService.getAllCheckIns();
+      res.status(200).json(checkIns);
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });
     }
   } else if (id) {
     try {
-      await checkInService.getCheckInsById(id);
-      res.status(204).send();
+      const checkIns = await checkInService.getCheckInsById(id);
+      res.status(200).json(checkIns);
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });
     }
   } else if (volunteerId) {
     try {
-      await checkInService.getCheckInsByVolunteerId(volunteerId as string);
-      res.status(204).send();
+      const checkIns = await checkInService.getCheckInsByVolunteerId(
+        volunteerId as string,
+      );
+      res.status(200).json(checkIns);
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });
     }
