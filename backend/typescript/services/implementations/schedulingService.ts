@@ -94,8 +94,8 @@ class SchedulingService implements ISchedulingService {
     let schedulingDtos: Array<SchedulingDTO> = [];
     let schedulings: Array<Scheduling>;
     try {
+      const currentStartDate = new Date();
       if (weekLimit !== 0) {
-        const currentStartDate = new Date();
         const nextDate = new Date();
         nextDate.setDate(nextDate.getDate() + weekLimit * 7);
         schedulings = await Scheduling.findAll({
@@ -111,6 +111,9 @@ class SchedulingService implements ISchedulingService {
         schedulings = await Scheduling.findAll({
           where: {
             donor_id: Number(donorId),
+            start_time: {
+              [Op.gte]: currentStartDate,
+            },
           },
           order: [["start_time", "ASC"]],
         });
