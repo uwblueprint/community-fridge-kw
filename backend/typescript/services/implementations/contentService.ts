@@ -61,9 +61,13 @@ class ContentService implements IContentService {
   }
 
   /* eslint-disable class-methods-use-this */
-  async updateContent(id: string, content: UpdateContentDTO): Promise<void> {
+  async updateContent(
+    id: string,
+    content: UpdateContentDTO,
+  ): Promise<ContentDTO> {
+    let updateResult: ContentDTO;
     try {
-      await Content.update(
+      const response = await Content.update(
         {
           food_rescue_description: content.foodRescueDescription,
           food_rescue_url: content.foodRescueUrl,
@@ -73,14 +77,24 @@ class ContentService implements IContentService {
         {
           where: { id },
           limit: 1,
+          returning: true,
         },
       );
+
+      updateResult = {
+        id: String(response[0]),
+        foodRescueDescription: content.foodRescueDescription,
+        foodRescueUrl: content.foodRescueUrl,
+        checkinDescription: content.checkinDescription,
+        checkinUrl: content.checkinUrl,
+      };
     } catch (error) {
       Logger.error(
         `Failed to update content. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
+    return updateResult;
   }
 }
 

@@ -21,7 +21,7 @@ interface IContentService {
    * @param id which is always 1 to retrieve the first entry
    * @throws Error if updating content fails
    */
-  updateContent(id: string, content: UpdateContentDTO): Promise<void>;
+  updateContent(id: string, content: UpdateContentDTO): Promise<ContentDTO>;
 }
 
 export default IContentService;
