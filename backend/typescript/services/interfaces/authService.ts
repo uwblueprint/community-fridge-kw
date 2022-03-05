@@ -43,11 +43,11 @@ interface IAuthService {
   sendEmailVerificationLink(email: string): Promise<void>;
 
   /**
-   * Sends an email about the volunteer pending status for the user with the given email 
+   * Sends an email about the volunteer pending status for the user with the given email
    * @param email email of user that has pending status
    * @throws Error if unable to send email
    */
-   sendEmailVolunteerPending(email: string): Promise<void>;
+  sendEmailVolunteerPending(email: string): Promise<void>;
 
   /**
    * Determine if the provided access token is valid and authorized for at least
