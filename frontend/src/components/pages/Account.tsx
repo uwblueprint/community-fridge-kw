@@ -20,6 +20,7 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
+import AuthAPIClient from "../../APIClients/AuthAPIClient";
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import UserAPIClient from "../../APIClients/UserAPIClient";
 import pencilIcon from "../../assets/pencilIcon.svg";
@@ -29,7 +30,7 @@ import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
 import { DonorResponse } from "../../types/DonorTypes";
 import { setLocalStorageObjProperty } from "../../utils/LocalStorageUtils";
-import ConfirmCancelEditModal from "../common/UserManagement/ConfirmCancelEditModal";
+import EditAccountModal from "../common/UserManagement/EditAccountModal";
 import ErrorMessages from "./Scheduling/ErrorMessages";
 
 const Account = (): JSX.Element => {
@@ -39,6 +40,7 @@ const Account = (): JSX.Element => {
   const [businessName, setBusinessName] = useState("");
   const [donor, setDonor] = useState<DonorResponse>();
   const [isSavingData, setIsSavingData] = useState(false);
+  const [isTouched, setIsTouched] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
 
@@ -107,6 +109,14 @@ const Account = (): JSX.Element => {
     );
   };
 
+  const onResetPasswordClick = async () => {
+    const success = await AuthAPIClient.logout(authenticatedUser?.id);
+    if (success) {
+      setAuthenticatedUser(null);
+    }
+    history.push(Routes.FORGET_PASSWORD);
+  };
+
   const changeEditMode = () => {
     setIsSavingData(false);
     setIsEditing(!isEditing);
@@ -120,6 +130,7 @@ const Account = (): JSX.Element => {
     if (name === "businessName") {
       setBusinessName(e.toString());
     }
+    setIsTouched(true);
   };
 
   const discardChanges = () => {
@@ -137,6 +148,7 @@ const Account = (): JSX.Element => {
       lastName: "",
       phoneNumber: "",
     });
+    setIsTouched(false);
   };
 
   const validateForm = () => {
@@ -182,19 +194,23 @@ const Account = (): JSX.Element => {
       ...formValues,
     };
 
+    let updatedDonor = null;
+    
     // update user values
-    const updatedUser = await UserAPIClient.updateUserById(
+    const updatedUser =  await UserAPIClient.updateUserById(
       authenticatedUser!.id,
       {
         userData,
       },
     );
 
-    // update donor values
-    const updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
+    if(authenticatedUser?.role === Role.DONOR) {
+      // update donor values
+    updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
       businessName,
     });
-
+    }
+    
     // update authenticatedUser and local storage to reflect changes
     const user = {
       accessToken: authenticatedUser!.accessToken,
@@ -219,6 +235,7 @@ const Account = (): JSX.Element => {
       setIsSavingData(false);
     }
     setIsEditing(false);
+    setIsTouched(false);
   };
 
   const EditInfoButton = () => {
@@ -255,9 +272,10 @@ const Account = (): JSX.Element => {
       </Center>
     );
   }
+
   return (
     <Container centerContent variant="responsiveContainer">
-      <ConfirmCancelEditModal
+      <EditAccountModal
         isOpen={isOpen}
         onClose={onClose}
         discardChanges={discardChanges}
@@ -395,7 +413,7 @@ const Account = (): JSX.Element => {
               mt="2"
               variant="navigation"
               onClick={onSubmitClick}
-              isDisabled={isSavingData}
+              isDisabled={isSavingData || !isTouched}
             >
               {isSavingData ? <Spinner /> : "Save Changes"}
             </Button>
@@ -403,11 +421,11 @@ const Account = (): JSX.Element => {
         ) : (
           <Box mt={{ base: "66px", md: "56px" }}>
             <Button
-              isDisabled
               width="100%"
               size="lg"
               mt="2"
               variant="navigation"
+              onClick={onResetPasswordClick}
             >
               Change Password
             </Button>
