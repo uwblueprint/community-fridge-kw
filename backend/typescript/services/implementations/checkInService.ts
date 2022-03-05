@@ -40,8 +40,6 @@ class CheckInService implements ICheckInService {
       );
       throw error;
     }
-
-    console.log(checkInDtos);
     return checkInDtos;
   }
 
@@ -61,7 +59,7 @@ class CheckInService implements ICheckInService {
       throw error;
     }
 
-    const haha = {
+    return {
       id: String(checkIn.id),
       startDate: checkIn.start_date,
       endDate: checkIn.end_date,
@@ -69,8 +67,6 @@ class CheckInService implements ICheckInService {
       volunteerId: String(checkIn.volunteer_id),
       isAdmin: checkIn.is_admin,
     };
-    console.log(haha);
-    return haha;
   }
 
   async getCheckInsByVolunteerId(volunteerId: string): Promise<CheckInDTO[]> {
@@ -103,7 +99,6 @@ class CheckInService implements ICheckInService {
       throw error;
     }
 
-    console.log(checkInDtos);
     return checkInDtos;
   }
 
