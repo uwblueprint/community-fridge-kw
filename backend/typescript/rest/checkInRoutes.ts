@@ -4,6 +4,7 @@ import ICheckInService from "../services/interfaces/checkInService";
 import CheckInService from "../services/implementations/checkInService";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 import getErrorMessage from "../utilities/errorMessageUtil";
+import dayjs from "dayjs";
 
 const checkInRouter: Router = Router();
 
@@ -85,9 +86,17 @@ checkInRouter.delete("/:id?", async (req, res) => {
   }
 
   if (startDate && endDate) {
-    const startDateRange = new Date(startDate as string);
-    const endDateRange = new Date(endDate as string);
-    if (startDateRange > endDateRange) {
+    const startDateRange =  dayjs(startDate as string);
+    const endDateRange =  dayjs(endDate as string);
+
+    if (!startDateRange.isValid() || !endDateRange.isValid()) {
+      await sendResponseByMimeType(res, 400, contentType, [
+        {
+          error: "startDate and endDate must be valid dates",
+        },
+      ]);
+    }
+    if (startDateRange.isAfter(endDateRange)) {
       await sendResponseByMimeType(res, 400, contentType, [
         {
           error: "startDate must be before endDate",
