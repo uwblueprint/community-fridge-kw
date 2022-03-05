@@ -43,7 +43,6 @@ const Account = (): JSX.Element => {
   const [isTouched, setIsTouched] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-
   React.useEffect(() => {
     if (!authenticatedUser) {
       return;
@@ -195,22 +194,22 @@ const Account = (): JSX.Element => {
     };
 
     let updatedDonor = null;
-    
+
     // update user values
-    const updatedUser =  await UserAPIClient.updateUserById(
+    const updatedUser = await UserAPIClient.updateUserById(
       authenticatedUser!.id,
       {
         userData,
       },
     );
 
-    if(authenticatedUser?.role === Role.DONOR) {
+    if (authenticatedUser?.role === Role.DONOR) {
       // update donor values
-    updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
-      businessName,
-    });
+      updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
+        businessName,
+      });
     }
-    
+
     // update authenticatedUser and local storage to reflect changes
     const user = {
       accessToken: authenticatedUser!.accessToken,
@@ -331,7 +330,9 @@ const Account = (): JSX.Element => {
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          {authenticatedUser?.role === Role.VOLUNTEER ? "Volunteer Information" : "Point of Contact"}
+          {authenticatedUser?.role === Role.VOLUNTEER
+            ? "Volunteer Information"
+            : "Point of Contact"}
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
