@@ -25,7 +25,7 @@ class ContentService implements IContentService {
       throw error;
     }
     return {
-      id: newContent.id,
+      id: String(newContent.id),
       foodRescueDescription: newContent.food_rescue_description,
       foodRescueUrl: newContent.food_rescue_url,
       checkinDescription: newContent.checkin_description,
@@ -46,7 +46,7 @@ class ContentService implements IContentService {
         throw new Error(`No content was found.`);
       }
       contentDto = {
-        id: contentResponse.id,
+        id: String(contentResponse.id),
         foodRescueDescription: contentResponse.food_rescue_description,
         foodRescueUrl: contentResponse.food_rescue_url,
         checkinDescription: contentResponse.checkin_description,
