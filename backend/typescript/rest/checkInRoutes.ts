@@ -1,10 +1,10 @@
 import { Router } from "express";
 
+import dayjs from "dayjs";
 import ICheckInService from "../services/interfaces/checkInService";
 import CheckInService from "../services/implementations/checkInService";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 import getErrorMessage from "../utilities/errorMessageUtil";
-import dayjs from "dayjs";
 
 const checkInRouter: Router = Router();
 
@@ -86,8 +86,8 @@ checkInRouter.delete("/:id?", async (req, res) => {
   }
 
   if (startDate && endDate) {
-    const startDateRange =  dayjs(startDate as string);
-    const endDateRange =  dayjs(endDate as string);
+    const startDateRange = dayjs(startDate as string);
+    const endDateRange = dayjs(endDate as string);
 
     if (!startDateRange.isValid() || !endDateRange.isValid()) {
       await sendResponseByMimeType(res, 400, contentType, [
