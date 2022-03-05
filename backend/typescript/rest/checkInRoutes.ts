@@ -65,15 +65,6 @@ checkInRouter.delete("/:id?", async (req, res) => {
     ]);
     return;
   }
-  // handle case if only one of start date or end date are passed in ? or do i handle this in api client
-  if (!(startDate && endDate)) {
-    await sendResponseByMimeType(res, 400, contentType, [
-      {
-        error: "Must supply both startDate and endDate query parameters",
-      },
-    ]);
-    return;
-  }
 
   if (id) {
     try {
@@ -83,6 +74,16 @@ checkInRouter.delete("/:id?", async (req, res) => {
       res.status(500).json({ error: getErrorMessage(error) });
     }
   }
+
+  if (!(startDate && endDate)) {
+    await sendResponseByMimeType(res, 400, contentType, [
+      {
+        error: "Must supply both startDate and endDate query parameters",
+      },
+    ]);
+    return;
+  }
+
   if (startDate && endDate) {
     if (startDate > endDate) {
       throw new Error(`start date must be before end date.`);
