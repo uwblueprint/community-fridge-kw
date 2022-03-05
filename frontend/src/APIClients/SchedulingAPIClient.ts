@@ -142,7 +142,7 @@ const deleteSchedule = async (
   userRole: string,
 ): Promise<boolean> => {
   try {
-    await baseAPIClient.delete(`/scheduling/${scheduleId}&role=${userRole}`, {
+    await baseAPIClient.delete(`/scheduling/${scheduleId}?role=${userRole}`, {
       headers: { Authorization: BEARER_TOKEN },
     });
     return true;
