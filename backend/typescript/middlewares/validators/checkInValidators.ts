@@ -41,7 +41,8 @@ export const createCheckInDtoValidator = async (
   return next();
 };
 
-export const updateCheckInDtoValidator = async (
+// checks that each field of type CheckInDTO if it exists
+export const CheckInGeneralDtoValidator = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -64,6 +65,9 @@ export const updateCheckInDtoValidator = async (
       .status(400)
       .send(getApiValidationError("dates", "Date string", false, true));
   }
+  if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
+    return res.status(400).send(getApiValidationError("notes", "string"));
+  }
   if (req.body.isAdmin && !validatePrimitive(req.body.isAdmin, "boolean")) {
     return res.status(400).send(getApiValidationError("isAdmin", "boolean"));
   }
@@ -72,9 +76,6 @@ export const updateCheckInDtoValidator = async (
     !validatePrimitive(req.body.volunteerId, "string")
   ) {
     return res.status(400).send(getApiValidationError("volunteerId", "string"));
-  }
-  if (req.body.notes && !validatePrimitive(req.body.notes, "string")) {
-    return res.status(400).send(getApiValidationError("notes", "string"));
   }
 
   return next();

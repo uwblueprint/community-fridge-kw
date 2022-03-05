@@ -4,10 +4,10 @@ interface ICheckInService {
   /**
    * Create check in
    * @param checkIn CreateCheckInDTO object containing check in info
-   * @returns a CheckInDTO with the created check in information
+   * @returns a CheckInDTO[] with all the created check ins
    * @throws Error if check in creation fails
    */
-  createCheckIn(checkIn: CreateCheckInDTO): Promise<CheckInDTO>;
+  createCheckIn(checkIn: CreateCheckInDTO): Promise<CheckInDTO[]>;
 
   /**
    * Update checkIn.

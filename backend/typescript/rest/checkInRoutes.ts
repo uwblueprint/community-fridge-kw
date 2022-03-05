@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import {
   createCheckInDtoValidator,
-  updateCheckInDtoValidator,
+  CheckInGeneralDtoValidator,
 } from "../middlewares/validators/checkInValidators";
 import getErrorMessage from "../utilities/errorMessageUtil";
 import CheckInService from "../services/implementations/checkInService";
@@ -33,7 +33,7 @@ checkInRouter.post("/", createCheckInDtoValidator, async (req, res) => {
 });
 
 /* Update the check in instance by id */
-checkInRouter.put("/:id", updateCheckInDtoValidator, async (req, res) => {
+checkInRouter.put("/:id", CheckInGeneralDtoValidator, async (req, res) => {
   try {
     const updatedCheckIn = await checkInService.updateCheckInById(
       req.params.id,

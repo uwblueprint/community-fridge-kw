@@ -1,33 +1,26 @@
 /* eslint-disable class-methods-use-this */
 import { snakeCase } from "lodash";
+import dayjs from "dayjs";
 import ICheckInService from "../interfaces/checkInService";
-import { CheckInDTO, CreateCheckInDTO, UpdateCheckInDTO } from "../../types";
+import {
+  CheckInDTO,
+  CreateCheckInDTO,
+  UpdateCheckInDTO,
+  DTOTypes,
+} from "../../types";
 import logger from "../../utilities/logger";
 import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
 import IVolunteerService from "../interfaces/volunteerService";
+import { toSnakeCase } from "../../utilities/servicesUtils";
 
 const Logger = logger(__filename);
 
-function toSnakeCase(
-  checkIn: CreateCheckInDTO,
-): Record<string, Date | string | boolean | null | undefined> {
-  const checkInSnakeCase: Record<
-    string,
-    Date | string | boolean | null | undefined
-  > = {};
-  Object.entries(checkIn).forEach(([key, value]) => {
-    checkInSnakeCase[snakeCase(key)] = value;
-  });
-  return checkInSnakeCase;
-}
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
 
   volunteerService: IVolunteerService | null;
-
-  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -37,41 +30,27 @@ class CheckInService implements ICheckInService {
     this.volunteerService = volunteerService;
   }
 
-  async createCheckIn(checkIn: CreateCheckInDTO): Promise<CheckInDTO> {
-    let firstCheckIn: CheckIn;
+  async createCheckIn(checkIn: CreateCheckInDTO): Promise<Array<CheckInDTO>> {
+    let snakeCaseCheckIns: Array<CheckIn> = [];
     try {
       const originalStartDate: Date = new Date(checkIn.startDate);
       const originalEndDate: Date = new Date(checkIn.endDate);
 
-      const nextStartDate: Date = new Date(originalStartDate);
-      const nextEndDate: Date = new Date(originalStartDate);
+      let nextStartDate = dayjs(originalStartDate);
+      let nextEndDate = dayjs(originalStartDate);
 
-      nextEndDate.setHours(originalEndDate.getHours());
-      nextEndDate.setMinutes(originalEndDate.getMinutes());
-      nextEndDate.setSeconds(originalEndDate.getSeconds());
-      nextEndDate.setSeconds(originalEndDate.getMilliseconds());
+      nextEndDate = nextEndDate
+        .hour(originalEndDate.getHours())
+        .minute(originalEndDate.getMinutes())
+        .second(originalEndDate.getSeconds())
+        .millisecond(originalEndDate.getMilliseconds());
 
-      // create first check in
-      firstCheckIn = await CheckIn.create({
-        start_date: nextStartDate,
-        end_date: nextEndDate,
-        notes: checkIn.notes,
-        volunteer_id: checkIn.volunteerId,
-        is_admin: checkIn.isAdmin,
-      });
+      const checkInsToBeCreated: DTOTypes[] = [];
 
-      const checkInsToBeCreated: Record<
-        string,
-        string | number | boolean | string[] | Date | undefined | null
-      >[] = [];
-
-      while (nextEndDate.valueOf() < originalEndDate.valueOf()) {
-        nextStartDate.setDate(nextStartDate.getDate() + 1);
-        nextEndDate.setDate(nextEndDate.getDate() + 1);
-
+      while (nextEndDate.valueOf() <= originalEndDate.valueOf()) {
         const newCheckIn: CreateCheckInDTO = {
-          startDate: nextStartDate,
-          endDate: nextEndDate,
+          startDate: nextStartDate.toDate(),
+          endDate: nextEndDate.toDate(),
           notes: checkIn.notes,
           volunteerId: checkIn.volunteerId,
           isAdmin: checkIn.isAdmin,
@@ -79,12 +58,15 @@ class CheckInService implements ICheckInService {
 
         const snakeCaseNewCheckIn: Record<
           string,
-          Date | string | boolean | null | undefined
+          Date | string | string[] | boolean | number | null | undefined
         > = toSnakeCase(newCheckIn);
 
         checkInsToBeCreated.push(snakeCaseNewCheckIn);
+
+        nextStartDate = nextStartDate.add(1, "day");
+        nextEndDate = nextEndDate.add(1, "day");
       }
-      await CheckIn.bulkCreate(checkInsToBeCreated);
+      snakeCaseCheckIns = await CheckIn.bulkCreate(checkInsToBeCreated);
     } catch (error) {
       Logger.error(
         `Failed to create check in. Reason = ${getErrorMessage(error)}`,
@@ -92,16 +74,20 @@ class CheckInService implements ICheckInService {
       throw error;
     }
 
-    const retNewCheckIn: CheckInDTO = {
-      id: String(firstCheckIn.id),
-      startDate: firstCheckIn.start_date,
-      endDate: firstCheckIn.end_date,
-      notes: firstCheckIn.notes,
-      volunteerId: String(firstCheckIn.volunteer_id),
-      isAdmin: firstCheckIn.is_admin,
-    };
+    const checkInDtos: Array<CheckInDTO> = snakeCaseCheckIns.map(
+      (createdCheckIn) => {
+        return {
+          id: String(createdCheckIn.id),
+          startDate: createdCheckIn.start_date,
+          endDate: createdCheckIn.end_date,
+          notes: createdCheckIn.notes,
+          volunteerId: String(createdCheckIn.volunteer_id),
+          isAdmin: createdCheckIn.is_admin,
+        };
+      },
+    );
 
-    return retNewCheckIn;
+    return checkInDtos;
   }
 
   async updateCheckInById(
