@@ -48,7 +48,7 @@ class AuthService implements IAuthService {
         const user = await this.userService.getUserByEmail(response.email);
 
         if (user.role === Role.VOLUNTEER) {
-          this.sendEmailVolunteerPending(response.email);
+          await this.sendEmailVolunteerPending(response.email);
         }
         return true;
       }
