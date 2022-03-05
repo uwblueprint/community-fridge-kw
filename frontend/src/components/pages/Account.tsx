@@ -30,7 +30,7 @@ import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
 import { DonorResponse } from "../../types/DonorTypes";
 import { setLocalStorageObjProperty } from "../../utils/LocalStorageUtils";
-import ConfirmCancelEditModal from "../common/UserManagement/ConfirmCancelEditModal";
+import EditAccountModal from "../common/UserManagement/EditAccountModal";
 import ErrorMessages from "./Scheduling/ErrorMessages";
 
 const Account = (): JSX.Element => {
@@ -40,6 +40,7 @@ const Account = (): JSX.Element => {
   const [businessName, setBusinessName] = useState("");
   const [donor, setDonor] = useState<DonorResponse>();
   const [isSavingData, setIsSavingData] = useState(false);
+  const [isTouched, setIsTouched] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   React.useEffect(() => {
@@ -128,6 +129,7 @@ const Account = (): JSX.Element => {
     if (name === "businessName") {
       setBusinessName(e.toString());
     }
+    setIsTouched(true);
   };
 
   const discardChanges = () => {
@@ -145,6 +147,7 @@ const Account = (): JSX.Element => {
       lastName: "",
       phoneNumber: "",
     });
+    setIsTouched(false);
   };
 
   const validateForm = () => {
@@ -227,6 +230,7 @@ const Account = (): JSX.Element => {
       setIsSavingData(false);
     }
     setIsEditing(false);
+    setIsTouched(false);
   };
 
   const EditInfoButton = () => {
@@ -263,9 +267,10 @@ const Account = (): JSX.Element => {
       </Center>
     );
   }
+
   return (
     <Container centerContent variant="responsiveContainer">
-      <ConfirmCancelEditModal
+      <EditAccountModal
         isOpen={isOpen}
         onClose={onClose}
         discardChanges={discardChanges}
@@ -293,15 +298,15 @@ const Account = (): JSX.Element => {
         <Text textStyle="mobileSmall" color="hubbard.100" mt="1em" mb="2em">
           Edit any account information here.
         </Text>
-
-        <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
-          Organization
-        </Text>
         <FormControl
           isRequired
           isReadOnly={!isEditing}
           isInvalid={!!formErrors.businessName}
         >
+          <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
+            Organization
+          </Text>
+
           <FormLabel>Name of business</FormLabel>
           <Input
             mt="2"
@@ -313,6 +318,7 @@ const Account = (): JSX.Element => {
           />
           <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
         </FormControl>
+
         <Text
           mt={{ base: "40px", md: "54px" }}
           mb="1em"
@@ -401,7 +407,7 @@ const Account = (): JSX.Element => {
               mt="2"
               variant="navigation"
               onClick={onSubmitClick}
-              isDisabled={isSavingData}
+              isDisabled={isSavingData || !isTouched}
             >
               {isSavingData ? <Spinner /> : "Save Changes"}
             </Button>
