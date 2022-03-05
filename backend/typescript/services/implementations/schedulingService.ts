@@ -138,8 +138,8 @@ class SchedulingService implements ISchedulingService {
     let schedulingDtos: Array<SchedulingDTO> = [];
     let schedulings: Array<Scheduling>;
     try {
+      const currentStartDate = new Date();
       if (weekLimit !== 0) {
-        const currentStartDate = new Date();
         const nextDate = new Date();
         nextDate.setDate(nextDate.getDate() + weekLimit * 7);
         schedulings = await Scheduling.findAll({
@@ -155,6 +155,9 @@ class SchedulingService implements ISchedulingService {
         schedulings = await Scheduling.findAll({
           where: {
             donor_id: Number(donorId),
+            start_time: {
+              [Op.gte]: currentStartDate,
+            },
           },
           order: [["start_time", "ASC"]],
         });
@@ -397,7 +400,7 @@ class SchedulingService implements ISchedulingService {
             <title>Donation Details Email</title>
           </head>
           <body>
-              <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+              <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/drawer-logo.png
               style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
               
               <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">

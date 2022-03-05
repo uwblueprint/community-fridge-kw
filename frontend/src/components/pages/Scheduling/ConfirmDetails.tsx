@@ -10,7 +10,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { add, differenceInDays, format, isBefore } from "date-fns";
+import { format } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -109,7 +109,6 @@ const ConfirmDetails = ({
   };
 
   const startDateLocal = new Date(currentSchedule.startTime);
-  const endDateLocal = new Date(currentSchedule.recurringDonationEndDate);
   const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
   const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mm aa");
 
@@ -118,31 +117,6 @@ const ConfirmDetails = ({
   };
   const dateText = (startDate: Date) => {
     return format(startDate, "MMMM d, yyyy");
-  };
-
-  const nextDropoffDateText = (startDate: Date) => {
-    let addOptions = {};
-    switch (currentSchedule.frequency) {
-      case DonationFrequency.WEEKLY:
-        addOptions = { weeks: 1 };
-        break;
-      case DonationFrequency.DAILY:
-        addOptions = { days: 1 };
-        break;
-      case DonationFrequency.MONTHLY:
-        addOptions = { months: 1 };
-        break;
-      default:
-        break;
-    }
-    const result = add(startDate, addOptions);
-    if (
-      differenceInDays(endDateLocal, result) >= 0 &&
-      isBefore(result, endDateLocal)
-    ) {
-      return dateText(result);
-    }
-    return null;
   };
 
   useEffect(() => {
@@ -236,21 +210,6 @@ const ConfirmDetails = ({
                 : ""}
             </Text>
           </HStack>
-
-          {nextDropoffDateText(startDateLocal) === null ||
-          currentSchedule.frequency === DonationFrequency.ONE_TIME ? null : (
-            <Box>
-              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-                Next Drop-Off
-              </Text>
-              <Text textStyle="mobileBody">
-                {nextDropoffDateText(startDateLocal)}
-              </Text>
-              <Text textStyle="mobileBody">
-                {`${startTimeLocal} - ${endTimeLocal}`}
-              </Text>{" "}
-            </Box>
-          )}
         </Box>
       </Box>
 

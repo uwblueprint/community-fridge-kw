@@ -103,8 +103,12 @@ describe("pg schedulingService", () => {
       donorId.toString(),
       0,
     );
+    const currentDate = new Date();
     expect(res).toMatchObject(
-      testSchedules.filter((schedule) => schedule.donorId === donorId),
+      testSchedules.filter(
+        (schedule) =>
+          schedule.donorId === donorId && schedule.startTime >= currentDate,
+      ),
     );
   });
 
