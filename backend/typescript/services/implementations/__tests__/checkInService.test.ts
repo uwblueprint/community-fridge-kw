@@ -60,7 +60,7 @@ describe("pg checkInService", () => {
 
     const res = await checkInService.createCheckIn(mockCreateCheckInDTO);
 
-    expect(res).toEqual(expectedCheckIn);
+    expect(res[0]).toEqual(expectedCheckIn);
   });
 
   it("create multi day CheckIn", async () => {
@@ -72,14 +72,32 @@ describe("pg checkInService", () => {
       notes: "hi this is a test",
       isAdmin: true,
     };
-    const expectedCheckIn = {
-      id: "4",
-      startDate: new Date("2021-08-30T09:00:00.000Z"),
-      endDate: new Date("2021-08-30T00:10:00.000Z"),
-      isAdmin: true,
-      notes: "hi this is a test",
-      volunteerId: "null",
-    };
+    const expectedCheckIn = [
+      {
+        id: "4",
+        startDate: new Date("2021-08-30T09:00:00.000Z"),
+        endDate: new Date("2021-08-30T00:10:00.000Z"),
+        isAdmin: true,
+        notes: "hi this is a test",
+        volunteerId: "null",
+      },
+      {
+        id: "5",
+        startDate: new Date("2021-08-31T09:00:00.000Z"),
+        endDate: new Date("2021-08-31T00:10:00.000Z"),
+        isAdmin: true,
+        notes: "hi this is a test",
+        volunteerId: "null",
+      },
+      {
+        id: "6",
+        startDate: new Date("2021-09-01T09:00:00.000Z"),
+        endDate: new Date("2021-09-01T00:10:00.000Z"),
+        isAdmin: true,
+        notes: "hi this is a test",
+        volunteerId: "null",
+      },
+    ];
 
     const res = await checkInService.createCheckIn(mockCreateCheckInDTO);
 
