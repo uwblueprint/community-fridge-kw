@@ -8,23 +8,9 @@ import {
   testUsersDb,
   testVolunteersDb,
 } from "../../../testUtils/schedulingService";
-import nodemailerConfig from "../../../nodemailer.config";
-import IEmailService from "../../interfaces/emailService";
-import EmailService from "../emailService";
 import CheckInService from "../checkInService";
 import VolunteerService from "../volunteerService";
 import IVolunteerService from "../../interfaces/volunteerService";
-
-const checkIns = testCheckIns.map((checkIn) => {
-  const checkInsSnakeCase: Record<
-    string,
-    string | number | boolean | string[] | Date | null | undefined
-  > = {};
-  Object.entries(checkIn).forEach(([key, value]) => {
-    checkInsSnakeCase[snakeCase(key)] = value;
-  });
-  return checkInsSnakeCase;
-});
 
 jest.mock("nodemailer", () => {
   const createTransport = jest.fn().mockReturnValue({
@@ -39,9 +25,8 @@ describe("pg checkInService", () => {
   beforeEach(async () => {
     await testSql.sync({ force: true });
     checkInService = new CheckInService();
-    const emailService: IEmailService = new EmailService(nodemailerConfig);
     const volunteerService: IVolunteerService = new VolunteerService();
-    checkInService = new CheckInService(emailService, volunteerService);
+    checkInService = new CheckInService(volunteerService);
     await User.bulkCreate(testUsersDb);
     await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);

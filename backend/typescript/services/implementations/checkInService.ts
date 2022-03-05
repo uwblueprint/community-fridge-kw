@@ -12,17 +12,9 @@ const Logger = logger(__filename);
 class CheckInService implements ICheckInService {
   /* eslint-disable class-methods-use-this */
 
-  emailService: IEmailService | null;
-
   volunteerService: IVolunteerService | null;
 
-  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
-
-  constructor(
-    emailService: IEmailService | null = null,
-    volunteerService: IVolunteerService | null = null,
-  ) {
-    this.emailService = emailService;
+  constructor(volunteerService: IVolunteerService | null = null) {
     this.volunteerService = volunteerService;
   }
 
