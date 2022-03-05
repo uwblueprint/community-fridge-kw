@@ -41,6 +41,7 @@ const Account = (): JSX.Element => {
   const [isSavingData, setIsSavingData] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+
   React.useEffect(() => {
     if (!authenticatedUser) {
       return;
@@ -284,33 +285,35 @@ const Account = (): JSX.Element => {
         <Text textStyle="mobileSmall" color="hubbard.100" mt="1em" mb="2em">
           Edit any account information here.
         </Text>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <FormControl
+            isRequired
+            isReadOnly={!isEditing}
+            isInvalid={!!formErrors.businessName}
+          >
+            <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
+              Organization
+            </Text>
 
-        <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
-          Organization
-        </Text>
-        <FormControl
-          isRequired
-          isReadOnly={!isEditing}
-          isInvalid={!!formErrors.businessName}
-        >
-          <FormLabel>Name of business</FormLabel>
-          <Input
-            mt="2"
-            value={businessName}
-            name="businessName"
-            placeholder="Enter name of business"
-            variant={isEditing ? "customFilled" : "unstyled"}
-            onChange={(e) => handleChange(e.target.value, "businessName")}
-          />
-          <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
-        </FormControl>
+            <FormLabel>Name of business</FormLabel>
+            <Input
+              mt="2"
+              value={businessName}
+              name="businessName"
+              placeholder="Enter name of business"
+              variant={isEditing ? "customFilled" : "unstyled"}
+              onChange={(e) => handleChange(e.target.value, "businessName")}
+            />
+            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
+          </FormControl>
+        ) : null}
         <Text
           mt={{ base: "40px", md: "54px" }}
           mb="1em"
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Point of Contact
+          {authenticatedUser?.role === Role.VOLUNTEER ? "Volunteer Information" : "Point of Contact"}
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
