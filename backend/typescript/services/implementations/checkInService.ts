@@ -50,7 +50,7 @@ class CheckInService implements ICheckInService {
       checkIn = await CheckIn.findByPk(Number(id));
 
       if (!checkIn) {
-        throw new Error(`scheduling with id ${id} not found.`);
+        throw new Error(`checkin with id ${id} not found.`);
       }
     } catch (error) {
       Logger.error(
@@ -92,7 +92,7 @@ class CheckInService implements ICheckInService {
       });
     } catch (error) {
       Logger.error(
-        `Failed to get schedules by volunteer id. Reason = ${getErrorMessage(
+        `Failed to get checkins by volunteer id. Reason = ${getErrorMessage(
           error,
         )}`,
       );

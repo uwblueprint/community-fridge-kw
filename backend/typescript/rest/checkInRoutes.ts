@@ -85,8 +85,14 @@ checkInRouter.delete("/:id?", async (req, res) => {
   }
 
   if (startDate && endDate) {
-    if (startDate > endDate) {
-      throw new Error(`start date must be before end date.`);
+    const startDateRange = new Date(startDate as string);
+    const endDateRange = new Date(endDate as string);
+    if (startDateRange > endDateRange) {
+      await sendResponseByMimeType(res, 400, contentType, [
+        {
+          error: "startDate must be before endDate",
+        },
+      ]);
     }
     try {
       await checkInService.deleteCheckInsByDateRange(
