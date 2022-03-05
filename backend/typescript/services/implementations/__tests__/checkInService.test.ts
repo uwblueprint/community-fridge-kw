@@ -12,6 +12,17 @@ import CheckInService from "../checkInService";
 import VolunteerService from "../volunteerService";
 import IVolunteerService from "../../interfaces/volunteerService";
 
+const checkIns = testCheckIns.map((checkIn) => {
+  const checkInsSnakeCase: Record<
+    string,
+    string | number | boolean | string[] | Date | null | undefined
+  > = {};
+  Object.entries(checkIn).forEach(([key, value]) => {
+    checkInsSnakeCase[snakeCase(key)] = value;
+  });
+  return checkInsSnakeCase;
+});
+
 jest.mock("nodemailer", () => {
   const createTransport = jest.fn().mockReturnValue({
     sendMail: jest.fn(),
