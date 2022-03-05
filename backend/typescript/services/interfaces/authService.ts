@@ -44,7 +44,7 @@ interface IAuthService {
 
   /**
    * Sends an email about the volunteer pending status for the user with the given email 
-   * @param email email of user that needs to be verified
+   * @param email email of user that has pending status
    * @throws Error if unable to send email
    */
    sendEmailVolunteerPending(email: string): Promise<void>;
@@ -84,7 +84,7 @@ interface IAuthService {
   /**
    * Confirm email verification link is valid and issued to the requested user
    * @param oobCode user's oob code to verify request
-   * @returns true if email verification confirmation is authorized, false otehrwise
+   * @returns true if email verification confirmation is authorized, false otherwise
    */
   verifyEmail(oobCode: string): Promise<boolean>;
 
