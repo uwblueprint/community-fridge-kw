@@ -8,7 +8,7 @@ import contentDtoValidator from "../middlewares/validators/contentValidators";
 const contentRouter: Router = Router();
 const contentService: IContentService = new ContentService();
 
-contentRouter.post("/", async (req, res) => {
+contentRouter.post("/", contentDtoValidator, async (req, res) => {
   try {
     const newContent = await contentService.createContent({
       ...req.body,

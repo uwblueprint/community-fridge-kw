@@ -82,11 +82,11 @@ class ContentService implements IContentService {
       );
 
       updateResult = {
-        id: String(response[0]),
-        foodRescueDescription: content.foodRescueDescription,
-        foodRescueUrl: content.foodRescueUrl,
-        checkinDescription: content.checkinDescription,
-        checkinUrl: content.checkinUrl,
+        id: String(response[1][0].id),
+        foodRescueDescription: response[1][0].food_rescue_description,
+        foodRescueUrl: response[1][0].food_rescue_url,
+        checkinDescription: response[1][0].checkin_description,
+        checkinUrl: response[1][0].checkin_url,
       };
     } catch (error) {
       Logger.error(
