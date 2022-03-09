@@ -13,16 +13,16 @@ import React from "react";
 
 import useViewport from "../../../hooks/useViewport";
 
-interface ConfirmCancelEditModalProps {
+interface EditAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
   discardChanges: () => void;
 }
-const ConfirmCancelEditModal = ({
+const EditAccountModal = ({
   isOpen,
   onClose,
   discardChanges,
-}: ConfirmCancelEditModalProps) => {
+}: EditAccountModalProps) => {
   const { isDesktop } = useViewport();
 
   return (
@@ -60,4 +60,4 @@ const ConfirmCancelEditModal = ({
   );
 };
 
-export default ConfirmCancelEditModal;
+export default EditAccountModal;

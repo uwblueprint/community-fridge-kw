@@ -8,26 +8,28 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
-interface ErrorSchedulingModalProps {
+interface GeneralErrorModalProps {
   isOpen: boolean;
   onClose: () => void;
+  headerText: string;
+  bodyText: string;
 }
-const ErrorSchedulingModal = ({
+const GeneralErrorModal = ({
   isOpen,
   onClose,
-}: ErrorSchedulingModalProps) => {
+  headerText,
+  bodyText,
+}: GeneralErrorModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent pb="20px">
-        <ModalHeader>Donation could not be scheduled</ModalHeader>
+        <ModalHeader>{headerText}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody textStyle="mobileBody">
-          Sorry, something went wrong with our system. Please try again.
-        </ModalBody>
+        <ModalBody textStyle="mobileBody">{bodyText}</ModalBody>
       </ModalContent>
     </Modal>
   );
 };
 
-export default ErrorSchedulingModal;
+export default GeneralErrorModal;

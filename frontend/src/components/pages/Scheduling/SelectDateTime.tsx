@@ -9,6 +9,8 @@ import {
   GridItem,
   SimpleGrid,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useContext, useState } from "react";
@@ -20,6 +22,7 @@ import useViewport from "../../../hooks/useViewport";
 import { Schedule } from "../../../types/SchedulingTypes";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
@@ -49,6 +52,8 @@ const SelectDateTime = ({
     endTime,
     recurringDonationEndDate,
   } = formValues;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const [formErrors, setFormErrors] = useState({
     date: "",
@@ -328,22 +333,6 @@ const SelectDateTime = ({
     }
   };
 
-  const onSaveClick = async () => {
-    if (!validateForm()) {
-      return;
-    }
-    await SchedulingAPIClient.updateSchedule(id, formValues);
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
-  };
-
-  const today = new Date();
-  const getMaxDate = () => {
-    const diff = today.getDate() + 13;
-    return new Date(today.setDate(diff));
-  };
-
   const discardChanges = async () => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
 
@@ -365,6 +354,49 @@ const SelectDateTime = ({
     return go && go("confirm donation details");
   };
 
+  const onSaveRecurringClick = () => {
+    if (!validateForm()) {
+      return;
+    }
+    onOpen();
+  };
+
+  const onSaveClick = async (isOneTimeEvent = true) => {
+    if (!validateForm()) {
+      return;
+    }
+    const editedFields = {
+      dayPart,
+      startTime,
+      endTime,
+    };
+    if (isOneTimeEvent) {
+      const res = await SchedulingAPIClient.updateSchedule(id, editedFields);
+      if (!res) {
+        toast({
+          title: "Drop-off Information could not be updated. Please try again",
+          status: "error",
+          duration: 7000,
+          isClosable: true,
+        });
+        return;
+      }
+    }
+    toast({
+      title: "Drop-off Information updated successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
+    discardChanges();
+  };
+
+  const today = new Date();
+  const getMaxDate = () => {
+    const diff = today.getDate() + 13;
+    return new Date(today.setDate(diff));
+  };
+
   return (
     <Container variant="responsiveContainer">
       {isBeingEdited ? (
@@ -383,7 +415,6 @@ const SelectDateTime = ({
         <Calendar
           className={isDesktop ? "rmdp-mobile desktop" : "rmdp-mobile"}
           minDate={new Date()}
-          maxDate={getMaxDate()}
           value={date}
           onChange={handleDateSelect}
         />
@@ -479,7 +510,22 @@ const SelectDateTime = ({
           </FormControl>
         )}
       {isBeingEdited ? (
-        <SaveButton onSaveClick={onSaveClick} />
+        <>
+          {formValues.recurringDonationId !== "null" ? (
+            <>
+              <SaveButton onSaveClick={onSaveRecurringClick} />
+              <ModifyRecurringDonationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onModification={onSaveClick}
+                modificationType="update"
+                isRecurringDisabled
+              />
+            </>
+          ) : (
+            <SaveButton onSaveClick={onSaveClick} />
+          )}
+        </>
       ) : (
         <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
       )}

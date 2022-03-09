@@ -1,21 +1,23 @@
-import { CloseIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
+  Grid,
   IconButton,
   Input,
   Text,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
 import useViewport from "../../../hooks/useViewport";
+import { Role } from "../../../types/AuthTypes";
+import HeaderLabel from "../../common/HeaderLabel";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -28,10 +30,9 @@ const CreateAccount = ({
   formData: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const { next } = navigation;
+  const { previous, next } = navigation;
   const history = useHistory();
-  const { firstName, lastName, businessName, phoneNumber } = formData;
-  const { authenticatedUser } = useContext(AuthContext);
+  const { role, firstName, lastName, businessName, phoneNumber } = formData;
 
   const { isDesktop } = useViewport();
 
@@ -52,7 +53,7 @@ const CreateAccount = ({
     };
     let valid = true;
 
-    if (!businessName) {
+    if (role === Role.DONOR && !businessName) {
       valid = false;
       newErrors.businessName = "Please enter the name of your business.";
     }
@@ -64,7 +65,7 @@ const CreateAccount = ({
       valid = false;
       newErrors.lastName = "Please enter a last name.";
     }
-    if (!phoneNumber) {
+    if (role === Role.DONOR && !phoneNumber) {
       valid = false;
       newErrors.phoneNumber = "Please enter a valid phone number.";
     }
@@ -78,11 +79,17 @@ const CreateAccount = ({
     }
   };
 
-  if (authenticatedUser) {
-    return <Redirect to={Routes.DASHBOARD_PAGE} />;
-  }
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">
+      <IconButton
+        marginLeft="-12px"
+        float="left"
+        backgroundColor="transparent"
+        aria-label="go back"
+        onClick={previous}
+      >
+        <ArrowBackIcon width="24px" height="24px" />
+      </IconButton>
       {!isDesktop && (
         <IconButton
           float="right"
@@ -93,70 +100,90 @@ const CreateAccount = ({
           <CloseIcon color="black.100" />
         </IconButton>
       )}
-      <Text mt="67px" textStyle="mobileHeader1">
-        Create an account
-      </Text>
-      <Text textStyle="mobileSmall" color="hubbard.100">
+      <HeaderLabel text="Create an account" />
+      <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Account information can be edited in the My Account section of the
         platform.
       </Text>
 
       <FormControl mt="2rem" isRequired>
-        <Box>
-          <Text mb="0.5rem" textStyle="mobileBodyBold" color="hubbard.100">
-            Organization
-          </Text>
-          <MandatoryInputDescription label="Name of Business" />
-          <FormControl isRequired isInvalid={!!formErrors.businessName}>
-            <Input
-              validate="Required"
-              mt="2"
-              value={businessName}
-              onChange={setForm}
-              name="businessName"
-              placeholder="i.e. Lettuce Garden"
-            />
-            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
-          </FormControl>
-        </Box>
-
+        {role === Role.DONOR && (
+          <Box>
+            <Text mb="0.5rem" textStyle="mobileBodyBold" color="hubbard.100">
+              Organization
+            </Text>
+            <MandatoryInputDescription label="Name of Business" />
+            <FormControl isRequired isInvalid={!!formErrors.businessName}>
+              <Input
+                validate="Required"
+                mt="2"
+                value={businessName}
+                onChange={setForm}
+                name="businessName"
+                placeholder="i.e. Lettuce Garden"
+              />
+              <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
+            </FormControl>
+          </Box>
+        )}
         <Text
           mt="2rem"
           mb="0.5rem"
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Point of Contact
+          {role === Role.VOLUNTEER
+            ? "Volunteer Information"
+            : "Point of Contact"}
         </Text>
-        <Box>
-          <FormControl isRequired isInvalid={!!formErrors.firstName}>
-            <MandatoryInputDescription label="First Name" />
-            <Input
-              mt="2"
-              value={firstName}
-              onChange={setForm}
-              name="firstName"
-              placeholder="i.e. Jane"
-            />
-            <FormErrorMessage>{formErrors.firstName}</FormErrorMessage>
-          </FormControl>
-        </Box>
-        <Box mt="1rem">
-          <FormControl isInvalid={!!formErrors.lastName}>
-            <MandatoryInputDescription label="Last Name" />
-            <Input
-              mt="2"
-              value={lastName}
-              onChange={setForm}
-              name="lastName"
-              placeholder="i.e. Doe"
-            />
-            <FormErrorMessage>{formErrors.lastName}</FormErrorMessage>
-          </FormControl>
-        </Box>
-        <Box mt="1rem">
+        <Grid
+          templateColumns={{ md: "repeat(2, 1fr)" }}
+          columnGap={16}
+          rowGap={4}
+        >
+          <Box>
+            <FormControl isRequired isInvalid={!!formErrors.firstName}>
+              <MandatoryInputDescription label="First name" />
+              <Input
+                mt="2"
+                value={firstName}
+                onChange={setForm}
+                name="firstName"
+                placeholder="i.e. Jane"
+              />
+              <FormErrorMessage>{formErrors.firstName}</FormErrorMessage>
+            </FormControl>
+          </Box>
+          <Box>
+            <FormControl isInvalid={!!formErrors.lastName}>
+              <MandatoryInputDescription label="Last name" />
+              <Input
+                mt="2"
+                value={lastName}
+                onChange={setForm}
+                name="lastName"
+                placeholder="i.e. Doe"
+              />
+              <FormErrorMessage>{formErrors.lastName}</FormErrorMessage>
+            </FormControl>
+          </Box>
+        </Grid>
+        <Box mt="2rem">
           <FormControl isInvalid={!!formErrors.phoneNumber}>
-            <MandatoryInputDescription label="Phone Number" />
+            {role === Role.DONOR && (
+              <MandatoryInputDescription label="Phone number" />
+            )}
+            {role === Role.VOLUNTEER && (
+              <Box display="inline">
+                <Text
+                  display="inline-block"
+                  textStyle="mobileBody"
+                  color="black.100"
+                >
+                  Phone number
+                </Text>
+              </Box>
+            )}
             <Input
               mt="2"
               type="tel"
@@ -168,13 +195,8 @@ const CreateAccount = ({
             <FormErrorMessage>{formErrors.phoneNumber}</FormErrorMessage>
           </FormControl>
         </Box>
-        <Box mt="1rem">
-          <Button
-            mt="1.5"
-            variant="navigation"
-            onClick={handleNext}
-            width="100%"
-          >
+        <Box mt="2.5rem">
+          <Button mt="2" variant="navigation" onClick={handleNext} width="100%">
             Next
           </Button>
         </Box>

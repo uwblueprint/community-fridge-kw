@@ -6,6 +6,8 @@ import {
   FormLabel,
   Stack,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useState } from "react";
 
@@ -13,6 +15,7 @@ import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import customTheme from "../../../theme";
 import RadioImageSelectGroup from "../../common/RadioImageSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
@@ -27,12 +30,13 @@ const DonationInformation: any = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next, go } = navigation;
-  const { id, categories, size } = formValues;
+  const { id, categories, size, recurringDonationId, startTime } = formValues;
   const [formErrors, setFormErrors] = useState({
     categories: "",
     size: "",
   });
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
   const getSubmitState = () => {
     return !!formValues.size && !!formValues.categories.length;
   };
@@ -91,16 +95,6 @@ const DonationInformation: any = ({
     }
   };
 
-  const onSaveClick = async () => {
-    if (!validateForm()) {
-      return;
-    }
-    await SchedulingAPIClient.updateSchedule(id, formValues);
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
-  };
-
   const discardChanges = async () => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
     setForm({
@@ -108,6 +102,43 @@ const DonationInformation: any = ({
     });
     setForm({ target: { name: "size", value: scheduleResponse.size } });
     return go && go("confirm donation details");
+  };
+
+  const onSaveClick = async (isOneTimeEvent = true) => {
+    if (!validateForm()) {
+      return;
+    }
+    const editedFields = { categories, size, startTime };
+    const res = isOneTimeEvent
+      ? await SchedulingAPIClient.updateSchedule(id, editedFields)
+      : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
+          recurringDonationId,
+          editedFields,
+        );
+
+    if (!res) {
+      toast({
+        title: "Donation Information could not be updated. Please try again",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    toast({
+      title: "Donation Information updated successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
+    discardChanges();
+  };
+
+  const onSaveRecurringClick = () => {
+    if (!validateForm()) {
+      return;
+    }
+    onOpen();
   };
 
   return (
@@ -157,7 +188,21 @@ const DonationInformation: any = ({
         </FormControl>
       )}
       {isBeingEdited ? (
-        <SaveButton onSaveClick={onSaveClick} />
+        <>
+          {formValues.recurringDonationId !== "null" ? (
+            <>
+              <SaveButton onSaveClick={onSaveRecurringClick} />
+              <ModifyRecurringDonationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onModification={onSaveClick}
+                modificationType="update"
+              />
+            </>
+          ) : (
+            <SaveButton onSaveClick={onSaveClick} />
+          )}
+        </>
       ) : (
         <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
       )}

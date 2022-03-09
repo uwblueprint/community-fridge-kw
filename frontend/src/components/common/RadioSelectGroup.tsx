@@ -16,19 +16,19 @@ import {
 import React from "react";
 
 import personIcon from "../../assets/personIcon.svg";
-import useViewport from "../../hooks/useViewport";
 
 interface RadioSelectGroupProps {
   name: string;
   value: string;
   values: string[];
-  label: string;
+  label?: string;
   helperText?: string;
   icons: number[];
   isRequired: boolean;
   isDisabled?: boolean;
   error?: string;
   onChange: (arg0: any) => void;
+  horizontalOnly?: boolean;
 }
 
 const RadioSelectButton = (props: any) => {
@@ -120,6 +120,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
     isDisabled,
     error,
     onChange,
+    horizontalOnly,
   } = props;
   const { getRootProps, getRadioProps } = useRadioGroup({
     name,
@@ -155,7 +156,7 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
       isInvalid={!!error}
       isDisabled={isDisabled}
     >
-      <FormLabel fontWeight="600">{label}</FormLabel>
+      {label && <FormLabel fontWeight="600">{label}</FormLabel>}
       <FormHelperText fontSize="16px" color="hubbard.100" mb="20px">
         {helperText}
       </FormHelperText>
@@ -172,15 +173,22 @@ const RadioSelectGroup = (props: RadioSelectGroupProps) => {
           slot without a pre-existing donor.
         </FormHelperText>
       )}
-      <Grid
-        templateRows={{ md: "repeat(2, 1fr)" }}
-        templateColumns={{ md: "repeat(2, 1fr)" }}
-        rowGap={6}
-        columnGap={16}
-        {...group}
-      >
-        {radioSelectButtons}
-      </Grid>
+      {horizontalOnly ? (
+        <Grid templateRows={{ md: "repeat(2, 1fr)" }} rowGap={6} {...group}>
+          {radioSelectButtons}
+        </Grid>
+      ) : (
+        <Grid
+          templateRows={{ md: "repeat(2, 1fr)" }}
+          templateColumns={{ md: "repeat(2, 1fr)" }}
+          rowGap={6}
+          columnGap={16}
+          {...group}
+        >
+          {radioSelectButtons}
+        </Grid>
+      )}
+
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   );
