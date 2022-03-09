@@ -75,9 +75,11 @@ const Account = (): JSX.Element => {
         );
       }
       setDonor(donorResponse);
-      setBusinessName(donorResponse.businessName);
+      if (authenticatedUser?.role !== Role.VOLUNTEER)
+        setBusinessName(donorResponse.businessName);
+      else setBusinessName("");
     };
-    getDonor();
+    if (authenticatedUser?.role !== Role.VOLUNTEER) getDonor();
   }, [authenticatedUser]);
 
   const accountData = {
@@ -138,7 +140,9 @@ const Account = (): JSX.Element => {
     formValues.firstName = authenticatedUser!.firstName;
     formValues.lastName = authenticatedUser!.lastName;
     formValues.phoneNumber = authenticatedUser!.phoneNumber;
-    setBusinessName(donor!.businessName);
+    if (authenticatedUser?.role !== Role.VOLUNTEER)
+      setBusinessName(donor!.businessName);
+    else setBusinessName("");
     setIsEditing(false);
     onClose();
     setFormErrors({
@@ -160,7 +164,7 @@ const Account = (): JSX.Element => {
 
     let isValid = true;
 
-    if (!businessName) {
+    if (!businessName && authenticatedUser?.role !== Role.VOLUNTEER) {
       isValid = false;
       newErrors.businessName = ErrorMessages.requiredField;
     }
@@ -230,7 +234,7 @@ const Account = (): JSX.Element => {
     }
 
     // handle loading spinner state
-    if (updatedUser && updatedDonor) {
+    if (updatedUser) {
       setIsSavingData(false);
     }
     setIsEditing(false);
@@ -263,14 +267,6 @@ const Account = (): JSX.Element => {
       />
     );
   };
-
-  if (!donor) {
-    return (
-      <Center>
-        <Spinner />
-      </Center>
-    );
-  }
 
   return (
     <Container centerContent variant="responsiveContainer">
