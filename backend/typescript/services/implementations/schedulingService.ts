@@ -516,10 +516,10 @@ class SchedulingService implements ISchedulingService {
             : newRecurringDonationId + 1;
 
         // end date of recurring donation
-        const recurringDonationEndDate: Date = new Date(
+        const recurringDonationEndDate = dayjs(
           scheduling.recurringDonationEndDate!,
         );
-        recurringDonationEndDate.setHours(23, 59, 59, 999);
+        recurringDonationEndDate.startOf("day");
 
         // create first schedule and assign it to newScheduling
         newScheduling = await Scheduling.create({
@@ -546,31 +546,18 @@ class SchedulingService implements ISchedulingService {
           string | number | boolean | string[] | Date | undefined | null
         >[] = [];
 
-        const originalStartTime: Date = new Date(scheduling.startTime);
-        const originalEndTime: Date = new Date(scheduling.endTime);
+        let nextDayStartTime = dayjs(scheduling.startTime);
+        let nextDayEndTime = dayjs(scheduling.endTime);
         // loop for calculations if frequency is DAILY
         if (schedulingFrequency === Frequency.DAILY) {
-          const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setDate(nextDay.getDate() + 1);
+          nextDayStartTime = nextDayStartTime.add(1, "day");
+          nextDayEndTime = nextDayEndTime.add(1, "day");
 
-          while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
-            const newStartTime: Date = new Date(nextDay);
-
-            newStartTime.setHours(originalStartTime.getHours());
-            newStartTime.setMinutes(originalStartTime.getMinutes());
-            newStartTime.setSeconds(originalStartTime.getSeconds());
-            newStartTime.setSeconds(originalStartTime.getMilliseconds());
-
-            const newEndTime: Date = new Date(nextDay);
-            newEndTime.setHours(originalEndTime.getHours());
-            newEndTime.setMinutes(originalEndTime.getMinutes());
-            newEndTime.setSeconds(originalEndTime.getSeconds());
-            newEndTime.setSeconds(originalEndTime.getMilliseconds());
-
+          while (nextDayStartTime.isBefore(recurringDonationEndDate)) {
             const newSchedule: CreateSchedulingDTO = {
               ...scheduling,
-              startTime: newStartTime,
-              endTime: newEndTime,
+              startTime: nextDayStartTime.toDate(),
+              endTime: nextDayEndTime.toDate(),
               recurringDonationId: String(newRecurringDonationId),
             };
             const snakeCaseNewSchedule: Record<
@@ -579,33 +566,21 @@ class SchedulingService implements ISchedulingService {
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setDate(nextDay.getDate() + 1);
+            nextDayStartTime = nextDayStartTime.add(1, "day");
+            nextDayEndTime = nextDayEndTime.add(1, "day");
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }
         // loop for calculations if frequency is WEEKLY
         else if (schedulingFrequency === Frequency.WEEKLY) {
-          const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setDate(nextDay.getDate() + 7);
+          nextDayStartTime = nextDayStartTime.add(7, "day");
+          nextDayEndTime = nextDayEndTime.add(7, "day");
 
-          while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
-            const newStartTime: Date = new Date(nextDay);
-
-            newStartTime.setHours(originalStartTime.getHours());
-            newStartTime.setMinutes(originalStartTime.getMinutes());
-            newStartTime.setSeconds(originalStartTime.getSeconds());
-            newStartTime.setSeconds(originalStartTime.getMilliseconds());
-
-            const newEndTime: Date = new Date(nextDay);
-            newEndTime.setHours(originalEndTime.getHours());
-            newEndTime.setMinutes(originalEndTime.getMinutes());
-            newEndTime.setSeconds(originalEndTime.getSeconds());
-            newEndTime.setSeconds(originalEndTime.getMilliseconds());
-
+          while (nextDayStartTime.isBefore(recurringDonationEndDate)) {
             const newSchedule: CreateSchedulingDTO = {
               ...scheduling,
-              startTime: newStartTime,
-              endTime: newEndTime,
+              startTime: nextDayStartTime.toDate(),
+              endTime: nextDayEndTime.toDate(),
               recurringDonationId: String(newRecurringDonationId),
             };
             const snakeCaseNewSchedule: Record<
@@ -614,33 +589,21 @@ class SchedulingService implements ISchedulingService {
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setDate(nextDay.getDate() + 7);
+            nextDayStartTime = nextDayStartTime.add(7, "day");
+            nextDayEndTime = nextDayEndTime.add(7, "day");
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }
         // loop for calculations if frequency is MONTHLY
         else {
-          const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setDate(nextDay.getDate() + 28);
+          nextDayStartTime = nextDayStartTime.add(28, "day");
+          nextDayEndTime = nextDayEndTime.add(28, "day");
 
-          while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
-            const newStartTime: Date = new Date(nextDay);
-
-            newStartTime.setHours(originalStartTime.getHours());
-            newStartTime.setMinutes(originalStartTime.getMinutes());
-            newStartTime.setSeconds(originalStartTime.getSeconds());
-            newStartTime.setSeconds(originalStartTime.getMilliseconds());
-
-            const newEndTime: Date = new Date(nextDay);
-            newEndTime.setHours(originalEndTime.getHours());
-            newEndTime.setMinutes(originalEndTime.getMinutes());
-            newEndTime.setSeconds(originalEndTime.getSeconds());
-            newEndTime.setSeconds(originalEndTime.getMilliseconds());
-
+          while (nextDayStartTime.isBefore(recurringDonationEndDate)) {
             const newSchedule: CreateSchedulingDTO = {
               ...scheduling,
-              startTime: newStartTime,
-              endTime: newEndTime,
+              startTime: nextDayStartTime.toDate(),
+              endTime: nextDayEndTime.toDate(),
               recurringDonationId: String(newRecurringDonationId),
             };
             const snakeCaseNewSchedule: Record<
@@ -649,7 +612,8 @@ class SchedulingService implements ISchedulingService {
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setDate(nextDay.getDate() + 28);
+            nextDayStartTime = nextDayStartTime.add(28, "day");
+            nextDayEndTime = nextDayEndTime.add(28, "day");
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }
