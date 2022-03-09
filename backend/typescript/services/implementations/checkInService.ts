@@ -33,21 +33,28 @@ class CheckInService implements ICheckInService {
   async createCheckIn(checkIn: CreateCheckInDTO): Promise<Array<CheckInDTO>> {
     let snakeCaseCheckIns: Array<CheckIn> = [];
     try {
-      const originalStartDate: Date = new Date(checkIn.startDate);
-      const originalEndDate: Date = new Date(checkIn.endDate);
+      const checkInsToBeCreated: DTOTypes[] = [];
+      const originalStartDate = dayjs(checkIn.startDate);
+      const originalEndDate = dayjs(checkIn.endDate);
 
       let nextStartDate = dayjs(originalStartDate);
       let nextEndDate = dayjs(originalStartDate);
 
+      console.log(checkIn.startDate);
+      console.log(`next end date: ${nextEndDate.toDate()}`);
+      console.log(`original end date: ${originalEndDate.toDate()}`);
+      console.log(checkIn.endDate);
+
       nextEndDate = nextEndDate
-        .hour(originalEndDate.getHours())
-        .minute(originalEndDate.getMinutes())
-        .second(originalEndDate.getSeconds())
-        .millisecond(originalEndDate.getMilliseconds());
+        .hour(originalEndDate.hour())
+        .minute(originalEndDate.minute())
+        .second(originalEndDate.second())
+        .millisecond(originalEndDate.millisecond());
 
-      const checkInsToBeCreated: DTOTypes[] = [];
+      while (nextEndDate.isBefore(originalEndDate)) {
+        console.log(`next end date: ${nextEndDate.toDate()}`);
+        console.log(`original end date: ${originalEndDate.toDate()}`);
 
-      while (nextEndDate.valueOf() <= originalEndDate.valueOf()) {
         const newCheckIn: CreateCheckInDTO = {
           startDate: nextStartDate.toDate(),
           endDate: nextEndDate.toDate(),
@@ -101,6 +108,7 @@ class CheckInService implements ICheckInService {
       });
       const updateResult = await CheckIn.update(updatesSnakeCase, {
         where: { id: Number(checkInId) },
+        limit: 1,
         returning: true,
       });
       if (updateResult[0] < 1) {

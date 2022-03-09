@@ -44,18 +44,16 @@ describe("pg checkInService", () => {
   it("create single day CheckIn", async () => {
     // pass in the id of a user (1)
     const mockCreateCheckInDTO = {
-      userId: "1",
       startDate: new Date("2021-09-01T09:00:00.000Z"),
-      endDate: new Date("2021-09-01T00:10:00.000Z"),
-      volunteerId: "1",
+      endDate: new Date("2021-09-01T10:00:00.000Z"),
     };
     const expectedCheckIn = {
       id: "4",
       startDate: new Date("2021-09-01T09:00:00.000Z"),
-      endDate: new Date("2021-09-01T00:10:00.000Z"),
+      endDate: new Date("2021-09-01T10:00:00.000Z"),
       isAdmin: false,
       notes: null,
-      volunteerId: "1",
+      volunteerId: "null",
     };
 
     const res = await checkInService.createCheckIn(mockCreateCheckInDTO);
@@ -64,11 +62,10 @@ describe("pg checkInService", () => {
   });
 
   it("create multi day CheckIn", async () => {
-    // pass in the id of a user (1)
     const mockCreateCheckInDTO = {
       userId: "1",
       startDate: new Date("2021-08-30T09:00:00.000Z"),
-      endDate: new Date("2021-09-01T00:10:00.000Z"),
+      endDate: new Date("2021-09-01T10:00:00.000Z"),
       notes: "hi this is a test",
       isAdmin: true,
     };
@@ -76,7 +73,7 @@ describe("pg checkInService", () => {
       {
         id: "4",
         startDate: new Date("2021-08-30T09:00:00.000Z"),
-        endDate: new Date("2021-08-30T00:10:00.000Z"),
+        endDate: new Date("2021-08-30T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
         volunteerId: "null",
@@ -84,7 +81,7 @@ describe("pg checkInService", () => {
       {
         id: "5",
         startDate: new Date("2021-08-31T09:00:00.000Z"),
-        endDate: new Date("2021-08-31T00:10:00.000Z"),
+        endDate: new Date("2021-08-31T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
         volunteerId: "null",
@@ -92,7 +89,7 @@ describe("pg checkInService", () => {
       {
         id: "6",
         startDate: new Date("2021-09-01T09:00:00.000Z"),
-        endDate: new Date("2021-09-01T00:10:00.000Z"),
+        endDate: new Date("2021-09-01T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
         volunteerId: "null",
