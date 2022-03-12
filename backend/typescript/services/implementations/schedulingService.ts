@@ -18,24 +18,9 @@ import {
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import { toSnakeCase } from "../../utilities/servicesUtils";
 
 const Logger = logger(__filename);
-
-function toSnakeCase(
-  schedule: CreateSchedulingDTO,
-): Record<
-  string,
-  string | string[] | boolean | number | Date | undefined | null
-> {
-  const scheduleSnakeCase: Record<
-    string,
-    string | string[] | boolean | number | Date | undefined | null
-  > = {};
-  Object.entries(schedule).forEach(([key, value]) => {
-    scheduleSnakeCase[snakeCase(key)] = value;
-  });
-  return scheduleSnakeCase;
-}
 
 class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
@@ -575,7 +560,7 @@ class SchedulingService implements ISchedulingService {
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined | null
+              Date | string | string[] | boolean | number | null | undefined
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);

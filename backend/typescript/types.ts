@@ -157,3 +157,12 @@ export type CheckInDTO = {
   volunteerId?: string;
   isAdmin?: boolean;
 };
+
+export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
+
+export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;
+
+export type DTOTypes = Record<
+  string,
+  Date | string | string[] | boolean | number | null | undefined
+>;

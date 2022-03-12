@@ -13,8 +13,6 @@ import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
 import checkInRouter from "./rest/checkInRoutes";
 import contentRouter from "./rest/contentRoutes";
-import EmailService from "./services/implementations/emailService";
-import IEmailService from "./services/interfaces/emailService";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
 if (process.env.NODE_ENV === "production") {
