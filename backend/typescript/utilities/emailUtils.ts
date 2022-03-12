@@ -59,3 +59,9 @@ export const cancellationEmail = (mainLine: string, name: string): string => {
  </html>
   `;
 };
+
+export const getAdminEmail = (): string => {
+  return process.env.NODE_ENV === "production"
+    ? "communityfridgekw@gmail.com"
+    : "hanlincheng@uwblueprint.org";
+};
