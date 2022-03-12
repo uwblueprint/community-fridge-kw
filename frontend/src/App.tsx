@@ -1,7 +1,8 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import volunteerAPIClient from "./APIClients/VolunteerAPIClient";
 import Action from "./components/auth/Action";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
@@ -27,7 +28,6 @@ import customTheme from "./theme/index";
 import { AuthenticatedUser, Role, Status } from "./types/AuthTypes";
 import { AuthenticatedVolunteer } from "./types/VolunteerTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
-import volunteerAPIClient from "./APIClients/VolunteerAPIClient";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -38,12 +38,16 @@ const App = (): React.ReactElement => {
     currentUser,
   );
 
-  const [volunteerUser, setVolunteerUser] = useState<AuthenticatedVolunteer>(null);
+  const [volunteerUser, setVolunteerUser] = useState<AuthenticatedVolunteer>(
+    null,
+  );
 
   useEffect(() => {
     async function getVolunteerUser() {
       if (authenticatedUser && authenticatedUser.role === Role.VOLUNTEER) {
-        const volunteer = await volunteerAPIClient.getVolunteerByUserId(authenticatedUser.id);
+        const volunteer = await volunteerAPIClient.getVolunteerByUserId(
+          authenticatedUser.id,
+        );
         setVolunteerUser(volunteer);
       }
     }
@@ -52,7 +56,12 @@ const App = (): React.ReactElement => {
   return (
     <ChakraProvider theme={customTheme}>
       <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
-        <VolunteerContext.Provider value={{ volunteerId: volunteerUser ? volunteerUser.id : null, volunteerStatus: volunteerUser ? volunteerUser.status : null }}>
+        <VolunteerContext.Provider
+          value={{
+            volunteerId: volunteerUser ? volunteerUser.id : null,
+            volunteerStatus: volunteerUser ? volunteerUser.status : null,
+          }}
+        >
           <Router>
             <FeedbackBanner />
             <Header />
