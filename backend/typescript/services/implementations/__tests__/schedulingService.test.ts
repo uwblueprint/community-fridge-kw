@@ -103,8 +103,12 @@ describe("pg schedulingService", () => {
       donorId.toString(),
       0,
     );
+    const currentDate = new Date();
     expect(res).toMatchObject(
-      testSchedules.filter((schedule) => schedule.donorId === donorId),
+      testSchedules.filter(
+        (schedule) =>
+          schedule.donorId === donorId && schedule.startTime >= currentDate,
+      ),
     );
   });
 
@@ -122,6 +126,23 @@ describe("pg schedulingService", () => {
     );
     expect(res).toMatchObject(
       testSchedules.filter((schedule) => schedule.volunteerId === volunteerId),
+    );
+  });
+
+  test("getSchedulesByPickUp", async () => {
+    await Scheduling.bulkCreate(schedules);
+
+    const resPickup = await schedulingService.getSchedulingsByPickUp(true);
+    expect(resPickup).toMatchObject(
+      testSchedules.filter((schedule) => schedule.isPickup === true),
+    );
+
+    const resUnload = await schedulingService.getSchedulingsByPickUp(false);
+    expect(resUnload).toMatchObject(
+      testSchedules.filter(
+        (schedule) =>
+          schedule.isPickup === false && schedule.volunteerNeeded === true,
+      ),
     );
   });
 

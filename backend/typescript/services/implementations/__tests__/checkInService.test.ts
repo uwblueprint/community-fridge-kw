@@ -15,6 +15,12 @@ import EmailService from "../emailService";
 import CheckInService from "../checkInService";
 import VolunteerService from "../volunteerService";
 import IVolunteerService from "../../interfaces/volunteerService";
+import { toSnakeCase } from "../../../utilities/servicesUtils";
+
+// from staging -> TO DO: change this to use utils ver !!
+const checkIns = testCheckIns.map((checkIn) => {
+  return toSnakeCase(checkIn);
+});
 
 jest.mock("nodemailer", () => {
   const createTransport = jest.fn().mockReturnValue({
@@ -33,7 +39,7 @@ describe("pg checkInService", () => {
     checkInService = new CheckInService(emailService, volunteerService);
     await User.bulkCreate(testUsersDb);
     await Volunteer.bulkCreate(testVolunteersDb);
-    await CheckIn.bulkCreate(testCheckIns);
+    await CheckIn.bulkCreate(checkIns);
   });
 
   afterAll(async () => {
@@ -48,7 +54,7 @@ describe("pg checkInService", () => {
       endDate: new Date("2021-09-01T10:00:00.000Z"),
     };
     const expectedCheckIn = {
-      id: "4",
+      id: "5",
       startDate: new Date("2021-09-01T09:00:00.000Z"),
       endDate: new Date("2021-09-01T10:00:00.000Z"),
       isAdmin: false,
@@ -71,7 +77,7 @@ describe("pg checkInService", () => {
     };
     const expectedCheckIn = [
       {
-        id: "4",
+        id: "5",
         startDate: new Date("2021-08-30T09:00:00.000Z"),
         endDate: new Date("2021-08-30T10:00:00.000Z"),
         isAdmin: true,
@@ -79,7 +85,7 @@ describe("pg checkInService", () => {
         volunteerId: "null",
       },
       {
-        id: "5",
+        id: "6",
         startDate: new Date("2021-08-31T09:00:00.000Z"),
         endDate: new Date("2021-08-31T10:00:00.000Z"),
         isAdmin: true,
@@ -87,7 +93,7 @@ describe("pg checkInService", () => {
         volunteerId: "null",
       },
       {
-        id: "6",
+        id: "7",
         startDate: new Date("2021-09-01T09:00:00.000Z"),
         endDate: new Date("2021-09-01T10:00:00.000Z"),
         isAdmin: true,
@@ -113,5 +119,60 @@ describe("pg checkInService", () => {
     );
 
     expect(updatedCheckIn).toMatchObject(testUpdatedCheckIns[0]);
+  });
+
+  test("getCheckIns", async () => {
+    const res = await checkInService.getAllCheckIns();
+    expect(res).toMatchObject(testCheckIns);
+  });
+
+  test("getCheckInsById", () => {
+    testCheckIns.forEach(async (checkIn, i) => {
+      const res = await checkInService.getCheckInsById((i + 1).toString());
+      expect(res).toMatchObject(checkIn);
+    });
+  });
+
+  test("getCheckInsByVolunteerId", async () => {
+    const { volunteerId } = testCheckIns[1];
+    const res = await checkInService.getCheckInsByVolunteerId(
+      (volunteerId ?? "").toString(),
+    );
+    expect(res).toMatchObject(
+      testCheckIns.filter((checkIn) => checkIn.volunteerId === volunteerId),
+    );
+  });
+
+  test("deleteCheckInById", async () => {
+    const checkInToDelete: CheckIn | null = await CheckIn.findOne();
+    expect(checkInToDelete).not.toBeNull();
+    if (checkInToDelete) {
+      const res = await checkInService.deleteCheckInById(
+        checkInToDelete.id.toString(),
+      );
+      const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
+      checkInsDbAfterDelete.forEach((checkIn: CheckIn, i) => {
+        expect(checkIn.id).not.toBe(checkInToDelete.id);
+      });
+      expect(checkInsDbAfterDelete.length).toBe(testCheckIns.length - 1);
+    }
+  });
+
+  test("deleteCheckInsByDateRange", async () => {
+    const startDate = "2021-09-01T09:00:00.000Z";
+    const endDate = "2021-09-07T10:00:00.000Z";
+    const res = await checkInService.deleteCheckInsByDateRange(
+      startDate,
+      endDate,
+    );
+    const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
+    const expected = testCheckIns.filter(
+      (checkIn) =>
+        !(
+          checkIn.startDate >= new Date(startDate) &&
+          checkIn.endDate <= new Date(endDate)
+        ),
+    );
+    expect(checkInsDbAfterDelete.length).toBe(expected.length);
   });
 });

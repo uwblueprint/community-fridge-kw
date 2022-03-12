@@ -7,4 +7,5 @@ export interface SignUpFormProps {
   confirmPassword: string;
   businessName: string;
   role: string;
+  acceptedTerms: boolean;
 }

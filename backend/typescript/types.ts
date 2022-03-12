@@ -78,6 +78,14 @@ export type VolunteerDTO = {
   status: Status;
 };
 
+export type ContentDTO = {
+  id: string;
+  foodRescueDescription: string;
+  foodRescueUrl: string;
+  checkinDescription: string;
+  checkinUrl: string;
+};
+
 export type UserDonorDTO = UserDTO & DonorDTO;
 
 export type CreateDonorDTO = Omit<DonorDTO, "id">;
@@ -93,6 +101,10 @@ export type AuthDTO = Token & UserDTO;
 export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
 export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id" | "userId">;
+
+export type CreateContentDTO = Omit<ContentDTO, "id">;
+
+export type UpdateContentDTO = CreateContentDTO;
 
 export type SchedulingDTO = {
   id: string;

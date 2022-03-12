@@ -8,6 +8,8 @@ import {
   Input,
   Text,
   Textarea,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useState } from "react";
@@ -15,6 +17,7 @@ import React, { useState } from "react";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import ModifyRecurringDonationModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import CancelButton from "./CancelEditsButton";
 import ErrorMessages from "./ErrorMessages";
@@ -29,9 +32,10 @@ const VolunteerInformation = ({
   isBeingEdited,
 }: SchedulingStepProps) => {
   const { previous, next, go } = navigation;
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     id,
+    recurringDonationId,
     startTime,
     endTime,
     frequency,
@@ -48,6 +52,8 @@ const VolunteerInformation = ({
     pickupLocation: "",
     isPickup: "",
   });
+
+  const toast = useToast();
 
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
@@ -122,22 +128,6 @@ const VolunteerInformation = ({
     return valid;
   };
 
-  const onSaveClick = async () => {
-    if (!validateForm()) {
-      return;
-    }
-    await SchedulingAPIClient.updateSchedule(id, formValues);
-    if (go !== undefined) {
-      go("confirm donation details");
-    }
-  };
-
-  const handleNext = () => {
-    if (validateForm()) {
-      next();
-    }
-  };
-
   const discardChanges = async () => {
     const scheduleResponse = await SchedulingAPIClient.getScheduleById(id);
     setForm({
@@ -159,6 +149,56 @@ const VolunteerInformation = ({
     setForm({ target: { name: "notes", value: scheduleResponse.notes } });
 
     return go && go("confirm donation details");
+  };
+
+  const onSaveRecurringClick = () => {
+    if (!validateForm()) {
+      return;
+    }
+    onOpen();
+  };
+
+  const onSaveClick = async (isOneTimeEvent = true) => {
+    if (!validateForm()) {
+      return;
+    }
+    const editedFields = {
+      volunteerNeeded,
+      volunteerTime: volunteerNeeded ? volunteerTime : null,
+      pickupLocation: volunteerNeeded && isPickup ? pickupLocation : null,
+      isPickup: volunteerNeeded ? isPickup : null,
+      notes,
+      startTime,
+    };
+    const res = isOneTimeEvent
+      ? await SchedulingAPIClient.updateSchedule(id, editedFields)
+      : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
+          recurringDonationId,
+          editedFields,
+        );
+
+    if (!res) {
+      toast({
+        title: "Volunteer Information could not be updated. Please try again",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    toast({
+      title: "Volunteer Information updated successfully",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
+    discardChanges();
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      next();
+    }
   };
 
   return (
@@ -227,7 +267,7 @@ const VolunteerInformation = ({
             >
               <FormLabel>Pickup location:</FormLabel>
               <Input
-                value={pickupLocation}
+                value={pickupLocation!}
                 onChange={(e) => {
                   handleChange(e.target.value, "pickupLocation");
                 }}
@@ -248,7 +288,7 @@ const VolunteerInformation = ({
                 What is the specific time you require assistance?
               </FormLabel>
               <Input
-                value={volunteerTime}
+                value={volunteerTime!}
                 type="time"
                 onChange={(e) => {
                   handleChange(e.target.value, "volunteerTime");
@@ -279,7 +319,21 @@ const VolunteerInformation = ({
         </FormControl>
       )}
       {isBeingEdited ? (
-        <SaveButton onSaveClick={onSaveClick} />
+        <>
+          {formValues.recurringDonationId !== "null" ? (
+            <>
+              <SaveButton onSaveClick={onSaveRecurringClick} />
+              <ModifyRecurringDonationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onModification={onSaveClick}
+                modificationType="update"
+              />
+            </>
+          ) : (
+            <SaveButton onSaveClick={onSaveClick} />
+          )}
+        </>
       ) : (
         <NextButton canSubmit={getSubmitState()} handleNext={handleNext} />
       )}

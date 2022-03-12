@@ -53,6 +53,14 @@ interface ISchedulingService {
   getSchedulings(): Promise<Array<SchedulingDTO>>;
 
   /**
+   * Get all scheduling information where it is either pickup or onsite
+   * @param isPickUp filters if schedules requiring volunteers require pickup or not
+   * @returns array of SchedulingDTOs
+   * @throws Error if scheduling retrieval fails
+   */
+  getSchedulingsByPickUp(isPickUp: boolean): Promise<Array<SchedulingDTO>>;
+
+  /**
    * Generate an email with donation information to be sent after user schedules
    * a donation
    * @param updated if email is regarding an update made to the schedule
@@ -85,6 +93,16 @@ interface ISchedulingService {
     id: string,
     scheduling: UpdateSchedulingDTO,
   ): Promise<SchedulingDTO>;
+
+  /**
+   * update schedulings by recurring_donation_id
+   * @param reucrring_donation_id recurring donation id
+   * @throws Error if recurring donation update fails
+   */
+  updateSchedulingByRecurringDonationId(
+    recurring_donation_id: string,
+    scheduling: UpdateSchedulingDTO,
+  ): Promise<void>;
 
   /**
    * Delete a scheduling by id

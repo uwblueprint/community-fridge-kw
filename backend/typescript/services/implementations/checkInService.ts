@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { snakeCase } from "lodash";
 import dayjs from "dayjs";
+import { Op } from "sequelize";
 import ICheckInService from "../interfaces/checkInService";
 import {
   CheckInDTO,
@@ -65,26 +66,107 @@ class CheckInService implements ICheckInService {
         nextEndDate = nextEndDate.add(1, "day");
       }
       snakeCaseCheckIns = await CheckIn.bulkCreate(checkInsToBeCreated);
+      const checkInDtos: Array<CheckInDTO> = snakeCaseCheckIns.map(
+        (createdCheckIn) => {
+          return {
+            id: String(createdCheckIn.id),
+            startDate: createdCheckIn.start_date,
+            endDate: createdCheckIn.end_date,
+            notes: createdCheckIn.notes,
+            volunteerId: String(createdCheckIn.volunteer_id),
+            isAdmin: createdCheckIn.is_admin,
+          };
+        },
+      );
+      return checkInDtos;
     } catch (error) {
       Logger.error(
         `Failed to create check in. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
+  }
 
-    const checkInDtos: Array<CheckInDTO> = snakeCaseCheckIns.map(
-      (createdCheckIn) => {
+  async getAllCheckIns(): Promise<CheckInDTO[]> {
+    let checkInDtos: CheckInDTO[] = [];
+    try {
+      const checkIns = await CheckIn.findAll({
+        order: [["start_date", "ASC"]],
+      });
+      checkInDtos = checkIns.map((checkIn: CheckIn) => {
         return {
-          id: String(createdCheckIn.id),
-          startDate: createdCheckIn.start_date,
-          endDate: createdCheckIn.end_date,
-          notes: createdCheckIn.notes,
-          volunteerId: String(createdCheckIn.volunteer_id),
-          isAdmin: createdCheckIn.is_admin,
+          id: String(checkIn.id),
+          startDate: checkIn.start_date,
+          endDate: checkIn.end_date,
+          notes: checkIn.notes,
+          volunteerId: String(checkIn.volunteer_id),
+          isAdmin: checkIn.is_admin,
         };
-      },
-    );
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get all checkins. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+    return checkInDtos;
+  }
 
+  async getCheckInsById(id: string): Promise<CheckInDTO> {
+    let checkIn: CheckIn | null;
+
+    try {
+      checkIn = await CheckIn.findByPk(Number(id));
+
+      if (!checkIn) {
+        throw new Error(`checkin with id ${id} not found.`);
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to get check in by id. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return {
+      id: String(checkIn.id),
+      startDate: checkIn.start_date,
+      endDate: checkIn.end_date,
+      notes: checkIn.notes,
+      volunteerId: String(checkIn.volunteer_id),
+      isAdmin: checkIn.is_admin,
+    };
+  }
+
+  async getCheckInsByVolunteerId(volunteerId: string): Promise<CheckInDTO[]> {
+    let checkInDtos: CheckInDTO[] = [];
+    let checkIns: CheckIn[];
+    try {
+      checkIns = await CheckIn.findAll({
+        where: {
+          volunteer_id: Number(volunteerId),
+        },
+        order: [["start_date", "ASC"]],
+      });
+
+      checkInDtos = checkIns.map((checkIn) => {
+        return {
+          id: String(checkIn.id),
+          startDate: checkIn.start_date,
+          endDate: checkIn.end_date,
+          notes: checkIn.notes,
+          volunteerId: String(checkIn.volunteer_id),
+          isAdmin: checkIn.is_admin,
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get checkins by volunteer id. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
     return checkInDtos;
   }
 
@@ -119,6 +201,55 @@ class CheckInService implements ICheckInService {
     } catch (error) {
       Logger.error(
         `Failed to update check in. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async deleteCheckInById(id: string): Promise<void> {
+    try {
+      const numDestroyed = await CheckIn.destroy({
+        where: { id: Number(id) },
+      });
+      if (numDestroyed <= 0) {
+        throw new Error(`checkin with id ${id} was not deleted.`);
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to delete checkin by id. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async deleteCheckInsByDateRange(
+    startDate: string,
+    endDate: string,
+  ): Promise<void> {
+    const startDateRange = new Date(startDate);
+    const endDateRange = new Date(endDate);
+
+    try {
+      const numsDestroyed = await CheckIn.destroy({
+        where: {
+          start_date: {
+            [Op.gte]: startDateRange,
+          },
+          end_date: {
+            [Op.lte]: endDateRange,
+          },
+        },
+      });
+      if (numsDestroyed <= 0) {
+        throw new Error(
+          `checkins between start date ${startDate} and end date ${endDate} were not deleted.`,
+        );
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to delete checkins by start and end date range. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
