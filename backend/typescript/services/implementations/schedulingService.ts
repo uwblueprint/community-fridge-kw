@@ -19,7 +19,7 @@ import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import { toSnakeCase } from "../../utilities/servicesUtils";
-import { cancellationEmail } from "../../utilities/emailUtils";
+import { cancellationEmail, getAdminEmail } from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
@@ -451,7 +451,7 @@ class SchedulingService implements ISchedulingService {
       }
 
       this.emailService.sendEmail(
-        isAdmin ? "communityfridgekw@gmail.com" : email,
+        isAdmin ? getAdminEmail() : email,
         subject,
         emailBody,
       );
