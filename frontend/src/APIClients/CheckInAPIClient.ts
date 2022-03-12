@@ -9,7 +9,7 @@ const getAllCheckIns = async (): Promise<CheckIn[]> => {
     });
     return data;
   } catch (error) {
-    return [];
+    return error as CheckIn[];
   }
 };
 
