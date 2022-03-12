@@ -17,7 +17,6 @@ import VolunteerService from "../volunteerService";
 import IVolunteerService from "../../interfaces/volunteerService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
 
-// from staging -> TO DO: change this to use utils ver !!
 const checkIns = testCheckIns.map((checkIn) => {
   return toSnakeCase(checkIn);
 });
