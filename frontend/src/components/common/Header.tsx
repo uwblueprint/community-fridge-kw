@@ -15,13 +15,13 @@ import {
   IconButton,
   Image,
   Link,
-  Stack,
-  useDisclosure,
   Menu,
   MenuButton,
-  MenuList,
   MenuItem,
-  useOutsideClick
+  MenuList,
+  Stack,
+  useDisclosure,
+  useOutsideClick,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Link as ReactLink, useHistory } from "react-router-dom";
@@ -39,7 +39,7 @@ const Header = (): JSX.Element => {
   useOutsideClick({
     ref: navDropdownRef,
     handler: () => setIsNavDropdownOpen(!isNavDropdownOpen),
-  })
+  });
 
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
@@ -121,15 +121,43 @@ const Header = (): JSX.Element => {
                   <Menu>
                     <MenuButton>
                       Donation & Shift Management{" "}
-                      {isNavDropdownOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                      {isNavDropdownOpen ? (
+                        <ChevronUpIcon />
+                      ) : (
+                        <ChevronDownIcon />
+                      )}
                     </MenuButton>
                     <MenuList>
-                      <MenuItem>
+                      <MenuItem
+                        style={{
+                          borderRadius: "0.4rem",
+                          margin: "auto",
+                          width: "95%",
+                        }}
+                        _focus={{
+                          bg: "raddish.50",
+                        }}
+                        _active={{
+                          bg: "raddish.50",
+                        }}
+                      >
                         <Link as={ReactLink} to={Routes.ADMIN_CHECK_INS}>
                           Fridge Check-ins
                         </Link>
                       </MenuItem>
-                      <MenuItem>
+                      <MenuItem
+                        style={{
+                          borderRadius: "0.4rem",
+                          margin: "auto",
+                          width: "95%",
+                        }}
+                        _focus={{
+                          bg: "raddish.50",
+                        }}
+                        _active={{
+                          bg: "raddish.50",
+                        }}
+                      >
                         <Link as={ReactLink} to={Routes.ADMIN_VIEW_DONATIONS}>
                           Scheduled Donations
                         </Link>
@@ -241,10 +269,17 @@ const Header = (): JSX.Element => {
                     <>
                       <Link
                         as={ReactLink}
+                        to={Routes.ADMIN_CHECK_INS}
+                        onClick={onClose}
+                      >
+                        Fridge Check-ins
+                      </Link>
+                      <Link
+                        as={ReactLink}
                         to={Routes.ADMIN_VIEW_DONATIONS}
                         onClick={onClose}
                       >
-                        View Donations
+                        Scheduled Donations
                       </Link>
                       <Link
                         as={ReactLink}
