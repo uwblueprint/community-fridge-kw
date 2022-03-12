@@ -3,6 +3,6 @@ export type CheckIn = {
   volunteerId?: number;
   startDate: string;
   endDate: string;
-  notes: string;
-  isAdmin: boolean;
+  notes?: string;
+  isAdmin?: boolean;
 };

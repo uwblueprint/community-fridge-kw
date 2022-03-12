@@ -13,7 +13,7 @@ const getAllCheckIns = async (): Promise<CheckIn[]> => {
   }
 };
 
-const getCheckInById = async (checkInId: string): Promise<CheckIn> => {
+const getCheckInsById = async (checkInId: string): Promise<CheckIn> => {
   try {
     const { data } = await baseAPIClient.get(`/checkin/${checkInId}`, {
       headers: { Authorization: BEARER_TOKEN },
@@ -38,7 +38,7 @@ const getCheckInsByVolunteerId = async (
   }
 };
 
-const deleteCheckIn = async (checkInId: string): Promise<boolean> => {
+const deleteCheckInById = async (checkInId: string): Promise<boolean> => {
   try {
     await baseAPIClient.delete(`/checkin/${checkInId}`, {
       headers: { Authorization: BEARER_TOKEN },
@@ -81,7 +81,7 @@ const createCheckIn = async (checkIn: CheckIn): Promise<CheckIn> => {
   }
 };
 
-const updateCheckIn = async (
+const updateCheckInById = async (
   checkInId: string,
   fields: CheckIn,
 ): Promise<CheckIn | boolean> => {
@@ -101,10 +101,10 @@ const updateCheckIn = async (
 
 export default {
   getAllCheckIns,
-  getCheckInById,
+  getCheckInsById,
   getCheckInsByVolunteerId,
-  deleteCheckIn,
+  deleteCheckInById,
   deleteCheckInsByDateRange,
   createCheckIn,
-  updateCheckIn,
+  updateCheckInById,
 };
