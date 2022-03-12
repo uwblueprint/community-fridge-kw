@@ -1,5 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Action from "./components/auth/Action";
@@ -22,9 +22,12 @@ import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
+import VolunteerContext from "./contexts/VolunteerContext";
 import customTheme from "./theme/index";
-import { AuthenticatedUser } from "./types/AuthTypes";
+import { AuthenticatedUser, Role, Status } from "./types/AuthTypes";
+import { AuthenticatedVolunteer } from "./types/VolunteerTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
+import volunteerAPIClient from "./APIClients/VolunteerAPIClient";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
@@ -35,61 +38,74 @@ const App = (): React.ReactElement => {
     currentUser,
   );
 
+  const [volunteerUser, setVolunteerUser] = useState<AuthenticatedVolunteer>(null);
+
+  useEffect(() => {
+    async function getVolunteerUser() {
+      if (authenticatedUser && authenticatedUser.role === Role.VOLUNTEER) {
+        const volunteer = await volunteerAPIClient.getVolunteerByUserId(authenticatedUser.id);
+        setVolunteerUser(volunteer);
+      }
+    }
+    getVolunteerUser();
+  }, []);
   return (
     <ChakraProvider theme={customTheme}>
       <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
-        <Router>
-          <FeedbackBanner />
-          <Header />
-          <Switch>
-            <Route exact path={Routes.LOGIN_PAGE} component={Login} />
-            <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
-            <Route exact path={Routes.LANDING_PAGE} component={Home} />
-            <PrivateRoute
-              exact
-              path={Routes.USER_MANAGEMENT_PAGE}
-              component={UserManagement}
-            />
-            <PrivateRoute
-              exact
-              path={Routes.VOLUNTEER_SHIFTS_PAGE}
-              component={VolunteerShiftsPage}
-            />
-            <PrivateRoute
-              exact
-              path={Routes.ACCOUNT_PAGE}
-              component={Account}
-            />
-            <Route
-              exact
-              path={Routes.VIEW_DONATIONS}
-              component={ViewDonationsPage}
-            />
-            <PrivateRoute
-              exact
-              path={Routes.DASHBOARD_SCHEDULE_EDIT_PAGE}
-              component={EditDashboardSchedulePage}
-            />
-            <PrivateRoute
-              exact
-              path={Routes.DASHBOARD_PAGE}
-              component={Dashboard}
-            />
-            <PrivateRoute
-              exact
-              path={Routes.SCHEDULING_PAGE}
-              component={Scheduling as React.FC}
-            />
-            <Route path={Routes.ACTION} component={Action} />
-            <Route
-              exact
-              path={Routes.FORGET_PASSWORD}
-              component={ResetPassword}
-            />
-            <Route exact path="*" component={NotFound} />
-          </Switch>
-          <Footer />
-        </Router>
+        <VolunteerContext.Provider value={{ volunteerId: volunteerUser ? volunteerUser.id : null, volunteerStatus: volunteerUser ? volunteerUser.status : null }}>
+          <Router>
+            <FeedbackBanner />
+            <Header />
+            <Switch>
+              <Route exact path={Routes.LOGIN_PAGE} component={Login} />
+              <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
+              <Route exact path={Routes.LANDING_PAGE} component={Home} />
+              <PrivateRoute
+                exact
+                path={Routes.USER_MANAGEMENT_PAGE}
+                component={UserManagement}
+              />
+              <PrivateRoute
+                exact
+                path={Routes.VOLUNTEER_SHIFTS_PAGE}
+                component={VolunteerShiftsPage}
+              />
+              <PrivateRoute
+                exact
+                path={Routes.ACCOUNT_PAGE}
+                component={Account}
+              />
+              <Route
+                exact
+                path={Routes.VIEW_DONATIONS}
+                component={ViewDonationsPage}
+              />
+              <PrivateRoute
+                exact
+                path={Routes.DASHBOARD_SCHEDULE_EDIT_PAGE}
+                component={EditDashboardSchedulePage}
+              />
+              <PrivateRoute
+                exact
+                path={Routes.DASHBOARD_PAGE}
+                component={Dashboard}
+              />
+              <PrivateRoute
+                exact
+                path={Routes.SCHEDULING_PAGE}
+                component={Scheduling as React.FC}
+              />
+              <Route path={Routes.ACTION} component={Action} />
+              <Route
+                exact
+                path={Routes.FORGET_PASSWORD}
+                component={ResetPassword}
+              />
+              <Route exact path="*" component={NotFound} />
+            </Switch>
+            <Footer />
+          </Router>
+        </VolunteerContext.Provider>
       </AuthContext.Provider>
     </ChakraProvider>
   );
