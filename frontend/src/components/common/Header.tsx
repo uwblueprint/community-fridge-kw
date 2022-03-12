@@ -94,7 +94,7 @@ const Header = (): JSX.Element => {
                     Home
                   </Link>
                   <Link as={ReactLink} to={Routes.VOLUNTEER_SHIFTS_PAGE}>
-                    My Volunteer Shifts
+                    Scheduled Volunteer Shifts
                   </Link>
                 </>
               )}
