@@ -30,7 +30,7 @@
     "mongoose": "^5.12.12",
     "multer": "^1.4.2",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "nodemailer": "^6.5.0",
     "ordinal": "^1.0.3",
     "pg": "^8.5.1",
