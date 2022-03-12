@@ -9,7 +9,7 @@ type VolunteerContextType = {
 
 const VolunteerContext = createContext<VolunteerContextType>({
   volunteerId: null,
-  volunteerStatus: null
+  volunteerStatus: null,
 });
 
 export default VolunteerContext;
