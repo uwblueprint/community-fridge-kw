@@ -7,6 +7,8 @@ import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
 import PendingPage from "./PendingPage";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
+import ScheduledVolunteerShiftsPage from "./ScheduledVolunteerShiftsPage";
+
 
 const steps = [
   {
@@ -48,6 +50,8 @@ const VolunteerShiftsPage = () => {
   useEffect(() => {
     getVolunteerData();
   }, []);
+  
+  {volunteerStatus === Status.APPROVED && <ScheduledVolunteerShiftsPage />}
 
   switch (id) {
     case "pending page":
