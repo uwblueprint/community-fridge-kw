@@ -19,6 +19,7 @@ import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import { toSnakeCase } from "../../utilities/servicesUtils";
+import { cancellationEmail } from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
@@ -27,7 +28,7 @@ class SchedulingService implements ISchedulingService {
 
   donorService: IDonorService;
 
-  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
+  static TEMP_ADMIN_EMAIL = "linnaluo@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -450,7 +451,7 @@ class SchedulingService implements ISchedulingService {
       }
 
       this.emailService.sendEmail(
-        isAdmin ? SchedulingService.TEMP_ADMIN_EMAIL : email,
+        isAdmin ? "communityfridgekw@gmail.com" : email,
         subject,
         emailBody,
       );
@@ -721,6 +722,84 @@ class SchedulingService implements ISchedulingService {
     }
   }
 
+  async sendSchedulingCancellationEmail(
+    schedule: SchedulingDTO,
+    isRecurringDonation: boolean,
+    isAdminDeleted: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendEmailAfterSchedulingCancellation but this instance of SchedulingService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const { startTime, donorId } = schedule;
+      const donor = await this.donorService.getDonorById(donorId);
+      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
+        timeZone: "EST",
+      });
+
+      const startDayString: string = dayjs(startTimeToLocalDate).format(
+        "dddd, MMMM D",
+      );
+
+      const startTimeString: string = dayjs(startTimeToLocalDate).format(
+        "h:mm A",
+      );
+
+      // if admin deleted on behalf of donor
+      if (isAdminDeleted) {
+        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations" : ""
+        } has been cancelled by Community Fridge KW admin.`;
+        const adminMainLine = `The scheduled donation by ${
+          donor.businessName
+        } for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations " : ""
+        } has been cancelled.`;
+
+        this.emailService.sendEmail(
+          donor.email,
+          "Donation Cancelled By Community Fridge KW Admin",
+          cancellationEmail(donorMainLine, donor.firstName),
+        );
+        this.emailService.sendEmail(
+          "communityfridgekw@gmail.com",
+          `${donor.businessName} Donation Cancellation Confirmation`,
+          cancellationEmail(adminMainLine, "Community Fridge KW"),
+        );
+        // if donor deleted their own donation
+      } else {
+        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations" : ""
+        } has been cancelled.`;
+        const adminMainLine = `${
+          donor.businessName
+        } has cancelled their scheduled donation for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations " : ""
+        }!`;
+
+        this.emailService.sendEmail(
+          donor.email,
+          "Donation Cancellation Confirmation",
+          cancellationEmail(donorMainLine, donor.firstName),
+        );
+        this.emailService.sendEmail(
+          "communityfridgekw@gmail.com",
+          `${donor.businessName} Donation Cancellation`,
+          cancellationEmail(adminMainLine, "Community Fridge KW"),
+        );
+      }
+    } catch (error) {
+      const donor = await this.donorService.getDonorById(schedule.donorId);
+      Logger.error(
+        `Failed to generate email to confirm donation cancellation of donation scheduled by ${donor.email}`,
+      );
+      throw error;
+    }
+  }
+
   async updateSchedulingByRecurringDonationId(
     recurringDonationId: string,
     scheduling: UpdateSchedulingDTO,
@@ -759,13 +838,19 @@ class SchedulingService implements ISchedulingService {
     }
   }
 
-  async deleteSchedulingById(id: string): Promise<void> {
+  async deleteSchedulingById(id: string, role: string): Promise<void> {
     try {
+      const schedule = await this.getSchedulingById(id);
       const numDestroyed = await Scheduling.destroy({
         where: { id: Number(id) },
       });
       if (numDestroyed <= 0) {
         throw new Error(`scheduling with id ${id} was not deleted.`);
+      }
+      if (role === "Admin") {
+        this.sendSchedulingCancellationEmail(schedule, false, true);
+      } else {
+        this.sendSchedulingCancellationEmail(schedule, false, false);
       }
     } catch (error) {
       Logger.error(
@@ -778,9 +863,41 @@ class SchedulingService implements ISchedulingService {
   async deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string,
     current_date: string,
+    role: string,
   ): Promise<void> {
     try {
+      let schedule;
       const deletionPastDate = new Date(current_date);
+      const scheduleRet = await Scheduling.findOne({
+        where: {
+          recurring_donation_id,
+          start_time: deletionPastDate,
+        },
+      });
+      if (scheduleRet == null) {
+        throw new Error(
+          `scheduling with recurring_donation_id ${recurring_donation_id} with start time ${deletionPastDate} does not exist.`,
+        );
+      } else {
+        schedule = {
+          id: String(scheduleRet!.id),
+          donorId: String(scheduleRet!.donor_id),
+          categories: scheduleRet!.categories,
+          size: scheduleRet!.size,
+          isPickup: scheduleRet!.is_pickup,
+          pickupLocation: scheduleRet!.pickup_location,
+          dayPart: scheduleRet!.day_part,
+          startTime: scheduleRet!.start_time,
+          endTime: scheduleRet!.end_time,
+          status: scheduleRet!.status,
+          volunteerNeeded: scheduleRet!.volunteer_needed,
+          volunteerTime: scheduleRet!.volunteer_time,
+          frequency: scheduleRet!.frequency,
+          recurringDonationId: String(scheduleRet!.recurring_donation_id),
+          recurringDonationEndDate: scheduleRet!.recurring_donation_end_date,
+          notes: scheduleRet!.notes,
+        };
+      }
       const numsDestroyed = await Scheduling.destroy({
         where: {
           recurring_donation_id,
@@ -793,6 +910,11 @@ class SchedulingService implements ISchedulingService {
         throw new Error(
           `scheduling with recurring_donation_id ${recurring_donation_id} was not deleted.`,
         );
+      }
+      if (role === "Admin") {
+        this.sendSchedulingCancellationEmail(schedule, true, true);
+      } else {
+        this.sendSchedulingCancellationEmail(schedule, true, false);
       }
     } catch (error) {
       Logger.error(
