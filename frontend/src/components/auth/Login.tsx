@@ -11,8 +11,8 @@ import React, { useContext } from "react";
 import { useForm } from "react-hooks-helper";
 import { Link, Redirect } from "react-router-dom";
 
-import volunteerAPIClient from "../../APIClients/VolunteerAPIClient";
 import authAPIClient from "../../APIClients/AuthAPIClient";
+import volunteerAPIClient from "../../APIClients/VolunteerAPIClient";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import VolunteerContextDispatcher from "../../contexts/VolunteerContextDispatcher";
@@ -27,27 +27,27 @@ const Login = (): React.ReactElement => {
     isIncorrectLoginCredentails,
     setIsIncorrectLoginCredentails,
   ] = React.useState(false);
-  const getVolunteerUser = async function getVolunteerUser(user: AuthenticatedUser)  {
+  const getVolunteerUser = async function getVolunteerUser(
+    user: AuthenticatedUser,
+  ) {
     if (user && user.role === Role.VOLUNTEER) {
-      const volunteer = await volunteerAPIClient.getVolunteerByUserId(
-        user.id,
-      );
+      const volunteer = await volunteerAPIClient.getVolunteerByUserId(user.id);
       dispatchVolunteerUpdate({
         type: "SET_VOLUNTEER_ID",
         value: volunteer.id,
-      })
+      });
       dispatchVolunteerUpdate({
         type: "SET_VOLUNTEER_STATUS",
-        value: volunteer.status
-      })
+        value: volunteer.status,
+      });
     }
-  }
+  };
 
   const onLogInClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(email, password);
     if (user === null) {
       setIsIncorrectLoginCredentails(true);
-    } 
+    }
     setAuthenticatedUser(user);
     getVolunteerUser(user);
   };

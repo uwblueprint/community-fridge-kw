@@ -2,7 +2,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React, { useReducer, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import volunteerAPIClient from "./APIClients/VolunteerAPIClient";
 import Action from "./components/auth/Action";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
@@ -23,11 +22,13 @@ import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
 import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
-import VolunteerContext, { DEFAULT_VOLUNTEER_CONTEXT } from "./contexts/VolunteerContext";
+import VolunteerContext, {
+  DEFAULT_VOLUNTEER_CONTEXT,
+} from "./contexts/VolunteerContext";
 import VolunteerContextDispatcher from "./contexts/VolunteerContextDispatcher";
 import volunteerContextReducer from "./reducers/VolunteerContextReducer";
 import customTheme from "./theme/index";
-import { AuthenticatedUser, Status, Role } from "./types/AuthTypes";
+import { AuthenticatedUser } from "./types/AuthTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
 
 const App = (): React.ReactElement => {
@@ -41,13 +42,17 @@ const App = (): React.ReactElement => {
 
   const [volunteerContext, dispatchVolunteerContextUpdate] = useReducer(
     volunteerContextReducer,
-    DEFAULT_VOLUNTEER_CONTEXT
+    DEFAULT_VOLUNTEER_CONTEXT,
   );
   return (
     <ChakraProvider theme={customTheme}>
       <VolunteerContext.Provider value={volunteerContext}>
-        <VolunteerContextDispatcher.Provider value={dispatchVolunteerContextUpdate}>
-          <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
+        <VolunteerContextDispatcher.Provider
+          value={dispatchVolunteerContextUpdate}
+        >
+          <AuthContext.Provider
+            value={{ authenticatedUser, setAuthenticatedUser }}
+          >
             <Router>
               <FeedbackBanner />
               <Header />
