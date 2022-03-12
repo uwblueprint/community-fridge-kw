@@ -11,6 +11,7 @@ import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
+import CheckInsPage from "./components/pages/CheckInsPage";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import Home from "./components/pages/Home";
@@ -62,8 +63,13 @@ const App = (): React.ReactElement => {
             />
             <Route
               exact
-              path={Routes.VIEW_DONATIONS}
+              path={Routes.ADMIN_VIEW_DONATIONS}
               component={ViewDonationsPage}
+            />
+            <Route
+              exact
+              path={Routes.ADMIN_CHECK_INS}
+              component={CheckInsPage}
             />
             <PrivateRoute
               exact

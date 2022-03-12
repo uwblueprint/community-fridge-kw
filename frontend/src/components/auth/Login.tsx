@@ -34,10 +34,10 @@ const Login = (): React.ReactElement => {
   };
 
   if (authenticatedUser) {
-    return authenticatedUser.role === Role.DONOR ? (
-      <Redirect to={Routes.DASHBOARD_PAGE} />
+    return authenticatedUser.role === Role.ADMIN ? (
+      <Redirect to={Routes.ADMIN_VIEW_DONATIONS} />
     ) : (
-      <Redirect to={Routes.VIEW_DONATIONS} />
+      <Redirect to={Routes.DASHBOARD_PAGE} />
     );
   }
 

@@ -102,9 +102,9 @@ const Account = (): JSX.Element => {
 
   const navigateToDashboard = () => {
     history.push(
-      authenticatedUser!.role === Role.DONOR
-        ? Routes.DASHBOARD_PAGE
-        : Routes.VIEW_DONATIONS,
+      authenticatedUser!.role === Role.ADMIN
+        ? Routes.ADMIN_VIEW_DONATIONS
+        : Routes.DASHBOARD_PAGE,
     );
   };
 

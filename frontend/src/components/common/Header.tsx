@@ -1,4 +1,9 @@
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CloseIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import {
   Button,
   Container,
@@ -12,6 +17,11 @@ import {
   Link,
   Stack,
   useDisclosure,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useOutsideClick
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Link as ReactLink, useHistory } from "react-router-dom";
@@ -23,6 +33,14 @@ import { Role } from "../../types/AuthTypes";
 
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isNavDropdownOpen, setIsNavDropdownOpen] = React.useState(false);
+
+  const navDropdownRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
+  useOutsideClick({
+    ref: navDropdownRef,
+    handler: () => setIsNavDropdownOpen(!isNavDropdownOpen),
+  })
+
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
 
@@ -100,9 +118,24 @@ const Header = (): JSX.Element => {
               )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
-                  <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
-                    View Donations
-                  </Link>
+                  <Menu>
+                    <MenuButton>
+                      Donation & Shift Management{" "}
+                      {isNavDropdownOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem>
+                        <Link as={ReactLink} to={Routes.ADMIN_CHECK_INS}>
+                          Fridge Check-ins
+                        </Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link as={ReactLink} to={Routes.ADMIN_VIEW_DONATIONS}>
+                          Scheduled Donations
+                        </Link>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
                   <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
                     User Management
                   </Link>
@@ -208,7 +241,7 @@ const Header = (): JSX.Element => {
                     <>
                       <Link
                         as={ReactLink}
-                        to={Routes.VIEW_DONATIONS}
+                        to={Routes.ADMIN_VIEW_DONATIONS}
                         onClick={onClose}
                       >
                         View Donations
