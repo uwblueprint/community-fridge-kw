@@ -19,7 +19,7 @@ export type UpdateVolunteerDataType = {
 
 export type VolunteerContextType = {
   volunteerId: string | null;
-  volunteerStatus: Status | null;
+  volunteerStatus: Status;
 };
 
 export type VolunteerContextAction =
