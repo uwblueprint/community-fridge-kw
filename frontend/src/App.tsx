@@ -48,10 +48,6 @@ const App = (): React.ReactElement => {
     volunteerContextReducer,
     currentVolunteer ?? DEFAULT_VOLUNTEER_CONTEXT,
   );
-
- console.log("currentUser:", currentUser);
-  console.log("currentVolunteer:", currentVolunteer);
-  console.log("vooolunteerContext:", volunteerContext);
   return (
     <ChakraProvider theme={customTheme}>
       <VolunteerContext.Provider value={volunteerContext}>

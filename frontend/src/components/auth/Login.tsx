@@ -42,7 +42,6 @@ const Login = (): React.ReactElement => {
         type: "SET_VOLUNTEER_STATUS",
         value: status,
       });
-      console.log(id, status);
       localStorage.setItem(AUTHENTICATED_VOLUNTEER_CONTEXT_KEY, JSON.stringify({
         volunteerId: id,
         volunteerStatus: status
