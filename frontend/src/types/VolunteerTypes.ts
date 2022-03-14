@@ -22,6 +22,8 @@ export type VolunteerContextType = {
   volunteerStatus: Status;
 };
 
+export type AuthenticatedVolunteerContext = VolunteerContextType | null;
+
 export type VolunteerContextAction =
   | {
       type: "SET_VOLUNTEER_ID";

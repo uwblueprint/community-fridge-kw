@@ -14,6 +14,7 @@ import { Link, Redirect } from "react-router-dom";
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import volunteerAPIClient from "../../APIClients/VolunteerAPIClient";
 import * as Routes from "../../constants/Routes";
+import { AUTHENTICATED_VOLUNTEER_CONTEXT_KEY } from "../../constants/AuthConstants";
 import AuthContext from "../../contexts/AuthContext";
 import VolunteerContextDispatcher from "../../contexts/VolunteerContextDispatcher";
 import { AuthenticatedUser, Role } from "../../types/AuthTypes";
@@ -27,19 +28,25 @@ const Login = (): React.ReactElement => {
     isIncorrectLoginCredentails,
     setIsIncorrectLoginCredentails,
   ] = React.useState(false);
+
   const getVolunteerUser = async function getVolunteerUser(
     user: AuthenticatedUser,
   ) {
     if (user && user.role === Role.VOLUNTEER) {
-      const volunteer = await volunteerAPIClient.getVolunteerByUserId(user.id);
+      const { id, status } = await volunteerAPIClient.getVolunteerByUserId(user.id);
       dispatchVolunteerUpdate({
         type: "SET_VOLUNTEER_ID",
-        value: volunteer.id,
+        value: id,
       });
       dispatchVolunteerUpdate({
         type: "SET_VOLUNTEER_STATUS",
-        value: volunteer.status,
+        value: status,
       });
+      console.log(id, status);
+      localStorage.setItem(AUTHENTICATED_VOLUNTEER_CONTEXT_KEY, JSON.stringify({
+        volunteerId: id,
+        volunteerStatus: status
+      }));
     }
   };
 

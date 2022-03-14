@@ -19,7 +19,7 @@ import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
 import ViewDonationsPage from "./components/pages/ViewDonationsPage";
 import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
-import { AUTHENTICATED_USER_KEY } from "./constants/AuthConstants";
+import { AUTHENTICATED_USER_KEY, AUTHENTICATED_VOLUNTEER_CONTEXT_KEY } from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
 import VolunteerContext, {
@@ -29,11 +29,15 @@ import VolunteerContextDispatcher from "./contexts/VolunteerContextDispatcher";
 import volunteerContextReducer from "./reducers/VolunteerContextReducer";
 import customTheme from "./theme/index";
 import { AuthenticatedUser } from "./types/AuthTypes";
+import { AuthenticatedVolunteerContext } from "./types/VolunteerTypes";
 import { getLocalStorageObj } from "./utils/LocalStorageUtils";
 
 const App = (): React.ReactElement => {
   const currentUser: AuthenticatedUser = getLocalStorageObj<AuthenticatedUser>(
     AUTHENTICATED_USER_KEY,
+  );
+  const currentVolunteer: AuthenticatedVolunteerContext = getLocalStorageObj<AuthenticatedVolunteerContext>(
+    AUTHENTICATED_VOLUNTEER_CONTEXT_KEY
   );
 
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUser>(
@@ -42,8 +46,12 @@ const App = (): React.ReactElement => {
 
   const [volunteerContext, dispatchVolunteerContextUpdate] = useReducer(
     volunteerContextReducer,
-    DEFAULT_VOLUNTEER_CONTEXT,
+    currentVolunteer ?? DEFAULT_VOLUNTEER_CONTEXT,
   );
+
+ console.log("currentUser:", currentUser);
+  console.log("currentVolunteer:", currentVolunteer);
+  console.log("vooolunteerContext:", volunteerContext);
   return (
     <ChakraProvider theme={customTheme}>
       <VolunteerContext.Provider value={volunteerContext}>
