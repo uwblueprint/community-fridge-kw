@@ -8,10 +8,8 @@ import {
   Grid,
   Img,
   Radio,
-  SimpleGrid,
   useRadio,
   useRadioGroup,
-  VStack,
 } from "@chakra-ui/react";
 import React from "react";
 
