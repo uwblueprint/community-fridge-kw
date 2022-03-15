@@ -29,7 +29,7 @@ const Login = (): React.ReactElement => {
     setIsIncorrectLoginCredentails,
   ] = React.useState(false);
 
-  const getVolunteerUser = async function getVolunteerUser(
+  const setVolunteerContext = async function getVolunteerUser(
     user: AuthenticatedUser,
   ) {
     if (user && user.role === Role.VOLUNTEER) {
@@ -60,7 +60,7 @@ const Login = (): React.ReactElement => {
       setIsIncorrectLoginCredentails(true);
     }
     setAuthenticatedUser(user);
-    getVolunteerUser(user);
+    setVolunteerContext(user);
   };
 
   if (authenticatedUser) {
