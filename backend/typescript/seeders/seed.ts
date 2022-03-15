@@ -1,3 +1,4 @@
+import { truncate } from "fs";
 import { Seeder } from "../umzug";
 import { Role, Status } from "../types";
 
@@ -172,12 +173,14 @@ export const up: Seeder = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().bulkInsert("checkin", seedCheckins);
 };
 export const down: Seeder = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().bulkDelete("scheduling", {
-    id: [1, 2, 3],
-  });
-  await sequelize.getQueryInterface().bulkDelete("checkin", { id: [1, 2, 3] });
-  await sequelize.getQueryInterface().bulkDelete("donors", { id: [1] });
-  await sequelize.getQueryInterface().bulkDelete("volunteers", { id: [1] });
-  await sequelize.getQueryInterface().bulkDelete("users", { id: [1, 2, 3] });
-  await sequelize.getQueryInterface().bulkDelete("content", { id: [1] });
+  await sequelize
+    .getQueryInterface()
+    .dropTable("scheduling", { cascade: true });
+  await sequelize.getQueryInterface().dropTable("donors", { cascade: true });
+  await sequelize.getQueryInterface().dropTable("users", { cascade: true });
+  await sequelize
+    .getQueryInterface()
+    .dropTable("volunteers", { cascade: true });
+  await sequelize.getQueryInterface().dropTable("checkin", { cascade: true });
+  await sequelize.getQueryInterface().dropTable("content");
 };
