@@ -10,8 +10,6 @@ import getErrorMessage from "../../utilities/errorMessageUtil";
 
 const Logger = logger(__filename);
 
-const ADMIN_EMAIL = "communityfridge@uwblueprint.org";
-
 class AuthService implements IAuthService {
   userService: IUserService;
 
@@ -299,7 +297,7 @@ class AuthService implements IAuthService {
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey there,</h2>
         <p>Thank you for your interest in volunteering with Community Fridge KW!<br /><br />
         Your account is <strong>pending approval</strong>. After an admin approves your account, you will be notified via email and will be able to start signing up for volunteer shifts!<br /><br />
-        In the meantime, if you have any questions, please reach out at ${ADMIN_EMAIL}.
+        In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
         </p>
        <p style="margin-top: 50px">Sincerely,</p>
         <p>Community Fridge KW</p>   
