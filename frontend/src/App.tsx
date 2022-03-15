@@ -19,7 +19,10 @@ import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
 import ViewDonationsPage from "./components/pages/ViewDonationsPage";
 import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
-import { AUTHENTICATED_USER_KEY, AUTHENTICATED_VOLUNTEER_CONTEXT_KEY } from "./constants/AuthConstants";
+import {
+  AUTHENTICATED_USER_KEY,
+  AUTHENTICATED_VOLUNTEER_CONTEXT_KEY,
+} from "./constants/AuthConstants";
 import * as Routes from "./constants/Routes";
 import AuthContext from "./contexts/AuthContext";
 import VolunteerContext, {
@@ -37,7 +40,7 @@ const App = (): React.ReactElement => {
     AUTHENTICATED_USER_KEY,
   );
   const currentVolunteer: AuthenticatedVolunteerContext = getLocalStorageObj<AuthenticatedVolunteerContext>(
-    AUTHENTICATED_VOLUNTEER_CONTEXT_KEY
+    AUTHENTICATED_VOLUNTEER_CONTEXT_KEY,
   );
 
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUser>(
