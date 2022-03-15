@@ -310,7 +310,7 @@ class AuthService implements IAuthService {
       this.emailService.sendEmail(email, "Pending Status", emailBody);
     } catch (error) {
       Logger.error(
-        `Failed to generate email volunteer pending for user with email ${email}`,
+        `Failed to generate volunteer pending email for user with email ${email}`,
       );
       throw error;
     }
