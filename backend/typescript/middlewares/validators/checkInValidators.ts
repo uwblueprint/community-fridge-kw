@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { DayPart, Frequency, Status } from "../../types";
 import { getApiValidationError, validatePrimitive, validateDate } from "./util";
 
 export const createCheckInDtoValidator = async (
