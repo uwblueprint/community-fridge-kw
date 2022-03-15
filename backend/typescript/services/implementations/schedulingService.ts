@@ -80,10 +80,14 @@ class SchedulingService implements ISchedulingService {
       volunteerNeeded: scheduling.volunteer_needed,
       volunteerTime: scheduling.volunteer_time,
       frequency: scheduling.frequency,
-      recurringDonationId: String(scheduling.recurring_donation_id),
+      recurringDonationId: scheduling.recurring_donation_id
+        ? String(scheduling.recurring_donation_id)
+        : null,
       recurringDonationEndDate: scheduling.recurring_donation_end_date,
       notes: scheduling.notes,
-      volunteerId: String(scheduling.volunteer_id),
+      volunteerId: scheduling.volunteer_id
+        ? String(scheduling.volunteer_id)
+        : null,
     };
   }
 
@@ -134,10 +138,14 @@ class SchedulingService implements ISchedulingService {
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
           frequency: scheduling.frequency,
-          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
-          volunteerId: String(scheduling.volunteer_id),
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
         };
       });
     } catch (error) {
@@ -183,10 +191,14 @@ class SchedulingService implements ISchedulingService {
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
           frequency: scheduling.frequency,
-          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
-          volunteerId: String(scheduling.volunteer_id),
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
         };
       });
     } catch (error) {
@@ -222,10 +234,14 @@ class SchedulingService implements ISchedulingService {
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
           frequency: scheduling.frequency,
-          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
-          volunteerId: String(scheduling.volunteer_id),
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
         };
       });
     } catch (error) {
@@ -260,10 +276,14 @@ class SchedulingService implements ISchedulingService {
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
           frequency: scheduling.frequency,
-          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
-          volunteerId: String(scheduling.volunteer_id),
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
         };
       });
     } catch (error) {
