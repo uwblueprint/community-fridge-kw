@@ -1,7 +1,6 @@
 import React from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
-import { Role } from "../../../types/AuthTypes";
 import AccountDetails from "./AccountDetails";
 import AccountType from "./AccountType";
 import CreateAccount from "./CreateAccount";
@@ -37,7 +36,6 @@ const Signup = () => {
 
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
   const { id } = step;
-  const { next } = navigation;
 
   switch (id) {
     case "account type":
