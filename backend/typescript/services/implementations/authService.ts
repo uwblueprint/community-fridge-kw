@@ -45,6 +45,11 @@ class AuthService implements IAuthService {
         oobCode,
       );
       if (response.emailVerified) {
+        const user = await this.userService.getUserByEmail(response.email);
+
+        if (user.role === Role.VOLUNTEER) {
+          await this.sendEmailVolunteerPending(response.email);
+        }
         return true;
       }
       return false;
@@ -85,47 +90,6 @@ class AuthService implements IAuthService {
       return false;
     } catch (error) {
       return false;
-    }
-  }
-
-  /* eslint-disable class-methods-use-this */
-  async generateTokenOAuth(idToken: string): Promise<AuthDTO> {
-    try {
-      const googleUser = await FirebaseRestClient.signInWithGoogleOAuth(
-        idToken,
-      );
-      // googleUser.idToken refers to the Firebase Auth access token for the user
-      const token = {
-        accessToken: googleUser.idToken,
-        refreshToken: googleUser.refreshToken,
-      };
-      // If user already has a login with this email, just return the token
-      try {
-        // Note: an error message will be logged from UserService if this lookup fails.
-        // You may want to silence the logger for this special OAuth user lookup case
-        const user = await this.userService.getUserByEmail(googleUser.email);
-        return { ...token, ...user };
-      } catch (error) {
-        Logger.error(error as string);
-      }
-
-      const user = await this.userService.createUser(
-        {
-          firstName: googleUser.firstName,
-          lastName: googleUser.lastName,
-          email: googleUser.email,
-          role: Role.USER,
-          password: "",
-          phoneNumber: googleUser.phoneNumber,
-        },
-        googleUser.localId,
-        "GOOGLE",
-      );
-
-      return { ...token, ...user };
-    } catch (error) {
-      Logger.error(`Failed to generate token for user with OAuth ID token`);
-      throw error;
     }
   }
 
@@ -297,6 +261,54 @@ class AuthService implements IAuthService {
     } catch (error) {
       Logger.error(
         `Failed to generate email verification link for user with email ${email}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendEmailVolunteerPending(email: string): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendEmailVolunteerPending but this instance of AuthService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    try {
+      const emailBody = `
+      <html>
+      <head>
+         <link
+                        href="https://fonts.googleapis.com/css2?family=Inter"
+                        rel="stylesheet"
+                        />
+                    <style>
+                        body {
+                        font-family: "Inter";
+                        }
+                    </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>PENDING - Volunteer Account Status</title>
+      </head>
+      <body>
+         <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
+                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey there,</h2>
+        <p>Thank you for your interest in volunteering with Community Fridge KW!<br /><br />
+        Your account is <strong>pending approval</strong>. After an admin approves your account, you will be notified via email and will be able to start signing up for volunteer shifts!<br /><br />
+        In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
+        </p>
+       <p style="margin-top: 50px">Sincerely,</p>
+        <p>Community Fridge KW</p>   
+      </body>
+    </html>
+      `;
+
+      this.emailService.sendEmail(email, "Pending Status", emailBody);
+    } catch (error) {
+      Logger.error(
+        `Failed to generate volunteer pending email for user with email ${email}`,
       );
       throw error;
     }

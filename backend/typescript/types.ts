@@ -75,6 +75,15 @@ export type DonorDTO = {
 export type VolunteerDTO = {
   id: string;
   userId: string;
+  status: Status;
+};
+
+export type ContentDTO = {
+  id: string;
+  foodRescueDescription: string;
+  foodRescueUrl: string;
+  checkinDescription: string;
+  checkinUrl: string;
 };
 
 export type UserDonorDTO = UserDTO & DonorDTO;
@@ -91,7 +100,11 @@ export type AuthDTO = Token & UserDTO;
 
 export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
-export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id">;
+export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id" | "userId">;
+
+export type CreateContentDTO = Omit<ContentDTO, "id">;
+
+export type UpdateContentDTO = CreateContentDTO;
 
 export type SchedulingDTO = {
   id: string;
@@ -99,21 +112,21 @@ export type SchedulingDTO = {
   categories: string[];
   size?: string;
   isPickup: boolean;
-  pickupLocation?: string;
+  pickupLocation?: string | null;
   dayPart: DayPart;
   startTime: Date;
   endTime: Date;
   status: Status;
   frequency: Frequency;
-  recurringDonationId?: string;
-  recurringDonationEndDate?: Date;
+  recurringDonationId?: string | null;
+  recurringDonationEndDate?: Date | null;
   volunteerNeeded: boolean;
-  volunteerTime?: string;
-  volunteerIds: number[];
+  volunteerTime?: string | null;
   notes?: string;
+  volunteerId?: string | null;
 };
 
-export type CreateSchedulingDTO = Omit<SchedulingDTO, "id" | "volunteerIds">;
+export type CreateSchedulingDTO = Omit<SchedulingDTO, "id">;
 
 export type UpdateSchedulingDTO = Partial<
   Omit<SchedulingDTO, "id" | "donorId">
@@ -135,3 +148,21 @@ export type NodemailerConfig = {
 };
 
 export type SignUpMethod = "PASSWORD" | "GOOGLE";
+
+export type CheckInDTO = {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  notes?: string;
+  volunteerId?: string;
+  isAdmin?: boolean;
+};
+
+export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
+
+export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;
+
+export type DTOTypes = Record<
+  string,
+  Date | string | string[] | boolean | number | null | undefined
+>;

@@ -5,6 +5,12 @@ export enum Role {
   DONOR = "Donor",
 }
 
+export enum Status {
+  APPROVED = "Approved",
+  PENDING = "Pending",
+  REJECTED = "Rejected",
+}
+
 export type AuthenticatedUser = {
   id: string;
   firstName: string;

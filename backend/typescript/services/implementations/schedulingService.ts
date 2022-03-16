@@ -18,28 +18,17 @@ import {
 import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import { toSnakeCase } from "../../utilities/servicesUtils";
+import { cancellationEmail, getAdminEmail } from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
-
-function toSnakeCase(
-  schedule: CreateSchedulingDTO,
-): Record<string, string | string[] | boolean | number | Date | undefined> {
-  const scheduleSnakeCase: Record<
-    string,
-    string | string[] | boolean | number | Date | undefined
-  > = {};
-  Object.entries(schedule).forEach(([key, value]) => {
-    scheduleSnakeCase[snakeCase(key)] = value;
-  });
-  return scheduleSnakeCase;
-}
 
 class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
 
   donorService: IDonorService;
 
-  static TEMP_ADMIN_EMAIL = "jessiepeng@uwblueprint.org";
+  static TEMP_ADMIN_EMAIL = "linnaluo@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -63,10 +52,6 @@ class SchedulingService implements ISchedulingService {
       throw error;
     }
 
-    // TODO: retrieve volunteer ids from scheduling-volunteer
-    // table and add to returned object once volunteer table is created
-    const volunteerIds: number[] = [];
-
     return {
       id: String(scheduling.id),
       donorId: String(scheduling.donor_id),
@@ -80,11 +65,15 @@ class SchedulingService implements ISchedulingService {
       status: scheduling.status,
       volunteerNeeded: scheduling.volunteer_needed,
       volunteerTime: scheduling.volunteer_time,
-      volunteerIds,
       frequency: scheduling.frequency,
-      recurringDonationId: String(scheduling.recurring_donation_id),
+      recurringDonationId: scheduling.recurring_donation_id
+        ? String(scheduling.recurring_donation_id)
+        : null,
       recurringDonationEndDate: scheduling.recurring_donation_end_date,
       notes: scheduling.notes,
+      volunteerId: scheduling.volunteer_id
+        ? String(scheduling.volunteer_id)
+        : null,
     };
   }
 
@@ -95,8 +84,8 @@ class SchedulingService implements ISchedulingService {
     let schedulingDtos: Array<SchedulingDTO> = [];
     let schedulings: Array<Scheduling>;
     try {
+      const currentStartDate = new Date();
       if (weekLimit !== 0) {
-        const currentStartDate = new Date();
         const nextDate = new Date();
         nextDate.setDate(nextDate.getDate() + weekLimit * 7);
         schedulings = await Scheduling.findAll({
@@ -112,6 +101,9 @@ class SchedulingService implements ISchedulingService {
         schedulings = await Scheduling.findAll({
           where: {
             donor_id: Number(donorId),
+            start_time: {
+              [Op.gte]: currentStartDate,
+            },
           },
           order: [["start_time", "ASC"]],
         });
@@ -131,16 +123,75 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
-          volunteerIds: [],
           frequency: scheduling.frequency,
-          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
         };
       });
     } catch (error) {
       Logger.error(
         `Failed to get schedules. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
+  }
+
+  async getSchedulingsByVolunteersNeeded(
+    isVolunteerSlotFilled?: boolean,
+  ): Promise<SchedulingDTO[]> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    try {
+      const volunteerIdQuery = isVolunteerSlotFilled ? { [Op.ne]: null } : null;
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
+        where:
+          isVolunteerSlotFilled === undefined
+            ? {
+                volunteer_needed: true,
+              }
+            : {
+                volunteer_needed: true,
+                volunteer_id: volunteerIdQuery,
+              },
+        order: [["start_time", "ASC"]],
+      });
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedulings by volunteers needed. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
@@ -168,16 +219,64 @@ class SchedulingService implements ISchedulingService {
           status: scheduling.status,
           volunteerNeeded: scheduling.volunteer_needed,
           volunteerTime: scheduling.volunteer_time,
-          volunteerIds: [],
           frequency: scheduling.frequency,
-          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
           recurringDonationEndDate: scheduling.recurring_donation_end_date,
           notes: scheduling.notes,
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
         };
       });
     } catch (error) {
       Logger.error(
         `Failed to get schedulings. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
+  }
+
+  async getSchedulingsByPickUp(isPickUp: boolean): Promise<SchedulingDTO[]> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    try {
+      const schedulings: Array<Scheduling> = await Scheduling.findAll({
+        where: { is_pickup: isPickUp, volunteer_needed: true },
+        order: [["start_time", "ASC"]],
+      });
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: scheduling.recurring_donation_id
+            ? String(scheduling.recurring_donation_id)
+            : null,
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: scheduling.volunteer_id
+            ? String(scheduling.volunteer_id)
+            : null,
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedulings by pickup needed. Reason = ${getErrorMessage(
+          error,
+        )}`,
       );
       throw error;
     }
@@ -263,14 +362,14 @@ class SchedulingService implements ISchedulingService {
             <title>Donation Details Email</title>
           </head>
           <body>
-              <p><img src=https://i.ibb.co/txCj8db/drawer-logo.png
+              <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/drawer-logo.png
               style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
               
               <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
               
               ${
                 updated
-                  ? `Your community fridge donation has been edited by the admin team.
+                  ? `Your community fridge donation has been edited.
                     <br />
                     The following details have been updated:
                     </p>`
@@ -372,7 +471,7 @@ class SchedulingService implements ISchedulingService {
       }
 
       this.emailService.sendEmail(
-        isAdmin ? SchedulingService.TEMP_ADMIN_EMAIL : email,
+        isAdmin ? getAdminEmail() : email,
         subject,
         emailBody,
       );
@@ -409,6 +508,7 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_id: scheduling.recurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
+          volunteer_id: scheduling.volunteerId,
         });
       } else {
         // get new recurring donation id
@@ -422,10 +522,10 @@ class SchedulingService implements ISchedulingService {
             : newRecurringDonationId + 1;
 
         // end date of recurring donation
-        const recurringDonationEndDate: Date = new Date(
+        const recurringDonationEndDate = dayjs(
           scheduling.recurringDonationEndDate!,
         );
-        recurringDonationEndDate.setHours(23, 59, 59, 999);
+        recurringDonationEndDate.startOf("day");
 
         // create first schedule and assign it to newScheduling
         newScheduling = await Scheduling.create({
@@ -444,117 +544,82 @@ class SchedulingService implements ISchedulingService {
           recurring_donation_id: newRecurringDonationId,
           recurring_donation_end_date: scheduling.recurringDonationEndDate,
           notes: scheduling.notes,
+          volunteer_id: scheduling.volunteerId,
         });
 
         const schedulesToBeCreated: Record<
           string,
-          string | number | boolean | string[] | Date | undefined
+          string | number | boolean | string[] | Date | undefined | null
         >[] = [];
 
-        const originalStartTime: Date = new Date(scheduling.startTime);
-        const originalEndTime: Date = new Date(scheduling.endTime);
+        let nextDayStartTime = dayjs(scheduling.startTime);
+        let nextDayEndTime = dayjs(scheduling.endTime);
         // loop for calculations if frequency is DAILY
         if (schedulingFrequency === Frequency.DAILY) {
-          const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setDate(nextDay.getDate() + 1);
+          nextDayStartTime = nextDayStartTime.add(1, "day");
+          nextDayEndTime = nextDayEndTime.add(1, "day");
 
-          while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
-            const newStartTime: Date = new Date(nextDay);
-
-            newStartTime.setHours(originalStartTime.getHours());
-            newStartTime.setMinutes(originalStartTime.getMinutes());
-            newStartTime.setSeconds(originalStartTime.getSeconds());
-            newStartTime.setSeconds(originalStartTime.getMilliseconds());
-
-            const newEndTime: Date = new Date(nextDay);
-            newEndTime.setHours(originalEndTime.getHours());
-            newEndTime.setMinutes(originalEndTime.getMinutes());
-            newEndTime.setSeconds(originalEndTime.getSeconds());
-            newEndTime.setSeconds(originalEndTime.getMilliseconds());
-
+          while (nextDayStartTime.isBefore(recurringDonationEndDate)) {
             const newSchedule: CreateSchedulingDTO = {
               ...scheduling,
-              startTime: newStartTime,
-              endTime: newEndTime,
+              startTime: nextDayStartTime.toDate(),
+              endTime: nextDayEndTime.toDate(),
               recurringDonationId: String(newRecurringDonationId),
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              Date | string | string[] | boolean | number | null | undefined
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setDate(nextDay.getDate() + 1);
+            nextDayStartTime = nextDayStartTime.add(1, "day");
+            nextDayEndTime = nextDayEndTime.add(1, "day");
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }
         // loop for calculations if frequency is WEEKLY
         else if (schedulingFrequency === Frequency.WEEKLY) {
-          const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setDate(nextDay.getDate() + 7);
+          nextDayStartTime = nextDayStartTime.add(7, "day");
+          nextDayEndTime = nextDayEndTime.add(7, "day");
 
-          while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
-            const newStartTime: Date = new Date(nextDay);
-
-            newStartTime.setHours(originalStartTime.getHours());
-            newStartTime.setMinutes(originalStartTime.getMinutes());
-            newStartTime.setSeconds(originalStartTime.getSeconds());
-            newStartTime.setSeconds(originalStartTime.getMilliseconds());
-
-            const newEndTime: Date = new Date(nextDay);
-            newEndTime.setHours(originalEndTime.getHours());
-            newEndTime.setMinutes(originalEndTime.getMinutes());
-            newEndTime.setSeconds(originalEndTime.getSeconds());
-            newEndTime.setSeconds(originalEndTime.getMilliseconds());
-
+          while (nextDayStartTime.isBefore(recurringDonationEndDate)) {
             const newSchedule: CreateSchedulingDTO = {
               ...scheduling,
-              startTime: newStartTime,
-              endTime: newEndTime,
+              startTime: nextDayStartTime.toDate(),
+              endTime: nextDayEndTime.toDate(),
               recurringDonationId: String(newRecurringDonationId),
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setDate(nextDay.getDate() + 7);
+            nextDayStartTime = nextDayStartTime.add(7, "day");
+            nextDayEndTime = nextDayEndTime.add(7, "day");
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }
         // loop for calculations if frequency is MONTHLY
         else {
-          const nextDay: Date = new Date(scheduling.startTime);
-          nextDay.setDate(nextDay.getDate() + 28);
+          nextDayStartTime = nextDayStartTime.add(28, "day");
+          nextDayEndTime = nextDayEndTime.add(28, "day");
 
-          while (nextDay.valueOf() <= recurringDonationEndDate.valueOf()) {
-            const newStartTime: Date = new Date(nextDay);
-
-            newStartTime.setHours(originalStartTime.getHours());
-            newStartTime.setMinutes(originalStartTime.getMinutes());
-            newStartTime.setSeconds(originalStartTime.getSeconds());
-            newStartTime.setSeconds(originalStartTime.getMilliseconds());
-
-            const newEndTime: Date = new Date(nextDay);
-            newEndTime.setHours(originalEndTime.getHours());
-            newEndTime.setMinutes(originalEndTime.getMinutes());
-            newEndTime.setSeconds(originalEndTime.getSeconds());
-            newEndTime.setSeconds(originalEndTime.getMilliseconds());
-
+          while (nextDayStartTime.isBefore(recurringDonationEndDate)) {
             const newSchedule: CreateSchedulingDTO = {
               ...scheduling,
-              startTime: newStartTime,
-              endTime: newEndTime,
+              startTime: nextDayStartTime.toDate(),
+              endTime: nextDayEndTime.toDate(),
               recurringDonationId: String(newRecurringDonationId),
             };
             const snakeCaseNewSchedule: Record<
               string,
-              string | string[] | boolean | number | Date | undefined
+              string | string[] | boolean | number | Date | undefined | null
             > = toSnakeCase(newSchedule);
 
             schedulesToBeCreated.push(snakeCaseNewSchedule);
-            nextDay.setDate(nextDay.getDate() + 28);
+            nextDayStartTime = nextDayStartTime.add(28, "day");
+            nextDayEndTime = nextDayEndTime.add(28, "day");
           }
           await Scheduling.bulkCreate(schedulesToBeCreated);
         }
@@ -579,11 +644,11 @@ class SchedulingService implements ISchedulingService {
       status: newScheduling.status,
       volunteerNeeded: newScheduling.volunteer_needed,
       volunteerTime: newScheduling.volunteer_time,
-      volunteerIds: [],
       frequency: newScheduling.frequency,
       recurringDonationId: String(newScheduling.recurring_donation_id),
       recurringDonationEndDate: newScheduling.recurring_donation_end_date,
       notes: newScheduling.notes,
+      volunteerId: String(newScheduling.volunteer_id),
     };
 
     // send email
@@ -601,9 +666,7 @@ class SchedulingService implements ISchedulingService {
     try {
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(scheduling).forEach(([key, value]) => {
-        if (key !== "recurringDonationId") {
-          updatesSnakeCase[snakeCase(key)] = value;
-        }
+        updatesSnakeCase[snakeCase(key)] = value;
       });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
@@ -627,14 +690,12 @@ class SchedulingService implements ISchedulingService {
         status: updatedScheduling.status,
         volunteerNeeded: updatedScheduling.volunteer_needed,
         volunteerTime: updatedScheduling.volunteer_time,
-        volunteerIds: [],
         frequency: updatedScheduling.frequency,
         recurringDonationId: String(updatedScheduling.recurring_donation_id),
         recurringDonationEndDate: updatedScheduling.recurring_donation_end_date,
         notes: updatedScheduling.notes,
+        volunteerId: String(updatedScheduling.volunteer_id),
       };
-
-      this.sendScheduledDonationEmail(true, updatedSchedulingDTO, false);
 
       return updatedSchedulingDTO;
     } catch (error) {
@@ -645,13 +706,135 @@ class SchedulingService implements ISchedulingService {
     }
   }
 
-  async deleteSchedulingById(id: string): Promise<void> {
+  async sendSchedulingCancellationEmail(
+    schedule: SchedulingDTO,
+    isRecurringDonation: boolean,
+    isAdminDeleted: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendEmailAfterSchedulingCancellation but this instance of SchedulingService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
     try {
+      const { startTime, donorId } = schedule;
+      const donor = await this.donorService.getDonorById(donorId);
+      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
+        timeZone: "EST",
+      });
+
+      const startDayString: string = dayjs(startTimeToLocalDate).format(
+        "dddd, MMMM D",
+      );
+
+      const startTimeString: string = dayjs(startTimeToLocalDate).format(
+        "h:mm A",
+      );
+
+      // if admin deleted on behalf of donor
+      if (isAdminDeleted) {
+        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations" : ""
+        } has been cancelled by Community Fridge KW admin.`;
+        const adminMainLine = `The scheduled donation by ${
+          donor.businessName
+        } for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations " : ""
+        } has been cancelled.`;
+
+        this.emailService.sendEmail(
+          donor.email,
+          "Donation Cancelled By Community Fridge KW Admin",
+          cancellationEmail(donorMainLine, donor.firstName),
+        );
+        this.emailService.sendEmail(
+          "communityfridgekw@gmail.com",
+          `${donor.businessName} Donation Cancellation Confirmation`,
+          cancellationEmail(adminMainLine, "Community Fridge KW"),
+        );
+        // if donor deleted their own donation
+      } else {
+        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations" : ""
+        } has been cancelled.`;
+        const adminMainLine = `${
+          donor.businessName
+        } has cancelled their scheduled donation for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations " : ""
+        }!`;
+
+        this.emailService.sendEmail(
+          donor.email,
+          "Donation Cancellation Confirmation",
+          cancellationEmail(donorMainLine, donor.firstName),
+        );
+        this.emailService.sendEmail(
+          "communityfridgekw@gmail.com",
+          `${donor.businessName} Donation Cancellation`,
+          cancellationEmail(adminMainLine, "Community Fridge KW"),
+        );
+      }
+    } catch (error) {
+      const donor = await this.donorService.getDonorById(schedule.donorId);
+      Logger.error(
+        `Failed to generate email to confirm donation cancellation of donation scheduled by ${donor.email}`,
+      );
+      throw error;
+    }
+  }
+
+  async updateSchedulingByRecurringDonationId(
+    recurringDonationId: string,
+    scheduling: UpdateSchedulingDTO,
+  ): Promise<void> {
+    try {
+      const updatesSnakeCase: Record<
+        string,
+        Date | string | number | boolean | string[] | undefined | null
+      > = {};
+      const startDateTime = new Date(scheduling.startTime!);
+      Object.entries(scheduling).forEach(([key, value]) => {
+        if (key !== "startTime") {
+          updatesSnakeCase[snakeCase(key)] = value;
+        }
+      });
+
+      const updateResult = await Scheduling.update(updatesSnakeCase, {
+        where: {
+          recurring_donation_id: Number(recurringDonationId),
+          start_time: {
+            [Op.gte]: startDateTime,
+          },
+        },
+        returning: true,
+      });
+      if (updateResult[0] < 1) {
+        throw new Error(
+          `recurringDonationId ${recurringDonationId} not found.`,
+        );
+      }
+    } catch (error) {
+      Logger.error(
+        `Failed to update scheduling. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async deleteSchedulingById(id: string, role: string): Promise<void> {
+    try {
+      const schedule = await this.getSchedulingById(id);
       const numDestroyed = await Scheduling.destroy({
         where: { id: Number(id) },
       });
       if (numDestroyed <= 0) {
         throw new Error(`scheduling with id ${id} was not deleted.`);
+      }
+      if (role === "Admin") {
+        this.sendSchedulingCancellationEmail(schedule, false, true);
+      } else {
+        this.sendSchedulingCancellationEmail(schedule, false, false);
       }
     } catch (error) {
       Logger.error(
@@ -664,9 +847,41 @@ class SchedulingService implements ISchedulingService {
   async deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string,
     current_date: string,
+    role: string,
   ): Promise<void> {
     try {
+      let schedule;
       const deletionPastDate = new Date(current_date);
+      const scheduleRet = await Scheduling.findOne({
+        where: {
+          recurring_donation_id,
+          start_time: deletionPastDate,
+        },
+      });
+      if (scheduleRet == null) {
+        throw new Error(
+          `scheduling with recurring_donation_id ${recurring_donation_id} with start time ${deletionPastDate} does not exist.`,
+        );
+      } else {
+        schedule = {
+          id: String(scheduleRet!.id),
+          donorId: String(scheduleRet!.donor_id),
+          categories: scheduleRet!.categories,
+          size: scheduleRet!.size,
+          isPickup: scheduleRet!.is_pickup,
+          pickupLocation: scheduleRet!.pickup_location,
+          dayPart: scheduleRet!.day_part,
+          startTime: scheduleRet!.start_time,
+          endTime: scheduleRet!.end_time,
+          status: scheduleRet!.status,
+          volunteerNeeded: scheduleRet!.volunteer_needed,
+          volunteerTime: scheduleRet!.volunteer_time,
+          frequency: scheduleRet!.frequency,
+          recurringDonationId: String(scheduleRet!.recurring_donation_id),
+          recurringDonationEndDate: scheduleRet!.recurring_donation_end_date,
+          notes: scheduleRet!.notes,
+        };
+      }
       const numsDestroyed = await Scheduling.destroy({
         where: {
           recurring_donation_id,
@@ -679,6 +894,11 @@ class SchedulingService implements ISchedulingService {
         throw new Error(
           `scheduling with recurring_donation_id ${recurring_donation_id} was not deleted.`,
         );
+      }
+      if (role === "Admin") {
+        this.sendSchedulingCancellationEmail(schedule, true, true);
+      } else {
+        this.sendSchedulingCancellationEmail(schedule, true, false);
       }
     } catch (error) {
       Logger.error(
@@ -707,6 +927,52 @@ class SchedulingService implements ISchedulingService {
       );
       throw error;
     }
+  }
+
+  async getSchedulingsByVolunteerId(
+    volunteerId: string,
+  ): Promise<Array<SchedulingDTO>> {
+    let schedulingDtos: Array<SchedulingDTO> = [];
+    let schedulings: Array<Scheduling>;
+    try {
+      schedulings = await Scheduling.findAll({
+        where: {
+          volunteer_id: Number(volunteerId),
+        },
+        order: [["start_time", "ASC"]],
+      });
+
+      schedulingDtos = schedulings.map((scheduling) => {
+        return {
+          id: String(scheduling.id),
+          donorId: String(scheduling.donor_id),
+          categories: scheduling.categories,
+          size: scheduling.size,
+          isPickup: scheduling.is_pickup,
+          pickupLocation: scheduling.pickup_location,
+          dayPart: scheduling.day_part,
+          startTime: scheduling.start_time,
+          endTime: scheduling.end_time,
+          status: scheduling.status,
+          volunteerNeeded: scheduling.volunteer_needed,
+          volunteerTime: scheduling.volunteer_time,
+          frequency: scheduling.frequency,
+          recurringDonationId: String(scheduling.recurring_donation_id),
+          recurringDonationEndDate: scheduling.recurring_donation_end_date,
+          notes: scheduling.notes,
+          volunteerId: String(scheduling.volunteer_id),
+        };
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to get schedules by volunteer ID. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
+
+    return schedulingDtos;
   }
 }
 

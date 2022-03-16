@@ -6,18 +6,32 @@ import {
   Flex,
   Image,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
 import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png";
 import * as Routes from "../../../constants/Routes";
+import AuthContext from "../../../contexts/AuthContext";
+import { Role } from "../../../types/AuthTypes";
+import GeneralErrorModal from "../../common/GeneralErrorModal";
 import ViewDonations from "../ViewDonations";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
 
 const Home = (): JSX.Element => {
   const history = useHistory();
+  const { authenticatedUser } = React.useContext(AuthContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const onScheduleClick = () => {
+    if (authenticatedUser?.role === Role.ADMIN) {
+      onOpen();
+    } else {
+      history.push(Routes.SCHEDULING_PAGE);
+    }
+  };
 
   return (
     <>
@@ -48,7 +62,7 @@ const Home = (): JSX.Element => {
             </Text>
             <Button
               size="lg"
-              onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+              onClick={onScheduleClick}
               variant="navigation"
               width={{ base: "100%", md: "75%", xl: "30%" }}
             >
@@ -76,6 +90,12 @@ const Home = (): JSX.Element => {
         />
         <DonationProcess />
         <VolunteerRoles />
+        <GeneralErrorModal
+          isOpen={isOpen}
+          onClose={onClose}
+          headerText="Access Error"
+          bodyText="You do not have access to this function, please create a donor account to schedule a donation."
+        />
       </Container>
     </>
   );

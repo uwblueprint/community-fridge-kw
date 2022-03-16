@@ -27,14 +27,112 @@ const schedulingService: ISchedulingService = new SchedulingService(
   donorService,
 );
 
+schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
+  const { volunteerId } = req.params;
+  const { isVolunteerSlotFilled } = req.query;
+  const contentType = req.headers["content-type"];
+
+  if (volunteerId && isVolunteerSlotFilled) {
+    await sendResponseByMimeType(res, 400, contentType, [
+      {
+        error: "Cannot query by multiple parameters.",
+      },
+    ]);
+    return;
+  }
+
+  if (!volunteerId && !isVolunteerSlotFilled) {
+    try {
+      const schedulings = await schedulingService.getSchedulingsByVolunteersNeeded();
+      await sendResponseByMimeType<SchedulingDTO>(
+        res,
+        200,
+        contentType,
+        schedulings,
+      );
+    } catch (error: unknown) {
+      await sendResponseByMimeType(res, 500, contentType, [
+        {
+          error: getErrorMessage(error),
+        },
+      ]);
+    }
+    return;
+  }
+
+  if (volunteerId) {
+    if (typeof volunteerId !== "string") {
+      res
+        .status(400)
+        .json({ error: "volunteerId query parameter must be a string" });
+      return;
+    }
+
+    try {
+      const schedulings = await schedulingService.getSchedulingsByVolunteerId(
+        volunteerId,
+      );
+      res.status(200).json(schedulings);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+
+  if (isVolunteerSlotFilled) {
+    if (
+      typeof isVolunteerSlotFilled !== "string" ||
+      (isVolunteerSlotFilled !== "true" && isVolunteerSlotFilled !== "false")
+    ) {
+      res.status(400).json({
+        error:
+          "volunteerId query parameter must be the string 'true' or 'false'",
+      });
+      return;
+    }
+
+    try {
+      const schedulings = await schedulingService.getSchedulingsByVolunteersNeeded(
+        isVolunteerSlotFilled === "true",
+      );
+      res.status(200).json(schedulings);
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+});
+
+schedulingRouter.get("/pickup/:isPickUp", async (req, res) => {
+  const { isPickUp } = req.params;
+  const contentType = req.headers["content-type"];
+
+  if (
+    typeof isPickUp !== "string" ||
+    (isPickUp !== "true" && isPickUp !== "false")
+  ) {
+    res.status(400).json({
+      error: "isPickUp query parameter must be the string 'true' or 'false'",
+    });
+    return;
+  }
+
+  try {
+    const isPickUpCheck = isPickUp === "true";
+    const schedulings = await schedulingService.getSchedulingsByPickUp(
+      isPickUpCheck,
+    );
+    res.status(200).json(schedulings);
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
 /* Get all schedulings, optionally filter by:
   - id, through URI (ex. /scheduling/1)
-  - donorId, through query param (ex. /scheduling/?donorId=1)
+  - donorId through query param (ex. /scheduling/?donorId=1)
 */
 schedulingRouter.get("/:id?", async (req, res) => {
   const { id } = req.params;
-  const { donorId } = req.query;
-  const { weekLimit } = req.query;
+  const { donorId, weekLimit } = req.query;
   const contentType = req.headers["content-type"];
 
   if (id && donorId) {
@@ -105,18 +203,50 @@ schedulingRouter.post("/", createSchedulingDtoValidator, async (req, res) => {
   }
 });
 
-/* Update the scheduling instance by id */
-schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
-  try {
-    const updatedScheduling = await schedulingService.updateSchedulingById(
-      req.params.id,
-      req.body,
-    );
-    res.status(200).json(updatedScheduling);
-  } catch (error: unknown) {
-    res.status(500).json({ error: getErrorMessage(error) });
-  }
-});
+/* Update the scheduling instance by id or updates by recurring donation id  */
+schedulingRouter.put(
+  "/:id?",
+  updateSchedulingDtoValidator,
+  async (req, res) => {
+    const { id } = req.params;
+    const { recurringDonationId } = req.query;
+    const contentType = req.headers["content-type"];
+
+    if (recurringDonationId && id) {
+      await sendResponseByMimeType(res, 400, contentType, [
+        {
+          error: "Cannot edit by both id and recurringDonationId",
+        },
+      ]);
+      return;
+    }
+    if (id) {
+      try {
+        const updatedScheduling = await schedulingService.updateSchedulingById(
+          id,
+          req.body,
+        );
+        res.status(200).json(updatedScheduling);
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
+    } else if (recurringDonationId) {
+      try {
+        await schedulingService.updateSchedulingByRecurringDonationId(
+          recurringDonationId as string,
+          req.body,
+        );
+        res.status(204).send();
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
+      }
+    } else {
+      res.status(400).json({
+        error: "Must supply id or recurringDonationId as request parameter.",
+      });
+    }
+  },
+);
 
 /* Delete scheduling by id (e.g. /scheduling/63)
   or deletes by recurring donation id 
@@ -124,13 +254,13 @@ schedulingRouter.put("/:id", updateSchedulingDtoValidator, async (req, res) => {
 */
 schedulingRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
-  const { recurringDonationId, currentDate } = req.query;
+  const { recurringDonationId, currentDate, role } = req.query;
   const contentType = req.headers["content-type"];
 
   if (id && recurringDonationId) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
-        error: "Cannot delete by both id and recurringSchedulingId",
+        error: "Cannot delete by both id and recurringDonationId",
       },
     ]);
     return;
@@ -140,6 +270,7 @@ schedulingRouter.delete("/:id?", async (req, res) => {
       await schedulingService.deleteSchedulingByRecurringDonationId(
         recurringDonationId as string,
         currentDate as string,
+        role as string,
       );
       res.status(204).send();
     } catch (error: unknown) {
@@ -147,7 +278,7 @@ schedulingRouter.delete("/:id?", async (req, res) => {
     }
   } else if (id) {
     try {
-      await schedulingService.deleteSchedulingById(id);
+      await schedulingService.deleteSchedulingById(id, role as string);
       res.status(204).send();
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });

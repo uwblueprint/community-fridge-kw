@@ -40,6 +40,52 @@ const getScheduleByDonorId = async (
   }
 };
 
+const getScheduleByVolunteerId = async (
+  volunteerId: string,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/volunteers/${volunteerId}`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
+const getAllSchedulesThatNeedVolunteers = async (
+  isVolunteerSlotFilled?: boolean,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/volunteers${
+      isVolunteerSlotFilled === undefined
+        ? ``
+        : `/?isVolunteerSlotFilled=${isVolunteerSlotFilled}`
+    }`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
+const getAllSchedulesByPickupOrUnload = async (
+  isPickUp: boolean,
+): Promise<Schedule[]> => {
+  try {
+    const url = `/scheduling/pickup/${isPickUp}`;
+    const { data } = await baseAPIClient.get(url, {
+      headers: { Authorization: BEARER_TOKEN },
+    });
+    return data;
+  } catch (error) {
+    return error as Schedule[];
+  }
+};
+
 const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
   try {
     const { data } = await baseAPIClient.post(
@@ -58,7 +104,7 @@ const createSchedule = async (schedule: Schedule): Promise<Schedule> => {
 const updateSchedule = async (
   scheduleId: string,
   fields: UpdatedSchedulingFields,
-): Promise<Schedule> => {
+): Promise<Schedule | boolean> => {
   try {
     const { data } = await baseAPIClient.put(
       `/scheduling/${scheduleId}`,
@@ -69,13 +115,34 @@ const updateSchedule = async (
     );
     return data;
   } catch (error) {
-    return error as Schedule;
+    return false;
   }
 };
 
-const deleteSchedule = async (scheduleId: string): Promise<boolean> => {
+const updateSchedulesByRecurringDonationId = async (
+  recurringDonationId: string,
+  fields: UpdatedSchedulingFields,
+): Promise<boolean> => {
   try {
-    await baseAPIClient.delete(`/scheduling/${scheduleId}`, {
+    await baseAPIClient.put(
+      `/scheduling?recurringDonationId=${recurringDonationId}`,
+      {
+        ...fields,
+      },
+      { headers: { Authorization: BEARER_TOKEN } },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const deleteSchedule = async (
+  scheduleId: string,
+  userRole: string,
+): Promise<boolean> => {
+  try {
+    await baseAPIClient.delete(`/scheduling/${scheduleId}?role=${userRole}`, {
       headers: { Authorization: BEARER_TOKEN },
     });
     return true;
@@ -87,10 +154,11 @@ const deleteSchedule = async (scheduleId: string): Promise<boolean> => {
 const deleteScheduleByRecurringId = async (
   recurringDonationId: string,
   currentDate: string,
+  userRole: string,
 ): Promise<boolean> => {
   try {
     await baseAPIClient.delete(
-      `/scheduling?recurringDonationId=${recurringDonationId}&currentDate=${currentDate}`,
+      `/scheduling?recurringDonationId=${recurringDonationId}&currentDate=${currentDate}&role=${userRole}`,
       {
         headers: { Authorization: BEARER_TOKEN },
       },
@@ -107,6 +175,10 @@ export default {
   getScheduleByDonorId,
   createSchedule,
   updateSchedule,
+  updateSchedulesByRecurringDonationId,
   deleteSchedule,
   deleteScheduleByRecurringId,
+  getScheduleByVolunteerId,
+  getAllSchedulesThatNeedVolunteers,
+  getAllSchedulesByPickupOrUnload,
 };

@@ -16,6 +16,8 @@ import nodemailerConfig from "./nodemailer.config";
 import ICronService from "./services/interfaces/cronService";
 import CronService from "./services/implementations/cronService";
 import DonorService from "./services/implementations/donorService";
+import checkInRouter from "./rest/checkInRoutes";
+import contentRouter from "./rest/contentRoutes";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
 if (process.env.NODE_ENV === "production") {
@@ -45,6 +47,8 @@ app.use("/donors", donorRouter);
 app.use("/users", userRouter);
 app.use("/volunteers", volunteerRouter);
 app.use("/scheduling", schedulingRouter);
+app.use("/checkin", checkInRouter);
+app.use("/content", contentRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const eraseDatabaseOnSync = false;

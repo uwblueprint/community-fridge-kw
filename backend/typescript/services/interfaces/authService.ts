@@ -12,15 +12,6 @@ interface IAuthService {
   generateToken(email: string, password: string): Promise<AuthDTO>;
 
   /**
-   * Generate a short-lived JWT access token and a long-lived refresh token
-   * when supplied OAuth ID token
-   * @param idToken user's ID token
-   * @returns AuthDTO object containing the access token, refresh token, and user info
-   * @throws Error if token generation fails
-   */
-  generateTokenOAuth(idToken: string): Promise<AuthDTO>;
-
-  /**
    * Revoke all refresh tokens of a user
    * @param userId userId of user whose refresh tokens are to be revoked
    * @throws Error if token revocation fails
@@ -50,6 +41,13 @@ interface IAuthService {
    * @throws Error if unable to generate link or send email
    */
   sendEmailVerificationLink(email: string): Promise<void>;
+
+  /**
+   * Sends an email about the volunteer pending status for the user with the given email
+   * @param email email of user that has pending status
+   * @throws Error if unable to send email
+   */
+  sendEmailVolunteerPending(email: string): Promise<void>;
 
   /**
    * Determine if the provided access token is valid and authorized for at least
@@ -86,7 +84,7 @@ interface IAuthService {
   /**
    * Confirm email verification link is valid and issued to the requested user
    * @param oobCode user's oob code to verify request
-   * @returns true if email verification confirmation is authorized, false otehrwise
+   * @returns true if email verification confirmation is authorized, false otherwise
    */
   verifyEmail(oobCode: string): Promise<boolean>;
 
