@@ -47,7 +47,7 @@ const ViewDonations = ({
   };
 
   return (
-    <Container alignContent="left" variant="calendarContainer">
+    <Container alignContent="left" variant="responsiveContainer">
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="column"
@@ -56,7 +56,7 @@ const ViewDonations = ({
       >
         <Text
           textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
-          pt="1.4rem"
+          pt="2rem"
         >
           Upcoming Scheduled Fridge Donations
         </Text>

@@ -33,13 +33,6 @@ import { Role } from "../../types/AuthTypes";
 
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isNavDropdownOpen, setIsNavDropdownOpen] = React.useState(false);
-
-  const navDropdownRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
-  useOutsideClick({
-    ref: navDropdownRef,
-    handler: () => setIsNavDropdownOpen(!isNavDropdownOpen),
-  });
 
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
   const history = useHistory();
@@ -118,51 +111,55 @@ const Header = (): JSX.Element => {
               )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
-                  <Menu>
-                    <MenuButton>
-                      Donation & Shift Management{" "}
-                      {isNavDropdownOpen ? (
-                        <ChevronUpIcon />
-                      ) : (
-                        <ChevronDownIcon />
-                      )}
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        style={{
-                          borderRadius: "0.4rem",
-                          margin: "auto",
-                          width: "95%",
-                        }}
-                        _focus={{
-                          bg: "raddish.50",
-                        }}
-                        _active={{
-                          bg: "raddish.50",
-                        }}
-                      >
-                        <Link as={ReactLink} to={Routes.ADMIN_CHECK_INS}>
-                          Fridge Check-ins
-                        </Link>
-                      </MenuItem>
-                      <MenuItem
-                        style={{
-                          borderRadius: "0.4rem",
-                          margin: "auto",
-                          width: "95%",
-                        }}
-                        _focus={{
-                          bg: "raddish.50",
-                        }}
-                        _active={{
-                          bg: "raddish.50",
-                        }}
-                      >
-                        <Link as={ReactLink} to={Routes.ADMIN_VIEW_DONATIONS}>
-                          Scheduled Donations
-                        </Link>
-                      </MenuItem>
-                    </MenuList>
+                  <Menu closeOnBlur>
+                    {({ isOpen: isNavDropdownOpen }) => (
+                      <>
+                        <MenuButton isActive={isNavDropdownOpen}>
+                          Donation & Shift Management{" "}
+                          {isNavDropdownOpen ? (
+                            <ChevronUpIcon />
+                          ) : (
+                            <ChevronDownIcon />
+                          )}
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            as={ReactLink}
+                            to={Routes.ADMIN_CHECK_INS}
+                            style={{
+                              borderRadius: "0.4rem",
+                              margin: "auto",
+                              width: "95%",
+                            }}
+                            _focus={{
+                              bg: "raddish.50",
+                            }}
+                            _active={{
+                              bg: "raddish.50",
+                            }}
+                          >
+                            Fridge Check-ins
+                          </MenuItem>
+                          <MenuItem
+                            as={ReactLink}
+                            to={Routes.ADMIN_VIEW_DONATIONS}
+                            style={{
+                              borderRadius: "0.4rem",
+                              margin: "auto",
+                              width: "95%",
+                            }}
+                            _focus={{
+                              bg: "raddish.50",
+                            }}
+                            _active={{
+                              bg: "raddish.50",
+                            }}
+                          >
+                            Scheduled Donations
+                          </MenuItem>
+                        </MenuList>
+                      </>
+                    )}
                   </Menu>
                   <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
                     User Management
