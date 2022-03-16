@@ -277,14 +277,14 @@ const Header = (): JSX.Element => {
                         to={Routes.ADMIN_CHECK_INS}
                         onClick={onClose}
                       >
-                        Fridge Check-ins
+                        Fridge check-ins
                       </Link>
                       <Link
                         as={ReactLink}
                         to={Routes.ADMIN_VIEW_DONATIONS}
                         onClick={onClose}
                       >
-                        Scheduled Donations
+                        Scheduled donations
                       </Link>
                       <Link
                         as={ReactLink}

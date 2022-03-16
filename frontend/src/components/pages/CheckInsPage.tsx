@@ -9,7 +9,7 @@ const CheckInsPage = () => {
         textAlign="center"
         mt="2em"
       >
-        Fridge Check-ins
+        Fridge check-ins
       </Text>
     </Container>
   );
