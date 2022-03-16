@@ -75,9 +75,7 @@ const Account = (): JSX.Element => {
         );
       }
       setDonor(donorResponse);
-      if (authenticatedUser?.role !== Role.VOLUNTEER)
-        setBusinessName(donorResponse.businessName);
-      else setBusinessName("");
+   setBusinessName(authenticatedUser?.role !== Role.VOLUNTEER ? donorResponse.businessName: "");
     };
     if (authenticatedUser?.role !== Role.VOLUNTEER) getDonor();
   }, [authenticatedUser]);
