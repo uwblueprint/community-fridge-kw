@@ -122,6 +122,7 @@ class CronService implements ICronService {
   }
 
   async checkReminders(): Promise<void> {
+    try {
     const today: Date = dayjs().toDate();
     const tomorrow: Date = dayjs().add(1, "days").toDate();
 
@@ -153,6 +154,11 @@ class CronService implements ICronService {
         }
       });
     });
+  } catch (error: unknown) {
+    Logger.error(
+      `Failed to check for reminders. Reason = ${getErrorMessage(error)}`,
+    );
+    throw error;
   }
 }
 
