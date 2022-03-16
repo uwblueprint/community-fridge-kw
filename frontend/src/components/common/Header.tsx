@@ -23,7 +23,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
-import { Link as ReactLink, useHistory } from "react-router-dom";
+import { Link as ReactLink, Redirect, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import * as Routes from "../../constants/Routes";
@@ -39,6 +39,7 @@ const Header = (): JSX.Element => {
     const success = await authAPIClient.logout(authenticatedUser?.id);
     if (success) {
       setAuthenticatedUser(null);
+      <Redirect to={Routes.HOME_PAGE} />;
     }
     onClose();
   };

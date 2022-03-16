@@ -47,7 +47,7 @@ const ViewDonations = ({
   };
 
   return (
-    <Container alignContent="left" variant="responsiveContainer">
+    <Container alignContent="left" variant="calendarContainer">
       <Flex
         pt={{ base: "0.5rem", md: "2rem" }}
         flexDirection="column"
