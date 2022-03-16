@@ -6,8 +6,7 @@ import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
 import PendingPage from "./PendingPage";
-import VolunteerShiftsTabs from "./VolunteerShiftTabs";
-import ScheduledVolunteerShiftsPage from "./ScheduledVolunteerShiftsPage";
+import ScheduledVolunteerShiftsPage from "./VolunteerShiftsPage";
 
 
 const steps = [
