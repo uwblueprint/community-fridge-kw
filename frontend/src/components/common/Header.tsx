@@ -129,7 +129,7 @@ const Header = (): JSX.Element => {
                     {({ isOpen: isNavDropdownOpen }) => (
                       <>
                         <MenuButton isActive={isNavDropdownOpen}>
-                          Fridge Management{" "}
+                          Fridge management{" "}
                           {isNavDropdownOpen ? (
                             <ChevronUpIcon />
                           ) : (
@@ -149,7 +149,7 @@ const Header = (): JSX.Element => {
                             }}
                             onClick={() => setHoveredItem("checkIns")}
                           >
-                            Fridge Check-ins
+                            Fridge check-ins
                           </MenuItem>
                           <MenuItem
                             as={ReactLink}
@@ -163,7 +163,7 @@ const Header = (): JSX.Element => {
                             }}
                             onClick={() => setHoveredItem("scheduledDonations")}
                           >
-                            Scheduled Donations
+                            Scheduled donations
                           </MenuItem>
                         </MenuList>
                       </>
