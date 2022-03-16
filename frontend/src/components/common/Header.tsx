@@ -129,7 +129,7 @@ const Header = (): JSX.Element => {
                     {({ isOpen: isNavDropdownOpen }) => (
                       <>
                         <MenuButton isActive={isNavDropdownOpen}>
-                          Donation & Shift Management{" "}
+                          Fridge Management{" "}
                           {isNavDropdownOpen ? (
                             <ChevronUpIcon />
                           ) : (
