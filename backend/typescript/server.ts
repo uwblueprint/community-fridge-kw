@@ -11,6 +11,11 @@ import donorRouter from "./rest/donorRoutes";
 import userRouter from "./rest/userRoutes";
 import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
+import EmailService from "./services/implementations/emailService";
+import nodemailerConfig from "./nodemailer.config";
+import ICronService from "./services/interfaces/cronService";
+import CronService from "./services/implementations/cronService";
+import DonorService from "./services/implementations/donorService";
 import checkInRouter from "./rest/checkInRoutes";
 import contentRouter from "./rest/contentRoutes";
 
@@ -52,12 +57,19 @@ sequelize.sync({ force: eraseDatabaseOnSync });
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.applicationDefault(),
 });
-/*
-if (process.env.NODE_ENV === "production") {
-  const emailService: IEmailService = new EmailService(nodemailerConfig);
-  emailService.checkReminders();
+
+if (
+  process.env.NODE_ENV === "production" ||
+  process.env.NODE_ENV === "staging"
+) {
+  const cronService: ICronService = new CronService(
+    new EmailService(nodemailerConfig),
+    new DonorService(),
+  );
+
+  cronService.checkReminders();
 }
-*/
+
 const PORT = process.env.PORT || 5000;
 app.listen({ port: PORT }, () => {
   /* eslint-disable-next-line no-console */
