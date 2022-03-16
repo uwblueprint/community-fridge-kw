@@ -133,8 +133,8 @@ const CreateAccount = ({
           color="hubbard.100"
         >
           {role === Role.VOLUNTEER
-            ? "Volunteer Information"
-            : "Point of Contact"}
+            ? "Volunteer information"
+            : "Point of contact"}
         </Text>
         <Grid
           templateColumns={{ md: "repeat(2, 1fr)" }}

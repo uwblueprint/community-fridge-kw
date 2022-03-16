@@ -37,7 +37,7 @@ const DeleteScheduleModal = ({
         <ModalContent py="52px" px="48px">
           <ModalHeader>
             <Text textStyle={isDesktop ? "desktopHeader3" : "mobileBodyBold"}>
-              Cancel One-Time Donation
+              Cancel one-time donation
             </Text>
           </ModalHeader>
           <ModalCloseButton />

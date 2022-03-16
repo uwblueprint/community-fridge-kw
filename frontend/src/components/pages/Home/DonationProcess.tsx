@@ -56,7 +56,7 @@ const DonationProcess = (): JSX.Element => {
   return (
     <Box mt="57px">
       <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
-        For Donors
+        For donors
       </Text>
       <Text mb="1.5rem" color="black.100" textStyle="mobileHeader2">
         The Donation Process
