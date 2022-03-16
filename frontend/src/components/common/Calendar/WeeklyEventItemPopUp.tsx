@@ -75,7 +75,7 @@ const WeeklyEventItemPopUp = ({
               pl={isMobile ? "1.125rem" : "6rem"}
               pt={isMobile ? "2rem" : "4rem"}
             >
-              Donation Details
+              Donation details
             </Text>
           </ModalHeader>
           <ModalCloseButton />
@@ -118,7 +118,7 @@ const WeeklyEventItemPopUp = ({
                       textStyle={isMobile ? "mobileSmall" : "desktopSmall"}
                       py="0.5rem"
                     >
-                      Next Dropoff:{" "}
+                      Next dropoff:{" "}
                       {new Date(nextDropOff).toLocaleString(undefined, {
                         year: "numeric",
                         month: "long",
@@ -187,7 +187,7 @@ const WeeklyEventItemPopUp = ({
                   >
                     {schedule?.size}
                   </Text>
-                  <Text textStyle="popupTitleText">Category of Item:</Text>
+                  <Text textStyle="popupTitleText">Item category:</Text>
                   <Text textStyle="popupInformationText">
                     {schedule?.categories.join(", ")}
                   </Text>
@@ -208,14 +208,14 @@ const WeeklyEventItemPopUp = ({
                   templateColumns={isMobile ? "auto" : "repeat(2, 1fr)"}
                   gap={isMobile ? "0.5rem" : "1rem"}
                 >
-                  <Text textStyle="popupTitleText">Volunteer Required:</Text>
+                  <Text textStyle="popupTitleText">Volunteer required:</Text>
                   <Text
                     textStyle="popupInformationText"
                     pb={isMobile ? "1.5rem" : "0rem"}
                   >
                     {schedule?.volunteerNeeded ? "Yes" : "No"}
                   </Text>
-                  <Text textStyle="popupTitleText">Pickup Required:</Text>
+                  <Text textStyle="popupTitleText">Pickup required:</Text>
                   <Text
                     textStyle="popupInformationText"
                     pb={isMobile ? "1.5rem" : "0rem"}

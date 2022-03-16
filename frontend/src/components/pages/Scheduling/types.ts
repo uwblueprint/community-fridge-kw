@@ -109,7 +109,7 @@ export const DonationSizes: DonationSizeInterface[] = [
     image: xl,
     size: "Extra-large",
     description:
-      "Approximately fills four shelves of the fridge/ pantry (full capacity)",
+      "Approximately fills four shelves of the fridge/pantry (full capacity)",
   },
 ];
 

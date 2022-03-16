@@ -50,7 +50,7 @@ const Dashboard = (): JSX.Element => {
       <Stack direction={["column", "row"]} justifyContent="space-between">
         <VStack alignItems="left">
           <Text color="black.100" textStyle="mobileHeader1">
-            My Scheduled Donations
+            My scheduled donations
           </Text>
           <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
             Thank you for supporting your local community fridge!{" "}

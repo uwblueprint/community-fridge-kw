@@ -290,7 +290,7 @@ const Account = (): JSX.Element => {
 
         <HStack align="flex-end">
           <Text mt="1em" textStyle="mobileHeader1">
-            My Account
+            My account
           </Text>
           <Spacer />
           <EditInfoButton />
@@ -325,7 +325,7 @@ const Account = (): JSX.Element => {
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Point of Contact
+          Point of contact
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
@@ -421,7 +421,7 @@ const Account = (): JSX.Element => {
               variant="navigation"
               onClick={onResetPasswordClick}
             >
-              Change Password
+              Change password
             </Button>
           </Box>
         )}
