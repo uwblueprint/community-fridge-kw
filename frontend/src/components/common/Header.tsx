@@ -21,7 +21,6 @@ import {
   MenuList,
   Stack,
   useDisclosure,
-  useOutsideClick,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { Link as ReactLink, useHistory } from "react-router-dom";
