@@ -48,7 +48,7 @@ const Home = (): JSX.Element => {
         <Flex>
           <Box width="100%">
             <Text align="left" marginBottom="13px" textStyle="mobileHeader1">
-              Welcome to Community Fridge KW
+              Welcome to Community Fridge KW!
             </Text>
 
             <Text

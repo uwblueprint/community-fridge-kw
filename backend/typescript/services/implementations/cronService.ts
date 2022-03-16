@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Op } from "sequelize";
+import cron from "node-cron";
 import IEmailService from "../interfaces/emailService";
 import { UserDonorDTO } from "../../types";
 import logger from "../../utilities/logger";
@@ -11,7 +12,6 @@ import ICronService from "../interfaces/cronService";
 import IDonorService from "../interfaces/donorService";
 
 // eslint-disable-next-line
-const cron = require("node-cron");
 
 const Logger = logger(__filename);
 
