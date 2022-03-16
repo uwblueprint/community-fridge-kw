@@ -5,7 +5,7 @@ import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
 import PendingPage from "./PendingPage";
-import ScheduledVolunteerShiftsPage from "./ScheduledVolunteerShiftsPage";
+import ScheduledVolunteerShiftsPage from "./VolunteerShiftsPage";
 
 const VolunteerShiftsPage = () => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
