@@ -38,8 +38,8 @@ const Header = (): JSX.Element => {
   const onLogOutClick = async () => {
     const success = await authAPIClient.logout(authenticatedUser?.id);
     if (success) {
+      history.push(Routes.LANDING_PAGE);
       setAuthenticatedUser(null);
-      <Redirect to={Routes.HOME_PAGE} />;
     }
     onClose();
   };
