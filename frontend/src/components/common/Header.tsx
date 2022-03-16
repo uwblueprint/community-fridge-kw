@@ -22,7 +22,7 @@ import {
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link as ReactLink, Redirect, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
@@ -33,6 +33,7 @@ import { Role } from "../../types/AuthTypes";
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const [hoveredItem, setHoveredItem] = useState("");
   const history = useHistory();
 
   const onLogOutClick = async () => {
@@ -42,6 +43,20 @@ const Header = (): JSX.Element => {
       setAuthenticatedUser(null);
     }
     onClose();
+  };
+
+  const menuItemStyle = {
+    borderRadius: "0.4rem",
+    margin: "auto",
+    width: "95%",
+  };
+
+  const hoverMenuItemStyle = {
+    borderRadius: "0.4rem",
+    margin: "auto",
+    width: "95%",
+    backgroundColor: "#C24A84",
+    color: "white",
   };
 
   return (
@@ -125,34 +140,28 @@ const Header = (): JSX.Element => {
                           <MenuItem
                             as={ReactLink}
                             to={Routes.ADMIN_CHECK_INS}
-                            style={{
-                              borderRadius: "0.4rem",
-                              margin: "auto",
-                              width: "95%",
-                            }}
+                            style={hoveredItem === "checkIns" ? hoverMenuItemStyle : menuItemStyle}
                             _focus={{
                               bg: "raddish.50",
                             }}
                             _active={{
                               bg: "raddish.50",
                             }}
+                            onClick={() => setHoveredItem("checkIns")}
                           >
                             Fridge Check-ins
                           </MenuItem>
                           <MenuItem
                             as={ReactLink}
                             to={Routes.ADMIN_VIEW_DONATIONS}
-                            style={{
-                              borderRadius: "0.4rem",
-                              margin: "auto",
-                              width: "95%",
-                            }}
+                            style={hoveredItem === "scheduledDonations" ? hoverMenuItemStyle : menuItemStyle}
                             _focus={{
                               bg: "raddish.50",
                             }}
                             _active={{
                               bg: "raddish.50",
                             }}
+                            onClick={() => setHoveredItem("scheduledDonations")}
                           >
                             Scheduled Donations
                           </MenuItem>
