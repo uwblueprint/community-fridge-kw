@@ -1,9 +1,9 @@
-import { truncate } from "fs";
 import { Seeder } from "../umzug";
 import { Role, Status } from "../types";
 
 const seedUsers = [
   {
+    id: 1,
     first_name: "Celine",
     last_name: "Dion",
     auth_id: process.env.ADMIN_AUTH_ID,
@@ -14,6 +14,7 @@ const seedUsers = [
     updatedAt: new Date(1636226732806),
   },
   {
+    id: 2,
     first_name: "Sandra",
     last_name: "Oh",
     auth_id: process.env.DONOR_AUTH_ID,
@@ -24,6 +25,7 @@ const seedUsers = [
     updatedAt: new Date(1636226732806),
   },
   {
+    id: 3,
     first_name: "Roberta",
     last_name: "Bondar",
     auth_id: process.env.VOLUNTEER_AUTH_ID,
@@ -37,6 +39,7 @@ const seedUsers = [
 
 const seedDonors = [
   {
+    id: 1,
     user_id: 2,
     business_name: "Joe's Farm",
     facebook_link: "facebook.com",
@@ -48,6 +51,7 @@ const seedDonors = [
 
 const seedVolunteers = [
   {
+    id: 1,
     user_id: 3,
     status: Status.APPROVED,
     createdAt: new Date(1636226732806),
@@ -57,6 +61,7 @@ const seedVolunteers = [
 
 const seedSchedules = [
   {
+    id: 1,
     donor_id: 1,
     categories: ["Dry packaged goods"],
     size: "Medium",
@@ -78,6 +83,7 @@ const seedSchedules = [
     updatedAt: new Date(1636226732806),
   },
   {
+    id: 2,
     donor_id: 1,
     categories: ["Non-perishables", "Tea and coffee"],
     size: "Medium",
@@ -99,6 +105,7 @@ const seedSchedules = [
     updatedAt: new Date(1636226732806),
   },
   {
+    id: 3,
     donor_id: 1,
     categories: ["Fresh produce"],
     size: "Small",
@@ -125,6 +132,7 @@ const seedSchedules = [
 
 const seedContent = [
   {
+    id: 1,
     food_rescue_description:
       "Food rescue shifts assist with donations, either through unloading at the fridge or picking up off-site and bringing it to the fridge. For more information, check out the link here:",
     food_rescue_url: "https://www.google.com/",
@@ -138,6 +146,7 @@ const seedContent = [
 
 const seedCheckins = [
   {
+    id: 1,
     volunteer_id: 1,
     start_date: new Date("1 March 2022"),
     end_date: new Date("2 May 2022"),
@@ -146,6 +155,7 @@ const seedCheckins = [
     updatedAt: new Date(1649989378000),
   },
   {
+    id: 2,
     start_date: new Date(),
     end_date: new Date(),
     notes:
@@ -155,6 +165,7 @@ const seedCheckins = [
     updatedAt: new Date(1649989378000),
   },
   {
+    id: 3,
     volunteer_id: 1,
     start_date: new Date(),
     end_date: new Date(),
@@ -165,6 +176,12 @@ const seedCheckins = [
 ];
 
 export const up: Seeder = async ({ context: sequelize }) => {
+  await sequelize.query("TRUNCATE TABLE users CASCADE");
+  await sequelize.query("TRUNCATE TABLE donors CASCADE");
+  await sequelize.query("TRUNCATE TABLE volunteers CASCADE");
+  await sequelize.query("TRUNCATE TABLE scheduling CASCADE");
+  await sequelize.query("TRUNCATE TABLE content CASCADE");
+  await sequelize.query("TRUNCATE TABLE checkin CASCADE");
   await sequelize.getQueryInterface().bulkInsert("users", seedUsers);
   await sequelize.getQueryInterface().bulkInsert("donors", seedDonors);
   await sequelize.getQueryInterface().bulkInsert("volunteers", seedVolunteers);
@@ -173,14 +190,12 @@ export const up: Seeder = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().bulkInsert("checkin", seedCheckins);
 };
 export const down: Seeder = async ({ context: sequelize }) => {
-  await sequelize
-    .getQueryInterface()
-    .dropTable("scheduling", { cascade: true });
-  await sequelize.getQueryInterface().dropTable("donors", { cascade: true });
-  await sequelize.getQueryInterface().dropTable("users", { cascade: true });
-  await sequelize
-    .getQueryInterface()
-    .dropTable("volunteers", { cascade: true });
-  await sequelize.getQueryInterface().dropTable("checkin", { cascade: true });
-  await sequelize.getQueryInterface().dropTable("content");
+  await sequelize.getQueryInterface().bulkDelete("scheduling", {
+    id: [1, 2, 3],
+  });
+  await sequelize.getQueryInterface().bulkDelete("checkin", { id: [1, 2, 3] });
+  await sequelize.getQueryInterface().bulkDelete("donors", { id: [1] });
+  await sequelize.getQueryInterface().bulkDelete("volunteers", { id: [1] });
+  await sequelize.getQueryInterface().bulkDelete("users", { id: [1, 2, 3] });
+  await sequelize.getQueryInterface().bulkDelete("content", { id: [1] });
 };
