@@ -94,9 +94,9 @@ const ConfirmDetails = ({
       });
     }
     history.push(
-      authenticatedUser!.role === Role.DONOR
-        ? `${Routes.DASHBOARD_PAGE}`
-        : `${Routes.VIEW_DONATIONS}`,
+      authenticatedUser!.role === Role.ADMIN
+        ? Routes.ADMIN_VIEW_DONATIONS
+        : Routes.DASHBOARD_PAGE,
     );
   };
 
@@ -129,9 +129,9 @@ const ConfirmDetails = ({
           <Button
             onClick={() =>
               history.push(
-                authenticatedUser?.role === Role.DONOR
-                  ? Routes.DASHBOARD_PAGE
-                  : Routes.VIEW_DONATIONS,
+                authenticatedUser?.role === Role.ADMIN
+                  ? Routes.ADMIN_VIEW_DONATIONS
+                  : Routes.DASHBOARD_PAGE,
               )
             }
             paddingLeft="0"

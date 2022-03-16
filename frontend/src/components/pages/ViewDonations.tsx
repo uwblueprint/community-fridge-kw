@@ -56,7 +56,7 @@ const ViewDonations = ({
       >
         <Text
           textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
-          pt="1.4rem"
+          pt="2rem"
         >
           Scheduled donations
         </Text>
