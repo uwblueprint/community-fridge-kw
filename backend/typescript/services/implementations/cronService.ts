@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Op } from "sequelize";
-import cron from "node-cron";
 import IEmailService from "../interfaces/emailService";
 import { UserDonorDTO } from "../../types";
 import logger from "../../utilities/logger";
@@ -12,6 +11,7 @@ import ICronService from "../interfaces/cronService";
 import IDonorService from "../interfaces/donorService";
 
 // eslint-disable-next-line
+const cron = require("node-cron");
 
 const Logger = logger(__filename);
 
@@ -122,44 +122,43 @@ class CronService implements ICronService {
   }
 
   async checkReminders(): Promise<void> {
-    try {
     const today: Date = dayjs().toDate();
     const tomorrow: Date = dayjs().add(1, "days").toDate();
 
-    cron.schedule("0 0 0 * *", async () => {
-      const schedules: Array<Schedule> = await Schedule.findAll({
-        where: {
-          start_time: {
-            [Op.and]: [{ [Op.gte]: today }, { [Op.lte]: tomorrow }],
+    try {
+      cron.schedule("0 0 0 * *", async () => {
+        const schedules: Array<Schedule> = await Schedule.findAll({
+          where: {
+            start_time: {
+              [Op.and]: [{ [Op.gte]: today }, { [Op.lte]: tomorrow }],
+            },
           },
-        },
-      });
+        });
 
-      schedules.forEach(async (schedule: Schedule) => {
-        const user: User | null = await User.findByPk(
-          Number(schedule.donor_id),
-        );
-
-        if (!user) {
-          throw new Error(`donorId ${schedule.donor_id} not found.`);
-        }
-
-        try {
-          this.sendScheduledDonationEmail(schedule);
-        } catch (error) {
-          Logger.error(
-            `Failed to send reminder email. Reason = ${getErrorMessage(error)}`,
+        schedules.forEach(async (schedule: Schedule) => {
+          const user: User | null = await User.findByPk(
+            Number(schedule.donor_id),
           );
-          throw error;
-        }
+
+          if (!user) {
+            throw new Error(`donorId ${schedule.donor_id} not found.`);
+          }
+
+          try {
+            this.sendScheduledDonationEmail(schedule);
+          } catch (error) {
+            Logger.error(
+              `Failed to send reminder email. Reason = ${getErrorMessage(
+                error,
+              )}`,
+            );
+            throw error;
+          }
+        });
       });
-    });
-  } catch (error: unknown) {
-    Logger.error(
-      `Failed to check for reminders. Reason = ${getErrorMessage(error)}`,
-    );
-    throw error;
+    } catch (error: unknown) {
+      Logger.error("error");
+    }
   }
 }
-
 export default CronService;
