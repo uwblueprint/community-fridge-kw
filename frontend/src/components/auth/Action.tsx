@@ -1,9 +1,7 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import React from "react";
-import { useStep } from "react-hooks-helper";
 
 import AuthAPIClient from "../../APIClients/AuthAPIClient";
-import { steps, UseStepType } from "./ResetPassword/index";
 import NewPassword from "./ResetPassword/NewPassword";
 import ConfirmVerificationPage from "./Signup/ConfirmVerificationPage";
 

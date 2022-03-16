@@ -1,26 +1,24 @@
-import { snakeCase } from "lodash";
 import CheckIn from "../../../models/checkIn.model";
-import Volunteer from "../../../models/volunteer.model";
 import User from "../../../models/user.model";
+import Volunteer from "../../../models/volunteer.model";
+
 import testSql from "../../../testUtils/testDb";
-import testCheckIns from "../../../testUtils/checkInService";
 import {
-  testUsersDb,
+  testCheckIns,
   testVolunteersDb,
-} from "../../../testUtils/schedulingService";
+  testUpdatedCheckIns,
+  testUsersDb,
+} from "../../../testUtils/checkInService";
+import nodemailerConfig from "../../../nodemailer.config";
+import IEmailService from "../../interfaces/emailService";
+import EmailService from "../emailService";
 import CheckInService from "../checkInService";
 import VolunteerService from "../volunteerService";
 import IVolunteerService from "../../interfaces/volunteerService";
+import { toSnakeCase } from "../../../utilities/servicesUtils";
 
 const checkIns = testCheckIns.map((checkIn) => {
-  const checkInsSnakeCase: Record<
-    string,
-    string | number | boolean | string[] | Date | null | undefined
-  > = {};
-  Object.entries(checkIn).forEach(([key, value]) => {
-    checkInsSnakeCase[snakeCase(key)] = value;
-  });
-  return checkInsSnakeCase;
+  return toSnakeCase(checkIn);
 });
 
 jest.mock("nodemailer", () => {
@@ -35,9 +33,9 @@ describe("pg checkInService", () => {
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
-    checkInService = new CheckInService();
+    const emailService: IEmailService = new EmailService(nodemailerConfig);
     const volunteerService: IVolunteerService = new VolunteerService();
-    checkInService = new CheckInService(volunteerService);
+    checkInService = new CheckInService(emailService, volunteerService);
     await User.bulkCreate(testUsersDb);
     await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);
@@ -46,6 +44,80 @@ describe("pg checkInService", () => {
   afterAll(async () => {
     await testSql.sync({ force: true });
     await testSql.close();
+  });
+
+  it("create single day CheckIn", async () => {
+    // pass in the id of a user (1)
+    const mockCreateCheckInDTO = {
+      startDate: new Date("2021-09-01T09:00:00.000Z"),
+      endDate: new Date("2021-09-01T10:00:00.000Z"),
+    };
+    const expectedCheckIn = {
+      id: "5",
+      startDate: new Date("2021-09-01T09:00:00.000Z"),
+      endDate: new Date("2021-09-01T10:00:00.000Z"),
+      isAdmin: false,
+      notes: null,
+      volunteerId: "null",
+    };
+
+    const res = await checkInService.createCheckIn(mockCreateCheckInDTO);
+
+    expect(res[0]).toEqual(expectedCheckIn);
+  });
+
+  it("create multi day CheckIn", async () => {
+    const mockCreateCheckInDTO = {
+      userId: "1",
+      startDate: new Date("2021-08-30T09:00:00.000Z"),
+      endDate: new Date("2021-09-01T10:00:00.000Z"),
+      notes: "hi this is a test",
+      isAdmin: true,
+    };
+    const expectedCheckIn = [
+      {
+        id: "5",
+        startDate: new Date("2021-08-30T09:00:00.000Z"),
+        endDate: new Date("2021-08-30T10:00:00.000Z"),
+        isAdmin: true,
+        notes: "hi this is a test",
+        volunteerId: "null",
+      },
+      {
+        id: "6",
+        startDate: new Date("2021-08-31T09:00:00.000Z"),
+        endDate: new Date("2021-08-31T10:00:00.000Z"),
+        isAdmin: true,
+        notes: "hi this is a test",
+        volunteerId: "null",
+      },
+      {
+        id: "7",
+        startDate: new Date("2021-09-01T09:00:00.000Z"),
+        endDate: new Date("2021-09-01T10:00:00.000Z"),
+        isAdmin: true,
+        notes: "hi this is a test",
+        volunteerId: "null",
+      },
+    ];
+
+    const res = await checkInService.createCheckIn(mockCreateCheckInDTO);
+
+    expect(res).toEqual(expectedCheckIn);
+  });
+
+  it("updateCreateCheckIn", async () => {
+    const mockUpdateCheckinDTO = {
+      notes: "updated notes",
+      volunteerId: "1",
+    };
+
+    const updatedCheckIn = await checkInService.updateCheckInById(
+      "1",
+      mockUpdateCheckinDTO,
+    );
+
+    expect(updatedCheckIn).toMatchObject(testUpdatedCheckIns[0]);
   });
 
   test("getCheckIns", async () => {
@@ -87,7 +159,7 @@ describe("pg checkInService", () => {
 
   test("deleteCheckInsByDateRange", async () => {
     const startDate = "2021-09-01T09:00:00.000Z";
-    const endDate = "2021-09-07T00:10:00.000Z";
+    const endDate = "2021-09-07T10:00:00.000Z";
     const res = await checkInService.deleteCheckInsByDateRange(
       startDate,
       endDate,

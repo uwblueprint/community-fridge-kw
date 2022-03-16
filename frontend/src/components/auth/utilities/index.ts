@@ -1,5 +1,3 @@
-import React from "react";
-
 export const checkLength = (val: string) => val.length >= 12;
 
 export const checkForNumbers = (val: string) => !!val.match(/\d+/g);
