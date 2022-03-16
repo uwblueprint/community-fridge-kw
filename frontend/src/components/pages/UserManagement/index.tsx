@@ -47,7 +47,7 @@ const UserManagementPage = (): JSX.Element => {
   return (
     <Container variant="baseContainer">
       <Text mb="40px" textStyle="desktopHeader2">
-        User Management
+        User management
       </Text>
 
       <InputGroup>
@@ -65,9 +65,9 @@ const UserManagementPage = (): JSX.Element => {
         <Thead>
           <Tr>
             <Th color="black.100"> Company</Th>
-            <Th color="black.100">Point of Contact</Th>
+            <Th color="black.100">Point of contact</Th>
             <Th color="black.100">Email</Th>
-            <Th color="black.100">Phone Number</Th>
+            <Th color="black.100">Phone number</Th>
           </Tr>
         </Thead>
         <Tbody>
