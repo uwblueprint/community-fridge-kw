@@ -15,13 +15,19 @@ import {
 import React from "react";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { DonorResponse } from "../../../types/DonorTypes";
+import { VolunteerResponse } from "../../../types/VolunteerTypes";
 
 const UserManagementPage = (): JSX.Element => {
   const [donors, setDonors] = React.useState([] as DonorResponse[]);
+  const [volunteers, setVolunteers] = React.useState([] as VolunteerResponse[]);
+  const [users, setUsers] = React.useState(); // both donors and volunteers
   const [search, setSearch] = React.useState("");
+  const [filter, setFilter] = React.useState<"volunteer" | "donor" | "">(""); 
 
   const tableData = React.useMemo(() => {
+    
     if (!search) return donors;
     return donors.filter(
       (donor) =>
@@ -41,8 +47,23 @@ const UserManagementPage = (): JSX.Element => {
       setDonors(res);
     };
 
+    const getVolunteers = async () => {
+      const res = await VolunteerAPIClient.getAllVolunteers();
+      setVolunteers(res);
+    };
+
     getDonors();
+    getVolunteers();
   }, []);
+
+  // add businessName = "" field to volunteer objects
+  const buildTableVolunteers = (oldVolunteers: []) : DonorResponse[] => {
+    const newVolunteers = [] as DonorResponse[];
+
+
+
+    return newVolunteers;
+  }
 
   return (
     <Container variant="baseContainer">
