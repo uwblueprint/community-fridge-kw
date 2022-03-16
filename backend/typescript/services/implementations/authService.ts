@@ -45,6 +45,11 @@ class AuthService implements IAuthService {
         oobCode,
       );
       if (response.emailVerified) {
+        const user = await this.userService.getUserByEmail(response.email);
+
+        if (user.role === Role.VOLUNTEER) {
+          await this.sendEmailVolunteerPending(response.email);
+        }
         return true;
       }
       return false;
@@ -54,43 +59,37 @@ class AuthService implements IAuthService {
   }
 
   /* eslint-disable class-methods-use-this */
-  async generateTokenOAuth(idToken: string): Promise<AuthDTO> {
+  async verifyPasswordReset(oobCode: string): Promise<boolean> {
     try {
-      const googleUser = await FirebaseRestClient.signInWithGoogleOAuth(
-        idToken,
+      const response = await FirebaseRestClient.confirmPasswordResetVerificationCode(
+        oobCode,
       );
-      // googleUser.idToken refers to the Firebase Auth access token for the user
-      const token = {
-        accessToken: googleUser.idToken,
-        refreshToken: googleUser.refreshToken,
-      };
-      // If user already has a login with this email, just return the token
-      try {
-        // Note: an error message will be logged from UserService if this lookup fails.
-        // You may want to silence the logger for this special OAuth user lookup case
-        const user = await this.userService.getUserByEmail(googleUser.email);
-        return { ...token, ...user };
-      } catch (error) {
-        Logger.error(error as string);
+      if (response.email) {
+        return true;
       }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
 
-      const user = await this.userService.createUser(
-        {
-          firstName: googleUser.firstName,
-          lastName: googleUser.lastName,
-          email: googleUser.email,
-          role: Role.USER,
-          password: "",
-          phoneNumber: googleUser.phoneNumber,
-        },
-        googleUser.localId,
-        "GOOGLE",
+  /* eslint-disable class-methods-use-this */
+  async confirmPasswordReset(
+    newPassword: string,
+    oobCode: string,
+  ): Promise<boolean> {
+    try {
+      const response = await FirebaseRestClient.confirmPasswordReset(
+        newPassword,
+        oobCode,
       );
 
-      return { ...token, ...user };
+      if (response.email) {
+        return true;
+      }
+      return false;
     } catch (error) {
-      Logger.error(`Failed to generate token for user with OAuth ID token`);
-      throw error;
+      return false;
     }
   }
 
@@ -134,13 +133,57 @@ class AuthService implements IAuthService {
         .auth()
         .generatePasswordResetLink(email);
       const emailBody = `
-      Hello,
-      <br><br>
-      We have received a password reset request for your account.
-      Please click the following link to reset it.
-      <strong>This link is only valid for 1 hour.</strong>
-      <br><br>
-      <a href=${resetLink}>Reset Password</a>`;
+      <html>
+      <head>
+         <link
+                        href="https://fonts.googleapis.com/css2?family=Inter"
+                        rel="stylesheet"
+                        />
+                    <style>
+                        body {
+                        font-family: "Inter";
+                        }
+                    </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Reset Password</title>
+      </head>
+      <body>
+        <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
+                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/>
+        </p>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi there,</h2>
+        <p> 
+          This is an email verifying your request to change your password for Community Fridge. Please click on “Change Password” if you’d like to create a new password for the Community Fridge KW platform. 
+        </p>
+        <table cellspacing = "0" cellpadding = "0"> <tr>
+          <td align="center" width = "255" height = "44" bgcolor = "#C31887" style = "-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;" >
+            <a href=${resetLink} style = "font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block" >
+              <span style="color: #FAFCFE;" >
+                Change password
+              </span>
+            </a>
+          </td> 
+        </tr></table >
+        <h5 style="font-weight: bold; font-size: 16px; line-height: 22px; color: #6C6C84;">
+          How does this work?
+        </h5>
+        <p style = "color:#6C6C84">
+          This is a one - time URL that lets you change your password.
+        </p>
+        <div style = "width: 100%">
+          <div style= " float:left; color: #6C6C84">
+            Don't see a button above? 
+          </div>
+          <a style=" color: #C31887" href=${resetLink}>Change your password here</a>
+        </div>
+        <div> 
+          If you didn't request this reset link, you can safely ignore this email.
+        </div>
+        <p style = "margin-top: 50px"> Sincerely, </p>
+        <p> Community Fridge KW </p>   
+      </body>
+      </html>`;
 
       this.emailService.sendEmail(email, "Your Password Reset Link", emailBody);
     } catch (error) {
@@ -218,6 +261,54 @@ class AuthService implements IAuthService {
     } catch (error) {
       Logger.error(
         `Failed to generate email verification link for user with email ${email}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendEmailVolunteerPending(email: string): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendEmailVolunteerPending but this instance of AuthService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    try {
+      const emailBody = `
+      <html>
+      <head>
+         <link
+                        href="https://fonts.googleapis.com/css2?family=Inter"
+                        rel="stylesheet"
+                        />
+                    <style>
+                        body {
+                        font-family: "Inter";
+                        }
+                    </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>PENDING - Volunteer Account Status</title>
+      </head>
+      <body>
+         <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
+                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey there,</h2>
+        <p>Thank you for your interest in volunteering with Community Fridge KW!<br /><br />
+        Your account is <strong>pending approval</strong>. After an admin approves your account, you will be notified via email and will be able to start signing up for volunteer shifts!<br /><br />
+        In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
+        </p>
+       <p style="margin-top: 50px">Sincerely,</p>
+        <p>Community Fridge KW</p>   
+      </body>
+    </html>
+      `;
+
+      this.emailService.sendEmail(email, "Pending Status", emailBody);
+    } catch (error) {
+      Logger.error(
+        `Failed to generate volunteer pending email for user with email ${email}`,
       );
       throw error;
     }

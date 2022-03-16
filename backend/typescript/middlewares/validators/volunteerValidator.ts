@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Status } from "../../types";
-import { getApiValidationError, validatePrimitive } from "./util";
+import { getApiValidationError } from "./util";
 
 const volunteerDtoValidator = async (
   req: Request,

@@ -12,8 +12,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format } from "date-fns";
-import moment from "moment";
+import { format, parse } from "date-fns";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
 
@@ -70,7 +69,10 @@ const SelectDateTime = ({
 
   const get12HTimeString = (time: string) => {
     const time24Hour = `${new Date(time).getHours().toString()}:00`;
-    return moment(time24Hour, "HH:mm").format("h:mm A");
+    if (time24Hour === "NaN:00") {
+      return "";
+    }
+    return format(parse(time24Hour, "HH:mm", new Date()), "h:mm a");
   };
 
   const getSubmitState = () => {
@@ -190,8 +192,14 @@ const SelectDateTime = ({
     const tokens = timeRangeSelected.split(" - ");
 
     // convert start and end time to 24h values
-    const convertedStartTime = moment(tokens[0], "hh:mm A").format("HH:mm");
-    const convertedEndTime = moment(tokens[1], "hh:mm A").format("HH:mm");
+    const convertedStartTime = format(
+      parse(tokens[0], "h:mm a", new Date()),
+      "HH:mm",
+    );
+    const convertedEndTime = format(
+      parse(tokens[1], "h:mm a", new Date()),
+      "HH:mm",
+    );
 
     const newStartTime = new Date(`11/11/1970 ${convertedStartTime}`);
     const newEndTime = new Date(`11/11/1970 ${convertedEndTime}`);

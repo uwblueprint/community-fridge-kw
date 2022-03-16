@@ -1,5 +1,4 @@
-import { CloseIcon } from "@chakra-ui/icons";
-import { Button, Container, IconButton, Image, Text } from "@chakra-ui/react";
+import { Button, Container, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 

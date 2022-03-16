@@ -5,7 +5,7 @@ import { NodemailerConfig } from "../../types";
 import logger from "../../utilities/logger";
 import Schedule from "../../models/scheduling.model";
 import User from "../../models/user.model";
-import createReminderEmailContent from "../../utilities/emailUtils";
+import { createReminderEmailContent } from "../../utilities/emailUtils";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 
 // eslint-disable-next-line

@@ -42,6 +42,11 @@ const Button = {
     deleteDonation: {
       background: "tomato.100",
       color: "squash.100",
+    },
+    changePassword: {
+      border: "1px",
+      borderColor: "raddish.100",
+      color: "raddish.100",
       fontSize: "16px",
       py: "12px",
       px: "53px",
