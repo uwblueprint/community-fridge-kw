@@ -75,6 +75,20 @@ interface ISchedulingService {
   ): Promise<void>;
 
   /**
+   * Generate an email with donation information to be sent after user schedules
+   * a donation
+   * @param schedule object that contains information on cancelled donation
+   * @param isRecurringDonation false if the cancelled donation is a one-time donation, true otherwise
+   * @param isAdminDeleted false if donor that scheduled donation is cancelling donation, true otherwise
+   * @throws Error if unable to send email
+   */
+  sendSchedulingCancellationEmail(
+    schedule: SchedulingDTO,
+    isRecurringDonation: boolean,
+    isAdminDeleted: boolean,
+  ): Promise<void>;
+
+  /**
    * Create scheduling
    * @param scheduling CreateSchedulingDTO object containing scheduling info
    * @returns a SchedulingDTO with the created scheduling information
@@ -107,19 +121,22 @@ interface ISchedulingService {
   /**
    * Delete a scheduling by id
    * @param id scheduling id
+   * @param role of user that is deleting the donation
    * @throws Error if scheduling deletion fails
    */
-  deleteSchedulingById(id: string): Promise<void>;
+  deleteSchedulingById(id: string, role: string): Promise<void>;
 
   /**
    * Delete a scheduling by recurring_donation_id
    * @param reucrring_donation_id recurring donation id
    * @param current_date the current date of the recurrring donation
+   * @param role of user that is deleting the recurring donation
    * @throws Error if recurring donation deletion fails
    */
   deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string,
     current_date: string,
+    role: string,
   ): Promise<void>;
 }
 

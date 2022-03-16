@@ -67,10 +67,14 @@ const ConfirmDetails = ({
 
   const onDeleteClick = async (isOneTimeEvent = true) => {
     const res = isOneTimeEvent
-      ? await SchedulingAPIClient.deleteSchedule(currentSchedule.id)
+      ? await SchedulingAPIClient.deleteSchedule(
+          currentSchedule.id,
+          authenticatedUser!.role,
+        )
       : await SchedulingAPIClient.deleteScheduleByRecurringId(
           currentSchedule?.recurringDonationId,
           currentSchedule.startTime,
+          authenticatedUser!.role,
         );
     if (!res) {
       toast({
@@ -79,15 +83,16 @@ const ConfirmDetails = ({
         duration: 7000,
         isClosable: true,
       });
+    } else {
+      toast({
+        title: isOneTimeEvent
+          ? "Donation cancelled successfully"
+          : "Donations cancelled successfully",
+        status: "success",
+        duration: 7000,
+        isClosable: true,
+      });
     }
-    toast({
-      title: isOneTimeEvent
-        ? "Donation cancelled successfully"
-        : "Donations cancelled successfully",
-      status: "success",
-      duration: 7000,
-      isClosable: true,
-    });
     history.push(
       authenticatedUser!.role === Role.ADMIN
         ? Routes.ADMIN_VIEW_DONATIONS

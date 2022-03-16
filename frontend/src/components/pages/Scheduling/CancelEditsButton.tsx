@@ -1,4 +1,4 @@
-import { Button, CloseButton, Flex } from "@chakra-ui/react";
+import { CloseButton, Flex } from "@chakra-ui/react";
 import React from "react";
 
 import { ButtonProps } from "./types";
