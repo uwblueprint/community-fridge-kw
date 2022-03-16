@@ -80,7 +80,7 @@ const Header = (): JSX.Element => {
                     Home
                   </Link>
                   <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
-                    My Scheduled Donations
+                    My scheduled donations
                   </Link>
                 </>
               )}
@@ -94,22 +94,22 @@ const Header = (): JSX.Element => {
                     Home
                   </Link>
                   <Link as={ReactLink} to={Routes.VOLUNTEER_SHIFTS_PAGE}>
-                    My Volunteer Shifts
+                    My volunteer shifts
                   </Link>
                 </>
               )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
                   <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
-                    View Donations
+                    View donations
                   </Link>
                   <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
-                    User Management
+                    User management
                   </Link>
                 </>
               )}
               <Link as={ReactLink} to={Routes.ACCOUNT_PAGE}>
-                My Account
+                My account
               </Link>
               <Button
                 onClick={onLogOutClick}
@@ -117,7 +117,7 @@ const Header = (): JSX.Element => {
                 color="black"
                 fontWeight="400"
               >
-                Log Out
+                Log out
               </Button>
             </>
           ) : (
@@ -136,7 +136,7 @@ const Header = (): JSX.Element => {
                   onClose();
                 }}
               >
-                Sign In
+                Sign in
               </Button>
             </>
           )}
@@ -182,7 +182,7 @@ const Header = (): JSX.Element => {
                         to={Routes.DASHBOARD_PAGE}
                         onClick={onClose}
                       >
-                        My Scheduled Donations
+                        My scheduled donations
                       </Link>
                     </>
                   )}
@@ -200,7 +200,7 @@ const Header = (): JSX.Element => {
                         to={Routes.VOLUNTEER_SHIFTS_PAGE}
                         onClick={onClose}
                       >
-                        My Volunteer Shifts
+                        My volunteer shifts
                       </Link>
                     </>
                   )}
@@ -211,14 +211,14 @@ const Header = (): JSX.Element => {
                         to={Routes.VIEW_DONATIONS}
                         onClick={onClose}
                       >
-                        View Donations
+                        View donations
                       </Link>
                       <Link
                         as={ReactLink}
                         to={Routes.USER_MANAGEMENT_PAGE}
                         onClick={onClose}
                       >
-                        User Management
+                        User management
                       </Link>
                     </>
                   )}
@@ -227,7 +227,7 @@ const Header = (): JSX.Element => {
                     to={Routes.ACCOUNT_PAGE}
                     onClick={onClose}
                   >
-                    My Account
+                    My account
                   </Link>
                   <Button
                     onClick={onLogOutClick}
@@ -237,7 +237,7 @@ const Header = (): JSX.Element => {
                     color="black"
                     fontWeight="400"
                   >
-                    Log Out
+                    Log out
                   </Button>
                 </>
               ) : (
@@ -256,7 +256,7 @@ const Header = (): JSX.Element => {
                       onClose();
                     }}
                   >
-                    Sign In
+                    Sign in
                   </Button>
                 </>
               )}

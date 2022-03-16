@@ -288,7 +288,7 @@ const Account = (): JSX.Element => {
 
         <HStack align="flex-end">
           <Text mt="1em" textStyle="mobileHeader1">
-            My Account
+            My account
           </Text>
           <Spacer />
           <EditInfoButton />
@@ -325,8 +325,8 @@ const Account = (): JSX.Element => {
           color="hubbard.100"
         >
           {authenticatedUser?.role === Role.VOLUNTEER
-            ? "Volunteer Information"
-            : "Point of Contact"}
+            ? "Volunteer information"
+            : "Point of contact"}
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
@@ -422,7 +422,7 @@ const Account = (): JSX.Element => {
               variant="navigation"
               onClick={onResetPasswordClick}
             >
-              Change Password
+              Change password
             </Button>
           </Box>
         )}
