@@ -2,7 +2,6 @@ import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Center,
   Container,
   FormControl,
   FormErrorMessage,
@@ -75,7 +74,11 @@ const Account = (): JSX.Element => {
         );
       }
       setDonor(donorResponse);
-   setBusinessName(authenticatedUser?.role !== Role.VOLUNTEER ? donorResponse.businessName: "");
+      setBusinessName(
+        authenticatedUser?.role !== Role.VOLUNTEER
+          ? donorResponse.businessName
+          : "",
+      );
     };
     if (authenticatedUser?.role !== Role.VOLUNTEER) getDonor();
   }, [authenticatedUser]);
