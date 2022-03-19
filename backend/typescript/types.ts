@@ -162,6 +162,11 @@ export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
 
 export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;
 
+export enum ShiftType {
+  CHECKIN = "checkIn",
+  SCHEDULING = "scheduling",
+} 
+
 export type DTOTypes = Record<
   string,
   Date | string | string[] | boolean | number | null | undefined

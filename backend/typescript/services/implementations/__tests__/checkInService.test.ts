@@ -34,10 +34,8 @@ describe("pg checkInService", () => {
   beforeEach(async () => {
     await testSql.sync({ force: true });
     const emailService: IEmailService = new EmailService(nodemailerConfig);
-    const volunteerService: IVolunteerService = new VolunteerService();
-    checkInService = new CheckInService(emailService, volunteerService);
+    checkInService = new CheckInService(emailService);
     await User.bulkCreate(testUsersDb);
-    await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);
   });
 

@@ -2,6 +2,8 @@ import {
   VolunteerDTO,
   UserVolunteerDTO,
   UpdateVolunteerDTO,
+  CheckInDTO,
+  SchedulingDTO,
 } from "../../types";
 
 interface IVolunteerService {
@@ -35,6 +37,8 @@ interface IVolunteerService {
    * @throws Error if volunteer retrieval fails
    */
   getVolunteers(): Promise<Array<UserVolunteerDTO>>;
+
+  getCheckInsAndSchedules(volunteerId: string): Promise<Array<CheckInDTO | SchedulingDTO>>;
 
   /**
    * Update a volunteer by volunteerId.

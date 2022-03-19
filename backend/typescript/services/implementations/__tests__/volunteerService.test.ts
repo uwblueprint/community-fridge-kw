@@ -12,6 +12,22 @@ import {
 } from "../../../testUtils/volunteerService";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
+import ICheckInService from "../../interfaces/checkInService";
+import IDonorService from "../../interfaces/donorService";
+import CheckInService from "../checkInService";
+import DonorService from "../donorService";
+import ISchedulingService from "../../interfaces/schedulingService";
+import SchedulingService from "../schedulingService";
+import IEmailService from "../../interfaces/emailService";
+import nodemailerConfig from "../../../nodemailer.config";
+import EmailService from "../emailService";
+import Donor from "../../../models/donor.model";
+import { testDonorsDb } from "../../../testUtils/schedulingService";
+
+const emailService: IEmailService = new EmailService(nodemailerConfig);
+const donorService: IDonorService = new DonorService();
+const checkInService: ICheckInService = new CheckInService();
+const schedulingService: ISchedulingService = new SchedulingService(emailService, donorService);
 
 jest.mock("firebase-admin", () => {
   const auth = jest.fn().mockReturnValue({
@@ -25,7 +41,14 @@ describe("Testing VolunteerService Functions", () => {
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
-    volunteerService = new VolunteerService();
+    const emailService: IEmailService = new EmailService(nodemailerConfig);
+    const donorService: IDonorService = new DonorService();
+    const checkInService: ICheckInService = new CheckInService();
+    const schedulingService: ISchedulingService = new SchedulingService(emailService, donorService);
+    volunteerService = new VolunteerService(
+      checkInService,
+      schedulingService,
+    );
 
     // translate frontend camel case into backend snake case format
     const users = testUsers.map((user) => {
@@ -46,6 +69,7 @@ describe("Testing VolunteerService Functions", () => {
 
     // bulk create all users and volunteers using the user and volunteer models
     await User.bulkCreate(users);
+    await Donor.bulkCreate(testDonorsDb);
     await Volunteer.bulkCreate(volunteers);
   });
 

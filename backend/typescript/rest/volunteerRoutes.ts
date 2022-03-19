@@ -1,12 +1,28 @@
 import { Router } from "express";
 import volunteerDtoValidator from "../middlewares/validators/volunteerValidator";
+import nodemailerConfig from "../nodemailer.config";
+import CheckInService from "../services/implementations/checkInService";
+import DonorService from "../services/implementations/donorService";
+import EmailService from "../services/implementations/emailService";
+import SchedulingService from "../services/implementations/schedulingService";
 import VolunteerService from "../services/implementations/volunteerService";
+import ICheckInService from "../services/interfaces/checkInService";
+import IDonorService from "../services/interfaces/donorService";
+import IEmailService from "../services/interfaces/emailService";
+import ISchedulingService from "../services/interfaces/schedulingService";
 import IVolunteerService from "../services/interfaces/volunteerService";
 import getErrorMessage from "../utilities/errorMessageUtil";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const volunteerRouter: Router = Router();
-const volunteerService: IVolunteerService = new VolunteerService();
+const emailService: IEmailService = new EmailService(nodemailerConfig);
+const donorService: IDonorService = new DonorService();
+const checkInService: ICheckInService = new CheckInService();
+const schedulingService: ISchedulingService = new SchedulingService(emailService, donorService);
+const volunteerService: IVolunteerService = new VolunteerService(
+  checkInService,
+  schedulingService
+);
 
 /* Get all volunteers and optionally filter by:
   - volunteerId, through URI (ex. /volunteer/1)
@@ -66,6 +82,19 @@ volunteerRouter.get("/:volunteerId?", async (req, res) => {
     try {
       const volunteer = await volunteerService.getVolunteerByUserId(userId);
       res.status(200).json(volunteer);
+    } catch (error) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+});
+
+volunteerRouter.get("/shifts/:volunteerId?", async (req, res) => {
+  const { volunteerId } = req.params;
+
+  if (volunteerId) {
+    try {
+      const shifts = await volunteerService.getCheckInsAndSchedules(volunteerId as string);
+      res.status(200).json(shifts);
     } catch (error) {
       res.status(500).json({ error: getErrorMessage(error) });
     }

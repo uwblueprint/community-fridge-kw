@@ -21,14 +21,10 @@ const Logger = logger(__filename);
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
 
-  volunteerService: IVolunteerService | null;
-
   constructor(
-    emailService: IEmailService | null = null,
-    volunteerService: IVolunteerService | null = null,
+    emailService: IEmailService | null = null
   ) {
     this.emailService = emailService;
-    this.volunteerService = volunteerService;
   }
 
   async createCheckIn(checkIn: CreateCheckInDTO): Promise<Array<CheckInDTO>> {

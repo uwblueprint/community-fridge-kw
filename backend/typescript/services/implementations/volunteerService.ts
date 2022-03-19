@@ -1,17 +1,33 @@
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
 import {
+  CheckInDTO,
+  SchedulingDTO,
   UpdateVolunteerDTO,
   UserVolunteerDTO,
   VolunteerDTO,
+  ShiftType
 } from "../../types";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import logger from "../../utilities/logger";
+import ICheckInService from "../interfaces/checkInService";
+import ISchedulingService from "../interfaces/schedulingService";
 import IVolunteerService from "../interfaces/volunteerService";
 
 const Logger = logger(__filename);
 
 class VolunteerService implements IVolunteerService {
+  checkInService: ICheckInService;
+
+  schedulingService: ISchedulingService;
+
+  constructor(
+    checkInService: ICheckInService,
+    schedulingService: ISchedulingService
+  ) {
+    this.checkInService = checkInService;
+    this.schedulingService = schedulingService;
+  }
   /* eslint-disable class-methods-use-this */
 
   async createVolunteer(
@@ -146,6 +162,17 @@ class VolunteerService implements IVolunteerService {
     }
 
     return userVolunteerDTOs;
+  }
+
+  async getCheckInsAndSchedules(volunteerId: string): Promise<(CheckInDTO | SchedulingDTO)[]> {
+      const checkIns = await (await this.checkInService.getCheckInsByVolunteerId(volunteerId)).map(checkIn => ({ ...checkIn, type: ShiftType.CHECKIN }));
+      const schedulings = await (await this.schedulingService.getSchedulingsByVolunteerId(volunteerId)).map(scheduling => ({ ...scheduling, type: ShiftType.SCHEDULING }));
+      let shifts : (CheckInDTO | SchedulingDTO)[] = [...checkIns, ...schedulings].sort(function(a, b) {
+        const date1: Date = 'startDate' in a ? new Date(a.startDate) : new Date(a.volunteerTime!)
+        const date2: Date = 'startDate' in b ? new Date(b.startDate) : new Date(b.volunteerTime!)
+        return date1.valueOf() - date2.valueOf();
+      });
+      return shifts;
   }
 
   async updateVolunteerById(

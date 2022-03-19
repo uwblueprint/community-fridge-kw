@@ -16,12 +16,10 @@ import VolunteerService from "../services/implementations/volunteerService";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const emailService: IEmailService = new EmailService(nodemailerConfig);
-const volunteerService: IVolunteerService = new VolunteerService();
 
 const checkInRouter: Router = Router();
 const checkInService: ICheckInService = new CheckInService(
-  emailService,
-  volunteerService,
+  emailService
 );
 
 /* Create a check in instance */
