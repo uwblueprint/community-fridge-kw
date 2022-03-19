@@ -28,7 +28,7 @@ const getCheckInsByVolunteerId = async (
   volunteerId: string,
 ): Promise<CheckIn[]> => {
   try {
-    const url = `/checkin/volunteers?volunteerId=${volunteerId}`;
+    const url = `/checkin/?volunteerId=${volunteerId}`;
     const { data } = await baseAPIClient.get(url, {
       headers: { Authorization: BEARER_TOKEN },
     });
