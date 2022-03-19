@@ -56,9 +56,9 @@ const ViewDonations = ({
       >
         <Text
           textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
-          pt="1.4rem"
+          pt="2rem"
         >
-          Upcoming Scheduled Fridge Donations
+          Scheduled donations
         </Text>
         {isMobile ? (
           <HStack py="1.2rem" width="inherit" alignItems="center">

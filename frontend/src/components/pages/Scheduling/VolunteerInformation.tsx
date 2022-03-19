@@ -57,7 +57,7 @@ const VolunteerInformation = ({
 
   const volunteerNeededValues = ["Yes", "No"];
   const volunteerAssistanceValues = [
-    "Pick up (food rescue)",
+    "Pickup (off-site)",
     "Unloading (on-site)",
   ];
   const volunteerRequiredHelperText =
@@ -179,7 +179,7 @@ const VolunteerInformation = ({
 
     if (!res) {
       toast({
-        title: "Volunteer Information could not be updated. Please try again",
+        title: "Volunteer information could not be updated. Please try again",
         status: "error",
         duration: 7000,
         isClosable: true,
@@ -187,7 +187,7 @@ const VolunteerInformation = ({
       return;
     }
     toast({
-      title: "Volunteer Information updated successfully",
+      title: "Volunteer information updated successfully",
       status: "success",
       duration: 7000,
       isClosable: true,
@@ -212,7 +212,7 @@ const VolunteerInformation = ({
         </>
       )}
       <Text textStyle="mobileHeader2" mt="2em">
-        Volunteer Information
+        Volunteer information
       </Text>
       <Box
         p="2em"
@@ -222,7 +222,7 @@ const VolunteerInformation = ({
         borderRadius="5px"
         maxWidth="500px"
       >
-        <Text textStyle="mobileHeader4">Proposed Drop-off Time</Text>
+        <Text textStyle="mobileHeader4">Proposed drop-off time</Text>
         <Text textStyle="mobileBody">
           {format(new Date(startTime), "EEEE, MMMM d")}
         </Text>
@@ -313,7 +313,7 @@ const VolunteerInformation = ({
           <Textarea
             value={notes}
             onChange={(e) => handleChange(e.target.value, "notes")}
-            placeholder="Add any information about pick-up, drop-off, or any comments for Admin."
+            placeholder="Add any information about pick-up, drop-off, or any comments for admin."
             maxWidth="740px"
           />
         </FormControl>

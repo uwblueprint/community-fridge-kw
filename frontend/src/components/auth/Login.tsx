@@ -12,18 +12,47 @@ import { useForm } from "react-hooks-helper";
 import { Link, Redirect } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
+import volunteerAPIClient from "../../APIClients/VolunteerAPIClient";
+import { AUTHENTICATED_VOLUNTEER_CONTEXT_KEY } from "../../constants/AuthConstants";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
+import VolunteerContextDispatcher from "../../contexts/VolunteerContextDispatcher";
 import { AuthenticatedUser, Role } from "../../types/AuthTypes";
 import HeaderLabel from "../common/HeaderLabel";
 
 const Login = (): React.ReactElement => {
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const dispatchVolunteerUpdate = useContext(VolunteerContextDispatcher);
   const [{ email, password }, setValue] = useForm({ email: "", password: "" });
   const [
     isIncorrectLoginCredentails,
     setIsIncorrectLoginCredentails,
   ] = React.useState(false);
+
+  const setVolunteerContext = async function getVolunteerUser(
+    user: AuthenticatedUser,
+  ) {
+    if (user && user.role === Role.VOLUNTEER) {
+      const { id, status } = await volunteerAPIClient.getVolunteerByUserId(
+        user.id,
+      );
+      dispatchVolunteerUpdate({
+        type: "SET_VOLUNTEER_ID",
+        value: id,
+      });
+      dispatchVolunteerUpdate({
+        type: "SET_VOLUNTEER_STATUS",
+        value: status,
+      });
+      localStorage.setItem(
+        AUTHENTICATED_VOLUNTEER_CONTEXT_KEY,
+        JSON.stringify({
+          volunteerId: id,
+          volunteerStatus: status,
+        }),
+      );
+    }
+  };
 
   const onLogInClick = async () => {
     const user: AuthenticatedUser = await authAPIClient.login(email, password);
@@ -31,13 +60,14 @@ const Login = (): React.ReactElement => {
       setIsIncorrectLoginCredentails(true);
     }
     setAuthenticatedUser(user);
+    setVolunteerContext(user);
   };
 
   if (authenticatedUser) {
-    return authenticatedUser.role === Role.DONOR ? (
-      <Redirect to={Routes.DASHBOARD_PAGE} />
+    return authenticatedUser.role === Role.ADMIN ? (
+      <Redirect to={Routes.ADMIN_VIEW_DONATIONS} />
     ) : (
-      <Redirect to={Routes.VIEW_DONATIONS} />
+      <Redirect to={Routes.DASHBOARD_PAGE} />
     );
   }
 
