@@ -2,9 +2,6 @@ import nodemailer, { Transporter } from "nodemailer";
 import IEmailService from "../interfaces/emailService";
 import { NodemailerConfig } from "../../types";
 import logger from "../../utilities/logger";
-import Schedule from "../../models/scheduling.model";
-import User from "../../models/user.model";
-import { createReminderEmailContent } from "../../utilities/emailUtils";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 
 const Logger = logger(__filename);
