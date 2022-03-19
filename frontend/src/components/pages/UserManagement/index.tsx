@@ -2,10 +2,12 @@ import { DeleteIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   Button,
   Container,
+  HStack,
   IconButton,
   Input,
   InputGroup,
   InputLeftElement,
+  Select,
   Table,
   Tbody,
   Td,
@@ -17,6 +19,7 @@ import {
 import React from "react";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import UserAPIClient from "../../../APIClients/UserAPIClient";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { Role, Status } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
@@ -28,6 +31,23 @@ const UserManagementPage = (): JSX.Element => {
   const [volunteers, setVolunteers] = React.useState([] as VolunteerResponse[]);
   const [users, setUsers] = React.useState([] as UserMgmtTableRecord[]); // both donors and volunteers
   const [search, setSearch] = React.useState("");
+  const [selectedFilter, setSelectedFilter] = React.useState("all");
+  const [dataChanged, setDataChanged] = React.useState<0 | 1>(0);
+
+  const filterOptions = [
+    {
+      value: "all",
+      label: "All accounts",
+    },
+    {
+      value: "volunteers",
+      label: "Volunteers",
+    },
+    {
+      value: "donors",
+      label: "Donors",
+    },
+  ];
 
   // Merge donors and volunteers into one list of type UserMgmtTableRecord
   const buildTableUsers = (): UserMgmtTableRecord[] => {
@@ -35,6 +55,8 @@ const UserManagementPage = (): JSX.Element => {
 
     volunteers.forEach(function (volunteer) {
       mergedUsers.push({
+        userId: volunteer.userId,
+        id: volunteer.id,
         pointOfContact: `${volunteer.firstName} ${volunteer.lastName}`,
         company: "",
         email: volunteer.email,
@@ -46,6 +68,8 @@ const UserManagementPage = (): JSX.Element => {
 
     donors.forEach(function (donor) {
       mergedUsers.push({
+        userId: donor.userId,
+        id: donor.id,
         pointOfContact: `${donor.firstName} ${donor.lastName}`,
         company: donor.businessName,
         email: donor.email,
@@ -71,7 +95,7 @@ const UserManagementPage = (): JSX.Element => {
 
     getDonors();
     getVolunteers();
-  }, []);
+  }, [dataChanged]);
 
   // Update users whenever donors or volunteers have a change
   React.useEffect(() => {
@@ -79,7 +103,16 @@ const UserManagementPage = (): JSX.Element => {
   }, [donors, volunteers]);
 
   const tableData = React.useMemo(() => {
-    if (!search) return users;
+    let filteredUsers;
+    if (selectedFilter === "all") filteredUsers = users;
+    else if (selectedFilter === "volunteers")
+      filteredUsers = users.filter(
+        (user) => user.accountType === Role.VOLUNTEER,
+      );
+    else
+      filteredUsers = users.filter((user) => user.accountType === Role.DONOR);
+
+    if (!search) return filteredUsers;
     return users.filter(
       (user) =>
         user.pointOfContact.toLowerCase().includes(search.toLowerCase()) ||
@@ -87,16 +120,28 @@ const UserManagementPage = (): JSX.Element => {
         user.email.toLowerCase().includes(search.toLowerCase()) ||
         user.phoneNumber.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [search, users]);
+  }, [search, selectedFilter, users]);
 
   // Sets volunteer status to Approved
-  const handleApprove = () => {
-    // TODO: Call VolunteerAPIClient and update status
+  const handleApprove = (user: UserMgmtTableRecord) => {
+    const newVolunteerData = { status: Status.APPROVED };
+    const updatedVolunteer = VolunteerAPIClient.updateVolunteerById(
+      user.id,
+      newVolunteerData,
+    );
+    setDataChanged(dataChanged === 0 ? 1 : 0);
+    console.log(dataChanged);
   };
 
   // Deletes selected user
-  const handleDeleteUser = () => {
-    // TODO: Get id of selected user and call UserAPIClient to delete user
+  const handleDeleteUser = (user: UserMgmtTableRecord) => {
+    const updatedUser = UserAPIClient.deleteUserById(user.userId);
+    setDataChanged(dataChanged === 0 ? 1 : 0);
+  };
+
+  // Selects a filter
+  const handleSelectFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFilter(e.target.value.toString());
   };
 
   return (
@@ -104,20 +149,37 @@ const UserManagementPage = (): JSX.Element => {
       <Text mb="40px" textStyle="desktopHeader2">
         User management
       </Text>
-
-      <InputGroup>
-        <InputLeftElement pointerEvents="none">
-          <SearchIcon color="gray.300" />
-        </InputLeftElement>
-        <Input
-          enterKeyHint="enter"
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search for a user"
-        />
-      </InputGroup>
+      <HStack>
+        <InputGroup flex={4}>
+          <InputLeftElement pointerEvents="none">
+            <SearchIcon color="gray.300" />
+          </InputLeftElement>
+          <Input
+            enterKeyHint="enter"
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search for a user"
+            variant="customFilled"
+          />
+        </InputGroup>
+        <Select
+          flex={1}
+          color="hubbard.100"
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            handleSelectFilter(e);
+          }}
+        >
+          {filterOptions.map((option, key) => {
+            return (
+              <option key={key} value={option.value}>
+                {option.label}
+              </option>
+            );
+          })}
+        </Select>
+      </HStack>
 
       <Table colorScheme="blackAlpha" mt="30px">
-        <Thead>
+        <Thead background="squash.100">
           <Tr>
             <Th color="black.100">Point of contact</Th>
             <Th color="black.100">Company</Th>
@@ -139,7 +201,7 @@ const UserManagementPage = (): JSX.Element => {
               <Td>
                 {user.accountType === Role.VOLUNTEER &&
                 user.approvalStatus !== Status.APPROVED ? (
-                  <Button variant="approve" onClick={handleApprove}>
+                  <Button variant="approve" onClick={() => handleApprove(user)}>
                     Approve
                   </Button>
                 ) : (
@@ -151,7 +213,7 @@ const UserManagementPage = (): JSX.Element => {
                   backgroundColor="transparent"
                   aria-label="Delete user"
                   icon={<DeleteIcon color="hubbard.100" />}
-                  onClick={handleDeleteUser}
+                  onClick={() => handleDeleteUser(user)}
                 />
               </Td>
             </Tr>

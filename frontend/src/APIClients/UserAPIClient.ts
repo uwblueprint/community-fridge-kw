@@ -60,4 +60,20 @@ const updateUserById = async (
   }
 };
 
-export default { getUserById, updateUserById };
+const deleteUserById = async (id: string): Promise<boolean> => {
+  const bearerToken = `Bearer ${getLocalStorageObjProperty(
+    AUTHENTICATED_USER_KEY,
+    "accessToken",
+  )}`;
+
+  try {
+    await baseAPIClient.delete(`/users?userId=${id}`, {
+      headers: { Authorization: bearerToken },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export default { getUserById, updateUserById, deleteUserById };
