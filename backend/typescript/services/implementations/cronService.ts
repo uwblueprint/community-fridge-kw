@@ -126,7 +126,7 @@ class CronService implements ICronService {
     const tomorrow: Date = dayjs().add(1, "days").toDate();
 
     try {
-      cron.schedule("0 0 0 * *", async () => {
+      cron.schedule("0 0 0 * * *", async () => {
         const schedules: Array<Schedule> = await Schedule.findAll({
           where: {
             start_time: {
