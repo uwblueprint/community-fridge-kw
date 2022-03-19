@@ -24,7 +24,7 @@
     "cors": "^2.8.5",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
+    "eslint-plugin-unused-imports": "^1.1.5",
     "express": "^4.17.1",
     "firebase-admin": "^9.5.0",
     "lodash": "^4.17.21",
