@@ -5,6 +5,7 @@ import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
 import PendingPage from "./PendingPage";
+import VolunteerShifts from "./VolunteerShifts";
 
 const VolunteerShiftsPage = () => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
@@ -24,6 +25,7 @@ const VolunteerShiftsPage = () => {
   return (
     <Container centerContent variant="responsiveContainer">
       {volunteerStatus === Status.PENDING && <PendingPage />}
+      <VolunteerShifts />
     </Container>
   );
 };
