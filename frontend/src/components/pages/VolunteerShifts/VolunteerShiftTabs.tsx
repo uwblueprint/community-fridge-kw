@@ -47,7 +47,7 @@ const VolunteerShiftsTabs = (): JSX.Element => {
   }, []);
 
   return (
-    <Tabs variant="soft-rounded" colorScheme="gray" defaultIndex={activeTab}>
+    <Tabs defaultIndex={activeTab} variant="soft-rounded" colorScheme="gray">
       <TabList>
         <NavLink to={{ hash: "checkin" }}>
           <Tab>Fridge check-in</Tab>{" "}
@@ -60,7 +60,6 @@ const VolunteerShiftsTabs = (): JSX.Element => {
         <TabPanel id="checkin">
           <CheckIns />
         </TabPanel>
-
         <TabPanel id="rescue">
           <FoodRescues />
         </TabPanel>
