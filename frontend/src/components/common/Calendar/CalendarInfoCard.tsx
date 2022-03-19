@@ -92,7 +92,7 @@ const CalendarInfoCard = ({
               color={frequencyColorScheme}
             >
               {frequency === DonationFrequency.ONE_TIME
-                ? "One Time"
+                ? "One time"
                 : frequency}
             </Box>
             {frequency === DonationFrequency.ONE_TIME

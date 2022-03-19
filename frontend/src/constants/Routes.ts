@@ -12,7 +12,7 @@ export const DASHBOARD_PAGE = "/dashboard";
 
 export const DASHBOARD_SCHEDULE_EDIT_PAGE = "/dashboard/:id";
 
-export const VIEW_DONATIONS = "/view-donations";
+export const ADMIN_VIEW_DONATIONS = "/admin/view-donations";
 
 export const ACCOUNT_PAGE = "/account";
 
@@ -23,3 +23,5 @@ export const USER_MANAGEMENT_PAGE = "/user-management";
 export const VOLUNTEER_SHIFTS_PAGE = "/volunteer-shifts";
 
 export const FORGET_PASSWORD = "/forget-password";
+
+export const ADMIN_CHECK_INS = "/admin/check-ins";

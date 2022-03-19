@@ -76,12 +76,12 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
         {volunteerNeeded ? (
           <HStack minWidth="225px" pb={["12px", "0px"]}>
             <CheckIcon color={frequencyColorScheme} />
-            <Text textStyle="mobileBody">Volunteers Requested</Text>
+            <Text textStyle="mobileBody">Volunteers requested</Text>
           </HStack>
         ) : (
           <HStack minWidth="225px" pb={["12px", "0px"]}>
             <CloseIcon w={3} color={frequencyColorScheme} mr="4px" />
-            <Text textStyle="mobileBody">No Volunteers Needed</Text>
+            <Text textStyle="mobileBody">No volunteers needed</Text>
           </HStack>
         )}
         <HStack>
@@ -93,7 +93,7 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
               color={frequencyColorScheme}
             >
               {frequency === DonationFrequency.ONE_TIME
-                ? "One Time"
+                ? "One time"
                 : frequency}
             </Box>
             {frequency === DonationFrequency.ONE_TIME

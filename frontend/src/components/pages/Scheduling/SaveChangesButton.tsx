@@ -12,13 +12,13 @@ export default function SaveButton({ onSaveClick }: ButtonProps) {
       {isDesktop ? (
         <Flex justify="flex-end">
           <Button onClick={onSaveClick} variant="navigation">
-            Save Changes
+            Save changes
           </Button>
         </Flex>
       ) : (
         <Flex justifyContent="center">
           <Button onClick={onSaveClick} variant="navigation">
-            Save Changes
+            Save changes
           </Button>
         </Flex>
       )}

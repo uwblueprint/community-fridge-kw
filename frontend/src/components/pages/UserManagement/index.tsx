@@ -102,7 +102,7 @@ const UserManagementPage = (): JSX.Element => {
   return (
     <Container variant="baseContainer">
       <Text mb="40px" textStyle="desktopHeader2">
-        User Management
+        User management
       </Text>
 
       <InputGroup>
