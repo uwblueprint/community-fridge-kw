@@ -3,7 +3,14 @@ import IUserService from "../interfaces/userService";
 import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
 import logger from "../../utilities/logger";
 import User from "../../models/user.model";
+import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import Donor from "../../models/donor.model";
+import Volunteer from "../../models/volunteer.model";
+import CheckIn from "../../models/checkIn.model";
+import DonorService from "./donorService";
+import CheckInService from "./checkInService";
+import VolunteerService from "./volunteerService";
 
 const Logger = logger(__filename);
 
@@ -279,10 +286,72 @@ class UserService implements IUserService {
     try {
       // Sequelize doesn't provide a way to atomically find, delete, and return deleted row
       const deletedUser: User | null = await User.findByPk(Number(userId));
-
+      let deletedDonor: Donor | null = null;
+      let deletedVolunteer: Volunteer | null = null;
       if (!deletedUser) {
         throw new Error(`userid ${userId} not found.`);
       }
+      if (deletedUser.role === Role.DONOR) {
+        deletedDonor = await Donor.findOne({
+          where: {
+            user_id: Number(userId)
+          }
+        });
+
+        if (!deletedDonor) {
+          throw new Error(`Donor with userid ${userId} not found.`);
+        }
+
+        await Scheduling.destroy({
+          where: { donor_id: deletedDonor.id },
+        });
+
+        const donorDestroyed: number = await Donor.destroy({
+          where: { id: deletedDonor.id },
+        });
+  
+        if (donorDestroyed <= 0) {
+          throw new Error(`Donor with donorId ${deletedDonor.id} was not deleted in Postgres.`);
+        }
+      } else if (deletedUser.role === Role.VOLUNTEER) {
+        deletedVolunteer = await Volunteer.findOne({
+          where: {
+            user_id: Number(userId)
+          }
+        });
+
+        if (!deletedVolunteer) {
+          throw new Error(`Volunteer with userid ${userId} not found.`);
+        }
+
+        await Scheduling.update(
+          {
+            volunteer_id: null,
+          },
+          {
+            where: { volunteer_id: deletedVolunteer.id }
+          },
+        );
+
+        await CheckIn.update(
+          {
+            volunteer_id: null,
+          },
+          {
+            where: { volunteer_id: deletedVolunteer.id }
+          },
+        );
+
+        const volunteerDestroyed: number = await Volunteer.destroy({
+          where: { id: deletedVolunteer.id },
+        });
+  
+        if (volunteerDestroyed <= 0) {
+          throw new Error(`Volunteer with volunteerId ${deletedVolunteer.id} was not deleted in Postgres.`);
+        }
+
+      }
+
 
       const numDestroyed: number = await User.destroy({
         where: { id: userId },
@@ -305,6 +374,19 @@ class UserService implements IUserService {
             role: deletedUser.role,
             phone_number: deletedUser.phone_number,
           });
+          if (deletedUser.role === Role.DONOR && deletedDonor) {
+            await Donor.create({
+              user_id: deletedUser.id,
+              facebook_link: deletedDonor.facebook_link,
+              instagram_link: deletedDonor.instagram_link,
+              business_name: deletedDonor.business_name,
+            });
+          } else if (deletedUser.role === Role.VOLUNTEER && deletedVolunteer) {
+            await Volunteer.create({
+              user_id: deletedUser.id,
+            });
+          }
+          
         } catch (postgresError: unknown) {
           const errorMessage = [
             "Failed to rollback Postgres user deletion after Firebase user deletion failure. Reason =",
