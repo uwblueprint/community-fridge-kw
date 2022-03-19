@@ -1,21 +1,33 @@
-import { Box, Button, Container, Flex, Stack, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Stack,
+  StackDivider,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
-import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { useHistory } from "react-router-dom";
 
+import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import DropoffCard from "../Dashboard/components/DropoffCard";
+import VolunteerShiftCard from "../Dashboard/components/VolunteerShiftCard";
 
 const ScheduledVolunteerShiftsPage = () => {
   const { authenticatedUser } = useContext(AuthContext);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
   const history = useHistory();
 
   useEffect(() => {
-    const getSchedules = async () => {
+    const getShifts = async () => {
       const volunteer = await VolunteerAPIClient.getVolunteerByUserId(
         authenticatedUser!.id,
       );
@@ -23,11 +35,15 @@ const ScheduledVolunteerShiftsPage = () => {
       const scheduleResponse = await SchedulingAPIClient.getScheduleByVolunteerId(
         volunteer.id,
       );
+      const checkInResponse = await CheckInAPIClient.getCheckInsByVolunteerId(
+        volunteer.id,
+      );
 
       setSchedules(scheduleResponse);
+      setCheckIns(checkInResponse);
     };
 
-    getSchedules();
+    getShifts();
   }, [authenticatedUser]);
 
   return (
@@ -45,24 +61,26 @@ const ScheduledVolunteerShiftsPage = () => {
           float="right"
           mt="1.5rem"
           size="lg"
-          width={{ lg: "30%", base: "100%" }}
+          width={{ lg: "40%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.SCHEDULING_PAGE)}
         >
           Volunteer for a shift
         </Button>
       </Stack>
-      <Box
-        display={{ lg: "flex" }}
-        flexDirection="row"
-        flexWrap="wrap"
+      <VStack
+        divider={<StackDivider borderColor="gray.200" />}
         marginTop={["60px", "70px"]}
       >
-        {schedules.length > 0 ? (
+        {!!schedules.length &&
           schedules.map((scheduleObject: Schedule, id) => (
-            <DropoffCard key={id} schedule={scheduleObject!} />
-          ))
-        ) : (
+            <VolunteerShiftCard key={id} schedule={scheduleObject!} />
+          ))}
+        {!!checkIns.length &&
+          checkIns.map((checkInObject: CheckIn, id) => (
+            <VolunteerShiftCard key={id} checkIn={checkInObject!} />
+          ))}
+        {!schedules.length && !checkIns.length && (
           <Flex paddingTop="1.5rem">
             <Box
               display={{ lg: "flex" }}
@@ -88,7 +106,7 @@ const ScheduledVolunteerShiftsPage = () => {
             </Box>
           </Flex>
         )}
-      </Box>
+      </VStack>
     </Container>
   );
 };
