@@ -1,3 +1,5 @@
+import CheckIn from "../../models/checkIn.model";
+import Scheduling from "../../models/scheduling.model";
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
 import {
@@ -204,12 +206,47 @@ class VolunteerService implements IVolunteerService {
 
   async deleteVolunteerById(id: string): Promise<void> {
     try {
-      const deletedRole: Volunteer | null = await Volunteer.findByPk(
+      const deletedVolunteer: Volunteer | null = await Volunteer.findByPk(
         Number(id),
       );
 
-      if (!deletedRole) {
+      if (!deletedVolunteer) {
         throw new Error(`id ${id} not found.`);
+      }
+      try {
+        await Scheduling.update(
+          {
+            volunteer_id: null,
+          },
+          {
+            where: { volunteer_id: deletedVolunteer.id },
+          },
+        );
+      } catch (error) {
+        Logger.error(
+          `Failed to update schedules volunteer id. Reason = ${getErrorMessage(
+            error,
+          )}`,
+        );
+        throw error;
+      }
+
+      try {
+        await CheckIn.update(
+          {
+            volunteer_id: null,
+          },
+          {
+            where: { volunteer_id: deletedVolunteer.id },
+          },
+        );
+      } catch (error) {
+        Logger.error(
+          `Failed to update checkins volunteer id. Reason = ${getErrorMessage(
+            error,
+          )}`,
+        );
+        throw error;
       }
 
       const numDestroyed: number = await Volunteer.destroy({

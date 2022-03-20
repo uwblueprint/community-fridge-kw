@@ -8,8 +8,9 @@ import getErrorMessage from "../../utilities/errorMessageUtil";
 import Donor from "../../models/donor.model";
 import Volunteer from "../../models/volunteer.model";
 import CheckIn from "../../models/checkIn.model";
+import IDonorService from "../interfaces/donorService";
 import DonorService from "./donorService";
-import CheckInService from "./checkInService";
+import IVolunteerService from "../interfaces/volunteerService";
 import VolunteerService from "./volunteerService";
 
 const Logger = logger(__filename);
@@ -283,6 +284,8 @@ class UserService implements IUserService {
   }
 
   async deleteUserById(userId: string): Promise<void> {
+    const donorService: IDonorService = new DonorService();
+    const volunteerService: IVolunteerService = new VolunteerService();
     try {
       // Sequelize doesn't provide a way to atomically find, delete, and return deleted row
       const deletedUser: User | null = await User.findByPk(Number(userId));
@@ -301,58 +304,19 @@ class UserService implements IUserService {
         if (!deletedDonor) {
           throw new Error(`Donor with userid ${userId} not found.`);
         }
-
-        await Scheduling.destroy({
-          where: { donor_id: deletedDonor.id },
-        });
-
-        const donorDestroyed: number = await Donor.destroy({
-          where: { id: deletedDonor.id },
-        });
-  
-        if (donorDestroyed <= 0) {
-          throw new Error(`Donor with donorId ${deletedDonor.id} was not deleted in Postgres.`);
-        }
+        donorService.deleteDonorById(deletedDonor.id)
+        
       } else if (deletedUser.role === Role.VOLUNTEER) {
         deletedVolunteer = await Volunteer.findOne({
           where: {
             user_id: Number(userId)
           }
         });
-
         if (!deletedVolunteer) {
           throw new Error(`Volunteer with userid ${userId} not found.`);
-        }
-
-        await Scheduling.update(
-          {
-            volunteer_id: null,
-          },
-          {
-            where: { volunteer_id: deletedVolunteer.id }
-          },
-        );
-
-        await CheckIn.update(
-          {
-            volunteer_id: null,
-          },
-          {
-            where: { volunteer_id: deletedVolunteer.id }
-          },
-        );
-
-        const volunteerDestroyed: number = await Volunteer.destroy({
-          where: { id: deletedVolunteer.id },
-        });
-  
-        if (volunteerDestroyed <= 0) {
-          throw new Error(`Volunteer with volunteerId ${deletedVolunteer.id} was not deleted in Postgres.`);
-        }
-
+        }       
+        volunteerService.deleteVolunteerById(deletedVolunteer.id)
       }
-
-
       const numDestroyed: number = await User.destroy({
         where: { id: userId },
       });
