@@ -3,6 +3,7 @@ import { format, parse } from "date-fns";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import DonorAPIClient from "../../../../APIClients/DonorAPIClient";
 import VolunteerAPIClient from "../../../../APIClients/VolunteerAPIClient";
 import { getFrequencyColor } from "../../../../constants/DaysInWeek";
 import * as Routes from "../../../../constants/Routes";
@@ -41,7 +42,15 @@ const DropoffCardSubInformation = ({
   </VStack>
 );
 
-const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
+const DropoffCard = ({
+  schedule,
+  isDonorView,
+  isPublicView = false,
+}: {
+  schedule: Schedule;
+  isDonorView: boolean;
+  isPublicView?: boolean;
+}): JSX.Element => {
   const {
     startTime,
     endTime,
@@ -51,10 +60,13 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
     isPickup,
     volunteerTime,
     volunteerId,
+    donorId,
+    categories,
   } = schedule;
   const history = useHistory();
   const frequencyColorScheme = getFrequencyColor(frequency);
   const [volunteerAssigned, setVolunteerAssigned] = React.useState("");
+  const [donorName, setDonorName] = React.useState("");
   const startDateLocal = new Date(startTime);
   const startTimeLocal = format(new Date(startTime), "h:mm aa");
   const endTimeLocal = format(new Date(endTime), "h:mm aa");
@@ -66,7 +78,15 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
         setVolunteerAssigned(`${response.firstName} ${response.lastName}`);
       }
     };
+
+    const getDonorName = async (dId: string) => {
+      if (dId) {
+        const response = await DonorAPIClient.getDonorById(dId);
+        setDonorName(`${response.businessName}`);
+      }
+    };
     getVolunteerName(String(volunteerId));
+    getDonorName(String(donorId));
   }, []);
 
   return (
@@ -91,15 +111,17 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
             whiteSpace="nowrap"
             pb={["18px", "0px"]}
           >
-            {dateHeadingText(startDateLocal)}
+            {isDonorView ? dateHeadingText(startDateLocal) : donorName}
           </Text>
-          <Text
-            color="h20.100"
-            textDecoration="underline"
-            onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${id}`)}
-          >
-            View Details
-          </Text>
+          {!isPublicView && (
+            <Text
+              color="h20.100"
+              textDecoration="underline"
+              onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${id}`)}
+            >
+              View Details
+            </Text>
+          )}
         </Stack>
         <Stack direction={["column", "row"]} spacing={["20px", "40px"]}>
           <DropoffCardSubInformation
@@ -117,22 +139,34 @@ const DropoffCard = ({ schedule }: { schedule: Schedule }): JSX.Element => {
             frequency={frequency}
             frequencyColorScheme={frequencyColorScheme}
           />
-          <DropoffCardSubInformation
-            description="Volunteer Request Time"
-            value={
-              volunteerTime
-                ? format(parse(volunteerTime, "kk:mm", new Date()), "h:mm aa")
-                : "-"
-            }
-          />
-          <DropoffCardSubInformation
-            description="Assistance Type"
-            value={volunteerNeeded ? getAssistanceType(isPickup!) : "-"}
-          />
-          <DropoffCardSubInformation
-            description="Volunteer Assigned"
-            value={volunteerId ? volunteerAssigned : "-"}
-          />
+          {isPublicView ? (
+            <DropoffCardSubInformation
+              description="Type of Donation Items"
+              value={categories.join(" ; ")}
+            />
+          ) : (
+            <>
+              <DropoffCardSubInformation
+                description="Volunteer Request Time"
+                value={
+                  volunteerTime
+                    ? format(
+                        parse(volunteerTime, "kk:mm", new Date()),
+                        "h:mm aa",
+                      )
+                    : "-"
+                }
+              />
+              <DropoffCardSubInformation
+                description="Assistance Type"
+                value={volunteerNeeded ? getAssistanceType(isPickup!) : "-"}
+              />
+              <DropoffCardSubInformation
+                description="Volunteer Assigned"
+                value={volunteerId ? volunteerAssigned : "-"}
+              />
+            </>
+          )}
         </Stack>
       </VStack>
     </Box>

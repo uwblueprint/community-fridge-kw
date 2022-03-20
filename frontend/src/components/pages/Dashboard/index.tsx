@@ -75,7 +75,7 @@ const Dashboard = (): JSX.Element => {
       >
         {schedules.length > 0 ? (
           schedules.map((scheduleObject: Schedule, id) => (
-            <DropoffCard key={id} schedule={scheduleObject!} />
+            <DropoffCard key={id} schedule={scheduleObject!} isDonorView />
           ))
         ) : (
           <Flex paddingTop="1.5rem">
