@@ -249,6 +249,7 @@ const SelectDateTime = ({
     setRecurringEndDate(selectedDateObj);
 
     const recurringDate = new Date(selectedDateObj);
+    recurringDate.setHours(23,59,59,999); // Need to set it to EOD so that recurring schedules are created properly in the backend
     setForm({
       target: {
         name: "recurringDonationEndDate",

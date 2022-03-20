@@ -525,7 +525,6 @@ class SchedulingService implements ISchedulingService {
         const recurringDonationEndDate = dayjs(
           scheduling.recurringDonationEndDate!,
         );
-        recurringDonationEndDate.startOf("day");
 
         // create first schedule and assign it to newScheduling
         newScheduling = await Scheduling.create({
