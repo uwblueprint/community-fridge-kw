@@ -1,12 +1,6 @@
 import { snakeCase } from "lodash";
 import Scheduling from "../../../models/scheduling.model";
-import {
-  SchedulingDTO,
-  Status,
-  CreateSchedulingDTO,
-  DayPart,
-  Frequency,
-} from "../../../types";
+import { SchedulingDTO, CreateSchedulingDTO } from "../../../types";
 import User from "../../../models/user.model";
 import Donor from "../../../models/donor.model";
 import SchedulingService from "../schedulingService";

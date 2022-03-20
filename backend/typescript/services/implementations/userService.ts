@@ -3,11 +3,9 @@ import IUserService from "../interfaces/userService";
 import { CreateUserDTO, Role, UpdateUserDTO, UserDTO } from "../../types";
 import logger from "../../utilities/logger";
 import User from "../../models/user.model";
-import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import Donor from "../../models/donor.model";
 import Volunteer from "../../models/volunteer.model";
-import CheckIn from "../../models/checkIn.model";
 import IDonorService from "../interfaces/donorService";
 import DonorService from "./donorService";
 import IVolunteerService from "../interfaces/volunteerService";
@@ -297,25 +295,24 @@ class UserService implements IUserService {
       if (deletedUser.role === Role.DONOR) {
         deletedDonor = await Donor.findOne({
           where: {
-            user_id: Number(userId)
-          }
+            user_id: Number(userId),
+          },
         });
 
         if (!deletedDonor) {
           throw new Error(`Donor with userid ${userId} not found.`);
         }
-        donorService.deleteDonorById(deletedDonor.id)
-        
+        donorService.deleteDonorById(deletedDonor.id);
       } else if (deletedUser.role === Role.VOLUNTEER) {
         deletedVolunteer = await Volunteer.findOne({
           where: {
-            user_id: Number(userId)
-          }
+            user_id: Number(userId),
+          },
         });
         if (!deletedVolunteer) {
           throw new Error(`Volunteer with userid ${userId} not found.`);
-        }       
-        volunteerService.deleteVolunteerById(deletedVolunteer.id)
+        }
+        volunteerService.deleteVolunteerById(deletedVolunteer.id);
       }
       const numDestroyed: number = await User.destroy({
         where: { id: userId },
@@ -350,7 +347,6 @@ class UserService implements IUserService {
               user_id: deletedUser.id,
             });
           }
-          
         } catch (postgresError: unknown) {
           const errorMessage = [
             "Failed to rollback Postgres user deletion after Firebase user deletion failure. Reason =",
