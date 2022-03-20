@@ -58,68 +58,70 @@ const App = (): React.ReactElement => {
         <VolunteerContextDispatcher.Provider
           value={dispatchVolunteerContextUpdate}
         >
-         <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
-          <Router>
-            <FeedbackBanner />
-            <Header />
-            <Switch>
-              <Route exact path={Routes.LOGIN_PAGE} component={Login} />
-              <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
-              <Route exact path={Routes.LANDING_PAGE} component={Home} />
-              <PrivateRoute
-                adminOnly
-                exact
-                path={Routes.USER_MANAGEMENT_PAGE}
-                component={UserManagement}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.VOLUNTEER_SHIFTS_PAGE}
-                component={VolunteerShiftsPage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.ACCOUNT_PAGE}
-                component={Account}
-              />
-              <PrivateRoute
-                adminOnly
-                exact
-                path={Routes.ADMIN_VIEW_DONATIONS}
-                component={ViewDonationsPage}
-              />
-              <PrivateRoute
-                adminOnly
-                exact
-                path={Routes.ADMIN_CHECK_INS}
-                component={CheckInsPage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.DASHBOARD_SCHEDULE_EDIT_PAGE}
-                component={EditDashboardSchedulePage}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.DASHBOARD_PAGE}
-                component={Dashboard}
-              />
-              <PrivateRoute
-                exact
-                path={Routes.SCHEDULING_PAGE}
-                component={Scheduling as React.FC}
-              />
-              <Route path={Routes.ACTION} component={Action} />
-              <Route
-                exact
-                path={Routes.FORGET_PASSWORD}
-                component={ResetPassword}
-              />
-              <Route exact path="*" component={NotFound} />
-            </Switch>
-            <Footer />
-          </Router>
-        </AuthContext.Provider>
+          <AuthContext.Provider
+            value={{ authenticatedUser, setAuthenticatedUser }}
+          >
+            <Router>
+              <FeedbackBanner />
+              <Header />
+              <Switch>
+                <Route exact path={Routes.LOGIN_PAGE} component={Login} />
+                <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
+                <Route exact path={Routes.LANDING_PAGE} component={Home} />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.USER_MANAGEMENT_PAGE}
+                  component={UserManagement}
+                />
+                <PrivateRoute
+                  exact
+                  path={Routes.VOLUNTEER_SHIFTS_PAGE}
+                  component={VolunteerShiftsPage}
+                />
+                <PrivateRoute
+                  exact
+                  path={Routes.ACCOUNT_PAGE}
+                  component={Account}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_VIEW_DONATIONS}
+                  component={ViewDonationsPage}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_CHECK_INS}
+                  component={CheckInsPage}
+                />
+                <PrivateRoute
+                  exact
+                  path={Routes.DASHBOARD_SCHEDULE_EDIT_PAGE}
+                  component={EditDashboardSchedulePage}
+                />
+                <PrivateRoute
+                  exact
+                  path={Routes.DASHBOARD_PAGE}
+                  component={Dashboard}
+                />
+                <PrivateRoute
+                  exact
+                  path={Routes.SCHEDULING_PAGE}
+                  component={Scheduling as React.FC}
+                />
+                <Route path={Routes.ACTION} component={Action} />
+                <Route
+                  exact
+                  path={Routes.FORGET_PASSWORD}
+                  component={ResetPassword}
+                />
+                <Route exact path="*" component={NotFound} />
+              </Switch>
+              <Footer />
+            </Router>
+          </AuthContext.Provider>
         </VolunteerContextDispatcher.Provider>
       </VolunteerContext.Provider>
     </ChakraProvider>
