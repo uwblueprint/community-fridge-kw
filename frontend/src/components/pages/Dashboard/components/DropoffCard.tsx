@@ -106,11 +106,7 @@ const DropoffCard = ({
           spacing={["4px", "24px"]}
           mb={["4px", "21px"]}
         >
-          <Text
-            textStyle="mobileHeader4"
-            whiteSpace="nowrap"
-            pb={["18px", "0px"]}
-          >
+          <Text textStyle="mobileHeader4" whiteSpace="nowrap">
             {isDonorView ? dateHeadingText(startDateLocal) : donorName}
           </Text>
           {!isPublicView && (
@@ -118,6 +114,7 @@ const DropoffCard = ({
               color="h20.100"
               textDecoration="underline"
               onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${id}`)}
+              pb={["24px", "0px"]}
             >
               View Details
             </Text>

@@ -22,6 +22,7 @@ const Calendar = ({
         schedules={schedules}
         renderItem={({ schedule }) => (
           <DropoffCard
+            key={JSON.stringify(schedule)}
             schedule={schedule}
             isDonorView={false}
             isPublicView={!isAdminView}
