@@ -18,10 +18,13 @@ const volunteerRouter: Router = Router();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const donorService: IDonorService = new DonorService();
 const checkInService: ICheckInService = new CheckInService();
-const schedulingService: ISchedulingService = new SchedulingService(emailService, donorService);
+const schedulingService: ISchedulingService = new SchedulingService(
+  emailService,
+  donorService,
+);
 const volunteerService: IVolunteerService = new VolunteerService(
   checkInService,
-  schedulingService
+  schedulingService,
 );
 
 /* Get all volunteers and optionally filter by:
@@ -94,10 +97,12 @@ volunteerRouter.get("/shifts/:volunteerId?", async (req, res) => {
     try {
       if (typeof volunteerId !== "string") {
         res
-        .status(400)
-        .json({ error: "volunteerId query parameter must be a string" });
+          .status(400)
+          .json({ error: "volunteerId query parameter must be a string" });
       }
-      const shifts = await volunteerService.getCheckInsAndSchedules(volunteerId);
+      const shifts = await volunteerService.getCheckInsAndSchedules(
+        volunteerId,
+      );
       res.status(200).json(shifts);
     } catch (error) {
       res.status(500).json({ error: getErrorMessage(error) });

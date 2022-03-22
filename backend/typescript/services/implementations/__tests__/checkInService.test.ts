@@ -9,7 +9,7 @@ import {
 } from "../../../testUtils/checkInService";
 import {
   testVolunteersDb,
-  testUsersDb
+  testUsersDb,
 } from "../../../testUtils/schedulingService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";
@@ -145,9 +145,7 @@ describe("pg checkInService", () => {
     const checkInToDelete: CheckIn | null = await CheckIn.findOne();
     expect(checkInToDelete).not.toBeNull();
     if (checkInToDelete) {
-      await checkInService.deleteCheckInById(
-        checkInToDelete.id.toString(),
-      );
+      await checkInService.deleteCheckInById(checkInToDelete.id.toString());
       const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
       checkInsDbAfterDelete.forEach((checkIn: CheckIn, i) => {
         expect(checkIn.id).not.toBe(checkInToDelete.id);
@@ -159,10 +157,7 @@ describe("pg checkInService", () => {
   test("deleteCheckInsByDateRange", async () => {
     const startDate = "2021-09-01T09:00:00.000Z";
     const endDate = "2021-09-07T10:00:00.000Z";
-    await checkInService.deleteCheckInsByDateRange(
-      startDate,
-      endDate,
-    );
+    await checkInService.deleteCheckInsByDateRange(startDate, endDate);
     const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
     const expected = testCheckIns.filter(
       (checkIn) =>

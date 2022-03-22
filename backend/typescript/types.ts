@@ -165,7 +165,7 @@ export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;
 export enum ShiftType {
   CHECKIN = "checkIn",
   SCHEDULING = "scheduling",
-} 
+}
 
 export type DTOTypes = Record<
   string,

@@ -11,16 +11,12 @@ import ICheckInService from "../services/interfaces/checkInService";
 import IEmailService from "../services/interfaces/emailService";
 import nodemailerConfig from "../nodemailer.config";
 import EmailService from "../services/implementations/emailService";
-import IVolunteerService from "../services/interfaces/volunteerService";
-import VolunteerService from "../services/implementations/volunteerService";
 import { sendResponseByMimeType } from "../utilities/responseUtil";
 
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 
 const checkInRouter: Router = Router();
-const checkInService: ICheckInService = new CheckInService(
-  emailService
-);
+const checkInService: ICheckInService = new CheckInService(emailService);
 
 /* Create a check in instance */
 checkInRouter.post("/", createCheckInDtoValidator, async (req, res) => {

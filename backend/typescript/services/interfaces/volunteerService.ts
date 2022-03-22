@@ -38,7 +38,15 @@ interface IVolunteerService {
    */
   getVolunteers(): Promise<Array<UserVolunteerDTO>>;
 
-  getCheckInsAndSchedules(volunteerId: string): Promise<Array<CheckInDTO | SchedulingDTO>>;
+  /**
+   * Get all checkins and schedulings sorted by most recent to least recent
+   * @param volunteerId id associated with volunteer
+   * @returns all checkins and schedulings sorted by most recent to least recent
+   * @throws Error if scheduling or checkin retrieval fails
+   */
+  getCheckInsAndSchedules(
+    volunteerId: string,
+  ): Promise<Array<CheckInDTO | SchedulingDTO>>;
 
   /**
    * Update a volunteer by volunteerId.

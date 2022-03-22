@@ -1,8 +1,5 @@
-import { snakeCase } from "lodash";
 import User from "../../../models/user.model";
-
 import { Status, VolunteerDTO } from "../../../types";
-
 import testSql from "../../../testUtils/testDb";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
@@ -18,24 +15,17 @@ import SchedulingService from "../schedulingService";
 import IEmailService from "../../interfaces/emailService";
 import nodemailerConfig from "../../../nodemailer.config";
 import EmailService from "../emailService";
-import { testCheckIns } from "../../../testUtils/checkInService";
-import {
-  testSchedules,
-  testDonorsDb
-} from "../../../testUtils/schedulingService";
+import { testDonorsDb } from "../../../testUtils/schedulingService";
 import {
   testUsers,
   testVolunteers,
   testUserVolunteers,
   testUpdatedUserVolunteers,
-  expectedCheckInsAndSchedules
+  testSchedules,
+  testCheckIns,
+  expectedCheckInsAndSchedules,
 } from "../../../testUtils/volunteerService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
-
-const emailService: IEmailService = new EmailService(nodemailerConfig);
-const donorService: IDonorService = new DonorService();
-const checkInService: ICheckInService = new CheckInService();
-const schedulingService: ISchedulingService = new SchedulingService(emailService, donorService);
 
 // translate frontend camel case into backend snake case format
 const users = testUsers.map((user) => {
@@ -69,11 +59,11 @@ describe("Testing VolunteerService Functions", () => {
     const emailService: IEmailService = new EmailService(nodemailerConfig);
     const donorService: IDonorService = new DonorService();
     const checkInService: ICheckInService = new CheckInService();
-    const schedulingService: ISchedulingService = new SchedulingService(emailService, donorService);
-    volunteerService = new VolunteerService(
-      checkInService,
-      schedulingService,
+    const schedulingService: ISchedulingService = new SchedulingService(
+      emailService,
+      donorService,
     );
+    volunteerService = new VolunteerService(checkInService, schedulingService);
 
     // bulk create all users and volunteers using the user and volunteer models
     await User.bulkCreate(users);
@@ -125,7 +115,7 @@ describe("Testing VolunteerService Functions", () => {
     const res = await volunteerService.getCheckInsAndSchedules("1");
 
     expect(res).toMatchObject(expectedCheckInsAndSchedules);
-  })
+  });
 
   it("updateVolunteerById", async () => {
     const mockUpdateVolunteerDTO = {

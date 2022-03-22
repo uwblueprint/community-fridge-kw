@@ -6,7 +6,7 @@ import {
   UpdateVolunteerDTO,
   UserVolunteerDTO,
   VolunteerDTO,
-  ShiftType
+  ShiftType,
 } from "../../types";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import logger from "../../utilities/logger";
@@ -23,7 +23,7 @@ class VolunteerService implements IVolunteerService {
 
   constructor(
     checkInService: ICheckInService,
-    schedulingService: ISchedulingService
+    schedulingService: ISchedulingService,
   ) {
     this.checkInService = checkInService;
     this.schedulingService = schedulingService;
@@ -164,15 +164,23 @@ class VolunteerService implements IVolunteerService {
     return userVolunteerDTOs;
   }
 
-  async getCheckInsAndSchedules(volunteerId: string): Promise<(CheckInDTO | SchedulingDTO)[]> {
-      const checkIns = await (await this.checkInService.getCheckInsByVolunteerId(volunteerId)).map(checkIn => ({ ...checkIn, type: ShiftType.CHECKIN }));
-      const schedulings = await (await this.schedulingService.getSchedulingsByVolunteerId(volunteerId)).map(scheduling => ({ ...scheduling, type: ShiftType.SCHEDULING }));
-      const shifts = [...checkIns, ...schedulings].sort((a, b) => {
-        const date1: Date = 'startDate' in a ? new Date(a.startDate) : new Date(a.startTime)
-        const date2: Date = 'startDate' in b ? new Date(b.startDate) : new Date(b.startTime)
-        return date2.valueOf() - date1.valueOf();
-      });
-      return shifts;
+  async getCheckInsAndSchedules(
+    volunteerId: string,
+  ): Promise<(CheckInDTO | SchedulingDTO)[]> {
+    const checkIns = await (
+      await this.checkInService.getCheckInsByVolunteerId(volunteerId)
+    ).map((checkIn) => ({ ...checkIn, type: ShiftType.CHECKIN }));
+    const schedulings = await (
+      await this.schedulingService.getSchedulingsByVolunteerId(volunteerId)
+    ).map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
+    const shifts = [...checkIns, ...schedulings].sort((a, b) => {
+      const date1: Date =
+        "startDate" in a ? new Date(a.startDate) : new Date(a.startTime);
+      const date2: Date =
+        "startDate" in b ? new Date(b.startDate) : new Date(b.startTime);
+      return date2.valueOf() - date1.valueOf();
+    });
+    return shifts;
   }
 
   async updateVolunteerById(

@@ -6,8 +6,8 @@ export const testCheckIns = [
   },
   {
     volunteerId: "1",
-    startDate: new Date("2022-09-05T09:00:00.000Z"),
-    endDate: new Date("2022-09-05T10:00:00.000Z"),
+    startDate: new Date("2022-02-28T09:00:00.000Z"),
+    endDate: new Date("2022-02-28T10:00:00.000Z"),
     notes: "test with volunteer 1",
   },
   {

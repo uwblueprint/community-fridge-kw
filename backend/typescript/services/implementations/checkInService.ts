@@ -13,7 +13,6 @@ import logger from "../../utilities/logger";
 import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
-import IVolunteerService from "../interfaces/volunteerService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
 
 const Logger = logger(__filename);
@@ -21,9 +20,7 @@ const Logger = logger(__filename);
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
 
-  constructor(
-    emailService: IEmailService | null = null
-  ) {
+  constructor(emailService: IEmailService | null = null) {
     this.emailService = emailService;
   }
 

@@ -29,10 +29,13 @@ const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
 const donorService: IDonorService = new DonorService();
 const checkInService: ICheckInService = new CheckInService();
-const schedulingService: ISchedulingService = new SchedulingService(emailService, donorService);
+const schedulingService: ISchedulingService = new SchedulingService(
+  emailService,
+  donorService,
+);
 const volunteerService: IVolunteerService = new VolunteerService(
   checkInService,
-  schedulingService
+  schedulingService,
 );
 
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
