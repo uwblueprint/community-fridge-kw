@@ -1,5 +1,4 @@
 import { snakeCase } from "lodash";
-import Scheduling from "../../../models/scheduling.model";
 import {
   SchedulingDTO,
   Status,
@@ -7,10 +6,11 @@ import {
   DayPart,
   Frequency,
 } from "../../../types";
+import Scheduling from "../../../models/scheduling.model";
 import User from "../../../models/user.model";
 import Donor from "../../../models/donor.model";
-import SchedulingService from "../schedulingService";
 import Volunteer from "../../../models/volunteer.model";
+import SchedulingService from "../schedulingService";
 
 import testSql from "../../../testUtils/testDb";
 import {
@@ -29,16 +29,10 @@ import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";
 import IDonorService from "../../interfaces/donorService";
 import DonorService from "../donorService";
+import { toSnakeCase } from "../../../utilities/servicesUtils";
 
 const schedules = testSchedules.map((schedule) => {
-  const scheduleSnakeCase: Record<
-    string,
-    string | string[] | boolean | number | Date | undefined | null
-  > = {};
-  Object.entries(schedule).forEach(([key, value]) => {
-    scheduleSnakeCase[snakeCase(key)] = value;
-  });
-  return scheduleSnakeCase;
+  return toSnakeCase(schedule);
 });
 
 jest.mock("nodemailer", () => {

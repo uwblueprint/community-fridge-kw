@@ -5,16 +5,16 @@ import Volunteer from "../../../models/volunteer.model";
 import testSql from "../../../testUtils/testDb";
 import {
   testCheckIns,
-  testVolunteersDb,
   testUpdatedCheckIns,
-  testUsersDb,
 } from "../../../testUtils/checkInService";
+import {
+  testVolunteersDb,
+  testUsersDb
+} from "../../../testUtils/schedulingService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";
 import CheckInService from "../checkInService";
-import VolunteerService from "../volunteerService";
-import IVolunteerService from "../../interfaces/volunteerService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
 
 const checkIns = testCheckIns.map((checkIn) => {
@@ -36,6 +36,7 @@ describe("pg checkInService", () => {
     const emailService: IEmailService = new EmailService(nodemailerConfig);
     checkInService = new CheckInService(emailService);
     await User.bulkCreate(testUsersDb);
+    await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);
   });
 
@@ -144,7 +145,7 @@ describe("pg checkInService", () => {
     const checkInToDelete: CheckIn | null = await CheckIn.findOne();
     expect(checkInToDelete).not.toBeNull();
     if (checkInToDelete) {
-      const res = await checkInService.deleteCheckInById(
+      await checkInService.deleteCheckInById(
         checkInToDelete.id.toString(),
       );
       const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
@@ -158,7 +159,7 @@ describe("pg checkInService", () => {
   test("deleteCheckInsByDateRange", async () => {
     const startDate = "2021-09-01T09:00:00.000Z";
     const endDate = "2021-09-07T10:00:00.000Z";
-    const res = await checkInService.deleteCheckInsByDateRange(
+    await checkInService.deleteCheckInsByDateRange(
       startDate,
       endDate,
     );

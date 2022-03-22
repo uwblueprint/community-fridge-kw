@@ -71,3 +71,64 @@ export const testUpdatedUserVolunteers = [
     status: Status.REJECTED,
   },
 ];
+
+export const expectedCheckInsAndSchedules = [
+  {
+    id: '2',
+    donorId: '2',
+    categories: [ 'Non-perishables', 'Tea and coffee' ],
+    size: 'medium',
+    isPickup: true,
+    pickupLocation: 'location',
+    dayPart: 'Morning (6am - 11am)',
+    startTime: new Date("2022-09-08T09:00:00.000Z"),
+    endTime: new Date("2022-09-08T10:00:00.000Z"),
+    status: 'Pending',
+    volunteerNeeded: true,
+    volunteerTime: '8:00 AM',
+    frequency: 'Daily',
+    recurringDonationId: '1',
+    recurringDonationEndDate: new Date("2022-09-10T00:00:00.000Z"),
+    notes: 'these are the copied notes',
+    volunteerId: '1',
+    type: 'scheduling'
+  },
+  {
+    id: '2',
+    startDate: new Date("2022-09-05T09:00:00.000Z"),
+    endDate: new Date("2022-09-05T10:00:00.000Z"),
+    notes: 'test with volunteer 1',
+    volunteerId: '1',
+    isAdmin: false,
+    type: 'checkIn'
+  },
+  {
+    id: "3",
+    startDate: new Date("2022-03-01T09:00:00.000Z"),
+    endDate: new Date("2022-03-01T10:00:00.000Z"),
+    notes: "test with volunteer 1 again",
+    volunteerId: '1',
+    isAdmin: false,
+    type: 'checkIn'
+  },
+  {
+    id: '1',
+    donorId: '1',
+    categories: [ 'Dry packaged goods' ],
+    size: 'medium',
+    isPickup: false,
+    pickupLocation: null,
+    dayPart: 'Morning (6am - 11am)',
+    startTime: new Date("2021-09-01T09:00:00.000Z"),
+    endTime: new Date("2021-09-01T10:00:00.000Z"),
+    status: 'Pending',
+    volunteerNeeded: true,
+    volunteerTime: '8:00 AM',
+    frequency: 'One time',
+    recurringDonationId: 'null',
+    recurringDonationEndDate: null,
+    notes: 'these are the notes',
+    volunteerId: '1',
+    type: 'scheduling'
+  },
+]
