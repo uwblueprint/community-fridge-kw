@@ -13,8 +13,8 @@ import {
 import { format } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 
+import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import { colorMap } from "../../../constants/DaysInWeek";
@@ -36,11 +36,7 @@ import {
 } from "../Scheduling/types";
 import { ShiftStepProps } from "./types";
 
-const ConfirmShift = ({
-  isRescue,
-  navigation,
-
-}: ShiftStepProps) => {
+const ConfirmShift = ({ isRescue, navigation }: ShiftStepProps) => {
   const { previous, next, go } = navigation;
   const history = useHistory();
   const { authenticatedUser } = useContext(AuthContext);
@@ -58,13 +54,8 @@ const ConfirmShift = ({
   } = useDisclosure();
 
   const onSubmitClick = async () => {
-    
-
     next();
   };
-
-
-
 
   // const startDateLocal = new Date(currentSchedule.startTime);
   // const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
@@ -82,7 +73,9 @@ const ConfirmShift = ({
   useEffect(() => {
     const getShiftDetails = async () => {
       if (isRescue) {
-        const foodRescueResponse = await SchedulingAPIClient.getScheduleById("4");
+        const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
+          "4",
+        );
         setFoodRescue(foodRescueResponse);
       } else {
         const checkInResponse = await CheckInAPIClient.getCheckInsById("2");
@@ -91,15 +84,14 @@ const ConfirmShift = ({
     };
     getShiftDetails();
   }, [foodRescue, checkIn]);
-  
+
   return (
     <Container variant="responsiveContainer">
-      
-        <>
-          <BackButton previous={previous} />
-          <SchedulingProgressBar activeStep={3} totalSteps={4} />
-        </>
-      
+      <>
+        <BackButton previous={previous} />
+        <SchedulingProgressBar activeStep={3} totalSteps={4} />
+      </>
+
       <Text
         textStyle="mobileHeader2"
         mt="1em"
@@ -107,9 +99,7 @@ const ConfirmShift = ({
         display={{ md: "flex" }}
         mb="1em"
       >
-        Confirm shift sign up
-        &nbsp;&nbsp;&nbsp;
-       
+        Confirm shift sign up &nbsp;&nbsp;&nbsp;
       </Text>
       <Box
         pl="0"
@@ -120,7 +110,6 @@ const ConfirmShift = ({
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
-      
         <Box>
           <Text textStyle="mobileHeader3">Shift Details</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
@@ -134,10 +123,7 @@ const ConfirmShift = ({
             Frequency
           </Text>
           <HStack spacing="4px">
-            <Text
-              textStyle="mobileBodyBold"
-              color="hubbard.100"
-            >
+            <Text textStyle="mobileBodyBold" color="hubbard.100">
               Frequency
             </Text>
             {/* <Text>
@@ -201,10 +187,7 @@ const ConfirmShift = ({
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Volunteer Needed
           </Text>
-         
-         
 
-          
           <Box>
             <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
               Additional notes
@@ -235,21 +218,20 @@ const ConfirmShift = ({
         </Text>
         <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
       </Box>
-   
-        <HStack>
-          <Flex justify="flex-end">
-            <Button onClick={onSubmitClick} variant="navigation">
-              Submit
-            </Button>
-          </Flex>
-          <ErrorSchedulingModal
-            headerText="Donation could not be scheduled"
-            bodyText=" Sorry, something went wrong with our system. Please try again."
-            isOpen={isErrorSchedulingOpen}
-            onClose={onErrorSchedulingClose}
-          />
-        </HStack>
-  
+
+      <HStack>
+        <Flex justify="flex-end">
+          <Button onClick={onSubmitClick} variant="navigation">
+            Submit
+          </Button>
+        </Flex>
+        <ErrorSchedulingModal
+          headerText="Donation could not be scheduled"
+          bodyText=" Sorry, something went wrong with our system. Please try again."
+          isOpen={isErrorSchedulingOpen}
+          onClose={onErrorSchedulingClose}
+        />
+      </HStack>
     </Container>
   );
 };

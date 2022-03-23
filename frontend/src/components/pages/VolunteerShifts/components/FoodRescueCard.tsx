@@ -11,9 +11,15 @@ import * as Routes from "../../../../constants/Routes";
 import { Schedule } from "../../../../types/SchedulingTypes";
 import { DonationFrequency } from "../../Scheduling/types";
 
-const FoodRescueCard = (
-    { schedule, navigation, setShiftId}: { schedule: Schedule, navigation: NavigationProps
-    setShiftId: any }): JSX.Element => {
+const FoodRescueCard = ({
+  schedule,
+  navigation,
+  setShiftId,
+}: {
+  schedule: Schedule;
+  navigation: NavigationProps;
+  setShiftId: any;
+}): JSX.Element => {
   const {
     startTime,
     endTime,

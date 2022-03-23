@@ -35,7 +35,7 @@ import { ShiftStepProps } from "./types";
 const VolunteerShiftsTabs = ({
   setIsRescue,
   navigation,
-  setShiftId
+  setShiftId,
 }: ShiftStepProps): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
   // const [schedules, setSchedules] = useState<Schedule[]>([]);

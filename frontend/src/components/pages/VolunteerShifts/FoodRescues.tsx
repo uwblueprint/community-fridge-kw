@@ -68,7 +68,12 @@ const FoodRescues = ({
       >
         {foodRescues.length > 0 ? (
           foodRescues.map((scheduleObject: Schedule, id) => (
-            <FoodRescueCard key={id} schedule={scheduleObject} navigation={navigation} setShiftId={setShiftId}/>
+            <FoodRescueCard
+              key={id}
+              schedule={scheduleObject}
+              navigation={navigation}
+              setShiftId={setShiftId}
+            />
           ))
         ) : (
           <Flex paddingTop="1.5rem">
