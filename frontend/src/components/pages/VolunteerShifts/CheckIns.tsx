@@ -20,7 +20,7 @@ import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { CheckIn } from "../../../types/CheckInTypes";
-import CheckInCard from "./CheckInCard";
+import CheckInCard from "./components/CheckInCard";
 
 const CheckIns = (): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);

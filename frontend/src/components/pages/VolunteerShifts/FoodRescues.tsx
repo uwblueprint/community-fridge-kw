@@ -17,27 +17,37 @@ import React, { useContext, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { CheckIn } from "../../../types/CheckInTypes";
-import CheckInCard from "./CheckInCard";
+import { Schedule } from "../../../types/SchedulingTypes";
+import SchedulingProgressBar from "../../common/SchedulingProgressBar";
+import FoodRescueCard from "./components/FoodRescueCard";
+import { ShiftStepProps } from "./types";
 
-const FoodRescues = (): JSX.Element => {
+const FoodRescues = ({
+  setIsRescue,
+  navigation,
+  setShiftId,
+}: ShiftStepProps): JSX.Element => {
   const { authenticatedUser } = useContext(AuthContext);
   // const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
+  const [foodRescues, setFoodRescues] = useState<Schedule[]>([]);
   const history = useHistory();
 
   React.useEffect(() => {
-    const getCheckIns = async () => {
-      const checkInResponse = await CheckInAPIClient.getAllCheckIns();
-      setCheckIns(checkInResponse);
+    const getFoodRescues = async () => {
+      const foodRescueResponse = await SchedulingAPIClient.getAllSchedulesByPickupOrUnload(
+        true,
+      );
+      setFoodRescues(foodRescueResponse);
     };
-
-    getCheckIns();
+    setIsRescue(true);
+    getFoodRescues();
   }, []);
 
-  if (!checkIns || checkIns === null) {
+  if (!foodRescues || foodRescues === null) {
     return <Spinner />;
   }
 
@@ -56,8 +66,10 @@ const FoodRescues = (): JSX.Element => {
         flexWrap="wrap"
         marginTop={["60px", "70px"]}
       >
-        {checkIns.length > 0 ? (
-          <p>Hello food rescues here</p>
+        {foodRescues.length > 0 ? (
+          foodRescues.map((scheduleObject: Schedule, id) => (
+            <FoodRescueCard key={id} schedule={scheduleObject} navigation={navigation} setShiftId={setShiftId}/>
+          ))
         ) : (
           <Flex paddingTop="1.5rem">
             <Box

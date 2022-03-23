@@ -4,8 +4,8 @@ import { format, isToday, isTomorrow } from "date-fns";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import * as Routes from "../../../constants/Routes";
-import { CheckIn } from "../../../types/CheckInTypes";
+import * as Routes from "../../../../constants/Routes";
+import { CheckIn } from "../../../../types/CheckInTypes";
 
 const CheckInCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
   const {
