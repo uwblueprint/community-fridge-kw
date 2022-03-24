@@ -3,6 +3,7 @@ import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 import useViewport from "../../../hooks/useViewport";
+import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 
 type State = {
@@ -135,6 +136,81 @@ export function WeeklyBody<EventItem>({
 
                 return renderItem({
                   schedule,
+                  showingFullWeek: selectedDay === undefined,
+                });
+              })}
+            </VStack>
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+type RenderCheckInItemProps<EventItem> = {
+  checkIn: CheckIn;
+  showingFullWeek: boolean;
+};
+
+type WeeklyCheckInBodyProps<EventItem> = {
+  selectedDay: Date;
+  checkIns: CheckIn[];
+  renderItem: (item: RenderCheckInItemProps<EventItem>) => ReactNode;
+};
+
+export function WeeklyCheckInBody<EventItem>({
+  selectedDay,
+  checkIns,
+  renderItem,
+}: WeeklyCheckInBodyProps<EventItem>) {
+  const { isMobile } = useViewport();
+  const { locale, week } = useWeeklyCalendar();
+
+  const getDay = (datePassed: Date, i: number): string => {
+    const datePassedDay = datePassed.getDay();
+    const updatedDay = (datePassedDay + i) % 7;
+
+    const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+
+    return days[updatedDay];
+  };
+
+  return (
+    <>
+      {[...Array(isMobile ? 1 : 3)].map((_, i) => {
+        return (
+          <div key={i}>
+            <VStack
+              justifyItems="flex-start"
+              alignContent="start"
+              pb="3rem"
+              width="100%"
+            >
+              <DayButton
+                day={{
+                  day: selectedDay.getDay() + i,
+                  label: getDay(selectedDay, i),
+                }}
+              />
+
+              {checkIns.map((checkIn) => {
+                const currentDate = setDay(week, selectedDay.getDay() + i, {
+                  locale,
+                });
+                const scheduledDate = new Date(checkIn?.startDate as string);
+
+                if (
+                  checkIn === null ||
+                  scheduledDate === null ||
+                  scheduledDate.getDate() !== currentDate.getDate() ||
+                  scheduledDate.getMonth() !== currentDate.getMonth() ||
+                  scheduledDate.getFullYear() !== currentDate.getFullYear()
+                ) {
+                  return null;
+                }
+
+                return renderItem({
+                  checkIn,
                   showingFullWeek: selectedDay === undefined,
                 });
               })}

@@ -62,7 +62,7 @@ const Button = {
       border: "1px",
       borderColor:"dorian.100",
       color: "hubbard.100",
-      fontSize: "16px",
+      fontSize: "14px",
       py: "20px",
       px: "53px",
       lineHeight: "20px",
@@ -73,7 +73,7 @@ const Button = {
       color: "white",
       border: "1px",
       borderColor:"champagne.100",
-      fontSize: "16px",
+      fontSize: "14px",
       py: "20px",
       px: "53px",
       lineHeight: "20px"
