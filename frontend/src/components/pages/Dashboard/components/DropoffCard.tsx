@@ -93,11 +93,11 @@ const DropoffCard = ({
     <Box
       pb="50px"
       pt="32px"
-      pl="30px"
+      px="30px"
       mb="24px"
       borderLeft={`7px solid ${getFrequencyColor(frequency)}`}
       boxShadow="2px 2px 12px rgba(0, 0, 0, 0.08)"
-      width={{ base: "default", md: "100%" }}
+      width="100%"
       overflow="hidden"
     >
       <VStack alignItems="left">
