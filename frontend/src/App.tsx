@@ -72,6 +72,12 @@ const App = (): React.ReactElement => {
                 <PrivateRoute
                   adminOnly
                   exact
+                  path={Routes.CREATE_CHECKIN}
+                  component={CreateCheckIn}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
                   path={Routes.USER_MANAGEMENT_PAGE}
                   component={UserManagement}
                 />

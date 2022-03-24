@@ -9,9 +9,10 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
+import Icon from "react-multi-date-picker/components/icon";
 import AuthContext from "../../../../contexts/AuthContext";
 import { CheckIn } from "../../../../types/CheckInTypes";
 
@@ -26,9 +27,24 @@ const checkInDefaultData = ({
 const CreateCheckIn = () => {
   const { authenticatedUser } = useContext(AuthContext);
   const [checkInFormValues, setCheckInForm] = useForm(checkInDefaultData);
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
-  console.log(startDate);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: string,
+  ) => {
+    console.log(e.target.value);
+    // if (name === "startDate") {
+    //   // set date portion of startDate in form
+    //   if (checkInFormValues.startDate) {
+    //   }
+    // } else if (name === "endDate") {
+    //   // placeholder
+    // } else if (name === "startTime") {
+    //   // placeholder
+    // } else if (name === "endTime") {
+    //   // placeholder
+    // }
+    // setCheckInForm({ target: { name, value: e } });
+  };
   return (
     <Container variant="responsiveContainer">
       <Text textStyle="mobileHeader2" mt="2em">
@@ -37,8 +53,21 @@ const CreateCheckIn = () => {
       <FormControl isRequired m="3em 0">
         <FormLabel fontWeight="600">Select time range</FormLabel>
         <HStack maxW="740px">
-          <Input type="time" pr="3em" /> <Text>to</Text>
-          <Input type="time" pl="3em" />
+          <Input
+            type="time"
+            onChange={(e: any) => {
+              handleChange(e, "startTime");
+            }}
+            pr="3em"
+          />
+          <Text>to</Text>
+          <Input
+            type="time"
+            onChange={(e: any) => {
+              handleChange(e, "endTime");
+            }}
+            l="3em"
+          />
         </HStack>
       </FormControl>
       <FormControl isRequired m="3em 0">
@@ -47,27 +76,34 @@ const CreateCheckIn = () => {
         <HStack maxW="740px">
           <DatePicker
             range
-            placeholder={
-              startDate
-                ? new DateObject(startDate).format("MMMM D, YYYY")
-                : "MM-DD-YYYY"
-            }
             onChange={(e: any) => {
-              setStartDate(e[0]);
-              setEndDate(e[1]);
+              handleChange(e[0], "startDate");
+              handleChange(e[1], "endDate");
             }}
-            format="MMMM D, YYYY"
             minDate={new Date()}
             value={null}
+            render={<Icon />}
           />
-          <Text>to</Text>
-          <DatePicker
-            style={{ pointerEvents: "none" }}
+          <Input
             placeholder={
-              endDate
-                ? new DateObject(endDate).format("MMMM D, YYYY")
+              checkInFormValues.startDate
+                ? new DateObject(checkInFormValues.startDate).format(
+                    "MMMM D, YYYY",
+                  )
                 : "MM-DD-YYYY"
             }
+            style={{ pointerEvents: "none" }}
+          />
+          <Text>to</Text>
+          <Input
+            placeholder={
+              checkInFormValues.endDate
+                ? new DateObject(checkInFormValues.endDate).format(
+                    "MMMM D, YYYY",
+                  )
+                : "MM-DD-YYYY"
+            }
+            style={{ pointerEvents: "none" }}
           />
         </HStack>
       </FormControl>
