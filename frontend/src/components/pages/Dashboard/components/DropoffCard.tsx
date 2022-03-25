@@ -115,6 +115,7 @@ const DropoffCard = ({
               textDecoration="underline"
               onClick={() => history.push(`${Routes.DASHBOARD_PAGE}/${id}`)}
               pb={["24px", "0px"]}
+              cursor="pointer"
             >
               View Details
             </Text>
