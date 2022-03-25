@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
-import { CheckIn } from "../../../types/CheckInTypes";
 
+import { CheckIn } from "../../../types/CheckInTypes";
 import CheckInInfoCard from "./CheckInInfoCard";
-import { WeeklyCheckInBody, WeeklyCalendar } from "./WeeklyCalendar";
+import { WeeklyCalendar, WeeklyCheckInBody } from "./WeeklyCalendar";
 
 type CalendarProps = {
   selectedDay: Date;
@@ -21,10 +21,7 @@ const CheckInCalendar = ({
         checkIns={checkIns}
         renderItem={({ checkIn }) => (
           <Box display="block" pb="1.5rem" width="100%">
-            <CheckInInfoCard
-              key={JSON.stringify(checkIn)}
-              checkIn={checkIn}
-            />
+            <CheckInInfoCard key={JSON.stringify(checkIn)} checkIn={checkIn} />
           </Box>
         )}
       />
