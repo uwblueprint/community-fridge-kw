@@ -1,4 +1,4 @@
-import { Container, Stack, VStack } from "@chakra-ui/react";
+import { Container, Stack, Text, VStack } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { NavigationProps, Step, useStep } from "react-hooks-helper";
 
@@ -39,23 +39,15 @@ const VolunteerShiftsPage = () => {
     setVolunteerStatus(volunteerResponse.status);
   };
 
-  useEffect(() => {
-    getVolunteerData();
-  }, []);
-
-  const [shiftIdValue, setShiftIdValue] = useState<number>();
-  const [isRescueValue, setIsRescueValue] = useState<boolean>();
-  const setShiftIdValueFunction = (value: number) => {
-    setShiftIdValue(value);
-  };
-  const setIsRescueValueFunction = (value: boolean) => {
-    setIsRescueValue(value);
-  };
-  const { step, navigation }: UseStepType = useStep({
+  const { step }: UseStepType = useStep({
     steps,
     initialStep: 1,
   });
   const { id } = step;
+
+  useEffect(() => {
+    getVolunteerData();
+  }, []);
 
   switch (id) {
     case "pending page":
@@ -73,13 +65,13 @@ const VolunteerShiftsPage = () => {
     case "confirm shift sign up":
       return (
         <Container centerContent variant="responsiveContainer">
-          <p>confirm shift page component</p>
+          <Text>Confirm Shift Page Component</Text>
         </Container>
       );
     case "thank you page":
       return (
         <Container centerContent variant="responsiveContainer">
-          <p>thank you page component</p>
+          <Text>Thank You Page Component</Text>
         </Container>
       );
     default:
