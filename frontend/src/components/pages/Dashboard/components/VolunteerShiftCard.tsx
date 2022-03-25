@@ -7,6 +7,7 @@ import DonorAPIClient from "../../../../APIClients/DonorAPIClient";
 import * as Routes from "../../../../constants/Routes";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import { Schedule } from "../../../../types/SchedulingTypes";
+import CardField from "../../../common/CardField";
 import { getShiftColor, ShiftTypes } from "../../VolunteerShifts/types";
 
 const VolunteerShiftCard = ({
@@ -17,15 +18,14 @@ const VolunteerShiftCard = ({
   checkIn?: CheckIn;
 }): JSX.Element => {
   const {
-    id: scheduleId,
     donorId,
     isPickup,
     pickupLocation,
     volunteerTime,
     startTime,
-    endTime,
+    notes: scheduleNotes,
   } = schedule || {};
-  const { startDate, endDate, notes, id: checkInId } = checkIn || {};
+  const { startDate, endDate, notes: checkinNotes } = checkIn || {};
   const [businessName, setBusinessName] = useState<string>("");
 
   const history = useHistory();
@@ -47,14 +47,11 @@ const VolunteerShiftCard = ({
 
   const timeLocal = () => {
     if (startDate) {
-      return format(new Date(startDate), "h:mm aa");
+      return format(new Date(startDate), "h:mmaa");
     }
 
     return volunteerTime;
   };
-
-  const startTimeLocal = startTime && format(new Date(startTime), "h:mm aa");
-  const endTimeLocal = endTime && format(new Date(endTime), "h:mm aa");
 
   useEffect(() => {
     const getBusinessName = async () => {
@@ -68,7 +65,7 @@ const VolunteerShiftCard = ({
   }, []);
 
   return (
-    <Box my="24px" width={{ base: "default", md: "100%" }} overflow="hidden">
+    <Box my="24px" width="100%" overflow="hidden">
       <Stack
         direction={["column", "row"]}
         display="flex"
@@ -106,72 +103,17 @@ const VolunteerShiftCard = ({
           display={["default", "flex"]}
           spacing={["0", "4"]}
         >
-          <VStack align="left">
-            {businessName && (
-              <>
-                <Text
-                  textTransform="uppercase"
-                  textStyle="mobileSmall"
-                  color="hubbard.100"
-                >
-                  Organization
-                </Text>
-                <Text textStyle="mobileSmall" pb={["1.5rem", "0px"]}>
-                  {businessName}
-                </Text>
-              </>
-            )}
-            <Text
-              textTransform="uppercase"
-              textStyle="mobileSmall"
-              color="hubbard.100"
-            >
-              Volunteer Request Time
-            </Text>
-            <Text textStyle="mobileSmall" pb={["1.5rem", "0px"]}>
-              {`${timeLocal()}`}
-            </Text>
-            {startTimeLocal && (
-              <>
-                <Text
-                  textTransform="uppercase"
-                  textStyle="mobileSmall"
-                  color="hubbard.100"
-                >
-                  Donation Time
-                </Text>
-                <Text textStyle="mobileSmall" pb={["1.5rem", "0px"]}>
-                  {`${startTimeLocal}-${endTimeLocal}`}
-                </Text>
-              </>
-            )}
-            {pickupLocation && (
-              <>
-                <Text
-                  textTransform="uppercase"
-                  textStyle="mobileSmall"
-                  color="hubbard.100"
-                >
-                  Location
-                </Text>
-                <Text textStyle="mobileSmall" pb={["1.5rem", "0px"]}>
-                  {pickupLocation}
-                </Text>
-              </>
-            )}
-            {!!checkIn && (
-              <>
-                <Text
-                  textTransform="uppercase"
-                  textStyle="mobileSmall"
-                  color="hubbard.100"
-                >
-                  Notes
-                </Text>
-                <Text textStyle="mobileSmall">{notes ? `${notes}` : "-"}</Text>
-              </>
-            )}
-          </VStack>
+          {businessName && (
+            <CardField title="Organization Name" value={businessName} />
+          )}
+          <CardField title="Volunteer Request Time" value={`${timeLocal()}`} />
+          {pickupLocation && (
+            <CardField title="Location" value={pickupLocation} />
+          )}
+          <CardField
+            title="Notes"
+            value={checkinNotes || scheduleNotes || "-"}
+          />
         </Stack>
       </Box>
     </Box>

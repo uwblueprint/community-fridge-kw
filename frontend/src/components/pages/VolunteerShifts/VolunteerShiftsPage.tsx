@@ -59,7 +59,6 @@ const ScheduledVolunteerShiftsPage = () => {
         </VStack>
         <Button
           float="right"
-          mt="1.5rem"
           size="lg"
           width={{ lg: "40%", base: "100%" }}
           variant="navigation"
