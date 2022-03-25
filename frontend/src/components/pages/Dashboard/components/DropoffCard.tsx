@@ -72,21 +72,23 @@ const DropoffCard = ({
   const endTimeLocal = format(new Date(endTime), "h:mm aa");
 
   React.useEffect(() => {
-    const getVolunteerName = async (vId: string) => {
+    const getVolunteerName = async () => {
       if (volunteerId) {
-        const response = await VolunteerAPIClient.getVolunteerById(vId);
+        const response = await VolunteerAPIClient.getVolunteerById(
+          String(volunteerId),
+        );
         setVolunteerAssigned(`${response.firstName} ${response.lastName}`);
       }
     };
 
-    const getDonorName = async (dId: string) => {
-      if (dId) {
-        const response = await DonorAPIClient.getDonorById(dId);
+    const getDonorName = async () => {
+      if (donorId) {
+        const response = await DonorAPIClient.getDonorById(String(donorId));
         setDonorName(`${response.businessName}`);
       }
     };
-    getVolunteerName(String(volunteerId));
-    getDonorName(String(donorId));
+    getVolunteerName();
+    getDonorName();
   }, []);
 
   return (
@@ -140,7 +142,7 @@ const DropoffCard = ({
           {isPublicView ? (
             <DropoffCardSubInformation
               description="Type of Donation Items"
-              value={categories.join(" ; ")}
+              value={categories.join("; ")}
             />
           ) : (
             <>
