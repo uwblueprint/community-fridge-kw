@@ -33,3 +33,43 @@ export const testUpdatedCheckIns = [
     notes: "updated notes",
   },
 ];
+
+export const testUsersDb = [
+  {
+    first_name: "Test",
+    last_name: "User",
+    auth_id: "test id",
+    role: "Donor",
+    email: "test@email.com",
+  },
+  {
+    first_name: "Test",
+    last_name: "User 2",
+    auth_id: "test id 2",
+    role: "Donor",
+    email: "test2@email.com",
+  },
+  {
+    first_name: "Test",
+    last_name: "User 3",
+    auth_id: "test id 3",
+    role: "Volunteer",
+    email: "test3@email.com",
+  },
+  {
+    first_name: "Test",
+    last_name: "User 4",
+    auth_id: "test id 4",
+    role: "Volunteer",
+    email: "test4@email.com",
+  },
+];
+
+export const testVolunteersDb = [
+  {
+    user_id: 3,
+  },
+  {
+    user_id: 4,
+  },
+];

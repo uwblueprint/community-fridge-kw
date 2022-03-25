@@ -13,6 +13,8 @@ import logger from "../../utilities/logger";
 import ICheckInService from "../interfaces/checkInService";
 import ISchedulingService from "../interfaces/schedulingService";
 import IVolunteerService from "../interfaces/volunteerService";
+import { getDateWithVolunteerTime } from "../../utilities/servicesUtils";
+import dayjs from "dayjs";
 
 const Logger = logger(__filename);
 
@@ -174,11 +176,11 @@ class VolunteerService implements IVolunteerService {
       await this.schedulingService.getSchedulingsByVolunteerId(volunteerId)
     ).map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
     const shifts = [...checkIns, ...schedulings].sort((a, b) => {
-      const date1: Date =
-        "startDate" in a ? new Date(a.startDate) : new Date(a.startTime);
-      const date2: Date =
-        "startDate" in b ? new Date(b.startDate) : new Date(b.startTime);
-      return date2.valueOf() - date1.valueOf();
+      const date1 =
+        "startDate" in a ? dayjs(a.startDate) : getDateWithVolunteerTime(a.startTime, a.volunteerTime!);
+      const date2 =
+        "startDate" in b ? dayjs(b.startDate) : getDateWithVolunteerTime(b.startTime, b.volunteerTime!);
+      return date2.isBefore(date1) ? 1 : -1;
     });
     return shifts;
   }

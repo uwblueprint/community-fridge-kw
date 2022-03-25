@@ -6,11 +6,9 @@ import testSql from "../../../testUtils/testDb";
 import {
   testCheckIns,
   testUpdatedCheckIns,
-} from "../../../testUtils/checkInService";
-import {
   testVolunteersDb,
-  testUsersDb,
-} from "../../../testUtils/schedulingService";
+  testUsersDb
+} from "../../../testUtils/checkInService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";

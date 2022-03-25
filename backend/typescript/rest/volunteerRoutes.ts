@@ -91,7 +91,7 @@ volunteerRouter.get("/:volunteerId?", async (req, res) => {
   }
 });
 
-volunteerRouter.get("/shifts/:volunteerId?", async (req, res) => {
+volunteerRouter.get("/shifts/:volunteerId", async (req, res) => {
   const { volunteerId } = req.params;
   if (volunteerId) {
     try {
