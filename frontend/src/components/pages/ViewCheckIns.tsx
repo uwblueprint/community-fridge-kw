@@ -1,4 +1,4 @@
-import { AddIcon, ChevronLeftIcon, ChevronRightIcon, CloseIcon, DeleteIcon, DownloadIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from "@chakra-ui/icons";
 import {
     Container,
     Flex,
@@ -10,28 +10,28 @@ import {
     Button,
     Img,
     useDisclosure,
-    Box,
-    Stack
+    Stack,
+    Show,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Box
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 
-import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
 import useViewport from "../../hooks/useViewport";
-import Calendar from "../common/Calendar/Calendar";
 import pencilIconHollow from "../../assets/pencilIconHollow.svg";
 import downloadIcon from "../../assets/downloadIcon.svg";
 import deleteIcon from "../../assets/deleteIcon.svg";
 import { CheckIn } from "../../types/CheckInTypes";
 import CheckInAPIClient from "../../APIClients/CheckInAPIClient";
 import CheckInCalendar from "../common/Calendar/CheckInCalendar";
+import menuIcon from "../../assets/menuIcon.svg"
 
-const ViewCheckIns = ({
-    isAdminView,
-}: {
-    isAdminView: boolean;
-}): React.ReactElement => {
+const ViewCheckIns = (): React.ReactElement => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isSavingData, setIsSavingData] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,7 +51,7 @@ const ViewCheckIns = ({
         };
 
         getCheckIns();
-    }, []);
+    }, [checkIns]);
 
     const changeDays = (days: number) => {
         setTest(test + 1); // need this for some reason
@@ -90,70 +90,86 @@ const ViewCheckIns = ({
         );
     };
 
+    const menuListStyle = {
+        minWidth: "105px",
+        minHeight: "80px",
+        borderColor: "dorian.100",
+        shadow: "none"
+    }
+
+    const menuItemStyle = {
+        borderRadius: "0.4rem",
+        margin: "auto",
+        width: "95%",
+    }
+
     return (
-        <Container alignContent="left" variant="calendarContainer">
+        <Container alignContent="left" variant="calendarContainer" pt={["84px", "108px"]} px={["12px", "0"]}>
             <Flex
-                pt={{ base: "0.5rem", md: "2rem" }}
                 flexDirection="column"
                 justifyContent="space-between"
                 display={{ base: "inline", md: "flex" }}
             >
-                <Box flexDirection="row"
-                    justifyContent="space-between"
-                    alignItems="flex-end"
-                    display={isMobile ? "" : "flex"}
-                    alignContent="left">
+                <HStack
+                    alignItems="center"
+                    display="flex"
+                    width="100%"
+                    alignContent="left"
+                >
                     <Text
                         textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
-                        pt="2rem"
                     >
                         Fridge check-ins
                     </Text>
+
                     <Spacer />
-                    {!isMobile ? (
-                        <Stack direction='row' spacing={4}>
-                            <Button
-                                size="md"
-                                onClick={() => { }}
-                                variant="create"
-                                width="2.5rem"
-                                lineHeight="20px"
-                            >
-                                +  Create
-                            </Button>
 
-                            <Button
-                                size="md"
-                                onClick={() => { }}
-                                variant="export"
-                                leftIcon={<Img
-                                    src={deleteIcon}
-                                    alt="delete icon"
-                                    width="16px"
-                                    display="inline"
-                                />}
-                                width="2.5rem"
-                            >
-                                Delete
-                            </Button>
+                    <Show above="sm">
+                        {!isMobile ? (
+                            <Stack direction='row' spacing={4}>
+                                <Button
+                                    size="md"
+                                    onClick={() => { }}
+                                    variant="create"
+                                    width="2.5rem"
+                                    lineHeight="20px"
+                                >
+                                    +  Create
+                                </Button>
 
-                            <Button
-                                size="md"
-                                onClick={() => { }}
-                                variant="export"
-                                leftIcon={<Img
-                                    src={downloadIcon}
-                                    alt="download icon"
-                                    width="16px"
-                                    display="inline"
-                                />}
-                                width="2.5rem"
-                            >
-                                Export
-                            </Button>
-                        </Stack>)
-                        : (<></>)}
-                </Box>
+                                <Button
+                                    size="md"
+                                    onClick={() => { }}
+                                    variant="export"
+                                    leftIcon={<Img
+                                        src={deleteIcon}
+                                        alt="delete icon"
+                                        width="16px"
+                                        display="inline"
+                                    />}
+                                    width="2.5rem"
+                                >
+                                    Delete
+                                </Button>
+
+                                <Button
+                                    size="md"
+                                    onClick={() => { }}
+                                    variant="export"
+                                    leftIcon={<Img
+                                        src={downloadIcon}
+                                        alt="download icon"
+                                        width="16px"
+                                        display="inline"
+                                    />}
+                                    width="2.5rem"
+                                >
+                                    Export
+                                </Button>
+                            </Stack>)
+                            : (<></>)}
+                    </Show>
+                </HStack>
 
                 <Text
                     textStyle={isMobile ? "mobileHeader4" : "desktopSubtitle"}
@@ -175,18 +191,42 @@ const ViewCheckIns = ({
                     </Link>
                 </Text>
 
-                {isMobile ?
-                    (<Button
-                        mt="3.5rem"
-                        size="md"
-                        onClick={() => { }}
-                        variant="create"
-                        width="100%"
-                        lineHeight="20px"
-                    >
-                        +  Create
-                    </Button>) : (<></>)
-                }
+                <Show below="md">
+                    <HStack mt="3.5rem" spacing="7px">
+                        <Button
+                            size="sm"
+                            onClick={() => { }}
+                            variant="create"
+                            width="100%"
+                            lineHeight="20px"
+                            height="42px"
+                            py="12px"
+                        >
+                            +  Create
+                        </Button>
+                        <Menu placement="bottom-end" size="xs">
+                            <MenuButton
+                                as={IconButton}
+                                aria-label='Options'
+                                icon={
+                                    <Img display="inline" src={menuIcon} alt="menu icon" width="24px"/>
+                                }
+                                variant='export'
+                                pl="7px" pr="13px"
+                                height="44px"
+                            />
+                            <MenuList style={menuListStyle}>
+                                <MenuItem style={menuItemStyle} _hover={{ bg: 'dorian.100' }}>
+                                    <Text textStyle="mobileSmall" color="hubbard.100">Export</Text>
+                                </MenuItem>
+                                <MenuItem style={menuItemStyle} _hover={{ bg: 'dorian.100' }}>
+                                    <Text textStyle="mobileSmall" color="hubbard.100">Delete</Text>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+
+                    </HStack>
+                </Show>
 
                 {isMobile ? (
                     <HStack py="1.2rem" width="inherit" alignItems="center">
@@ -269,7 +309,7 @@ const ViewCheckIns = ({
                     checkIns={checkIns}
                 />
             </Flex>
-        </Container>
+        </Container >
     );
 };
 

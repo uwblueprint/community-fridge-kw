@@ -1,25 +1,11 @@
-import { AddIcon, EditIcon, ExternalLinkIcon, HamburgerIcon, RepeatIcon } from "@chakra-ui/icons";
-import { Box, HStack, Stack, Text, VStack, Button, Menu, MenuButton, IconButton, MenuList, MenuItem, Spacer, Flex, Img } from "@chakra-ui/react";
+import { Box, Stack, Text, VStack, Button, Menu, MenuButton, IconButton, MenuList, MenuItem, Spacer, Flex, Img } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
-
-import DonorAPIClient from "../../../APIClients/DonorAPIClient";
-import UserAPIClient from "../../../APIClients/UserAPIClient";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
-import { getFrequencyColor } from "../../../constants/DaysInWeek";
-import * as Routes from "../../../constants/Routes";
 import { CheckIn } from "../../../types/CheckInTypes";
-import { Schedule } from "../../../types/SchedulingTypes";
 import { VolunteerResponse } from "../../../types/VolunteerTypes";
-import { DonationFrequency } from "../../pages/Scheduling/types";
-import { FridgeIcon, PersonIcon } from "../icons";
-import { AuthenticatedUser } from "../../../types/AuthTypes";
-import { getLocalStorageObj } from "../../../utils/LocalStorageUtils";
-import {
-    AUTHENTICATED_USER_KEY,
-} from "../../../constants/AuthConstants";
+
 import useViewport from "../../../hooks/useViewport";
 import menuIcon from "../../../assets/menuIcon.svg"
 
@@ -28,49 +14,40 @@ const CheckInInfoCard = ({
 }: {
     checkIn: CheckIn;
 }): JSX.Element => {
-    const {
-        id,
-        volunteerId,
-        startDate,
-        endDate,
-        notes,
-        isAdmin
-    } = checkIn;
-
-    const startTimeLocal = format(new Date(startDate), "h:mm aa");
-    const endTimeLocal = format(new Date(endDate), "h:mm aa");
-    const { isMobile } = useViewport();
-
     const [volunteer, setVolunteer] = useState<VolunteerResponse>(
         {} as VolunteerResponse,
     );
+    const [currentCheckIn, setCurrentCheckIn] = useState<CheckIn>(checkIn);
+
+    const startTimeLocal = format(new Date(currentCheckIn.startDate), "hh:mm aa");
+    const endTimeLocal = format(new Date(currentCheckIn.endDate), "hh:mm aa");
+    const { isMobile } = useViewport();
 
     useEffect(() => {
         const getVolunteerData = async () => {
-            // TODO: fix???
-            if (volunteerId?.toString() !== "null") {
-                const volunteerResponse = await VolunteerAPIClient.getVolunteerById((volunteerId ?? "").toString());
+            if (currentCheckIn.volunteerId !== null) {
+                const volunteerResponse = await VolunteerAPIClient.getVolunteerById(currentCheckIn.volunteerId ? String(currentCheckIn.volunteerId) : "");
                 setVolunteer(volunteerResponse);
-            }
-            else {
+            } else {
                 setVolunteer({} as VolunteerResponse);
             }
         };
         getVolunteerData();
 
-    }, [checkIn.volunteerId]);
-
-
-    const currentUser: AuthenticatedUser | undefined = getLocalStorageObj<AuthenticatedUser>(
-        AUTHENTICATED_USER_KEY,
-    );
+    }, [currentCheckIn.volunteerId]);
 
     const removeVolunteer = async () => {
-        await CheckInAPIClient.updateCheckInById(id, { ...checkIn, volunteerId: undefined });
+        const checkInResponse = await CheckInAPIClient.updateCheckInById(currentCheckIn.id, { volunteerId: null, isAdmin: false });
+        setCurrentCheckIn(checkInResponse);
     }
 
     const volunteerAsAdmin = async () => {
-        await CheckInAPIClient.updateCheckInById(id, { ...checkIn, isAdmin: true, volunteerId: Number(currentUser?.id) });
+        const checkInResponse = await CheckInAPIClient.updateCheckInById(currentCheckIn.id, { isAdmin: true });
+        setCurrentCheckIn(checkInResponse);
+    }
+
+    const deleteCheckIn = async () => {
+        await CheckInAPIClient.deleteCheckInById(currentCheckIn.id);
     }
 
     const RemoveVolunteerButton = () => (
@@ -80,7 +57,7 @@ const CheckInInfoCard = ({
             py="10px"
             px="20px"
             onClick={removeVolunteer}
-            width={isMobile ? "100%" : ""}
+            width={["100%", "164px"]}
         >
             Remove Volunteer
         </Button>
@@ -90,31 +67,45 @@ const CheckInInfoCard = ({
         <Button variant="navigation" fontSize="14px"
             lineHeight="20px"
             fontWeight="700"
-            py="10px"
-            px="15.5px"
-            width={isMobile ? "100%" : ""}
+            py="12px"
+            px="16px"
+            onClick={volunteerAsAdmin}
+            width={["100%", "164px"]}
         >
             Volunteer as admin
         </Button>
     );
 
+
+    const menuListStyle = {
+        minWidth: "105px",
+        minHeight: "80px",
+        borderColor: "dorian.100",
+        shadow: "none"
+    }
+
+    const menuItemStyle = {
+        borderRadius: "0.4rem",
+        margin: "auto",
+        width: "95%",
+    }
+
     return (
         <Box
-            px={isMobile ? "32px" : "36px"}
-            py={isMobile ? "28px" : "32px"}
+            px={["32px", "36px"]}
+            py={["28px", "32px"]}
             border="1px solid"
             borderColor="dorian.100"
             width="100%"
             overflow="hidden"
         >
             <Stack
-                direction={isMobile ? "row" : "column"}
-                p="6"
+                direction="column"
                 display={["default", "flex"]}
-                spacing={["0", "4"]}
+                spacing={["30px", "21px"]}
                 alignItems="left"
             >
-                <Flex direction="row" alignItems="top" display="flex">
+                <Flex direction="row" alignItems="center" display="flex">
                     <Box >
                         <Text
                             textStyle="mobileHeader4"
@@ -126,38 +117,39 @@ const CheckInInfoCard = ({
                     </Box>
                     <Spacer />
                     <Box>
-                        <Menu>
+                        <Menu placement="bottom-end" size="xs">
                             <MenuButton
                                 as={IconButton}
                                 aria-label='Options'
-                                icon={<Img
-                                    display="inline" src={menuIcon} alt="menu icon" width="24px" />}
+                                icon={
+                                    <Img display="inline" src={menuIcon} alt="menu icon" width="24px" />
+                                }
                                 variant='plain'
                             />
-                            {/* TODO: style menu */}
-                            <MenuList alignContent="left">
-                                <MenuItem>
+                            <MenuList style={menuListStyle}
+                            >
+                                <MenuItem style={menuItemStyle}>
                                     <Text textStyle="mobileSmall" color="hubbard.100">Edit</Text>
                                 </MenuItem>
-                                <MenuItem>
-                                <Text textStyle="mobileSmall" color="hubbard.100">Delete</Text>
+                                <MenuItem style={menuItemStyle} onClick={deleteCheckIn}>
+                                    <Text textStyle="mobileSmall" color="hubbard.100">Delete</Text>
                                 </MenuItem>
                             </MenuList>
                         </Menu>
                     </Box>
                 </Flex>
-                <Stack align="left" direction={isMobile ? "column" : "row"} spacing={isMobile ? "25px" : "40px"} pb="29px">
+                <Stack align="left" direction={["column", "row"]} spacing={["25px", "40px"]} pb={["0px", "27px"]}>
                     <VStack align="left">
                         <Text textStyle="mobileBody" lineHeight="22px" color="hubbard.100">
                             VOLUNTEER ASSIGNED
                         </Text>
-                        {volunteerId?.toString() === "null" ? (
+                        {(Object.keys(volunteer).length === 0 && !currentCheckIn.isAdmin) ? (
                             <Text textStyle="mobileBodyBold">
                                 None
                             </Text>
                         ) : (
-                            <Text textStyle="mobileBody" lineHeight="22px">
-                                {isAdmin ? "Admin" : `${volunteer.firstName} ${volunteer.lastName}`}
+                            <Text textStyle="mobileBody" as={currentCheckIn.isAdmin ? 'i' : undefined} lineHeight="22px">
+                                {currentCheckIn.isAdmin ? "Admin" : `${volunteer.firstName} ${volunteer.lastName}`}
                             </Text>
                         )}
                     </VStack>
@@ -166,7 +158,7 @@ const CheckInInfoCard = ({
                             PHONE NUMBER
                         </Text>
                         <Text textStyle="mobileBody" lineHeight="22px">
-                            {(volunteerId?.toString() === "null" || !volunteer.phoneNumber) ?
+                            {(Object.keys(volunteer).length === 0 || !volunteer.phoneNumber) ?
                                 "-"
                                 :
                                 `${volunteer.phoneNumber}`
@@ -178,34 +170,34 @@ const CheckInInfoCard = ({
                             EMAIL
                         </Text>
                         <Text textStyle="mobileBody" lineHeight="22px">
-                            {(volunteerId?.toString() === "null" || !volunteer.email) ?
+                            {(Object.keys(volunteer).length === 0 || !volunteer.email) ?
                                 "-"
                                 :
                                 `${volunteer.email}`
                             }
                         </Text>
                     </VStack>
-                    {isMobile && notes ? (
+                    {isMobile && currentCheckIn.notes ? (
                         <VStack align="left">
                             <Text textStyle="mobileBody" lineHeight="22px" color="hubbard.100">
                                 NOTES
                             </Text>
-                            <Text textStyle="mobileBody" lineHeight="22px">{notes}</Text>
+                            <Text textStyle="mobileBody" lineHeight="22px">{currentCheckIn.notes}</Text>
                         </VStack>
                     ) : (<></>)}
                 </Stack>
-                {notes && !isMobile ?
+                {currentCheckIn.notes && !isMobile ?
                     (<Text>
-                        {notes}
+                        {currentCheckIn.notes}
                     </Text>) :
                     <></>
                 }
-                <Box align={isMobile ? "" : "right"} pt={isMobile ? "15px" : "27px"}>
-                    {(volunteerId?.toString() === "null") ?
+                <Box align="right" pt={["0px", "27px"]} >
+                    {(Object.keys(volunteer).length === 0 && !currentCheckIn.isAdmin) ?
                         <VolunteerAsAdminButton /> : <RemoveVolunteerButton />
                     }
                 </Box>
-            </Stack>
+            </Stack >
 
         </Box >
     );
