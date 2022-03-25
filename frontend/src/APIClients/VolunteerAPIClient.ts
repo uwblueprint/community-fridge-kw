@@ -3,8 +3,6 @@ import {
   UpdateVolunteerDataType,
   VolunteerResponse,
 } from "../types/VolunteerTypes";
-import { CheckIn } from "../types/CheckInTypes";
-import { Scheduling } from "../types/SchedulingTypes";
 import baseAPIClient from "./BaseAPIClient";
 
 const getAllVolunteers = async (): Promise<VolunteerResponse[]> => {
@@ -44,16 +42,19 @@ const getVolunteerByUserId = async (
 
 const getCheckInsAndSchedules = async (
   volunteerId: string,
-): Promise<(CheckIn | Scheduling)[]> => {
+): Promise<VolunteerResponse[]> => {
   try {
-    const { data } = await baseAPIClient.get(`/volunteers/shifts/${volunteerId}`, {
-      headers: { Authorization: BEARER_TOKEN },
-    });
+    const { data } = await baseAPIClient.get(
+      `/volunteers/shifts/${volunteerId}`,
+      {
+        headers: { Authorization: BEARER_TOKEN },
+      },
+    );
     return data;
   } catch (error) {
     return error as VolunteerResponse[];
   }
-}
+};
 
 const updateVolunteerById = async (
   id: string,

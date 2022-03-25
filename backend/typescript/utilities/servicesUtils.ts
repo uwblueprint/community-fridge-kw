@@ -1,6 +1,6 @@
 import { snakeCase } from "lodash";
-import { DTOTypes } from "../types";
 import dayjs from "dayjs";
+import { DTOTypes } from "../types";
 
 // eslint-disable-next-line import/prefer-default-export
 export const toSnakeCase = (dto: DTOTypes): DTOTypes => {
@@ -11,7 +11,10 @@ export const toSnakeCase = (dto: DTOTypes): DTOTypes => {
   return dtoSnakeCase;
 };
 
-export const getDateWithVolunteerTime = (date: Date, volunteerTime: string): dayjs.Dayjs => {
+export const getDateWithVolunteerTime = (
+  date: Date,
+  volunteerTime: string,
+): dayjs.Dayjs => {
   const [hours, minutes] = volunteerTime.split(":");
   return dayjs(date).hour(Number(hours)).minute(Number(minutes));
-}
+};

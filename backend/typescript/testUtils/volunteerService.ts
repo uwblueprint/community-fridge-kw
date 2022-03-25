@@ -212,5 +212,5 @@ export const expectedCheckInsAndSchedules = [
     volunteerId: "1",
     isAdmin: false,
     type: "checkIn",
-  }
+  },
 ];

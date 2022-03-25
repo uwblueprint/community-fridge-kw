@@ -7,7 +7,7 @@ import {
   testCheckIns,
   testUpdatedCheckIns,
   testVolunteersDb,
-  testUsersDb
+  testUsersDb,
 } from "../../../testUtils/checkInService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";

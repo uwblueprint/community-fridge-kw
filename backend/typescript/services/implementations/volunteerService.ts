@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
 import {
@@ -14,7 +15,6 @@ import ICheckInService from "../interfaces/checkInService";
 import ISchedulingService from "../interfaces/schedulingService";
 import IVolunteerService from "../interfaces/volunteerService";
 import { getDateWithVolunteerTime } from "../../utilities/servicesUtils";
-import dayjs from "dayjs";
 
 const Logger = logger(__filename);
 
@@ -177,9 +177,13 @@ class VolunteerService implements IVolunteerService {
     ).map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
     const shifts = [...checkIns, ...schedulings].sort((a, b) => {
       const date1 =
-        "startDate" in a ? dayjs(a.startDate) : getDateWithVolunteerTime(a.startTime, a.volunteerTime!);
+        "startDate" in a
+          ? dayjs(a.startDate)
+          : getDateWithVolunteerTime(a.startTime, a.volunteerTime!);
       const date2 =
-        "startDate" in b ? dayjs(b.startDate) : getDateWithVolunteerTime(b.startTime, b.volunteerTime!);
+        "startDate" in b
+          ? dayjs(b.startDate)
+          : getDateWithVolunteerTime(b.startTime, b.volunteerTime!);
       return date2.isBefore(date1) ? 1 : -1;
     });
     return shifts;
