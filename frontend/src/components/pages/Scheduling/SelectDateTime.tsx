@@ -12,7 +12,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format, parse } from "date-fns";
+import { endOfDay, format, parse } from "date-fns";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
 
@@ -247,9 +247,7 @@ const SelectDateTime = ({
   const handleChangeRecurringDate = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setRecurringEndDate(selectedDateObj);
-
-    const recurringDate = new Date(selectedDateObj);
-    recurringDate.setHours(23,59,59,999); // Need to set it to EOD so that recurring schedules are created properly in the backend
+    const recurringDate = endOfDay(new Date(selectedDateObj))
     setForm({
       target: {
         name: "recurringDonationEndDate",
