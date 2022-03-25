@@ -1,6 +1,6 @@
 import { Container, Stack, VStack } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
-import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
+import { NavigationProps, Step, useStep } from "react-hooks-helper";
 
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
@@ -26,11 +26,6 @@ const steps = [
 interface UseStepType {
   step: number | Step | any;
   navigation: NavigationProps | any;
-}
-
-interface ShiftProps {
-  shiftId: number | null;
-  isRescue: boolean;
 }
 
 const VolunteerShiftsPage = () => {
@@ -74,13 +69,7 @@ const VolunteerShiftsPage = () => {
         </Container>
       );
     case "shifts tab":
-      return (
-        <VolunteerShiftsTabs
-          setIsRescue={setIsRescueValueFunction}
-          navigation={navigation}
-          setShiftId={setShiftIdValueFunction}
-        />
-      );
+      return <VolunteerShiftsTabs />;
     case "confirm shift sign up":
       return (
         <Container centerContent variant="responsiveContainer">

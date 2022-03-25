@@ -1,9 +1,5 @@
 import {
-  Box,
-  Button,
   Container,
-  Flex,
-  Spinner,
   Stack,
   Tab,
   TabList,
@@ -13,34 +9,13 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Link,
-  NavLink,
-  Route,
-  Switch,
-  useHistory,
-  useParams,
-} from "react-router-dom";
+import React from "react";
+import { NavLink } from "react-router-dom";
 
-import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
-import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
-import { CheckIn } from "../../../types/CheckInTypes";
 import CheckIns from "./CheckIns";
 import FoodRescues from "./FoodRescues";
-import { ShiftStepProps } from "./types";
 
-const VolunteerShiftsTabs = ({
-  setIsRescue,
-  navigation,
-  setShiftId,
-}: ShiftStepProps): JSX.Element => {
-  const { authenticatedUser } = useContext(AuthContext);
-  // const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const history = useHistory();
-
+const VolunteerShiftsTabs = (): JSX.Element => {
   return (
     <Container variant="baseContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">
@@ -66,11 +41,7 @@ const VolunteerShiftsTabs = ({
                 <CheckIns />
               </TabPanel>
               <TabPanel id="rescue">
-                <FoodRescues
-                  navigation={navigation}
-                  setIsRescue={setIsRescue}
-                  setShiftId={setShiftId}
-                />
+                <FoodRescues />
               </TabPanel>
             </TabPanels>
           </Tabs>

@@ -1,89 +1,15 @@
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Spinner,
-  Stack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
-import { NavLink, useHistory } from "react-router-dom";
-
-import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
-import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
-import { CheckIn } from "../../../types/CheckInTypes";
-import CheckInCard from "./components/CheckInCard";
+import { Text } from "@chakra-ui/react";
+import React from "react";
 
 const CheckIns = (): JSX.Element => {
-  const { authenticatedUser } = useContext(AuthContext);
-  // const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
-  const history = useHistory();
-
-  React.useEffect(() => {
-    const getCheckIns = async () => {
-      const checkInResponse = await CheckInAPIClient.getAllCheckIns();
-
-      setCheckIns(checkInResponse);
-    };
-
-    getCheckIns();
-  }, []);
-
-  if (!checkIns || checkIns === null) {
-    return <Spinner />;
-  }
-
   return (
     <div>
-      <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
-        Check in description + links from checkin service{" "}
+      <Text pt="0.8rem" textStyle="mobileHeader4" color="black.100">
+        Check in shifts{" "}
       </Text>
-      <Box
-        display={{ lg: "flex" }}
-        flexDirection="row"
-        flexWrap="wrap"
-        marginTop={["60px", "70px"]}
-      >
-        {checkIns.length > 0 ? (
-          checkIns.map((checkInObject: CheckIn, id) => (
-            <CheckInCard key={id} checkIn={checkInObject!} />
-          ))
-        ) : (
-          <Flex paddingTop="1.5rem">
-            <Box
-              display={{ lg: "flex" }}
-              width={{ base: "default", md: "100%" }}
-              backgroundColor="squash.100"
-              padding={{ base: "0px", md: "3rem" }}
-            >
-              <Text
-                p={{ base: "28px", md: "0px" }}
-                color="black.500"
-                textStyle="mobileBody"
-              >
-                There are currently no checkins available for signup! &nbsp;
-              </Text>
-              {/* <Text
-                    pl={{ base: "28px", md: "0px" }}
-                    px={{ base: "28px", md: "0px" }}
-                    color="black.500"
-                    textStyle="mobileBody"
-                  >
-                    Schedule a donation today to start giving back.
-                  </Text> */}
-            </Box>
-          </Flex>
-        )}
-      </Box>
+      <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
+        check in shift blurb.{" "}
+      </Text>
     </div>
   );
 };
