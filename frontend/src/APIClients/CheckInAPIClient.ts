@@ -1,5 +1,5 @@
 import { BEARER_TOKEN } from "../constants/AuthConstants";
-import { CheckIn } from "../types/CheckInTypes";
+import { CheckIn, UpdatedCheckInFields } from "../types/CheckInTypes";
 import baseAPIClient from "./BaseAPIClient";
 
 const getAllCheckIns = async (): Promise<CheckIn[]> => {
@@ -83,8 +83,8 @@ const createCheckIn = async (checkIn: CheckIn): Promise<CheckIn> => {
 
 const updateCheckInById = async (
   checkInId: string,
-  fields: CheckIn,
-): Promise<CheckIn | boolean> => {
+  fields: UpdatedCheckInFields,
+): Promise<CheckIn> => {
   try {
     const { data } = await baseAPIClient.put(
       `/checkin/${checkInId}`,
@@ -95,7 +95,7 @@ const updateCheckInById = async (
     );
     return data;
   } catch (error) {
-    return false;
+    return error as CheckIn;
   }
 };
 
