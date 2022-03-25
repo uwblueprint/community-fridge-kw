@@ -26,7 +26,7 @@ const VolunteerShiftsTabs = (): JSX.Element => {
           <Tabs
             defaultIndex={window.location.hash === "#rescue" ? 1 : 0}
             variant="soft-rounded"
-            colorScheme="gray"
+            colorScheme="dorian"
           >
             <TabList>
               <NavLink to={{ hash: "checkin" }}>
