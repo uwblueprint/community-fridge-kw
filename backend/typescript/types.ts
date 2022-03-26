@@ -154,7 +154,7 @@ export type CheckInDTO = {
   startDate: Date;
   endDate: Date;
   notes?: string;
-  volunteerId?: string | null;
+  volunteerId?: string;
   isAdmin?: boolean;
 };
 
