@@ -22,6 +22,7 @@ import menuIcon from "../../../assets/menuIcon.svg";
 import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { VolunteerResponse } from "../../../types/VolunteerTypes";
+import CardSubInformation from "../Card";
 
 const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
   const [volunteer, setVolunteer] = useState<VolunteerResponse>(
@@ -29,8 +30,8 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
   );
   const [currentCheckIn, setCurrentCheckIn] = useState<CheckIn>(checkIn);
 
-  const startTimeLocal = format(new Date(currentCheckIn.startDate), "hh:mm aa");
-  const endTimeLocal = format(new Date(currentCheckIn.endDate), "hh:mm aa");
+  const startTimeLocal = format(new Date(currentCheckIn.startDate), "hh:mmaa");
+  const endTimeLocal = format(new Date(currentCheckIn.endDate), "hh:mmaa");
   const { isMobile } = useViewport();
 
   useEffect(() => {
@@ -50,7 +51,10 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
   const removeVolunteer = async () => {
     const checkInResponse = await CheckInAPIClient.updateCheckInById(
       currentCheckIn.id,
-      { volunteerId: null, isAdmin: false },
+      {
+        volunteerId: undefined,
+        isAdmin: false,
+      },
     );
     setCurrentCheckIn(checkInResponse);
   };
@@ -58,7 +62,9 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
   const volunteerAsAdmin = async () => {
     const checkInResponse = await CheckInAPIClient.updateCheckInById(
       currentCheckIn.id,
-      { isAdmin: true },
+      {
+        isAdmin: true,
+      },
     );
     setCurrentCheckIn(checkInResponse);
   };
@@ -190,49 +196,33 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
               </Text>
             )}
           </VStack>
-          <VStack align="left">
-            <Text textStyle="mobileBody" lineHeight="22px" color="hubbard.100">
-              PHONE NUMBER
-            </Text>
-            <Text textStyle="mobileBody" lineHeight="22px">
-              {Object.keys(volunteer).length === 0 || !volunteer.phoneNumber
+          <CardSubInformation
+            description="Phone Number"
+            value={
+              Object.keys(volunteer).length === 0 || !volunteer.phoneNumber
                 ? "-"
-                : `${volunteer.phoneNumber}`}
-            </Text>
-          </VStack>
-          <VStack align="left">
-            <Text textStyle="mobileBody" lineHeight="22px" color="hubbard.100">
-              EMAIL
-            </Text>
-            <Text textStyle="mobileBody" lineHeight="22px">
-              {Object.keys(volunteer).length === 0 || !volunteer.email
+                : `${volunteer.phoneNumber}`
+            }
+          />
+          <CardSubInformation
+            description="Email Address"
+            value={
+              Object.keys(volunteer).length === 0 || !volunteer.email
                 ? "-"
-                : `${volunteer.email}`}
-            </Text>
-          </VStack>
-          {isMobile && currentCheckIn.notes ? (
-            <VStack align="left">
-              <Text
-                textStyle="mobileBody"
-                lineHeight="22px"
-                color="hubbard.100"
-              >
-                NOTES
-              </Text>
-              <Text textStyle="mobileBody" lineHeight="22px">
-                {currentCheckIn.notes}
-              </Text>
-            </VStack>
-          ) : (
-            <></>
+                : `${volunteer.email}`
+            }
+          />
+          {isMobile && (
+            <CardSubInformation
+              description="Notes"
+              value={currentCheckIn.notes ?? ""}
+            />
           )}
         </Stack>
-        {currentCheckIn.notes && !isMobile ? (
-          <Text>{currentCheckIn.notes}</Text>
-        ) : (
-          <></>
+        {!isMobile && (
+          <Text textStyle="desktopSmall">{currentCheckIn.notes}</Text>
         )}
-        <Box align="right" pt={["0px", "27px"]}>
+        <Box align="right">
           {Object.keys(volunteer).length === 0 && !currentCheckIn.isAdmin ? (
             <VolunteerAsAdminButton />
           ) : (

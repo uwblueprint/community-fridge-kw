@@ -1,7 +1,6 @@
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  CloseIcon,
   DeleteIcon,
   DownloadIcon,
   EditIcon,
@@ -22,7 +21,6 @@ import {
   Spacer,
   Stack,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
@@ -35,10 +33,6 @@ import { CheckIn } from "../../types/CheckInTypes";
 import CheckInCalendar from "../common/Calendar/CheckInCalendar";
 
 const ViewCheckIns = (): React.ReactElement => {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [isSavingData, setIsSavingData] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
   >(new Date());
@@ -64,27 +58,13 @@ const ViewCheckIns = (): React.ReactElement => {
     setSelectedDay(newDate);
   };
 
-  const changeEditMode = () => {
-    setIsSavingData(false);
-    setIsEditing(!isEditing);
-  };
-
-  const EditDescriptionButton = () => {
-    return !isEditing ? (
-      <Button
-        variant="editInfo"
-        rightIcon={<EditIcon size={24} />}
-        onClick={changeEditMode}
-      />
-    ) : (
-      <IconButton
-        variant="cancelEditInfo"
-        aria-label="Cancel editing"
-        icon={<CloseIcon />}
-        onClick={onOpen}
-      />
-    );
-  };
+  const EditDescriptionButton = () => (
+    <Button
+      variant="editInfo"
+      rightIcon={<EditIcon size={24} />}
+      onClick={() => alert("Edit content clicked!")}
+    />
+  );
 
   const menuListStyle = {
     minWidth: "105px",
