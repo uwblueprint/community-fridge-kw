@@ -39,7 +39,7 @@ const VolunteerShiftsPage = () => {
     setVolunteerStatus(volunteerResponse.status);
   };
 
-  const { step }: UseStepType = useStep({
+  const { step, navigation }: UseStepType = useStep({
     steps,
     initialStep: 1,
   });
@@ -61,7 +61,7 @@ const VolunteerShiftsPage = () => {
         </Container>
       );
     case "shifts tab":
-      return <VolunteerShiftsTabs />;
+      return <VolunteerShiftsTabs navigation={navigation} />;
     case "confirm shift sign up":
       return (
         <Container centerContent variant="responsiveContainer">
