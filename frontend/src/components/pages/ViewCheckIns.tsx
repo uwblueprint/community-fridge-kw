@@ -1,4 +1,11 @@
-import { ChevronLeftIcon, ChevronRightIcon, CloseIcon } from "@chakra-ui/icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  DeleteIcon,
+  DownloadIcon,
+  EditIcon,
+} from "@chakra-ui/icons";
 import {
   Button,
   Container,
@@ -22,10 +29,7 @@ import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 
 import CheckInAPIClient from "../../APIClients/CheckInAPIClient";
-import deleteIcon from "../../assets/deleteIcon.svg";
-import downloadIcon from "../../assets/downloadIcon.svg";
 import menuIcon from "../../assets/menuIcon.svg";
-import pencilIconHollow from "../../assets/pencilIconHollow.svg";
 import useViewport from "../../hooks/useViewport";
 import { CheckIn } from "../../types/CheckInTypes";
 import CheckInCalendar from "../common/Calendar/CheckInCalendar";
@@ -69,14 +73,7 @@ const ViewCheckIns = (): React.ReactElement => {
     return !isEditing ? (
       <Button
         variant="editInfo"
-        rightIcon={
-          <Img
-            src={pencilIconHollow}
-            alt="pencil icon"
-            width="24px"
-            display="inline"
-          />
-        }
+        rightIcon={<EditIcon size={24} />}
         onClick={changeEditMode}
       />
     ) : (
@@ -143,14 +140,7 @@ const ViewCheckIns = (): React.ReactElement => {
                   size="md"
                   onClick={() => {}}
                   variant="export"
-                  leftIcon={
-                    <Img
-                      src={deleteIcon}
-                      alt="delete icon"
-                      width="16px"
-                      display="inline"
-                    />
-                  }
+                  leftIcon={<DeleteIcon />}
                   width="2.5rem"
                 >
                   Delete
@@ -160,14 +150,7 @@ const ViewCheckIns = (): React.ReactElement => {
                   size="md"
                   onClick={() => {}}
                   variant="export"
-                  leftIcon={
-                    <Img
-                      src={downloadIcon}
-                      alt="download icon"
-                      width="16px"
-                      display="inline"
-                    />
-                  }
+                  leftIcon={<DownloadIcon />}
                   width="2.5rem"
                 >
                   Export
