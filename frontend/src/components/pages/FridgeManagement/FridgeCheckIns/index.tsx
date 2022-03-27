@@ -68,13 +68,12 @@ const CreateCheckIn = () => {
       </Text>
       <FormControl isRequired m="3em 0">
         <FormLabel fontWeight="600">Select time range</FormLabel>
-        <HStack maxW="740px">
+        <HStack maxW="740px" spacing="1rem">
           <Input
             type="time"
             onChange={(e: any) => {
               // handleChange(e, "startTime");
             }}
-            pr="3em"
           />
           <Text>to</Text>
           <Input
@@ -82,7 +81,6 @@ const CreateCheckIn = () => {
             onChange={(e: any) => {
               // handleChange(e, "endTime");
             }}
-            l="3em"
           />
         </HStack>
       </FormControl>
@@ -109,14 +107,20 @@ const CreateCheckIn = () => {
             openCalendar: React.MouseEventHandler<HTMLInputElement>,
           ) => {
             return (
-              <HStack maxW="740px">
+              <HStack maxW="740px" spacing="1rem">
                 <Input
                   onClick={openCalendar}
-                  value={value[0]}
-                  placeholder="MM-DD-YY"
+                  value={new DateObject(value[0]).format("MMM DD, YYYY")}
                 />
                 <Text>to</Text>
-                <Input value={value[1] ? value[1] : "MM-DD-YYYY"} disabled />
+                <Input
+                  value={
+                    value[1]
+                      ? new DateObject(value[1]).format("MMM DD, YYYY")
+                      : "MM/DD/YYYY"
+                  }
+                  disabled
+                />
               </HStack>
             );
           }}

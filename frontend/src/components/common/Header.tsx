@@ -23,7 +23,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
-import { Link as ReactLink, Redirect, useHistory } from "react-router-dom";
+import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
 import * as Routes from "../../constants/Routes";
@@ -140,7 +140,11 @@ const Header = (): JSX.Element => {
                           <MenuItem
                             as={ReactLink}
                             to={Routes.ADMIN_CHECK_INS}
-                            style={hoveredItem === "checkIns" ? hoverMenuItemStyle : menuItemStyle}
+                            style={
+                              hoveredItem === "checkIns"
+                                ? hoverMenuItemStyle
+                                : menuItemStyle
+                            }
                             _focus={{
                               bg: "raddish.50",
                             }}
@@ -154,7 +158,11 @@ const Header = (): JSX.Element => {
                           <MenuItem
                             as={ReactLink}
                             to={Routes.ADMIN_VIEW_DONATIONS}
-                            style={hoveredItem === "scheduledDonations" ? hoverMenuItemStyle : menuItemStyle}
+                            style={
+                              hoveredItem === "scheduledDonations"
+                                ? hoverMenuItemStyle
+                                : menuItemStyle
+                            }
                             _focus={{
                               bg: "raddish.50",
                             }}

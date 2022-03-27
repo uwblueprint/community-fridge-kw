@@ -408,7 +408,7 @@ const SelectDateTime = ({
         </>
       )}
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
-      Date and time
+        Date and time
       </Text>
       <FormControl isRequired isInvalid={!!formErrors.date}>
         <FormLabel fontWeight="600">Select date</FormLabel>
