@@ -2,7 +2,6 @@ import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Center,
   Container,
   FormControl,
   FormErrorMessage,
@@ -75,7 +74,11 @@ const Account = (): JSX.Element => {
         );
       }
       setDonor(donorResponse);
-   setBusinessName(authenticatedUser?.role !== Role.VOLUNTEER ? donorResponse.businessName: "");
+      setBusinessName(
+        authenticatedUser?.role !== Role.VOLUNTEER
+          ? donorResponse.businessName
+          : "",
+      );
     };
     if (authenticatedUser?.role !== Role.VOLUNTEER) getDonor();
   }, [authenticatedUser]);
@@ -102,9 +105,9 @@ const Account = (): JSX.Element => {
 
   const navigateToDashboard = () => {
     history.push(
-      authenticatedUser!.role === Role.DONOR
-        ? Routes.DASHBOARD_PAGE
-        : Routes.VIEW_DONATIONS,
+      authenticatedUser!.role === Role.ADMIN
+        ? Routes.ADMIN_VIEW_DONATIONS
+        : Routes.DASHBOARD_PAGE,
     );
   };
 
@@ -288,7 +291,7 @@ const Account = (): JSX.Element => {
 
         <HStack align="flex-end">
           <Text mt="1em" textStyle="mobileHeader1">
-            My Account
+            My account
           </Text>
           <Spacer />
           <EditInfoButton />
@@ -325,8 +328,8 @@ const Account = (): JSX.Element => {
           color="hubbard.100"
         >
           {authenticatedUser?.role === Role.VOLUNTEER
-            ? "Volunteer Information"
-            : "Point of Contact"}
+            ? "Volunteer information"
+            : "Point of contact"}
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
@@ -422,7 +425,7 @@ const Account = (): JSX.Element => {
               variant="navigation"
               onClick={onResetPasswordClick}
             >
-              Change Password
+              Change password
             </Button>
           </Box>
         )}

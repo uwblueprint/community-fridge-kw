@@ -44,8 +44,7 @@ const PendingPage = () => {
         mt="1em"
         color="hubbard.100"
       >
-        Check back soon to see if your profile has been approved. You will also
-        receive a welcome email when you have been approved!
+        You will receive an email when your account has been approved!
       </Text>
     </Container>
   );

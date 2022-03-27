@@ -125,34 +125,45 @@ class CronService implements ICronService {
     const today: Date = dayjs().toDate();
     const tomorrow: Date = dayjs().add(1, "days").toDate();
 
-    cron.schedule("0 0 0 * *", async () => {
-      const schedules: Array<Schedule> = await Schedule.findAll({
-        where: {
-          start_time: {
-            [Op.and]: [{ [Op.gte]: today }, { [Op.lte]: tomorrow }],
+    try {
+      cron.schedule("0 0 0 * *", async () => {
+        const schedules: Array<Schedule> = await Schedule.findAll({
+          where: {
+            start_time: {
+              [Op.and]: [{ [Op.gte]: today }, { [Op.lte]: tomorrow }],
+            },
           },
-        },
-      });
+        });
 
-      schedules.forEach(async (schedule: Schedule) => {
-        const user: User | null = await User.findByPk(
-          Number(schedule.donor_id),
-        );
-
-        if (!user) {
-          throw new Error(`donorId ${schedule.donor_id} not found.`);
-        }
-
-        try {
-          this.sendScheduledDonationEmail(schedule);
-        } catch (error) {
-          Logger.error(
-            `Failed to send reminder email. Reason = ${getErrorMessage(error)}`,
+        schedules.forEach(async (schedule: Schedule) => {
+          const user: User | null = await User.findByPk(
+            Number(schedule.donor_id),
           );
-          throw error;
-        }
+
+          if (!user) {
+            throw new Error(`donorId ${schedule.donor_id} not found.`);
+          }
+
+          try {
+            this.sendScheduledDonationEmail(schedule);
+          } catch (error) {
+            Logger.error(
+              `Failed to send reminder email. Reason = ${getErrorMessage(
+                error,
+              )}`,
+            );
+            throw error;
+          }
+        });
       });
-    });
+    } catch (error) {
+      Logger.error(
+        `Failed to run checkReminders cron service. Reason = ${getErrorMessage(
+          error,
+        )}`,
+      );
+      throw error;
+    }
   }
 }
 

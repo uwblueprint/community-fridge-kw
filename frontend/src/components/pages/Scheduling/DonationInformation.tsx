@@ -118,7 +118,7 @@ const DonationInformation: any = ({
 
     if (!res) {
       toast({
-        title: "Donation Information could not be updated. Please try again",
+        title: "Donation information could not be updated. Please try again",
         status: "error",
         duration: 7000,
         isClosable: true,
@@ -126,7 +126,7 @@ const DonationInformation: any = ({
       return;
     }
     toast({
-      title: "Donation Information updated successfully",
+      title: "Donation information updated successfully",
       status: "success",
       duration: 7000,
       isClosable: true,
@@ -152,7 +152,7 @@ const DonationInformation: any = ({
         </>
       )}
       <Text textStyle="mobileHeader2" mt="2em">
-        Donation Information
+        Donation information
       </Text>
       <RadioImageSelectGroup
         value={size}

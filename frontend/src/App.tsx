@@ -11,6 +11,7 @@ import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
+import CheckInsPage from "./components/pages/CheckInsPage";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import Home from "./components/pages/Home";
@@ -68,6 +69,7 @@ const App = (): React.ReactElement => {
                 <Route exact path={Routes.SIGNUP_PAGE} component={Signup} />
                 <Route exact path={Routes.LANDING_PAGE} component={Home} />
                 <PrivateRoute
+                  adminOnly
                   exact
                   path={Routes.USER_MANAGEMENT_PAGE}
                   component={UserManagement}
@@ -82,10 +84,17 @@ const App = (): React.ReactElement => {
                   path={Routes.ACCOUNT_PAGE}
                   component={Account}
                 />
-                <Route
+                <PrivateRoute
+                  adminOnly
                   exact
-                  path={Routes.VIEW_DONATIONS}
+                  path={Routes.ADMIN_VIEW_DONATIONS}
                   component={ViewDonationsPage}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_CHECK_INS}
+                  component={CheckInsPage}
                 />
                 <PrivateRoute
                   exact

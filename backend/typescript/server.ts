@@ -67,7 +67,7 @@ if (
     new DonorService(),
   );
 
-  cronService.checkReminders();
+  // cronService.checkReminders();
 }
 
 const PORT = process.env.PORT || 5000;

@@ -50,7 +50,7 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
           maxWidth="500px"
           size="lg"
         >
-          View Dashboard
+          View dashboard
         </Button>
       </HStack>
     </Container>
