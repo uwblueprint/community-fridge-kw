@@ -211,8 +211,17 @@ class VolunteerService implements IVolunteerService {
       );
 
       if (!deletedVolunteer) {
-        throw new Error(`id ${id} not found.`);
+        throw new Error(`volunteerId ${id} not found.`);
       }
+
+      const numDestroyed: number = await Volunteer.destroy({
+        where: { id },
+      });
+
+      if (numDestroyed <= 0) {
+        throw new Error(`id ${id} was not deleted in Postgres.`);
+      }
+
       try {
         await Scheduling.update(
           {
@@ -224,7 +233,7 @@ class VolunteerService implements IVolunteerService {
         );
       } catch (error) {
         Logger.error(
-          `Failed to update schedules volunteer id. Reason = ${getErrorMessage(
+          `Failed to remove volunteerId from schedule. Reason = ${getErrorMessage(
             error,
           )}`,
         );
@@ -242,19 +251,11 @@ class VolunteerService implements IVolunteerService {
         );
       } catch (error) {
         Logger.error(
-          `Failed to update checkins volunteer id. Reason = ${getErrorMessage(
+          `Failed to remove volunteerId from checkin. Reason = ${getErrorMessage(
             error,
           )}`,
         );
         throw error;
-      }
-
-      const numDestroyed: number = await Volunteer.destroy({
-        where: { id },
-      });
-
-      if (numDestroyed <= 0) {
-        throw new Error(`id ${id} was not deleted in Postgres.`);
       }
     } catch (error) {
       Logger.error(

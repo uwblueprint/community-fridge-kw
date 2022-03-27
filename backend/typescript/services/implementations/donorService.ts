@@ -154,6 +154,13 @@ class DonorService implements IDonorService {
       if (!deletedDonor) {
         throw new Error(`id ${id} not found.`);
       }
+      const numDestroyed: number = await Donor.destroy({
+        where: { id },
+      });
+
+      if (numDestroyed <= 0) {
+        throw new Error(`id ${id} was not deleted in Postgres.`);
+      }
       try {
         await Scheduling.destroy({
           where: { donor_id: deletedDonor.id },
@@ -165,14 +172,6 @@ class DonorService implements IDonorService {
           )}`,
         );
         throw error;
-      }
-
-      const numDestroyed: number = await Donor.destroy({
-        where: { id },
-      });
-
-      if (numDestroyed <= 0) {
-        throw new Error(`id ${id} was not deleted in Postgres.`);
       }
     } catch (error) {
       Logger.error(

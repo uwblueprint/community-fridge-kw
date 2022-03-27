@@ -302,7 +302,7 @@ class UserService implements IUserService {
         if (!deletedDonor) {
           throw new Error(`Donor with userid ${userId} not found.`);
         }
-        donorService.deleteDonorById(deletedDonor.id);
+        await donorService.deleteDonorById(deletedDonor.id);
       } else if (deletedUser.role === Role.VOLUNTEER) {
         deletedVolunteer = await Volunteer.findOne({
           where: {
@@ -312,7 +312,7 @@ class UserService implements IUserService {
         if (!deletedVolunteer) {
           throw new Error(`Volunteer with userid ${userId} not found.`);
         }
-        volunteerService.deleteVolunteerById(deletedVolunteer.id);
+        await volunteerService.deleteVolunteerById(deletedVolunteer.id);
       }
       const numDestroyed: number = await User.destroy({
         where: { id: userId },
@@ -345,6 +345,7 @@ class UserService implements IUserService {
           } else if (deletedUser.role === Role.VOLUNTEER && deletedVolunteer) {
             await Volunteer.create({
               user_id: deletedUser.id,
+              status: deletedVolunteer.status,
             });
           }
         } catch (postgresError: unknown) {
