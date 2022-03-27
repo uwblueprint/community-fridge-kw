@@ -12,6 +12,7 @@ import {
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
+
 import AuthContext from "../../../../contexts/AuthContext";
 import { CheckIn } from "../../../../types/CheckInTypes";
 
@@ -53,7 +54,7 @@ const CreateCheckIn = () => {
       </Text>
       <FormControl isRequired m="3em 0">
         <FormLabel fontWeight="600">Select time range</FormLabel>
-        <HStack maxW="740px">
+        <HStack maxW="740px" spacing="1rem">
           <Input
             type="time"
             onChange={(e: any) => {
@@ -79,20 +80,27 @@ const CreateCheckIn = () => {
           onChange={(e: DateObject[]) => {
             setDates(e);
           }}
-          render={(value: string, openCalendar: React.MouseEventHandler<HTMLInputElement>) => {
+          render={(
+            value: string,
+            openCalendar: React.MouseEventHandler<HTMLInputElement>,
+          ) => {
             return (
-              <HStack maxW="740px">
+              <HStack maxW="740px" spacing="1rem">
                 <Input
                   onClick={openCalendar}
-                  value={value[0]}
+                  value={new DateObject(value[0]).format("MMM DD, YYYY")}
                 />
                 <Text>to</Text>
                 <Input
-                  value={value[1] || "MM-DD-YYYY"}
+                  value={
+                    value[1]
+                      ? new DateObject(value[1]).format("MMM DD, YYYY")
+                      : "MM/DD/YYYY"
+                  }
                   disabled
                 />
               </HStack>
-            )
+            );
           }}
         />
       </FormControl>
