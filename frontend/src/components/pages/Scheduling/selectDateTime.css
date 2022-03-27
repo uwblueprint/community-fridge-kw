@@ -23,17 +23,14 @@
   color: #000 !important;
 }
 
-.rmdp-day.rmdp-today.rmdp-selected span {
-  color: #fff !important;
-}
-
 .rmdp-day.rmdp-today span {
   color: #000 !important;
   background-color: transparent !important;
 }
 
-.rmdp-day.rmdp-selected span, .rmdp-day.rmdp-selected.rmdp-today span {
-  background-color: #C31887 !important;
+.rmdp-day.rmdp-selected span, .rmdp-day.rmdp-selected.rmdp-today span, .rmdp-day.rmdp-range.start span, .rmdp-day.rmdp-range.end span {
+  background-color: #C24A84 !important;
+  color: #fff !important;
 }
 
 .rmdp-container {
@@ -45,7 +42,7 @@
 }
 
 .rmdp-arrow {
-  border: solid #C31887 !important;
+  border: solid #C24A84 !important;
   border-width: 0 2px 2px 0 !important;
   margin-top: 6px; 
 }
@@ -55,10 +52,20 @@
   border-width: 0 2px 2px 0 !important;
 }
 
-.rmdp-arrow-container:hover {
-  background-color: #C31887 !important;
+.rmdp-arrow-container:hover, .rmdp-day span:hover {
+  background-color: #f38dcf !important;
+}
+
+.rmdp-day.rmdp-disabled span:hover, .rmdp-day.rmdp-day-hidden span:hover {
+  background-color: transparent !important;
 }
 
 .rmdp-arrow-container.disabled.rmdp-right, .rmdp-arrow-container.disabled.rmdp-left {
  display: none !important;
+}
+
+.rmdp-day.rmdp-range {
+  box-shadow: none !important;
+  color: #000 !important;
+  background-color: #ffe5f9 !important;
 }

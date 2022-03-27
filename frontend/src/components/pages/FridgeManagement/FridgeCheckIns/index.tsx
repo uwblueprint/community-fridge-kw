@@ -9,10 +9,9 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
-import Icon from "react-multi-date-picker/components/icon";
 import AuthContext from "../../../../contexts/AuthContext";
 import { CheckIn } from "../../../../types/CheckInTypes";
 
@@ -27,6 +26,8 @@ const checkInDefaultData = ({
 const CreateCheckIn = () => {
   const { authenticatedUser } = useContext(AuthContext);
   const [checkInFormValues, setCheckInForm] = useForm(checkInDefaultData);
+  const [dates, setDates] = useState([new DateObject()]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -58,7 +59,6 @@ const CreateCheckIn = () => {
             onChange={(e: any) => {
               handleChange(e, "startTime");
             }}
-            pr="3em"
           />
           <Text>to</Text>
           <Input
@@ -66,46 +66,35 @@ const CreateCheckIn = () => {
             onChange={(e: any) => {
               handleChange(e, "endTime");
             }}
-            l="3em"
           />
         </HStack>
       </FormControl>
       <FormControl isRequired m="3em 0">
         <FormLabel fontWeight="600">Select date range</FormLabel>
         <FormHelperText mb="1em">Create shifts daily from:</FormHelperText>
-        <HStack maxW="740px">
-          <DatePicker
-            range
-            onChange={(e: any) => {
-              handleChange(e[0], "startDate");
-              handleChange(e[1], "endDate");
-            }}
-            minDate={new Date()}
-            value={null}
-            render={<Icon />}
-          />
-          <Input
-            placeholder={
-              checkInFormValues.startDate
-                ? new DateObject(checkInFormValues.startDate).format(
-                    "MMMM D, YYYY",
-                  )
-                : "MM-DD-YYYY"
-            }
-            style={{ pointerEvents: "none" }}
-          />
-          <Text>to</Text>
-          <Input
-            placeholder={
-              checkInFormValues.endDate
-                ? new DateObject(checkInFormValues.endDate).format(
-                    "MMMM D, YYYY",
-                  )
-                : "MM-DD-YYYY"
-            }
-            style={{ pointerEvents: "none" }}
-          />
-        </HStack>
+        <DatePicker
+          range
+          minDate={new Date()}
+          value={dates}
+          onChange={(e: DateObject[]) => {
+            setDates(e);
+          }}
+          render={(value: string, openCalendar: React.MouseEventHandler<HTMLInputElement>) => {
+            return (
+              <HStack maxW="740px">
+                <Input
+                  onClick={openCalendar}
+                  value={value[0]}
+                />
+                <Text>to</Text>
+                <Input
+                  value={value[1] || "MM-DD-YYYY"}
+                  disabled
+                />
+              </HStack>
+            )
+          }}
+        />
       </FormControl>
       <FormControl m="3em 0">
         <FormLabel fontWeight="600">Add notes</FormLabel>
