@@ -167,6 +167,11 @@ export enum ShiftType {
   SCHEDULING = "scheduling",
 }
 
+export type SchedulingDTOWithShiftType = SchedulingDTO & {
+  type: ShiftType.SCHEDULING;
+};
+export type CheckInDTOWithShiftType = CheckInDTO & { type: ShiftType.CHECKIN };
+
 export type DTOTypes = Record<
   string,
   Date | string | string[] | boolean | number | null | undefined

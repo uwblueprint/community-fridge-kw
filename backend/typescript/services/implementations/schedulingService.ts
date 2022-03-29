@@ -938,6 +938,7 @@ class SchedulingService implements ISchedulingService {
       schedulings = await Scheduling.findAll({
         where: {
           volunteer_id: Number(volunteerId),
+          volunteer_needed: true,
         },
         order: [["start_time", "ASC"]],
       });

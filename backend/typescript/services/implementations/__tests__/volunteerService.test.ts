@@ -6,15 +6,8 @@ import Volunteer from "../../../models/volunteer.model";
 import Scheduling from "../../../models/scheduling.model";
 import Donor from "../../../models/donor.model";
 import CheckIn from "../../../models/checkIn.model";
-import ICheckInService from "../../interfaces/checkInService";
 import IDonorService from "../../interfaces/donorService";
-import CheckInService from "../checkInService";
 import DonorService from "../donorService";
-import ISchedulingService from "../../interfaces/schedulingService";
-import SchedulingService from "../schedulingService";
-import IEmailService from "../../interfaces/emailService";
-import nodemailerConfig from "../../../nodemailer.config";
-import EmailService from "../emailService";
 import { testDonorsDb } from "../../../testUtils/schedulingService";
 import {
   testUsers,
@@ -56,14 +49,8 @@ describe("Testing VolunteerService Functions", () => {
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
-    const emailService: IEmailService = new EmailService(nodemailerConfig);
     const donorService: IDonorService = new DonorService();
-    const checkInService: ICheckInService = new CheckInService();
-    const schedulingService: ISchedulingService = new SchedulingService(
-      emailService,
-      donorService,
-    );
-    volunteerService = new VolunteerService(checkInService, schedulingService);
+    volunteerService = new VolunteerService();
 
     // bulk create all users and volunteers using the user and volunteer models
     await User.bulkCreate(users);

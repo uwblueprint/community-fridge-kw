@@ -7,17 +7,13 @@ import {
 } from "../middlewares/validators/authValidators";
 import nodemailerConfig from "../nodemailer.config";
 import AuthService from "../services/implementations/authService";
-import CheckInService from "../services/implementations/checkInService";
 import DonorService from "../services/implementations/donorService";
 import EmailService from "../services/implementations/emailService";
-import SchedulingService from "../services/implementations/schedulingService";
 import UserService from "../services/implementations/userService";
 import VolunteerService from "../services/implementations/volunteerService";
 import IAuthService from "../services/interfaces/authService";
-import ICheckInService from "../services/interfaces/checkInService";
 import IDonorService from "../services/interfaces/donorService";
 import IEmailService from "../services/interfaces/emailService";
-import ISchedulingService from "../services/interfaces/schedulingService";
 import IUserService from "../services/interfaces/userService";
 import IVolunteerService from "../services/interfaces/volunteerService";
 import { Role } from "../types";
@@ -28,15 +24,7 @@ const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
 const donorService: IDonorService = new DonorService();
-const checkInService: ICheckInService = new CheckInService();
-const schedulingService: ISchedulingService = new SchedulingService(
-  emailService,
-  donorService,
-);
-const volunteerService: IVolunteerService = new VolunteerService(
-  checkInService,
-  schedulingService,
-);
+const volunteerService: IVolunteerService = new VolunteerService();
 
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/login", loginRequestValidator, async (req, res) => {
