@@ -81,7 +81,7 @@ describe("pg checkInService", () => {
         endDate: new Date("2021-08-30T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
-        volunteerId: "null",
+        volunteerId: null,
       },
       {
         id: "6",
@@ -89,7 +89,7 @@ describe("pg checkInService", () => {
         endDate: new Date("2021-08-31T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
-        volunteerId: "null",
+        volunteerId: null,
       },
       {
         id: "7",
@@ -97,7 +97,7 @@ describe("pg checkInService", () => {
         endDate: new Date("2021-09-01T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
-        volunteerId: "null",
+        volunteerId: null,
       },
     ];
 
