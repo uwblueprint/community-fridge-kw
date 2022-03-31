@@ -130,7 +130,7 @@ userRouter.put("/:userId", updateUserDtoValidator, async (req, res) => {
 /* Delete a user by userId or email, specified through a query parameter */
 userRouter.delete(
   "/",
-  // isAuthorizedByRole(new Set([Role.ADMIN])),
+  isAuthorizedByRole(new Set([Role.ADMIN])),
   async (req, res) => {
     const { userId, email } = req.query;
 

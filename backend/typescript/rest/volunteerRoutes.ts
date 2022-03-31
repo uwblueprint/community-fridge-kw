@@ -72,6 +72,25 @@ volunteerRouter.get("/:volunteerId?", async (req, res) => {
   }
 });
 
+volunteerRouter.get("/shifts/:volunteerId", async (req, res) => {
+  const { volunteerId } = req.params;
+  if (volunteerId) {
+    try {
+      if (typeof volunteerId !== "string") {
+        res
+          .status(400)
+          .json({ error: "volunteerId query parameter must be a string" });
+      }
+      const shifts = await volunteerService.getCheckInsAndSchedules(
+        volunteerId,
+      );
+      res.status(200).json(shifts);
+    } catch (error) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+});
+
 /* Update volunteer status by:
   - id, through URI (ex. /volunteers/1)
   - userId, through query param (ex. /volunteers/?userId=1)

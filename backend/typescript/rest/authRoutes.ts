@@ -23,8 +23,8 @@ const authRouter: Router = Router();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
-const volunteerService: IVolunteerService = new VolunteerService();
 const donorService: IDonorService = new DonorService();
+const volunteerService: IVolunteerService = new VolunteerService();
 
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/login", loginRequestValidator, async (req, res) => {

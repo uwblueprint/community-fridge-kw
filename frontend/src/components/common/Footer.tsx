@@ -42,28 +42,34 @@ const Footer = (): JSX.Element => (
           Contact Us
         </Text>
         <Flex mt={{ base: 4 }}>
-          <Link href="https://www.facebook.com/CommunityFridgeKW/">
+          <Link
+            href="https://www.facebook.com/CommunityFridgeKW/"
+            display="flex"
+            flexDirection="row"
+          >
             <Facebook />
+            <Text ml="8px">Facebook</Text>
           </Link>
-          <Container>
-            <Text>Facebook</Text>
-          </Container>
         </Flex>
         <Flex mt={{ base: 4 }}>
-          <Link href="https://www.instagram.com/communityfridgekw/">
+          <Link
+            href="https://www.instagram.com/communityfridgekw/"
+            display="flex"
+            flexDirection="row"
+          >
             <Instagram />
+            <Text ml="8px">Instagram</Text>
           </Link>
-          <Container>
-            <Text>Instagram</Text>
-          </Container>
         </Flex>
         <Flex mt={{ base: 4 }}>
-          <Link href="mailto:communityfridgekw@gmail.com">
+          <Link
+            href="mailto:communityfridgekw@gmail.com"
+            display="flex"
+            flexDirection="row"
+          >
             <Email />
+            <Text ml="8px">Email</Text>
           </Link>
-          <Container>
-            <Text>Email</Text>
-          </Container>
         </Flex>
       </VStack>
     </Container>
