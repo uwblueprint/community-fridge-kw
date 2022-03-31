@@ -40,6 +40,22 @@ const getVolunteerByUserId = async (
   }
 };
 
+const getCheckInsAndSchedules = async (
+  volunteerId: string,
+): Promise<VolunteerResponse[]> => {
+  try {
+    const { data } = await baseAPIClient.get(
+      `/volunteers/shifts/${volunteerId}`,
+      {
+        headers: { Authorization: BEARER_TOKEN },
+      },
+    );
+    return data;
+  } catch (error) {
+    return error as VolunteerResponse[];
+  }
+};
+
 const updateVolunteerById = async (
   id: string,
   volunteerData: UpdateVolunteerDataType,
@@ -91,6 +107,7 @@ export default {
   getAllVolunteers,
   getVolunteerById,
   getVolunteerByUserId,
+  getCheckInsAndSchedules,
   updateVolunteerById,
   updateVolunteerByUserId,
   deleteVolunteerById,
