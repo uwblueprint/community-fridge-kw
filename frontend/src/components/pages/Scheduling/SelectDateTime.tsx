@@ -247,7 +247,7 @@ const SelectDateTime = ({
   const handleChangeRecurringDate = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setRecurringEndDate(selectedDateObj);
-    const recurringDate = endOfDay(new Date(selectedDateObj))
+    const recurringDate = endOfDay(new Date(selectedDateObj));
     setForm({
       target: {
         name: "recurringDonationEndDate",
