@@ -1,18 +1,15 @@
 import colors from "../../../theme/colors";
 
-export enum ShiftTypes {
-  PICKUP = "Pickup assistance",
-  UNLOADING = "Unloading assistance",
-  CHECKIN = "Fridge check-in",
+export enum ShiftType {
+  CHECKIN = "checkIn",
+  SCHEDULING = "scheduling",
 }
 
-export const getShiftColor = (shift: string): string => {
+export const getShiftColor = (shift: string, isPickup: boolean): string => {
   switch (shift) {
-    case "Pickup assistance":
-      return colors.turnip["50"];
-    case "Unloading assistance":
-      return colors.onion["50"];
-    case "Fridge check-in":
+    case ShiftType.SCHEDULING:
+      return isPickup ? colors.turnip["50"] : colors.onion["50"];
+    case ShiftType.CHECKIN:
       return colors.h20["50"];
     default:
       return "";

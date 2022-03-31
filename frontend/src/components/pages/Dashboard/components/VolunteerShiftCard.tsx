@@ -8,7 +8,7 @@ import * as Routes from "../../../../constants/Routes";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import { Schedule } from "../../../../types/SchedulingTypes";
 import CardField from "../../../common/CardField";
-import { getShiftColor, ShiftTypes } from "../../VolunteerShifts/types";
+import { getShiftColor, ShiftType } from "../../VolunteerShifts/types";
 
 const VolunteerShiftCard = ({
   schedule,
@@ -30,12 +30,7 @@ const VolunteerShiftCard = ({
 
   const history = useHistory();
 
-  const shiftType = () => {
-    if (checkIn) {
-      return ShiftTypes.CHECKIN;
-    }
-    return isPickup ? ShiftTypes.PICKUP : ShiftTypes.UNLOADING;
-  };
+  const shiftType = checkIn ? ShiftType.CHECKIN : ShiftType.SCHEDULING;
 
   const dateLocal = () => {
     if (startDate) {
@@ -74,7 +69,8 @@ const VolunteerShiftCard = ({
         <Text textStyle="mobileHeader4" whiteSpace="nowrap" minWidth="225px">
           {`${dateLocal()}`}
           <Text minWidth="125px" textStyle="mobileSmall" color="hubbard.100">
-            {shiftType()}
+            {shiftType === ShiftType.CHECKIN && "Fridge check-in"}
+            {shiftType === ShiftType.SCHEDULING && isPickup ? "Pickup assistance" : "Unloading assistance"}
           </Text>
         </Text>
         <Button
@@ -93,7 +89,7 @@ const VolunteerShiftCard = ({
         mr={{ base: "0px", md: "24px" }}
         p="2rem"
         borderRadius="8px"
-        bg={getShiftColor(shiftType())}
+        bg={getShiftColor(shiftType, !!isPickup)}
         width={{ base: "default", md: "100%" }}
         onClick={() => history.push(`${Routes.DASHBOARD_PAGE}`)}
         overflow="hidden"
