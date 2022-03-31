@@ -2,7 +2,7 @@ import { EditIcon } from "@chakra-ui/icons";
 import { Button, Link, Text } from "@chakra-ui/react";
 import React from "react";
 
-const FridgeCheckInDescription = () => (
+export const FridgeCheckInDescription = () => (
   <>
     <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
       Fridge check-in description
@@ -34,7 +34,7 @@ const FridgeCheckInDescription = () => (
   </>
 );
 
-const FridgeFoodRescueDescription = () => (
+export const FridgeFoodRescueDescription = () => (
   <>
     <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
       Scheduled donations
@@ -65,4 +65,3 @@ const FridgeFoodRescueDescription = () => (
     </Text>
   </>
 );
-export default FridgeCheckInDescription;
