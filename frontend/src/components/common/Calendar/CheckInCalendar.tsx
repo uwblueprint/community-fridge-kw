@@ -3,7 +3,7 @@ import React from "react";
 
 import { CheckIn } from "../../../types/CheckInTypes";
 import CheckInInfoCard from "./CheckInInfoCard";
-import { WeeklyCalendar, WeeklyCheckInBody } from "./WeeklyCalendar";
+import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
 
 type CalendarProps = {
   selectedDay: Date;
@@ -16,12 +16,15 @@ const CheckInCalendar = ({
 }: CalendarProps): React.ReactElement => {
   return (
     <WeeklyCalendar week={selectedDay}>
-      <WeeklyCheckInBody
+      <WeeklyBody
         selectedDay={selectedDay}
-        checkIns={checkIns}
-        renderItem={({ checkIn }) => (
+        schedules={checkIns}
+        renderItem={({ schedule }) => (
           <Box display="block" pb="1.5rem" width="100%">
-            <CheckInInfoCard key={JSON.stringify(checkIn)} checkIn={checkIn} />
+            <CheckInInfoCard
+              key={JSON.stringify(schedule)}
+              checkIn={schedule as CheckIn}
+            />
           </Box>
         )}
       />

@@ -1,38 +1,24 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  DeleteIcon,
-  DownloadIcon,
-} from "@chakra-ui/icons";
-import {
-  Button,
   Container,
   Flex,
   HStack,
   IconButton,
-  Img,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Show,
   Spacer,
-  Stack,
   Text,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 
-import CheckInAPIClient from "../../APIClients/CheckInAPIClient";
-import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
-import menuIcon from "../../assets/menuIcon.svg";
-import useViewport from "../../hooks/useViewport";
-import { CheckIn } from "../../types/CheckInTypes";
-import { Schedule } from "../../types/SchedulingTypes";
-import Calendar from "../common/Calendar/Calendar";
-import CheckInCalendar from "../common/Calendar/CheckInCalendar";
-import FridgeCheckInDescription from "../common/FridgeCheckInDescription";
+import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import useViewport from "../../../hooks/useViewport";
+import { CheckIn } from "../../../types/CheckInTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
+import Calendar from "../../common/Calendar/Calendar";
+import CheckInCalendar from "../../common/Calendar/CheckInCalendar";
+import CheckInAdminButtons from "./components/CheckInAdminButtons";
 
 const ViewDonationsAndCheckins = ({
   isAdminView,
@@ -66,7 +52,7 @@ const ViewDonationsAndCheckins = ({
     };
 
     getCheckIns();
-  }, [checkIns]);
+  }, []);
 
   const changeDays = (days: number) => {
     setTest(test + 1); // need this for some reason
@@ -88,105 +74,10 @@ const ViewDonationsAndCheckins = ({
           textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
           pt="2rem"
         >
-          Scheduled donations
+          {isCheckInView ? "Fridge check-ins" : "Scheduled donations"}
         </Text>
 
-        {isCheckInView && (
-          <>
-            <HStack
-              alignItems="center"
-              display="flex"
-              width="100%"
-              alignContent="left"
-            >
-              <Text textStyle={["mobileHeader2", "desktopHeader2"]}>
-                Fridge check-ins
-              </Text>
-
-              <Spacer />
-
-              <Show above="md">
-                <Stack direction="row" spacing={4}>
-                  <Button
-                    size="md"
-                    onClick={() => {}}
-                    variant="create"
-                    width="2.5rem"
-                    lineHeight="20px"
-                  >
-                    + Create
-                  </Button>
-
-                  <Button
-                    size="md"
-                    onClick={() => {}}
-                    variant="export"
-                    leftIcon={<DeleteIcon />}
-                    width="2.5rem"
-                  >
-                    Delete
-                  </Button>
-
-                  <Button
-                    size="md"
-                    onClick={() => {}}
-                    variant="export"
-                    leftIcon={<DownloadIcon />}
-                    width="2.5rem"
-                  >
-                    Export
-                  </Button>
-                </Stack>
-              </Show>
-            </HStack>
-            <FridgeCheckInDescription />
-            <Show below="md">
-              <HStack mt="3.5rem" spacing="7px">
-                <Button
-                  size="sm"
-                  onClick={() => {}}
-                  variant="create"
-                  width="100%"
-                  lineHeight="20px"
-                  height="42px"
-                  py="12px"
-                >
-                  + Create
-                </Button>
-                <Menu placement="bottom-end" size="xs">
-                  <MenuButton
-                    as={IconButton}
-                    aria-label="Options"
-                    icon={
-                      <Img
-                        display="inline"
-                        src={menuIcon}
-                        alt="menu icon"
-                        width="24px"
-                      />
-                    }
-                    variant="export"
-                    pl="7px"
-                    pr="13px"
-                    height="44px"
-                  />
-                  <MenuList>
-                    <MenuItem hover={{ bg: "dorian.100" }}>
-                      <Text textStyle="mobileSmall" color="hubbard.100">
-                        Export
-                      </Text>
-                    </MenuItem>
-                    <MenuItem _hover={{ bg: "dorian.100" }}>
-                      <Text textStyle="mobileSmall" color="hubbard.100">
-                        Delete
-                      </Text>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
-              </HStack>
-            </Show>
-          </>
-        )}
+        {isCheckInView && <CheckInAdminButtons />}
         {isMobile ? (
           <HStack py="1.2rem" width="inherit" alignItems="center">
             <Text textStyle="mobileHeader4" whiteSpace="nowrap">

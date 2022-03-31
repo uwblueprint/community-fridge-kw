@@ -73,13 +73,13 @@ const DayButton = ({ day }: DayButtonProps) => {
 };
 
 type RenderItemProps<EventItem> = {
-  schedule: Schedule;
+  schedule: Schedule | CheckIn;
   showingFullWeek: boolean;
 };
 
 type WeeklyBodyProps<EventItem> = {
   selectedDay: Date;
-  schedules: Schedule[];
+  schedules: Schedule[] | CheckIn[];
   renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
 };
 
@@ -118,11 +118,14 @@ export function WeeklyBody<EventItem>({
                 }}
               />
 
-              {schedules.map((schedule) => {
+              {(schedules as Array<Schedule | CheckIn>).map((schedule) => {
                 const currentDate = setDay(week, selectedDay.getDay() + i, {
                   locale,
                 });
-                const scheduledDate = new Date(schedule?.startTime as string);
+                const scheduledDate =
+                  "startTime" in schedule
+                    ? new Date(schedule?.startTime as string)
+                    : new Date(schedule?.startDate as string);
 
                 if (
                   schedule === null ||
@@ -146,86 +149,3 @@ export function WeeklyBody<EventItem>({
     </>
   );
 }
-
-type RenderCheckInItemProps<EventItem> = {
-  checkIn: CheckIn;
-  showingFullWeek: boolean;
-};
-
-type WeeklyCheckInBodyProps<EventItem> = {
-  selectedDay: Date;
-  checkIns: CheckIn[];
-  renderItem: (item: RenderCheckInItemProps<EventItem>) => ReactNode;
-};
-
-export function WeeklyCheckInBody<EventItem>({
-  selectedDay,
-  checkIns,
-  renderItem,
-}: WeeklyCheckInBodyProps<EventItem>) {
-  const { isMobile } = useViewport();
-  const { locale, week } = useWeeklyCalendar();
-
-  const getDay = (datePassed: Date, i: number): string => {
-    const datePassedDay = datePassed.getDay();
-    const updatedDay = (datePassedDay + i) % 7;
-
-    const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-
-    return days[updatedDay];
-  };
-
-  return (
-    <>
-      {[...Array(isMobile ? 1 : 3)].map((_, i) => {
-        return (
-          <div key={i}>
-            <VStack
-              justifyItems="flex-start"
-              alignContent="start"
-              pb="3rem"
-              width="100%"
-            >
-              <DayButton
-                day={{
-                  day: selectedDay.getDay() + i,
-                  label: getDay(selectedDay, i),
-                }}
-              />
-
-              {checkIns.map((checkIn) => {
-                const currentDate = setDay(week, selectedDay.getDay() + i, {
-                  locale,
-                });
-                const scheduledDate = new Date(checkIn?.startDate as string);
-
-                if (
-                  checkIn === null ||
-                  scheduledDate === null ||
-                  scheduledDate.getDate() !== currentDate.getDate() ||
-                  scheduledDate.getMonth() !== currentDate.getMonth() ||
-                  scheduledDate.getFullYear() !== currentDate.getFullYear()
-                ) {
-                  return null;
-                }
-
-                return renderItem({
-                  checkIn,
-                  showingFullWeek: selectedDay === undefined,
-                });
-              })}
-            </VStack>
-          </div>
-        );
-      })}
-    </>
-  );
-}
-
-export const WeeklyResponsiveContainer = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
-  return <div>{children}</div>;
-};
