@@ -112,18 +112,18 @@ export type SchedulingDTO = {
   categories: string[];
   size?: string;
   isPickup: boolean;
-  pickupLocation?: string;
+  pickupLocation?: string | null;
   dayPart: DayPart;
   startTime: Date;
   endTime: Date;
   status: Status;
   frequency: Frequency;
-  recurringDonationId?: string;
-  recurringDonationEndDate?: Date;
+  recurringDonationId?: string | null;
+  recurringDonationEndDate?: Date | null;
   volunteerNeeded: boolean;
-  volunteerTime?: string;
+  volunteerTime?: string | null;
   notes?: string;
-  volunteerId?: string;
+  volunteerId?: string | null;
 };
 
 export type CreateSchedulingDTO = Omit<SchedulingDTO, "id">;
@@ -161,6 +161,16 @@ export type CheckInDTO = {
 export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
 
 export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;
+
+export enum ShiftType {
+  CHECKIN = "checkIn",
+  SCHEDULING = "scheduling",
+}
+
+export type SchedulingDTOWithShiftType = SchedulingDTO & {
+  type: ShiftType.SCHEDULING;
+};
+export type CheckInDTOWithShiftType = CheckInDTO & { type: ShiftType.CHECKIN };
 
 export type DTOTypes = Record<
   string,

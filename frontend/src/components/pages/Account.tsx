@@ -2,7 +2,6 @@ import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Center,
   Container,
   FormControl,
   FormErrorMessage,
@@ -75,9 +74,13 @@ const Account = (): JSX.Element => {
         );
       }
       setDonor(donorResponse);
-      setBusinessName(donorResponse.businessName);
+      setBusinessName(
+        authenticatedUser?.role !== Role.VOLUNTEER
+          ? donorResponse.businessName
+          : "",
+      );
     };
-    getDonor();
+    if (authenticatedUser?.role !== Role.VOLUNTEER) getDonor();
   }, [authenticatedUser]);
 
   const accountData = {
@@ -102,9 +105,9 @@ const Account = (): JSX.Element => {
 
   const navigateToDashboard = () => {
     history.push(
-      authenticatedUser!.role === Role.DONOR
-        ? Routes.DASHBOARD_PAGE
-        : Routes.VIEW_DONATIONS,
+      authenticatedUser!.role === Role.ADMIN
+        ? Routes.ADMIN_VIEW_DONATIONS
+        : Routes.DASHBOARD_PAGE,
     );
   };
 
@@ -138,7 +141,9 @@ const Account = (): JSX.Element => {
     formValues.firstName = authenticatedUser!.firstName;
     formValues.lastName = authenticatedUser!.lastName;
     formValues.phoneNumber = authenticatedUser!.phoneNumber;
-    setBusinessName(donor!.businessName);
+    if (authenticatedUser?.role !== Role.VOLUNTEER)
+      setBusinessName(donor!.businessName);
+    else setBusinessName("");
     setIsEditing(false);
     onClose();
     setFormErrors({
@@ -160,7 +165,7 @@ const Account = (): JSX.Element => {
 
     let isValid = true;
 
-    if (!businessName) {
+    if (!businessName && authenticatedUser?.role !== Role.VOLUNTEER) {
       isValid = false;
       newErrors.businessName = ErrorMessages.requiredField;
     }
@@ -193,6 +198,8 @@ const Account = (): JSX.Element => {
       ...formValues,
     };
 
+    let updatedDonor = null;
+
     // update user values
     const updatedUser = await UserAPIClient.updateUserById(
       authenticatedUser!.id,
@@ -201,10 +208,12 @@ const Account = (): JSX.Element => {
       },
     );
 
-    // update donor values
-    const updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
-      businessName,
-    });
+    if (authenticatedUser?.role === Role.DONOR) {
+      // update donor values
+      updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
+        businessName,
+      });
+    }
 
     // update authenticatedUser and local storage to reflect changes
     const user = {
@@ -226,7 +235,7 @@ const Account = (): JSX.Element => {
     }
 
     // handle loading spinner state
-    if (updatedUser && updatedDonor) {
+    if (updatedUser) {
       setIsSavingData(false);
     }
     setIsEditing(false);
@@ -260,14 +269,6 @@ const Account = (): JSX.Element => {
     );
   };
 
-  if (!donor) {
-    return (
-      <Center>
-        <Spinner />
-      </Center>
-    );
-  }
-
   return (
     <Container centerContent variant="responsiveContainer">
       <EditAccountModal
@@ -290,7 +291,7 @@ const Account = (): JSX.Element => {
 
         <HStack align="flex-end">
           <Text mt="1em" textStyle="mobileHeader1">
-            My Account
+            My account
           </Text>
           <Spacer />
           <EditInfoButton />
@@ -298,34 +299,37 @@ const Account = (): JSX.Element => {
         <Text textStyle="mobileSmall" color="hubbard.100" mt="1em" mb="2em">
           Edit any account information here.
         </Text>
-        <FormControl
-          isRequired
-          isReadOnly={!isEditing}
-          isInvalid={!!formErrors.businessName}
-        >
-          <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
-            Organization
-          </Text>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <FormControl
+            isRequired
+            isReadOnly={!isEditing}
+            isInvalid={!!formErrors.businessName}
+          >
+            <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
+              Organization
+            </Text>
 
-          <FormLabel>Name of business</FormLabel>
-          <Input
-            mt="2"
-            value={businessName}
-            name="businessName"
-            placeholder="Enter name of business"
-            variant={isEditing ? "customFilled" : "unstyled"}
-            onChange={(e) => handleChange(e.target.value, "businessName")}
-          />
-          <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
-        </FormControl>
-
+            <FormLabel>Name of business</FormLabel>
+            <Input
+              mt="2"
+              value={businessName}
+              name="businessName"
+              placeholder="Enter name of business"
+              variant={isEditing ? "customFilled" : "unstyled"}
+              onChange={(e) => handleChange(e.target.value, "businessName")}
+            />
+            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
+          </FormControl>
+        ) : null}
         <Text
           mt={{ base: "40px", md: "54px" }}
           mb="1em"
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Point of Contact
+          {authenticatedUser?.role === Role.VOLUNTEER
+            ? "Volunteer information"
+            : "Point of contact"}
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
@@ -421,7 +425,7 @@ const Account = (): JSX.Element => {
               variant="navigation"
               onClick={onResetPasswordClick}
             >
-              Change Password
+              Change password
             </Button>
           </Box>
         )}

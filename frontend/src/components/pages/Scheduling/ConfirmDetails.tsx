@@ -94,9 +94,9 @@ const ConfirmDetails = ({
       });
     }
     history.push(
-      authenticatedUser!.role === Role.DONOR
-        ? `${Routes.DASHBOARD_PAGE}`
-        : `${Routes.VIEW_DONATIONS}`,
+      authenticatedUser!.role === Role.ADMIN
+        ? Routes.ADMIN_VIEW_DONATIONS
+        : Routes.DASHBOARD_PAGE,
     );
   };
 
@@ -129,9 +129,9 @@ const ConfirmDetails = ({
           <Button
             onClick={() =>
               history.push(
-                authenticatedUser?.role === Role.DONOR
-                  ? Routes.DASHBOARD_PAGE
-                  : Routes.VIEW_DONATIONS,
+                authenticatedUser?.role === Role.ADMIN
+                  ? Routes.ADMIN_VIEW_DONATIONS
+                  : Routes.DASHBOARD_PAGE,
               )
             }
             paddingLeft="0"
@@ -153,7 +153,7 @@ const ConfirmDetails = ({
         display={{ md: "flex" }}
         mb="1em"
       >
-        {isBeingEdited ? "Donation Details" : "Confirm Donation Details"}
+        {isBeingEdited ? "Donation details" : "Confirm donation details"}
         &nbsp;&nbsp;&nbsp;
         <Badge
           borderRadius="11px"
@@ -186,9 +186,9 @@ const ConfirmDetails = ({
           Edit
         </Button>
         <Box>
-          <Text textStyle="mobileHeader3">Drop-off Information</Text>
+          <Text textStyle="mobileHeader3">Date and time</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Proposed Drop-off Time
+            Proposed drop-off time
           </Text>
           <Text textStyle="mobileBody">{dateText(startDateLocal)}</Text>
           <Text textStyle="mobileBody">
@@ -230,13 +230,13 @@ const ConfirmDetails = ({
           Edit
         </Button>
         <Box>
-          <Text textStyle="mobileHeader3">Donation Information</Text>
+          <Text textStyle="mobileHeader3">Donation information</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Size
           </Text>
           <Text textStyle="mobileBody">{`${currentSchedule.size} - ${description}`}</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Item Category
+            Item category
           </Text>
           <Text textStyle="mobileBody">
             {currentSchedule.categories.join(", ")}
@@ -261,9 +261,9 @@ const ConfirmDetails = ({
           Edit
         </Button>
         <Box>
-          <Text textStyle="mobileHeader3">Volunteer Information</Text>
+          <Text textStyle="mobileHeader3">Volunteer information</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Volunteer Needed
+            Volunteer required
           </Text>
           <Text textStyle="mobileBody">
             {currentSchedule.volunteerNeeded ? "Yes" : "No"}
@@ -271,7 +271,7 @@ const ConfirmDetails = ({
           {currentSchedule.volunteerNeeded && (
             <>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-                Pickup Needed
+                Pickup required
               </Text>
               <Text textStyle="mobileBody">
                 {currentSchedule.isPickup ? "Yes" : "No"}
@@ -299,7 +299,7 @@ const ConfirmDetails = ({
       </Box>
 
       <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader3">Donor Information</Text>
+        <Text textStyle="mobileHeader3">Donor information</Text>
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Name
         </Text>

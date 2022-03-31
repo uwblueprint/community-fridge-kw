@@ -12,7 +12,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format, parse } from "date-fns";
+import { endOfDay, format, isAfter, parse } from "date-fns";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
 
@@ -247,8 +247,7 @@ const SelectDateTime = ({
   const handleChangeRecurringDate = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setRecurringEndDate(selectedDateObj);
-
-    const recurringDate = new Date(selectedDateObj);
+    const recurringDate = endOfDay(new Date(selectedDateObj));
     setForm({
       target: {
         name: "recurringDonationEndDate",
@@ -312,11 +311,11 @@ const SelectDateTime = ({
         recurringEndDateVal.setHours(23);
         recurringEndDateVal.setMinutes(59);
 
-        if (startDateVal > recurringEndDateVal) {
+        if (isAfter(startDateVal, recurringEndDateVal)) {
           valid = false;
           newErrors.recurringDonationEndDate =
             ErrorMessages.recurringEndDateAfterStartDate;
-        } else if (recurringEndDateVal > maxRecurringEndDateVal) {
+        } else if (isAfter(recurringEndDateVal, maxRecurringEndDateVal)) {
           valid = false;
           newErrors.recurringDonationEndDate =
             ErrorMessages.recurringDonationEndDateWithinSixMonths;
@@ -374,7 +373,7 @@ const SelectDateTime = ({
       const res = await SchedulingAPIClient.updateSchedule(id, editedFields);
       if (!res) {
         toast({
-          title: "Drop-off Information could not be updated. Please try again",
+          title: "Drop-off information could not be updated. Please try again",
           status: "error",
           duration: 7000,
           isClosable: true,
@@ -383,7 +382,7 @@ const SelectDateTime = ({
       }
     }
     toast({
-      title: "Drop-off Information updated successfully",
+      title: "Drop-off information updated successfully",
       status: "success",
       duration: 7000,
       isClosable: true,
@@ -408,7 +407,7 @@ const SelectDateTime = ({
         </>
       )}
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
-        {isDesktop ? "Drop-off date and time" : "Date and Time"}
+        Date and time
       </Text>
       <FormControl isRequired isInvalid={!!formErrors.date}>
         <FormLabel fontWeight="600">Select date</FormLabel>

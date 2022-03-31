@@ -27,6 +27,7 @@
     "date-fns": "^2.25.0",
     "depcheck": "^1.4.2",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-unused-imports": "^1.1.5",
     "framer-motion": "^4.1.17",
     "humps": "^2.0.1",
     "json-schema": "^0.3.0",

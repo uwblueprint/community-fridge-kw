@@ -2,6 +2,8 @@ import {
   VolunteerDTO,
   UserVolunteerDTO,
   UpdateVolunteerDTO,
+  CheckInDTO,
+  SchedulingDTO,
 } from "../../types";
 
 interface IVolunteerService {
@@ -35,6 +37,16 @@ interface IVolunteerService {
    * @throws Error if volunteer retrieval fails
    */
   getVolunteers(): Promise<Array<UserVolunteerDTO>>;
+
+  /**
+   * Get all checkins and schedulings sorted by most recent to least recent
+   * @param volunteerId id associated with volunteer
+   * @returns all checkins and schedulings sorted by most recent to least recent
+   * @throws Error if scheduling or checkin retrieval fails
+   */
+  getCheckInsAndSchedules(
+    volunteerId: string,
+  ): Promise<Array<CheckInDTO | SchedulingDTO>>;
 
   /**
    * Update a volunteer by volunteerId.

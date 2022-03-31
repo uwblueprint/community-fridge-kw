@@ -47,7 +47,7 @@ const VolunteerRoles = () => (
     mx={{ base: "-42px", md: "0px" }}
   >
     <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
-      For Volunteers
+      For volunteers
     </Text>
     <Text mb="1.5rem" color="black.100" textStyle="mobileHeader2">
       Volunteer Roles
@@ -63,7 +63,7 @@ const VolunteerRoles = () => (
       <Spacer />
       <VolunteerRoleStep
         title="Assist with food rescue"
-        description="Support a donation from a local business, organization or individual by making a pick-up or assisting with donation unloading and stocking at the fridge."
+        description="Support a donation from a local business, organization or individual by making a pickup or assisting with donation unloading and stocking at the fridge."
       />
     </Flex>
   </Box>
