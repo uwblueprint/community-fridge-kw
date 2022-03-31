@@ -16,7 +16,7 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import GeneralErrorModal from "../../common/GeneralErrorModal";
-import ViewDonations from "../ViewDonations";
+import ViewDonations from "../ViewDonationsAndCheckins";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
 

@@ -1,12 +1,12 @@
 import { Container } from "@chakra-ui/react";
 import React from "react";
 
-import ViewDonationsAndCheckins from "./ViewDonationsAndCheckins";
+import ViewCheckins from "./ViewDonationsAndCheckins";
 
 const ViewDonationsPage = () => {
   return (
     <Container variant="responsiveContainer">
-      <ViewDonationsAndCheckins isAdminView />
+      <ViewCheckins isAdminView={false} isCheckInView />
     </Container>
   );
 };
