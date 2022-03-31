@@ -17,7 +17,6 @@ import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import Calendar from "../../common/Calendar/Calendar";
-import CheckInCalendar from "../../common/Calendar/CheckInCalendar";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
 
 const ViewDonationsAndCheckins = ({
@@ -153,20 +152,13 @@ const ViewDonationsAndCheckins = ({
             </HStack>
           </Flex>
         )}
-        {isCheckInView ? (
-          <CheckInCalendar
-            key={selectedDay?.toString()}
-            selectedDay={selectedDay as Date}
-            checkIns={checkIns}
-          />
-        ) : (
-          <Calendar
-            key={selectedDay?.toString()}
-            selectedDay={selectedDay as Date}
-            schedules={schedules}
-            isAdminView={isAdminView}
-          />
-        )}
+        <Calendar
+          key={selectedDay?.toString()}
+          selectedDay={selectedDay as Date}
+          schedules={isCheckInView ? checkIns : schedules}
+          isAdminView={isAdminView}
+          isCheckInView={isCheckInView}
+        />
       </Flex>
     </Container>
   );

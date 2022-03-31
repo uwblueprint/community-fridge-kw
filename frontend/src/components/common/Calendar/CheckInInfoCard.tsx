@@ -124,6 +124,7 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
       borderColor="dorian.100"
       width="100%"
       overflow="hidden"
+      display="box"
     >
       <Stack
         direction="column"
