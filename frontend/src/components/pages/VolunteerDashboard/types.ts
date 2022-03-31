@@ -1,9 +1,5 @@
 import colors from "../../../theme/colors";
-
-export enum ShiftType {
-  CHECKIN = "checkIn",
-  SCHEDULING = "scheduling",
-}
+import { ShiftType } from "../../../types/VolunteerTypes";
 
 export const getShiftColor = (shift: string, isPickup: boolean): string => {
   switch (shift) {
@@ -15,3 +11,5 @@ export const getShiftColor = (shift: string, isPickup: boolean): string => {
       return "";
   }
 };
+
+export default getShiftColor;

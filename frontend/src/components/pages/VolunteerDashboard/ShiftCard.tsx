@@ -3,19 +3,18 @@ import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import DonorAPIClient from "../../../../APIClients/DonorAPIClient";
-import * as Routes from "../../../../constants/Routes";
-import { CheckIn } from "../../../../types/CheckInTypes";
-import { Schedule } from "../../../../types/SchedulingTypes";
-import CardField from "../../../common/CardField";
-import { getShiftColor, ShiftType } from "../../VolunteerShifts/types";
+import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import * as Routes from "../../../constants/Routes";
+import { CheckIn } from "../../../types/CheckInTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
+import { CheckInWithShiftType, ScheduleWithShiftType, ShiftType } from "../../../types/VolunteerTypes";
+import CardField from "../../common/CardField";
+import { getShiftColor } from "./types";
 
 const VolunteerShiftCard = ({
-  schedule,
-  checkIn,
+  shift,
 }: {
-  schedule?: Schedule;
-  checkIn?: CheckIn;
+  shift: (CheckInWithShiftType | ScheduleWithShiftType)
 }): JSX.Element => {
   const {
     donorId,
@@ -23,14 +22,13 @@ const VolunteerShiftCard = ({
     pickupLocation,
     volunteerTime,
     startTime,
-    notes: scheduleNotes,
-  } = schedule || {};
-  const { startDate, endDate, notes: checkinNotes } = checkIn || {};
+    startDate,
+    notes,
+    type,
+  } = shift as (CheckInWithShiftType & ScheduleWithShiftType);
   const [businessName, setBusinessName] = useState<string>("");
 
   const history = useHistory();
-
-  const shiftType = checkIn ? ShiftType.CHECKIN : ShiftType.SCHEDULING;
 
   const dateLocal = () => {
     if (startDate) {
@@ -42,7 +40,7 @@ const VolunteerShiftCard = ({
 
   const timeLocal = () => {
     if (startDate) {
-      return format(new Date(startDate), "h:mmaa");
+      return format(new Date(startDate), "h:mm aa");
     }
 
     return volunteerTime;
@@ -69,8 +67,8 @@ const VolunteerShiftCard = ({
         <Text textStyle="mobileHeader4" whiteSpace="nowrap" minWidth="225px">
           {`${dateLocal()}`}
           <Text minWidth="125px" textStyle="mobileSmall" color="hubbard.100">
-            {shiftType === ShiftType.CHECKIN && "Fridge check-in"}
-            {shiftType === ShiftType.SCHEDULING && isPickup ? "Pickup assistance" : "Unloading assistance"}
+            {type === ShiftType.CHECKIN && "Fridge check-in"}
+            {type === ShiftType.SCHEDULING && (isPickup ? "Pickup assistance" : "Unloading assistance")}
           </Text>
         </Text>
         <Button
@@ -89,7 +87,7 @@ const VolunteerShiftCard = ({
         mr={{ base: "0px", md: "24px" }}
         p="2rem"
         borderRadius="8px"
-        bg={getShiftColor(shiftType, !!isPickup)}
+        bg={getShiftColor(type, !!isPickup)}
         width={{ base: "default", md: "100%" }}
         onClick={() => history.push(`${Routes.DASHBOARD_PAGE}`)}
         overflow="hidden"
@@ -108,7 +106,7 @@ const VolunteerShiftCard = ({
           )}
           <CardField
             title="Notes"
-            value={checkinNotes || scheduleNotes || "-"}
+            value={notes || "-"}
           />
         </Stack>
       </Box>

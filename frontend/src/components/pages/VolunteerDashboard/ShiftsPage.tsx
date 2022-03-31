@@ -11,19 +11,15 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
-import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import { CheckIn } from "../../../types/CheckInTypes";
-import { Schedule } from "../../../types/SchedulingTypes";
-import VolunteerShiftCard from "../Dashboard/components/VolunteerShiftCard";
+import VolunteerShiftCard from "./ShiftCard";
+import { CheckInWithShiftType, ScheduleWithShiftType } from "../../../types/VolunteerTypes";
 
 const ScheduledVolunteerShiftsPage = () => {
   const { authenticatedUser } = useContext(AuthContext);
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
+  const [shifts, setShifts] = useState<(CheckInWithShiftType | ScheduleWithShiftType)[]>([]);
   const history = useHistory();
 
   useEffect(() => {
@@ -32,15 +28,11 @@ const ScheduledVolunteerShiftsPage = () => {
         authenticatedUser!.id,
       );
 
-      const scheduleResponse = await SchedulingAPIClient.getScheduleByVolunteerId(
-        volunteer.id,
-      );
-      const checkInResponse = await CheckInAPIClient.getCheckInsByVolunteerId(
+      const shiftsResponse = await VolunteerAPIClient.getCheckInsAndSchedules(
         volunteer.id,
       );
 
-      setSchedules(scheduleResponse);
-      setCheckIns(checkInResponse);
+      setShifts(shiftsResponse);
     };
 
     getShifts();
@@ -71,15 +63,11 @@ const ScheduledVolunteerShiftsPage = () => {
         divider={<StackDivider borderColor="gray.200" />}
         marginTop={["60px", "70px"]}
       >
-        {!!schedules.length &&
-          schedules.map((scheduleObject: Schedule, id) => (
-            <VolunteerShiftCard key={id} schedule={scheduleObject!} />
+        {!!shifts.length &&
+          shifts.map((shiftObject: (CheckInWithShiftType | ScheduleWithShiftType), id) => (
+            <VolunteerShiftCard key={id} shift={shiftObject!} />
           ))}
-        {!!checkIns.length &&
-          checkIns.map((checkInObject: CheckIn, id) => (
-            <VolunteerShiftCard key={id} checkIn={checkInObject!} />
-          ))}
-        {!schedules.length && !checkIns.length && (
+        {!shifts.length && (
           <Flex paddingTop="1.5rem">
             <Box
               display={{ lg: "flex" }}
