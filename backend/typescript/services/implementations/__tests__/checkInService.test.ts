@@ -58,7 +58,7 @@ describe("pg checkInService", () => {
       endDate: new Date("2021-09-01T10:00:00.000Z"),
       isAdmin: false,
       notes: null,
-      volunteerId: "null",
+      volunteerId: null,
     };
 
     const res = await checkInService.createCheckIn(mockCreateCheckInDTO);
