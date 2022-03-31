@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import CheckIn from "../../models/checkIn.model";
+import Scheduling from "../../models/scheduling.model";
 import User from "../../models/user.model";
 import Volunteer from "../../models/volunteer.model";
 import {
@@ -251,12 +253,12 @@ class VolunteerService implements IVolunteerService {
 
   async deleteVolunteerById(id: string): Promise<void> {
     try {
-      const deletedRole: Volunteer | null = await Volunteer.findByPk(
+      const deletedVolunteer: Volunteer | null = await Volunteer.findByPk(
         Number(id),
       );
 
-      if (!deletedRole) {
-        throw new Error(`id ${id} not found.`);
+      if (!deletedVolunteer) {
+        throw new Error(`volunteerId ${id} not found.`);
       }
 
       const numDestroyed: number = await Volunteer.destroy({
@@ -265,6 +267,42 @@ class VolunteerService implements IVolunteerService {
 
       if (numDestroyed <= 0) {
         throw new Error(`id ${id} was not deleted in Postgres.`);
+      }
+
+      try {
+        await Scheduling.update(
+          {
+            volunteer_id: null,
+          },
+          {
+            where: { volunteer_id: deletedVolunteer.id },
+          },
+        );
+      } catch (error) {
+        Logger.error(
+          `Failed to remove volunteerId from schedule. Reason = ${getErrorMessage(
+            error,
+          )}`,
+        );
+        throw error;
+      }
+
+      try {
+        await CheckIn.update(
+          {
+            volunteer_id: null,
+          },
+          {
+            where: { volunteer_id: deletedVolunteer.id },
+          },
+        );
+      } catch (error) {
+        Logger.error(
+          `Failed to remove volunteerId from checkin. Reason = ${getErrorMessage(
+            error,
+          )}`,
+        );
+        throw error;
       }
     } catch (error) {
       Logger.error(
