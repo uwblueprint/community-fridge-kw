@@ -115,7 +115,7 @@ const VolunteerShiftCard = ({
           {businessName && (
             <CardField title="Organization Name" value={businessName} />
           )}
-          <CardField title="Volunteer Request Time" value={`${timeLocal()}`} />
+          <CardField title="Volunteer Arrival Time" value={`${timeLocal()}`} />
           {pickupLocation && (
             <CardField title="Location" value={pickupLocation} />
           )}
