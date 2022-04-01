@@ -10,3 +10,24 @@ export type UserMgmtTableRecord = {
   accountType: Role | string;
   approvalStatus: Status | string;
 };
+
+export enum AccountFilterType {
+  ALL = "all",
+  VOLUNTEER = "volunteers",
+  DONOR = "donors",
+}
+
+export const accountTypefilterOptions = [
+  {
+    value: AccountFilterType.ALL,
+    label: "All accounts",
+  },
+  {
+    value: AccountFilterType.VOLUNTEER,
+    label: "Volunteers",
+  },
+  {
+    value: AccountFilterType.DONOR,
+    label: "Donors",
+  },
+];

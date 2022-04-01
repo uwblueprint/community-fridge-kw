@@ -1,6 +1,5 @@
-import { AUTHENTICATED_USER_KEY } from "../constants/AuthConstants";
+import { BEARER_TOKEN } from "../constants/AuthConstants";
 import { Role } from "../types/AuthTypes";
-import { getLocalStorageObjProperty } from "../utils/LocalStorageUtils";
 import baseAPIClient from "./BaseAPIClient";
 
 type UserRequest = {
@@ -22,14 +21,9 @@ type UserResponse = {
 };
 
 const getUserById = async (id: string): Promise<UserResponse> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
-
   try {
     const { data } = await baseAPIClient.get(`/users/${id}`, {
-      headers: { Authorization: bearerToken },
+      headers: { Authorization: BEARER_TOKEN },
     });
     return data;
   } catch (error) {
@@ -45,14 +39,9 @@ const updateUserById = async (
     userData: UserRequest;
   },
 ): Promise<UserResponse> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
-
   try {
     const { data } = await baseAPIClient.put(`/users/${id}`, userData, {
-      headers: { Authorization: bearerToken },
+      headers: { Authorization: BEARER_TOKEN },
     });
     return data;
   } catch (error) {
@@ -61,14 +50,9 @@ const updateUserById = async (
 };
 
 const deleteUserById = async (id: string): Promise<boolean> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
-
   try {
     await baseAPIClient.delete(`/users?userId=${id}`, {
-      headers: { Authorization: bearerToken },
+      headers: { Authorization: BEARER_TOKEN },
     });
     return true;
   } catch (error) {

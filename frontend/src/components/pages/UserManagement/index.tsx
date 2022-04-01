@@ -24,7 +24,11 @@ import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { Role, Status } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { VolunteerResponse } from "../../../types/VolunteerTypes";
-import { UserMgmtTableRecord } from "./types";
+import {
+  AccountFilterType,
+  accountTypefilterOptions,
+  UserMgmtTableRecord,
+} from "./types";
 
 const UserManagementPage = (): JSX.Element => {
   const [donors, setDonors] = React.useState([] as DonorResponse[]);
@@ -33,21 +37,6 @@ const UserManagementPage = (): JSX.Element => {
   const [search, setSearch] = React.useState("");
   const [selectedFilter, setSelectedFilter] = React.useState("all");
   const [dataChanged, setDataChanged] = React.useState<0 | 1>(0);
-
-  const filterOptions = [
-    {
-      value: "all",
-      label: "All accounts",
-    },
-    {
-      value: "volunteers",
-      label: "Volunteers",
-    },
-    {
-      value: "donors",
-      label: "Donors",
-    },
-  ];
 
   // Merge donors and volunteers into one list of type UserMgmtTableRecord
   const buildTableUsers = (): UserMgmtTableRecord[] => {
@@ -104,17 +93,19 @@ const UserManagementPage = (): JSX.Element => {
 
   const tableData = React.useMemo(() => {
     let filteredUsers;
-    if (selectedFilter === "all") filteredUsers = users;
-    else if (selectedFilter === "volunteers")
+    if (selectedFilter === AccountFilterType.ALL) filteredUsers = users;
+    else if (selectedFilter === AccountFilterType.VOLUNTEER)
       filteredUsers = users.filter(
         (user) => user.accountType === Role.VOLUNTEER,
       );
+    // selectedFilter === AccountFilterType.DONOR
     else
       filteredUsers = users.filter((user) => user.accountType === Role.DONOR);
 
     if (!search) return filteredUsers;
-    return users.filter(
+    return filteredUsers.filter(
       (user) =>
+        user.accountType.toLowerCase().includes(search.toLowerCase()) ||
         user.pointOfContact.toLowerCase().includes(search.toLowerCase()) ||
         user.company.toLowerCase().includes(search.toLowerCase()) ||
         user.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -125,16 +116,13 @@ const UserManagementPage = (): JSX.Element => {
   // Sets volunteer status to Approved
   const handleApprove = (user: UserMgmtTableRecord) => {
     const newVolunteerData = { status: Status.APPROVED };
-    const updatedVolunteer = VolunteerAPIClient.updateVolunteerById(
-      user.id,
-      newVolunteerData,
-    );
+    VolunteerAPIClient.updateVolunteerById(user.id, newVolunteerData);
     setDataChanged(dataChanged === 0 ? 1 : 0);
   };
 
   // Deletes selected user
   const handleDeleteUser = (user: UserMgmtTableRecord) => {
-    const updatedUser = UserAPIClient.deleteUserById(user.userId);
+    UserAPIClient.deleteUserById(user.userId);
     setDataChanged(dataChanged === 0 ? 1 : 0);
   };
 
@@ -167,7 +155,7 @@ const UserManagementPage = (): JSX.Element => {
             handleSelectFilter(e);
           }}
         >
-          {filterOptions.map((option, key) => {
+          {accountTypefilterOptions.map((option, key) => {
             return (
               <option key={key} value={option.value}>
                 {option.label}
