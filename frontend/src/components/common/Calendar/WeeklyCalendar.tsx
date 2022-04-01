@@ -138,7 +138,7 @@ export function WeeklyBody<EventItem>({
                 }
 
                 return renderItem({
-                  item: item,
+                  item,
                   showingFullWeek: selectedDay === undefined,
                 });
               })}

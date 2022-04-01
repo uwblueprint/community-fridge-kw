@@ -2,8 +2,8 @@ import React from "react";
 
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import CheckInInfoCard from "../../pages/AdminDashboard/components/CheckInInfoCard";
+import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
 
 type CalendarProps = {

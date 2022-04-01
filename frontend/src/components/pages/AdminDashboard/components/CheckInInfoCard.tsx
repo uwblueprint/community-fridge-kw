@@ -18,7 +18,7 @@ import React, { useEffect, useState } from "react";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import VolunteerAPIClient from "../../../../APIClients/VolunteerAPIClient";
-import menuIcon from "../../../assets/menuIcon.svg";
+import menuIcon from "../../../../assets/menuIcon.svg";
 import useViewport from "../../../../hooks/useViewport";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import { VolunteerResponse } from "../../../../types/VolunteerTypes";

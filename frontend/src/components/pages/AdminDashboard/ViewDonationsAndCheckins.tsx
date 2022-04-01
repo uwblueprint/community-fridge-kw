@@ -17,8 +17,8 @@ import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import Calendar from "../../common/Calendar/Calendar";
-import { FridgeCheckInDescription } from "../../common/FridgeCheckInDescription";
-import { FridgeFoodRescueDescription } from "../../common/FridgeFoodRescueDescription";
+import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
+import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
 
 const ViewDonationsAndCheckIns = ({
@@ -78,12 +78,8 @@ const ViewDonationsAndCheckIns = ({
 
           {isCheckInView && <CheckInAdminButtons />}
         </HStack>
-        {isCheckInView && (
-          <FridgeCheckInDescription />
-        )}
-        {isAdminView && (
-          <FridgeFoodRescueDescription />
-        )}
+        {isCheckInView && <FridgeCheckInDescription />}
+        {isAdminView && <FridgeFoodRescueDescription />}
         {isMobile ? (
           <HStack py="1.2rem" width="inherit" alignItems="center">
             <Text textStyle="mobileHeader4" whiteSpace="nowrap">

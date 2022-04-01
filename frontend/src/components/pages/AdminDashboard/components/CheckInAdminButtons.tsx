@@ -22,7 +22,7 @@ const CheckInAdminButtons = () => (
       <Stack direction="row" spacing={4}>
         <Button
           size="md"
-          onClick={() => { }}
+          onClick={() => {}}
           variant="create"
           width="2.5rem"
           lineHeight="20px"
@@ -32,7 +32,7 @@ const CheckInAdminButtons = () => (
 
         <Button
           size="md"
-          onClick={() => { }}
+          onClick={() => {}}
           variant="export"
           leftIcon={<DeleteIcon />}
           width="2.5rem"
@@ -41,7 +41,7 @@ const CheckInAdminButtons = () => (
         </Button>
         <Button
           size="md"
-          onClick={() => { }}
+          onClick={() => {}}
           variant="export"
           leftIcon={<DownloadIcon />}
           width="2.5rem"
@@ -55,7 +55,7 @@ const CheckInAdminButtons = () => (
       <HStack mt="3.5rem" spacing="7px">
         <Button
           size="sm"
-          onClick={() => { }}
+          onClick={() => {}}
           variant="create"
           width="100%"
           lineHeight="20px"
