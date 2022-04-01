@@ -33,3 +33,9 @@ export type VolunteerContextAction =
       type: "SET_VOLUNTEER_STATUS";
       value: Status;
     };
+
+export type VolunteerDTO = {
+  id: string;
+  userId: string;
+  status: Status;
+};

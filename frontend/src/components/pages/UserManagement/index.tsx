@@ -23,7 +23,7 @@ import UserAPIClient from "../../../APIClients/UserAPIClient";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { Role, Status } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
-import { VolunteerResponse } from "../../../types/VolunteerTypes";
+import { VolunteerDTO, VolunteerResponse } from "../../../types/VolunteerTypes";
 import {
   AccountFilterType,
   accountTypefilterOptions,
@@ -35,8 +35,9 @@ const UserManagementPage = (): JSX.Element => {
   const [volunteers, setVolunteers] = React.useState([] as VolunteerResponse[]);
   const [users, setUsers] = React.useState([] as UserMgmtTableRecord[]); // both donors and volunteers
   const [search, setSearch] = React.useState("");
-  const [selectedFilter, setSelectedFilter] = React.useState("all");
-  const [dataChanged, setDataChanged] = React.useState<0 | 1>(0);
+  const [selectedFilter, setSelectedFilter] = React.useState<string>(
+    AccountFilterType.ALL,
+  );
 
   // Merge donors and volunteers into one list of type UserMgmtTableRecord
   const buildTableUsers = (): UserMgmtTableRecord[] => {
@@ -71,6 +72,7 @@ const UserManagementPage = (): JSX.Element => {
     return mergedUsers;
   };
 
+  // Update users whenever donors or volunteers have a change
   React.useEffect(() => {
     const getDonors = async () => {
       const res = await DonorAPIClient.getAllDonors();
@@ -84,9 +86,8 @@ const UserManagementPage = (): JSX.Element => {
 
     getDonors();
     getVolunteers();
-  }, [dataChanged]);
+  }, []);
 
-  // Update users whenever donors or volunteers have a change
   React.useEffect(() => {
     setUsers(buildTableUsers());
   }, [donors, volunteers]);
@@ -114,16 +115,31 @@ const UserManagementPage = (): JSX.Element => {
   }, [search, selectedFilter, users]);
 
   // Sets volunteer status to Approved
-  const handleApprove = (user: UserMgmtTableRecord) => {
+  const handleApprove = async (user: UserMgmtTableRecord) => {
+    console.log("ON APPROVE CLICK");
     const newVolunteerData = { status: Status.APPROVED };
-    VolunteerAPIClient.updateVolunteerById(user.id, newVolunteerData);
-    setDataChanged(dataChanged === 0 ? 1 : 0);
+    const updatedVolunteerResponse: VolunteerDTO = await VolunteerAPIClient.updateVolunteerByUserId(
+      user.userId,
+      newVolunteerData,
+    );
+    console.log("AFTER BE CALL");
+    console.log("updatedResponse", updatedVolunteerResponse);
+    if (updatedVolunteerResponse) {
+      const i = users.findIndex((u) => u.id === user.userId);
+      const newUsers = users.slice();
+      newUsers[i].approvalStatus = Status.APPROVED;
+      setUsers(newUsers);
+      console.log("newUsers", newUsers);
+    }
+    console.log(users);
   };
 
   // Deletes selected user
-  const handleDeleteUser = (user: UserMgmtTableRecord) => {
-    UserAPIClient.deleteUserById(user.userId);
-    setDataChanged(dataChanged === 0 ? 1 : 0);
+  const handleDeleteUser = async (user: UserMgmtTableRecord) => {
+    const deleteUserResponse = await UserAPIClient.deleteUserById(user.userId);
+    if (deleteUserResponse) {
+      setUsers(users.filter((u) => u.id !== user.id));
+    }
   };
 
   // Selects a filter
