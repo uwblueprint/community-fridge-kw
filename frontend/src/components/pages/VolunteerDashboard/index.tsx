@@ -1,26 +1,13 @@
 import { Container } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 
-import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
-import AuthContext from "../../../contexts/AuthContext";
+import VolunteerContext from "../../../contexts/VolunteerContext";
 import { Status } from "../../../types/AuthTypes";
 import PendingPage from "./PendingPage";
 import ScheduledVolunteerShiftsPage from "./ShiftsPage";
 
 const VolunteerDashboard = () => {
-  const [volunteerStatus, setVolunteerStatus] = useState<Status>();
-  const { authenticatedUser } = useContext(AuthContext);
-
-  const getVolunteerData = async () => {
-    const volunteerResponse = await VolunteerAPIClient.getVolunteerByUserId(
-      authenticatedUser!.id,
-    );
-    setVolunteerStatus(volunteerResponse.status);
-  };
-
-  useEffect(() => {
-    getVolunteerData();
-  }, []);
+  const { volunteerStatus } = useContext(VolunteerContext);
 
   return (
     <Container centerContent variant="responsiveContainer">

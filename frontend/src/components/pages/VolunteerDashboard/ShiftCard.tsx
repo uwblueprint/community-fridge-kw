@@ -1,10 +1,8 @@
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
-import * as Routes from "../../../constants/Routes";
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
@@ -14,6 +12,7 @@ import CardField from "../../common/CardField";
 import { getShiftColor } from "./types";
 
 interface CheckInOrScheduleProps {
+  id: string;
   donorId?: string;
   isPickup?: boolean;
   pickupLocation?: string;
@@ -29,6 +28,7 @@ const VolunteerShiftCard = ({
   shift: CheckInWithShiftType | ScheduleWithShiftType;
 }): JSX.Element => {
   const {
+    id,
     donorId,
     isPickup,
     pickupLocation,
@@ -39,8 +39,6 @@ const VolunteerShiftCard = ({
     type,
   } = shift as CheckInOrScheduleProps;
   const [businessName, setBusinessName] = useState<string>("");
-
-  const history = useHistory();
 
   const dateLocal = () => {
     if (startDate) {

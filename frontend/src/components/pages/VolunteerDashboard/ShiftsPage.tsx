@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
+import VolunteerContext from "../../../contexts/VolunteerContext";
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
@@ -21,7 +21,7 @@ import {
 import VolunteerShiftCard from "./ShiftCard";
 
 const ScheduledVolunteerShiftsPage = () => {
-  const { authenticatedUser } = useContext(AuthContext);
+  const { volunteerId } = useContext(VolunteerContext);
   const [shifts, setShifts] = useState<
     (CheckInWithShiftType | ScheduleWithShiftType)[]
   >([]);
@@ -29,19 +29,16 @@ const ScheduledVolunteerShiftsPage = () => {
 
   useEffect(() => {
     const getShifts = async () => {
-      const volunteer = await VolunteerAPIClient.getVolunteerByUserId(
-        authenticatedUser!.id,
-      );
-
-      const shiftsResponse = await VolunteerAPIClient.getCheckInsAndSchedules(
-        volunteer.id,
-      );
-
-      setShifts(shiftsResponse);
+      if (volunteerId) {
+        const shiftsResponse = await VolunteerAPIClient.getCheckInsAndSchedules(
+          volunteerId,
+        );
+        setShifts(shiftsResponse);
+      }
     };
 
     getShifts();
-  }, [authenticatedUser]);
+  }, [volunteerId]);
 
   return (
     <Container variant="baseContainer">
