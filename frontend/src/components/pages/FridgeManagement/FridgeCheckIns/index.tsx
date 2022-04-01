@@ -11,7 +11,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { isAfter } from "date-fns";
+import { isAfter, set } from "date-fns";
 import React, { useState } from "react";
 import { useForm } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
@@ -35,8 +35,8 @@ const CreateCheckIn = () => {
     new DateObject(),
     new DateObject().add(1, "days"),
   ]);
-  const [startTime, setStartTime] = useState<Date>(new Date("11/11/1970"));
-  const [endTime, setEndTime] = useState<Date>(new Date("11/11/1970"));
+  const [startTime, setStartTime] = useState<Date>();
+  const [endTime, setEndTime] = useState<Date>();
   const [formErrors, setFormErrors] = useState({
     timeRange: "",
     dateRange: "",
@@ -52,10 +52,11 @@ const CreateCheckIn = () => {
       if (checkInFormValues.startDate) {
         newStartDate = new Date(checkInFormValues.startDate);
       }
-      newStartDate.setFullYear(startDateState.getFullYear());
-      newStartDate.setMonth(startDateState.getMonth());
-      newStartDate.setDate(startDateState.getDate());
-      console.log(newStartDate.toString());
+      set(newStartDate, {
+        year: startDateState.getFullYear(),
+        month: startDateState.getMonth(),
+        date: startDateState.getDate(),
+      });
       setCheckInForm({
         target: { name: "startDate", value: newStartDate.toString() },
       });
@@ -66,14 +67,15 @@ const CreateCheckIn = () => {
       if (checkInFormValues.endDate) {
         newEndDate = new Date(checkInFormValues.endDate);
       }
-      newEndDate.setFullYear(endDateState.getFullYear());
-      newEndDate.setMonth(endDateState.getMonth());
-      newEndDate.setDate(endDateState.getDate());
+      set(newEndDate, {
+        year: endDateState.getFullYear(),
+        month: endDateState.getMonth(),
+        date: endDateState.getDate(),
+      });
       setCheckInForm({
         target: { name: "endDate", value: newEndDate.toString() },
       });
     }
-    console.log(checkInFormValues);
   };
   const handleChange = (
     e:
@@ -84,21 +86,37 @@ const CreateCheckIn = () => {
     if (name === "startDate") {
       const time = new Date(`11/11/1970 ${e.target.value}`);
       setStartTime(time);
-      const newtime = new Date(time);
-      newtime.setFullYear(dateRange[0].year);
-      newtime.setMonth(dateRange[0].month.number - 1);
-      newtime.setDate(dateRange[0].day);
+      const newtime = set(new Date(time), {
+        year: dateRange[0].year,
+        month: dateRange[0].month.number - 1,
+        date: dateRange[0].day,
+      });
 
       setCheckInForm({ target: { name: "startDate", value: newtime } });
+      setFormErrors({
+        ...formErrors,
+        timeRange: "",
+      });
     } else if (name === "endDate") {
       const time = new Date(`11/11/1970 ${e.target.value}`);
       setEndTime(time);
-      const newtime = new Date(time);
-      newtime.setFullYear(dateRange[1].year);
-      newtime.setMonth(dateRange[1].month.number - 1);
-      newtime.setDate(dateRange[1].day);
+      const newtime = set(new Date(time), {
+        year: dateRange[1].year,
+        month: dateRange[1].month.number - 1,
+      });
+      // NOTE: handles case for if end date is midnight, BUT what about HH:mm pm startTime and HH:mm am endTime?
+      if (e.target.value === "00:00") {
+        newtime.setDate(dateRange[1].day + 1);
+        setEndTime(set(new Date(endTime!), { date: endTime!.getDate() + 1 }));
+      } else {
+        newtime.setDate(dateRange[1].day);
+      }
 
       setCheckInForm({ target: { name: "endDate", value: newtime } });
+      setFormErrors({
+        ...formErrors,
+        timeRange: "",
+      });
     } else {
       // notes
       setCheckInForm({ target: { name: "notes", value: e.target.value } });
@@ -111,10 +129,10 @@ const CreateCheckIn = () => {
       dateRange: "",
     };
     let valid = true;
-    if (!(checkInFormValues.startDate || checkInFormValues.endDate)) {
+    if (!checkInFormValues.startDate || !checkInFormValues.endDate) {
       valid = false;
       newErrors.timeRange = ErrorMessages.bothFieldsRequired;
-    } else if (isAfter(startTime, endTime)) {
+    } else if (isAfter(startTime!, endTime!)) {
       valid = false;
       newErrors.timeRange = ErrorMessages.endTimeBeforeStartTime;
     }
@@ -124,7 +142,6 @@ const CreateCheckIn = () => {
 
   const onSaveClick = async () => {
     const isValid = validateForm();
-    console.log(formErrors);
     if (!isValid) {
       return;
     }
@@ -139,7 +156,7 @@ const CreateCheckIn = () => {
       return;
     }
     toast({
-      title: "Checkins have successfully been created",
+      title: "Check-ins have successfully been created",
       status: "success",
       duration: 7000,
       isClosable: true,
@@ -158,7 +175,6 @@ const CreateCheckIn = () => {
           <Input
             type="time"
             onChange={(e: any) => {
-              console.log(e.target.value);
               handleChange(e, "startDate");
             }}
           />
@@ -182,11 +198,6 @@ const CreateCheckIn = () => {
           value={null}
           onChange={(e: DateObject[]) => {
             setDateRange(e);
-            console.log(
-              `start date: ${dateRange[0].format()}, end date: ${
-                dateRange[1] ? dateRange[1].format() : "n/a"
-              }`,
-            );
             handleDateRangeChange(e);
           }}
           render={(
