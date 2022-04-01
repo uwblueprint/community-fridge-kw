@@ -51,12 +51,12 @@ const VolunteerShiftCard = ({
 
   const timeLocal = () => {
     if (startDate) {
-      return format(new Date(startDate), "h:mm aa");
+      return format(new Date(startDate), "h:mma");
     }
 
     return (
       volunteerTime &&
-      format(parse(volunteerTime, "kk:mm", new Date()), "h:mm aa")
+      format(parse(volunteerTime, "kk:mm", new Date()), "h:mma")
     );
   };
 
