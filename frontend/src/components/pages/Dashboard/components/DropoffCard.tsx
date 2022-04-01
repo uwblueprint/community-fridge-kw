@@ -12,35 +12,8 @@ import {
   dateHeadingText,
   getAssistanceType,
 } from "../../../../utils/DashboardUtils";
+import CardSubInformation from "../../../common/Card";
 import { DonationFrequency } from "../../Scheduling/types";
-
-const DropoffCardSubInformation = ({
-  description,
-  value,
-  isFrequencyBlock,
-  frequency,
-  frequencyColorScheme,
-}: {
-  description: string;
-  value: string;
-  isFrequencyBlock?: boolean;
-  frequency?: string;
-  frequencyColorScheme?: string;
-}) => (
-  <VStack spacing="4px" alignItems="left" minWidth="10vw">
-    <Text textTransform="uppercase" color="hubbard.100" textStyle="mobileSmall">
-      {description}
-    </Text>
-    <Text color="black.100" textStyle="desktopBody">
-      {isFrequencyBlock && (
-        <Box as="span" textStyle="mobileBodyBold" color={frequencyColorScheme}>
-          {frequency === DonationFrequency.ONE_TIME ? "One time" : frequency}
-        </Box>
-      )}
-      {value}
-    </Text>
-  </VStack>
-);
 
 const DropoffCard = ({
   schedule,
@@ -124,11 +97,11 @@ const DropoffCard = ({
           )}
         </Stack>
         <Stack direction={["column", "row"]} spacing={["20px", "40px"]}>
-          <DropoffCardSubInformation
+          <CardSubInformation
             description="Donation Time"
             value={`${startTimeLocal}-${endTimeLocal}`}
           />
-          <DropoffCardSubInformation
+          <CardSubInformation
             description="Frequency"
             value={
               frequency === DonationFrequency.ONE_TIME
@@ -140,13 +113,13 @@ const DropoffCard = ({
             frequencyColorScheme={frequencyColorScheme}
           />
           {isPublicView ? (
-            <DropoffCardSubInformation
+            <CardSubInformation
               description="Type of Donation Items"
               value={categories.join("; ")}
             />
           ) : (
             <>
-              <DropoffCardSubInformation
+              <CardSubInformation
                 description="Volunteer Request Time"
                 value={
                   volunteerTime
@@ -157,11 +130,11 @@ const DropoffCard = ({
                     : "-"
                 }
               />
-              <DropoffCardSubInformation
+              <CardSubInformation
                 description="Assistance Type"
                 value={volunteerNeeded ? getAssistanceType(isPickup!) : "-"}
               />
-              <DropoffCardSubInformation
+              <CardSubInformation
                 description="Volunteer Assigned"
                 value={volunteerId ? volunteerAssigned : "-"}
               />
