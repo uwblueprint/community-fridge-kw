@@ -130,7 +130,6 @@ const UserManagementPage = (): JSX.Element => {
       newVolunteerData,
     );
     setDataChanged(dataChanged === 0 ? 1 : 0);
-    console.log(dataChanged);
   };
 
   // Deletes selected user
