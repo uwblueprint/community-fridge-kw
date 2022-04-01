@@ -77,7 +77,7 @@ const App = (): React.ReactElement => {
                 <PrivateRoute
                   exact
                   path={Routes.VOLUNTEER_SHIFTS_PAGE}
-                  component={VolunteerShiftsPage}
+                  component={VolunteerShiftsPage as React.FC}
                 />
                 <PrivateRoute
                   exact

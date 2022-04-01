@@ -14,8 +14,11 @@ import { NavLink } from "react-router-dom";
 
 import CheckIns from "./CheckIns";
 import FoodRescues from "./FoodRescues";
+import { VolunteerShiftStepProps } from "./types";
 
-const VolunteerShiftsTabs = (): JSX.Element => {
+const VolunteerShiftsTabs = ({
+  navigation,
+}: VolunteerShiftStepProps): JSX.Element => {
   return (
     <Container variant="baseContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">
@@ -41,7 +44,7 @@ const VolunteerShiftsTabs = (): JSX.Element => {
                 <CheckIns />
               </TabPanel>
               <TabPanel id="rescue">
-                <FoodRescues />
+                <FoodRescues navigation={navigation} />
               </TabPanel>
             </TabPanels>
           </Tabs>

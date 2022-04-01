@@ -1,10 +1,11 @@
 import { Container, Stack, Text, VStack } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
-import { NavigationProps, Step, useStep } from "react-hooks-helper";
+import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
 import PendingPage from "./PendingPage";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
 
@@ -28,9 +29,22 @@ interface UseStepType {
   navigation: NavigationProps | any;
 }
 
-const VolunteerShiftsPage = () => {
+const schedulingDefaultData = ({
+  id: "",
+  donorId: "",
+  categories: [],
+  size: "",
+  dayPart: "",
+  startTime: "",
+  endTime: "",
+  frequency: "",
+  notes: "",
+} as unknown) as Schedule;
+
+const VolunteerShiftsPage = (schedulingData = schedulingDefaultData) => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
   const { authenticatedUser } = useContext(AuthContext);
+  const [schedulingFormValues, setSchedulingForm] = useForm(schedulingData);
 
   const getVolunteerData = async () => {
     const volunteerResponse = await VolunteerAPIClient.getVolunteerByUserId(
@@ -39,7 +53,7 @@ const VolunteerShiftsPage = () => {
     setVolunteerStatus(volunteerResponse.status);
   };
 
-  const { step }: UseStepType = useStep({
+  const { step, navigation }: UseStepType = useStep({
     steps,
     initialStep: 1,
   });
@@ -61,13 +75,9 @@ const VolunteerShiftsPage = () => {
         </Container>
       );
     case "shifts tab":
-      return <VolunteerShiftsTabs />;
+      return <VolunteerShiftsTabs navigation={navigation} />;
     case "confirm shift sign up":
-      return (
-        <Container centerContent variant="responsiveContainer">
-          <Text>Confirm Shift Page Component</Text>
-        </Container>
-      );
+      return <p>confirm shift sign up page</p>;
     case "thank you page":
       return (
         <Container centerContent variant="responsiveContainer">

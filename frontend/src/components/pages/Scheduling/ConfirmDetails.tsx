@@ -10,17 +10,19 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { colorMap } from "../../../constants/DaysInWeek";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
+import { VolunteerResponse } from "../../../types/VolunteerTypes";
 import ErrorSchedulingModal from "../../common/GeneralErrorModal";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
 import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
@@ -40,6 +42,9 @@ const ConfirmDetails = ({
 
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
     {} as DonorResponse,
+  );
+  const [currentVolunteer, setCurrentVolunteer] = useState<VolunteerResponse>(
+    {} as VolunteerResponse,
   );
   const currentSchedule = formValues;
   const { description } = DonationSizes.filter(
@@ -108,6 +113,18 @@ const ConfirmDetails = ({
     setCurrentDonor(donorResponse);
   };
 
+  const getVolunteerData = async () => {
+    if (currentSchedule.volunteerId === null) {
+      return;
+    }
+    if (currentSchedule.volunteerId !== undefined) {
+      const volunteerResponse = await VolunteerAPIClient.getVolunteerById(
+        currentSchedule.volunteerId.toString(),
+      );
+      setCurrentVolunteer(volunteerResponse);
+    }
+  };
+
   const startDateLocal = new Date(currentSchedule.startTime);
   const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
   const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mm aa");
@@ -121,6 +138,7 @@ const ConfirmDetails = ({
 
   useEffect(() => {
     getDonorData();
+    getVolunteerData();
   }, [currentSchedule.id]);
   return (
     <Container variant="responsiveContainer">
@@ -271,30 +289,69 @@ const ConfirmDetails = ({
           {currentSchedule.volunteerNeeded && (
             <>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-                Pickup required
+                Assistance type
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.isPickup ? "Yes" : "No"}
+                Food rescue {currentSchedule.isPickup ? "pickup" : "unloading"}
               </Text>
-            </>
-          )}
 
-          {currentSchedule.volunteerNeeded && currentSchedule.isPickup && (
-            <Box>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Volunteer request time
+              </Text>
+              <Text textStyle="mobileBody">{dateText(startDateLocal)}</Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerTime
+                  ? format(
+                      parse(currentSchedule.volunteerTime, "kk:mm", new Date()),
+                      "h:mm aa",
+                    )
+                  : "-"}
+              </Text>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Address
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.pickupLocation}
+                {currentSchedule.isPickup
+                  ? `${currentSchedule.pickupLocation}`
+                  : "Community Fridge"}
               </Text>
-            </Box>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Additional notes
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.notes === "" || currentSchedule.notes === null
+                  ? "-"
+                  : currentSchedule.notes}
+              </Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Assigned volunteer
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerId === undefined ||
+                currentSchedule.volunteerId === null
+                  ? "-"
+                  : `${currentVolunteer.firstName} ${currentVolunteer.lastName}`}
+              </Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Email
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerId === undefined ||
+                currentSchedule.volunteerId === null
+                  ? "-"
+                  : `${currentVolunteer.email}`}
+              </Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Phone
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerId === undefined ||
+                currentSchedule.volunteerId === null
+                  ? "-"
+                  : `${currentVolunteer.phoneNumber}`}
+              </Text>
+            </>
           )}
-          <Box>
-            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-              Additional notes
-            </Text>
-            <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
-          </Box>
         </Box>
       </Box>
 
