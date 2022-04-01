@@ -10,15 +10,18 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
+import { NavigationProps } from "react-hooks-helper";
 import { NavLink } from "react-router-dom";
 
 import CheckIns from "./CheckIns";
 import FoodRescues from "./FoodRescues";
-import { VolunteerShiftStepProps } from "./types";
+// import { VolunteerShiftStepProps } from "./types";
 
 const VolunteerShiftsTabs = ({
   navigation,
-}: VolunteerShiftStepProps): JSX.Element => {
+}: {
+  navigation: NavigationProps;
+}): JSX.Element => {
   return (
     <Container variant="baseContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">

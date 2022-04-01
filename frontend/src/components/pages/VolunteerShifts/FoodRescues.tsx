@@ -1,20 +1,42 @@
 import { Spinner, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { NavigationProps } from "react-hooks-helper";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
-import { Schedule } from "../../../types/SchedulingTypes";
-import FoodRescueCard from "./components/FoodRescueCard";
-import { VolunteerShiftStepProps } from "./types";
+import {
+  ScheduleWithShiftType,
+  ShiftType,
+} from "../../../types/VolunteerTypes";
+import ShiftCard from "./components/ShiftCard";
+// import { VolunteerShiftStepProps } from "./types";
 
-const FoodRescues = ({ navigation }: VolunteerShiftStepProps): JSX.Element => {
-  const [foodRescues, setFoodRescues] = useState<Schedule[]>([]);
+const FoodRescues = ({
+  navigation,
+}: {
+  navigation: NavigationProps;
+}): JSX.Element => {
+  const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
   // const history = useHistory();
+
+  // React.useEffect(() => {
+  //   const getFoodRescues = async () => {
+  //     const scheduleResponse = await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(
+  //       false,
+  //     );
+
+  //     setFoodRescues(scheduleResponse);
+
+  //   };
+
+  //   getFoodRescues();
+  //   console.log(foodRescues);
+  // }, []);
 
   React.useEffect(() => {
     const getFoodRescues = async () => {
-      const scheduleResponse = await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(
-        false,
-      );
+      const scheduleResponse: ScheduleWithShiftType[] = await (
+        await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(false)
+      ).map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
       setFoodRescues(scheduleResponse);
     };
 
@@ -35,12 +57,8 @@ const FoodRescues = ({ navigation }: VolunteerShiftStepProps): JSX.Element => {
         Food rescue shifts are picking up food from donors and helping bring
         them to the fridge.{" "}
       </Text>
-      {foodRescues.map((scheduleObject: Schedule, id) => (
-        <FoodRescueCard
-          key={id}
-          schedule={scheduleObject}
-          navigation={navigation}
-        />
+      {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
+        <ShiftCard key={id} shift={scheduleObject} />
       ))}
     </>
   );
