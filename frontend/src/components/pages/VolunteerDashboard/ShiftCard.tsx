@@ -8,7 +8,7 @@ import {
   ScheduleWithShiftType,
   ShiftType,
 } from "../../../types/VolunteerTypes";
-import CardField from "../../common/CardField";
+import CardSubInformation from "../../common/Card";
 import { getShiftColor } from "./types";
 
 interface CheckInOrScheduleProps {
@@ -109,13 +109,19 @@ const VolunteerShiftCard = ({
           spacing={["0", "4"]}
         >
           {businessName && (
-            <CardField title="Organization Name" value={businessName} />
+            <CardSubInformation
+              description="Organization Name"
+              value={businessName}
+            />
           )}
-          <CardField title="Volunteer Arrival Time" value={`${timeLocal()}`} />
+          <CardSubInformation
+            description="Volunteer Arrival Time"
+            value={`${timeLocal()}`}
+          />
           {pickupLocation && (
-            <CardField title="Location" value={pickupLocation} />
+            <CardSubInformation description="Location" value={pickupLocation} />
           )}
-          <CardField title="Notes" value={notes || "-"} />
+          <CardSubInformation description="Notes" value={notes || "-"} />
         </Stack>
       </Box>
     </Box>
