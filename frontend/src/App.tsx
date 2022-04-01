@@ -11,7 +11,7 @@ import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
-import CheckInsPage from "./components/pages/AdminDashboard/ViewCheckInPage";
+import CheckInsPage from "./components/pages/AdminDashboard/ViewCheckInsPage";
 import ViewDonationsPage from "./components/pages/AdminDashboard/ViewDonationsPage";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";

@@ -17,13 +17,11 @@ import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import Calendar from "../../common/Calendar/Calendar";
-import {
-  FridgeCheckInDescription,
-  FridgeFoodRescueDescription,
-} from "../../common/FridgeCheckInDescription";
+import { FridgeCheckInDescription } from "../../common/FridgeCheckInDescription";
+import { FridgeFoodRescueDescription } from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
 
-const ViewDonationsAndCheckins = ({
+const ViewDonationsAndCheckIns = ({
   isAdminView,
   isCheckInView = false,
 }: {
@@ -45,15 +43,12 @@ const ViewDonationsAndCheckins = ({
       setSchedules(scheduleResponse);
     };
 
-    getSchedules();
-  }, []);
-
-  useEffect(() => {
     const getCheckIns = async () => {
       const checkInResponse = await CheckInAPIClient.getAllCheckIns();
       setCheckIns(checkInResponse);
     };
 
+    getSchedules();
     getCheckIns();
   }, []);
 
@@ -83,9 +78,10 @@ const ViewDonationsAndCheckins = ({
 
           {isCheckInView && <CheckInAdminButtons />}
         </HStack>
-        {isCheckInView ? (
+        {isCheckInView && (
           <FridgeCheckInDescription />
-        ) : (
+        )}
+        {isAdminView && (
           <FridgeFoodRescueDescription />
         )}
         {isMobile ? (
@@ -166,7 +162,7 @@ const ViewDonationsAndCheckins = ({
         <Calendar
           key={selectedDay?.toString()}
           selectedDay={selectedDay as Date}
-          schedules={isCheckInView ? checkIns : schedules}
+          items={isCheckInView ? checkIns : schedules}
           isAdminView={isAdminView}
           isCheckInView={isCheckInView}
         />
@@ -175,4 +171,4 @@ const ViewDonationsAndCheckins = ({
   );
 };
 
-export default ViewDonationsAndCheckins;
+export default ViewDonationsAndCheckIns;

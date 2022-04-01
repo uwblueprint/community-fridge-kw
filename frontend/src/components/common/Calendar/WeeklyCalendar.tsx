@@ -73,19 +73,19 @@ const DayButton = ({ day }: DayButtonProps) => {
 };
 
 type RenderItemProps<EventItem> = {
-  schedule: Schedule | CheckIn;
+  item: Schedule | CheckIn;
   showingFullWeek: boolean;
 };
 
 type WeeklyBodyProps<EventItem> = {
   selectedDay: Date;
-  schedules: Schedule[] | CheckIn[];
+  items: Schedule[] | CheckIn[];
   renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
 };
 
 export function WeeklyBody<EventItem>({
   selectedDay,
-  schedules,
+  items,
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
   const { isMobile } = useViewport();
@@ -118,17 +118,17 @@ export function WeeklyBody<EventItem>({
                 }}
               />
 
-              {(schedules as Array<Schedule | CheckIn>).map((schedule) => {
+              {(items as Array<Schedule | CheckIn>).map((item) => {
                 const currentDate = setDay(week, selectedDay.getDay() + i, {
                   locale,
                 });
                 const scheduledDate =
-                  "startTime" in schedule
-                    ? new Date(schedule?.startTime as string)
-                    : new Date(schedule?.startDate as string);
+                  "startTime" in item
+                    ? new Date(item?.startTime as string)
+                    : new Date(item?.startDate as string);
 
                 if (
-                  schedule === null ||
+                  item === null ||
                   scheduledDate === null ||
                   scheduledDate.getDate() !== currentDate.getDate() ||
                   scheduledDate.getMonth() !== currentDate.getMonth() ||
@@ -138,7 +138,7 @@ export function WeeklyBody<EventItem>({
                 }
 
                 return renderItem({
-                  schedule,
+                  item: item,
                   showingFullWeek: selectedDay === undefined,
                 });
               })}

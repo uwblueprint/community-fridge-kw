@@ -2,10 +2,10 @@ import { EditIcon } from "@chakra-ui/icons";
 import { Button, Link, Text } from "@chakra-ui/react";
 import React from "react";
 
-export const FridgeCheckInDescription = () => (
+export const FridgeFoodRescueDescription = () => (
   <>
     <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
-      Fridge check-in description
+      Scheduled donations
       <Button
         variant="editInfo"
         rightIcon={<EditIcon size={24} />}

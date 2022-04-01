@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { snakeCase } from "lodash";
+import { create, snakeCase } from "lodash";
 import dayjs from "dayjs";
 import { Op } from "sequelize";
 import ICheckInService from "../interfaces/checkInService";
@@ -73,8 +73,8 @@ class CheckInService implements ICheckInService {
             startDate: createdCheckIn.start_date,
             endDate: createdCheckIn.end_date,
             notes: createdCheckIn.notes,
-            volunteerId: checkIn.volunteerId
-              ? String(checkIn.volunteerId)
+            volunteerId: createdCheckIn.volunteer_id
+              ? String(createdCheckIn.volunteer_id)
               : null,
             isAdmin: createdCheckIn.is_admin,
           };

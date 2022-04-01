@@ -16,13 +16,13 @@ import {
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 
-import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
-import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
+import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
+import VolunteerAPIClient from "../../../../APIClients/VolunteerAPIClient";
 import menuIcon from "../../../assets/menuIcon.svg";
-import useViewport from "../../../hooks/useViewport";
-import { CheckIn } from "../../../types/CheckInTypes";
-import { VolunteerResponse } from "../../../types/VolunteerTypes";
-import CardSubInformation from "../Card";
+import useViewport from "../../../../hooks/useViewport";
+import { CheckIn } from "../../../../types/CheckInTypes";
+import { VolunteerResponse } from "../../../../types/VolunteerTypes";
+import CardSubInformation from "../../../common/Card";
 
 const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
   const [volunteer, setVolunteer] = useState<VolunteerResponse>(
@@ -36,9 +36,9 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
 
   useEffect(() => {
     const getVolunteerData = async () => {
-      if (currentCheckIn.volunteerId !== null) {
+      if (currentCheckIn.volunteerId) {
         const volunteerResponse = await VolunteerAPIClient.getVolunteerById(
-          currentCheckIn.volunteerId ? String(currentCheckIn.volunteerId) : "",
+          String(currentCheckIn.volunteerId),
         );
         setVolunteer(volunteerResponse);
       } else {
@@ -52,7 +52,7 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
     const checkInResponse = await CheckInAPIClient.updateCheckInById(
       currentCheckIn.id,
       {
-        volunteerId: undefined,
+        volunteerId: null,
         isAdmin: false,
       },
     );
