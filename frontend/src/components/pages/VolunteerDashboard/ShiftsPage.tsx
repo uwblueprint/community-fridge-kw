@@ -14,12 +14,17 @@ import { useHistory } from "react-router-dom";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
 import VolunteerShiftCard from "./ShiftCard";
-import { CheckInWithShiftType, ScheduleWithShiftType } from "../../../types/VolunteerTypes";
 
 const ScheduledVolunteerShiftsPage = () => {
   const { authenticatedUser } = useContext(AuthContext);
-  const [shifts, setShifts] = useState<(CheckInWithShiftType | ScheduleWithShiftType)[]>([]);
+  const [shifts, setShifts] = useState<
+    (CheckInWithShiftType | ScheduleWithShiftType)[]
+  >([]);
   const history = useHistory();
 
   useEffect(() => {
@@ -64,9 +69,11 @@ const ScheduledVolunteerShiftsPage = () => {
         marginTop={["60px", "70px"]}
       >
         {!!shifts.length &&
-          shifts.map((shiftObject: (CheckInWithShiftType | ScheduleWithShiftType), id) => (
-            <VolunteerShiftCard key={id} shift={shiftObject!} />
-          ))}
+          shifts.map(
+            (shiftObject: CheckInWithShiftType | ScheduleWithShiftType, id) => (
+              <VolunteerShiftCard key={id} shift={shiftObject!} />
+            ),
+          )}
         {!shifts.length && (
           <Flex paddingTop="1.5rem">
             <Box

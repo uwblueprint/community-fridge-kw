@@ -1,5 +1,6 @@
-import { Container, Stack, VStack } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
+
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";

@@ -1,20 +1,32 @@
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import * as Routes from "../../../constants/Routes";
-import { CheckIn } from "../../../types/CheckInTypes";
-import { Schedule } from "../../../types/SchedulingTypes";
-import { CheckInWithShiftType, ScheduleWithShiftType, ShiftType } from "../../../types/VolunteerTypes";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+  ShiftType,
+} from "../../../types/VolunteerTypes";
 import CardField from "../../common/CardField";
 import { getShiftColor } from "./types";
 
+interface CheckInOrScheduleProps {
+  donorId?: string;
+  isPickup?: boolean;
+  pickupLocation?: string;
+  volunteerTime?: string;
+  startTime?: string;
+  startDate?: string;
+  notes: string;
+  type: ShiftType;
+}
 const VolunteerShiftCard = ({
   shift,
 }: {
-  shift: (CheckInWithShiftType | ScheduleWithShiftType)
+  shift: CheckInWithShiftType | ScheduleWithShiftType;
 }): JSX.Element => {
   const {
     donorId,
@@ -25,7 +37,7 @@ const VolunteerShiftCard = ({
     startDate,
     notes,
     type,
-  } = shift as (CheckInWithShiftType & ScheduleWithShiftType);
+  } = shift as CheckInOrScheduleProps;
   const [businessName, setBusinessName] = useState<string>("");
 
   const history = useHistory();
@@ -34,7 +46,6 @@ const VolunteerShiftCard = ({
     if (startDate) {
       return format(new Date(startDate), "EEE MMM dd, yyyy");
     }
-
     return startTime && format(new Date(startTime), "EEE MMM dd, yyyy");
   };
 
@@ -43,7 +54,10 @@ const VolunteerShiftCard = ({
       return format(new Date(startDate), "h:mm aa");
     }
 
-    return volunteerTime;
+    return (
+      volunteerTime &&
+      format(parse(volunteerTime, "kk:mm", new Date()), "h:mm aa")
+    );
   };
 
   useEffect(() => {
@@ -68,7 +82,8 @@ const VolunteerShiftCard = ({
           {`${dateLocal()}`}
           <Text minWidth="125px" textStyle="mobileSmall" color="hubbard.100">
             {type === ShiftType.CHECKIN && "Fridge check-in"}
-            {type === ShiftType.SCHEDULING && (isPickup ? "Pickup assistance" : "Unloading assistance")}
+            {type === ShiftType.SCHEDULING &&
+              (isPickup ? "Pickup assistance" : "Unloading assistance")}
           </Text>
         </Text>
         <Button
@@ -104,10 +119,7 @@ const VolunteerShiftCard = ({
           {pickupLocation && (
             <CardField title="Location" value={pickupLocation} />
           )}
-          <CardField
-            title="Notes"
-            value={notes || "-"}
-          />
+          <CardField title="Notes" value={notes || "-"} />
         </Stack>
       </Box>
     </Box>
