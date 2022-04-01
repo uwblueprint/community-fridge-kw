@@ -3,6 +3,7 @@ import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 
 import useViewport from "../../../hooks/useViewport";
+import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 
 type State = {
@@ -72,19 +73,19 @@ const DayButton = ({ day }: DayButtonProps) => {
 };
 
 type RenderItemProps<EventItem> = {
-  schedule: Schedule;
+  item: Schedule | CheckIn;
   showingFullWeek: boolean;
 };
 
 type WeeklyBodyProps<EventItem> = {
   selectedDay: Date;
-  schedules: Schedule[];
+  items: Schedule[] | CheckIn[];
   renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
 };
 
 export function WeeklyBody<EventItem>({
   selectedDay,
-  schedules,
+  items,
   renderItem,
 }: WeeklyBodyProps<EventItem>) {
   const { isMobile } = useViewport();
@@ -117,14 +118,17 @@ export function WeeklyBody<EventItem>({
                 }}
               />
 
-              {schedules.map((schedule) => {
+              {(items as Array<Schedule | CheckIn>).map((item) => {
                 const currentDate = setDay(week, selectedDay.getDay() + i, {
                   locale,
                 });
-                const scheduledDate = new Date(schedule?.startTime as string);
+                const scheduledDate =
+                  "startTime" in item
+                    ? new Date(item?.startTime as string)
+                    : new Date(item?.startDate as string);
 
                 if (
-                  schedule === null ||
+                  item === null ||
                   scheduledDate === null ||
                   scheduledDate.getDate() !== currentDate.getDate() ||
                   scheduledDate.getMonth() !== currentDate.getMonth() ||
@@ -134,7 +138,7 @@ export function WeeklyBody<EventItem>({
                 }
 
                 return renderItem({
-                  schedule,
+                  item,
                   showingFullWeek: selectedDay === undefined,
                 });
               })}
@@ -145,11 +149,3 @@ export function WeeklyBody<EventItem>({
     </>
   );
 }
-
-export const WeeklyResponsiveContainer = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
-  return <div>{children}</div>;
-};

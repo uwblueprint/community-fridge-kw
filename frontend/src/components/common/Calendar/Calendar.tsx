@@ -1,33 +1,44 @@
 import React from "react";
 
+import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
+import CheckInInfoCard from "../../pages/AdminDashboard/components/CheckInInfoCard";
 import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
 
 type CalendarProps = {
   selectedDay: Date;
-  schedules: Schedule[];
+  items: Schedule[] | CheckIn[];
   isAdminView: boolean;
+  isCheckInView: boolean;
 };
 
 const Calendar = ({
   selectedDay,
-  schedules,
-  isAdminView,
+  items,
+  isAdminView = false,
+  isCheckInView = false,
 }: CalendarProps): React.ReactElement => {
   return (
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
         selectedDay={selectedDay}
-        schedules={schedules}
-        renderItem={({ schedule }) => (
-          <DropoffCard
-            key={JSON.stringify(schedule)}
-            schedule={schedule}
-            isDonorView={false}
-            isPublicView={!isAdminView}
-          />
-        )}
+        items={items}
+        renderItem={({ item }) =>
+          isCheckInView ? (
+            <CheckInInfoCard
+              key={JSON.stringify(item)}
+              checkIn={item as CheckIn}
+            />
+          ) : (
+            <DropoffCard
+              key={JSON.stringify(item)}
+              schedule={item as Schedule}
+              isDonorView={false}
+              isPublicView={!isAdminView}
+            />
+          )
+        }
       />
     </WeeklyCalendar>
   );
