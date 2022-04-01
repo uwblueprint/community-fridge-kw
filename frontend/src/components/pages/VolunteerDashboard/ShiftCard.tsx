@@ -92,7 +92,6 @@ const VolunteerShiftCard = ({
           size="lg"
           width="35%"
           variant="viewDetails"
-          onClick={() => history.push(Routes.SCHEDULING_PAGE)}
         >
           View Details
         </Button>
@@ -104,7 +103,6 @@ const VolunteerShiftCard = ({
         borderRadius="8px"
         bg={getShiftColor(type, !!isPickup)}
         width={{ base: "default", md: "100%" }}
-        onClick={() => history.push(`${Routes.DASHBOARD_PAGE}`)}
         overflow="hidden"
       >
         <Stack
