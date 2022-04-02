@@ -93,7 +93,7 @@ const Button = {
       px: "53px",
       lineHeight: "20px",
     },
-  }
+  },
 };
 
 export default Button;

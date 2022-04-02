@@ -278,14 +278,6 @@ class VolunteerService implements IVolunteerService {
         throw new Error(`volunteerId ${id} not found.`);
       }
 
-      const numDestroyed: number = await Volunteer.destroy({
-        where: { id },
-      });
-
-      if (numDestroyed <= 0) {
-        throw new Error(`id ${id} was not deleted in Postgres.`);
-      }
-
       try {
         await Scheduling.update(
           {
@@ -320,6 +312,14 @@ class VolunteerService implements IVolunteerService {
           )}`,
         );
         throw error;
+      }
+
+      const numDestroyed: number = await Volunteer.destroy({
+        where: { id },
+      });
+
+      if (numDestroyed <= 0) {
+        throw new Error(`id ${id} was not deleted in Postgres.`);
       }
     } catch (error) {
       Logger.error(
