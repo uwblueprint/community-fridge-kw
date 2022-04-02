@@ -200,7 +200,7 @@ class VolunteerService implements IVolunteerService {
   async updateVolunteerById(
     id: string,
     volunteer: UpdateVolunteerDTO,
-  ): Promise<void> {
+  ): Promise<VolunteerDTO> {
     try {
       const updateResult = await Volunteer.update(
         {
@@ -216,6 +216,14 @@ class VolunteerService implements IVolunteerService {
       if (updateResult[0] < 1) {
         throw new Error(`id ${id} not found.`);
       }
+      const updatedVolunteer = updateResult[1][0];
+
+      const updatedVolunteerDTO: VolunteerDTO = {
+        id: String(updatedVolunteer.id),
+        userId: String(updatedVolunteer.user_id),
+        status: updatedVolunteer.status,
+      };
+      return updatedVolunteerDTO;
     } catch (error) {
       Logger.error(
         `Failed to update volunteer. Reason = ${getErrorMessage(error)}`,
@@ -227,7 +235,7 @@ class VolunteerService implements IVolunteerService {
   async updateVolunteerByUserId(
     userId: string,
     volunteer: UpdateVolunteerDTO,
-  ): Promise<void> {
+  ): Promise<VolunteerDTO> {
     try {
       const updateResult = await Volunteer.update(
         {
@@ -243,6 +251,15 @@ class VolunteerService implements IVolunteerService {
       if (updateResult[0] < 1) {
         throw new Error(`userId ${userId} not found.`);
       }
+
+      const updatedVolunteer = updateResult[1][0];
+
+      const updatedVolunteerDTO: VolunteerDTO = {
+        id: String(updatedVolunteer.id),
+        userId: String(updatedVolunteer.user_id),
+        status: updatedVolunteer.status,
+      };
+      return updatedVolunteerDTO;
     } catch (error) {
       Logger.error(
         `Failed to update volunteer. Reason = ${getErrorMessage(error)}`,

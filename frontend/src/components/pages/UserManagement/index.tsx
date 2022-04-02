@@ -116,22 +116,20 @@ const UserManagementPage = (): JSX.Element => {
 
   // Sets volunteer status to Approved
   const handleApprove = async (user: UserMgmtTableRecord) => {
-    console.log("ON APPROVE CLICK");
     const newVolunteerData = { status: Status.APPROVED };
     const updatedVolunteerResponse: VolunteerDTO = await VolunteerAPIClient.updateVolunteerByUserId(
       user.userId,
       newVolunteerData,
     );
-    console.log("AFTER BE CALL");
-    console.log("updatedResponse", updatedVolunteerResponse);
     if (updatedVolunteerResponse) {
-      const i = users.findIndex((u) => u.id === user.userId);
-      const newUsers = users.slice();
-      newUsers[i].approvalStatus = Status.APPROVED;
+      const newUsers: UserMgmtTableRecord[] = await users.map(u => {
+        if (u.id === updatedVolunteerResponse.id) {
+          return {...u, approvalStatus: Status.APPROVED};
+        }
+        return u;
+      })
       setUsers(newUsers);
-      console.log("newUsers", newUsers);
     }
-    console.log(users);
   };
 
   // Deletes selected user
