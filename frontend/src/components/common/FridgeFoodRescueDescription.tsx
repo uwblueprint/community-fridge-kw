@@ -1,36 +1,54 @@
 import { EditIcon } from "@chakra-ui/icons";
 import { Button, Link, Text } from "@chakra-ui/react";
-import React from "react";
+import { useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import * as Routes from "../../constants/Routes";
+import ContentAPIClient from "../../APIClients/ContentAPIClient";
+import { Content } from "../../types/ContentTypes";
 
-const FridgeFoodRescueDescription = () => (
-  <>
-    <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
-      Food rescue description
-      <Button
-        variant="editInfo"
-        rightIcon={<EditIcon size={24} />}
-        onClick={() => alert("Edit content clicked!")}
-      />
-    </Text>
-    <Text textStyle={["mobileBody", "desktopBody"]} pt="2rem">
-      Select a card to see more details pertaining to the upcoming donation.
-      Select a card to see more details pertaining to the upcoming donation.
-      Select select a card to see more details pertaining to the Select a card
-      upcoming donation. Select a card to see more details pertaining to the
-      upcoming donation. Select a card to see more details pertaining to the
-      upcoming donation. Select a card Select a card to see more details
-      pertaining to the upcoming donation. Select a card to see more details
-      pertaining to the upcoming donation.
-      <Link
-        color="#498FB6"
-        textDecoration="underline"
-        textStyle={["mobileLink", "desktopLink"]}
-        href="www.google.com"
-        isExternal
-      >
-        Link to instructions
-      </Link>
-    </Text>
-  </>
-);
+const FridgeFoodRescueDescription = () => {
+  const [content, setContent] = useState<Content>();
+
+  const history = useHistory();
+  const navigateToEditPage = () => {
+    history.push(
+      Routes.ADMIN_FOOD_RESCUE_EDIT_DESCRIPTION_PAGE
+    );
+  };
+
+  useEffect(() => {
+    const getContent = async () => {
+      const contentResponse = await ContentAPIClient.getContent();
+      setContent(contentResponse);
+    };
+
+    getContent();
+  }, []);
+
+  return (
+    <>
+      <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
+        Scheduled donations
+        <Button
+          variant="editInfo"
+          rightIcon={<EditIcon size={24} />}
+          onClick={navigateToEditPage}
+        />
+      </Text>
+      <Text textStyle={["mobileBody", "desktopBody"]} pt="2rem">
+        {content?.foodRescueDescription}
+        <br />
+        <br />
+        <Link
+          color="#498FB6"
+          textStyle={["mobileLink", "desktopLink"]}
+          href={content?.foodRescueUrl}
+          isExternal
+        >
+          Link to instructions
+        </Link>
+      </Text>
+    </>
+  )
+};
 export default FridgeFoodRescueDescription;
