@@ -110,7 +110,7 @@ interface ISchedulingService {
 
   /**
    * update schedulings by recurring_donation_id
-   * @param reucrring_donation_id recurring donation id
+   * @param recurring_donation_id recurring donation id
    * @throws Error if recurring donation update fails
    */
   updateSchedulingByRecurringDonationId(
@@ -128,7 +128,7 @@ interface ISchedulingService {
 
   /**
    * Delete a scheduling by recurring_donation_id
-   * @param reucrring_donation_id recurring donation id
+   * @param recurring_donation_id recurring donation id
    * @param current_date the current date of the recurrring donation
    * @param role of user that is deleting the recurring donation
    * @throws Error if recurring donation deletion fails

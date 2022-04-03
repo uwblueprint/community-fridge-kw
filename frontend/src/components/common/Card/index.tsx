@@ -16,11 +16,11 @@ const CardSubInformation = ({
   frequency?: string;
   frequencyColorScheme?: string;
 }) => (
-  <VStack spacing="4px" alignItems="left" minWidth="10vw">
-    <Text textTransform="uppercase" color="hubbard.100" textStyle="mobileSmall">
+  <VStack align="left">
+    <Text textTransform="uppercase" textStyle="mobileSmall" color="hubbard.100">
       {description}
     </Text>
-    <Text color="black.100" textStyle="desktopBody">
+    <Text textStyle="mobileSmall" pb={["1.2rem", "0px"]}>
       {isFrequencyBlock && (
         <Box as="span" textStyle="mobileBodyBold" color={frequencyColorScheme}>
           {frequency === DonationFrequency.ONE_TIME ? "One time" : frequency}

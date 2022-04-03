@@ -57,6 +57,14 @@ const Button = {
       fontWeight: 300,
       textDecoration: "underline",
     },
+    viewDetails: {
+      border: "1px",
+      borderColor: "raddish.100",
+      color: "raddish.100",
+      fontSize: "16px",
+      py: "12px",
+      px: "53px",
+    },
     approve: {
       background: "raddish.100",
       color: "squash.100",

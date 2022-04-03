@@ -19,7 +19,7 @@ import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
-import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
+import VolunteerDashboard from "./components/pages/VolunteerDashboard";
 import {
   AUTHENTICATED_USER_KEY,
   AUTHENTICATED_VOLUNTEER_CONTEXT_KEY,
@@ -77,7 +77,7 @@ const App = (): React.ReactElement => {
                 <PrivateRoute
                   exact
                   path={Routes.VOLUNTEER_SHIFTS_PAGE}
-                  component={VolunteerShiftsPage}
+                  component={VolunteerDashboard}
                 />
                 <PrivateRoute
                   exact
