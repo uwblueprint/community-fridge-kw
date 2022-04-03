@@ -52,11 +52,16 @@ const CreateCheckIn = () => {
       if (checkInFormValues.startDate) {
         newStartDate = new Date(checkInFormValues.startDate);
       }
-      set(newStartDate, {
-        year: startDateState.getFullYear(),
-        month: startDateState.getMonth(),
-        date: startDateState.getDate(),
-      });
+
+      newStartDate.setFullYear(startDateState.getFullYear());
+      newStartDate.setMonth(startDateState.getMonth());
+      newStartDate.setDate(startDateState.getDate());
+
+      if (startTime) {
+        newStartDate.setHours(startTime.getHours());
+        newStartDate.setMinutes(startTime.getMinutes());
+      }
+
       setCheckInForm({
         target: { name: "startDate", value: newStartDate.toString() },
       });
@@ -67,13 +72,22 @@ const CreateCheckIn = () => {
       if (checkInFormValues.endDate) {
         newEndDate = new Date(checkInFormValues.endDate);
       }
-      set(newEndDate, {
-        year: endDateState.getFullYear(),
-        month: endDateState.getMonth(),
-        date: endDateState.getDate(),
-      });
+
+      newEndDate.setFullYear(endDateState.getFullYear());
+      newEndDate.setMonth(endDateState.getMonth());
+      newEndDate.setDate(endDateState.getDate());
+
+      if (endTime) {
+        newEndDate.setHours(endTime.getHours());
+        newEndDate.setMinutes(endTime.getMinutes());
+      }
+
       setCheckInForm({
         target: { name: "endDate", value: newEndDate.toString() },
+      });
+    } else {
+      setCheckInForm({
+        target: { name: "endDate", value: "" },
       });
     }
   };
@@ -141,6 +155,8 @@ const CreateCheckIn = () => {
   };
 
   const onSaveClick = async () => {
+    console.log(checkInFormValues.startDate);
+    console.log(checkInFormValues.endDate);
     const isValid = validateForm();
     if (!isValid) {
       return;
