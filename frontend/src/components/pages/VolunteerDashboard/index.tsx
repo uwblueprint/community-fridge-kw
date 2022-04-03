@@ -10,10 +10,10 @@ const VolunteerDashboard = () => {
   const { volunteerStatus } = useContext(VolunteerContext);
 
   return (
-    <Container centerContent variant="responsiveContainer">
+    <>
       {volunteerStatus === Status.PENDING && <PendingPage />}
       {volunteerStatus === Status.APPROVED && <ScheduledVolunteerShiftsPage />}
-    </Container>
+    </>
   );
 };
 

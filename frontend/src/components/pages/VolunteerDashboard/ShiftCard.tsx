@@ -19,6 +19,7 @@ interface CheckInOrScheduleProps {
   volunteerTime?: string;
   startTime?: string;
   startDate?: string;
+  endDate?: string;
   notes: string;
   type: ShiftType;
 }
@@ -35,6 +36,7 @@ const VolunteerShiftCard = ({
     volunteerTime,
     startTime,
     startDate,
+    endDate,
     notes,
     type,
   } = shift as CheckInOrScheduleProps;
@@ -49,7 +51,7 @@ const VolunteerShiftCard = ({
 
   const timeLocal = () => {
     if (startDate) {
-      return format(new Date(startDate), "h:mma");
+      return endDate && `${format(new Date(startDate), "h:mma")}-${format(new Date(endDate), "h:mma")}`;
     }
 
     return (
@@ -70,7 +72,7 @@ const VolunteerShiftCard = ({
   }, []);
 
   return (
-    <Box my="24px" width="100%" overflow="hidden">
+    <Box my="2rem" width="100%" overflow="hidden">
       <Stack
         direction={["column", "row"]}
         display="flex"
@@ -88,7 +90,7 @@ const VolunteerShiftCard = ({
           float="right"
           mt="1.5rem"
           size="lg"
-          width="35%"
+          width={["50%", "20%"]}
           variant="viewDetails"
         >
           View Details
@@ -106,11 +108,11 @@ const VolunteerShiftCard = ({
         <Stack
           direction={["column", "row"]}
           display={["default", "flex"]}
-          spacing={["0", "4"]}
+          spacing={["0", "8"]}
         >
           {businessName && (
             <CardSubInformation
-              description="Organization Name"
+              description="Organization"
               value={businessName}
             />
           )}

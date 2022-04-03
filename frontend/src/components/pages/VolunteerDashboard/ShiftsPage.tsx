@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Flex,
   Stack,
   StackDivider,
@@ -19,6 +20,7 @@ import {
   ScheduleWithShiftType,
 } from "../../../types/VolunteerTypes";
 import VolunteerShiftCard from "./ShiftCard";
+import useViewport from "../../../hooks/useViewport";
 
 const ScheduledVolunteerShiftsPage = () => {
   const { volunteerId } = useContext(VolunteerContext);
@@ -26,6 +28,7 @@ const ScheduledVolunteerShiftsPage = () => {
     (CheckInWithShiftType | ScheduleWithShiftType)[]
   >([]);
   const history = useHistory();
+  const { isDesktop } = useViewport();
 
   useEffect(() => {
     const getShifts = async () => {
@@ -44,26 +47,27 @@ const ScheduledVolunteerShiftsPage = () => {
     <Container variant="baseContainer">
       <Stack direction={["column", "row"]} justifyContent="space-between">
         <VStack alignItems="left">
-          <Text color="black.100" textStyle="mobileHeader1">
+          <Text pb="1rem" color="black.100" textStyle="mobileHeader1">
             My volunteer shifts
           </Text>
-          <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
+          <Text py={["0.8rem", "0"]} textStyle="mobileBody" color="hubbard.100">
             Thank you for supporting your local community fridge!{" "}
           </Text>
         </VStack>
         <Button
           float="right"
           size="lg"
-          width={{ lg: "40%", base: "100%" }}
+          width={{ lg: "30%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.SCHEDULING_PAGE)}
         >
           Volunteer for a shift
         </Button>
       </Stack>
+      {!isDesktop && <Divider mt="3rem" />}
       <VStack
         divider={<StackDivider borderColor="gray.200" />}
-        marginTop={["60px", "70px"]}
+        marginTop={["10px", "40px"]}
       >
         {!!shifts.length &&
           shifts.map(

@@ -20,7 +20,7 @@ const CardSubInformation = ({
     <Text textTransform="uppercase" textStyle="mobileSmall" color="hubbard.100">
       {description}
     </Text>
-    <Text textStyle="mobileSmall" pb={["1rem", "0px"]}>
+    <Text textStyle="mobileSmall" pb={["1.2rem", "0px"]}>
       {isFrequencyBlock && (
         <Box as="span" textStyle="mobileBodyBold" color={frequencyColorScheme}>
           {frequency === DonationFrequency.ONE_TIME ? "One time" : frequency}
