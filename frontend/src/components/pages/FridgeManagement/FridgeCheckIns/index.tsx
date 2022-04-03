@@ -103,6 +103,10 @@ const CreateCheckIn = () => {
         target: { name: "endDate", value: "" },
       });
     }
+    setFormErrors({
+      ...formErrors,
+      dateRange: "",
+    });
   };
   const handleChange = (
     e:
@@ -127,19 +131,22 @@ const CreateCheckIn = () => {
     } else if (name === "endDate") {
       const time = new Date(`11/11/1970 ${e.target.value}`);
       setEndTime(time);
-      const newtime = set(new Date(time), {
-        year: dateRange[1].year,
-        month: dateRange[1].month.number - 1,
-      });
-      // NOTE: handles case for if end date is midnight, BUT what about HH:mm pm startTime and HH:mm am endTime?
-      if (e.target.value === "00:00") {
-        newtime.setDate(dateRange[1].day + 1);
-        setEndTime(set(new Date(endTime!), { date: endTime!.getDate() + 1 }));
-      } else {
-        newtime.setDate(dateRange[1].day);
+
+      if (dateRange[1]) {
+        const newtime = set(new Date(time), {
+          year: dateRange[1].year,
+          month: dateRange[1].month.number - 1,
+        });
+        // NOTE: handles case for if end date is midnight, BUT what about HH:mm pm startTime and HH:mm am endTime?
+        if (e.target.value === "00:00") {
+          newtime.setDate(dateRange[1].day + 1);
+          setEndTime(set(new Date(endTime!), { date: endTime!.getDate() + 1 }));
+        } else {
+          newtime.setDate(dateRange[1].day);
+        }
+        setCheckInForm({ target: { name: "endDate", value: newtime } });
       }
 
-      setCheckInForm({ target: { name: "endDate", value: newtime } });
       setFormErrors({
         ...formErrors,
         timeRange: "",

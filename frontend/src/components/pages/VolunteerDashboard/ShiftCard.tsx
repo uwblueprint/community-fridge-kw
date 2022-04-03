@@ -51,7 +51,13 @@ const VolunteerShiftCard = ({
 
   const timeLocal = () => {
     if (startDate) {
-      return endDate && `${format(new Date(startDate), "h:mma")}-${format(new Date(endDate), "h:mma")}`;
+      return (
+        endDate &&
+        `${format(new Date(startDate), "h:mma")}-${format(
+          new Date(endDate),
+          "h:mma",
+        )}`
+      );
     }
 
     return (
