@@ -64,6 +64,7 @@ const Button = {
       fontSize: "16px",
       py: "12px",
       px: "53px",
+    },
     approve: {
       background: "raddish.100",
       color: "squash.100",
