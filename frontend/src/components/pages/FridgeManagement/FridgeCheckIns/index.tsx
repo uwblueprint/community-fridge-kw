@@ -12,7 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { isAfter, set } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useHistory } from "react-router-dom";
@@ -44,6 +44,19 @@ const CreateCheckIn = () => {
 
   const toast = useToast();
   const history = useHistory();
+
+  // set default start date and end date in checkInFormValues to today and tomorrow
+  useEffect(() => {
+    setCheckInForm({
+      target: { name: "startDate", value: new DateObject().toString() },
+    });
+    setCheckInForm({
+      target: {
+        name: "endDate",
+        value: new DateObject().add(1, "days").toString(),
+      },
+    });
+  }, []);
 
   const handleDateRangeChange = (e: DateObject[]) => {
     if (e[0]) {
@@ -143,9 +156,13 @@ const CreateCheckIn = () => {
       dateRange: "",
     };
     let valid = true;
+    if (!checkInFormValues.startDate || !checkInFormValues.endDate) {
+      valid = false;
+      newErrors.dateRange = ErrorMessages.bothDateFieldsRequired;
+    }
     if (!startTime || !endTime) {
       valid = false;
-      newErrors.timeRange = ErrorMessages.bothFieldsRequired;
+      newErrors.timeRange = ErrorMessages.bothTimeFieldsRequired;
     } else if (isAfter(startTime!, endTime!)) {
       valid = false;
       newErrors.timeRange = ErrorMessages.endTimeBeforeStartTime;
@@ -193,6 +210,7 @@ const CreateCheckIn = () => {
             onChange={(e: any) => {
               handleChange(e, "startDate");
             }}
+            error={formErrors.timeRange}
           />
           <Text>to</Text>
           <Input
@@ -205,7 +223,7 @@ const CreateCheckIn = () => {
         </HStack>
         <FormErrorMessage>{formErrors.timeRange}</FormErrorMessage>
       </FormControl>
-      <FormControl isRequired m="3em 0">
+      <FormControl isRequired isInvalid={!!formErrors.dateRange} m="3em 0">
         <FormLabel fontWeight="600">Select date range</FormLabel>
         <FormHelperText mb="1em">Create shifts daily from:</FormHelperText>
         <DatePicker
@@ -239,6 +257,7 @@ const CreateCheckIn = () => {
             );
           }}
         />
+        <FormErrorMessage>{formErrors.dateRange}</FormErrorMessage>
       </FormControl>
       <FormControl m="3em 0">
         <FormLabel fontWeight="600">Add notes</FormLabel>
