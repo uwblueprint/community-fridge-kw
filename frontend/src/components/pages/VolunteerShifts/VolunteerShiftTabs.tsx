@@ -18,9 +18,11 @@ import FoodRescues from "./FoodRescues";
 // import { VolunteerShiftStepProps } from "./types";
 
 const VolunteerShiftsTabs = ({
-  navigation,
+  navigation, setShiftId, setIsFoodRescue
 }: {
   navigation: NavigationProps;
+  setShiftId: any;
+  setIsFoodRescue: any;
 }): JSX.Element => {
   return (
     <Container variant="baseContainer">

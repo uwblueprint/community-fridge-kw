@@ -12,8 +12,12 @@ import ShiftCard from "./components/ShiftCard";
 
 const FoodRescues = ({
   navigation,
+  setShiftId,
+  setIsFoodRescue
 }: {
   navigation: NavigationProps;
+  setShiftId: any;
+  setIsFoodRescue: any;
 }): JSX.Element => {
   const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
   // const history = useHistory();
@@ -41,7 +45,8 @@ const FoodRescues = ({
     };
 
     getFoodRescues();
-    console.log(foodRescues);
+    setIsFoodRescue(true);
+
   }, []);
 
   if (!foodRescues || foodRescues === null) {
@@ -58,7 +63,7 @@ const FoodRescues = ({
         them to the fridge.{" "}
       </Text>
       {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
-        <ShiftCard key={id} shift={scheduleObject} />
+        <ShiftCard key={id} shift={scheduleObject} setShiftId={setShiftId} />
       ))}
     </>
   );
