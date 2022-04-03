@@ -10,8 +10,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
-import * as Routes from "../../../constants/Routes"
 import ContentAPIClient from "../../../APIClients/ContentAPIClient";
+import * as Routes from "../../../constants/Routes";
 import { Content } from "../../../types/ContentTypes";
 import SaveButton from "../Scheduling/SaveChangesButton";
 
@@ -23,14 +23,13 @@ const EditCheckInOrFoodRescue = ({
   const [content, setContent] = useState<Content>();
   const [{ description, url }, setValue] = useForm({
     description: "",
-    url: ""
+    url: "",
   });
 
   const history = useHistory();
   const navigateToViewPage = () => {
     history.push(
-      isCheckInView ?
-        Routes.ADMIN_CHECK_INS : Routes.ADMIN_VIEW_DONATIONS
+      isCheckInView ? Routes.ADMIN_CHECK_INS : Routes.ADMIN_VIEW_DONATIONS,
     );
   };
 
@@ -44,13 +43,17 @@ const EditCheckInOrFoodRescue = ({
   }, []);
 
   const onSaveClick = async () => {
-    const contentResponse = await ContentAPIClient.updateContent(content?.id ?? "",
+    const contentResponse = await ContentAPIClient.updateContent(
+      content?.id ?? "",
       {
-        checkinDescription: (isCheckInView ? description : content?.checkinDescription) ?? "",
+        checkinDescription:
+          (isCheckInView ? description : content?.checkinDescription) ?? "",
         checkinUrl: (isCheckInView ? url : content?.checkinUrl) ?? "",
-        foodRescueDescription: (!isCheckInView ? description : content?.foodRescueDescription) ?? "",
+        foodRescueDescription:
+          (!isCheckInView ? description : content?.foodRescueDescription) ?? "",
         foodRescueUrl: (!isCheckInView ? url : content?.foodRescueUrl) ?? "",
-      });
+      },
+    );
 
     setContent(contentResponse);
     navigateToViewPage();
@@ -69,15 +72,23 @@ const EditCheckInOrFoodRescue = ({
     <Container variant="responsiveContainer" maxWidth="100%" mt="2rem">
       <Box>
         <Box display="flex" justifyContent="right">
-          <CloseButton onClick={navigateToViewPage}/>
+          <CloseButton onClick={navigateToViewPage} />
         </Box>
-        <Text textStyle="desktopHeader4" color="black.100">{`Edit ${isCheckInView ? `check in` : `food rescue`} description`}</Text>
+        <Text textStyle="desktopHeader4" color="black.100">{`Edit ${
+          isCheckInView ? `check in` : `food rescue`
+        } description`}</Text>
 
-        <Text textStyle="desktopSubtitle" color="black.100" mt="2rem">Edit description</Text>
+        <Text textStyle="desktopSubtitle" color="black.100" mt="2rem">
+          Edit description
+        </Text>
         <Textarea
           mt="2.5rem"
           value={description}
-          placeholder={isCheckInView ? content?.checkinDescription : content?.foodRescueDescription}
+          placeholder={
+            isCheckInView
+              ? content?.checkinDescription
+              : content?.foodRescueDescription
+          }
           name="description"
           onChange={setValue}
           width="478px"
@@ -86,13 +97,17 @@ const EditCheckInOrFoodRescue = ({
           p="1.5rem"
         />
 
-        <Text textStyle="desktopSubtitle" color="black.100" mt="3.5rem">Edit link</Text>
+        <Text textStyle="desktopSubtitle" color="black.100" mt="3.5rem">
+          Edit link
+        </Text>
 
         <Input
           mt="2.5rem"
           value={url}
           name="url"
-          placeholder={isCheckInView ? content?.checkinUrl : content?.foodRescueUrl}
+          placeholder={
+            isCheckInView ? content?.checkinUrl : content?.foodRescueUrl
+          }
           onChange={setValue}
           width="44rem"
           height="64px"

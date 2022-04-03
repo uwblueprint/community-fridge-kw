@@ -1,9 +1,10 @@
 import { EditIcon } from "@chakra-ui/icons";
 import { Button, Link, Text } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import * as Routes from "../../constants/Routes";
+import { useHistory } from "react-router-dom";
+
 import ContentAPIClient from "../../APIClients/ContentAPIClient";
+import * as Routes from "../../constants/Routes";
 import { Content } from "../../types/ContentTypes";
 
 const FridgeCheckInDescription = () => {
@@ -11,9 +12,7 @@ const FridgeCheckInDescription = () => {
 
   const history = useHistory();
   const navigateToEditPage = () => {
-    history.push(
-      Routes.ADMIN_CHECK_IN_EDIT_DESCRIPTION_PAGE
-    );
+    history.push(Routes.ADMIN_CHECK_IN_EDIT_DESCRIPTION_PAGE);
   };
 
   useEffect(() => {
@@ -49,6 +48,6 @@ const FridgeCheckInDescription = () => {
         </Link>
       </Text>
     </>
-  )
+  );
 };
 export default FridgeCheckInDescription;
