@@ -1,4 +1,3 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   CloseButton,
@@ -9,7 +8,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hooks-helper";
+import { useHistory } from "react-router-dom";
 
+import * as Routes from "../../../constants/Routes"
 import ContentAPIClient from "../../../APIClients/ContentAPIClient";
 import { Content } from "../../../types/ContentTypes";
 import SaveButton from "../Scheduling/SaveChangesButton";
@@ -25,6 +26,23 @@ const EditCheckInOrFoodRescue = ({
     url: ""
   });
 
+  const history = useHistory();
+  const navigateToViewPage = () => {
+    history.push(
+      isCheckInView ?
+        Routes.ADMIN_CHECK_INS : Routes.ADMIN_VIEW_DONATIONS
+    );
+  };
+
+  useEffect(() => {
+    const getContent = async () => {
+      const contentResponse = await ContentAPIClient.getContent();
+      setContent(contentResponse);
+    };
+
+    getContent();
+  }, []);
+
   const onSaveClick = async () => {
     const contentResponse = await ContentAPIClient.updateContent(content?.id ?? "",
       {
@@ -35,6 +53,7 @@ const EditCheckInOrFoodRescue = ({
       });
 
     setContent(contentResponse);
+    navigateToViewPage();
   };
 
   useEffect(() => {
@@ -50,7 +69,7 @@ const EditCheckInOrFoodRescue = ({
     <Container variant="responsiveContainer" maxWidth="100%" mt="2rem">
       <Box>
         <Box display="flex" justifyContent="right">
-          <CloseButton />
+          <CloseButton onClick={navigateToViewPage}/>
         </Box>
         <Text textStyle="desktopHeader4" color="black.100">{`Edit ${isCheckInView ? `check in` : `food rescue`} description`}</Text>
 
