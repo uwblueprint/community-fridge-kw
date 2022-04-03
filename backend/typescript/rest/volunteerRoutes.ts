@@ -113,21 +113,27 @@ volunteerRouter.put(
     }
     if (volunteerId) {
       try {
-        await volunteerService.updateVolunteerById(volunteerId, {
-          status: req.body.status,
-        });
+        const updatedVolunteer = await volunteerService.updateVolunteerById(
+          volunteerId,
+          {
+            status: req.body.status,
+          },
+        );
 
-        res.status(201).send();
+        res.status(200).send(updatedVolunteer);
       } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }
     } else if (userId) {
       try {
-        await volunteerService.updateVolunteerByUserId(userId as string, {
-          status: req.body.status,
-        });
+        const updatedVolunteer = await volunteerService.updateVolunteerByUserId(
+          userId as string,
+          {
+            status: req.body.status,
+          },
+        );
 
-        res.status(201).send();
+        res.status(200).send(updatedVolunteer);
       } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }

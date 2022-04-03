@@ -1,6 +1,9 @@
 import { BEARER_TOKEN } from "../constants/AuthConstants";
 import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
   UpdateVolunteerDataType,
+  VolunteerDTO,
   VolunteerResponse,
 } from "../types/VolunteerTypes";
 import baseAPIClient from "./BaseAPIClient";
@@ -42,7 +45,7 @@ const getVolunteerByUserId = async (
 
 const getCheckInsAndSchedules = async (
   volunteerId: string,
-): Promise<VolunteerResponse[]> => {
+): Promise<(CheckInWithShiftType | ScheduleWithShiftType)[]> => {
   try {
     const { data } = await baseAPIClient.get(
       `/volunteers/shifts/${volunteerId}`,
@@ -52,14 +55,14 @@ const getCheckInsAndSchedules = async (
     );
     return data;
   } catch (error) {
-    return error as VolunteerResponse[];
+    return error as (CheckInWithShiftType | ScheduleWithShiftType)[];
   }
 };
 
 const updateVolunteerById = async (
   id: string,
   volunteerData: UpdateVolunteerDataType,
-): Promise<VolunteerResponse> => {
+): Promise<VolunteerDTO> => {
   try {
     const { data } = await baseAPIClient.put(
       `/volunteers/${id}`,
@@ -77,7 +80,7 @@ const updateVolunteerById = async (
 const updateVolunteerByUserId = async (
   userId: string,
   volunteerData: UpdateVolunteerDataType,
-): Promise<VolunteerResponse> => {
+): Promise<VolunteerDTO> => {
   try {
     const { data } = await baseAPIClient.put(
       `/volunteers/?userId=${userId}`,

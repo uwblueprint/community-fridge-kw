@@ -12,7 +12,7 @@ const PendingPage = () => {
   };
 
   return (
-    <Container variant="responsiveContainer">
+    <Container variant="baseContainer">
       <Box mt={10}>
         <Button
           onClick={navigateToDashboard}
