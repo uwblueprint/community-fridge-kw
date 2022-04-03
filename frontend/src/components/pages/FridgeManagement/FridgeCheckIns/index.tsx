@@ -129,7 +129,7 @@ const CreateCheckIn = () => {
       dateRange: "",
     };
     let valid = true;
-    if (!checkInFormValues.startDate || !checkInFormValues.endDate) {
+    if (!startTime || !endTime) {
       valid = false;
       newErrors.timeRange = ErrorMessages.bothFieldsRequired;
     } else if (isAfter(startTime!, endTime!)) {
