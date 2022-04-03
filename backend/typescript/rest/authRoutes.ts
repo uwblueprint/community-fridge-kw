@@ -171,7 +171,7 @@ authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
 
   try {
     const response = await authService.confirmPasswordReset(
-      req.params.newPassword,
+      req.params.newPassword!,
       oobCode as string,
     );
     if (response) {

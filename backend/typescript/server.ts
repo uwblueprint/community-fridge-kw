@@ -18,6 +18,7 @@ import CronService from "./services/implementations/cronService";
 import DonorService from "./services/implementations/donorService";
 import checkInRouter from "./rest/checkInRoutes";
 import contentRouter from "./rest/contentRoutes";
+import cronRouter from "./rest/cronRoutes";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
 if (process.env.NODE_ENV === "production") {
@@ -49,6 +50,7 @@ app.use("/volunteers", volunteerRouter);
 app.use("/scheduling", schedulingRouter);
 app.use("/checkin", checkInRouter);
 app.use("/content", contentRouter);
+app.use("/email-reminders", cronRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const eraseDatabaseOnSync = false;

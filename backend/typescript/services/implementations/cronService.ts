@@ -9,6 +9,7 @@ import User from "../../models/user.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import ICronService from "../interfaces/cronService";
 import IDonorService from "../interfaces/donorService";
+import Donor from "../../models/donor.model";
 
 // eslint-disable-next-line
 const cron = require("node-cron");
@@ -123,44 +124,38 @@ class CronService implements ICronService {
 
   async checkReminders(): Promise<void> {
     const today: Date = dayjs().toDate();
-    const tomorrow: Date = dayjs().add(1, "days").toDate();
+    const dayAfterTomorrow: Date = dayjs().add(2, "days").toDate();
 
     try {
-      cron.schedule("0 0 0 * *", async () => {
-        const schedules: Array<Schedule> = await Schedule.findAll({
-          where: {
-            start_time: {
-              [Op.and]: [{ [Op.gte]: today }, { [Op.lte]: tomorrow }],
-            },
+      const schedules: Array<Schedule> = await Schedule.findAll({
+        where: {
+          start_time: {
+            [Op.and]: [{ [Op.gte]: today }, { [Op.lte]: dayAfterTomorrow }],
           },
-        });
+        },
+      });
 
-        schedules.forEach(async (schedule: Schedule) => {
-          const user: User | null = await User.findByPk(
-            Number(schedule.donor_id),
+      schedules.forEach(async (schedule: Schedule) => {
+        const donor: Donor | null = await Donor.findByPk(
+          Number(schedule.donor_id),
+        );
+
+        if (!donor) {
+          throw new Error(`donorId ${schedule.donor_id} not found.`);
+        }
+
+        try {
+          this.sendScheduledDonationEmail(schedule);
+        } catch (error) {
+          Logger.error(
+            `Failed to send reminder email. Reason = ${getErrorMessage(error)}`,
           );
-
-          if (!user) {
-            throw new Error(`donorId ${schedule.donor_id} not found.`);
-          }
-
-          try {
-            this.sendScheduledDonationEmail(schedule);
-          } catch (error) {
-            Logger.error(
-              `Failed to send reminder email. Reason = ${getErrorMessage(
-                error,
-              )}`,
-            );
-            throw error;
-          }
-        });
+          throw error;
+        }
       });
     } catch (error) {
       Logger.error(
-        `Failed to run checkReminders cron service. Reason = ${getErrorMessage(
-          error,
-        )}`,
+        `Failed to send reminders. Reason = ${getErrorMessage(error)}`,
       );
       throw error;
     }
