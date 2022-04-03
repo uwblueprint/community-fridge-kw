@@ -154,13 +154,23 @@ export type CheckInDTO = {
   startDate: Date;
   endDate: Date;
   notes?: string;
-  volunteerId?: string;
+  volunteerId?: string | null;
   isAdmin?: boolean;
 };
 
 export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
 
 export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;
+
+export enum ShiftType {
+  CHECKIN = "checkIn",
+  SCHEDULING = "scheduling",
+}
+
+export type SchedulingDTOWithShiftType = SchedulingDTO & {
+  type: ShiftType.SCHEDULING;
+};
+export type CheckInDTOWithShiftType = CheckInDTO & { type: ShiftType.CHECKIN };
 
 export type DTOTypes = Record<
   string,

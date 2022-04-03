@@ -9,6 +9,7 @@ import logger from "../../utilities/logger";
 import Donor from "../../models/donor.model";
 import User from "../../models/user.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import Scheduling from "../../models/scheduling.model";
 
 const Logger = logger(__filename);
 
@@ -148,12 +149,23 @@ class DonorService implements IDonorService {
 
   async deleteDonorById(id: string): Promise<void> {
     try {
-      const deletedRole: Donor | null = await Donor.findByPk(Number(id));
+      const deletedDonor: Donor | null = await Donor.findByPk(Number(id));
 
-      if (!deletedRole) {
+      if (!deletedDonor) {
         throw new Error(`id ${id} not found.`);
       }
-
+      try {
+        await Scheduling.destroy({
+          where: { donor_id: deletedDonor.id },
+        });
+      } catch (error) {
+        Logger.error(
+          `Failed to delete schedules for the donor. Reason = ${getErrorMessage(
+            error,
+          )}`,
+        );
+        throw error;
+      }
       const numDestroyed: number = await Donor.destroy({
         where: { id },
       });

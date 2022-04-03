@@ -5,16 +5,14 @@ import Volunteer from "../../../models/volunteer.model";
 import testSql from "../../../testUtils/testDb";
 import {
   testCheckIns,
-  testVolunteersDb,
   testUpdatedCheckIns,
+  testVolunteersDb,
   testUsersDb,
 } from "../../../testUtils/checkInService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";
 import CheckInService from "../checkInService";
-import VolunteerService from "../volunteerService";
-import IVolunteerService from "../../interfaces/volunteerService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
 
 const checkIns = testCheckIns.map((checkIn) => {
@@ -34,8 +32,7 @@ describe("pg checkInService", () => {
   beforeEach(async () => {
     await testSql.sync({ force: true });
     const emailService: IEmailService = new EmailService(nodemailerConfig);
-    const volunteerService: IVolunteerService = new VolunteerService();
-    checkInService = new CheckInService(emailService, volunteerService);
+    checkInService = new CheckInService(emailService);
     await User.bulkCreate(testUsersDb);
     await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);
@@ -58,7 +55,7 @@ describe("pg checkInService", () => {
       endDate: new Date("2021-09-01T10:00:00.000Z"),
       isAdmin: false,
       notes: null,
-      volunteerId: "null",
+      volunteerId: null,
     };
 
     const res = await checkInService.createCheckIn(mockCreateCheckInDTO);
@@ -81,7 +78,7 @@ describe("pg checkInService", () => {
         endDate: new Date("2021-08-30T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
-        volunteerId: "null",
+        volunteerId: null,
       },
       {
         id: "6",
@@ -89,7 +86,7 @@ describe("pg checkInService", () => {
         endDate: new Date("2021-08-31T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
-        volunteerId: "null",
+        volunteerId: null,
       },
       {
         id: "7",
@@ -97,7 +94,7 @@ describe("pg checkInService", () => {
         endDate: new Date("2021-09-01T10:00:00.000Z"),
         isAdmin: true,
         notes: "hi this is a test",
-        volunteerId: "null",
+        volunteerId: null,
       },
     ];
 
@@ -146,9 +143,7 @@ describe("pg checkInService", () => {
     const checkInToDelete: CheckIn | null = await CheckIn.findOne();
     expect(checkInToDelete).not.toBeNull();
     if (checkInToDelete) {
-      const res = await checkInService.deleteCheckInById(
-        checkInToDelete.id.toString(),
-      );
+      await checkInService.deleteCheckInById(checkInToDelete.id.toString());
       const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
       checkInsDbAfterDelete.forEach((checkIn: CheckIn, i) => {
         expect(checkIn.id).not.toBe(checkInToDelete.id);
@@ -160,10 +155,7 @@ describe("pg checkInService", () => {
   test("deleteCheckInsByDateRange", async () => {
     const startDate = "2021-09-01T09:00:00.000Z";
     const endDate = "2021-09-07T10:00:00.000Z";
-    const res = await checkInService.deleteCheckInsByDateRange(
-      startDate,
-      endDate,
-    );
+    await checkInService.deleteCheckInsByDateRange(startDate, endDate);
     const checkInsDbAfterDelete: CheckIn[] = await CheckIn.findAll();
     const expected = testCheckIns.filter(
       (checkIn) =>

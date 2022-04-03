@@ -1,17 +1,41 @@
-import { snakeCase } from "lodash";
 import User from "../../../models/user.model";
-
 import { Status, VolunteerDTO } from "../../../types";
-
 import testSql from "../../../testUtils/testDb";
+import VolunteerService from "../volunteerService";
+import Volunteer from "../../../models/volunteer.model";
+import Scheduling from "../../../models/scheduling.model";
+import Donor from "../../../models/donor.model";
+import CheckIn from "../../../models/checkIn.model";
+import IDonorService from "../../interfaces/donorService";
+import DonorService from "../donorService";
+import { testDonorsDb } from "../../../testUtils/schedulingService";
 import {
   testUsers,
   testVolunteers,
   testUserVolunteers,
   testUpdatedUserVolunteers,
+  testSchedules,
+  testCheckIns,
+  expectedCheckInsAndSchedules,
 } from "../../../testUtils/volunteerService";
-import VolunteerService from "../volunteerService";
-import Volunteer from "../../../models/volunteer.model";
+import { toSnakeCase } from "../../../utilities/servicesUtils";
+
+// translate frontend camel case into backend snake case format
+const users = testUsers.map((user) => {
+  return toSnakeCase(user);
+});
+const volunteers = testVolunteers.map((volunteer) => {
+  return toSnakeCase(volunteer);
+});
+const checkIns = testCheckIns.map((checkIn) => {
+  return toSnakeCase(checkIn);
+});
+const schedules = testSchedules.map((schedule) => {
+  return toSnakeCase(schedule);
+});
+const donors = testDonorsDb.map((donor) => {
+  return toSnakeCase(donor);
+});
 
 jest.mock("firebase-admin", () => {
   const auth = jest.fn().mockReturnValue({
@@ -25,28 +49,13 @@ describe("Testing VolunteerService Functions", () => {
 
   beforeEach(async () => {
     await testSql.sync({ force: true });
+    const donorService: IDonorService = new DonorService();
     volunteerService = new VolunteerService();
-
-    // translate frontend camel case into backend snake case format
-    const users = testUsers.map((user) => {
-      const userSnakeCase: Record<string, string> = {};
-      Object.entries(user).forEach(([key, value]) => {
-        userSnakeCase[snakeCase(key)] = value;
-      });
-      return userSnakeCase;
-    });
-
-    const volunteers = testVolunteers.map((volunteer) => {
-      const volunteerSnakeCase: Record<string, string> = {};
-      Object.entries(volunteer).forEach(([key, value]) => {
-        volunteerSnakeCase[snakeCase(key)] = value;
-      });
-      return volunteerSnakeCase;
-    });
 
     // bulk create all users and volunteers using the user and volunteer models
     await User.bulkCreate(users);
     await Volunteer.bulkCreate(volunteers);
+    await Donor.bulkCreate(donors);
   });
 
   afterAll(async () => {
@@ -84,6 +93,15 @@ describe("Testing VolunteerService Functions", () => {
     res.forEach((volunteer: VolunteerDTO, i: number) => {
       expect(volunteer).toMatchObject(testUserVolunteers[i]);
     });
+  });
+
+  it("getCheckInsAndSchedulesByVolunteerId", async () => {
+    await CheckIn.bulkCreate(checkIns);
+    await Scheduling.bulkCreate(schedules);
+
+    const res = await volunteerService.getCheckInsAndSchedules("1");
+
+    expect(res).toMatchObject(expectedCheckInsAndSchedules);
   });
 
   it("updateVolunteerById", async () => {

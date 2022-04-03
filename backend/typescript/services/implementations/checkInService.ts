@@ -13,7 +13,6 @@ import logger from "../../utilities/logger";
 import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
-import IVolunteerService from "../interfaces/volunteerService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
 
 const Logger = logger(__filename);
@@ -21,14 +20,8 @@ const Logger = logger(__filename);
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
 
-  volunteerService: IVolunteerService | null;
-
-  constructor(
-    emailService: IEmailService | null = null,
-    volunteerService: IVolunteerService | null = null,
-  ) {
+  constructor(emailService: IEmailService | null = null) {
     this.emailService = emailService;
-    this.volunteerService = volunteerService;
   }
 
   async createCheckIn(checkIn: CreateCheckInDTO): Promise<Array<CheckInDTO>> {
@@ -51,7 +44,7 @@ class CheckInService implements ICheckInService {
             .millisecond(originalEndDate.millisecond())
             .toDate(),
           notes: checkIn.notes,
-          volunteerId: checkIn.volunteerId,
+          volunteerId: checkIn.volunteerId ? String(checkIn.volunteerId) : null,
           isAdmin: checkIn.isAdmin,
         };
 
@@ -73,7 +66,9 @@ class CheckInService implements ICheckInService {
             startDate: createdCheckIn.start_date,
             endDate: createdCheckIn.end_date,
             notes: createdCheckIn.notes,
-            volunteerId: String(createdCheckIn.volunteer_id),
+            volunteerId: createdCheckIn.volunteer_id
+              ? String(createdCheckIn.volunteer_id)
+              : null,
             isAdmin: createdCheckIn.is_admin,
           };
         },
@@ -99,7 +94,9 @@ class CheckInService implements ICheckInService {
           startDate: checkIn.start_date,
           endDate: checkIn.end_date,
           notes: checkIn.notes,
-          volunteerId: String(checkIn.volunteer_id),
+          volunteerId: checkIn.volunteer_id
+            ? String(checkIn.volunteer_id)
+            : null,
           isAdmin: checkIn.is_admin,
         };
       });
@@ -133,7 +130,7 @@ class CheckInService implements ICheckInService {
       startDate: checkIn.start_date,
       endDate: checkIn.end_date,
       notes: checkIn.notes,
-      volunteerId: String(checkIn.volunteer_id),
+      volunteerId: checkIn.volunteer_id ? String(checkIn.volunteer_id) : null,
       isAdmin: checkIn.is_admin,
     };
   }
@@ -155,7 +152,9 @@ class CheckInService implements ICheckInService {
           startDate: checkIn.start_date,
           endDate: checkIn.end_date,
           notes: checkIn.notes,
-          volunteerId: String(checkIn.volunteer_id),
+          volunteerId: checkIn.volunteer_id
+            ? String(checkIn.volunteer_id)
+            : null,
           isAdmin: checkIn.is_admin,
         };
       });
@@ -191,7 +190,9 @@ class CheckInService implements ICheckInService {
 
       const updatedCheckInDTO: CheckInDTO = {
         id: String(updatedCheckIn.id),
-        volunteerId: String(updatedCheckIn.volunteer_id),
+        volunteerId: updatedCheckIn.volunteer_id
+          ? String(updatedCheckIn.volunteer_id)
+          : null,
         startDate: updatedCheckIn.start_date,
         endDate: updatedCheckIn.end_date,
         notes: updatedCheckIn.notes,

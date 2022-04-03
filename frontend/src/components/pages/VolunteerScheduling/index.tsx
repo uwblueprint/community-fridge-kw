@@ -7,7 +7,7 @@ import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import ConfirmShiftDetails from "./ConfirmShiftDetails";
-import PendingPage from "./PendingPage";
+import PendingPage from "../VolunteerDashboard/PendingPage";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
 
 const steps = [
@@ -42,12 +42,12 @@ const schedulingDefaultData = ({
   notes: "",
 } as unknown) as Schedule;
 
-const VolunteerShiftsPage = (schedulingData = schedulingDefaultData) => {
+const VolunteerScheduling = (schedulingData = schedulingDefaultData) => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
   const { authenticatedUser } = useContext(AuthContext);
   const [schedulingFormValues, setSchedulingForm] = useForm(schedulingData);
-  const [shiftId, setShiftId] = useState<string>();
-  const [isFoodRescue, setIsFoodRescue] = useState<boolean>();
+  const [shiftId, setShiftId] = useState<string>("1");
+  const [isFoodRescue, setIsFoodRescue] = useState<boolean>(true);
 
   const getVolunteerData = async () => {
     const volunteerResponse = await VolunteerAPIClient.getVolunteerByUserId(
@@ -81,7 +81,7 @@ const VolunteerShiftsPage = (schedulingData = schedulingDefaultData) => {
       return <VolunteerShiftsTabs navigation={navigation} setShiftId={setShiftId}
       setIsFoodRescue={setIsFoodRescue} />;
     case "confirm shift sign up":
-      return <ConfirmShiftDetails navigation={navigation}/>;
+      return <ConfirmShiftDetails navigation={navigation} shiftId={shiftId} isFoodRescue={isFoodRescue}/>;
     case "thank you page":
       return (
         <Container centerContent variant="responsiveContainer">
@@ -93,4 +93,4 @@ const VolunteerShiftsPage = (schedulingData = schedulingDefaultData) => {
   }
 };
 
-export default VolunteerShiftsPage;
+export default VolunteerScheduling;

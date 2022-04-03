@@ -12,7 +12,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format, isAfter, parse } from "date-fns";
+import { endOfDay, format, isAfter, parse } from "date-fns";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
 
@@ -247,8 +247,7 @@ const SelectDateTime = ({
   const handleChangeRecurringDate = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setRecurringEndDate(selectedDateObj);
-
-    const recurringDate = new Date(selectedDateObj);
+    const recurringDate = endOfDay(new Date(selectedDateObj));
     setForm({
       target: {
         name: "recurringDonationEndDate",
