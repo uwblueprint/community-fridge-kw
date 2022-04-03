@@ -3,6 +3,7 @@ import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
   UpdateVolunteerDataType,
+  VolunteerDTO,
   VolunteerResponse,
 } from "../types/VolunteerTypes";
 import baseAPIClient from "./BaseAPIClient";
@@ -61,7 +62,7 @@ const getCheckInsAndSchedules = async (
 const updateVolunteerById = async (
   id: string,
   volunteerData: UpdateVolunteerDataType,
-): Promise<VolunteerResponse> => {
+): Promise<VolunteerDTO> => {
   try {
     const { data } = await baseAPIClient.put(
       `/volunteers/${id}`,
@@ -79,7 +80,7 @@ const updateVolunteerById = async (
 const updateVolunteerByUserId = async (
   userId: string,
   volunteerData: UpdateVolunteerDataType,
-): Promise<VolunteerResponse> => {
+): Promise<VolunteerDTO> => {
   try {
     const { data } = await baseAPIClient.put(
       `/volunteers/?userId=${userId}`,
