@@ -22,14 +22,16 @@ import * as Routes from "../../../../constants/Routes";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import ErrorMessages from "./ErrorMessages";
 
-const checkInDefaultData = ({
+const checkInDefaultData = {
   startDate: "",
   endDate: "",
   notes: "",
   isAdmin: false,
-} as unknown) as CheckIn;
+} as CheckIn;
 
 const CreateCheckIn = () => {
+  const toast = useToast();
+  const history = useHistory();
   const [checkInFormValues, setCheckInForm] = useForm(checkInDefaultData);
   const [dateRange, setDateRange] = useState<DateObject[]>([
     new DateObject(),
@@ -41,9 +43,6 @@ const CreateCheckIn = () => {
     timeRange: "",
     dateRange: "",
   });
-
-  const toast = useToast();
-  const history = useHistory();
 
   // set default start date and end date in checkInFormValues to today and tomorrow
   useEffect(() => {
@@ -61,18 +60,21 @@ const CreateCheckIn = () => {
   const handleDateRangeChange = (e: DateObject[]) => {
     if (e[0]) {
       const startDateState = new Date(e[0].format());
-      let newStartDate = new Date();
-      if (checkInFormValues.startDate) {
-        newStartDate = new Date(checkInFormValues.startDate);
-      }
+      const newStartDate = checkInFormValues.startDate
+        ? new Date(checkInFormValues.startDate)
+        : new Date();
 
-      newStartDate.setFullYear(startDateState.getFullYear());
-      newStartDate.setMonth(startDateState.getMonth());
-      newStartDate.setDate(startDateState.getDate());
+      set(newStartDate, {
+        year: startDateState.getFullYear(),
+        month: startDateState.getMonth(),
+        date: startDateState.getDate(),
+      });
 
       if (startTime) {
-        newStartDate.setHours(startTime.getHours());
-        newStartDate.setMinutes(startTime.getMinutes());
+        set(newStartDate, {
+          hours: startTime.getHours(),
+          minutes: startTime.getMinutes(),
+        });
       }
 
       setCheckInForm({
@@ -86,13 +88,17 @@ const CreateCheckIn = () => {
         newEndDate = new Date(checkInFormValues.endDate);
       }
 
-      newEndDate.setFullYear(endDateState.getFullYear());
-      newEndDate.setMonth(endDateState.getMonth());
-      newEndDate.setDate(endDateState.getDate());
+      set(newEndDate, {
+        year: endDateState.getFullYear(),
+        month: endDateState.getMonth(),
+        date: endDateState.getDate(),
+      });
 
       if (endTime) {
-        newEndDate.setHours(endTime.getHours());
-        newEndDate.setMinutes(endTime.getMinutes());
+        set(newEndDate, {
+          hours: endTime.getHours(),
+          minutes: endTime.getMinutes(),
+        });
       }
 
       setCheckInForm({
@@ -179,8 +185,6 @@ const CreateCheckIn = () => {
   };
 
   const onSaveClick = async () => {
-    console.log(checkInFormValues.startDate);
-    console.log(checkInFormValues.endDate);
     const isValid = validateForm();
     if (!isValid) {
       return;
