@@ -1,4 +1,3 @@
-import { Container } from "@chakra-ui/react";
 import React, { useContext } from "react";
 
 import VolunteerContext from "../../../contexts/VolunteerContext";
