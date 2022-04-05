@@ -123,11 +123,11 @@ const VolunteerShiftCard = ({
           float="right"
           mt="1.5rem"
           size="lg"
-          width={["50%", "20%"]}
+          width={isSignUp? ["60", "20"]: ["50%", "20%"]}
           variant={isSignUp ? "navigation" : "viewDetails"}
           onClick={onSubmitClick}
         >
-          View Details
+          {isSignUp? "Volunteer for shift": "View Details"}
         </Button>
       </Stack>
       <Box

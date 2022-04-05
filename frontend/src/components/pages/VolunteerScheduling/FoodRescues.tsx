@@ -20,21 +20,7 @@ const FoodRescues = ({
   setIsFoodRescue: any;
 }): JSX.Element => {
   const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
-  // const history = useHistory();
-
-  // React.useEffect(() => {
-  //   const getFoodRescues = async () => {
-  //     const scheduleResponse = await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(
-  //       false,
-  //     );
-
-  //     setFoodRescues(scheduleResponse);
-
-  //   };
-
-  //   getFoodRescues();
-  //   console.log(foodRescues);
-  // }, []);
+ 
 
   React.useEffect(() => {
     const getFoodRescues = async () => {
