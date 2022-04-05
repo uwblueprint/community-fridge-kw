@@ -6,8 +6,8 @@ import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import ConfirmShiftDetails from "./ConfirmShiftDetails";
 import PendingPage from "../VolunteerDashboard/PendingPage";
+import ConfirmShiftDetails from "./ConfirmShiftDetails";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
 
 const steps = [
@@ -78,10 +78,21 @@ const VolunteerScheduling = (schedulingData = schedulingDefaultData) => {
         </Container>
       );
     case "shifts tab":
-      return <VolunteerShiftsTabs navigation={navigation} setShiftId={setShiftId}
-      setIsFoodRescue={setIsFoodRescue} />;
+      return (
+        <VolunteerShiftsTabs
+          navigation={navigation}
+          setShiftId={setShiftId}
+          setIsFoodRescue={setIsFoodRescue}
+        />
+      );
     case "confirm shift sign up":
-      return <ConfirmShiftDetails navigation={navigation} shiftId={shiftId} isFoodRescue={isFoodRescue}/>;
+      return (
+        <ConfirmShiftDetails
+          navigation={navigation}
+          shiftId={shiftId}
+          isFoodRescue={isFoodRescue}
+        />
+      );
     case "thank you page":
       return (
         <Container centerContent variant="responsiveContainer">

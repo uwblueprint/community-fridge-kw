@@ -7,13 +7,13 @@ import {
   ScheduleWithShiftType,
   ShiftType,
 } from "../../../types/VolunteerTypes";
-import ShiftCard from "./components/ShiftCard";
+import ShiftCard from "../VolunteerDashboard/ShiftCard";
 // import { VolunteerShiftStepProps } from "./types";
 
 const FoodRescues = ({
   navigation,
   setShiftId,
-  setIsFoodRescue
+  setIsFoodRescue,
 }: {
   navigation: NavigationProps;
   setShiftId: any;
@@ -46,7 +46,6 @@ const FoodRescues = ({
 
     getFoodRescues();
     setIsFoodRescue(true);
-
   }, []);
 
   if (!foodRescues || foodRescues === null) {
@@ -63,7 +62,13 @@ const FoodRescues = ({
         them to the fridge.{" "}
       </Text>
       {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
-        <ShiftCard key={id} shift={scheduleObject} setShiftId={setShiftId} />
+        <ShiftCard
+          key={id}
+          shift={scheduleObject}
+          setShiftId={setShiftId}
+          navigation={navigation}
+          isSignUp
+        />
       ))}
     </>
   );

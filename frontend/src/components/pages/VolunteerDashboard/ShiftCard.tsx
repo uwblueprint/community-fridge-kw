@@ -1,6 +1,7 @@
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
+import { NavigationProps } from "react-hooks-helper";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import {
@@ -25,8 +26,14 @@ interface CheckInOrScheduleProps {
 }
 const VolunteerShiftCard = ({
   shift,
+  setShiftId,
+  navigation,
+  isSignUp,
 }: {
   shift: CheckInWithShiftType | ScheduleWithShiftType;
+  setShiftId?: any;
+  navigation?: NavigationProps;
+  isSignUp?: boolean;
 }): JSX.Element => {
   const {
     id,
@@ -51,7 +58,13 @@ const VolunteerShiftCard = ({
 
   const timeLocal = () => {
     if (startDate) {
-      return endDate && `${format(new Date(startDate), "h:mma")}-${format(new Date(endDate), "h:mma")}`;
+      return (
+        endDate &&
+        `${format(new Date(startDate), "h:mma")}-${format(
+          new Date(endDate),
+          "h:mma",
+        )}`
+      );
     }
 
     return (
@@ -67,9 +80,29 @@ const VolunteerShiftCard = ({
         setBusinessName(donor.businessName);
       }
     };
+    setShiftId(id);
 
     getBusinessName();
+    // setCurrentFoodRescue(shift);
   }, []);
+
+  let next: any;
+
+  if (navigation !== undefined) {
+    next = navigation.next;
+  }
+  const onSubmitClick = async () => {
+    //  const schedule = await SchedulingAPIClient.createSchedule(currentSchedule);
+
+    // if (!schedule.id) {
+    //   onErrorSchedulingOpen();
+    //   return;
+    // }
+    // setCurrentFoodRescue(shift);
+    // setShiftId(id);
+    setShiftId(id);
+    next();
+  };
 
   return (
     <Box my="2rem" width="100%" overflow="hidden">
@@ -91,7 +124,8 @@ const VolunteerShiftCard = ({
           mt="1.5rem"
           size="lg"
           width={["50%", "20%"]}
-          variant="viewDetails"
+          variant={isSignUp ? "navigation" : "viewDetails"}
+          onClick={onSubmitClick}
         >
           View Details
         </Button>

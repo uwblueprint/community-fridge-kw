@@ -19,7 +19,6 @@ import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
-import VolunteerDashboard from "./components/pages/VolunteerDashboard";
 import VolunteerScheduling from "./components/pages/VolunteerScheduling";
 import {
   AUTHENTICATED_USER_KEY,
