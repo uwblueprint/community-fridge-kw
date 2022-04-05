@@ -17,11 +17,12 @@ import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
+import { SignupErrorMessage } from "../../../constants/AuthConstants";
 import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
 import { AuthenticatedUser } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
-import FailedModal from "./FailedModal";
+import SignUpFailedModal from "./ReturnToLoginModal";
 import { SignUpFormProps } from "./types";
 
 const TermsConditions = ({
@@ -186,7 +187,12 @@ const TermsConditions = ({
           </Button>
         </Box>
       </FormControl>
-      <FailedModal isOpen={isOpen} onClose={onClose} />
+      <SignUpFailedModal
+        errorHeader={SignupErrorMessage.HEADER}
+        errorMessage={SignupErrorMessage.BODY}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </Container>
   );
 };

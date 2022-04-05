@@ -122,12 +122,12 @@ const UserManagementPage = (): JSX.Element => {
       newVolunteerData,
     );
     if (updatedVolunteerResponse) {
-      const newUsers: UserMgmtTableRecord[] = await users.map(u => {
+      const newUsers: UserMgmtTableRecord[] = await users.map((u) => {
         if (u.id === updatedVolunteerResponse.id) {
-          return {...u, approvalStatus: Status.APPROVED};
+          return { ...u, approvalStatus: Status.APPROVED };
         }
         return u;
-      })
+      });
       setUsers(newUsers);
     }
   };
