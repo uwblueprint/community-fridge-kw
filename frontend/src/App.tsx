@@ -11,15 +11,16 @@ import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
-import CheckInsPage from "./components/pages/CheckInsPage";
+import CheckInsPage from "./components/pages/AdminDashboard/ViewCheckInsPage";
+import ViewDonationsPage from "./components/pages/AdminDashboard/ViewDonationsPage";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
-import ViewDonationsPage from "./components/pages/ViewDonationsPage";
-import VolunteerShiftsPage from "./components/pages/VolunteerShifts";
+import VolunteerDashboard from "./components/pages/VolunteerDashboard";
+import VolunteerScheduling from "./components/pages/VolunteerScheduling";
 import {
   AUTHENTICATED_USER_KEY,
   AUTHENTICATED_VOLUNTEER_CONTEXT_KEY,
@@ -77,7 +78,12 @@ const App = (): React.ReactElement => {
                 <PrivateRoute
                   exact
                   path={Routes.VOLUNTEER_SHIFTS_PAGE}
-                  component={VolunteerShiftsPage as React.FC}
+                  component={VolunteerScheduling as React.FC}
+                />
+                <PrivateRoute
+                  exact
+                  path={Routes.VOLUNTEER_DASHBOARD_PAGE}
+                  component={VolunteerDashboard}
                 />
                 <PrivateRoute
                   exact

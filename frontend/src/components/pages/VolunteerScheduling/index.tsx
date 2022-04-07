@@ -1,12 +1,17 @@
-import { Container, Stack, Text, VStack } from "@chakra-ui/react";
+import { Container, Stack, VStack } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
-import { Schedule } from "../../../types/SchedulingTypes";
-import PendingPage from "./PendingPage";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
+import PendingPage from "../VolunteerDashboard/PendingPage";
+import ConfirmShiftDetails from "./ConfirmShiftDetails";
+import ThankYouVolunteer from "./ThankYouVolunteer";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
 
 const steps = [
@@ -29,22 +34,27 @@ interface UseStepType {
   navigation: NavigationProps | any;
 }
 
-const schedulingDefaultData = ({
+const shiftDefaultData = ({
   id: "",
   donorId: "",
+  isPickup: "",
+  pickupLocation: "",
+  volunteerTime: "",
   categories: [],
   size: "",
   dayPart: "",
   startTime: "",
   endTime: "",
-  frequency: "",
   notes: "",
-} as unknown) as Schedule;
+  type: "",
+} as unknown) as CheckInWithShiftType | ScheduleWithShiftType;
 
-const VolunteerShiftsPage = (schedulingData = schedulingDefaultData) => {
+const VolunteerScheduling = (shiftData = shiftDefaultData) => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
   const { authenticatedUser } = useContext(AuthContext);
-  const [schedulingFormValues, setSchedulingForm] = useForm(schedulingData);
+  const [shiftFormValues, setShiftForm] = useForm(shiftData);
+  const [shiftId, setShiftId] = useState<string>("1");
+  const [isFoodRescue, setIsFoodRescue] = useState<boolean>(true);
 
   const getVolunteerData = async () => {
     const volunteerResponse = await VolunteerAPIClient.getVolunteerByUserId(
@@ -75,18 +85,32 @@ const VolunteerShiftsPage = (schedulingData = schedulingDefaultData) => {
         </Container>
       );
     case "shifts tab":
-      return <VolunteerShiftsTabs navigation={navigation} />;
+      return (
+        <VolunteerShiftsTabs
+          navigation={navigation}
+          setShiftId={setShiftId}
+          setIsFoodRescue={setIsFoodRescue}
+        />
+      );
     case "confirm shift sign up":
-      return <p>confirm shift sign up page</p>;
+      return (
+        <ConfirmShiftDetails
+          navigation={navigation}
+          shiftId={shiftId}
+          isFoodRescue={isFoodRescue}
+        />
+      );
     case "thank you page":
       return (
-        <Container centerContent variant="responsiveContainer">
-          <Text>Thank You Page Component</Text>
-        </Container>
+        <ThankYouVolunteer
+          navigation={navigation}
+          shiftId={shiftId}
+          isFoodRescue={isFoodRescue}
+        />
       );
     default:
       return <></>;
   }
 };
 
-export default VolunteerShiftsPage;
+export default VolunteerScheduling;

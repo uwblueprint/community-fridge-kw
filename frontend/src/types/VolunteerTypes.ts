@@ -45,3 +45,9 @@ export type ScheduleWithShiftType = Schedule & {
   type: ShiftType.SCHEDULING;
 };
 export type CheckInWithShiftType = CheckIn & { type: ShiftType.CHECKIN };
+
+export type VolunteerDTO = {
+  id: string;
+  userId: string;
+  status: Status;
+};

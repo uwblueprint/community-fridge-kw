@@ -1,51 +1,78 @@
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { NavigationProps } from "react-hooks-helper";
 
-import DonorAPIClient from "../../../../APIClients/DonorAPIClient";
-import * as Routes from "../../../../constants/Routes";
+import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
   ShiftType,
-} from "../../../../types/VolunteerTypes";
-import CardField from "../../../common/CardField";
-import { getShiftColor } from "../types";
+} from "../../../types/VolunteerTypes";
+import CardSubInformation from "../../common/Card";
+import { getShiftColor } from "./types";
 
+interface CheckInOrScheduleProps {
+  id: string;
+  donorId?: string;
+  isPickup?: boolean;
+  pickupLocation?: string;
+  volunteerTime?: string;
+  startTime?: string;
+  startDate?: string;
+  endDate?: string;
+  notes: string;
+  type: ShiftType;
+}
 const VolunteerShiftCard = ({
   shift,
+  setShiftId,
+  navigation,
+  isSignUp,
+  setIsFoodRescue,
 }: {
   shift: CheckInWithShiftType | ScheduleWithShiftType;
+  setShiftId?: any;
+  navigation?: NavigationProps;
+  isSignUp?: boolean;
+  setIsFoodRescue?: any;
 }): JSX.Element => {
   const {
+    id,
     donorId,
     isPickup,
     pickupLocation,
     volunteerTime,
     startTime,
     startDate,
+    endDate,
     notes,
     type,
-  } = shift as CheckInWithShiftType & ScheduleWithShiftType;
+  } = shift as CheckInOrScheduleProps;
   const [businessName, setBusinessName] = useState<string>("");
-
-  const history = useHistory();
 
   const dateLocal = () => {
     if (startDate) {
       return format(new Date(startDate), "EEE MMM dd, yyyy");
     }
-
     return startTime && format(new Date(startTime), "EEE MMM dd, yyyy");
   };
 
   const timeLocal = () => {
     if (startDate) {
-      return format(new Date(startDate), "h:mm aa");
+      return (
+        endDate &&
+        `${format(new Date(startDate), "h:mma")}-${format(
+          new Date(endDate),
+          "h:mma",
+        )}`
+      );
     }
 
-    return volunteerTime;
+    return (
+      volunteerTime &&
+      format(parse(volunteerTime, "kk:mm", new Date()), "h:mma")
+    );
   };
 
   useEffect(() => {
@@ -55,12 +82,32 @@ const VolunteerShiftCard = ({
         setBusinessName(donor.businessName);
       }
     };
+    setShiftId(id);
 
     getBusinessName();
+    // setCurrentFoodRescue(shift);
   }, []);
 
+  let next: any;
+
+  if (navigation !== undefined) {
+    next = navigation.next;
+  }
+  const onSubmitClick = async () => {
+    setShiftId(id);
+    if (type === ShiftType.SCHEDULING) {
+      setIsFoodRescue(true);
+    }
+
+    if (type === ShiftType.CHECKIN) {
+      setIsFoodRescue(false);
+    }
+
+    next();
+  };
+
   return (
-    <Box my="24px" width="100%" overflow="hidden">
+    <Box my="2rem" width="100%" overflow="hidden">
       <Stack
         direction={["column", "row"]}
         display="flex"
@@ -78,11 +125,11 @@ const VolunteerShiftCard = ({
           float="right"
           mt="1.5rem"
           size="lg"
-          width="35%"
-          variant="viewDetails"
-          onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+          width={isSignUp ? ["60%", "33%"] : ["50%", "20%"]}
+          variant={isSignUp ? "navigation" : "viewDetails"}
+          onClick={onSubmitClick}
         >
-          View Details
+          {isSignUp ? "Volunteer for shift" : "View Details"}
         </Button>
       </Stack>
       <Box
@@ -92,22 +139,27 @@ const VolunteerShiftCard = ({
         borderRadius="8px"
         bg={getShiftColor(type, !!isPickup)}
         width={{ base: "default", md: "100%" }}
-        onClick={() => history.push(`${Routes.DASHBOARD_PAGE}`)}
         overflow="hidden"
       >
         <Stack
           direction={["column", "row"]}
           display={["default", "flex"]}
-          spacing={["0", "4"]}
+          spacing={["0", "8"]}
         >
           {businessName && (
-            <CardField title="Organization Name" value={businessName} />
+            <CardSubInformation
+              description="Organization"
+              value={businessName}
+            />
           )}
-          <CardField title="Volunteer Request Time" value={`${timeLocal()}`} />
+          <CardSubInformation
+            description="Volunteer Arrival Time"
+            value={`${timeLocal()}`}
+          />
           {pickupLocation && (
-            <CardField title="Location" value={pickupLocation} />
+            <CardSubInformation description="Location" value={pickupLocation} />
           )}
-          <CardField title="Notes" value={notes || "-"} />
+          <CardSubInformation description="Notes" value={notes || "-"} />
         </Stack>
       </Box>
     </Box>

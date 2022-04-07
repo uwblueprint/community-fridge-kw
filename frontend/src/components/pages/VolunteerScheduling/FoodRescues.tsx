@@ -7,30 +7,19 @@ import {
   ScheduleWithShiftType,
   ShiftType,
 } from "../../../types/VolunteerTypes";
-import ShiftCard from "./components/ShiftCard";
+import ShiftCard from "../VolunteerDashboard/ShiftCard";
 // import { VolunteerShiftStepProps } from "./types";
 
 const FoodRescues = ({
   navigation,
+  setShiftId,
+  setIsFoodRescue,
 }: {
   navigation: NavigationProps;
+  setShiftId: any;
+  setIsFoodRescue: any;
 }): JSX.Element => {
   const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
-  // const history = useHistory();
-
-  // React.useEffect(() => {
-  //   const getFoodRescues = async () => {
-  //     const scheduleResponse = await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(
-  //       false,
-  //     );
-
-  //     setFoodRescues(scheduleResponse);
-
-  //   };
-
-  //   getFoodRescues();
-  //   console.log(foodRescues);
-  // }, []);
 
   React.useEffect(() => {
     const getFoodRescues = async () => {
@@ -41,7 +30,7 @@ const FoodRescues = ({
     };
 
     getFoodRescues();
-    console.log(foodRescues);
+    setIsFoodRescue(true);
   }, []);
 
   if (!foodRescues || foodRescues === null) {
@@ -58,7 +47,14 @@ const FoodRescues = ({
         them to the fridge.{" "}
       </Text>
       {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
-        <ShiftCard key={id} shift={scheduleObject} />
+        <ShiftCard
+          key={id}
+          shift={scheduleObject}
+          setShiftId={setShiftId}
+          navigation={navigation}
+          isSignUp
+          setIsFoodRescue={setIsFoodRescue}
+        />
       ))}
     </>
   );

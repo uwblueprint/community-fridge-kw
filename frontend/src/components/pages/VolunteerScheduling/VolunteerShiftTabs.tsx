@@ -19,8 +19,12 @@ import FoodRescues from "./FoodRescues";
 
 const VolunteerShiftsTabs = ({
   navigation,
+  setShiftId,
+  setIsFoodRescue,
 }: {
   navigation: NavigationProps;
+  setShiftId: any;
+  setIsFoodRescue: any;
 }): JSX.Element => {
   return (
     <Container variant="baseContainer">
@@ -44,10 +48,18 @@ const VolunteerShiftsTabs = ({
             </TabList>
             <TabPanels>
               <TabPanel id="checkin">
-                <CheckIns />
+                <CheckIns
+                  navigation={navigation}
+                  setShiftId={setShiftId}
+                  setIsFoodRescue={setIsFoodRescue}
+                />
               </TabPanel>
               <TabPanel id="rescue">
-                <FoodRescues navigation={navigation} />
+                <FoodRescues
+                  navigation={navigation}
+                  setShiftId={setShiftId}
+                  setIsFoodRescue={setIsFoodRescue}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>

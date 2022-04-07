@@ -11,15 +11,22 @@ import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 
-import SchedulingAPIClient from "../../APIClients/SchedulingAPIClient";
-import useViewport from "../../hooks/useViewport";
-import { Schedule } from "../../types/SchedulingTypes";
-import Calendar from "../common/Calendar/Calendar";
+import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
+import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import useViewport from "../../../hooks/useViewport";
+import { CheckIn } from "../../../types/CheckInTypes";
+import { Schedule } from "../../../types/SchedulingTypes";
+import Calendar from "../../common/Calendar/Calendar";
+import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
+import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
+import CheckInAdminButtons from "./components/CheckInAdminButtons";
 
-const ViewDonations = ({
+const ViewDonationsAndCheckIns = ({
   isAdminView,
+  isCheckInView = false,
 }: {
   isAdminView: boolean;
+  isCheckInView?: boolean;
 }): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
@@ -28,6 +35,7 @@ const ViewDonations = ({
   const { isMobile } = useViewport();
   const [test, setTest] = useState<any>(0);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
 
   useEffect(() => {
     const getSchedules = async () => {
@@ -35,7 +43,13 @@ const ViewDonations = ({
       setSchedules(scheduleResponse);
     };
 
+    const getCheckIns = async () => {
+      const checkInResponse = await CheckInAPIClient.getAllCheckIns();
+      setCheckIns(checkInResponse);
+    };
+
     getSchedules();
+    getCheckIns();
   }, []);
 
   const changeDays = (days: number) => {
@@ -54,12 +68,18 @@ const ViewDonations = ({
         justifyContent="space-between"
         display={{ base: "inline", md: "flex" }}
       >
-        <Text
-          textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
-          pt="2rem"
-        >
-          Scheduled donations
-        </Text>
+        <HStack justifyContent="space-between">
+          <Text
+            textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
+            pt="2rem"
+          >
+            {isCheckInView ? "Fridge check-ins" : "Scheduled donations"}
+          </Text>
+
+          {isCheckInView && <CheckInAdminButtons />}
+        </HStack>
+        {isCheckInView && <FridgeCheckInDescription />}
+        {isAdminView && <FridgeFoodRescueDescription />}
         {isMobile ? (
           <HStack py="1.2rem" width="inherit" alignItems="center">
             <Text textStyle="mobileHeader4" whiteSpace="nowrap">
@@ -138,12 +158,13 @@ const ViewDonations = ({
         <Calendar
           key={selectedDay?.toString()}
           selectedDay={selectedDay as Date}
-          schedules={schedules}
+          items={isCheckInView ? checkIns : schedules}
           isAdminView={isAdminView}
+          isCheckInView={isCheckInView}
         />
       </Flex>
     </Container>
   );
 };
 
-export default ViewDonations;
+export default ViewDonationsAndCheckIns;
