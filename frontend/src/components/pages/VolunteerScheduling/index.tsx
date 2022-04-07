@@ -1,6 +1,6 @@
 import { Container, Stack, VStack } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
-import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
+import { NavigationProps, Step, useStep } from "react-hooks-helper";
 
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
@@ -52,7 +52,6 @@ const shiftDefaultData = ({
 const VolunteerScheduling = (shiftData = shiftDefaultData) => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
   const { authenticatedUser } = useContext(AuthContext);
-  const [shiftFormValues, setShiftForm] = useForm(shiftData);
   const [shiftId, setShiftId] = useState<string>("1");
   const [isFoodRescue, setIsFoodRescue] = useState<boolean>(true);
 
@@ -102,11 +101,7 @@ const VolunteerScheduling = (shiftData = shiftDefaultData) => {
       );
     case "thank you page":
       return (
-        <ThankYouVolunteer
-          navigation={navigation}
-          shiftId={shiftId}
-          isFoodRescue={isFoodRescue}
-        />
+        <ThankYouVolunteer shiftId={shiftId} isFoodRescue={isFoodRescue} />
       );
     default:
       return <></>;

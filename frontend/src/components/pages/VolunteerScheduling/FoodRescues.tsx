@@ -1,6 +1,5 @@
-import { Spinner, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { NavigationProps } from "react-hooks-helper";
+import { Divider, Spinner, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import {
@@ -8,20 +7,16 @@ import {
   ShiftType,
 } from "../../../types/VolunteerTypes";
 import ShiftCard from "../VolunteerDashboard/ShiftCard";
-// import { VolunteerShiftStepProps } from "./types";
+import { ShiftProps } from "./CheckIns";
 
 const FoodRescues = ({
   navigation,
   setShiftId,
   setIsFoodRescue,
-}: {
-  navigation: NavigationProps;
-  setShiftId: any;
-  setIsFoodRescue: any;
-}): JSX.Element => {
+}: ShiftProps): JSX.Element => {
   const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const getFoodRescues = async () => {
       const scheduleResponse: ScheduleWithShiftType[] = await (
         await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(false)
@@ -46,6 +41,7 @@ const FoodRescues = ({
         Food rescue shifts are picking up food from donors and helping bring
         them to the fridge.{" "}
       </Text>
+      <Divider mt="1rem" />
       {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
         <ShiftCard
           key={id}

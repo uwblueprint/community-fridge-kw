@@ -1,7 +1,6 @@
 import { Button, Container, HStack, Img, Text } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
-import { NavigationProps } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
@@ -12,29 +11,26 @@ import AuthContext from "../../../contexts/AuthContext";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 
+const schedulingDefaultData = ({
+  id: "",
+  donorId: "",
+  categories: [],
+  size: "",
+  dayPart: "",
+  startTime: "",
+  endTime: "",
+  frequency: "",
+  notes: "",
+  volunteerTime: "",
+} as unknown) as Schedule;
+
 const ThankYouVolunteer = ({
-  navigation,
   shiftId,
   isFoodRescue,
 }: {
-  navigation: NavigationProps;
   shiftId: string;
   isFoodRescue: boolean;
 }) => {
-  //  const { startTime } = formValues;
-  const schedulingDefaultData = ({
-    id: "",
-    donorId: "",
-    categories: [],
-    size: "",
-    dayPart: "",
-    startTime: "",
-    endTime: "",
-    frequency: "",
-    notes: "",
-    volunteerTime: "",
-  } as unknown) as Schedule;
-
   const [currentFoodRescue, setCurrentFoodRescue] = useState<Schedule>(
     schedulingDefaultData,
   );

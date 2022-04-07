@@ -2,7 +2,6 @@ import { Box, Button, Container, Flex, HStack, Text } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { NavigationProps } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
 
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
@@ -11,9 +10,39 @@ import AuthContext from "../../../contexts/AuthContext";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import { VolunteerResponse } from "../../../types/VolunteerTypes";
 import BackButton from "../Scheduling/BackButton";
 import { DonationSizes } from "../Scheduling/types";
+
+const schedulingDefaultData = ({
+  id: "",
+  donorId: "",
+  categories: [],
+  size: "",
+  dayPart: "",
+  startTime: "",
+  endTime: "",
+  frequency: "",
+  notes: "",
+  volunteerTime: "",
+  volunteerId: "",
+} as unknown) as Schedule;
+
+const donorDefaultData = ({
+  id: "",
+  businessName: "",
+  email: "",
+  firstName: "",
+  lastName: "",
+  phoneNumber: "",
+} as unknown) as DonorResponse;
+
+const checkInDefaultData = ({
+  id: "",
+  volunteerId: "",
+  startDate: "",
+  endDate: "",
+  notes: "",
+} as unknown) as CheckIn;
 
 const ConfirmShiftDetails = ({
   navigation,
@@ -24,55 +53,11 @@ const ConfirmShiftDetails = ({
   shiftId: string;
   isFoodRescue: boolean;
 }) => {
-  const { previous, next, go } = navigation;
-  const history = useHistory();
+  const { previous, next } = navigation;
   const { authenticatedUser } = useContext(AuthContext);
-
-  const [currentVolunteer, setCurrentVolunteer] = useState<VolunteerResponse>(
-    {} as VolunteerResponse,
-  );
-  // const currentSchedule = formValues;
-  // const { description } = DonationSizes.filter(
-  //   (category) => category.size === currentSchedule.size,
-  // )[0];
-  const [currentShift, setCurrentShift] = useState<Schedule | CheckIn>(
-    {} as Schedule | CheckIn,
-  );
-  const schedulingDefaultData = ({
-    id: "",
-    donorId: "",
-    categories: [],
-    size: "",
-    dayPart: "",
-    startTime: "",
-    endTime: "",
-    frequency: "",
-    notes: "",
-    volunteerTime: "",
-    volunteerId: "",
-  } as unknown) as Schedule;
-
-  const donorDefaultData = ({
-    id: "",
-    businessName: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-  } as unknown) as DonorResponse;
-
-  const checkInDefaultData = ({
-    id: "",
-    volunteerId: "",
-    startDate: "",
-    endDate: "",
-    notes: "",
-  } as unknown) as CheckIn;
-
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
     donorDefaultData,
   );
-
   const [currentFoodRescue, setCurrentFoodRescue] = useState<Schedule>(
     schedulingDefaultData,
   );
@@ -102,7 +87,6 @@ const ConfirmShiftDetails = ({
     const donorResponse = await DonorAPIClient.getDonorById(
       currentFoodRescue.donorId,
     );
-    console.log("donor", donorResponse);
     setCurrentDonor(donorResponse);
   };
 
@@ -110,7 +94,6 @@ const ConfirmShiftDetails = ({
     const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
       shiftId,
     );
-
     setCurrentFoodRescue(foodRescueResponse);
   };
 
@@ -133,12 +116,16 @@ const ConfirmShiftDetails = ({
     console.log(isFoodRescue);
     if (isFoodRescue) {
       getFoodRescueData();
-      getDonorData();
     } else {
-      console.log("check in");
       getCheckInData();
     }
   }, [shiftId, isFoodRescue]);
+
+  useEffect(() => {
+    if (isFoodRescue) {
+      getDonorData();
+    }
+  }, [currentFoodRescue]);
 
   const dateText = (date: string) => {
     if (date !== "") {
