@@ -49,6 +49,7 @@ const ConfirmShiftDetails = ({
     frequency: "",
     notes: "",
     volunteerTime: "",
+    volunteerId: "",
   } as unknown) as Schedule;
 
   const donorDefaultData = ({
@@ -60,6 +61,14 @@ const ConfirmShiftDetails = ({
     phoneNumber: "",
   } as unknown) as DonorResponse;
 
+  const checkInDefaultData = ({
+    id: "",
+    volunteerId: "",
+    startDate: "",
+    endDate: "",
+    notes: "",
+  } as unknown) as CheckIn;
+
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
     donorDefaultData,
   );
@@ -67,10 +76,25 @@ const ConfirmShiftDetails = ({
   const [currentFoodRescue, setCurrentFoodRescue] = useState<Schedule>(
     schedulingDefaultData,
   );
-  const [currentCheckIn, setCurrentCheckIn] = useState<CheckIn>({} as CheckIn);
+  const [currentCheckIn, setCurrentCheckIn] = useState<CheckIn>(
+    checkInDefaultData,
+  );
 
   const onSubmitClick = async () => {
     // sign up logic
+    if (authenticatedUser !== null) {
+      const editedFields = {
+        volunteerId: parseInt(authenticatedUser.id, 10),
+      };
+      console.log("EDITED", editedFields);
+      const res = isFoodRescue
+        ? await SchedulingAPIClient.updateSchedule(shiftId, editedFields)
+        : await CheckInAPIClient.updateCheckInById(shiftId, editedFields);
+      if (!res) {
+        console.log("error when submitting volunteer");
+        return;
+      }
+    }
     next();
   };
 
@@ -78,6 +102,7 @@ const ConfirmShiftDetails = ({
     const donorResponse = await DonorAPIClient.getDonorById(
       currentFoodRescue.donorId,
     );
+    console.log("donor", donorResponse);
     setCurrentDonor(donorResponse);
   };
 
@@ -105,50 +130,41 @@ const ConfirmShiftDetails = ({
   };
 
   useEffect(() => {
+    console.log(isFoodRescue);
     if (isFoodRescue) {
       getFoodRescueData();
       getDonorData();
     } else {
+      console.log("check in");
       getCheckInData();
     }
-  }, [currentDonor, currentFoodRescue]);
+  }, [shiftId, isFoodRescue]);
 
-  const dateText = () => {
-    if (currentFoodRescue.startTime !== "") {
-      const startDateLocal = new Date(currentFoodRescue.startTime);
+  const dateText = (date: string) => {
+    if (date !== "") {
+      const startDateLocal = new Date(date);
       return format(startDateLocal, "MMMM d, yyyy");
     }
     return "";
   };
 
-  const startTimeLocal = () => {
-    if (currentFoodRescue.startTime !== "") {
-      return format(new Date(currentFoodRescue.startTime), "h:mm aa");
+  const startTimeLocal = (date: string) => {
+    if (date !== "") {
+      return format(new Date(date), "h:mm aa");
     }
     return "";
   };
 
-  const endTimeLocal = () => {
-    if (currentFoodRescue.endTime !== "") {
-      return format(new Date(currentFoodRescue.endTime), "h:mm aa");
+  const endTimeLocal = (date: string) => {
+    if (date !== "") {
+      return format(new Date(date), "h:mm aa");
     }
     return "";
   };
 
-  const volunteerTimeLocal = () => {
-    return (
-      currentFoodRescue.volunteerTime &&
-      format(
-        parse(currentFoodRescue.volunteerTime, "kk:mm", new Date()),
-        "h:mm a",
-      )
-    );
-  };
-
-  const donorName = () => {
-    if (currentDonor.firstName !== "") {
-      return currentDonor.firstName;
-    }
+  const volunteerTimeLocal = (date: string | null) => {
+    if (date !== "")
+      return date && format(parse(date, "kk:mm", new Date()), "h:mm a");
     return "";
   };
 
@@ -184,16 +200,27 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Volunteer shift type
         </Text>
-        <Text textStyle="mobileBody">{`Food rescue ${
-          currentFoodRescue.isPickup ? "pickup" : "unloading"
-        }`}</Text>
+        {isFoodRescue && (
+          <Text textStyle="mobileBody">{`Food rescue ${
+            currentFoodRescue.isPickup ? "pickup" : "unloading"
+          }`}</Text>
+        )}
+        {!isFoodRescue && <Text textStyle="mobileBody">Fridge check in</Text>}
 
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Volunteer arrival time
         </Text>
 
-        <Text textStyle="mobileBody">{dateText()}</Text>
-        <Text textStyle="mobileBody">{volunteerTimeLocal()}</Text>
+        <Text textStyle="mobileBody">
+          {isFoodRescue
+            ? dateText(currentFoodRescue.startTime)
+            : dateText(currentCheckIn.startDate)}
+        </Text>
+        <Text textStyle="mobileBody">
+          {isFoodRescue
+            ? volunteerTimeLocal(currentFoodRescue.volunteerTime)
+            : startTimeLocal(currentCheckIn.startDate)}
+        </Text>
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Address
         </Text>
@@ -205,62 +232,78 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Additional notes
         </Text>
-        <Text textStyle="mobileBody">{`${
-          currentFoodRescue.notes === null || currentFoodRescue.notes === ""
-            ? "-"
-            : currentFoodRescue.notes
-        }`}</Text>
+        {isFoodRescue && (
+          <Text textStyle="mobileBody">{`${
+            currentFoodRescue.notes === null || currentFoodRescue.notes === ""
+              ? "-"
+              : currentFoodRescue.notes
+          }`}</Text>
+        )}
+        {!isFoodRescue && (
+          <Text textStyle="mobileBody">{`${
+            currentCheckIn.notes === null || currentCheckIn.notes === ""
+              ? "-"
+              : currentCheckIn.notes
+          }`}</Text>
+        )}
       </Box>
 
-      <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader3">Donation information</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Donation time
-        </Text>
+      {isFoodRescue && (
+        <>
+          <Box m="3em 0" pl="0" align="left">
+            <Text textStyle="mobileHeader3">Donation information</Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Donation time
+            </Text>
 
-        <Text textStyle="mobileBody">{dateText()}</Text>
-        <Text textStyle="mobileBody">
-          {`${startTimeLocal()} - ${endTimeLocal()}`}
-        </Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Size
-        </Text>
-        <Text textStyle="mobileBody">{`${
-          currentFoodRescue.size
-        } - ${getDescription()}`}</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Item category
-        </Text>
-        <Text textStyle="mobileBody">
-          {currentFoodRescue.categories
-            ? currentFoodRescue.categories.join(", ")
-            : ""}
-        </Text>
-      </Box>
-
-      <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader3">Donor information</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Name
-        </Text>
-        <Text textStyle="mobileBody">
-          {currentDonor.firstName} {currentDonor.lastName}
-        </Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Email
-        </Text>
-        <Text textStyle="mobileBody">
-          {currentDonor.email !== "" ? currentDonor.email : "hi"}
-        </Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Phone
-        </Text>
-        <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Organization
-        </Text>
-        <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
-      </Box>
+            <Text textStyle="mobileBody">
+              {dateText(currentFoodRescue.startTime)}
+            </Text>
+            <Text textStyle="mobileBody">
+              {`${startTimeLocal(currentFoodRescue.startTime)} - ${endTimeLocal(
+                currentFoodRescue.endTime,
+              )}`}
+            </Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Size
+            </Text>
+            <Text textStyle="mobileBody">{`${
+              currentFoodRescue.size
+            } - ${getDescription()}`}</Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Item category
+            </Text>
+            <Text textStyle="mobileBody">
+              {currentFoodRescue.categories
+                ? currentFoodRescue.categories.join(", ")
+                : ""}
+            </Text>
+          </Box>
+          <Box m="3em 0" pl="0" align="left">
+            <Text textStyle="mobileHeader3">Donor information</Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Name
+            </Text>
+            <Text textStyle="mobileBody">
+              {currentDonor.firstName} {currentDonor.lastName}
+            </Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Email
+            </Text>
+            <Text textStyle="mobileBody">
+              {currentDonor.email !== "" ? currentDonor.email : "hi"}
+            </Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Phone
+            </Text>
+            <Text textStyle="mobileBody">{currentDonor.phoneNumber}</Text>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Organization
+            </Text>
+            <Text textStyle="mobileBody">{currentDonor.businessName}</Text>
+          </Box>{" "}
+        </>
+      )}
 
       <Box m="3em 0" pl="0" align="left">
         <Text textStyle="mobileHeader3">Volunteer information</Text>

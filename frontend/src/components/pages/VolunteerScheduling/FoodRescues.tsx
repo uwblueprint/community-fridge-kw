@@ -20,7 +20,6 @@ const FoodRescues = ({
   setIsFoodRescue: any;
 }): JSX.Element => {
   const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
- 
 
   React.useEffect(() => {
     const getFoodRescues = async () => {
@@ -54,6 +53,7 @@ const FoodRescues = ({
           setShiftId={setShiftId}
           navigation={navigation}
           isSignUp
+          setIsFoodRescue={setIsFoodRescue}
         />
       ))}
     </>

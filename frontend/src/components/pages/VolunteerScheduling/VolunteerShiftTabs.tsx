@@ -48,10 +48,11 @@ const VolunteerShiftsTabs = ({
             </TabList>
             <TabPanels>
               <TabPanel id="checkin">
-                <CheckIns 
-                 navigation={navigation}
-                 setShiftId={setShiftId}
-                 setIsFoodRescue={setIsFoodRescue}/>
+                <CheckIns
+                  navigation={navigation}
+                  setShiftId={setShiftId}
+                  setIsFoodRescue={setIsFoodRescue}
+                />
               </TabPanel>
               <TabPanel id="rescue">
                 <FoodRescues

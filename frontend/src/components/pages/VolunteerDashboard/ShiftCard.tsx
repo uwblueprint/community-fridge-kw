@@ -29,11 +29,13 @@ const VolunteerShiftCard = ({
   setShiftId,
   navigation,
   isSignUp,
+  setIsFoodRescue,
 }: {
   shift: CheckInWithShiftType | ScheduleWithShiftType;
   setShiftId?: any;
   navigation?: NavigationProps;
   isSignUp?: boolean;
+  setIsFoodRescue?: any;
 }): JSX.Element => {
   const {
     id,
@@ -92,15 +94,15 @@ const VolunteerShiftCard = ({
     next = navigation.next;
   }
   const onSubmitClick = async () => {
-    //  const schedule = await SchedulingAPIClient.createSchedule(currentSchedule);
-
-    // if (!schedule.id) {
-    //   onErrorSchedulingOpen();
-    //   return;
-    // }
-    // setCurrentFoodRescue(shift);
-    // setShiftId(id);
     setShiftId(id);
+    if (type === ShiftType.SCHEDULING) {
+      setIsFoodRescue(true);
+    }
+
+    if (type === ShiftType.CHECKIN) {
+      setIsFoodRescue(false);
+    }
+
     next();
   };
 
@@ -123,11 +125,11 @@ const VolunteerShiftCard = ({
           float="right"
           mt="1.5rem"
           size="lg"
-          width={isSignUp? ["60", "20"]: ["50%", "20%"]}
+          width={isSignUp ? ["60%", "33%"] : ["50%", "20%"]}
           variant={isSignUp ? "navigation" : "viewDetails"}
           onClick={onSubmitClick}
         >
-          {isSignUp? "Volunteer for shift": "View Details"}
+          {isSignUp ? "Volunteer for shift" : "View Details"}
         </Button>
       </Stack>
       <Box

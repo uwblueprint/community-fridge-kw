@@ -19,6 +19,7 @@ import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
+import VolunteerDashboard from "./components/pages/VolunteerDashboard";
 import VolunteerScheduling from "./components/pages/VolunteerScheduling";
 import {
   AUTHENTICATED_USER_KEY,
@@ -78,6 +79,11 @@ const App = (): React.ReactElement => {
                   exact
                   path={Routes.VOLUNTEER_SHIFTS_PAGE}
                   component={VolunteerScheduling as React.FC}
+                />
+                <PrivateRoute
+                  exact
+                  path={Routes.VOLUNTEER_DASHBOARD_PAGE}
+                  component={VolunteerDashboard}
                 />
                 <PrivateRoute
                   exact

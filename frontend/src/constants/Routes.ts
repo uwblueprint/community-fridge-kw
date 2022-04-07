@@ -25,3 +25,5 @@ export const VOLUNTEER_SHIFTS_PAGE = "/volunteer-shifts";
 export const FORGET_PASSWORD = "/forget-password";
 
 export const ADMIN_CHECK_INS = "/admin/check-ins";
+
+export const VOLUNTEER_DASHBOARD_PAGE = "/volunteer-dashboard";

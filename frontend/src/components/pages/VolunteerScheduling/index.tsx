@@ -1,13 +1,17 @@
-import { Container, Stack, Text, VStack } from "@chakra-ui/react";
+import { Container, Stack, VStack } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
 
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
-import { Schedule } from "../../../types/SchedulingTypes";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
 import PendingPage from "../VolunteerDashboard/PendingPage";
 import ConfirmShiftDetails from "./ConfirmShiftDetails";
+import ThankYouVolunteer from "./ThankYouVolunteer";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
 
 const steps = [
@@ -30,22 +34,25 @@ interface UseStepType {
   navigation: NavigationProps | any;
 }
 
-const schedulingDefaultData = ({
+const shiftDefaultData = ({
   id: "",
   donorId: "",
+  isPickup: "",
+  pickupLocation: "",
+  volunteerTime: "",
   categories: [],
   size: "",
   dayPart: "",
   startTime: "",
   endTime: "",
-  frequency: "",
   notes: "",
-} as unknown) as Schedule;
+  type: "",
+} as unknown) as CheckInWithShiftType | ScheduleWithShiftType;
 
-const VolunteerScheduling = (schedulingData = schedulingDefaultData) => {
+const VolunteerScheduling = (shiftData = shiftDefaultData) => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
   const { authenticatedUser } = useContext(AuthContext);
-  const [schedulingFormValues, setSchedulingForm] = useForm(schedulingData);
+  const [shiftFormValues, setShiftForm] = useForm(shiftData);
   const [shiftId, setShiftId] = useState<string>("1");
   const [isFoodRescue, setIsFoodRescue] = useState<boolean>(true);
 
@@ -95,9 +102,11 @@ const VolunteerScheduling = (schedulingData = schedulingDefaultData) => {
       );
     case "thank you page":
       return (
-        <Container centerContent variant="responsiveContainer">
-          <Text>Thank You Page Component</Text>
-        </Container>
+        <ThankYouVolunteer
+          navigation={navigation}
+          shiftId={shiftId}
+          isFoodRescue={isFoodRescue}
+        />
       );
     default:
       return <></>;
