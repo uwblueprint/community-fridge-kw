@@ -7,3 +7,8 @@ export const BEARER_TOKEN = `Bearer ${getLocalStorageObjProperty(
   AUTHENTICATED_USER_KEY,
   "accessToken",
 )}`;
+
+export enum SignupErrorMessage {
+  HEADER = "Sign up failed",
+  BODY = "Sorry, something went wrong. Please try again later and check all fields have correct formatting.",
+}

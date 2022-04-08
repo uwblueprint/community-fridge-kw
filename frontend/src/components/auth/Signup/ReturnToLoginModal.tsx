@@ -13,10 +13,14 @@ import { useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
 
-const FailedModal = ({
+const ReturnToLoginModal = ({
+  errorHeader,
+  errorMessage,
   isOpen,
   onClose,
 }: {
+  errorHeader: string;
+  errorMessage: string;
   isOpen: boolean;
   onClose: () => void;
 }) => {
@@ -26,12 +30,9 @@ const FailedModal = ({
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Sign up failed</ModalHeader>
+        <ModalHeader>{errorHeader}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody textStyle="mobileBody">
-          Sorry, something went wrong. Please try again later and check all
-          fields have correct formatting.
-        </ModalBody>
+        <ModalBody textStyle="mobileBody">{errorMessage}</ModalBody>
 
         <ModalFooter>
           <Button
@@ -49,4 +50,4 @@ const FailedModal = ({
   );
 };
 
-export default FailedModal;
+export default ReturnToLoginModal;
