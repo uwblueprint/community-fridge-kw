@@ -11,6 +11,7 @@ type CalendarProps = {
   items: Schedule[] | CheckIn[];
   isAdminView: boolean;
   isCheckInView: boolean;
+  deleteCheckIn: (checkInId: string) => void;
 };
 
 const Calendar = ({
@@ -18,6 +19,7 @@ const Calendar = ({
   items,
   isAdminView = false,
   isCheckInView = false,
+  deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
   return (
     <WeeklyCalendar week={selectedDay}>
@@ -29,6 +31,7 @@ const Calendar = ({
             <CheckInInfoCard
               key={JSON.stringify(item)}
               checkIn={item as CheckIn}
+              deleteCheckIn={deleteCheckIn}
             />
           ) : (
             <DropoffCard
