@@ -19,7 +19,7 @@ import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import { toSnakeCase } from "../../utilities/servicesUtils";
-import { cancellationEmail, getAdminEmail } from "../../utilities/emailUtils";
+import { cancellationEmail, getAdminEmail, emailHeader, emailFooter } from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
@@ -347,23 +347,8 @@ class SchedulingService implements ISchedulingService {
 
       const emailBody = `
         <html>
-          <head>
-            <link
-              href="https://fonts.googleapis.com/css2?family=Inter"
-              rel="stylesheet"
-            />
-            <style>
-              body {
-                  font-family: "Inter";
-              }
-            </style>
-            <meta charset="utf-8" />
-            <meta http-equiv="x-ua-compatible" content="ie=edge" />
-            <title>Donation Details Email</title>
-          </head>
+          ${emailHeader}
           <body>
-              <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/drawer-logo.png
-              style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
               
               <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
               
@@ -454,8 +439,7 @@ class SchedulingService implements ISchedulingService {
          ? `<p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">If this is an error, please contact the CFKW admin team.</p>`
          : ""
      }
-     <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
-     <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>   
+     ${emailFooter}
      </body>
      </html>
       `;
