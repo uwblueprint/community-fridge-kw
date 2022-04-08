@@ -15,6 +15,7 @@ import CheckInsPage from "./components/pages/AdminDashboard/ViewCheckInsPage";
 import ViewDonationsPage from "./components/pages/AdminDashboard/ViewDonationsPage";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
+import DeleteCheckInsPage from "./components/pages/FridgeManagement/FridgeCheckIns/DeleteCheckIns";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
@@ -95,6 +96,12 @@ const App = (): React.ReactElement => {
                   exact
                   path={Routes.ADMIN_CHECK_INS}
                   component={CheckInsPage}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_DELETE_CHECK_INS}
+                  component={DeleteCheckInsPage}
                 />
                 <PrivateRoute
                   exact
