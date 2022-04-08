@@ -3,12 +3,12 @@ import React from "react";
 import { CheckInWithShiftType } from "../../../types/VolunteerTypes";
 import { WeeklyBody, WeeklyCalendar } from "../../common/Calendar/WeeklyCalendar";
 
-type CalendarProps = {
+type CheckInCalendarProps = {
   selectedDay: Date;
   checkIns: CheckInWithShiftType[];
   setShiftId: React.Dispatch<string>;
   setIsFoodRescue: React.Dispatch<boolean>
-  navigation: any; // change type
+  navigation: any; // change
 };
 
 const CheckInCalendarComponent = ({
@@ -17,24 +17,27 @@ const CheckInCalendarComponent = ({
   setShiftId,
   setIsFoodRescue,
   navigation
-}: CalendarProps): React.ReactElement => {
+}: CheckInCalendarProps): React.ReactElement => {
   return (
-    <WeeklyCalendar week={selectedDay}>
-      {/* <WeeklyBody
-        selectedDay={selectedDay}
-        items={checkIns}
-        renderItem={({ checkInObject: CheckInWithShiftType, id }) => (
-        <ShiftCard
-            key={id}
-            shift={checkInObject}
-            setShiftId={setShiftId}
-            navigation={navigation}
-            isSignUp
-            setIsFoodRescue={setIsFoodRescue}
-        />   
-        )}
-      /> */}
-    </WeeklyCalendar>
+      <p>
+        let's leave something cool here
+      </p>
+    // <WeeklyCalendar week={selectedDay}>
+    //   <WeeklyBody
+    //     selectedDay={selectedDay}
+    //     items={checkIns}
+    //     renderItem={({ checkInObject: CheckInWithShiftType, id }) => (
+    //     <ShiftCard
+    //         key={id}
+    //         shift={checkInObject}
+    //         setShiftId={setShiftId}
+    //         navigation={navigation}
+    //         isSignUp
+    //         setIsFoodRescue={setIsFoodRescue}
+    //     />   
+    //     )}
+    //   />
+    // </WeeklyCalendar>
   );
 };
 
