@@ -10,7 +10,6 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { isAfter } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
@@ -58,7 +57,7 @@ const DeleteCheckInsPage = () => {
     }
     if (e[1]) {
       setCheckInForm({
-        target: { name: "endDate", value: e[1].toString() },
+        target: { name: "endDate", value: new DateObject(e[1]).add(1, "days").toString() },
       });
     } else {
       setCheckInForm({
@@ -95,7 +94,7 @@ const DeleteCheckInsPage = () => {
     );
     if (!res) {
       toast({
-        title: "Check-ins could not be deleted. Please try again",
+        title: "There are no check-ins in this date range.",
         status: "error",
         duration: 7000,
         isClosable: true,
@@ -103,7 +102,7 @@ const DeleteCheckInsPage = () => {
       return;
     }
     toast({
-      title: "Check-ins have successfully been deleted",
+      title: "Check-in(s) have been successfully deleted",
       status: "success",
       duration: 7000,
       isClosable: true,
