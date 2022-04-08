@@ -16,7 +16,6 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useHistory } from "react-router-dom";
-
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import * as Routes from "../../../../constants/Routes";
 import { CheckIn } from "../../../../types/CheckInTypes";
