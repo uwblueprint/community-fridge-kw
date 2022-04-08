@@ -34,12 +34,12 @@ const FridgeCheckInDescription = () => {
           onClick={navigateToEditPage}
         />
       </Text>
-      {content?.checkinDescription &&
+      {content?.checkinDescription && (
         <Text textStyle={["mobileBody", "desktopBody"]} pt="2rem">
           {content?.checkinDescription}
         </Text>
-      }
-      {content?.checkinUrl &&
+      )}
+      {content?.checkinUrl && (
         <Link
           pt="1.5rem"
           color="#498FB6"
@@ -49,7 +49,7 @@ const FridgeCheckInDescription = () => {
         >
           Link to instructions
         </Link>
-      }
+      )}
     </>
   );
 };

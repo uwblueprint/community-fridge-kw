@@ -34,12 +34,12 @@ const FridgeFoodRescueDescription = () => {
           onClick={navigateToEditPage}
         />
       </Text>
-      {content?.foodRescueDescription &&
+      {content?.foodRescueDescription && (
         <Text textStyle={["mobileBody", "desktopBody"]} pt="2rem">
           {content?.foodRescueDescription}
         </Text>
-      }
-      {content?.foodRescueUrl &&
+      )}
+      {content?.foodRescueUrl && (
         <Link
           pt="1.5rem"
           color="#498FB6"
@@ -49,7 +49,7 @@ const FridgeFoodRescueDescription = () => {
         >
           Link to instructions
         </Link>
-      }
+      )}
     </>
   );
 };
