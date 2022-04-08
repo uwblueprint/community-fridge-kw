@@ -19,12 +19,12 @@ import menuIcon from "../../../../assets/menuIcon.svg";
 const CheckInAdminButtons = () => (
   <>
     <Show above="md">
-      <Stack direction="row" spacing={4}>
+      <Stack direction="row" spacing={4} pt="30px">
         <Button
           size="md"
           onClick={() => {}}
           variant="create"
-          width="2.5rem"
+          px="20px"
           lineHeight="20px"
         >
           + Create
@@ -35,7 +35,7 @@ const CheckInAdminButtons = () => (
           onClick={() => {}}
           variant="export"
           leftIcon={<DeleteIcon />}
-          width="2.5rem"
+          px="20px"
         >
           Delete
         </Button>
@@ -44,7 +44,7 @@ const CheckInAdminButtons = () => (
           onClick={() => {}}
           variant="export"
           leftIcon={<DownloadIcon />}
-          width="2.5rem"
+          px="20px"
         >
           Export
         </Button>
