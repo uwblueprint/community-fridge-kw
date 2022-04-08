@@ -19,7 +19,12 @@ import logger from "../../utilities/logger";
 import Scheduling from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import { toSnakeCase } from "../../utilities/servicesUtils";
-import { cancellationEmail, getAdminEmail, emailHeader, emailFooter } from "../../utilities/emailUtils";
+import {
+  cancellationEmail,
+  getAdminEmail,
+  emailHeader,
+  emailFooter,
+} from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
