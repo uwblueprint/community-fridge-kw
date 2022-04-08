@@ -7,6 +7,7 @@ import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
+import VolunteerContext from "../../../contexts/VolunteerContext";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
@@ -55,6 +56,7 @@ const ConfirmShiftDetails = ({
 }) => {
   const { previous, next } = navigation;
   const { authenticatedUser } = useContext(AuthContext);
+  const { volunteerId } = useContext(VolunteerContext);
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
     donorDefaultData,
   );
@@ -67,14 +69,14 @@ const ConfirmShiftDetails = ({
 
   const onSubmitClick = async () => {
     // sign up logic
-    if (authenticatedUser !== null) {
-      const editedFields = {
-        volunteerId: parseInt(authenticatedUser.id, 10),
-      };
-      console.log("EDITED", editedFields);
+    if (volunteerId !== null) {
       const res = isFoodRescue
-        ? await SchedulingAPIClient.updateSchedule(shiftId, editedFields)
-        : await CheckInAPIClient.updateCheckInById(shiftId, editedFields);
+        ? await SchedulingAPIClient.updateSchedule(shiftId, {
+          volunteerId: String(volunteerId)
+        })
+        : await CheckInAPIClient.updateCheckInById(shiftId, { 
+          volunteerId: Number(volunteerId)
+        });
       if (!res) {
         console.log("error when submitting volunteer");
         return;
@@ -83,19 +85,19 @@ const ConfirmShiftDetails = ({
     next();
   };
 
+  const getFoodRescueResponse = async () => {
+    const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
+      shiftId,
+    );
+    setCurrentFoodRescue(foodRescueResponse);
+  }
+
   const getDonorData = async () => {
     const donorResponse = await DonorAPIClient.getDonorById(
       currentFoodRescue.donorId,
     );
     setCurrentDonor(donorResponse);
-  };
-
-  const getFoodRescueData = async () => {
-    const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
-      shiftId,
-    );
-    setCurrentFoodRescue(foodRescueResponse);
-  };
+  }
 
   const getCheckInData = async () => {
     const checkInResponse = await CheckInAPIClient.getCheckInsById(shiftId);
@@ -113,19 +115,12 @@ const ConfirmShiftDetails = ({
   };
 
   useEffect(() => {
-    console.log(isFoodRescue);
     if (isFoodRescue) {
-      getFoodRescueData();
+      getFoodRescueResponse().then(() => getDonorData());
     } else {
       getCheckInData();
     }
-  }, [shiftId, isFoodRescue]);
-
-  useEffect(() => {
-    if (isFoodRescue) {
-      getDonorData();
-    }
-  }, [currentFoodRescue]);
+  }, []);
 
   const dateText = (date: string) => {
     if (date !== "") {

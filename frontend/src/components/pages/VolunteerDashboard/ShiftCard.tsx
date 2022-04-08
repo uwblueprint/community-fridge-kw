@@ -82,10 +82,10 @@ const VolunteerShiftCard = ({
         setBusinessName(donor.businessName);
       }
     };
-    setShiftId(id);
-
+    if (setShiftId) {
+      setShiftId(id);
+    }
     getBusinessName();
-    // setCurrentFoodRescue(shift);
   }, []);
 
   let next: any;
@@ -94,7 +94,9 @@ const VolunteerShiftCard = ({
     next = navigation.next;
   }
   const onSubmitClick = async () => {
-    setShiftId(id);
+    if (setShiftId) {
+      setShiftId(id);
+    }
     if (type === ShiftType.SCHEDULING) {
       setIsFoodRescue(true);
     }

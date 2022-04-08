@@ -4,7 +4,9 @@ import { NavigationProps } from "react-hooks-helper";
 
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import { CheckInWithShiftType, ShiftType } from "../../../types/VolunteerTypes";
+import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import ShiftCard from "../VolunteerDashboard/ShiftCard";
+import CheckInCalendar from "./CheckInCalendar";
 
 export interface ShiftProps {
   navigation: NavigationProps;
@@ -17,6 +19,7 @@ const CheckIns = ({
   setShiftId,
   setIsFoodRescue,
 }: ShiftProps): JSX.Element => {
+  // const { isMobile } = useViewport();
   const [checkIns, setCheckIns] = useState<CheckInWithShiftType[]>([]);
 
   useEffect(() => {
@@ -39,23 +42,9 @@ const CheckIns = ({
 
   return (
     <>
-      <Text pt="0.8rem" textStyle="mobileHeader3" color="black.100">
-        Fridge check-in shifts{" "}
-      </Text>
-      <Text py="0.8rem" textStyle="mobileBody" color="hubbard.100">
-        Checkin blurb w/ link.{" "}
-      </Text>
+      <FridgeCheckInDescription />
       <Divider mt="1rem" />
-      {checkIns.map((checkInObject: CheckInWithShiftType, id) => (
-        <ShiftCard
-          key={id}
-          shift={checkInObject}
-          setShiftId={setShiftId}
-          navigation={navigation}
-          isSignUp
-          setIsFoodRescue={setIsFoodRescue}
-        />
-      ))}
+      <CheckInCalendar isAdminView={false} checkIns={checkIns}/>
     </>
   );
 };

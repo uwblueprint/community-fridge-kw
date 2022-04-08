@@ -40,7 +40,6 @@ const ThankYouVolunteer = ({
     const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
       shiftId,
     );
-
     setCurrentFoodRescue(foodRescueResponse);
   };
   const getCheckInData = async () => {

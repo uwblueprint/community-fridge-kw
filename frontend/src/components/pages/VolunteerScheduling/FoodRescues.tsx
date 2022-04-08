@@ -6,6 +6,7 @@ import {
   ScheduleWithShiftType,
   ShiftType,
 } from "../../../types/VolunteerTypes";
+import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import ShiftCard from "../VolunteerDashboard/ShiftCard";
 import { ShiftProps } from "./CheckIns";
 
@@ -34,13 +35,7 @@ const FoodRescues = ({
 
   return (
     <>
-      <Text pt="0.8rem" textStyle="mobileHeader3" color="black.100">
-        Food rescue shifts{" "}
-      </Text>
-      <Text py="0.8rem" textStyle="mobileBody" color="hubbard.100">
-        Food rescue shifts are picking up food from donors and helping bring
-        them to the fridge.{" "}
-      </Text>
+      <FridgeFoodRescueDescription />
       <Divider mt="1rem" />
       {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
         <ShiftCard
