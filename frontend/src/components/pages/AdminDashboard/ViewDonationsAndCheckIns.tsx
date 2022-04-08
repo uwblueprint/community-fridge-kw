@@ -118,6 +118,13 @@ const ViewDonationsAndCheckIns = ({
     setSelectedFilter(e.target.value.toString());
   };
 
+  const deleteCheckIn = (checkInId: string) => {
+    CheckInAPIClient.deleteCheckInById(checkInId);
+    setCheckIns([
+      ...checkIns.filter((checkIn: CheckIn) => checkIn.id !== checkInId),
+    ]);
+  };
+
   return (
     <Container alignContent="left" variant="calendarContainer">
       <Stack
@@ -247,6 +254,7 @@ const ViewDonationsAndCheckIns = ({
         items={isCheckInView ? checkIns : filteredSchedules}
         isAdminView={isAdminView}
         isCheckInView={isCheckInView}
+        deleteCheckIn={deleteCheckIn}
       />
     </Container>
   );
