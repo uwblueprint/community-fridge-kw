@@ -30,6 +30,8 @@ const checkInDefaultData = ({
 } as unknown) as CheckIn;
 
 const CreateCheckIn = () => {
+  const toast = useToast();
+  const history = useHistory();
   const [checkInFormValues, setCheckInForm] = useForm(checkInDefaultData);
   const [dateRange, setDateRange] = useState<DateObject[]>([
     new DateObject(),
@@ -41,9 +43,6 @@ const CreateCheckIn = () => {
     timeRange: "",
     dateRange: "",
   });
-
-  const toast = useToast();
-  const history = useHistory();
 
   // set default start date and end date in checkInFormValues to today and tomorrow
   useEffect(() => {
@@ -61,10 +60,9 @@ const CreateCheckIn = () => {
   const handleDateRangeChange = (e: DateObject[]) => {
     if (e[0]) {
       const startDateState = new Date(e[0].format());
-      let newStartDate = new Date();
-      if (checkInFormValues.startDate) {
-        newStartDate = new Date(checkInFormValues.startDate);
-      }
+      const newStartDate = checkInFormValues.startDate
+        ? new Date(checkInFormValues.startDate)
+        : new Date();
 
       newStartDate.setFullYear(startDateState.getFullYear());
       newStartDate.setMonth(startDateState.getMonth());
@@ -179,8 +177,6 @@ const CreateCheckIn = () => {
   };
 
   const onSaveClick = async () => {
-    console.log(checkInFormValues.startDate);
-    console.log(checkInFormValues.endDate);
     const isValid = validateForm();
     if (!isValid) {
       return;
