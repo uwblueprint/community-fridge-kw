@@ -60,6 +60,13 @@ const ViewDonationsAndCheckIns = ({
     setSelectedDay(newDate);
   };
 
+  const deleteCheckIn = (checkInId: string) => {
+    CheckInAPIClient.deleteCheckInById(checkInId);
+    setCheckIns([
+      ...checkIns.filter((checkIn: CheckIn) => checkIn.id !== checkInId),
+    ]);
+  };
+
   return (
     <Container alignContent="left" variant="calendarContainer">
       <Flex
@@ -161,6 +168,7 @@ const ViewDonationsAndCheckIns = ({
           items={isCheckInView ? checkIns : schedules}
           isAdminView={isAdminView}
           isCheckInView={isCheckInView}
+          deleteCheckIn={deleteCheckIn}
         />
       </Flex>
     </Container>

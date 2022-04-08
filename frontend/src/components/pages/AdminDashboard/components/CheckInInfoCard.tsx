@@ -24,7 +24,14 @@ import { CheckIn } from "../../../../types/CheckInTypes";
 import { VolunteerResponse } from "../../../../types/VolunteerTypes";
 import CardSubInformation from "../../../common/Card";
 
-const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
+interface CheckInInfoCardProps {
+  checkIn: CheckIn;
+  deleteCheckIn: (checkInId: string) => void;
+}
+const CheckInInfoCard = ({
+  checkIn,
+  deleteCheckIn,
+}: CheckInInfoCardProps): JSX.Element => {
   const [volunteer, setVolunteer] = useState<VolunteerResponse>(
     {} as VolunteerResponse,
   );
@@ -67,10 +74,6 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
       },
     );
     setCurrentCheckIn(checkInResponse);
-  };
-
-  const deleteCheckIn = async () => {
-    await CheckInAPIClient.deleteCheckInById(currentCheckIn.id);
   };
 
   const RemoveVolunteerButton = () => (
@@ -164,7 +167,10 @@ const CheckInInfoCard = ({ checkIn }: { checkIn: CheckIn }): JSX.Element => {
                     Edit
                   </Text>
                 </MenuItem>
-                <MenuItem style={menuItemStyle} onClick={deleteCheckIn}>
+                <MenuItem
+                  style={menuItemStyle}
+                  onClick={() => deleteCheckIn(currentCheckIn.id)}
+                >
                   <Text textStyle="mobileSmall" color="hubbard.100">
                     Delete
                   </Text>
