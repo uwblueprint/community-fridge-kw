@@ -10,25 +10,17 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hooks-helper";
+import React, { useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useHistory } from "react-router-dom";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import * as Routes from "../../../../constants/Routes";
-import { CheckIn } from "../../../../types/CheckInTypes";
 import ErrorMessages from "./ErrorMessages";
-
-const checkInDefaultData = {
-  startDate: "",
-  endDate: "",
-} as CheckIn;
 
 const DeleteCheckInsPage = () => {
   const toast = useToast();
   const history = useHistory();
-  const [checkInFormValues, setCheckInForm] = useForm(checkInDefaultData);
   const [dateRange, setDateRange] = useState<DateObject[]>([
     new DateObject(),
     new DateObject().add(1, "days"),
@@ -37,45 +29,12 @@ const DeleteCheckInsPage = () => {
     dateRange: "",
   });
 
-  useEffect(() => {
-    setCheckInForm({
-      target: { name: "startDate", value: new DateObject().toString() },
-    });
-    setCheckInForm({
-      target: {
-        name: "endDate",
-        value: new DateObject().add(1, "days").toString(),
-      },
-    });
-  }, []);
-
-  const handleDateRangeChange = (e: DateObject[]) => {
-    if (e[0]) {
-      setCheckInForm({
-        target: { name: "startDate", value: e[0].toString() },
-      });
-    }
-    if (e[1]) {
-      setCheckInForm({
-        target: { name: "endDate", value: new DateObject(e[1]).add(1, "days").toString() },
-      });
-    } else {
-      setCheckInForm({
-        target: { name: "endDate", value: "" },
-      });
-    }
-    setFormErrors({
-      ...formErrors,
-      dateRange: "",
-    });
-  };
-
   const validateForm = () => {
     const newErrors = {
       dateRange: "",
     };
     let valid = true;
-    if (!checkInFormValues.startDate || !checkInFormValues.endDate) {
+    if (!dateRange[0] || !dateRange[1]) {
       valid = false;
       newErrors.dateRange = ErrorMessages.bothDateFieldsRequired;
     }
@@ -89,8 +48,8 @@ const DeleteCheckInsPage = () => {
       return;
     }
     const res = await CheckInAPIClient.deleteCheckInsByDateRange(
-      checkInFormValues.startDate,
-      checkInFormValues.endDate,
+      dateRange[0].toString(),
+      dateRange[1].add(1, "days").toString(),
     );
     if (!res) {
       toast({
@@ -124,7 +83,6 @@ const DeleteCheckInsPage = () => {
           value={null}
           onChange={(e: DateObject[]) => {
             setDateRange(e);
-            handleDateRangeChange(e);
           }}
           render={(
             value: string,
