@@ -82,11 +82,11 @@ const ViewDonationsAndCheckIns = ({
           >
             {isCheckInView ? "Fridge check-ins" : "Scheduled donations"}
           </Text>
-
-          {isCheckInView && <CheckInAdminButtons />}
+          {isCheckInView && !isMobile && <CheckInAdminButtons />}
         </HStack>
         {isCheckInView && <FridgeCheckInDescription />}
         {isAdminView && <FridgeFoodRescueDescription />}
+        {isCheckInView && isMobile && <CheckInAdminButtons />}
         {isMobile ? (
           <HStack py="1.2rem" width="inherit" alignItems="center">
             <Text textStyle="mobileHeader4" whiteSpace="nowrap">
