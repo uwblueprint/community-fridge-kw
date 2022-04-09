@@ -27,8 +27,8 @@ const CreateCheckIn = () => {
     new DateObject(),
     new DateObject().add(1, "days"),
   ]);
-  const [startTime, setStartTime] = useState<string>();
-  const [endTime, setEndTime] = useState<string>();
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [notes, setNotes] = useState<string>();
   const [formErrors, setFormErrors] = useState({
     timeRange: "",
@@ -46,8 +46,8 @@ const CreateCheckIn = () => {
       newErrors.timeRange = ErrorMessages.bothTimeFieldsRequired;
     } else if (
       isAfter(
-        parse(startTime!, "kk:mm", new Date()),
-        parse(endTime!, "kk:mm", new Date()),
+        parse(startTime, "kk:mm", new Date()),
+        parse(endTime, "kk:mm", new Date()),
       )
     ) {
       valid = false;
@@ -68,12 +68,12 @@ const CreateCheckIn = () => {
 
     const checkInData: CreateCheckInFields = {
       startDate: parse(
-        startTime!,
+        startTime,
         "kk:mm",
         new Date(dateRange![0].format()),
       ).toString(),
       endDate: parse(
-        endTime!,
+        endTime,
         "kk:mm",
         new Date(dateRange![1].format()),
       ).toString(),

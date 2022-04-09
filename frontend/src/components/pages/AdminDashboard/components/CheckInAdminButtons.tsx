@@ -61,7 +61,9 @@ const CheckInAdminButtons = () => {
         <HStack mt="3.5rem" spacing="7px">
           <Button
             size="sm"
-            onClick={() => {}}
+            onClick={() => {
+              history.push(Routes.CREATE_CHECKIN);
+            }}
             variant="create"
             width="100%"
             lineHeight="20px"
