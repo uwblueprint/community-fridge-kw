@@ -8,3 +8,5 @@ export type CheckIn = {
 };
 
 export type UpdatedCheckInFields = Partial<Omit<CheckIn, "id">>;
+
+export type CreateCheckInFields = Omit<CheckIn, "id" | "volunteerId">;
