@@ -10,6 +10,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { endOfDay } from "date-fns";
 import React, { useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useHistory } from "react-router-dom";
@@ -25,31 +26,26 @@ const DeleteCheckInsPage = () => {
     new DateObject(),
     new DateObject().add(1, "days"),
   ]);
-  const [formErrors, setFormErrors] = useState({
-    dateRange: "",
-  });
+  const [dateRangeError, setDateRangeError] = useState("");
 
   const validateForm = () => {
-    const newErrors = {
-      dateRange: "",
-    };
+    let newError = "";
     let valid = true;
     if (!dateRange[0] || !dateRange[1]) {
       valid = false;
-      newErrors.dateRange = ErrorMessages.bothDateFieldsRequired;
+      newError = ErrorMessages.bothDateFieldsRequired;
     }
-    setFormErrors(newErrors);
+    setDateRangeError(newError);
     return valid;
   };
 
   const onSaveClick = async () => {
-    const isValid = validateForm();
-    if (!isValid) {
+    if (!validateForm()) {
       return;
     }
     const res = await CheckInAPIClient.deleteCheckInsByDateRange(
       dateRange[0].toString(),
-      dateRange[1].add(1, "days").toString(),
+      endOfDay(dateRange[1].toDate()).toString(),
     );
     if (!res) {
       toast({
@@ -74,7 +70,7 @@ const DeleteCheckInsPage = () => {
       <Text textStyle="mobileHeader2" mt="2em">
         Delete shifts
       </Text>
-      <FormControl isRequired isInvalid={!!formErrors.dateRange} m="3em 0">
+      <FormControl isRequired isInvalid={!!dateRangeError} m="3em 0">
         <FormLabel fontWeight="600">Select date range</FormLabel>
         <FormHelperText mb="1em">Delete all shifts between:</FormHelperText>
         <DatePicker
@@ -83,6 +79,7 @@ const DeleteCheckInsPage = () => {
           value={null}
           onChange={(e: DateObject[]) => {
             setDateRange(e);
+            setDateRangeError("");
           }}
           render={(
             value: string,
@@ -107,7 +104,7 @@ const DeleteCheckInsPage = () => {
             );
           }}
         />
-        <FormErrorMessage>{formErrors.dateRange}</FormErrorMessage>
+        <FormErrorMessage>{dateRangeError}</FormErrorMessage>
       </FormControl>
       <Button onClick={onSaveClick} variant="navigation">
         Delete shifts
