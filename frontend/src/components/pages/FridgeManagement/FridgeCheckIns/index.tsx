@@ -11,156 +11,29 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { isAfter, set } from "date-fns";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hooks-helper";
+import { isAfter, parse } from "date-fns";
+import React, { useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useHistory } from "react-router-dom";
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import * as Routes from "../../../../constants/Routes";
-import { CheckIn } from "../../../../types/CheckInTypes";
+import { CreateCheckInFields } from "../../../../types/CheckInTypes";
 import ErrorMessages from "./ErrorMessages";
-
-const checkInDefaultData = {
-  startDate: "",
-  endDate: "",
-  notes: "",
-  isAdmin: false,
-} as CheckIn;
 
 const CreateCheckIn = () => {
   const toast = useToast();
   const history = useHistory();
-  const [checkInFormValues, setCheckInForm] = useForm(checkInDefaultData);
   const [dateRange, setDateRange] = useState<DateObject[]>([
     new DateObject(),
     new DateObject().add(1, "days"),
   ]);
-  const [startTime, setStartTime] = useState<Date>();
-  const [endTime, setEndTime] = useState<Date>();
+  const [startTime, setStartTime] = useState<string>();
+  const [endTime, setEndTime] = useState<string>();
+  const [notes, setNotes] = useState<string>();
   const [formErrors, setFormErrors] = useState({
     timeRange: "",
     dateRange: "",
   });
-
-  // set default start date and end date in checkInFormValues to today and tomorrow
-  useEffect(() => {
-    setCheckInForm({
-      target: { name: "startDate", value: new DateObject().toString() },
-    });
-    setCheckInForm({
-      target: {
-        name: "endDate",
-        value: new DateObject().add(1, "days").toString(),
-      },
-    });
-  }, []);
-
-  const handleDateRangeChange = (e: DateObject[]) => {
-    if (e[0]) {
-      const startDateState = new Date(e[0].format());
-      const newStartDate = checkInFormValues.startDate
-        ? new Date(checkInFormValues.startDate)
-        : new Date();
-
-      set(newStartDate, {
-        year: startDateState.getFullYear(),
-        month: startDateState.getMonth(),
-        date: startDateState.getDate(),
-      });
-
-      if (startTime) {
-        set(newStartDate, {
-          hours: startTime.getHours(),
-          minutes: startTime.getMinutes(),
-        });
-      }
-
-      setCheckInForm({
-        target: { name: "startDate", value: newStartDate.toString() },
-      });
-    }
-    if (e[1]) {
-      const endDateState = new Date(e[1].format());
-      let newEndDate = new Date();
-      if (checkInFormValues.endDate) {
-        newEndDate = new Date(checkInFormValues.endDate);
-      }
-
-      set(newEndDate, {
-        year: endDateState.getFullYear(),
-        month: endDateState.getMonth(),
-        date: endDateState.getDate(),
-      });
-
-      if (endTime) {
-        set(newEndDate, {
-          hours: endTime.getHours(),
-          minutes: endTime.getMinutes(),
-        });
-      }
-
-      setCheckInForm({
-        target: { name: "endDate", value: newEndDate.toString() },
-      });
-    } else {
-      setCheckInForm({
-        target: { name: "endDate", value: "" },
-      });
-    }
-    setFormErrors({
-      ...formErrors,
-      dateRange: "",
-    });
-  };
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
-    name: string,
-  ) => {
-    if (name === "startDate") {
-      const time = new Date(`11/11/1970 ${e.target.value}`);
-      setStartTime(time);
-      const newtime = set(new Date(time), {
-        year: dateRange[0].year,
-        month: dateRange[0].month.number - 1,
-        date: dateRange[0].day,
-      });
-
-      setCheckInForm({ target: { name: "startDate", value: newtime } });
-      setFormErrors({
-        ...formErrors,
-        timeRange: "",
-      });
-    } else if (name === "endDate") {
-      const time = new Date(`11/11/1970 ${e.target.value}`);
-      setEndTime(time);
-
-      if (dateRange[1]) {
-        const newtime = set(new Date(time), {
-          year: dateRange[1].year,
-          month: dateRange[1].month.number - 1,
-        });
-        // NOTE: handles case for if end date is midnight, BUT what about HH:mm pm startTime and HH:mm am endTime?
-        if (e.target.value === "00:00") {
-          newtime.setDate(dateRange[1].day + 1);
-          setEndTime(set(new Date(endTime!), { date: endTime!.getDate() + 1 }));
-        } else {
-          newtime.setDate(dateRange[1].day);
-        }
-        setCheckInForm({ target: { name: "endDate", value: newtime } });
-      }
-
-      setFormErrors({
-        ...formErrors,
-        timeRange: "",
-      });
-    } else {
-      // notes
-      setCheckInForm({ target: { name: "notes", value: e.target.value } });
-    }
-  };
 
   const validateForm = () => {
     const newErrors = {
@@ -168,27 +41,47 @@ const CreateCheckIn = () => {
       dateRange: "",
     };
     let valid = true;
-    if (!checkInFormValues.startDate || !checkInFormValues.endDate) {
-      valid = false;
-      newErrors.dateRange = ErrorMessages.bothDateFieldsRequired;
-    }
     if (!startTime || !endTime) {
       valid = false;
       newErrors.timeRange = ErrorMessages.bothTimeFieldsRequired;
-    } else if (isAfter(startTime!, endTime!)) {
+    } else if (
+      isAfter(
+        parse(startTime!, "kk:mm", new Date()),
+        parse(endTime!, "kk:mm", new Date()),
+      )
+    ) {
       valid = false;
       newErrors.timeRange = ErrorMessages.endTimeBeforeStartTime;
+    }
+    if (!dateRange[0] || !dateRange[1]) {
+      valid = false;
+      newErrors.dateRange = ErrorMessages.bothDateFieldsRequired;
     }
     setFormErrors(newErrors);
     return valid;
   };
 
   const onSaveClick = async () => {
-    const isValid = validateForm();
-    if (!isValid) {
+    if (!validateForm()) {
       return;
     }
-    const res = await CheckInAPIClient.createCheckIn(checkInFormValues);
+
+    const checkInData: CreateCheckInFields = {
+      startDate: parse(
+        startTime!,
+        "kk:mm",
+        new Date(dateRange![0].format()),
+      ).toString(),
+      endDate: parse(
+        endTime!,
+        "kk:mm",
+        new Date(dateRange![1].format()),
+      ).toString(),
+      notes,
+      isAdmin: false,
+    };
+
+    const res = await CheckInAPIClient.createCheckIn(checkInData);
     if (!res) {
       toast({
         title: "Checkin could not be created. Please try again",
@@ -217,16 +110,24 @@ const CreateCheckIn = () => {
         <HStack maxW="740px" spacing="1rem">
           <Input
             type="time"
-            onChange={(e: any) => {
-              handleChange(e, "startDate");
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setStartTime(e.target.value);
+              setFormErrors({
+                ...formErrors,
+                timeRange: "",
+              });
             }}
             error={formErrors.timeRange}
           />
           <Text>to</Text>
           <Input
             type="time"
-            onChange={(e: any) => {
-              handleChange(e, "endDate");
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setEndTime(e.target.value);
+              setFormErrors({
+                ...formErrors,
+                timeRange: "",
+              });
             }}
             error={formErrors.timeRange}
           />
@@ -242,7 +143,10 @@ const CreateCheckIn = () => {
           value={null}
           onChange={(e: DateObject[]) => {
             setDateRange(e);
-            handleDateRangeChange(e);
+            setFormErrors({
+              ...formErrors,
+              dateRange: "",
+            });
           }}
           render={(
             value: string,
@@ -257,8 +161,8 @@ const CreateCheckIn = () => {
                 <Text>to</Text>
                 <Input
                   value={
-                    dateRange[1]
-                      ? new DateObject(dateRange[1]).format("MMM DD, YYYY")
+                    dateRange![1]
+                      ? new DateObject(dateRange![1]).format("MMM DD, YYYY")
                       : "MM/DD/YYYY"
                   }
                   disabled
@@ -274,9 +178,9 @@ const CreateCheckIn = () => {
         <Textarea
           placeholder="Add any additional information here"
           maxWidth="740px"
-          onChange={(e) => {
-            handleChange(e, "notes");
-          }}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setNotes(e.target.value)
+          }
         />
       </FormControl>
       <Button onClick={onSaveClick} variant="navigation">
