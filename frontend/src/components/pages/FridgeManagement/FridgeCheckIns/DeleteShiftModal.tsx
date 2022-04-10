@@ -31,7 +31,7 @@ const DeleteShiftModal = ({
   return (
     <>
       <Modal
-        size={isDesktop ? "2xl" : "xs"}
+        size={["xs, "2xl"]}
         isOpen={isOpen}
         onClose={onClose}
         isCentered
