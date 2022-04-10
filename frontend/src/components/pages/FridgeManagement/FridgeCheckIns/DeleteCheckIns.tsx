@@ -49,7 +49,7 @@ const DeleteCheckInsPage = () => {
     }
 
     onOpen();
-  }
+  };
   const onDeleteClick = async () => {
     if (!validateForm()) {
       return;
