@@ -20,7 +20,13 @@ const EditCheckInOrFoodRescueDescription = ({
 }: {
   isCheckInView?: boolean;
 }): React.ReactElement => {
-  const [content, setContent] = useState<Content>();
+  const [content, setContent] = useState<Content>({
+    id: "1",
+    foodRescueDescription: "",
+    foodRescueUrl: "",
+    checkinDescription: "",
+    checkinUrl: "",
+  });
   const [interactedWith, setInteractedWith] = useState(false);
 
   const history = useHistory();
@@ -81,8 +87,8 @@ const EditCheckInOrFoodRescueDescription = ({
           mt={["17px", "42px"]}
           value={
             isCheckInView
-              ? content?.checkinDescription
-              : content?.foodRescueDescription
+              ? content.checkinDescription
+              : content.foodRescueDescription
           }
           name="description"
           onChange={(e) =>
@@ -100,9 +106,8 @@ const EditCheckInOrFoodRescueDescription = ({
           background="squash.100"
           p="1.5rem"
           isInvalid={
-            ((isCheckInView && content?.checkinDescription.length === 0) ||
-              (!isCheckInView &&
-                content?.foodRescueDescription.length === 0)) &&
+            ((isCheckInView && content.checkinDescription.length === 0) ||
+              (!isCheckInView && content.foodRescueDescription.length === 0)) &&
             interactedWith
           }
         />
@@ -118,7 +123,7 @@ const EditCheckInOrFoodRescueDescription = ({
         <Input
           mt={["17px", "42px"]}
           name="url"
-          value={isCheckInView ? content?.checkinUrl : content?.foodRescueUrl}
+          value={isCheckInView ? content.checkinUrl : content?.foodRescueUrl}
           onChange={(e) => {
             if (content) {
               setContent({
@@ -134,7 +139,7 @@ const EditCheckInOrFoodRescueDescription = ({
           height={["44px", "64px"]}
           background="squash.100"
           isInvalid={
-            (isCheckInView && content?.checkinUrl.length === 0) ||
+            (isCheckInView && content.checkinUrl.length === 0) ||
             (!isCheckInView &&
               content?.foodRescueUrl.length === 0 &&
               interactedWith)
