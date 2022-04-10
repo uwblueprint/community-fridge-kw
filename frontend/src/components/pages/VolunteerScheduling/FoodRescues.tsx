@@ -1,4 +1,4 @@
-import { Divider, Spinner } from "@chakra-ui/react";
+import { Divider, Spinner, StackDivider, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
@@ -37,6 +37,10 @@ const FoodRescues = ({
     <>
       <FridgeFoodRescueDescription />
       <Divider mt="1rem" />
+      <VStack
+        divider={<StackDivider borderColor="gray.200" />}
+        marginTop={["10px", "40px"]}
+      >
       {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
         <ShiftCard
           key={id}
@@ -47,6 +51,7 @@ const FoodRescues = ({
           setIsFoodRescue={setIsFoodRescue}
         />
       ))}
+      </VStack>
     </>
   );
 };
