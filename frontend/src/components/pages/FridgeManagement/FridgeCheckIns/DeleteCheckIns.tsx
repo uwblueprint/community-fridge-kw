@@ -18,7 +18,7 @@ import { useHistory } from "react-router-dom";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import * as Routes from "../../../../constants/Routes";
-import DeleteShiftModal from "./DeleteShiftModal";
+import GeneralDeleteShiftModal from "../../../common/GeneralDeleteShiftModal";
 import ErrorMessages from "./ErrorMessages";
 
 const DeleteCheckInsPage = () => {
@@ -120,8 +120,20 @@ const DeleteCheckInsPage = () => {
       <Button onClick={openModal} variant="navigation">
         Delete shifts
       </Button>
-      <DeleteShiftModal
-        dateRange={dateRange}
+      <GeneralDeleteShiftModal
+        title="Cancel shifts in range"
+        bodyText={
+          dateRange[1] &&
+          `Are you sure you want to cancel these fridge check-in shifts? This will remove all shifts ${
+            dateRange[0].toString() === dateRange[1].toString()
+              ? ` on ${dateRange[0].format("MMMM D").toString()} `
+              : ` between ${dateRange[0]
+                  .format("MMMM D")
+                  .toString()} and ${dateRange[1].format("MMMM D").toString()} `
+          }
+        and notify any assigned volunteers.`
+        }
+        buttonLabel="Cancel shifts"
         isOpen={isOpen}
         onClose={onClose}
         onDelete={onDeleteClick}
