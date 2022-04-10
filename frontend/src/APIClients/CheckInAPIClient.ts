@@ -1,5 +1,9 @@
 import { BEARER_TOKEN } from "../constants/AuthConstants";
-import { CheckIn, UpdatedCheckInFields } from "../types/CheckInTypes";
+import {
+  CheckIn,
+  CreateCheckInFields,
+  UpdatedCheckInFields,
+} from "../types/CheckInTypes";
 import baseAPIClient from "./BaseAPIClient";
 
 const getAllCheckIns = async (): Promise<CheckIn[]> => {
@@ -66,7 +70,9 @@ const deleteCheckInsByDateRange = async (
   }
 };
 
-const createCheckIn = async (checkIn: CheckIn): Promise<CheckIn> => {
+const createCheckIn = async (
+  checkIn: CreateCheckInFields,
+): Promise<CheckIn> => {
   try {
     const { data } = await baseAPIClient.post(
       "/checkin",

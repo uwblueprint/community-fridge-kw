@@ -18,6 +18,7 @@ type CalendarProps = {
   navigation?: NavigationProps;
   setIsFoodRescue?: any;
   isSignUp?: any;
+  deleteCheckIn?: (checkInId: string) => void;
 };
 
 const Calendar = ({
@@ -30,6 +31,7 @@ const Calendar = ({
   navigation,
   setIsFoodRescue,
   isSignUp,
+  deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
   const getCheckInCard = (item: any) => {
     if (isCheckInShiftView) {
@@ -45,7 +47,7 @@ const Calendar = ({
       );
     }
     return (
-      <CheckInInfoCard key={JSON.stringify(item)} checkIn={item as CheckIn} />
+      <CheckInInfoCard key={JSON.stringify(item)} checkIn={item as CheckIn}  deleteCheckIn={deleteCheckIn} />
     );
   };
   return (
