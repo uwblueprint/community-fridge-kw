@@ -12,8 +12,6 @@ import {
 import React from "react";
 import { DateObject } from "react-multi-date-picker";
 
-import useViewport from "../../../../hooks/useViewport";
-
 interface DeleteShiftModalProps {
   dateRange: DateObject[];
   isOpen: boolean;
@@ -30,13 +28,12 @@ const DeleteShiftModal = ({
   return (
     <>
       <Modal
-        size={["xs, "2xl"]}
         isOpen={isOpen}
         onClose={onClose}
         isCentered
       >
         <ModalOverlay />
-        <ModalContent py="52px" px="48px">
+        <ModalContent py="52px" px="48px" size={["xs", "2xl"]}>
           <ModalHeader>
             <Text textStyle={["mobileBodyBold", "desktopHeader3"]}>
               Cancel shifts in range
