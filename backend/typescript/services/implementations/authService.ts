@@ -280,9 +280,6 @@ class AuthService implements IAuthService {
       throw new Error(errorMessage);
     }
     try {
-      const emailVerificationLink = await firebaseAdmin
-        .auth()
-        .generateEmailVerificationLink(getAdminEmail());
       const emailBody = `<html>
       ${emailHeader}
       <body>
@@ -301,20 +298,12 @@ class AuthService implements IAuthService {
         </a>
       </td> 
       </tr> </table> 
-        <h5 style="font-weight: bold; font-size: 16px;
-      line-height: 22px; color: #6C6C84;">How does this work?</h5>
-        <p style="color:#6C6C84">This is a one-time URL that lets you confirm your
-          identity that lasts for 1 hour.
-        </p>
-       <div style="width: 100%"> <div style=" float:left; color: #6C6C84">Don't see a button above? </div><a style=" color: #C31887" href=${emailVerificationLink}> Verify yourself here</a></div>
-       <div> If you didn't request this verification
-       link, you can safely ignore this email.</div>
        ${emailFooter} 
       </body>
     </html>`;
       this.emailService.sendEmail(
         getAdminEmail(),
-        "Volunteer Approval Required",
+        `Volunteer Approval Required: ${fullName}`,
         emailBody,
       );
     } catch (error) {
