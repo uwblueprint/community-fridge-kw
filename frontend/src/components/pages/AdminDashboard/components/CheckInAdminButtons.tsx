@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
+
 import menuIcon from "../../../../assets/menuIcon.svg";
 import * as Routes from "../../../../constants/Routes";
 
@@ -23,14 +24,14 @@ const CheckInAdminButtons = () => {
   return (
     <>
       <Show above="md">
-        <Stack direction="row" spacing={4}>
+        <Stack direction="row" spacing={4} pt="30px">
           <Button
             size="md"
             onClick={() => {
               history.push(Routes.CREATE_CHECKIN);
             }}
             variant="create"
-            width="2.5rem"
+            px="20px"
             lineHeight="20px"
           >
             + Create
@@ -41,7 +42,7 @@ const CheckInAdminButtons = () => {
             onClick={() => {}}
             variant="export"
             leftIcon={<DeleteIcon />}
-            width="2.5rem"
+            px="20px"
           >
             Delete
           </Button>
@@ -50,7 +51,7 @@ const CheckInAdminButtons = () => {
             onClick={() => {}}
             variant="export"
             leftIcon={<DownloadIcon />}
-            width="2.5rem"
+            px="20px"
           >
             Export
           </Button>
