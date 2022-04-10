@@ -65,7 +65,7 @@ const CreateAccount = ({
       valid = false;
       newErrors.lastName = "Please enter a last name.";
     }
-    if (role === Role.DONOR && !phoneNumber) {
+    if (!phoneNumber) {
       valid = false;
       newErrors.phoneNumber = "Please enter a valid phone number.";
     }
@@ -170,20 +170,7 @@ const CreateAccount = ({
         </Grid>
         <Box mt="2rem">
           <FormControl isInvalid={!!formErrors.phoneNumber}>
-            {role === Role.DONOR && (
-              <MandatoryInputDescription label="Phone number" />
-            )}
-            {role === Role.VOLUNTEER && (
-              <Box display="inline">
-                <Text
-                  display="inline-block"
-                  textStyle="mobileBody"
-                  color="black.100"
-                >
-                  Phone number
-                </Text>
-              </Box>
-            )}
+            <MandatoryInputDescription label="Phone number" />
             <Input
               mt="2"
               type="tel"
