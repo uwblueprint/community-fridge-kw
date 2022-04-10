@@ -1,7 +1,7 @@
 import { Container } from "@chakra-ui/react";
 import React from "react";
 
-import EditCheckInDescription from "./EditCheckInOrFoodRescue";
+import EditCheckInDescription from "./EditCheckInOrFoodRescueDescription";
 
 const EditCheckInDescriptionPage = () => {
   return (

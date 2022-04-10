@@ -9,23 +9,18 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import ContentAPIClient from "../../../APIClients/ContentAPIClient";
 import * as Routes from "../../../constants/Routes";
 import { Content } from "../../../types/ContentTypes";
 
-const EditCheckInOrFoodRescue = ({
+const EditCheckInOrFoodRescueDescription = ({
   isCheckInView = false,
 }: {
   isCheckInView?: boolean;
 }): React.ReactElement => {
   const [content, setContent] = useState<Content>();
-  const [{ description, url }, setValue] = useForm({
-    description: "",
-    url: "",
-  });
   const [interactedWith, setInteractedWith] = useState(false);
 
   const history = useHistory();
@@ -45,19 +40,20 @@ const EditCheckInOrFoodRescue = ({
   }, []);
 
   const onSaveClick = async () => {
-    const contentResponse = await ContentAPIClient.updateContent("1", {
-      checkinDescription: String(
-        isCheckInView ? description : content?.checkinDescription,
-      ),
-      checkinUrl: String(isCheckInView ? url : content?.checkinUrl),
-      foodRescueDescription: String(
-        !isCheckInView ? description : content?.foodRescueDescription,
-      ),
-      foodRescueUrl: String(!isCheckInView ? url : content?.foodRescueUrl),
-    });
-
-    setContent(contentResponse);
-    navigateToViewPage();
+    if (
+      content &&
+      content.checkinDescription.length !== 0 &&
+      content.checkinUrl.length !== 0 &&
+      content.foodRescueDescription.length !== 0 &&
+      content.foodRescueUrl.length !== 0
+    ) {
+      const contentResponse = await ContentAPIClient.updateContent(
+        "1",
+        content,
+      );
+      setContent(contentResponse);
+      navigateToViewPage();
+    }
   };
 
   return (
@@ -83,20 +79,35 @@ const EditCheckInOrFoodRescue = ({
         </Text>
         <Textarea
           mt={["17px", "42px"]}
-          value={description}
-          placeholder={
+          value={
             isCheckInView
               ? content?.checkinDescription
               : content?.foodRescueDescription
           }
           name="description"
-          onChange={setValue}
+          onChange={(e) =>
+            content &&
+            setContent({
+              ...content,
+              ...(isCheckInView
+                ? { checkinDescription: e.target.value }
+                : { foodRescueDescription: e.target.value }),
+            })
+          }
           onFocus={() => setInteractedWith(true)}
           width={["100%", "478px"]}
           height={["140px", "210px"]}
           background="squash.100"
           p="1.5rem"
-          isInvalid={!description && interactedWith}
+          isInvalid={
+            (isCheckInView &&
+              (!content?.checkinDescription ||
+                content?.checkinDescription.length === 0)) ||
+            (!isCheckInView &&
+              (!content?.foodRescueDescription ||
+                content?.foodRescueDescription.length === 0) &&
+              interactedWith)
+          }
         />
 
         <Text
@@ -109,17 +120,30 @@ const EditCheckInOrFoodRescue = ({
 
         <Input
           mt={["17px", "42px"]}
-          value={url}
           name="url"
-          placeholder={
-            isCheckInView ? content?.checkinUrl : content?.foodRescueUrl
-          }
-          onChange={setValue}
+          value={isCheckInView ? content?.checkinUrl : content?.foodRescueUrl}
+          onChange={(e) => {
+            if (content) {
+              setContent({
+                ...content,
+                ...(isCheckInView
+                  ? { checkinUrl: e.target.value }
+                  : { foodRescueUrl: e.target.value }),
+              });
+            }
+          }}
           onFocus={() => setInteractedWith(true)}
           width={["100%", "44rem"]}
           height={["44px", "64px"]}
           background="squash.100"
-          isInvalid={!url && interactedWith}
+          isInvalid={
+            (isCheckInView &&
+              (!content?.checkinUrl || content?.checkinUrl.length === 0)) ||
+            (!isCheckInView &&
+              (!content?.foodRescueUrl ||
+                content?.foodRescueUrl.length === 0) &&
+              interactedWith)
+          }
         />
 
         <Flex mt={["60px", "87px"]} direction="column">
@@ -137,4 +161,4 @@ const EditCheckInOrFoodRescue = ({
   );
 };
 
-export default EditCheckInOrFoodRescue;
+export default EditCheckInOrFoodRescueDescription;
