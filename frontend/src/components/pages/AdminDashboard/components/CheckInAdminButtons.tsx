@@ -13,7 +13,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import menuIcon from "../../../../assets/menuIcon.svg";
 import * as Routes from "../../../../constants/Routes";
@@ -96,7 +96,11 @@ const CheckInAdminButtons = () => {
                   Export
                 </Text>
               </MenuItem>
-              <MenuItem _hover={{ bg: "dorian.100" }}>
+              <MenuItem
+                _hover={{ bg: "dorian.100" }}
+                as={ReactLink}
+                to={Routes.ADMIN_DELETE_CHECK_INS}
+              >
                 <Text textStyle="mobileSmall" color="hubbard.100">
                   Delete
                 </Text>
