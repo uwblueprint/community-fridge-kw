@@ -87,22 +87,24 @@ const ViewDonationsAndCheckIns = ({
   }, []);
 
   // filter donations/schedules based on selected filter
-  useEffect(() => {
-    let filteredDonations;
-
-    if (selectedFilter === DonationFilterType.ALL)
-      filteredDonations = schedules;
-    else if (selectedFilter === DonationFilterType.FILLED)
-      filteredDonations = schedules.filter(
-        (schedule) => schedule.volunteerId != null,
-      );
-    // selectedFilter === AccountFilterType.DONOR
-    else
-      filteredDonations = schedules.filter(
-        (schedule) => schedule.volunteerId == null,
-      );
-
-    setFilteredSchedules(filteredDonations);
+  React.useMemo(() => {
+    if (selectedFilter === DonationFilterType.FILLED) {
+      setFilteredSchedules([
+        ...schedules.filter(
+          (schedule) =>
+            schedule.volunteerId != null && schedule.volunteerNeeded,
+        ),
+      ]);
+    } else if (selectedFilter === DonationFilterType.UNASSIGNED) {
+      setFilteredSchedules([
+        ...schedules.filter(
+          (schedule) =>
+            schedule.volunteerId == null && schedule.volunteerNeeded,
+        ),
+      ]);
+    } else {
+      setFilteredSchedules([...schedules]);
+    }
   }, [selectedFilter]);
 
   const changeDays = (days: number) => {
@@ -150,13 +152,13 @@ const ViewDonationsAndCheckIns = ({
             </Button>
             <Select
               color="hubbard.100"
-              background={isMobile ? "dorian.100" : "none"}
-              border={isMobile ? "none" : "1px"}
-              borderColor={isMobile ? "none" : "dorian.100"}
+              background={["dorian.100", "none"]}
+              border={["none", "1px"]}
+              borderColor={["none", "dorian.100"]}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 handleSelectFilter(e);
               }}
-              flex={isMobile ? 1.5 : 2.5}
+              flex={[1.5, 2.5]}
             >
               {donationTypefilterOptions.map((option, key) => {
                 return (
