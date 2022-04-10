@@ -14,6 +14,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { CSVLink } from "react-csv";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
@@ -27,6 +28,7 @@ import Calendar from "../../common/Calendar/Calendar";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
+import { generateCSV } from "../../../utils/CSVUtils";
 
 const ViewDonationsAndCheckIns = ({
   isAdminView,
@@ -42,6 +44,7 @@ const ViewDonationsAndCheckIns = ({
   const { isMobile } = useViewport();
   const [test, setTest] = useState<any>(0);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [csvData, setCSVData] = useState<string>("");
   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>([]);
   const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
 
@@ -75,15 +78,21 @@ const ViewDonationsAndCheckIns = ({
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
       setSchedules(scheduleResponse);
       setFilteredSchedules(scheduleResponse);
+      const result = await generateCSV<Schedule>({ data: scheduleResponse });
+      setCSVData(result);
     };
 
     const getCheckIns = async () => {
       const checkInResponse = await CheckInAPIClient.getAllCheckIns();
       setCheckIns(checkInResponse);
+      const result = await generateCSV<CheckIn>({ data: checkInResponse });
+      setCSVData(result);
     };
-
-    getSchedules();
-    getCheckIns();
+    if (isCheckInView) {
+      getCheckIns()
+    } else {
+      getSchedules()
+    }
   }, []);
 
   // filter donations/schedules based on selected filter
@@ -148,7 +157,7 @@ const ViewDonationsAndCheckIns = ({
               leftIcon={<DownloadIcon />}
               flex={1}
             >
-              Export
+              <CSVLink data={csvData}>Export</CSVLink>
             </Button>
             <Select
               color="hubbard.100"
