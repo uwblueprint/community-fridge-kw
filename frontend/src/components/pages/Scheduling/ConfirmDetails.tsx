@@ -21,9 +21,9 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
+import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import ErrorSchedulingModal from "../../common/GeneralErrorModal";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
 import ModifyRecurringModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
@@ -331,7 +331,11 @@ const ConfirmDetails = ({
             Cancel donation
           </Button>
           {currentSchedule.recurringDonationId === "null" ? (
-            <DeleteScheduleModal
+            <GeneralDeleteShiftModal
+              title="Cancel one-time donation"
+              bodyText="Are you sure you want to cancel your donation? This will remove all
+              linked occurences and notify all respective parties, including CFKW."
+              buttonLabel="Cancel donation"
               isOpen={isOpen}
               onClose={onClose}
               onDelete={onDeleteClick}
