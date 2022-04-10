@@ -7,7 +7,11 @@ import { AuthDTO, Role, Token } from "../../types";
 import FirebaseRestClient from "../../utilities/firebaseRestClient";
 import logger from "../../utilities/logger";
 import getErrorMessage from "../../utilities/errorMessageUtil";
-import { emailHeader, emailFooter } from "../../utilities/emailUtils";
+import {
+  emailHeader,
+  emailFooter,
+  getAdminEmail,
+} from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
@@ -260,6 +264,51 @@ class AuthService implements IAuthService {
     } catch (error) {
       Logger.error(
         `Failed to generate volunteer pending email for user with email ${email}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendAdminVolunteerSignUpEmail(
+    email: string,
+    fullName: string,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendAdminVolunteerSignUpEmail but this instance of AuthService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const emailBody = `<html>
+      ${emailHeader}
+      <body>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">A new volunteer has signed up!</h2>
+        <p>${fullName} is interested in becoming a volunteer.
+          <br />
+          <br />
+          Please approve this volunteer (${email}) for the Community Fridge KW volunteer by clicking "Approve"
+        </p>
+         <table cellspacing="0" cellpadding="0"> <tr> 
+      <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
+        <a href="https://schedule.communityfridgekw.ca/user-management" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
+        <span style="color: #FAFCFE;">
+          Approve
+        </span>
+        </a>
+      </td> 
+      </tr> </table> 
+       ${emailFooter} 
+      </body>
+    </html>`;
+      this.emailService.sendEmail(
+        getAdminEmail(),
+        `Volunteer Approval Required: ${fullName}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate admin email for new volunteer sign up for volunteer with email ${email}`,
       );
       throw error;
     }
