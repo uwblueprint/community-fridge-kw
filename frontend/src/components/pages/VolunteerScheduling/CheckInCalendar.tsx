@@ -18,17 +18,17 @@ import Calendar from "../../common/Calendar/Calendar";
 import CheckInAdminButtons from "../AdminDashboard/components/CheckInAdminButtons";
 
 const CheckInCalendar = ({
-  isAdminView,
+  isAdminView = false,
   checkIns,
   setShiftId,
   navigation,
   setIsFoodRescue,
 }: {
-  isAdminView: boolean;
+  isAdminView?: boolean;
   checkIns: CheckInWithShiftType[];
-  setShiftId: any;
+  setShiftId: React.Dispatch<string>;
   navigation: NavigationProps;
-  setIsFoodRescue: any;
+  setIsFoodRescue: React.Dispatch<boolean>;
 }): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
@@ -141,7 +141,6 @@ const CheckInCalendar = ({
           setShiftId={setShiftId}
           navigation={navigation}
           setIsFoodRescue={setIsFoodRescue}
-          isSignUp
         />
       </Flex>
     </Container>

@@ -32,10 +32,10 @@ const VolunteerShiftCard = ({
   setIsFoodRescue,
 }: {
   shift: CheckInWithShiftType | ScheduleWithShiftType;
-  setShiftId?: any;
+  setShiftId?: React.Dispatch<string>;
   navigation?: NavigationProps;
   isSignUp?: boolean;
-  setIsFoodRescue?: any;
+  setIsFoodRescue?: React.Dispatch<boolean>;
 }): JSX.Element => {
   const {
     id,
@@ -94,15 +94,16 @@ const VolunteerShiftCard = ({
     next = navigation.next;
   }
   const onSubmitClick = async () => {
-    if (setShiftId) {
+    if (setShiftId && setIsFoodRescue) {
       setShiftId(id);
-    }
-    if (type === ShiftType.SCHEDULING) {
-      setIsFoodRescue(true);
-    }
 
-    if (type === ShiftType.CHECKIN) {
-      setIsFoodRescue(false);
+      if (type === ShiftType.SCHEDULING) {
+        setIsFoodRescue(true);
+      }
+
+      if (type === ShiftType.CHECKIN) {
+        setIsFoodRescue(false);
+      }
     }
 
     next();

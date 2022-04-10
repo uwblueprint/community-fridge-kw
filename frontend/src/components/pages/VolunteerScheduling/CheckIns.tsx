@@ -33,23 +33,20 @@ const CheckIns = ({
     };
     getCheckIns();
     setIsFoodRescue(false);
-
-    console.log(checkIns);
   }, []);
 
   if (!checkIns || checkIns === null) {
-    console.log("here");
     return <Spinner />;
   }
+
   return (
     <>
       <FridgeCheckInDescription />
       <Divider mt="1rem" />
       <CheckInCalendar
-        isAdminView={false}
         checkIns={checkIns}
-        setShiftId={setShiftId}
         navigation={navigation}
+        setShiftId={setShiftId}
         setIsFoodRescue={setIsFoodRescue}
       />
     </>

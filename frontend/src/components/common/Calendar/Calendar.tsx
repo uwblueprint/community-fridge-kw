@@ -1,3 +1,4 @@
+import { Divider } from "@chakra-ui/react";
 import React from "react";
 import { NavigationProps } from "react-hooks-helper";
 
@@ -14,10 +15,9 @@ type CalendarProps = {
   isAdminView: boolean;
   isCheckInView: boolean;
   isCheckInShiftView?: boolean;
-  setShiftId?: any;
+  setShiftId?: React.Dispatch<string>;
   navigation?: NavigationProps;
-  setIsFoodRescue?: any;
-  isSignUp?: any;
+  setIsFoodRescue?: React.Dispatch<boolean>;
   deleteCheckIn?: any;
 };
 
@@ -30,24 +30,30 @@ const Calendar = ({
   setShiftId,
   navigation,
   setIsFoodRescue,
-  isSignUp,
   deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
-  const getCheckInCard = (item: any) => {
+  const getCheckInCard = (item: any, index: number) => {
     if (isCheckInShiftView) {
       return (
-        <ShiftCard
-          key={JSON.stringify(item)}
-          shift={item}
-          setShiftId={setShiftId}
-          navigation={navigation}
-          isSignUp
-          setIsFoodRescue={setIsFoodRescue}
-        />
+        <>
+          <ShiftCard
+            key={JSON.stringify(item)}
+            shift={item}
+            setShiftId={setShiftId}
+            navigation={navigation}
+            isSignUp
+            setIsFoodRescue={setIsFoodRescue}
+          />
+          {index < items.length - 1 && <Divider pt="0.5rem" />}
+        </>
       );
     }
     return (
-      <CheckInInfoCard key={JSON.stringify(item)} checkIn={item as CheckIn}  deleteCheckIn={deleteCheckIn} />
+      <CheckInInfoCard
+        key={JSON.stringify(item)}
+        checkIn={item as CheckIn}
+        deleteCheckIn={deleteCheckIn}
+      />
     );
   };
   return (
@@ -55,9 +61,9 @@ const Calendar = ({
       <WeeklyBody
         selectedDay={selectedDay}
         items={items}
-        renderItem={({ item }) =>
+        renderItem={({ item, index }) =>
           isCheckInView ? (
-            getCheckInCard(item)
+            getCheckInCard(item, index)
           ) : (
             <DropoffCard
               key={JSON.stringify(item)}

@@ -41,16 +41,16 @@ const FoodRescues = ({
         divider={<StackDivider borderColor="gray.200" />}
         marginTop={["10px", "40px"]}
       >
-      {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
-        <ShiftCard
-          key={id}
-          shift={scheduleObject}
-          setShiftId={setShiftId}
-          navigation={navigation}
-          isSignUp
-          setIsFoodRescue={setIsFoodRescue}
-        />
-      ))}
+        {foodRescues.map((scheduleObject: ScheduleWithShiftType, id) => (
+          <ShiftCard
+            key={id}
+            shift={scheduleObject}
+            setShiftId={setShiftId}
+            navigation={navigation}
+            isSignUp
+            setIsFoodRescue={setIsFoodRescue}
+          />
+        ))}
       </VStack>
     </>
   );

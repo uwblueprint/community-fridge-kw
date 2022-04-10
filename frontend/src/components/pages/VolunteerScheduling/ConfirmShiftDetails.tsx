@@ -78,7 +78,7 @@ const ConfirmShiftDetails = ({
             volunteerId: Number(volunteerId),
           });
       if (!res) {
-        console.log("error when submitting volunteer");
+        console.error("Error when confirming shift details with volunteer.");
         return;
       }
     }
@@ -116,11 +116,17 @@ const ConfirmShiftDetails = ({
 
   useEffect(() => {
     if (isFoodRescue) {
-      getFoodRescueResponse().then(() => getDonorData());
+      getFoodRescueResponse();
     } else {
       getCheckInData();
     }
   }, []);
+
+  useEffect(() => {
+    if (isFoodRescue) {
+      getDonorData();
+    }
+  }, [currentFoodRescue]);
 
   const dateText = (date: string) => {
     if (date !== "") {
