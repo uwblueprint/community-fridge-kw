@@ -76,18 +76,14 @@ const UserManagementPage = (): JSX.Element => {
   React.useEffect(() => {
     const getDonors = async () => {
       const res = await DonorAPIClient.getAllDonors();
-      if (res.length === undefined) setDonors(res);
-      else {
-        setDataError(true);
-      }
+      if (res.length !== undefined) setDonors(res);
+      else setDataError(true);
     };
 
     const getVolunteers = async () => {
       const res = await VolunteerAPIClient.getAllVolunteers();
-      if (res.length === undefined) setVolunteers(res);
-      else {
-        setDataError(true);
-      }
+      if (res.length !== undefined) setVolunteers(res);
+      else setDataError(true);
     };
 
     getDonors();
@@ -158,7 +154,10 @@ const UserManagementPage = (): JSX.Element => {
         User management
       </Text>
       {dataError ? (
-        <Text>Something went wrong with loading the data, please refresh the page and try again!</Text>
+        <Text>
+          Something went wrong with loading the data, please refresh the page
+          and try again!
+        </Text>
       ) : (
         <>
           <HStack>
