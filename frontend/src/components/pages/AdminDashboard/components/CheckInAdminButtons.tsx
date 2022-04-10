@@ -18,7 +18,7 @@ import { useHistory } from "react-router-dom";
 import menuIcon from "../../../../assets/menuIcon.svg";
 import * as Routes from "../../../../constants/Routes";
 
-const CheckInAdminButtons = (): JSX.Element => {
+const CheckInAdminButtons = () => {
   const history = useHistory();
 
   return (
@@ -27,7 +27,9 @@ const CheckInAdminButtons = (): JSX.Element => {
         <Stack direction="row" spacing={4}>
           <Button
             size="md"
-            onClick={() => {}}
+            onClick={() => {
+              history.push(Routes.CREATE_CHECKIN);
+            }}
             variant="create"
             width="2.5rem"
             lineHeight="20px"
@@ -60,7 +62,9 @@ const CheckInAdminButtons = (): JSX.Element => {
         <HStack mt="3.5rem" spacing="7px">
           <Button
             size="sm"
-            onClick={() => {}}
+            onClick={() => {
+              history.push(Routes.CREATE_CHECKIN);
+            }}
             variant="create"
             width="100%"
             lineHeight="20px"
