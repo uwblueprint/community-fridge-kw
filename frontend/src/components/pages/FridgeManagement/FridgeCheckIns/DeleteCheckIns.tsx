@@ -121,10 +121,10 @@ const DeleteCheckInsPage = () => {
         Delete shifts
       </Button>
       <GeneralDeleteShiftModal
-        title="Cancel shifts in range"
+        title="Delete shifts in range"
         bodyText={
           dateRange[1] &&
-          `Are you sure you want to cancel these fridge check-in shifts? This will remove all shifts ${
+          `Are you sure you want to delete these fridge check-in shifts? This will remove all shifts ${
             dateRange[0].toString() === dateRange[1].toString()
               ? ` on ${dateRange[0].format("MMMM D").toString()} `
               : ` between ${dateRange[0]
@@ -133,7 +133,7 @@ const DeleteCheckInsPage = () => {
           }
         and notify any assigned volunteers.`
         }
-        buttonLabel="Cancel shifts"
+        buttonLabel="Delete shifts"
         isOpen={isOpen}
         onClose={onClose}
         onDelete={onDeleteClick}
