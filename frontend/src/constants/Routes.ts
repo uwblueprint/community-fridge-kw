@@ -27,3 +27,5 @@ export const FORGET_PASSWORD = "/forget-password";
 export const ADMIN_CHECK_INS = "/admin/check-ins";
 
 export const CREATE_CHECKIN = "/admin/create-checkin";
+
+export const ADMIN_CHECKIN_EDIT = "/admin/checkin/:id";

@@ -15,10 +15,12 @@ import {
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
+import { Link as ReactLink } from "react-router-dom";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import VolunteerAPIClient from "../../../../APIClients/VolunteerAPIClient";
 import menuIcon from "../../../../assets/menuIcon.svg";
+import * as Routes from "../../../../constants/Routes";
 import useViewport from "../../../../hooks/useViewport";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import { VolunteerResponse } from "../../../../types/VolunteerTypes";
@@ -162,7 +164,14 @@ const CheckInInfoCard = ({
                 variant="plain"
               />
               <MenuList style={menuListStyle}>
-                <MenuItem style={menuItemStyle}>
+                <MenuItem
+                  style={menuItemStyle}
+                  as={ReactLink}
+                  to={Routes.ADMIN_CHECKIN_EDIT.replace(
+                    ":id",
+                    currentCheckIn.id,
+                  )}
+                >
                   <Text textStyle="mobileSmall" color="hubbard.100">
                     Edit
                   </Text>
