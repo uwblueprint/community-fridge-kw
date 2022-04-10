@@ -5,7 +5,7 @@ import React from "react";
 const FridgeFoodRescueDescription = () => (
   <>
     <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
-      Scheduled donations
+      Food rescue description
       <Button
         variant="editInfo"
         rightIcon={<EditIcon size={24} />}
