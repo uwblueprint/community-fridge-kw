@@ -1,11 +1,10 @@
-import { Spinner, Text, Divider } from "@chakra-ui/react";
+import { Divider, Spinner } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { NavigationProps } from "react-hooks-helper";
 
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import { CheckInWithShiftType, ShiftType } from "../../../types/VolunteerTypes";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
-import ShiftCard from "../VolunteerDashboard/ShiftCard";
 import CheckInCalendar from "./CheckInCalendar";
 
 export interface ShiftProps {
@@ -34,17 +33,25 @@ const CheckIns = ({
     };
     getCheckIns();
     setIsFoodRescue(false);
+
+    console.log(checkIns);
   }, []);
 
   if (!checkIns || checkIns === null) {
+    console.log("here");
     return <Spinner />;
   }
-
   return (
     <>
       <FridgeCheckInDescription />
       <Divider mt="1rem" />
-      <CheckInCalendar isAdminView={false} checkIns={checkIns}/>
+      <CheckInCalendar
+        isAdminView={false}
+        checkIns={checkIns}
+        setShiftId={setShiftId}
+        navigation={navigation}
+        setIsFoodRescue={setIsFoodRescue}
+      />
     </>
   );
 };

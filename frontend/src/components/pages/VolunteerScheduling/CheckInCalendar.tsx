@@ -8,22 +8,27 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { NavigationProps } from "react-hooks-helper";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
 
 import useViewport from "../../../hooks/useViewport";
 import { CheckInWithShiftType } from "../../../types/VolunteerTypes";
 import Calendar from "../../common/Calendar/Calendar";
-import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
-import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "../AdminDashboard/components/CheckInAdminButtons";
 
 const CheckInCalendar = ({
   isAdminView,
-  checkIns
+  checkIns,
+  setShiftId,
+  navigation,
+  setIsFoodRescue,
 }: {
   isAdminView: boolean;
-  checkIns: CheckInWithShiftType[]
+  checkIns: CheckInWithShiftType[];
+  setShiftId: any;
+  navigation: NavigationProps;
+  setIsFoodRescue: any;
 }): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
@@ -43,23 +48,14 @@ const CheckInCalendar = ({
   return (
     <Container alignContent="left" variant="calendarContainer">
       <Flex
-        pt={{ base: "0.5rem", md: "2rem" }}
+        pt={{ base: "0.5rem", md: "1.2rem" }}
         flexDirection="column"
         justifyContent="space-between"
         display={{ base: "inline", md: "flex" }}
       >
         <HStack justifyContent="space-between">
-          <Text
-            textStyle={isMobile ? "mobileHeader2" : "desktopHeader2"}
-            pt="2rem"
-          >
-            Fridge check-ins
-          </Text>
-
-          <CheckInAdminButtons />
+          {isAdminView && <CheckInAdminButtons />}
         </HStack>
-        <FridgeCheckInDescription />
-        {isAdminView && <FridgeFoodRescueDescription />}
         {isMobile ? (
           <HStack py="1.2rem" width="inherit" alignItems="center">
             <Text textStyle="mobileHeader4" whiteSpace="nowrap">
@@ -141,6 +137,11 @@ const CheckInCalendar = ({
           items={checkIns}
           isAdminView={isAdminView}
           isCheckInView
+          isCheckInShiftView
+          setShiftId={setShiftId}
+          navigation={navigation}
+          setIsFoodRescue={setIsFoodRescue}
+          isSignUp
         />
       </Flex>
     </Container>

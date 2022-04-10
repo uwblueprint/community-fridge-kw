@@ -72,11 +72,11 @@ const ConfirmShiftDetails = ({
     if (volunteerId !== null) {
       const res = isFoodRescue
         ? await SchedulingAPIClient.updateSchedule(shiftId, {
-          volunteerId: String(volunteerId)
-        })
-        : await CheckInAPIClient.updateCheckInById(shiftId, { 
-          volunteerId: Number(volunteerId)
-        });
+            volunteerId: String(volunteerId),
+          })
+        : await CheckInAPIClient.updateCheckInById(shiftId, {
+            volunteerId: Number(volunteerId),
+          });
       if (!res) {
         console.log("error when submitting volunteer");
         return;
@@ -90,14 +90,14 @@ const ConfirmShiftDetails = ({
       shiftId,
     );
     setCurrentFoodRescue(foodRescueResponse);
-  }
+  };
 
   const getDonorData = async () => {
     const donorResponse = await DonorAPIClient.getDonorById(
       currentFoodRescue.donorId,
     );
     setCurrentDonor(donorResponse);
-  }
+  };
 
   const getCheckInData = async () => {
     const checkInResponse = await CheckInAPIClient.getCheckInsById(shiftId);
@@ -267,14 +267,12 @@ const ConfirmShiftDetails = ({
               Name
             </Text>
             <Text textStyle="mobileBody">
-              {currentDonor.firstName} {currentDonor.lastName}
+              {`${currentDonor.firstName} ${currentDonor.lastName}`}
             </Text>
             <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
               Email
             </Text>
-            <Text textStyle="mobileBody">
-              {currentDonor.email !== "" ? currentDonor.email : "hi"}
-            </Text>
+            <Text textStyle="mobileBody">{currentDonor.email}</Text>
             <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
               Phone
             </Text>

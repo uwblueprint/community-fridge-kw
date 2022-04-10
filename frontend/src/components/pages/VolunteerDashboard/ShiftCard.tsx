@@ -127,7 +127,7 @@ const VolunteerShiftCard = ({
           float="right"
           mt="1.5rem"
           size="lg"
-          width={isSignUp ? ["60%", "33%"] : ["50%", "20%"]}
+          width={isSignUp ? ["55%", "25%"] : ["50%", "20%"]}
           variant={isSignUp ? "navigation" : "viewDetails"}
           onClick={onSubmitClick}
         >
