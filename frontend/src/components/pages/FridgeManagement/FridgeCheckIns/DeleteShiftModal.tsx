@@ -26,7 +26,6 @@ const DeleteShiftModal = ({
   onClose,
   onDelete,
 }: DeleteShiftModalProps) => {
-  const { isDesktop } = useViewport();
 
   return (
     <>
