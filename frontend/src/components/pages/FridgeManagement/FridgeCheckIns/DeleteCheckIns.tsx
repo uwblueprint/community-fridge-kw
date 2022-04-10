@@ -8,6 +8,7 @@ import {
   HStack,
   Input,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { endOfDay } from "date-fns";
@@ -17,11 +18,14 @@ import { useHistory } from "react-router-dom";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import * as Routes from "../../../../constants/Routes";
+import DeleteShiftModal from "./DeleteShiftModal";
 import ErrorMessages from "./ErrorMessages";
 
 const DeleteCheckInsPage = () => {
   const toast = useToast();
   const history = useHistory();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [dateRange, setDateRange] = useState<DateObject[]>([
     new DateObject(),
     new DateObject().add(1, "days"),
@@ -39,7 +43,14 @@ const DeleteCheckInsPage = () => {
     return valid;
   };
 
-  const onSaveClick = async () => {
+  const openModal = () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    onOpen();
+  }
+  const onDeleteClick = async () => {
     if (!validateForm()) {
       return;
     }
@@ -57,7 +68,7 @@ const DeleteCheckInsPage = () => {
       return;
     }
     toast({
-      title: "Check-in(s) have been successfully deleted",
+      title: "Check-ins have been successfully deleted",
       status: "success",
       duration: 7000,
       isClosable: true,
@@ -106,9 +117,15 @@ const DeleteCheckInsPage = () => {
         />
         <FormErrorMessage>{dateRangeError}</FormErrorMessage>
       </FormControl>
-      <Button onClick={onSaveClick} variant="navigation">
+      <Button onClick={openModal} variant="navigation">
         Delete shifts
       </Button>
+      <DeleteShiftModal
+        dateRange={dateRange}
+        isOpen={isOpen}
+        onClose={onClose}
+        onDelete={onDeleteClick}
+      />
     </Container>
   );
 };
