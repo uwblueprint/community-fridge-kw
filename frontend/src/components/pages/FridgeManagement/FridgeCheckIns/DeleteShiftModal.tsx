@@ -39,7 +39,7 @@ const DeleteShiftModal = ({
         <ModalOverlay />
         <ModalContent py="52px" px="48px">
           <ModalHeader>
-            <Text textStyle={isDesktop ? "desktopHeader3" : "mobileBodyBold"}>
+            <Text textStyle={["mobileBodyBold", "desktopHeader3"]}>
               Cancel shifts in range
             </Text>
           </ModalHeader>
