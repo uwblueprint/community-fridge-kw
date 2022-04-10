@@ -100,13 +100,10 @@ const EditCheckInOrFoodRescueDescription = ({
           background="squash.100"
           p="1.5rem"
           isInvalid={
-            (isCheckInView &&
-              (!content?.checkinDescription ||
-                content?.checkinDescription.length === 0)) ||
-            (!isCheckInView &&
-              (!content?.foodRescueDescription ||
-                content?.foodRescueDescription.length === 0) &&
-              interactedWith)
+            ((isCheckInView && content?.checkinDescription.length === 0) ||
+              (!isCheckInView &&
+                content?.foodRescueDescription.length === 0)) &&
+            interactedWith
           }
         />
 
@@ -137,11 +134,9 @@ const EditCheckInOrFoodRescueDescription = ({
           height={["44px", "64px"]}
           background="squash.100"
           isInvalid={
-            (isCheckInView &&
-              (!content?.checkinUrl || content?.checkinUrl.length === 0)) ||
+            (isCheckInView && content?.checkinUrl.length === 0) ||
             (!isCheckInView &&
-              (!content?.foodRescueUrl ||
-                content?.foodRescueUrl.length === 0) &&
+              content?.foodRescueUrl.length === 0 &&
               interactedWith)
           }
         />
