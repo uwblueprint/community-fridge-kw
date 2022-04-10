@@ -76,7 +76,7 @@ const UserManagementPage = (): JSX.Element => {
   React.useEffect(() => {
     const getDonors = async () => {
       const res = await DonorAPIClient.getAllDonors();
-      if (res.length) setDonors(res);
+      if (res.length === undefined) setDonors(res);
       else {
         setDataError(true);
       }
@@ -84,7 +84,7 @@ const UserManagementPage = (): JSX.Element => {
 
     const getVolunteers = async () => {
       const res = await VolunteerAPIClient.getAllVolunteers();
-      if (res.length) setVolunteers(res);
+      if (res.length === undefined) setVolunteers(res);
       else {
         setDataError(true);
       }
