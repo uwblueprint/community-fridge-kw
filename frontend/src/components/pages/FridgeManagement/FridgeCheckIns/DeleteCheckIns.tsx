@@ -11,7 +11,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { endOfDay } from "date-fns";
+import { endOfDay, startOfDay } from "date-fns";
 import React, { useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useHistory } from "react-router-dom";
@@ -55,7 +55,7 @@ const DeleteCheckInsPage = () => {
       return;
     }
     const res = await CheckInAPIClient.deleteCheckInsByDateRange(
-      dateRange[0].toString(),
+      startOfDay(dateRange[0].toDate()).toString(),
       endOfDay(dateRange[1].toDate()).toString(),
     );
     if (!res) {
