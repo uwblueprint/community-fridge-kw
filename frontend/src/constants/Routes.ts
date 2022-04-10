@@ -26,8 +26,5 @@ export const FORGET_PASSWORD = "/forget-password";
 
 export const ADMIN_CHECK_INS = "/admin/check-ins";
 
-<<<<<<< HEAD
 export const VOLUNTEER_DASHBOARD_PAGE = "/volunteer-dashboard";
-=======
 export const CREATE_CHECKIN = "/admin/create-checkin";
->>>>>>> origin/staging

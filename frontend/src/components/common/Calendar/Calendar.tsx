@@ -18,7 +18,7 @@ type CalendarProps = {
   navigation?: NavigationProps;
   setIsFoodRescue?: any;
   isSignUp?: any;
-  deleteCheckIn?: (checkInId: string) => void;
+  deleteCheckIn?: any;
 };
 
 const Calendar = ({
