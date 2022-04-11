@@ -20,7 +20,7 @@ import { useHistory, useParams } from "react-router-dom";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import * as Routes from "../../../../constants/Routes";
-import { CreateCheckInFields } from "../../../../types/CheckInTypes";
+import { UpdateCheckInFields } from "../../../../types/CheckInTypes";
 import ErrorMessages from "./ErrorMessages";
 
 const EditCheckInPage = (): JSX.Element => {
@@ -63,7 +63,7 @@ const EditCheckInPage = (): JSX.Element => {
       return;
     }
 
-    const checkInData: CreateCheckInFields = {
+    const checkInData: UpdateCheckInFields = {
       startDate: parse(startTime, "kk:mm", new Date(date)).toString(),
       endDate: parse(endTime, "kk:mm", new Date(date)).toString(),
       notes,
