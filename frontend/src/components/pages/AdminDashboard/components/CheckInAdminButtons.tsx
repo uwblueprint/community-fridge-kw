@@ -14,11 +14,16 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { CSVLink } from "react-csv";
 
 import menuIcon from "../../../../assets/menuIcon.svg";
 import * as Routes from "../../../../constants/Routes";
 
-const CheckInAdminButtons = () => {
+type CheckInAdminButtonsInterface = {
+  csvData: string;
+}
+
+const CheckInAdminButtons = ({ csvData } : CheckInAdminButtonsInterface) => {
   const history = useHistory();
 
   return (
@@ -53,7 +58,7 @@ const CheckInAdminButtons = () => {
             leftIcon={<DownloadIcon />}
             px="20px"
           >
-            Export
+            <CSVLink data={csvData}>Export</CSVLink>
           </Button>
         </Stack>
       </Show>
@@ -93,7 +98,7 @@ const CheckInAdminButtons = () => {
             <MenuList>
               <MenuItem hover={{ bg: "dorian.100" }}>
                 <Text textStyle="mobileSmall" color="hubbard.100">
-                  Export
+                  <CSVLink data={csvData}>Export</CSVLink>
                 </Text>
               </MenuItem>
               <MenuItem _hover={{ bg: "dorian.100" }}>

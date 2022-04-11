@@ -28,7 +28,7 @@ import Calendar from "../../common/Calendar/Calendar";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
-import { generateCSV } from "../../../utils/CSVUtils";
+import { getCheckInCSVData, getScheduleCSVData } from "./getCSVData";
 
 const ViewDonationsAndCheckIns = ({
   isAdminView,
@@ -78,20 +78,20 @@ const ViewDonationsAndCheckIns = ({
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
       setSchedules(scheduleResponse);
       setFilteredSchedules(scheduleResponse);
-      const result = await generateCSV<Schedule>({ data: scheduleResponse });
-      setCSVData(result);
+      const scheduleCSVData = await getScheduleCSVData();
+      setCSVData(scheduleCSVData);
     };
 
     const getCheckIns = async () => {
       const checkInResponse = await CheckInAPIClient.getAllCheckIns();
       setCheckIns(checkInResponse);
-      const result = await generateCSV<CheckIn>({ data: checkInResponse });
-      setCSVData(result);
+      const checkInCSVData = await getCheckInCSVData();
+      setCSVData(checkInCSVData);
     };
     if (isCheckInView) {
-      getCheckIns()
+      getCheckIns();
     } else {
-      getSchedules()
+      getSchedules();
     }
   }, []);
 
@@ -179,7 +179,7 @@ const ViewDonationsAndCheckIns = ({
             </Select>
           </HStack>
         )}
-        {isCheckInView && <CheckInAdminButtons />}
+        {isCheckInView && <CheckInAdminButtons csvData={csvData} />}
       </Stack>
       {isAdminView && <FridgeFoodRescueDescription />}
       {isCheckInView && <FridgeCheckInDescription />}
