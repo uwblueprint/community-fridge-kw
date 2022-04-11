@@ -18,7 +18,6 @@ export const getScheduleCSVData = async () => {
       return {
         ...schedule,
         id,
-        categories: schedule.categories.join("; ").replaceAll(",", ""),
         volunteerFirstName: volunteer && volunteer.firstName,
         volunteerLastName: volunteer && volunteer.lastName,
         volunteerEmail: volunteer && volunteer.email,

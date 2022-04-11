@@ -13,18 +13,20 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
-import { CSVLink } from "react-csv";
 import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import menuIcon from "../../../../assets/menuIcon.svg";
 import * as Routes from "../../../../constants/Routes";
+import { downloadCSV } from "../../../../utils/CSVUtils";
+import { getCheckInCSVData } from "../getCSVData";
 
-type CheckInAdminButtonsInterface = {
-  csvData: string;
-}
-
-const CheckInAdminButtons = ({ csvData } : CheckInAdminButtonsInterface) => {
+const CheckInAdminButtons = () => {
   const history = useHistory();
+
+  const handleCSVDownload = async () => {
+    const csvCheckInData = await getCheckInCSVData();
+    downloadCSV(csvCheckInData, "checkins");
+  };
 
   return (
     <>
@@ -53,12 +55,12 @@ const CheckInAdminButtons = ({ csvData } : CheckInAdminButtonsInterface) => {
           </Button>
           <Button
             size="md"
-            onClick={() => {}}
+            onClick={handleCSVDownload}
             variant="export"
             leftIcon={<DownloadIcon />}
             px="20px"
           >
-            <CSVLink data={csvData}>Export</CSVLink>
+            Export
           </Button>
         </Stack>
       </Show>
@@ -96,9 +98,12 @@ const CheckInAdminButtons = ({ csvData } : CheckInAdminButtonsInterface) => {
               height="44px"
             />
             <MenuList>
-              <MenuItem hover={{ bg: "dorian.100" }}>
+              <MenuItem
+                _hover={{ bg: "dorian.100" }}
+                onClick={handleCSVDownload}
+              >
                 <Text textStyle="mobileSmall" color="hubbard.100">
-                  <CSVLink data={csvData}>Export</CSVLink>
+                  Export
                 </Text>
               </MenuItem>
               <MenuItem

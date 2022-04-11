@@ -14,7 +14,6 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { CSVLink } from "react-csv";
 import React, { useEffect, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Icon from "react-multi-date-picker/components/icon";
@@ -28,7 +27,8 @@ import Calendar from "../../common/Calendar/Calendar";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
-import { getCheckInCSVData, getScheduleCSVData } from "./getCSVData";
+import { getScheduleCSVData } from "./getCSVData";
+import { downloadCSV } from "../../../utils/CSVUtils";
 
 const ViewDonationsAndCheckIns = ({
   isAdminView,
@@ -44,7 +44,6 @@ const ViewDonationsAndCheckIns = ({
   const { isMobile } = useViewport();
   const [test, setTest] = useState<any>(0);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [csvData, setCSVData] = useState<string>("");
   const [filteredSchedules, setFilteredSchedules] = useState<Schedule[]>([]);
   const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
 
@@ -78,15 +77,11 @@ const ViewDonationsAndCheckIns = ({
       const scheduleResponse = await SchedulingAPIClient.getSchedules();
       setSchedules(scheduleResponse);
       setFilteredSchedules(scheduleResponse);
-      const scheduleCSVData = await getScheduleCSVData();
-      setCSVData(scheduleCSVData);
     };
 
     const getCheckIns = async () => {
       const checkInResponse = await CheckInAPIClient.getAllCheckIns();
       setCheckIns(checkInResponse);
-      const checkInCSVData = await getCheckInCSVData();
-      setCSVData(checkInCSVData);
     };
     if (isCheckInView) {
       getCheckIns();
@@ -136,6 +131,11 @@ const ViewDonationsAndCheckIns = ({
     ]);
   };
 
+  const handleCSVDownload = async () => {
+    const csvScheduleData = await getScheduleCSVData();
+    downloadCSV(csvScheduleData, "foodRescues");
+  };
+
   return (
     <Container alignContent="left" variant="calendarContainer">
       <Stack
@@ -156,8 +156,9 @@ const ViewDonationsAndCheckIns = ({
               variant={isMobile ? "exportMobile" : "export"}
               leftIcon={<DownloadIcon />}
               flex={1}
+              onClick={handleCSVDownload}
             >
-              <CSVLink data={csvData}>Export</CSVLink>
+              Export
             </Button>
             <Select
               color="hubbard.100"
@@ -179,7 +180,7 @@ const ViewDonationsAndCheckIns = ({
             </Select>
           </HStack>
         )}
-        {isCheckInView && <CheckInAdminButtons csvData={csvData} />}
+        {isCheckInView && <CheckInAdminButtons />}
       </Stack>
       {isAdminView && <FridgeFoodRescueDescription />}
       {isCheckInView && <FridgeCheckInDescription />}
