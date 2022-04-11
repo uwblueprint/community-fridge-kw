@@ -13,8 +13,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { CSVLink } from "react-csv";
+import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import menuIcon from "../../../../assets/menuIcon.svg";
 import * as Routes from "../../../../constants/Routes";
@@ -44,7 +44,7 @@ const CheckInAdminButtons = ({ csvData } : CheckInAdminButtonsInterface) => {
 
           <Button
             size="md"
-            onClick={() => {}}
+            onClick={() => history.push(Routes.ADMIN_DELETE_CHECK_INS)}
             variant="export"
             leftIcon={<DeleteIcon />}
             px="20px"
@@ -101,7 +101,11 @@ const CheckInAdminButtons = ({ csvData } : CheckInAdminButtonsInterface) => {
                   <CSVLink data={csvData}>Export</CSVLink>
                 </Text>
               </MenuItem>
-              <MenuItem _hover={{ bg: "dorian.100" }}>
+              <MenuItem
+                _hover={{ bg: "dorian.100" }}
+                as={ReactLink}
+                to={Routes.ADMIN_DELETE_CHECK_INS}
+              >
                 <Text textStyle="mobileSmall" color="hubbard.100">
                   Delete
                 </Text>
