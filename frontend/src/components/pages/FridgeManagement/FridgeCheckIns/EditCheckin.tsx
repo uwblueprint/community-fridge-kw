@@ -52,7 +52,7 @@ const EditCheckInPage = (): JSX.Element => {
       newError = ErrorMessages.endTimeBeforeStartTime;
     } else if (isEqual(parsedStartTime, parsedEndTime)) {
       valid = false;
-      newError = ErrorMessages.endTimeBeforeStartTime;
+      newError = ErrorMessages.endTimeEqualsStartTime;
     }
 
     setTimeRangeError(newError);

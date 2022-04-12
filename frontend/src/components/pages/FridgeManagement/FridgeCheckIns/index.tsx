@@ -60,7 +60,7 @@ const CreateCheckIn = () => {
       )
     ) {
       valid = false;
-      newErrors.timeRange = ErrorMessages.endTimeBeforeStartTime;
+      newErrors.timeRange = ErrorMessages.endTimeEqualsStartTime;
     }
     if (!dateRange[0] || !dateRange[1]) {
       valid = false;
