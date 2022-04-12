@@ -91,7 +91,7 @@ const CreateCheckIn = () => {
     };
 
     const res = await CheckInAPIClient.createCheckIn(checkInData);
-    if (!res) {
+    if (!res.id) {
       toast({
         title: "Checkin could not be created. Please try again",
         status: "error",

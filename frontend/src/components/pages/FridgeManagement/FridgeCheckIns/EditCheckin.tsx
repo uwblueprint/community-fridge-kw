@@ -50,9 +50,6 @@ const EditCheckInPage = (): JSX.Element => {
     if (isAfter(parsedStartTime, parsedEndTime)) {
       valid = false;
       newError = ErrorMessages.endTimeBeforeStartTime;
-    } else if (isEqual(parsedStartTime, parsedEndTime)) {
-      valid = false;
-      newError = ErrorMessages.endTimeEqualsStartTime;
     }
 
     setTimeRangeError(newError);
@@ -71,7 +68,8 @@ const EditCheckInPage = (): JSX.Element => {
     };
 
     const res = await CheckInAPIClient.updateCheckInById(id, checkInData);
-    if (!res) {
+
+    if (!res.id) {
       toast({
         title: "Checkin could not be updated. Please try again",
         status: "error",
