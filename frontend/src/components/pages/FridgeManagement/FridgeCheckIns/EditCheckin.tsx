@@ -14,7 +14,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { format, isAfter, parse } from "date-fns";
+import { format, isAfter, isEqual, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -44,12 +44,13 @@ const EditCheckInPage = (): JSX.Element => {
   const validateForm = () => {
     let newError = "";
     let valid = true;
-    if (
-      isAfter(
-        parse(startTime, "kk:mm", new Date()),
-        parse(endTime, "kk:mm", new Date()),
-      )
-    ) {
+    const parsedStartTime = parse(startTime, "kk:mm", new Date());
+    const parsedEndTime = parse(endTime, "kk:mm", new Date());
+
+    if (isAfter(parsedStartTime, parsedEndTime)) {
+      valid = false;
+      newError = ErrorMessages.endTimeBeforeStartTime;
+    } else if (isEqual(parsedStartTime, parsedEndTime)) {
       valid = false;
       newError = ErrorMessages.endTimeBeforeStartTime;
     }

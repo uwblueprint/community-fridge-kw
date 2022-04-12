@@ -11,7 +11,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { isAfter, parse } from "date-fns";
+import { isAfter, isEqual, parse } from "date-fns";
 import React, { useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import { useHistory } from "react-router-dom";
@@ -47,6 +47,14 @@ const CreateCheckIn = () => {
       newErrors.timeRange = ErrorMessages.bothTimeFieldsRequired;
     } else if (
       isAfter(
+        parse(startTime, "kk:mm", new Date()),
+        parse(endTime, "kk:mm", new Date()),
+      )
+    ) {
+      valid = false;
+      newErrors.timeRange = ErrorMessages.endTimeBeforeStartTime;
+    } else if (
+      isEqual(
         parse(startTime, "kk:mm", new Date()),
         parse(endTime, "kk:mm", new Date()),
       )
