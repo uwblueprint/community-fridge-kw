@@ -94,7 +94,7 @@ const EditCheckInPage = (): JSX.Element => {
     getCheckInData();
   }, []);
 
-  if (!date) {
+  if (!date || !startTime || !endTime) {
     return (
       <Center>
         <Spinner />

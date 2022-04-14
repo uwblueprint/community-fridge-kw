@@ -11,6 +11,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -42,6 +43,7 @@ const CheckInInfoCard = ({
   const startTimeLocal = format(new Date(currentCheckIn.startDate), "hh:mmaa");
   const endTimeLocal = format(new Date(currentCheckIn.endDate), "hh:mmaa");
   const { isMobile } = useViewport();
+  const toast = useToast();
 
   useEffect(() => {
     const getVolunteerData = async () => {
@@ -65,6 +67,16 @@ const CheckInInfoCard = ({
         isAdmin: false,
       },
     );
+
+    if (!checkInResponse) {
+      toast({
+        title: "There was an error removing the volunteer.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
     setCurrentCheckIn(checkInResponse as CheckIn);
   };
 
@@ -75,6 +87,16 @@ const CheckInInfoCard = ({
         isAdmin: true,
       },
     );
+
+    if (!checkInResponse) {
+      toast({
+        title: "There was an error assigning the volunteer as admin.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
     setCurrentCheckIn(checkInResponse as CheckIn);
   };
 

@@ -126,6 +126,7 @@ const App = (): React.ReactElement => {
                   component={EditFoodRescueDescriptionPage}
                 />
                 <PrivateRoute
+                  adminOnly
                   exact
                   path={Routes.ADMIN_CHECKIN_EDIT}
                   component={EditCheckInPage}

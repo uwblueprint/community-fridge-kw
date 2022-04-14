@@ -72,7 +72,7 @@ const deleteCheckInsByDateRange = async (
 
 const createCheckIn = async (
   checkIn: CreateCheckInFields,
-): Promise<CheckIn> => {
+): Promise<CheckIn | boolean> => {
   try {
     const { data } = await baseAPIClient.post(
       "/checkin",
@@ -83,7 +83,7 @@ const createCheckIn = async (
     );
     return data;
   } catch (error) {
-    return error as CheckIn;
+    return false;
   }
 };
 
