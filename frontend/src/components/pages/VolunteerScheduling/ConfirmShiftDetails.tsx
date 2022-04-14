@@ -85,18 +85,15 @@ const ConfirmShiftDetails = ({
     next();
   };
 
-  const getFoodRescueResponse = async () => {
-    const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
-      shiftId,
-    );
-    setCurrentFoodRescue(foodRescueResponse);
-  };
-
   const getDonorData = async () => {
+    const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
+      shiftId
+    );
     const donorResponse = await DonorAPIClient.getDonorById(
-      currentFoodRescue.donorId,
+      foodRescueResponse.donorId,
     );
     setCurrentDonor(donorResponse);
+    setCurrentFoodRescue(foodRescueResponse);
   };
 
   const getCheckInData = async () => {
@@ -116,17 +113,11 @@ const ConfirmShiftDetails = ({
 
   useEffect(() => {
     if (isFoodRescue) {
-      getFoodRescueResponse();
+      getDonorData();
     } else {
       getCheckInData();
     }
   }, []);
-
-  useEffect(() => {
-    if (isFoodRescue) {
-      getDonorData();
-    }
-  }, [currentFoodRescue]);
 
   const dateText = (date: string) => {
     if (date !== "") {

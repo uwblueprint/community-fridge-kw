@@ -18,7 +18,6 @@ const CheckIns = ({
   setShiftId,
   setIsFoodRescue,
 }: ShiftProps): JSX.Element => {
-  // const { isMobile } = useViewport();
   const [checkIns, setCheckIns] = useState<CheckInWithShiftType[]>([]);
 
   useEffect(() => {

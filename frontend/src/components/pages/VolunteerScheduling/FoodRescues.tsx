@@ -1,5 +1,6 @@
 import { Divider, Spinner, StackDivider, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import isAfter from "date-fns/isAfter";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import {
@@ -21,7 +22,8 @@ const FoodRescues = ({
     const getFoodRescues = async () => {
       const scheduleResponse: ScheduleWithShiftType[] = await (
         await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(false)
-      ).map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
+      ).filter((scheduling) => isAfter(new Date(scheduling.startTime), new Date()))
+      .map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
       setFoodRescues(scheduleResponse);
     };
 
