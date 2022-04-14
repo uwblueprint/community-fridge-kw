@@ -98,6 +98,17 @@ checkInRouter.delete("/:id?", async (req, res) => {
     return;
   }
 
+  if (id) {
+    try {
+      await checkInService.deleteCheckInById(id);
+      res.status(204).send();
+      return;
+    } catch (error: unknown) {
+      res.status(500).json({ error: getErrorMessage(error) });
+      return;
+    }
+  }
+
   if (!(startDate && endDate)) {
     await sendResponseByMimeType(res, 400, contentType, [
       {
@@ -105,15 +116,6 @@ checkInRouter.delete("/:id?", async (req, res) => {
       },
     ]);
     return;
-  }
-
-  if (id) {
-    try {
-      await checkInService.deleteCheckInById(id);
-      res.status(204).send();
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
   }
 
   if (startDate && endDate) {
