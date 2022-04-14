@@ -138,6 +138,7 @@ const App = (): React.ReactElement => {
                 />
                 <PrivateRoute
                   exact
+                  donorOnly
                   path={Routes.SCHEDULING_PAGE}
                   component={Scheduling as React.FC}
                 />
