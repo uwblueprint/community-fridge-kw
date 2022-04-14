@@ -10,6 +10,8 @@ type PrivateRouteProps = {
   path: string;
   exact: boolean;
   adminOnly?: boolean;
+  volunteerOnly?: boolean;
+  donorOnly?: boolean;
 };
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
@@ -17,11 +19,29 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   exact,
   path,
   adminOnly,
+  donorOnly,
+  volunteerOnly,
 }: PrivateRouteProps) => {
   const { authenticatedUser } = useContext(AuthContext);
 
   if (adminOnly) {
     return authenticatedUser?.role === Role.ADMIN ? (
+      <Route path={path} exact={exact} component={component} />
+    ) : (
+      <Redirect to={Routes.LANDING_PAGE} />
+    );
+  }
+
+  if (donorOnly) {
+    return authenticatedUser?.role === Role.DONOR ? (
+      <Route path={path} exact={exact} component={component} />
+    ) : (
+      <Redirect to={Routes.LANDING_PAGE} />
+    );
+  }
+
+  if (volunteerOnly) {
+    return authenticatedUser?.role === Role.VOLUNTEER ? (
       <Route path={path} exact={exact} component={component} />
     ) : (
       <Redirect to={Routes.LANDING_PAGE} />
