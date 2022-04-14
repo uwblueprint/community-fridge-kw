@@ -92,7 +92,7 @@ const EditCheckInPage = (): JSX.Element => {
 
   useEffect(() => {
     getCheckInData();
-  }, [id]);
+  }, []);
 
   if (!date) {
     return (
