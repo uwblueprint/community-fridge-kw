@@ -5,10 +5,6 @@ import { NavigationProps, Step, useStep } from "react-hooks-helper";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import AuthContext from "../../../contexts/AuthContext";
 import { Status } from "../../../types/AuthTypes";
-import {
-  CheckInWithShiftType,
-  ScheduleWithShiftType,
-} from "../../../types/VolunteerTypes";
 import PendingPage from "../VolunteerDashboard/PendingPage";
 import ConfirmShiftDetails from "./ConfirmShiftDetails";
 import ThankYouVolunteer from "./ThankYouVolunteer";
@@ -34,22 +30,7 @@ interface UseStepType {
   navigation: NavigationProps | any;
 }
 
-const shiftDefaultData = ({
-  id: "",
-  donorId: "",
-  isPickup: "",
-  pickupLocation: "",
-  volunteerTime: "",
-  categories: [],
-  size: "",
-  dayPart: "",
-  startTime: "",
-  endTime: "",
-  notes: "",
-  type: "",
-} as unknown) as CheckInWithShiftType | ScheduleWithShiftType;
-
-const VolunteerScheduling = (shiftData = shiftDefaultData) => {
+const VolunteerScheduling = () => {
   const [volunteerStatus, setVolunteerStatus] = useState<Status>();
   const { authenticatedUser } = useContext(AuthContext);
   const [shiftId, setShiftId] = useState<string>("1");
