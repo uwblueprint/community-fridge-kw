@@ -1,8 +1,13 @@
+import { format } from "date-fns";
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { generateCSV } from "../../../utils/CSVUtils";
+
+const dateText = (date: string) => {
+    return format(new Date(date), "MMMM d, yyyy");
+};
 
 export const getScheduleCSVData = async () => {
   const schedules = await SchedulingAPIClient.getSchedules();
@@ -11,13 +16,16 @@ export const getScheduleCSVData = async () => {
       let volunteer;
       if (schedule.volunteerId) {
         volunteer = await VolunteerAPIClient.getVolunteerById(
-          schedule.volunteerId!.toString(),
+          schedule.volunteerId.toString(),
         );
       }
       const donor = await DonorAPIClient.getDonorById(schedule.donorId);
       return {
         ...schedule,
         id,
+        startTime: dateText(schedule.startTime),
+        endTime: dateText(schedule.endTime),
+        recurringDonationEndDate: dateText(schedule.recurringDonationEndDate),
         volunteerFirstName: volunteer && volunteer.firstName,
         volunteerLastName: volunteer && volunteer.lastName,
         volunteerEmail: volunteer && volunteer.email,
@@ -71,6 +79,8 @@ export const getCheckInCSVData = async () => {
         return {
           ...checkIn,
           id,
+          startDate: dateText(checkIn.startDate),
+          endDate: dateText(checkIn.endDate),
           volunteerFirstName: volunteer && volunteer.firstName,
           volunteerLastName: volunteer && volunteer.lastName,
           volunteerEmail: volunteer && volunteer.email,
