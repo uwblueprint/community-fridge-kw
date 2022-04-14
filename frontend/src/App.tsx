@@ -11,11 +11,14 @@ import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";
+import EditCheckInDescriptionPage from "./components/pages/AdminDashboard/EditCheckInDescriptionPage";
+import EditFoodRescueDescriptionPage from "./components/pages/AdminDashboard/EditFoodRescueDescriptionPage";
 import CheckInsPage from "./components/pages/AdminDashboard/ViewCheckInsPage";
 import ViewDonationsPage from "./components/pages/AdminDashboard/ViewDonationsPage";
 import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import CreateCheckIn from "./components/pages/FridgeManagement/FridgeCheckIns";
+import DeleteCheckInsPage from "./components/pages/FridgeManagement/FridgeCheckIns/DeleteCheckIns";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
@@ -108,6 +111,24 @@ const App = (): React.ReactElement => {
                   exact
                   path={Routes.ADMIN_CHECK_INS}
                   component={CheckInsPage}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_DELETE_CHECK_INS}
+                  component={DeleteCheckInsPage}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_CHECK_IN_EDIT_DESCRIPTION_PAGE}
+                  component={EditCheckInDescriptionPage}
+                />
+                <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_FOOD_RESCUE_EDIT_DESCRIPTION_PAGE}
+                  component={EditFoodRescueDescriptionPage}
                 />
                 <PrivateRoute
                   exact
