@@ -90,7 +90,7 @@ const createCheckIn = async (
 const updateCheckInById = async (
   checkInId: string,
   fields: UpdatedCheckInFields,
-): Promise<CheckIn> => {
+): Promise<CheckIn | boolean> => {
   try {
     const { data } = await baseAPIClient.put(
       `/checkin/${checkInId}`,
@@ -101,7 +101,7 @@ const updateCheckInById = async (
     );
     return data;
   } catch (error) {
-    return error as CheckIn;
+    return false;
   }
 };
 

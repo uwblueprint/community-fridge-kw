@@ -65,7 +65,7 @@ const CheckInInfoCard = ({
         isAdmin: false,
       },
     );
-    setCurrentCheckIn(checkInResponse);
+    setCurrentCheckIn(checkInResponse as CheckIn);
   };
 
   const volunteerAsAdmin = async () => {
@@ -75,7 +75,7 @@ const CheckInInfoCard = ({
         isAdmin: true,
       },
     );
-    setCurrentCheckIn(checkInResponse);
+    setCurrentCheckIn(checkInResponse as CheckIn);
   };
 
   const RemoveVolunteerButton = () => (

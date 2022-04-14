@@ -72,7 +72,7 @@ const EditCheckInPage = (): JSX.Element => {
 
     const res = await CheckInAPIClient.updateCheckInById(id, checkInData);
 
-    if (!res.id) {
+    if (!res) {
       toast({
         title: "Checkin could not be updated. Please try again",
         status: "error",
