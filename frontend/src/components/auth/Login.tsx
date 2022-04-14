@@ -64,11 +64,14 @@ const Login = (): React.ReactElement => {
   };
 
   if (authenticatedUser) {
-    return authenticatedUser.role === Role.ADMIN ? (
-      <Redirect to={Routes.ADMIN_CHECK_INS} />
-    ) : (
-      <Redirect to={Routes.DASHBOARD_PAGE} />
-    );
+    switch (authenticatedUser.role) {
+      case Role.ADMIN:
+        return <Redirect to={Routes.ADMIN_CHECK_INS} />;
+      case Role.VOLUNTEER:
+        return <Redirect to={Routes.VOLUNTEER_SHIFTS_PAGE} />;
+      default:
+        return <Redirect to={Routes.DASHBOARD_PAGE} />;
+    }
   }
 
   return (
