@@ -1,6 +1,5 @@
 import {
   Container,
-  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -28,43 +27,41 @@ const VolunteerShiftsTabs = ({
 }): JSX.Element => {
   return (
     <Container variant="baseContainer">
-      <Stack direction={["column", "row"]} justifyContent="space-between">
-        <VStack alignItems="left">
-          <Text color="black.100" textStyle="mobileHeader1">
-            Volunteer Shifts
-          </Text>
-          <Tabs
-            defaultIndex={window.location.hash === "#rescue" ? 1 : 0}
-            variant="soft-rounded"
-            colorScheme="dorian"
-          >
-            <TabList>
-              <NavLink to={{ hash: "checkin" }}>
-                <Tab>Fridge check-in</Tab>{" "}
-              </NavLink>
-              <NavLink to={{ hash: "rescue" }}>
-                <Tab>Food rescue</Tab>{" "}
-              </NavLink>
-            </TabList>
-            <TabPanels>
-              <TabPanel id="checkin">
-                <CheckIns
-                  navigation={navigation}
-                  setShiftId={setShiftId}
-                  setIsFoodRescue={setIsFoodRescue}
-                />
-              </TabPanel>
-              <TabPanel id="rescue">
-                <FoodRescues
-                  navigation={navigation}
-                  setShiftId={setShiftId}
-                  setIsFoodRescue={setIsFoodRescue}
-                />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </VStack>
-      </Stack>
+      <VStack alignItems="left">
+        <Text color="black.100" textStyle="mobileHeader1">
+          Volunteer Shifts
+        </Text>
+        <Tabs
+          defaultIndex={window.location.hash === "#rescue" ? 1 : 0}
+          variant="soft-rounded"
+          colorScheme="dorian"
+        >
+          <TabList>
+            <NavLink to={{ hash: "checkin" }}>
+              <Tab>Fridge check-in</Tab>{" "}
+            </NavLink>
+            <NavLink to={{ hash: "rescue" }}>
+              <Tab>Food rescue</Tab>{" "}
+            </NavLink>
+          </TabList>
+          <TabPanels>
+            <TabPanel id="checkin">
+              <CheckIns
+                navigation={navigation}
+                setShiftId={setShiftId}
+                setIsFoodRescue={setIsFoodRescue}
+              />
+            </TabPanel>
+            <TabPanel id="rescue">
+              <FoodRescues
+                navigation={navigation}
+                setShiftId={setShiftId}
+                setIsFoodRescue={setIsFoodRescue}
+              />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </VStack>
     </Container>
   );
 };
