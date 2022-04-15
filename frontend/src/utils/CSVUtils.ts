@@ -66,7 +66,7 @@ export const generateCSV = async <T>({
  * @param data CSV string
  * @param fileName name of the CSV file
  */
- export const downloadCSV = (data: string, fileName: string): void => {
+export const downloadCSV = (data: string, fileName: string): void => {
   const byteOrderMark = "\uFEFF";
   const csvContent = byteOrderMark + data;
   const blob = new Blob([csvContent], {

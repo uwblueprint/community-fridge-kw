@@ -23,12 +23,12 @@ import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
+import { downloadCSV } from "../../../utils/CSVUtils";
 import Calendar from "../../common/Calendar/Calendar";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
 import { getScheduleCSVData } from "./getCSVData";
-import { downloadCSV } from "../../../utils/CSVUtils";
 
 const ViewDonationsAndCheckIns = ({
   isAdminView,
