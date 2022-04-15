@@ -41,11 +41,11 @@ class SchedulingService implements ISchedulingService {
   constructor(
     emailService: IEmailService | null = null,
     donorService: IDonorService,
-    volunteerServce: IVolunteerService,
+    volunteerService: IVolunteerService,
   ) {
     this.emailService = emailService;
     this.donorService = donorService;
-    this.volunteerService = volunteerServce;
+    this.volunteerService = volunteerService;
   }
 
   async getSchedulingById(id: string): Promise<SchedulingDTO> {
