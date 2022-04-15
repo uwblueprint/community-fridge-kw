@@ -182,7 +182,7 @@ const CheckInInfoCard = ({
       ) : (
         <GeneralDeleteShiftModal
           title="Remove volunteer"
-          bodyText="Are you sure you want to remove this volunteer? This will remove the listed volunteer from their shift and notify them by email."
+          bodyText={`Are you sure you want to remove this volunteer? This will remove the listed volunteer from their shift from ${startTimeLocal}-${endTimeLocal} on ${shiftDate} and notify them by email.`}
           buttonLabel="Remove volunteer"
           isOpen={isOpen}
           onClose={onClose}
