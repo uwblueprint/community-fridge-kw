@@ -87,7 +87,6 @@ const CheckInInfoCard = ({
     onClose();
   };
 
-
   const handleRemoveVolunteerClick = () => {
     setModalType("removeVolunteer");
     onOpen();
@@ -96,8 +95,7 @@ const CheckInInfoCard = ({
   const handleDeleteCheckInClick = () => {
     setModalType("cancelCheckIn");
     onOpen();
-  }
-
+  };
 
   const volunteerAsAdmin = async () => {
     const checkInResponse = await CheckInAPIClient.updateCheckInById(
