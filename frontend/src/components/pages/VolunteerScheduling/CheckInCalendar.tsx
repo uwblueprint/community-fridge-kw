@@ -20,15 +20,13 @@ import CheckInAdminButtons from "../AdminDashboard/components/CheckInAdminButton
 const CheckInCalendar = ({
   isAdminView = false,
   checkIns,
-  setShiftId,
+  setShiftDetails,
   navigation,
-  setIsFoodRescue,
 }: {
   isAdminView?: boolean;
   checkIns: CheckInWithShiftType[];
-  setShiftId: React.Dispatch<string>;
   navigation: NavigationProps;
-  setIsFoodRescue: React.Dispatch<boolean>;
+  setShiftDetails: (shiftId: string, isFoodRescue: boolean) => void;
 }): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<
     Date | DateObject | DateObject[] | null
@@ -138,9 +136,8 @@ const CheckInCalendar = ({
           isAdminView={isAdminView}
           isCheckInView
           isCheckInShiftView
-          setShiftId={setShiftId}
           navigation={navigation}
-          setIsFoodRescue={setIsFoodRescue}
+          setShiftDetails={setShiftDetails}
         />
       </Flex>
     </Container>

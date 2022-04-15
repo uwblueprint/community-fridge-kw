@@ -9,15 +9,10 @@ import CheckInCalendar from "./CheckInCalendar";
 
 export interface ShiftProps {
   navigation: NavigationProps;
-  setShiftId: React.Dispatch<string>;
-  setIsFoodRescue: React.Dispatch<boolean>;
+  setShiftDetails: (shiftId: string, isFoodRescue: boolean) => void;
 }
 
-const CheckIns = ({
-  navigation,
-  setShiftId,
-  setIsFoodRescue,
-}: ShiftProps): JSX.Element => {
+const CheckIns = ({ navigation, setShiftDetails }: ShiftProps): JSX.Element => {
   const [checkIns, setCheckIns] = useState<CheckInWithShiftType[]>([]);
 
   useEffect(() => {
@@ -31,7 +26,6 @@ const CheckIns = ({
       setCheckIns(needVolunteerCheckIns);
     };
     getCheckIns();
-    setIsFoodRescue(false);
   }, []);
 
   if (!checkIns || checkIns === null) {
@@ -45,8 +39,7 @@ const CheckIns = ({
       <CheckInCalendar
         checkIns={checkIns}
         navigation={navigation}
-        setShiftId={setShiftId}
-        setIsFoodRescue={setIsFoodRescue}
+        setShiftDetails={setShiftDetails}
       />
     </>
   );

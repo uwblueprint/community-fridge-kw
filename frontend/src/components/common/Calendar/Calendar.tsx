@@ -15,9 +15,8 @@ type CalendarProps = {
   isAdminView: boolean;
   isCheckInView: boolean;
   isCheckInShiftView?: boolean;
-  setShiftId?: React.Dispatch<string>;
   navigation?: NavigationProps;
-  setIsFoodRescue?: React.Dispatch<boolean>;
+  setShiftDetails?: (shiftId: string, isFoodRescue: boolean) => void;
   deleteCheckIn?: any;
 };
 
@@ -27,9 +26,8 @@ const Calendar = ({
   isAdminView = false,
   isCheckInView = false,
   isCheckInShiftView = false,
-  setShiftId,
   navigation,
-  setIsFoodRescue,
+  setShiftDetails,
   deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
   const getCheckInCard = (item: any, index: number) => {
@@ -39,10 +37,9 @@ const Calendar = ({
           <ShiftCard
             key={JSON.stringify(item)}
             shift={item}
-            setShiftId={setShiftId}
             navigation={navigation}
             isSignUp
-            setIsFoodRescue={setIsFoodRescue}
+            setShiftDetails={setShiftDetails}
           />
           {index < items.length - 1 && <Divider pt="0.5rem" />}
         </>

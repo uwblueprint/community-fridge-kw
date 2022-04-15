@@ -26,16 +26,14 @@ interface CheckInOrScheduleProps {
 }
 const VolunteerShiftCard = ({
   shift,
-  setShiftId,
   navigation,
   isSignUp,
-  setIsFoodRescue,
+  setShiftDetails,
 }: {
   shift: CheckInWithShiftType | ScheduleWithShiftType;
-  setShiftId?: React.Dispatch<string>;
   navigation?: NavigationProps;
   isSignUp?: boolean;
-  setIsFoodRescue?: React.Dispatch<boolean>;
+  setShiftDetails?: (shiftId: string, isFoodRescue: boolean) => void;
 }): JSX.Element => {
   const {
     id,
@@ -82,8 +80,8 @@ const VolunteerShiftCard = ({
         setBusinessName(donor.businessName);
       }
     };
-    if (setShiftId) {
-      setShiftId(id);
+    if (setShiftDetails) {
+      setShiftDetails(id, !!startTime);
     }
     getBusinessName();
   }, []);
@@ -94,17 +92,15 @@ const VolunteerShiftCard = ({
     next = navigation.next;
   }
   const onSubmitClick = async () => {
-    if (setShiftId && setIsFoodRescue) {
-      setShiftId(id);
-
+    if (setShiftDetails) {
       if (type === ShiftType.SCHEDULING) {
-        setIsFoodRescue(true);
+        setShiftDetails(id, true);
       }
 
       if (type === ShiftType.CHECKIN) {
-        setIsFoodRescue(false);
+        setShiftDetails(id, false);
       }
-      
+
       next();
     }
   };

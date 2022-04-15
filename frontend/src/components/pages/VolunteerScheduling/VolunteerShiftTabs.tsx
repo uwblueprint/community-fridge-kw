@@ -14,16 +14,13 @@ import { NavLink } from "react-router-dom";
 
 import CheckIns from "./CheckIns";
 import FoodRescues from "./FoodRescues";
-// import { VolunteerShiftStepProps } from "./types";
 
 const VolunteerShiftsTabs = ({
   navigation,
-  setShiftId,
-  setIsFoodRescue,
+  setShiftDetails,
 }: {
   navigation: NavigationProps;
-  setShiftId: any;
-  setIsFoodRescue: any;
+  setShiftDetails: (shiftId: string, isFoodRescue: boolean) => void;
 }): JSX.Element => {
   return (
     <Container variant="baseContainer">
@@ -48,15 +45,13 @@ const VolunteerShiftsTabs = ({
             <TabPanel id="checkin">
               <CheckIns
                 navigation={navigation}
-                setShiftId={setShiftId}
-                setIsFoodRescue={setIsFoodRescue}
+                setShiftDetails={setShiftDetails}
               />
             </TabPanel>
             <TabPanel id="rescue">
               <FoodRescues
                 navigation={navigation}
-                setShiftId={setShiftId}
-                setIsFoodRescue={setIsFoodRescue}
+                setShiftDetails={setShiftDetails}
               />
             </TabPanel>
           </TabPanels>

@@ -1,6 +1,6 @@
 import { Divider, Spinner, StackDivider, VStack } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import isAfter from "date-fns/isAfter";
+import React, { useEffect, useState } from "react";
 
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import {
@@ -13,8 +13,7 @@ import { ShiftProps } from "./CheckIns";
 
 const FoodRescues = ({
   navigation,
-  setShiftId,
-  setIsFoodRescue,
+  setShiftDetails,
 }: ShiftProps): JSX.Element => {
   const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
 
@@ -22,13 +21,15 @@ const FoodRescues = ({
     const getFoodRescues = async () => {
       const scheduleResponse: ScheduleWithShiftType[] = await (
         await SchedulingAPIClient.getAllSchedulesThatNeedVolunteers(false)
-      ).filter((scheduling) => isAfter(new Date(scheduling.startTime), new Date()))
-      .map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
+      )
+        .filter((scheduling) =>
+          isAfter(new Date(scheduling.startTime), new Date()),
+        )
+        .map((scheduling) => ({ ...scheduling, type: ShiftType.SCHEDULING }));
       setFoodRescues(scheduleResponse);
     };
 
     getFoodRescues();
-    setIsFoodRescue(true);
   }, []);
 
   if (!foodRescues || foodRescues === null) {
@@ -47,10 +48,9 @@ const FoodRescues = ({
           <ShiftCard
             key={id}
             shift={scheduleObject}
-            setShiftId={setShiftId}
+            setShiftDetails={setShiftDetails}
             navigation={navigation}
             isSignUp
-            setIsFoodRescue={setIsFoodRescue}
           />
         ))}
       </VStack>

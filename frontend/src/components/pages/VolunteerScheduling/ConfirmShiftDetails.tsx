@@ -11,6 +11,7 @@ import VolunteerContext from "../../../contexts/VolunteerContext";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
+import { ShiftType } from "../../../types/VolunteerTypes";
 import BackButton from "../Scheduling/BackButton";
 import { DonationSizes } from "../Scheduling/types";
 
@@ -48,11 +49,11 @@ const checkInDefaultData = ({
 const ConfirmShiftDetails = ({
   navigation,
   shiftId,
-  isFoodRescue,
+  shiftType,
 }: {
   navigation: NavigationProps;
   shiftId: string;
-  isFoodRescue: boolean;
+  shiftType: ShiftType;
 }) => {
   const { previous, next } = navigation;
   const { authenticatedUser } = useContext(AuthContext);
@@ -71,11 +72,15 @@ const ConfirmShiftDetails = ({
     // sign up logic
     if (volunteerId !== null) {
       const updateShiftValues = {
-        volunteerId: String(volunteerId)
-      }
-      const res = isFoodRescue
-        ? await SchedulingAPIClient.updateSchedule(shiftId, updateShiftValues)
-        : await CheckInAPIClient.updateCheckInById(shiftId, updateShiftValues);
+        volunteerId: String(volunteerId),
+      };
+      const res =
+        shiftType === ShiftType.SCHEDULING
+          ? await SchedulingAPIClient.updateSchedule(shiftId, updateShiftValues)
+          : await CheckInAPIClient.updateCheckInById(
+              shiftId,
+              updateShiftValues,
+            );
       if (!res) {
         console.error("Error when confirming shift details with volunteer.");
         return;
@@ -86,7 +91,7 @@ const ConfirmShiftDetails = ({
 
   const getDonorData = async () => {
     const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
-      shiftId
+      shiftId,
     );
     const donorResponse = await DonorAPIClient.getDonorById(
       foodRescueResponse.donorId,
@@ -111,7 +116,7 @@ const ConfirmShiftDetails = ({
   };
 
   useEffect(() => {
-    if (isFoodRescue) {
+    if (shiftType === ShiftType.SCHEDULING) {
       getDonorData();
     } else {
       getCheckInData();
@@ -119,7 +124,8 @@ const ConfirmShiftDetails = ({
   }, []);
 
   const dateText = (date: string) => {
-    if (date !== "") {
+    if (date !== "" && date !== undefined) {
+      console.log(date);
       const startDateLocal = new Date(date);
       return format(startDateLocal, "MMMM d, yyyy");
     }
@@ -142,7 +148,7 @@ const ConfirmShiftDetails = ({
 
   const volunteerTimeLocal = (date: string | null) => {
     if (date !== "")
-      return date && format(parse(date, "kk:mm", new Date()), "h:mm a");
+      return date && format(parse(date, "HH:mm", new Date()), "h:mm a");
     return "";
   };
 
@@ -178,24 +184,26 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Volunteer shift type
         </Text>
-        {isFoodRescue && (
+        {shiftType === ShiftType.SCHEDULING && (
           <Text textStyle="mobileBody">{`Food rescue ${
             currentFoodRescue.isPickup ? "pickup" : "unloading"
           }`}</Text>
         )}
-        {!isFoodRescue && <Text textStyle="mobileBody">Fridge check in</Text>}
+        {shiftType === ShiftType.CHECKIN && (
+          <Text textStyle="mobileBody">Fridge check in</Text>
+        )}
 
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Volunteer arrival time
         </Text>
 
         <Text textStyle="mobileBody">
-          {isFoodRescue
+          {shiftType === ShiftType.SCHEDULING
             ? dateText(currentFoodRescue.startTime)
             : dateText(currentCheckIn.startDate)}
         </Text>
         <Text textStyle="mobileBody">
-          {isFoodRescue
+          {shiftType === ShiftType.SCHEDULING
             ? volunteerTimeLocal(currentFoodRescue.volunteerTime)
             : startTimeLocal(currentCheckIn.startDate)}
         </Text>
@@ -210,14 +218,14 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Additional notes
         </Text>
-        {isFoodRescue && (
+        {shiftType === ShiftType.SCHEDULING && (
           <Text textStyle="mobileBody">{`${
             currentFoodRescue.notes === null || currentFoodRescue.notes === ""
               ? "-"
               : currentFoodRescue.notes
           }`}</Text>
         )}
-        {!isFoodRescue && (
+        {shiftType === ShiftType.CHECKIN && (
           <Text textStyle="mobileBody">{`${
             currentCheckIn.notes === null || currentCheckIn.notes === ""
               ? "-"
@@ -226,7 +234,7 @@ const ConfirmShiftDetails = ({
         )}
       </Box>
 
-      {isFoodRescue && (
+      {shiftType === ShiftType.SCHEDULING && (
         <>
           <Box m="3em 0" pl="0" align="left">
             <Text textStyle="mobileHeader3">Donation information</Text>

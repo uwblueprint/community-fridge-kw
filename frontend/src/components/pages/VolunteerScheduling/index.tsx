@@ -1,19 +1,12 @@
-import { Container, Stack, VStack } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { NavigationProps, Step, useStep } from "react-hooks-helper";
 
-import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
-import AuthContext from "../../../contexts/AuthContext";
-import { Status } from "../../../types/AuthTypes";
-import PendingPage from "../VolunteerDashboard/PendingPage";
+import { ShiftType } from "../../../types/VolunteerTypes";
 import ConfirmShiftDetails from "./ConfirmShiftDetails";
 import ThankYouVolunteer from "./ThankYouVolunteer";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
 
 const steps = [
-  {
-    id: "pending page",
-  },
   {
     id: "shifts tab",
   },
@@ -31,45 +24,29 @@ interface UseStepType {
 }
 
 const VolunteerScheduling = () => {
-  const [volunteerStatus, setVolunteerStatus] = useState<Status>();
-  const { authenticatedUser } = useContext(AuthContext);
   const [shiftId, setShiftId] = useState<string>("1");
-  const [isFoodRescue, setIsFoodRescue] = useState<boolean>(true);
+  const [shiftType, setShiftType] = useState<ShiftType>(ShiftType.CHECKIN);
 
-  const getVolunteerData = async () => {
-    const volunteerResponse = await VolunteerAPIClient.getVolunteerByUserId(
-      authenticatedUser!.id,
-    );
-    setVolunteerStatus(volunteerResponse.status);
-  };
+  const setShiftDetails = useCallback(
+    (id: string, isFoodRescue: boolean) => {
+      setShiftId(id);
+      setShiftType(isFoodRescue ? ShiftType.SCHEDULING : ShiftType.CHECKIN);
+    },
+    [shiftId, shiftType],
+  );
 
   const { step, navigation }: UseStepType = useStep({
     steps,
-    initialStep: 1,
+    initialStep: 0,
   });
   const { id } = step;
 
-  useEffect(() => {
-    getVolunteerData();
-  }, []);
-
   switch (id) {
-    case "pending page":
-      return (
-        <Container variant="baseContainer">
-          <Stack direction={["column", "row"]} justifyContent="space-between">
-            <VStack alignItems="left">
-              {volunteerStatus === Status.PENDING && <PendingPage />}
-            </VStack>
-          </Stack>
-        </Container>
-      );
     case "shifts tab":
       return (
         <VolunteerShiftsTabs
           navigation={navigation}
-          setShiftId={setShiftId}
-          setIsFoodRescue={setIsFoodRescue}
+          setShiftDetails={setShiftDetails}
         />
       );
     case "confirm shift sign up":
@@ -77,13 +54,11 @@ const VolunteerScheduling = () => {
         <ConfirmShiftDetails
           navigation={navigation}
           shiftId={shiftId}
-          isFoodRescue={isFoodRescue}
+          shiftType={shiftType}
         />
       );
     case "thank you page":
-      return (
-        <ThankYouVolunteer shiftId={shiftId} isFoodRescue={isFoodRescue} />
-      );
+      return <ThankYouVolunteer shiftId={shiftId} shiftType={shiftType} />;
     default:
       return <></>;
   }

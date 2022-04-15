@@ -10,6 +10,7 @@ import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
+import { ShiftType } from "../../../types/VolunteerTypes";
 
 const schedulingDefaultData = ({
   id: "",
@@ -26,10 +27,10 @@ const schedulingDefaultData = ({
 
 const ThankYouVolunteer = ({
   shiftId,
-  isFoodRescue,
+  shiftType,
 }: {
   shiftId: string;
-  isFoodRescue: boolean;
+  shiftType: ShiftType;
 }) => {
   const [currentFoodRescue, setCurrentFoodRescue] = useState<Schedule>(
     schedulingDefaultData,
@@ -48,12 +49,12 @@ const ThankYouVolunteer = ({
   };
 
   useEffect(() => {
-    if (isFoodRescue) {
+    if (shiftType === ShiftType.SCHEDULING) {
       getFoodRescueData();
     } else {
       getCheckInData();
     }
-  }, [shiftId, isFoodRescue]);
+  }, []);
 
   const { authenticatedUser } = useContext(AuthContext);
   const history = useHistory();
@@ -65,7 +66,7 @@ const ThankYouVolunteer = ({
       >
         Thank you for volunteering with CFKW!
       </Text>
-      {isFoodRescue && (
+      {shiftType === ShiftType.SCHEDULING && (
         <Text textStyle="mobileBody" mt="1em" color="hubbard.100">
           {`We can't wait to see you at the fridge on ${
             currentFoodRescue.startTime
@@ -85,7 +86,7 @@ const ThankYouVolunteer = ({
         } `}
         </Text>
       )}
-      {!isFoodRescue && (
+      {shiftType === ShiftType.CHECKIN && (
         <Text textStyle="mobileBody" mt="1em" color="hubbard.100">
           {`We can't wait to see you at the fridge on ${
             currentCheckIn.startDate
