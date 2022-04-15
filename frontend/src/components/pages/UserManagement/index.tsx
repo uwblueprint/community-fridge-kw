@@ -153,7 +153,6 @@ const UserManagementPage = (): JSX.Element => {
     const deleteUserResponse = await UserAPIClient.deleteUserById(user!.userId);
     onClose();
     if (deleteUserResponse) {
-      console.log("jklhjgfdg");
       setUsers(users.filter((u) => u.id !== user!.id));
     }
     setUserToDelete(null);
