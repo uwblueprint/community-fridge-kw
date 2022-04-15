@@ -50,6 +50,14 @@ interface IAuthService {
   sendEmailVolunteerPending(email: string): Promise<void>;
 
   /**
+   * Sends admin an email alerting them of new volunteer sign up and asks for volunteer approval
+   * @param email email of volunteer that has pending status
+   * @param fullName of volunteer
+   * @throws Error if unable to send email
+   */
+  sendAdminVolunteerSignUpEmail(email: string, fullName: string): Promise<void>;
+
+  /**
    * Determine if the provided access token is valid and authorized for at least
    * one of the specified roles
    * @param accessToken user's access token

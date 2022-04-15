@@ -1,5 +1,9 @@
 import { BEARER_TOKEN } from "../constants/AuthConstants";
-import { CheckIn, UpdatedCheckInFields } from "../types/CheckInTypes";
+import {
+  CheckIn,
+  CreateCheckInFields,
+  UpdatedCheckInFields,
+} from "../types/CheckInTypes";
 import baseAPIClient from "./BaseAPIClient";
 
 const getAllCheckIns = async (): Promise<CheckIn[]> => {
@@ -66,7 +70,9 @@ const deleteCheckInsByDateRange = async (
   }
 };
 
-const createCheckIn = async (checkIn: CheckIn): Promise<CheckIn> => {
+const createCheckIn = async (
+  checkIn: CreateCheckInFields,
+): Promise<CheckIn | boolean> => {
   try {
     const { data } = await baseAPIClient.post(
       "/checkin",
@@ -77,14 +83,14 @@ const createCheckIn = async (checkIn: CheckIn): Promise<CheckIn> => {
     );
     return data;
   } catch (error) {
-    return error as CheckIn;
+    return false;
   }
 };
 
 const updateCheckInById = async (
   checkInId: string,
   fields: UpdatedCheckInFields,
-): Promise<CheckIn> => {
+): Promise<CheckIn | boolean> => {
   try {
     const { data } = await baseAPIClient.put(
       `/checkin/${checkInId}`,
@@ -95,7 +101,7 @@ const updateCheckInById = async (
     );
     return data;
   } catch (error) {
-    return error as CheckIn;
+    return false;
   }
 };
 

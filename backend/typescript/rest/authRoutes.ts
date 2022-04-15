@@ -85,6 +85,13 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
 
     await authService.sendEmailVerificationLink(req.body.email);
 
+    if (req.body.role === Role.VOLUNTEER) {
+      await authService.sendAdminVolunteerSignUpEmail(
+        req.body.email,
+        `${req.body.firstName} ${req.body.lastName}`,
+      );
+    }
+
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,

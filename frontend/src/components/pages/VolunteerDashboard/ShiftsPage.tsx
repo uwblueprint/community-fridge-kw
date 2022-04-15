@@ -15,12 +15,12 @@ import { useHistory } from "react-router-dom";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import * as Routes from "../../../constants/Routes";
 import VolunteerContext from "../../../contexts/VolunteerContext";
+import useViewport from "../../../hooks/useViewport";
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
 } from "../../../types/VolunteerTypes";
 import VolunteerShiftCard from "./ShiftCard";
-import useViewport from "../../../hooks/useViewport";
 
 const ScheduledVolunteerShiftsPage = () => {
   const { volunteerId } = useContext(VolunteerContext);

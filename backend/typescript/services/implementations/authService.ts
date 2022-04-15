@@ -7,6 +7,11 @@ import { AuthDTO, Role, Token } from "../../types";
 import FirebaseRestClient from "../../utilities/firebaseRestClient";
 import logger from "../../utilities/logger";
 import getErrorMessage from "../../utilities/errorMessageUtil";
+import {
+  emailHeader,
+  emailFooter,
+  getAdminEmail,
+} from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
@@ -134,24 +139,8 @@ class AuthService implements IAuthService {
         .generatePasswordResetLink(email);
       const emailBody = `
       <html>
-      <head>
-         <link
-                        href="https://fonts.googleapis.com/css2?family=Inter"
-                        rel="stylesheet"
-                        />
-                    <style>
-                        body {
-                        font-family: "Inter";
-                        }
-                    </style>
-        <meta charset="utf-8" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>Reset Password</title>
-      </head>
+      ${emailHeader}
       <body>
-        <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
-                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/>
-        </p>
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi there,</h2>
         <p> 
           This is an email verifying your request to change your password for Community Fridge. Please click on “Change Password” if you’d like to create a new password for the Community Fridge KW platform. 
@@ -180,8 +169,7 @@ class AuthService implements IAuthService {
         <div> 
           If you didn't request this reset link, you can safely ignore this email.
         </div>
-        <p style = "margin-top: 50px"> Sincerely, </p>
-        <p> Community Fridge KW </p>   
+        ${emailFooter}
       </body>
       </html>`;
 
@@ -209,23 +197,8 @@ class AuthService implements IAuthService {
 
       const emailBody = `
       <html>
-      <head>
-         <link
-                        href="https://fonts.googleapis.com/css2?family=Inter"
-                        rel="stylesheet"
-                        />
-                    <style>
-                        body {
-                        font-family: "Inter";
-                        }
-                    </style>
-        <meta charset="utf-8" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>Welcome Email</title>
-      </head>
+      ${emailHeader}
       <body>
-         <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
-                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey neighbour!</h2>
         <p>Thank you for getting involved with mutual aid through Community Fridge
           KW. We’re thrilled to have you.
@@ -250,9 +223,7 @@ class AuthService implements IAuthService {
        <div style="width: 100%"> <div style=" float:left; color: #6C6C84">Don't see a button above? </div><a style=" color: #C31887" href=${emailVerificationLink}> Verify yourself here</a></div>
        <div> If you didn't request this verification
        link, you can safely ignore this email.</div>
-     
-       <p style="margin-top: 50px">Sincerely,</p>
-        <p>Community Fridge KW</p>   
+       ${emailFooter} 
       </body>
     </html>
       `;
@@ -277,30 +248,14 @@ class AuthService implements IAuthService {
     try {
       const emailBody = `
       <html>
-      <head>
-         <link
-                        href="https://fonts.googleapis.com/css2?family=Inter"
-                        rel="stylesheet"
-                        />
-                    <style>
-                        body {
-                        font-family: "Inter";
-                        }
-                    </style>
-        <meta charset="utf-8" />
-        <meta http-equiv="x-ua-compatible" content="ie=edge" />
-        <title>PENDING - Volunteer Account Status</title>
-      </head>
+      ${emailHeader}
       <body>
-         <p><img src=https://community-fridge-logo.s3.us-west-004.backblazeb2.com/community-fridge-logo.png
-                        style="width: 134px; margin-bottom: 20px;  alt="CFKW Logo"/></p>
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey there,</h2>
         <p>Thank you for your interest in volunteering with Community Fridge KW!<br /><br />
         Your account is <strong>pending approval</strong>. After an admin approves your account, you will be notified via email and will be able to start signing up for volunteer shifts!<br /><br />
         In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
         </p>
-       <p style="margin-top: 50px">Sincerely,</p>
-        <p>Community Fridge KW</p>   
+       ${emailFooter}
       </body>
     </html>
       `;
@@ -309,6 +264,51 @@ class AuthService implements IAuthService {
     } catch (error) {
       Logger.error(
         `Failed to generate volunteer pending email for user with email ${email}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendAdminVolunteerSignUpEmail(
+    email: string,
+    fullName: string,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendAdminVolunteerSignUpEmail but this instance of AuthService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const emailBody = `<html>
+      ${emailHeader}
+      <body>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">A new volunteer has signed up!</h2>
+        <p>${fullName} is interested in becoming a volunteer.
+          <br />
+          <br />
+          Please approve this volunteer (${email}) for the Community Fridge KW volunteer by clicking "Approve"
+        </p>
+         <table cellspacing="0" cellpadding="0"> <tr> 
+      <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
+        <a href="https://schedule.communityfridgekw.ca/user-management" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
+        <span style="color: #FAFCFE;">
+          Approve
+        </span>
+        </a>
+      </td> 
+      </tr> </table> 
+       ${emailFooter} 
+      </body>
+    </html>`;
+      this.emailService.sendEmail(
+        getAdminEmail(),
+        `Volunteer Approval Required: ${fullName}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate admin email for new volunteer sign up for volunteer with email ${email}`,
       );
       throw error;
     }

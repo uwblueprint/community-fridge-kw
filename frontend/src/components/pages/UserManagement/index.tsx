@@ -15,6 +15,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -24,6 +25,7 @@ import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { Role, Status } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { VolunteerDTO, VolunteerResponse } from "../../../types/VolunteerTypes";
+import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import {
   AccountFilterType,
   accountTypefilterOptions,
@@ -38,6 +40,12 @@ const UserManagementPage = (): JSX.Element => {
   const [selectedFilter, setSelectedFilter] = React.useState<string>(
     AccountFilterType.ALL,
   );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [
+    userToDelete,
+    setUserToDelete,
+  ] = React.useState<UserMgmtTableRecord | null>(null);
+  const [dataError, setDataError] = React.useState<boolean>(false);
 
   // Merge donors and volunteers into one list of type UserMgmtTableRecord
   const buildTableUsers = (): UserMgmtTableRecord[] => {
@@ -72,22 +80,24 @@ const UserManagementPage = (): JSX.Element => {
     return mergedUsers;
   };
 
-  // Update users whenever donors or volunteers have a change
   React.useEffect(() => {
     const getDonors = async () => {
       const res = await DonorAPIClient.getAllDonors();
-      setDonors(res);
+      if (res.length !== undefined) setDonors(res);
+      else setDataError(true);
     };
 
     const getVolunteers = async () => {
       const res = await VolunteerAPIClient.getAllVolunteers();
-      setVolunteers(res);
+      if (res.length !== undefined) setVolunteers(res);
+      else setDataError(true);
     };
 
     getDonors();
     getVolunteers();
   }, []);
 
+  // Update users whenever donors or volunteers have a change
   React.useEffect(() => {
     setUsers(buildTableUsers());
   }, [donors, volunteers]);
@@ -122,22 +132,30 @@ const UserManagementPage = (): JSX.Element => {
       newVolunteerData,
     );
     if (updatedVolunteerResponse) {
-      const newUsers: UserMgmtTableRecord[] = await users.map(u => {
+      const newUsers: UserMgmtTableRecord[] = await users.map((u) => {
         if (u.id === updatedVolunteerResponse.id) {
-          return {...u, approvalStatus: Status.APPROVED};
+          return { ...u, approvalStatus: Status.APPROVED };
         }
         return u;
-      })
+      });
       setUsers(newUsers);
     }
   };
 
-  // Deletes selected user
+  // Show confirm delete modal
   const handleDeleteUser = async (user: UserMgmtTableRecord) => {
-    const deleteUserResponse = await UserAPIClient.deleteUserById(user.userId);
+    setUserToDelete(user);
+    onOpen();
+  };
+
+  // Deletes selected user
+  const handleConfirmDelete = async (user: UserMgmtTableRecord | null) => {
+    const deleteUserResponse = await UserAPIClient.deleteUserById(user!.userId);
+    onClose();
     if (deleteUserResponse) {
-      setUsers(users.filter((u) => u.id !== user.id));
+      setUsers(users.filter((u) => u.id !== user!.id));
     }
+    setUserToDelete(null);
   };
 
   // Selects a filter
@@ -147,80 +165,100 @@ const UserManagementPage = (): JSX.Element => {
 
   return (
     <Container variant="baseContainer">
+      <GeneralDeleteShiftModal
+        title="Delete a user"
+        bodyText="Are you sure you want to delete this user? This will remove all
+              linked occurences, including related donations and/or check-ins."
+        buttonLabel="Delete user"
+        isOpen={isOpen}
+        onClose={onClose}
+        onDelete={() => handleConfirmDelete(userToDelete)}
+      />
       <Text mb="40px" textStyle="desktopHeader2">
         User management
       </Text>
-      <HStack>
-        <InputGroup flex={4}>
-          <InputLeftElement pointerEvents="none">
-            <SearchIcon color="gray.300" />
-          </InputLeftElement>
-          <Input
-            enterKeyHint="enter"
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search for a user"
-            variant="customFilled"
-          />
-        </InputGroup>
-        <Select
-          flex={1}
-          color="hubbard.100"
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            handleSelectFilter(e);
-          }}
-        >
-          {accountTypefilterOptions.map((option, key) => {
-            return (
-              <option key={key} value={option.value}>
-                {option.label}
-              </option>
-            );
-          })}
-        </Select>
-      </HStack>
-
-      <Table colorScheme="blackAlpha" mt="30px">
-        <Thead background="squash.100">
-          <Tr>
-            <Th color="black.100">Point of contact</Th>
-            <Th color="black.100">Company</Th>
-            <Th color="black.100">Email</Th>
-            <Th color="black.100">Phone number</Th>
-            <Th color="black.100">Account type</Th>
-            <Th color="black.100">Approvals</Th>
-            <Th color="black.100" />
-          </Tr>
-        </Thead>
-        <Tbody>
-          {tableData.map((user, key) => (
-            <Tr key={key}>
-              <Td>{user.pointOfContact}</Td>
-              <Td>{user.company}</Td>
-              <Td>{user.email}</Td>
-              <Td>{user.phoneNumber}</Td>
-              <Td>{user.accountType}</Td>
-              <Td>
-                {user.accountType === Role.VOLUNTEER &&
-                user.approvalStatus !== Status.APPROVED ? (
-                  <Button variant="approve" onClick={() => handleApprove(user)}>
-                    Approve
-                  </Button>
-                ) : (
-                  ""
-                )}
-              </Td>
-              <Td>
-                <IconButton
-                  backgroundColor="transparent"
-                  aria-label="Delete user"
-                  icon={<DeleteIcon color="hubbard.100" />}
-                  onClick={() => handleDeleteUser(user)}
-                />
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+      {dataError ? (
+        <Text>
+          Something went wrong with loading the data, please refresh the page
+          and try again!
+        </Text>
+      ) : (
+        <>
+          <HStack>
+            <InputGroup flex={4}>
+              <InputLeftElement pointerEvents="none">
+                <SearchIcon color="gray.300" />
+              </InputLeftElement>
+              <Input
+                enterKeyHint="enter"
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search for a user"
+                variant="customFilled"
+              />
+            </InputGroup>
+            <Select
+              flex={1}
+              color="hubbard.100"
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                handleSelectFilter(e);
+              }}
+            >
+              {accountTypefilterOptions.map((option, key) => {
+                return (
+                  <option key={key} value={option.value}>
+                    {option.label}
+                  </option>
+                );
+              })}
+            </Select>
+          </HStack>
+          <Table colorScheme="blackAlpha" mt="30px">
+            <Thead background="squash.100">
+              <Tr>
+                <Th color="black.100">Point of contact</Th>
+                <Th color="black.100">Company</Th>
+                <Th color="black.100">Email</Th>
+                <Th color="black.100">Phone number</Th>
+                <Th color="black.100">Account type</Th>
+                <Th color="black.100">Approvals</Th>
+                <Th color="black.100" />
+              </Tr>
+            </Thead>
+            <Tbody>
+              {tableData.map((user, key) => (
+                <Tr key={key}>
+                  <Td>{user.pointOfContact}</Td>
+                  <Td>{user.company}</Td>
+                  <Td>{user.email}</Td>
+                  <Td>{user.phoneNumber}</Td>
+                  <Td>{user.accountType}</Td>
+                  <Td>
+                    {user.accountType === Role.VOLUNTEER &&
+                    user.approvalStatus !== Status.APPROVED ? (
+                      <Button
+                        variant="approve"
+                        onClick={() => handleApprove(user)}
+                      >
+                        Approve
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </Td>
+                  <Td>
+                    <IconButton
+                      backgroundColor="transparent"
+                      aria-label="Delete user"
+                      icon={<DeleteIcon color="hubbard.100" />}
+                      onClick={() => handleDeleteUser(user)}
+                    />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>{" "}
+        </>
+      )}
     </Container>
   );
 };
