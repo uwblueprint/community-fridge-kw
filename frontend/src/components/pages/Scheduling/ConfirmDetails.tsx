@@ -10,17 +10,19 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { colorMap } from "../../../constants/DaysInWeek";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
+import { VolunteerResponse } from "../../../types/VolunteerTypes";
 import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import ErrorSchedulingModal from "../../common/GeneralErrorModal";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
@@ -45,6 +47,9 @@ const ConfirmDetails = ({
   const { description } = DonationSizes.filter(
     (category) => category.size === currentSchedule.size,
   )[0];
+  const [volunteer, setVolunteer] = useState<VolunteerResponse>(
+    {} as VolunteerResponse,
+  );
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -108,19 +113,31 @@ const ConfirmDetails = ({
     setCurrentDonor(donorResponse);
   };
 
+  const getVolunteerData = async () => {
+    if (currentSchedule.volunteerId) {
+      const volunteerResponse = await VolunteerAPIClient.getVolunteerById(
+        currentSchedule.volunteerId.toString(),
+      );
+      setVolunteer(volunteerResponse);
+    }
+  };
+
   const startDateLocal = new Date(currentSchedule.startTime);
-  const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mm aa");
-  const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mm aa");
+  const startTimeLocal = format(new Date(currentSchedule.startTime), "h:mmaa");
+  const endTimeLocal = format(new Date(currentSchedule.endTime), "h:mmaa");
 
   const dayText = (startDate: Date) => {
     return format(startDate, "eeee");
   };
   const dateText = (startDate: Date) => {
-    return format(startDate, "MMMM d, yyyy");
+    return format(startDate, "EEEE, MMMM d, yyyy");
   };
 
   useEffect(() => {
     getDonorData();
+    if (isBeingEdited) {
+      getVolunteerData();
+    }
   }, [currentSchedule.id]);
   return (
     <Container variant="responsiveContainer">
@@ -185,14 +202,14 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Box>
+        <Box mb="1rem">
           <Text textStyle="mobileHeader3">Date and time</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Proposed drop-off time
           </Text>
           <Text textStyle="mobileBody">{dateText(startDateLocal)}</Text>
           <Text textStyle="mobileBody">
-            {`${startTimeLocal} - ${endTimeLocal}`}
+            {`${startTimeLocal}-${endTimeLocal}`}
           </Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Frequency
@@ -229,7 +246,7 @@ const ConfirmDetails = ({
         >
           Edit
         </Button>
-        <Box>
+        <Box mb="1rem">
           <Text textStyle="mobileHeader3">Donation information</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Size
@@ -269,16 +286,31 @@ const ConfirmDetails = ({
             {currentSchedule.volunteerNeeded ? "Yes" : "No"}
           </Text>
           {currentSchedule.volunteerNeeded && (
-            <>
+            <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-                Pickup required
+                Assistance type
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.isPickup ? "Yes" : "No"}
+                {currentSchedule.isPickup
+                  ? "Food pickup"
+                  : "Food rescue unloading"}
               </Text>
-            </>
+            </Box>
           )}
-
+          {currentSchedule.volunteerTime && (
+            <Box>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Volunteer arrival time
+              </Text>
+              <Text textStyle="mobileBody">{dateText(startDateLocal)}</Text>
+              <Text textStyle="mobileBody">
+                {format(
+                  parse(currentSchedule.volunteerTime, "HH:mm", new Date()),
+                  "h:mm aa",
+                )}
+              </Text>
+            </Box>
+          )}
           {currentSchedule.volunteerNeeded && currentSchedule.isPickup && (
             <Box>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
@@ -295,10 +327,26 @@ const ConfirmDetails = ({
             </Text>
             <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
           </Box>
+          {currentSchedule.volunteerId && volunteer && (
+            <Box>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Assigned volunteer
+              </Text>
+              <Text textStyle="mobileBody">{`${volunteer.firstName} ${volunteer.lastName}`}</Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Email
+              </Text>
+              <Text textStyle="mobileBody">{volunteer.email}</Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Phone
+              </Text>
+              <Text textStyle="mobileBody">{volunteer.phoneNumber}</Text>
+            </Box>
+          )}
         </Box>
       </Box>
 
-      <Box m="3em 0" pl="0" align="left">
+      <Box>
         <Text textStyle="mobileHeader3">Donor information</Text>
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Name
@@ -353,7 +401,7 @@ const ConfirmDetails = ({
       {!isBeingEdited && (
         <HStack>
           <Flex justify="flex-end">
-            <Button onClick={onSubmitClick} variant="navigation">
+            <Button mt="1.5rem" onClick={onSubmitClick} variant="navigation">
               Submit
             </Button>
           </Flex>
