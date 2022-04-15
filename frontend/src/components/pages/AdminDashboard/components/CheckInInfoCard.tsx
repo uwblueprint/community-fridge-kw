@@ -11,14 +11,17 @@ import {
   Spacer,
   Stack,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
+import { Link as ReactLink } from "react-router-dom";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import VolunteerAPIClient from "../../../../APIClients/VolunteerAPIClient";
 import menuIcon from "../../../../assets/menuIcon.svg";
+import * as Routes from "../../../../constants/Routes";
 import useViewport from "../../../../hooks/useViewport";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import { VolunteerResponse } from "../../../../types/VolunteerTypes";
@@ -40,6 +43,7 @@ const CheckInInfoCard = ({
   const startTimeLocal = format(new Date(currentCheckIn.startDate), "hh:mmaa");
   const endTimeLocal = format(new Date(currentCheckIn.endDate), "hh:mmaa");
   const { isMobile } = useViewport();
+  const toast = useToast();
 
   useEffect(() => {
     const getVolunteerData = async () => {
@@ -63,7 +67,17 @@ const CheckInInfoCard = ({
         isAdmin: false,
       },
     );
-    setCurrentCheckIn(checkInResponse);
+
+    if (!checkInResponse) {
+      toast({
+        title: "There was an error removing the volunteer.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    setCurrentCheckIn(checkInResponse as CheckIn);
   };
 
   const volunteerAsAdmin = async () => {
@@ -73,7 +87,17 @@ const CheckInInfoCard = ({
         isAdmin: true,
       },
     );
-    setCurrentCheckIn(checkInResponse);
+
+    if (!checkInResponse) {
+      toast({
+        title: "There was an error assigning the volunteer as admin.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    setCurrentCheckIn(checkInResponse as CheckIn);
   };
 
   const RemoveVolunteerButton = () => (
@@ -162,7 +186,14 @@ const CheckInInfoCard = ({
                 variant="plain"
               />
               <MenuList style={menuListStyle}>
-                <MenuItem style={menuItemStyle}>
+                <MenuItem
+                  style={menuItemStyle}
+                  as={ReactLink}
+                  to={Routes.ADMIN_CHECKIN_EDIT.replace(
+                    ":id",
+                    currentCheckIn.id,
+                  )}
+                >
                   <Text textStyle="mobileSmall" color="hubbard.100">
                     Edit
                   </Text>
