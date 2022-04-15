@@ -17,9 +17,16 @@ import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import menuIcon from "../../../../assets/menuIcon.svg";
 import * as Routes from "../../../../constants/Routes";
+import { downloadCSV } from "../../../../utils/CSVUtils";
+import { getCheckInCSVData } from "../getCSVData";
 
 const CheckInAdminButtons = () => {
   const history = useHistory();
+
+  const handleCSVDownload = async () => {
+    const csvCheckInData = await getCheckInCSVData();
+    downloadCSV(csvCheckInData, "checkins");
+  };
 
   return (
     <>
@@ -48,7 +55,7 @@ const CheckInAdminButtons = () => {
           </Button>
           <Button
             size="md"
-            onClick={() => {}}
+            onClick={handleCSVDownload}
             variant="export"
             leftIcon={<DownloadIcon />}
             px="20px"
@@ -91,7 +98,10 @@ const CheckInAdminButtons = () => {
               height="44px"
             />
             <MenuList>
-              <MenuItem hover={{ bg: "dorian.100" }}>
+              <MenuItem
+                _hover={{ bg: "dorian.100" }}
+                onClick={handleCSVDownload}
+              >
                 <Text textStyle="mobileSmall" color="hubbard.100">
                   Export
                 </Text>
