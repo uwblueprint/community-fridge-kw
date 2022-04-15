@@ -12,14 +12,17 @@ import {
   Stack,
   Text,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
+import { Link as ReactLink } from "react-router-dom";
 
 import CheckInAPIClient from "../../../../APIClients/CheckInAPIClient";
 import VolunteerAPIClient from "../../../../APIClients/VolunteerAPIClient";
 import menuIcon from "../../../../assets/menuIcon.svg";
+import * as Routes from "../../../../constants/Routes";
 import useViewport from "../../../../hooks/useViewport";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import { VolunteerResponse } from "../../../../types/VolunteerTypes";
@@ -47,6 +50,7 @@ const CheckInInfoCard = ({
   const [modalType, setModalType] = React.useState<
     "" | "removeVolunteer" | "cancelCheckIn"
   >("");
+  const toast = useToast();
 
   useEffect(() => {
     const getVolunteerData = async () => {
@@ -70,9 +74,19 @@ const CheckInInfoCard = ({
         isAdmin: false,
       },
     );
-    setCurrentCheckIn(checkInResponse);
+    if (!checkInResponse) {
+      toast({
+        title: "There was an error removing the volunteer.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    setCurrentCheckIn(checkInResponse as CheckIn);
     onClose();
   };
+
 
   const handleRemoveVolunteerClick = () => {
     setModalType("removeVolunteer");
@@ -82,7 +96,8 @@ const CheckInInfoCard = ({
   const handleDeleteCheckInClick = () => {
     setModalType("cancelCheckIn");
     onOpen();
-  };
+  }
+
 
   const volunteerAsAdmin = async () => {
     const checkInResponse = await CheckInAPIClient.updateCheckInById(
@@ -91,7 +106,17 @@ const CheckInInfoCard = ({
         isAdmin: true,
       },
     );
-    setCurrentCheckIn(checkInResponse);
+
+    if (!checkInResponse) {
+      toast({
+        title: "There was an error assigning the volunteer as admin.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    setCurrentCheckIn(checkInResponse as CheckIn);
   };
 
   const RemoveVolunteerButton = () => (
@@ -160,7 +185,7 @@ const CheckInInfoCard = ({
         <GeneralDeleteShiftModal
           title="Remove volunteer"
           bodyText="Are you sure you want to remove this volunteer? This will remove the listed volunteer from their shift and notify them by email."
-          buttonLabel="Delete user"
+          buttonLabel="Remove volunteer"
           isOpen={isOpen}
           onClose={onClose}
           onDelete={removeVolunteer}
@@ -199,7 +224,14 @@ const CheckInInfoCard = ({
                 variant="plain"
               />
               <MenuList style={menuListStyle}>
-                <MenuItem style={menuItemStyle}>
+                <MenuItem
+                  style={menuItemStyle}
+                  as={ReactLink}
+                  to={Routes.ADMIN_CHECKIN_EDIT.replace(
+                    ":id",
+                    currentCheckIn.id,
+                  )}
+                >
                   <Text textStyle="mobileSmall" color="hubbard.100">
                     Edit
                   </Text>
