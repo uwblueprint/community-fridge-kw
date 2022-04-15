@@ -19,6 +19,7 @@ import Dashboard from "./components/pages/Dashboard";
 import EditDashboardSchedulePage from "./components/pages/Dashboard/EditDashboardSchedule";
 import CreateCheckIn from "./components/pages/FridgeManagement/FridgeCheckIns";
 import DeleteCheckInsPage from "./components/pages/FridgeManagement/FridgeCheckIns/DeleteCheckIns";
+import EditCheckInPage from "./components/pages/FridgeManagement/FridgeCheckIns/EditCheckin";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
@@ -86,6 +87,7 @@ const App = (): React.ReactElement => {
                   component={UserManagement}
                 />
                 <PrivateRoute
+                  volunteerOnly
                   exact
                   path={Routes.VOLUNTEER_SHIFTS_PAGE}
                   component={VolunteerScheduling as React.FC}
@@ -131,17 +133,25 @@ const App = (): React.ReactElement => {
                   component={EditFoodRescueDescriptionPage}
                 />
                 <PrivateRoute
+                  adminOnly
+                  exact
+                  path={Routes.ADMIN_CHECKIN_EDIT}
+                  component={EditCheckInPage}
+                />
+                <PrivateRoute
                   exact
                   path={Routes.DASHBOARD_SCHEDULE_EDIT_PAGE}
                   component={EditDashboardSchedulePage}
                 />
                 <PrivateRoute
                   exact
+                  donorOnly
                   path={Routes.DASHBOARD_PAGE}
                   component={Dashboard}
                 />
                 <PrivateRoute
                   exact
+                  donorOnly
                   path={Routes.SCHEDULING_PAGE}
                   component={Scheduling as React.FC}
                 />

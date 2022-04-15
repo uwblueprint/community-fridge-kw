@@ -71,7 +71,7 @@ const VolunteerShiftCard = ({
 
     return (
       volunteerTime &&
-      format(parse(volunteerTime, "kk:mm", new Date()), "h:mma")
+      format(parse(volunteerTime, "HH:mm", new Date()), "h:mma")
     );
   };
 

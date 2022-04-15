@@ -31,6 +31,8 @@ export const ADMIN_DELETE_CHECK_INS = "/admin/delete-check-ins";
 
 export const CREATE_CHECKIN = "/admin/create-checkin";
 
+export const ADMIN_CHECKIN_EDIT = "/admin/edit-checkin/:id";
+
 export const ADMIN_CHECK_IN_EDIT_DESCRIPTION_PAGE =
   "/admin/edit-check-in-description";
 

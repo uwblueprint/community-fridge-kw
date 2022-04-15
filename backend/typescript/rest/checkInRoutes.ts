@@ -102,8 +102,10 @@ checkInRouter.delete("/:id?", async (req, res) => {
     try {
       await checkInService.deleteCheckInById(id);
       res.status(204).send();
+      return;
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });
+      return;
     }
   }
 
@@ -126,6 +128,7 @@ checkInRouter.delete("/:id?", async (req, res) => {
           error: "startDate and endDate must be valid dates",
         },
       ]);
+      return;
     }
     if (startDateRange.isAfter(endDateRange)) {
       await sendResponseByMimeType(res, 400, contentType, [
@@ -133,6 +136,7 @@ checkInRouter.delete("/:id?", async (req, res) => {
           error: "startDate must be before endDate",
         },
       ]);
+      return;
     }
     try {
       await checkInService.deleteCheckInsByDateRange(
