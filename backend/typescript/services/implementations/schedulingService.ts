@@ -7,6 +7,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
+import IVolunteerService from "../interfaces/volunteerService";
 import {
   SchedulingDTO,
   CreateSchedulingDTO,
@@ -33,14 +34,18 @@ class SchedulingService implements ISchedulingService {
 
   donorService: IDonorService;
 
+  volunteerService: IVolunteerService;
+
   static TEMP_ADMIN_EMAIL = "linnaluo@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
     donorService: IDonorService,
+    volunteerServce: IVolunteerService,
   ) {
     this.emailService = emailService;
     this.donorService = donorService;
+    this.volunteerService = volunteerServce;
   }
 
   async getSchedulingById(id: string): Promise<SchedulingDTO> {
@@ -706,8 +711,11 @@ class SchedulingService implements ISchedulingService {
       throw new Error(errorMessage);
     }
     try {
-      const { startTime, donorId } = schedule;
+      const { startTime, donorId, volunteerId } = schedule;
       const donor = await this.donorService.getDonorById(donorId);
+      const volunteer = volunteerId
+        ? await this.volunteerService.getVolunteerById(volunteerId)
+        : null;
       const startTimeToLocalDate = startTime.toLocaleString("en-US", {
         timeZone: "EST",
       });
@@ -730,6 +738,8 @@ class SchedulingService implements ISchedulingService {
         } for ${startDayString} at ${startTimeString}${
           isRecurringDonation ? " and all following donations " : ""
         } has been cancelled.`;
+        // check if start time string != volnteer start time string stuff
+        const volunteerMainLine = `Your scheduled shift for ${startDayString} at ${startTimeString} has been cancelled.`;
 
         this.emailService.sendEmail(
           donor.email,
@@ -741,6 +751,14 @@ class SchedulingService implements ISchedulingService {
           `${donor.businessName} Donation Cancellation Confirmation`,
           cancellationEmail(adminMainLine, "Community Fridge KW"),
         );
+        if (volunteer) {
+          this.emailService.sendEmail(
+            volunteer.email,
+            `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${startTimeString}`,
+            cancellationEmail(volunteerMainLine, volunteer.firstName, true),
+          );
+        }
+
         // if donor deleted their own donation
       } else {
         const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${
