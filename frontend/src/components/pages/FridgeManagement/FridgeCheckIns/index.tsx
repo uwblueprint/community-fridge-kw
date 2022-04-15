@@ -47,16 +47,16 @@ const CreateCheckIn = () => {
       newErrors.timeRange = ErrorMessages.bothTimeFieldsRequired;
     } else if (
       isAfter(
-        parse(startTime, "kk:mm", new Date()),
-        parse(endTime, "kk:mm", new Date()),
+        parse(startTime, "HH:mm", new Date()),
+        parse(endTime, "HH:mm", new Date()),
       )
     ) {
       valid = false;
       newErrors.timeRange = ErrorMessages.endTimeBeforeStartTime;
     } else if (
       isEqual(
-        parse(startTime, "kk:mm", new Date()),
-        parse(endTime, "kk:mm", new Date()),
+        parse(startTime, "HH:mm", new Date()),
+        parse(endTime, "HH:mm", new Date()),
       )
     ) {
       valid = false;
@@ -78,12 +78,12 @@ const CreateCheckIn = () => {
     const checkInData: CreateCheckInFields = {
       startDate: parse(
         startTime,
-        "kk:mm",
+        "HH:mm",
         new Date(dateRange![0].format()),
       ).toString(),
       endDate: parse(
         endTime,
-        "kk:mm",
+        "HH:mm",
         new Date(dateRange![1].format()),
       ).toString(),
       notes,
