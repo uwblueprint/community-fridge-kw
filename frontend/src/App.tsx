@@ -85,6 +85,7 @@ const App = (): React.ReactElement => {
                   component={UserManagement}
                 />
                 <PrivateRoute
+                  volunteerOnly
                   exact
                   path={Routes.VOLUNTEER_SHIFTS_PAGE}
                   component={VolunteerDashboard}
@@ -131,11 +132,13 @@ const App = (): React.ReactElement => {
                 />
                 <PrivateRoute
                   exact
+                  donorOnly
                   path={Routes.DASHBOARD_PAGE}
                   component={Dashboard}
                 />
                 <PrivateRoute
                   exact
+                  donorOnly
                   path={Routes.SCHEDULING_PAGE}
                   component={Scheduling as React.FC}
                 />

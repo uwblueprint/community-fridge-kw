@@ -95,7 +95,7 @@ const ConfirmDetails = ({
     }
     history.push(
       authenticatedUser!.role === Role.ADMIN
-        ? Routes.ADMIN_CHECK_INS
+        ? Routes.ADMIN_VIEW_DONATIONS
         : Routes.DASHBOARD_PAGE,
     );
   };
@@ -130,7 +130,7 @@ const ConfirmDetails = ({
             onClick={() =>
               history.push(
                 authenticatedUser?.role === Role.ADMIN
-                  ? Routes.ADMIN_CHECK_INS
+                  ? Routes.ADMIN_VIEW_DONATIONS
                   : Routes.DASHBOARD_PAGE,
               )
             }
