@@ -70,13 +70,12 @@ const ConfirmShiftDetails = ({
   const onSubmitClick = async () => {
     // sign up logic
     if (volunteerId !== null) {
+      const updateShiftValues = {
+        volunteerId: String(volunteerId)
+      }
       const res = isFoodRescue
-        ? await SchedulingAPIClient.updateSchedule(shiftId, {
-            volunteerId: String(volunteerId),
-          })
-        : await CheckInAPIClient.updateCheckInById(shiftId, {
-            volunteerId: Number(volunteerId),
-          });
+        ? await SchedulingAPIClient.updateSchedule(shiftId, updateShiftValues)
+        : await CheckInAPIClient.updateCheckInById(shiftId, updateShiftValues);
       if (!res) {
         console.error("Error when confirming shift details with volunteer.");
         return;

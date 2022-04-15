@@ -94,7 +94,6 @@ const VolunteerShiftCard = ({
     next = navigation.next;
   }
   const onSubmitClick = async () => {
-    console.log(setShiftId, setIsFoodRescue, "hello")
     if (setShiftId && setIsFoodRescue) {
       setShiftId(id);
 
