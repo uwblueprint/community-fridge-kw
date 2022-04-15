@@ -15,6 +15,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -24,6 +25,7 @@ import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { Role, Status } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { VolunteerDTO, VolunteerResponse } from "../../../types/VolunteerTypes";
+import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import {
   AccountFilterType,
   accountTypefilterOptions,
@@ -38,6 +40,11 @@ const UserManagementPage = (): JSX.Element => {
   const [selectedFilter, setSelectedFilter] = React.useState<string>(
     AccountFilterType.ALL,
   );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [
+    userToDelete,
+    setUserToDelete,
+  ] = React.useState<UserMgmtTableRecord | null>(null);
 
   // Merge donors and volunteers into one list of type UserMgmtTableRecord
   const buildTableUsers = (): UserMgmtTableRecord[] => {
@@ -132,12 +139,21 @@ const UserManagementPage = (): JSX.Element => {
     }
   };
 
-  // Deletes selected user
+  // Show confirm delete modal
   const handleDeleteUser = async (user: UserMgmtTableRecord) => {
-    const deleteUserResponse = await UserAPIClient.deleteUserById(user.userId);
+    setUserToDelete(user);
+    onOpen();
+  };
+
+  // Deletes selected user
+  const handleConfirmDelete = async (user: UserMgmtTableRecord | null) => {
+    const deleteUserResponse = await UserAPIClient.deleteUserById(user!.userId);
+    onClose();
     if (deleteUserResponse) {
-      setUsers(users.filter((u) => u.id !== user.id));
+      console.log("jklhjgfdg");
+      setUsers(users.filter((u) => u.id !== user!.id));
     }
+    setUserToDelete(null);
   };
 
   // Selects a filter
@@ -147,6 +163,15 @@ const UserManagementPage = (): JSX.Element => {
 
   return (
     <Container variant="baseContainer">
+      <GeneralDeleteShiftModal
+        title="Delete a user"
+        bodyText="Are you sure you want to delete this user? This will remove all
+              linked occurences, including related donations and/or check-ins."
+        buttonLabel="Delete user"
+        isOpen={isOpen}
+        onClose={onClose}
+        onDelete={() => handleConfirmDelete(userToDelete)}
+      />
       <Text mb="40px" textStyle="desktopHeader2">
         User management
       </Text>
