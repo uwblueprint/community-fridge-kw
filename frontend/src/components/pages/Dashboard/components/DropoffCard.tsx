@@ -124,7 +124,7 @@ const DropoffCard = ({
                 value={
                   volunteerTime
                     ? format(
-                        parse(volunteerTime, "kk:mm", new Date()),
+                        parse(volunteerTime, "HH:mm", new Date()),
                         "h:mm aa",
                       )
                     : "-"

@@ -36,16 +36,16 @@ const EditCheckInPage = (): JSX.Element => {
   const getCheckInData = async () => {
     const checkInResponse = await CheckInAPIClient.getCheckInsById(id);
     setDate(checkInResponse.startDate);
-    setStartTime(format(new Date(checkInResponse.startDate), "kk:mm"));
-    setEndTime(format(new Date(checkInResponse.endDate), "kk:mm"));
+    setStartTime(format(new Date(checkInResponse.startDate), "HH:mm"));
+    setEndTime(format(new Date(checkInResponse.endDate), "HH:mm"));
     setNotes(checkInResponse.notes);
   };
 
   const validateForm = () => {
     let newError = "";
     let valid = true;
-    const parsedStartTime = parse(startTime, "kk:mm", new Date());
-    const parsedEndTime = parse(endTime, "kk:mm", new Date());
+    const parsedStartTime = parse(startTime, "HH:mm", new Date());
+    const parsedEndTime = parse(endTime, "HH:mm", new Date());
 
     if (isAfter(parsedStartTime, parsedEndTime)) {
       valid = false;
@@ -65,8 +65,8 @@ const EditCheckInPage = (): JSX.Element => {
     }
 
     const checkInData: UpdateCheckInFields = {
-      startDate: parse(startTime, "kk:mm", new Date(date)).toString(),
-      endDate: parse(endTime, "kk:mm", new Date(date)).toString(),
+      startDate: parse(startTime, "HH:mm", new Date(date)).toString(),
+      endDate: parse(endTime, "HH:mm", new Date(date)).toString(),
       notes,
     };
 
