@@ -23,7 +23,7 @@
     "@types/react-hooks-helper": "^1.6.4",
     "@types/react-jsonschema-form": "^1.7.4",
     "@types/react-table": "^7.0.29",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "chakra-ui-steps": "^1.5.0",
     "date-fns": "^2.25.0",
     "depcheck": "^1.4.2",
