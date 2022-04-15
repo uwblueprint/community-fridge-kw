@@ -11,6 +11,7 @@ import {
   Spacer,
   Stack,
   Text,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import { format } from "date-fns";
@@ -23,6 +24,7 @@ import useViewport from "../../../../hooks/useViewport";
 import { CheckIn } from "../../../../types/CheckInTypes";
 import { VolunteerResponse } from "../../../../types/VolunteerTypes";
 import CardSubInformation from "../../../common/Card";
+import GeneralDeleteShiftModal from "../../../common/GeneralDeleteShiftModal";
 
 interface CheckInInfoCardProps {
   checkIn: CheckIn;
@@ -39,7 +41,12 @@ const CheckInInfoCard = ({
 
   const startTimeLocal = format(new Date(currentCheckIn.startDate), "hh:mmaa");
   const endTimeLocal = format(new Date(currentCheckIn.endDate), "hh:mmaa");
+  const shiftDate = format(new Date(currentCheckIn.endDate), "MMMM d");
   const { isMobile } = useViewport();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalType, setModalType] = React.useState<
+    "" | "removeVolunteer" | "cancelCheckIn"
+  >("");
 
   useEffect(() => {
     const getVolunteerData = async () => {
@@ -64,6 +71,17 @@ const CheckInInfoCard = ({
       },
     );
     setCurrentCheckIn(checkInResponse);
+    onClose();
+  };
+
+  const handleRemoveVolunteerClick = () => {
+    setModalType("removeVolunteer");
+    onOpen();
+  };
+
+  const handleDeleteCheckInClick = () => {
+    setModalType("cancelCheckIn");
+    onOpen();
   };
 
   const volunteerAsAdmin = async () => {
@@ -84,7 +102,7 @@ const CheckInInfoCard = ({
       fontWeight="700"
       py="10px"
       px="20px"
-      onClick={removeVolunteer}
+      onClick={handleRemoveVolunteerClick}
       width={["100%", "164px"]}
     >
       Remove Volunteer
@@ -129,6 +147,25 @@ const CheckInInfoCard = ({
       overflow="hidden"
       display="box"
     >
+      {modalType === "cancelCheckIn" ? (
+        <GeneralDeleteShiftModal
+          title="Cancel shift"
+          bodyText={`Are you sure you want to cancel this fridge check-in shift? This will remove the shift from ${startTimeLocal}-${endTimeLocal} on ${shiftDate} and notify any assigned volunteer.`}
+          buttonLabel="Cancel shift"
+          isOpen={isOpen}
+          onClose={onClose}
+          onDelete={() => deleteCheckIn(currentCheckIn.id)}
+        />
+      ) : (
+        <GeneralDeleteShiftModal
+          title="Remove volunteer"
+          bodyText="Are you sure you want to remove this volunteer? This will remove the listed volunteer from their shift and notify them by email."
+          buttonLabel="Delete user"
+          isOpen={isOpen}
+          onClose={onClose}
+          onDelete={removeVolunteer}
+        />
+      )}
       <Stack
         direction="column"
         display={["default", "flex"]}
@@ -169,7 +206,7 @@ const CheckInInfoCard = ({
                 </MenuItem>
                 <MenuItem
                   style={menuItemStyle}
-                  onClick={() => deleteCheckIn(currentCheckIn.id)}
+                  onClick={() => handleDeleteCheckInClick()}
                 >
                   <Text textStyle="mobileSmall" color="hubbard.100">
                     Delete
