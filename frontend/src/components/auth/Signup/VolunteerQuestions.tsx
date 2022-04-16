@@ -53,15 +53,15 @@ const VolunteerQuestions = ({
     };
     let valid = true;
 
-    if (!cityQuestionResponse) {
+    if (!cityQuestionResponse.trim()) {
       valid = false;
       newErrors.cityQuestion = "Please enter the city you currently live in.";
     }
-    if (!intentionQuestionResponse) {
+    if (!intentionQuestionResponse.trim()) {
       valid = false;
       newErrors.intentionsQuestion = "Please enter why you want to join us.";
     }
-    if (!skillsQuestionResponse) {
+    if (!skillsQuestionResponse.trim()) {
       valid = false;
       newErrors.skillsQuestion =
         "Please enter skills or traits you would like to share or develop as a volunteer.";
