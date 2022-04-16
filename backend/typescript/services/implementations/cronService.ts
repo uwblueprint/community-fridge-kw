@@ -4,16 +4,26 @@ import { Op } from "sequelize";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import IEmailService from "../interfaces/emailService";
-import { UserDonorDTO, VolunteerDTO } from "../../types";
+import { UserDonorDTO, UserVolunteerDTO } from "../../types";
 import logger from "../../utilities/logger";
 import Schedule from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import ICronService from "../interfaces/cronService";
 import IDonorService from "../interfaces/donorService";
 import Donor from "../../models/donor.model";
-import { emailHeader, emailFooter } from "../../utilities/emailUtils";
-import Volunteer from "../../models/volunteer.model";
+import {
+  emailHeader,
+  emailFooter,
+  formatDonorContactInformation,
+  formatFoodRescueShiftInformation,
+  formatVolunteerContactInformation,
+  getAdminEmail,
+  formatCheckinShiftInformation,
+} from "../../utilities/emailUtils";
 import IVolunteerService from "../interfaces/volunteerService";
+import IContentService from "../interfaces/contentService";
+import ContentService from "./contentService";
+import CheckIn from "../../models/checkIn.model";
 
 // eslint-disable-next-line
 const cron = require("node-cron");
@@ -45,7 +55,7 @@ class CronService implements ICronService {
   async sendScheduledDonationEmail(schedule: Schedule): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
-        "Attempted to send email regarding 24 hour email reminder but this instance of SchedulingService does not have an EmailService instance";
+        "Attempted to send email regarding 24 hour email reminder but this instance of CronService does not have an EmailService instance";
       Logger.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -105,6 +115,76 @@ class CronService implements ICronService {
     }
   }
 
+  async sendVolunteerSchedulingReminderEmail(
+    schedule: Schedule,
+    volunteer: UserVolunteerDTO,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerSchedulingReminderEmail but this instance of CronService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const contentService: IContentService = new ContentService();
+      const { foodRescueUrl } = await contentService.getContent();
+      const donor = await this.donorService.getDonorById(
+        String(schedule.donor_id),
+      );
+      dayjs.extend(customParseFormat);
+      const startDayString: string = dayjs
+        .tz(schedule.start_time)
+        .format("dddd, MMMM D");
+      const volunteerStartTime: string = dayjs(
+        schedule.volunteer_time,
+        "HH:mm",
+      ).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+        
+          <p>This is a friendly reminder of your upcoming shift!<br /><br />
+        
+          Here is a shift summary: <br /> <br />
+          Food Rescue Instructions:  <a href="${foodRescueUrl}">here</a>
+          </p>
+         ${formatFoodRescueShiftInformation(
+           schedule.is_pickup,
+           schedule.pickup_location ?? "",
+           startDayString,
+           volunteerStartTime,
+           schedule.notes ?? "",
+         )}
+          ${formatVolunteerContactInformation(
+            volunteer.firstName,
+            volunteer.lastName,
+            volunteer.phoneNumber,
+            volunteer.email,
+          )}
+          ${formatDonorContactInformation(
+            donor.firstName,
+            donor.lastName,
+            donor.phoneNumber,
+            donor.email,
+          )}
+         
+         ${emailFooter}
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        volunteer.email,
+        `Confirmation: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email for food rescue shift reminder for volunteer with id ${volunteer.id}`,
+      );
+      throw error;
+    }
+  }
+
   async checkScheduleReminders(): Promise<void> {
     const tomorrow: Date = dayjs().add(1, "days").toDate();
     const dayAfterTomorrow: Date = dayjs().add(2, "days").toDate();
@@ -119,21 +199,12 @@ class CronService implements ICronService {
       });
 
       schedules.forEach(async (schedule: Schedule) => {
-        const donor: Donor | null = await Donor.findByPk(
-          Number(schedule.donor_id),
-        );
-
-        if (!donor) {
-          throw new Error(`donorId ${schedule.donor_id} not found.`);
-        }
-
-        try {
-          this.sendScheduledDonationEmail(schedule);
-        } catch (error) {
-          Logger.error(
-            `Failed to send reminder email. Reason = ${getErrorMessage(error)}`,
+        this.sendScheduledDonationEmail(schedule);
+        if (schedule.volunteer_id) {
+          const volunteer: UserVolunteerDTO = await this.volunteerService.getVolunteerById(
+            String(schedule.volunteer_id),
           );
-          throw error;
+          this.sendVolunteerSchedulingReminderEmail(schedule, volunteer);
         }
       });
     } catch (error) {
@@ -149,7 +220,7 @@ class CronService implements ICronService {
     const dayAfterTomorrow: Date = dayjs().add(2, "days").toDate();
 
     try {
-      const schedules: Array<Schedule> = await Schedule.findAll({
+      const checkIns: Array<CheckIn> = await CheckIn.findAll({
         where: {
           start_time: {
             [Op.and]: [{ [Op.gte]: tomorrow }, { [Op.lte]: dayAfterTomorrow }],
@@ -157,27 +228,76 @@ class CronService implements ICronService {
         },
       });
 
-      schedules.forEach(async (schedule: Schedule) => {
-        const donor: Donor | null = await Donor.findByPk(
-          Number(schedule.donor_id),
-        );
-
-        if (!donor) {
-          throw new Error(`donorId ${schedule.donor_id} not found.`);
-        }
-
-        try {
-          this.sendScheduledDonationEmail(schedule);
-        } catch (error) {
-          Logger.error(
-            `Failed to send reminder email. Reason = ${getErrorMessage(error)}`,
+      checkIns.forEach(async (checkIn: CheckIn) => {
+        if (checkIn.volunteer_id) {
+          const volunteer: UserVolunteerDTO = await this.volunteerService.getVolunteerById(
+            String(checkIn.volunteer_id),
           );
-          throw error;
+          this.sendVolunteerCheckInReminderEmail(checkIn, volunteer, false);
         }
       });
     } catch (error) {
       Logger.error(
         `Failed to send reminders. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendVolunteerCheckInReminderEmail(
+    checkIn: CheckIn,
+    volunteer: UserVolunteerDTO,
+    isAdmin: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerCheckInReminderEmail but this instance of CronService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const contentService: IContentService = new ContentService();
+      const { checkinUrl } = await contentService.getContent();
+      const startDayString: string = dayjs
+        .tz(checkIn.start_date)
+        .format("dddd, MMMM D");
+      const startTimeString: string = dayjs
+        .tz(checkIn.start_date)
+        .format("h:mm A");
+      const endTimeString: string = dayjs.tz(checkIn.end_date).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+        <p>This is a friendly reminder of your upcoming shift!<br /><br />
+        
+        Here is a shift summary: <br /> <br />
+        Food Check-In Instructions: <a href="${checkinUrl}">here</a>
+        </p>
+          
+          ${formatVolunteerContactInformation(
+            volunteer.firstName,
+            volunteer.lastName,
+            volunteer.phoneNumber,
+            volunteer.email,
+          )}
+          ${formatCheckinShiftInformation(
+            startDayString,
+            startTimeString,
+            endTimeString,
+            checkIn.notes ?? "",
+          )}
+         ${emailFooter}
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        volunteer.email,
+        `Confirmation: Food Check-In Shift for ${startDayString} at ${startTimeString}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email for food checkin shift reminder for volunteer with id ${volunteer.id}`,
       );
       throw error;
     }

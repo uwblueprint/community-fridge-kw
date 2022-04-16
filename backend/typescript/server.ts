@@ -63,18 +63,6 @@ firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.applicationDefault(),
 });
 
-if (
-  process.env.NODE_ENV === "production" ||
-  process.env.NODE_ENV === "staging"
-) {
-  const cronService: ICronService = new CronService(
-    new EmailService(nodemailerConfig),
-    new DonorService(),
-  );
-
-  // cronService.checkReminders();
-}
-
 const PORT = process.env.PORT || 5000;
 app.listen({ port: PORT }, () => {
   /* eslint-disable-next-line no-console */
