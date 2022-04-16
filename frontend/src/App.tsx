@@ -100,6 +100,7 @@ const App = (): React.ReactElement => {
                   component={VolunteerShiftDetailsPage}
                 />
                 <PrivateRoute
+                  volunteerOnly
                   exact
                   path={Routes.VOLUNTEER_DASHBOARD_PAGE}
                   component={VolunteerDashboard}
