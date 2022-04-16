@@ -63,7 +63,10 @@ interface IAuthService {
    * @param firstName of volunteer
    * @throws Error if unable to send email
    */
-  sendVolunteerApprovedEmail(email: string, firstName: string): Promise<boolean>;
+  sendVolunteerApprovedEmail(
+    email: string,
+    firstName: string,
+  ): Promise<boolean>;
 
   /**
    * Determine if the provided access token is valid and authorized for at least

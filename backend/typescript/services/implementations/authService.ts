@@ -314,7 +314,6 @@ class AuthService implements IAuthService {
     }
   }
 
-
   async sendVolunteerApprovedEmail(
     email: string,
     firstName: string,
@@ -343,7 +342,11 @@ class AuthService implements IAuthService {
     </html>
       `;
 
-      this.emailService.sendEmail(email, "APPROVED: Volunteer Account Status", emailBody);
+      this.emailService.sendEmail(
+        email,
+        "APPROVED: Volunteer Account Status",
+        emailBody,
+      );
       return true;
     } catch (error) {
       Logger.error(
