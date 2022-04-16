@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { NavigationProps } from "react-hooks-helper";
 
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
-import { CheckInWithShiftType, ScheduleWithShiftType, ShiftType } from "../../../types/VolunteerTypes";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+  ShiftType,
+} from "../../../types/VolunteerTypes";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import CheckInCalendar from "./CheckInCalendar";
 
@@ -14,7 +18,10 @@ export interface ShiftProps {
   ) => void;
 }
 
-const CheckIns = ({ navigation, setSelectedVolunteerShift }: ShiftProps): JSX.Element => {
+const CheckIns = ({
+  navigation,
+  setSelectedVolunteerShift,
+}: ShiftProps): JSX.Element => {
   const [checkIns, setCheckIns] = useState<CheckInWithShiftType[]>([]);
 
   useEffect(() => {

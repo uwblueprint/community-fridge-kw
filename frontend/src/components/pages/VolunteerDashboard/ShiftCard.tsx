@@ -3,8 +3,9 @@ import { format, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { NavigationProps } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
-import * as Routes from "../../../constants/Routes";
+
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import * as Routes from "../../../constants/Routes";
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,

@@ -4,7 +4,10 @@ import { NavigationProps } from "react-hooks-helper";
 
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import { ScheduleWithShiftType, CheckInWithShiftType } from "../../../types/VolunteerTypes";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
 import CheckInInfoCard from "../../pages/AdminDashboard/components/CheckInInfoCard";
 import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import ShiftCard from "../../pages/VolunteerDashboard/ShiftCard";

@@ -11,8 +11,11 @@ import {
 import React from "react";
 import { NavigationProps } from "react-hooks-helper";
 import { NavLink } from "react-router-dom";
-import { CheckInWithShiftType, ScheduleWithShiftType } from "../../../types/VolunteerTypes";
 
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
 import CheckIns from "./CheckIns";
 import FoodRescues from "./FoodRescues";
 
@@ -23,7 +26,8 @@ const VolunteerShiftsTabs = ({
   navigation: NavigationProps;
   setSelectedVolunteerShift: (
     shift: ScheduleWithShiftType | CheckInWithShiftType,
-  ) => void;}): JSX.Element => {
+  ) => void;
+}): JSX.Element => {
   return (
     <Container variant="baseContainer">
       <VStack alignItems="left">

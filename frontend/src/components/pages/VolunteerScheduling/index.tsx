@@ -4,7 +4,6 @@ import { NavigationProps, Step, useStep } from "react-hooks-helper";
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
-  ShiftType,
 } from "../../../types/VolunteerTypes";
 import ConfirmShiftDetails from "./ConfirmShiftDetails";
 import ThankYouVolunteer from "./ThankYouVolunteer";
@@ -54,10 +53,7 @@ const VolunteerScheduling = () => {
       );
     case "confirm shift sign up":
       return (
-        <ConfirmShiftDetails
-          navigation={navigation}
-          shift={selectedShift}
-        />
+        <ConfirmShiftDetails navigation={navigation} shift={selectedShift} />
       );
     case "thank you page":
       return <ThankYouVolunteer shift={selectedShift} />;

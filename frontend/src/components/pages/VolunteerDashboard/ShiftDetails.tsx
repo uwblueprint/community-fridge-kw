@@ -1,8 +1,8 @@
 import { Center, Spinner } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 
+import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import {
   CheckInWithShiftType,
@@ -16,7 +16,7 @@ const VolunteerShiftDetailsPage = (): JSX.Element => {
   const [currentShift, setCurrentShift] = useState<
     ScheduleWithShiftType | CheckInWithShiftType
   >();
-  
+
   useEffect(() => {
     const getShiftData = async () => {
       if (type === ShiftType.SCHEDULING) {

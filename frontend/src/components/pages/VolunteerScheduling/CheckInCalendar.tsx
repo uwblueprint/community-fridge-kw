@@ -3,7 +3,10 @@ import React, { useState } from "react";
 import { NavigationProps } from "react-hooks-helper";
 import { DateObject } from "react-multi-date-picker";
 
-import { CheckInWithShiftType, ScheduleWithShiftType } from "../../../types/VolunteerTypes";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
 import Calendar from "../../common/Calendar/Calendar";
 import CalendarToggle from "../../common/Calendar/CalendarToggle";
 
@@ -18,7 +21,8 @@ const CheckInCalendar = ({
   navigation: NavigationProps;
   setSelectedVolunteerShift: (
     shift: ScheduleWithShiftType | CheckInWithShiftType,
-  ) => void;}): React.ReactElement => {
+  ) => void;
+}): React.ReactElement => {
   const [selectedDay, setSelectedDay] = useState<Date | DateObject | null>(
     new Date(),
   );
@@ -34,7 +38,7 @@ const CheckInCalendar = ({
         isCheckInShiftView
         navigation={navigation}
         setSelectedVolunteerShift={setSelectedVolunteerShift}
-        />
+      />
     );
   }, [selectedDay]);
 

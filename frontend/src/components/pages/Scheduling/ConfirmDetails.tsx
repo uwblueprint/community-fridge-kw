@@ -315,9 +315,7 @@ const ConfirmDetails = ({
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Additional notes
               </Text>
-              <Text textStyle="mobileBody">
-                {currentSchedule.notes}
-              </Text>
+              <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Assigned volunteer
               </Text>

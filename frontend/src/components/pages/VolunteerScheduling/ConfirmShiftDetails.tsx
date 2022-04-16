@@ -1,11 +1,22 @@
-import { Box, Button, Container, Flex, HStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  HStack,
+  Text,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { NavigationProps } from "react-hooks-helper";
+import { useHistory } from "react-router-dom";
 
 import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import VolunteerContext from "../../../contexts/VolunteerContext";
 import { DonorResponse } from "../../../types/DonorTypes";
@@ -14,6 +25,7 @@ import {
   ScheduleWithShiftType,
   ShiftType,
 } from "../../../types/VolunteerTypes";
+import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import BackButton from "../Scheduling/BackButton";
 import { DonationSizes } from "../Scheduling/types";
 
@@ -33,7 +45,10 @@ const ConfirmShiftDetails = ({
     next = navigation.next;
   }
   const { authenticatedUser } = useContext(AuthContext);
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { volunteerId } = useContext(VolunteerContext);
+  const history = useHistory();
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
     {} as DonorResponse,
   );
@@ -76,6 +91,36 @@ const ConfirmShiftDetails = ({
       return description;
     }
     return "";
+  };
+
+  const onDeleteClick = async () => {
+    const res =
+      shift.type === ShiftType.SCHEDULING
+        ? await SchedulingAPIClient.updateSchedule(shift.id, {
+            ...shift,
+            volunteerId: undefined,
+          })
+        : await CheckInAPIClient.updateCheckInById(shift.id, {
+            ...shift,
+            volunteerId: null,
+          });
+
+    if (!res) {
+      toast({
+        title: "Volunteer shift could not be cancelled. Please try again",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Volunteer shift cancelled successfully",
+        status: "success",
+        duration: 7000,
+        isClosable: true,
+      });
+    }
+    history.push(Routes.VOLUNTEER_DASHBOARD_PAGE);
   };
 
   useEffect(() => {
@@ -245,6 +290,33 @@ const ConfirmShiftDetails = ({
         </Text>
         <Text textStyle="mobileBody">{authenticatedUser?.phoneNumber}</Text>
       </Box>
+      {viewDetailsScreen && (
+        <Button
+          mt="1.5rem"
+          size="lg"
+          width={{ lg: "30%", base: "100%" }}
+          variant="deleteDonation"
+          onClick={onOpen}
+        >
+          Cancel volunteer shift
+        </Button>
+      )}
+      <GeneralDeleteShiftModal
+        title="Cancel volunteer shift"
+        bodyText={`Are you sure you want to cancel your volunteer shift on ${
+          shift.type === ShiftType.SCHEDULING
+            ? `${dateText(shift.startTime)} at ${volunteerTimeLocal(
+                shift.volunteerTime,
+              )}`
+            : `${dateText(shift.startDate)} at ${startAndEndTimeLocal(
+                shift.startDate,
+              )}`
+        }? This will notify all respective parties, including the CFKW admin team.`}
+        buttonLabel="Cancel volunteer shift"
+        isOpen={isOpen}
+        onClose={onClose}
+        onDelete={onDeleteClick}
+      />
     </Container>
   );
 };
