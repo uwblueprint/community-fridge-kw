@@ -132,7 +132,7 @@ const ConfirmShiftDetails = ({
   }, []);
 
   const dateText = (date: string) => {
-    return date ? format(new Date(date), "MMMM d, yyyy") : "";
+    return date ? format(new Date(date), "eeee, MMMM d, yyyy") : "";
   };
 
   const startAndEndTimeLocal = (date: string) => {
