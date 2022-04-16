@@ -25,11 +25,11 @@ import {
   ScheduleWithShiftType,
   ShiftType,
 } from "../../../types/VolunteerTypes";
+import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
+import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import BackButton from "../Scheduling/BackButton";
 import { DonationSizes } from "../Scheduling/types";
-import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
-import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 
 const ConfirmShiftDetails = ({
   navigation,
@@ -152,12 +152,12 @@ const ConfirmShiftDetails = ({
             : previous
         }
       />
-      {viewDetailsScreen &&
-        shift.type === ShiftType.CHECKIN &&
-        <FridgeCheckInDescription/>}
-      {viewDetailsScreen &&
-        shift.type === ShiftType.SCHEDULING &&
-        <FridgeFoodRescueDescription/>}
+      {viewDetailsScreen && shift.type === ShiftType.CHECKIN && (
+        <FridgeCheckInDescription />
+      )}
+      {viewDetailsScreen && shift.type === ShiftType.SCHEDULING && (
+        <FridgeFoodRescueDescription />
+      )}
       {!viewDetailsScreen && (
         <>
           <Text
