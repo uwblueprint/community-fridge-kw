@@ -1021,7 +1021,7 @@ class SchedulingService implements ISchedulingService {
             <br />
             Volunteer arrival time: ${startDayString} ${startTimeString} - ${endTimeString}
             <br />
-            Volunteer arrival time: ${schedule.isPickup ? `${schedule.pickupLocation}` : "Community Fridge"}
+            Address: ${schedule.isPickup ? `${schedule.pickupLocation}` : "Community Fridge"}
             <br />
             Additional Notes: ${schedule.notes}
             <br />
