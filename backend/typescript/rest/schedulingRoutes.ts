@@ -33,7 +33,7 @@ const schedulingService: ISchedulingService = new SchedulingService(
   emailService,
   volunteerService,
   donorService,
-  contentService
+  contentService,
 );
 
 schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {

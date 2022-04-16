@@ -22,7 +22,11 @@ const volunteerService: IVolunteerService = new VolunteerService();
 const contentService: IContentService = new ContentService();
 
 const checkInRouter: Router = Router();
-const checkInService: ICheckInService = new CheckInService(emailService, volunteerService, contentService);
+const checkInService: ICheckInService = new CheckInService(
+  emailService,
+  volunteerService,
+  contentService,
+);
 
 /* Create a check in instance */
 checkInRouter.post("/", createCheckInDtoValidator, async (req, res) => {

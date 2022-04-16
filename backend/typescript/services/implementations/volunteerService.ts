@@ -172,13 +172,17 @@ class VolunteerService implements IVolunteerService {
     const donorService: IDonorService = new DonorService();
     const emailService: IEmailService = new EmailService(nodemailerConfig);
     const contentService: IContentService = new ContentService();
-    const checkInService: ICheckInService = new CheckInService(emailService, this, contentService);
+    const checkInService: ICheckInService = new CheckInService(
+      emailService,
+      this,
+      contentService,
+    );
 
     const schedulingService: ISchedulingService = new SchedulingService(
       emailService,
       this,
       donorService,
-      contentService
+      contentService,
     );
     const checkIns: CheckInDTOWithShiftType[] = await (
       await checkInService.getCheckInsByVolunteerId(volunteerId)

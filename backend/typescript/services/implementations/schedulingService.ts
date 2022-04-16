@@ -33,8 +33,11 @@ const Logger = logger(__filename);
 
 class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
+
   volunteerService: IVolunteerService;
+
   donorService: IDonorService;
+
   contentService: IContentService;
 
   static TEMP_ADMIN_EMAIL = "dorasu@uwblueprint.org";
@@ -43,10 +46,10 @@ class SchedulingService implements ISchedulingService {
     emailService: IEmailService | null = null,
     volunteerService: IVolunteerService,
     donorService: IDonorService,
-    contentService: IContentService
+    contentService: IContentService,
   ) {
     this.emailService = emailService;
-    this.volunteerService = volunteerService
+    this.volunteerService = volunteerService;
     this.donorService = donorService;
     this.contentService = contentService;
   }
@@ -167,12 +170,12 @@ class SchedulingService implements ISchedulingService {
         where:
           isVolunteerSlotFilled === undefined
             ? {
-              volunteer_needed: true,
-            }
+                volunteer_needed: true,
+              }
             : {
-              volunteer_needed: true,
-              volunteer_id: volunteerIdQuery,
-            },
+                volunteer_needed: true,
+                volunteer_id: volunteerIdQuery,
+              },
         order: [["start_time", "ASC"]],
       });
       schedulingDtos = schedulings.map((scheduling) => {
@@ -365,28 +368,31 @@ class SchedulingService implements ISchedulingService {
               
               <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
               
-              ${updated
-          ? `Your community fridge donation has been edited.
+              ${
+                updated
+                  ? `Your community fridge donation has been edited.
                     <br />
                     The following details have been updated:
                     </p>`
-          : ``
-        }
+                  : ``
+              }
 
-              ${isAdmin
-          ? `${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>	
+              ${
+                isAdmin
+                  ? `${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>	
                     <br />`
-          : ``
-        }
+                  : ``
+              }
 
-              ${!updated && !isAdmin
-          ? `<strong>Hey there ${firstName}!</strong>
+              ${
+                !updated && !isAdmin
+                  ? `<strong>Hey there ${firstName}!</strong>
                   <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Thank you for scheduling a donation to your local community fridge.
                             <br />
                             <br />
                       Here is a summary of your upcoming donation:`
-          : ``
-        }
+                  : ``
+              }
               
      
               <table style="display: block; margin-top: 2em; justify-content: space-between; max-width: 800px;">
@@ -407,8 +413,8 @@ class SchedulingService implements ISchedulingService {
                     <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Donation information</h2>
                     <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
                       ${schedule.size} - ${donationSizeDescriptions.get(
-          schedule.size ?? "",
-        )}
+        schedule.size ?? "",
+      )}
                     <br />
                       ${schedule.categories.join(", ")}
                     </p>
@@ -418,32 +424,37 @@ class SchedulingService implements ISchedulingService {
                 <td style="display: inline-block; padding-right: 2em; vertical-align: top;">
                   <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">Volunteer information</h2>
                   <p style="margin: 0.5em 0 1.5em 0; max-width: 400px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-                    ${schedule.volunteerNeeded
-          ? `<strong>Volunteer required at ${volunteerTimeString}</strong>`
-          : "Volunteer not required"
-        }
+                    ${
+                      schedule.volunteerNeeded
+                        ? `<strong>Volunteer required at ${volunteerTimeString}</strong>`
+                        : "Volunteer not required"
+                    }
                     <br />
-                    ${schedule.isPickup
-          ? "Pickup required"
-          : "Pickup not required"
-        }
+                    ${
+                      schedule.isPickup
+                        ? "Pickup required"
+                        : "Pickup not required"
+                    }
                     <br />
-                    ${schedule.isPickup
-          ? `${schedule.pickupLocation}<br />`
-          : ""
-        }
-                    ${schedule.notes
-          ? `Additional Notes: ${schedule.notes}`
-          : ""
-        }
+                    ${
+                      schedule.isPickup
+                        ? `${schedule.pickupLocation}<br />`
+                        : ""
+                    }
+                    ${
+                      schedule.notes
+                        ? `Additional Notes: ${schedule.notes}`
+                        : ""
+                    }
                   </p>
                 </td>
               </tr>
             </table>
-     ${updated
-          ? `<p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">If this is an error, please contact the CFKW admin team.</p>`
-          : ""
-        }
+     ${
+       updated
+         ? `<p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">If this is an error, please contact the CFKW admin team.</p>`
+         : ""
+     }
      ${emailFooter}
      </body>
      </html>
@@ -466,7 +477,8 @@ class SchedulingService implements ISchedulingService {
       );
     } catch (error) {
       Logger.error(
-        `Failed to generate email to confirm ${updated ? "updated" : ""
+        `Failed to generate email to confirm ${
+          updated ? "updated" : ""
         } donation details of donation scheduled by ${currDonor.email}`,
       );
       throw error;
@@ -505,7 +517,7 @@ class SchedulingService implements ISchedulingService {
         );
         newRecurringDonationId =
           newRecurringDonationId === null ||
-            Number.isNaN(newRecurringDonationId)
+          Number.isNaN(newRecurringDonationId)
             ? 1
             : newRecurringDonationId + 1;
 
@@ -651,7 +663,9 @@ class SchedulingService implements ISchedulingService {
     scheduling: UpdateSchedulingDTO,
   ): Promise<SchedulingDTO> {
     try {
-      const prevScheduling: SchedulingDTO = await this.getSchedulingById(schedulingId);
+      const prevScheduling: SchedulingDTO = await this.getSchedulingById(
+        schedulingId,
+      );
       const prevVolunteerId = prevScheduling.volunteerId;
 
       const updatesSnakeCase: Record<string, unknown> = {};
@@ -687,10 +701,10 @@ class SchedulingService implements ISchedulingService {
         volunteerId: String(updatedScheduling.volunteer_id),
       };
 
-      if(scheduling.volunteerId && !prevVolunteerId){
-        this.sendFoodRescueSignUpAdminEmail(updatedSchedulingDTO)
+      if (scheduling.volunteerId && !prevVolunteerId) {
+        this.sendFoodRescueSignUpAdminEmail(updatedSchedulingDTO);
       }
-      
+
       return updatedSchedulingDTO;
     } catch (error) {
       Logger.error(
@@ -728,11 +742,14 @@ class SchedulingService implements ISchedulingService {
 
       // if admin deleted on behalf of donor
       if (isAdminDeleted) {
-        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${isRecurringDonation ? " and all following donations" : ""
-          } has been cancelled by Community Fridge KW admin.`;
-        const adminMainLine = `The scheduled donation by ${donor.businessName
-          } for ${startDayString} at ${startTimeString}${isRecurringDonation ? " and all following donations " : ""
-          } has been cancelled.`;
+        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations" : ""
+        } has been cancelled by Community Fridge KW admin.`;
+        const adminMainLine = `The scheduled donation by ${
+          donor.businessName
+        } for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations " : ""
+        } has been cancelled.`;
 
         this.emailService.sendEmail(
           donor.email,
@@ -746,11 +763,14 @@ class SchedulingService implements ISchedulingService {
         );
         // if donor deleted their own donation
       } else {
-        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${isRecurringDonation ? " and all following donations" : ""
-          } has been cancelled.`;
-        const adminMainLine = `${donor.businessName
-          } has cancelled their scheduled donation for ${startDayString} at ${startTimeString}${isRecurringDonation ? " and all following donations " : ""
-          }!`;
+        const donorMainLine = `Your donation scheduled for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations" : ""
+        } has been cancelled.`;
+        const adminMainLine = `${
+          donor.businessName
+        } has cancelled their scheduled donation for ${startDayString} at ${startTimeString}${
+          isRecurringDonation ? " and all following donations " : ""
+        }!`;
 
         this.emailService.sendEmail(
           donor.email,
@@ -964,9 +984,7 @@ class SchedulingService implements ISchedulingService {
     return schedulingDtos;
   }
 
-  async sendFoodRescueSignUpAdminEmail(
-    schedule: SchedulingDTO,
-  ): Promise<void> {
+  async sendFoodRescueSignUpAdminEmail(schedule: SchedulingDTO): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
         "Attempted to send email regarding volunteer signing up for a check in but this instance of CheckInService does not have an EmailService instance";
@@ -978,17 +996,32 @@ class SchedulingService implements ISchedulingService {
       String(schedule.volunteerId),
     );
 
-    const donor: UserDonorDTO = await this.donorService.getDonorById(schedule.donorId);
+    const donor: UserDonorDTO = await this.donorService.getDonorById(
+      schedule.donorId,
+    );
 
-    const instructionsLink: string = (await this.contentService.getContent()).foodRescueUrl;
+    const instructionsLink: string = (await this.contentService.getContent())
+      .foodRescueUrl;
     // Proposed drop off info
 
     try {
-      const { firstName: volunteerFirstName, lastName: volunteerLastName, email: volunteerEmail, phoneNumber: volunteerPhoneNumber } = volunteer;
-      const { firstName: donorFirstName, lastName: donorLastName, email: donorEmail, phoneNumber: donorPhoneNumber } = donor;
+      const {
+        firstName: volunteerFirstName,
+        lastName: volunteerLastName,
+        email: volunteerEmail,
+        phoneNumber: volunteerPhoneNumber,
+      } = volunteer;
+      const {
+        firstName: donorFirstName,
+        lastName: donorLastName,
+        email: donorEmail,
+        phoneNumber: donorPhoneNumber,
+      } = donor;
       const { startTime, endTime } = schedule;
 
-      const startTimeToLocalDate = startTime.toLocaleString("en-US", { timeZone: "EST", });
+      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
+        timeZone: "EST",
+      });
 
       const startDayString: string = dayjs(startTimeToLocalDate).format(
         "dddd, MMMM D",
@@ -997,7 +1030,9 @@ class SchedulingService implements ISchedulingService {
       const startTimeString: string = dayjs(startTimeToLocalDate).format(
         "h:mm A",
       );
-      const endTimeString: string = dayjs(endTime.toLocaleString("en-US", { timeZone: "EST", }),).format("h:mm A");
+      const endTimeString: string = dayjs(
+        endTime.toLocaleString("en-US", { timeZone: "EST" }),
+      ).format("h:mm A");
 
       dayjs.extend(customParseFormat);
 
@@ -1017,11 +1052,17 @@ class SchedulingService implements ISchedulingService {
             <br />
             Shift Information:
             <br />
-            Volunteer shift type: ${schedule.isPickup ? "Food rescue pickup" : "Food rescue unloading"}
+            Volunteer shift type: ${
+              schedule.isPickup ? "Food rescue pickup" : "Food rescue unloading"
+            }
             <br />
             Volunteer arrival time: ${startDayString} ${startTimeString} - ${endTimeString}
             <br />
-            Address: ${schedule.isPickup ? `${schedule.pickupLocation}` : "Community Fridge"}
+            Address: ${
+              schedule.isPickup
+                ? `${schedule.pickupLocation}`
+                : "Community Fridge"
+            }
             <br />
             Additional Notes: ${schedule.notes}
             <br />
@@ -1046,14 +1087,9 @@ class SchedulingService implements ISchedulingService {
          </body>
          </html>`;
 
-      let subject = `New: Food Rescue Shift for ${startDayString} at ${startTimeString}`;
-      this.emailService.sendEmail(
-        getAdminEmail(),
-        subject,
-        emailBody,
-      );
+      const subject = `New: Food Rescue Shift for ${startDayString} at ${startTimeString}`;
+      this.emailService.sendEmail(getAdminEmail(), subject, emailBody);
     } catch (error) {
-      const volunteer = await this.volunteerService.getVolunteerById(String(schedule.volunteerId));
       Logger.error(
         `Failed to generate email to confirm volunteer sign-up for food rescue shift for volunteer ${volunteer.firstName} ${volunteer.lastName}`,
       );

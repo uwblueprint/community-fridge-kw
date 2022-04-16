@@ -1,7 +1,8 @@
 /* eslint-disable class-methods-use-this */
-import { snakeCase, update } from "lodash";
+import { snakeCase } from "lodash";
 import dayjs from "dayjs";
 import { Op } from "sequelize";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import ICheckInService from "../interfaces/checkInService";
 import {
   CheckInDTO,
@@ -16,20 +17,25 @@ import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
 import IVolunteerService from "../interfaces/volunteerService";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import { emailFooter, emailHeader, getAdminEmail } from "../../utilities/emailUtils";
+import { emailHeader, getAdminEmail } from "../../utilities/emailUtils";
 import IContentService from "../interfaces/contentService";
 
 const Logger = logger(__filename);
 
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
+
   volunteerService: IVolunteerService;
+
   contentService: IContentService;
 
   static TEMP_ADMIN_EMAIL = "dorasu@uwblueprint.org";
 
-  constructor(emailService: IEmailService | null = null, volunteerService: IVolunteerService, contentService: IContentService) {
+  constructor(
+    emailService: IEmailService | null = null,
+    volunteerService: IVolunteerService,
+    contentService: IContentService,
+  ) {
     this.emailService = emailService;
     this.volunteerService = volunteerService;
     this.contentService = contentService;
@@ -216,7 +222,7 @@ class CheckInService implements ICheckInService {
       if (checkIn.volunteerId && !prevVolunteerId) {
         this.sendCheckInSignUpAdminEmail(updatedCheckInDTO);
       }
-      
+
       return updatedCheckInDTO;
     } catch (error) {
       Logger.error(
@@ -275,9 +281,7 @@ class CheckInService implements ICheckInService {
     }
   }
 
-  async sendCheckInSignUpAdminEmail(
-    checkIn: CheckInDTO,
-  ): Promise<void> {
+  async sendCheckInSignUpAdminEmail(checkIn: CheckInDTO): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
         "Attempted to send email regarding volunteer signing up for a check in but this instance of CheckInService does not have an EmailService instance";
@@ -289,14 +293,17 @@ class CheckInService implements ICheckInService {
       String(checkIn.volunteerId),
     );
 
-    const instructionsLink: string = (await this.contentService.getContent()).checkinUrl;
+    const instructionsLink: string = (await this.contentService.getContent())
+      .checkinUrl;
     // Proposed drop off info
 
     try {
       const { firstName, lastName, email, phoneNumber } = volunteer;
       const { startDate, endDate } = checkIn;
 
-      const startTimeToLocalDate = startDate.toLocaleString("en-US", { timeZone: "EST", });
+      const startTimeToLocalDate = startDate.toLocaleString("en-US", {
+        timeZone: "EST",
+      });
 
       const startDayString: string = dayjs(startTimeToLocalDate).format(
         "dddd, MMMM D",
@@ -305,7 +312,9 @@ class CheckInService implements ICheckInService {
       const startTimeString: string = dayjs(startTimeToLocalDate).format(
         "h:mm A",
       );
-      const endTimeString: string = dayjs(endDate.toLocaleString("en-US", { timeZone: "EST", }),).format("h:mm A");
+      const endTimeString: string = dayjs(
+        endDate.toLocaleString("en-US", { timeZone: "EST" }),
+      ).format("h:mm A");
 
       dayjs.extend(customParseFormat);
 
@@ -341,14 +350,9 @@ class CheckInService implements ICheckInService {
          </body>
          </html>`;
 
-      let subject = `New: Fridge Check-in Shift for ${startDayString} at ${startTimeString}`;
-      this.emailService.sendEmail(
-        getAdminEmail(),
-        subject,
-        emailBody,
-      );
+      const subject = `New: Fridge Check-in Shift for ${startDayString} at ${startTimeString}`;
+      this.emailService.sendEmail(getAdminEmail(), subject, emailBody);
     } catch (error) {
-      const volunteer = await this.volunteerService.getVolunteerById(String(checkIn.volunteerId));
       Logger.error(
         `Failed to generate email to confirm volunteer sign-up for check-in shift for volunteer ${volunteer.firstName} ${volunteer.lastName}`,
       );

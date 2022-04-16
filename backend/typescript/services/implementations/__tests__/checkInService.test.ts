@@ -38,7 +38,11 @@ describe("pg checkInService", () => {
     const emailService: IEmailService = new EmailService(nodemailerConfig);
     const volunteerService: IVolunteerService = new VolunteerService();
     const contentService: IContentService = new ContentService();
-    checkInService = new CheckInService(emailService, volunteerService, contentService);
+    checkInService = new CheckInService(
+      emailService,
+      volunteerService,
+      contentService,
+    );
     await User.bulkCreate(testUsersDb);
     await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);

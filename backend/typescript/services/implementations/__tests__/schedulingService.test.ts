@@ -48,8 +48,13 @@ describe("pg schedulingService", () => {
     const donorService: IDonorService = new DonorService();
     const volunteerService: IVolunteerService = new VolunteerService();
     const contentService: IContentService = new ContentService();
-    
-    schedulingService = new SchedulingService(emailService, volunteerService, donorService, contentService);
+
+    schedulingService = new SchedulingService(
+      emailService,
+      volunteerService,
+      donorService,
+      contentService,
+    );
     await User.bulkCreate(testUsersDb);
     await Donor.bulkCreate(testDonorsDb);
     await Volunteer.bulkCreate(testVolunteersDb);
