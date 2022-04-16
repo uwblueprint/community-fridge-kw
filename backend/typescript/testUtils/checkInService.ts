@@ -34,6 +34,8 @@ export const testUpdatedCheckIns = [
   },
 ];
 
+export const testContent = [{}];
+
 export const testUsersDb = [
   {
     first_name: "Test",

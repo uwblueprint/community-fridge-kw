@@ -22,6 +22,7 @@ import {
   emailHeader,
   formatShiftInformation,
   formatVolunteerContactInformation,
+  getAdminEmail,
 } from "../../utilities/emailUtils";
 import IContentService from "../interfaces/contentService";
 
@@ -185,6 +186,7 @@ class CheckInService implements ICheckInService {
   async sendVolunteerCheckInSignUpConfirmationEmail(
     volunteerId: string,
     checkIn: CheckInDTO,
+    isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -219,9 +221,15 @@ class CheckInService implements ICheckInService {
       const emailBody = `<html>
         ${emailHeader}
         <body>
-          <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
-          <p>Thank you for volunteering with us!<br /><br />
-          Here is a summary of your upcoming shift: <br /> <br />
+          ${
+            isAdmin
+              ? `
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has signed up for a Fridge Check-in Shift for 
+        ${startDayString} from ${startTimeString} to ${endTimeString}</h2>`
+              : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+          <p>Thank you for volunteering with us!<br /><br />`
+          }
+          Here is a shift summary: <br /> <br />
           Food Check-In Instructions: <a href="${checkinUrl}">here</a>
           </p>
           ${formatVolunteerContactInformation(
@@ -236,15 +244,19 @@ class CheckInService implements ICheckInService {
             endTimeString,
             checkIn.notes ?? "",
           )}
-          <p>
+         ${
+           !isAdmin
+             ? ` <p>
             If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
           </p>
-         ${emailFooter}
+         ${emailFooter}`
+             : ""
+         }
         </body>
       </html>
         `;
       this.emailService.sendEmail(
-        email,
+        isAdmin ? getAdminEmail() : email,
         `Confirmation: Food Check-In Shift for ${startDayString} at ${startTimeString}`,
         emailBody,
       );
@@ -290,6 +302,12 @@ class CheckInService implements ICheckInService {
         this.sendVolunteerCheckInSignUpConfirmationEmail(
           checkIn.volunteerId!,
           updatedCheckInDTO,
+          false,
+        );
+        this.sendVolunteerCheckInSignUpConfirmationEmail(
+          checkIn.volunteerId!,
+          updatedCheckInDTO,
+          true,
         );
       }
 
