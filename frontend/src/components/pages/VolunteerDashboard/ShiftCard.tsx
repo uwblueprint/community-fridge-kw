@@ -114,7 +114,7 @@ const VolunteerShiftCard = ({
           <Text minWidth="125px" textStyle="mobileSmall" color="hubbard.100">
             {type === ShiftType.CHECKIN && "Fridge check-in"}
             {type === ShiftType.SCHEDULING &&
-              (isPickup ? "Pickup assistance" : "Unloading assistance")}
+              (isPickup ? "Food rescue pickup" : "Food rescue unloading")}
           </Text>
         </Text>
         <Button
