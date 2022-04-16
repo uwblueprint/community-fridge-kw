@@ -168,10 +168,7 @@ const ConfirmShiftDetails = ({
 
   return (
     <Container variant="responsiveContainer">
-      <>
-        <BackButton previous={previous} />
-      </>
-
+      <BackButton previous={previous} />
       <Text
         textStyle="mobileHeader2"
         mt="1em"

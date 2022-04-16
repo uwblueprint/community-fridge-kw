@@ -302,7 +302,7 @@ const ConfirmDetails = ({
               <Text textStyle="mobileBody">
                 {currentSchedule.volunteerTime
                   ? format(
-                      parse(currentSchedule.volunteerTime, "kk:mm", new Date()),
+                      parse(currentSchedule.volunteerTime, "HH:mm", new Date()),
                       "h:mm aa",
                     )
                   : "-"}

@@ -36,7 +36,7 @@ const ThankYouVolunteer = ({
           } at
         ${
           shift.volunteerTime
-            ? format(parse(shift.volunteerTime, "kk:mm", new Date()), "h:mm a")
+            ? format(parse(shift.volunteerTime, "HH:mm", new Date()), "h:mm a")
             : ""
         } `}
         </Text>
