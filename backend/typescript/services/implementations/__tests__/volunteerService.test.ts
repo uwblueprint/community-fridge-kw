@@ -1,5 +1,5 @@
 import User from "../../../models/user.model";
-import { Status, VolunteerDTO } from "../../../types";
+import { ShiftType, Status, VolunteerDTO } from "../../../types";
 import testSql from "../../../testUtils/testDb";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
@@ -101,7 +101,15 @@ describe("Testing VolunteerService Functions", () => {
 
     const res = await volunteerService.getCheckInsAndSchedules("1");
 
-    expect(res).toMatchObject(expectedCheckInsAndSchedules);
+    expect(res).toMatchObject(
+      expectedCheckInsAndSchedules.filter(
+        (shift) =>
+          (shift.type === ShiftType.CHECKIN &&
+            shift.startDate! >= new Date()) ||
+          (shift.type === ShiftType.SCHEDULING &&
+            shift.startTime! >= new Date()),
+      ),
+    );
   });
 
   it("updateVolunteerById", async () => {

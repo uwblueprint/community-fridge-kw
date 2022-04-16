@@ -116,7 +116,11 @@ describe("pg schedulingService", () => {
       (volunteerId ?? "").toString(),
     );
     expect(res).toMatchObject(
-      testSchedules.filter((schedule) => schedule.volunteerId === volunteerId),
+      testSchedules.filter(
+        (schedule) =>
+          schedule.volunteerId === volunteerId &&
+          schedule.startTime >= new Date(),
+      ),
     );
   });
 

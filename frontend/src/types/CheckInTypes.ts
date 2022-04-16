@@ -1,6 +1,6 @@
 export type CheckIn = {
   id: string;
-  volunteerId?: number | null;
+  volunteerId?: string | null;
   startDate: string;
   endDate: string;
   notes?: string;
