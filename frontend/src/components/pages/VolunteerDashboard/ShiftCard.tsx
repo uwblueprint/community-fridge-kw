@@ -48,6 +48,11 @@ const VolunteerShiftCard = ({
     type,
   } = shift as CheckInOrScheduleProps;
   const [businessName, setBusinessName] = useState<string>("");
+  let next: () => void;
+
+  if (navigation) {
+    next = navigation.next;
+  }
 
   const dateLocal = () => {
     if (startDate) {
@@ -73,6 +78,13 @@ const VolunteerShiftCard = ({
     );
   };
 
+  const onSubmitClick = async () => {
+    if (setShiftDetails) {
+      setShiftDetails(id, type === ShiftType.SCHEDULING);
+      next();
+    }
+  };
+
   useEffect(() => {
     const getBusinessName = async () => {
       if (donorId) {
@@ -85,25 +97,6 @@ const VolunteerShiftCard = ({
     }
     getBusinessName();
   }, []);
-
-  let next: any;
-
-  if (navigation !== undefined) {
-    next = navigation.next;
-  }
-  const onSubmitClick = async () => {
-    if (setShiftDetails) {
-      if (type === ShiftType.SCHEDULING) {
-        setShiftDetails(id, true);
-      }
-
-      if (type === ShiftType.CHECKIN) {
-        setShiftDetails(id, false);
-      }
-
-      next();
-    }
-  };
 
   return (
     <Box my="2rem" width="100%" overflow="hidden">

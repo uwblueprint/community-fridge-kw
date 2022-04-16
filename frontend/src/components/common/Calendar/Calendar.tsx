@@ -30,7 +30,6 @@ const Calendar = ({
   setShiftDetails,
   deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
-  console.log("calendar's day: ", selectedDay);
   const getCheckInCard = (item: any, index: number) => {
     if (isCheckInShiftView) {
       return (

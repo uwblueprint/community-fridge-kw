@@ -50,7 +50,6 @@ const CheckInCalendar = ({
           setSelectedDay={(day) => setSelectedDay(day)}
         />
         {CheckInsCalendar}
-        {String(selectedDay)}
       </Flex>
     </Container>
   );
