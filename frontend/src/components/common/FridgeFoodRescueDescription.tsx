@@ -30,7 +30,7 @@ const FridgeFoodRescueDescription = () => {
   return (
     <>
       <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
-        Scheduled donations
+        Food rescue shifts
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
             variant="editInfo"
