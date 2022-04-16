@@ -77,7 +77,6 @@ const ConfirmShiftDetails = ({
   );
 
   const onSubmitClick = async () => {
-    // sign up logic
     if (volunteerId !== null) {
       const updateShiftValues = {
         volunteerId: String(volunteerId),
@@ -141,7 +140,6 @@ const ConfirmShiftDetails = ({
 
   const dateText = (date: string) => {
     if (date !== "" && date !== undefined) {
-      console.log(date);
       const startDateLocal = new Date(date);
       return format(startDateLocal, "MMMM d, yyyy");
     }

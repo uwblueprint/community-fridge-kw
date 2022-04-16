@@ -118,7 +118,7 @@ const Header = (): JSX.Element => {
                   >
                     Home
                   </Link>
-                  <Link as={ReactLink} to={Routes.VOLUNTEER_SHIFTS_PAGE}>
+                  <Link as={ReactLink} to={Routes.VOLUNTEER_DASHBOARD_PAGE}>
                     My volunteer shifts
                   </Link>
                 </>
@@ -271,7 +271,7 @@ const Header = (): JSX.Element => {
                       </Link>
                       <Link
                         as={ReactLink}
-                        to={Routes.VOLUNTEER_SHIFTS_PAGE}
+                        to={Routes.VOLUNTEER_DASHBOARD_PAGE}
                         onClick={onClose}
                       >
                         My volunteer shifts
