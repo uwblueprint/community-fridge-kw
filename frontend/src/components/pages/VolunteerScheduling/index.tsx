@@ -1,7 +1,12 @@
-import { Container, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { NavigationProps, Step, useStep } from "react-hooks-helper";
 
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
+import ConfirmShiftDetails from "./ConfirmShiftDetails";
+import ThankYouVolunteer from "./ThankYouVolunteer";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
 
 const steps = [
@@ -22,7 +27,17 @@ interface UseStepType {
 }
 
 const VolunteerScheduling = () => {
-  const { step }: UseStepType = useStep({
+  const [selectedShift, setSelectedShift] = useState<
+    CheckInWithShiftType | ScheduleWithShiftType
+  >({} as CheckInWithShiftType | ScheduleWithShiftType);
+
+  const setSelectedVolunteerShift = useCallback(
+    (shift: CheckInWithShiftType | ScheduleWithShiftType) =>
+      setSelectedShift(shift),
+    [setSelectedShift],
+  );
+
+  const { step, navigation }: UseStepType = useStep({
     steps,
     initialStep: 0,
   });
@@ -30,19 +45,18 @@ const VolunteerScheduling = () => {
 
   switch (id) {
     case "shifts tab":
-      return <VolunteerShiftsTabs />;
+      return (
+        <VolunteerShiftsTabs
+          navigation={navigation}
+          setSelectedVolunteerShift={setSelectedVolunteerShift}
+        />
+      );
     case "confirm shift sign up":
       return (
-        <Container centerContent variant="responsiveContainer">
-          <Text>Confirm Shift Page Component</Text>
-        </Container>
+        <ConfirmShiftDetails navigation={navigation} shift={selectedShift} />
       );
     case "thank you page":
-      return (
-        <Container centerContent variant="responsiveContainer">
-          <Text>Thank You Page Component</Text>
-        </Container>
-      );
+      return <ThankYouVolunteer shift={selectedShift} />;
     default:
       return <></>;
   }

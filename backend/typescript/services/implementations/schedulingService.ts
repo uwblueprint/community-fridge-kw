@@ -1021,6 +1021,9 @@ class SchedulingService implements ISchedulingService {
         where: {
           volunteer_id: Number(volunteerId),
           volunteer_needed: true,
+          start_time: {
+            [Op.gte]: new Date(),
+          },
         },
         order: [["start_time", "ASC"]],
       });

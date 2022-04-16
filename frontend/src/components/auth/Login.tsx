@@ -68,7 +68,7 @@ const Login = (): React.ReactElement => {
       case Role.ADMIN:
         return <Redirect to={Routes.ADMIN_CHECK_INS} />;
       case Role.VOLUNTEER:
-        return <Redirect to={Routes.VOLUNTEER_SHIFTS_PAGE} />;
+        return <Redirect to={Routes.VOLUNTEER_DASHBOARD_PAGE} />;
       default:
         return <Redirect to={Routes.DASHBOARD_PAGE} />;
     }
