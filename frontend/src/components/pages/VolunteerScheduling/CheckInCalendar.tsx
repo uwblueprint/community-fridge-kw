@@ -27,21 +27,6 @@ const CheckInCalendar = ({
     new Date(),
   );
 
-  const CheckInsCalendar = React.useMemo(() => {
-    return (
-      <Calendar
-        key={selectedDay?.toString()}
-        selectedDay={selectedDay as Date}
-        items={checkIns}
-        isAdminView={isAdminView}
-        isCheckInView
-        isCheckInShiftView
-        navigation={navigation}
-        setSelectedVolunteerShift={setSelectedVolunteerShift}
-      />
-    );
-  }, [selectedDay]);
-
   return (
     <Container alignContent="left" variant="calendarContainer">
       <Flex
@@ -54,7 +39,16 @@ const CheckInCalendar = ({
           selectedDay={selectedDay}
           setSelectedDay={(day) => setSelectedDay(day)}
         />
-        {CheckInsCalendar}
+        <Calendar
+          key={selectedDay?.toString()}
+          selectedDay={selectedDay as Date}
+          items={checkIns}
+          isAdminView={isAdminView}
+          isCheckInView
+          isCheckInShiftView
+          navigation={navigation}
+          setSelectedVolunteerShift={setSelectedVolunteerShift}
+        />
       </Flex>
     </Container>
   );
