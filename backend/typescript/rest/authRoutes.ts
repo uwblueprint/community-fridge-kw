@@ -199,7 +199,7 @@ authRouter.post("/approveVolunteer/:email?", async (req, res) => {
 
   try {
     const response = await authService.sendVolunteerApprovedEmail(
-      req.params.email,
+      req.params.email!,
       firstName as string,
     );
     if (response) {
