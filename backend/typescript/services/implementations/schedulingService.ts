@@ -655,6 +655,9 @@ class SchedulingService implements ISchedulingService {
       Object.entries(scheduling).forEach(([key, value]) => {
         updatesSnakeCase[snakeCase(key)] = value;
       });
+      const oldScheduling = await Scheduling.findOne({
+        where: { id: schedulingId },
+      });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
         returning: true,
@@ -684,8 +687,10 @@ class SchedulingService implements ISchedulingService {
         volunteerId: String(updatedScheduling.volunteer_id),
       };
       // send volunteer email confirmation if signed up for food rescue
-      if (Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") && 
-      updatedScheduling.volunteer_id !== null) {
+      if (
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        updatedScheduling.volunteer_id !== null
+      ) {
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
           scheduling.volunteerId!,
           updatedSchedulingDTO,
@@ -698,15 +703,17 @@ class SchedulingService implements ISchedulingService {
         );
       }
       // send cancellation email if volunteer has cancelled
-      else if (Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") && 
-      updatedScheduling.volunteer_id === null) {
+      if (
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        updatedScheduling.volunteer_id === null
+      ) {
         this.sendFoodRescueCancellationEmail(
-          scheduling.volunteerId!,
+          String(oldScheduling!.volunteer_id),
           updatedSchedulingDTO,
           true,
         );
         this.sendFoodRescueCancellationEmail(
-          scheduling.volunteerId!,
+          String(oldScheduling!.volunteer_id),
           updatedSchedulingDTO,
           false,
         );
@@ -1122,15 +1129,16 @@ class SchedulingService implements ISchedulingService {
         </body>
       </html>
         `;
-        this.emailService.sendEmail(
-          isAdmin ? getAdminEmail() : email,
-          isAdmin ? `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`
+      this.emailService.sendEmail(
+        isAdmin ? getAdminEmail() : email,
+        isAdmin
+          ? `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`
           : `Confirmation: Cancelled Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
-          emailBody,
-        );
+        emailBody,
+      );
     } catch (error) {
       Logger.error(
-        `Failed to generate email to confirm volunteer sign up for food rescue shift for volunteer with id ${volunteerId}`,
+        `Failed to generate email to notify volunteer cancellation for food rescue shift for volunteer with id ${volunteerId}`,
       );
       throw error;
     }
