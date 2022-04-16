@@ -1048,7 +1048,7 @@ class SchedulingService implements ISchedulingService {
 
       let subject = `New: Food Rescue Shift for ${startDayString} at ${startTimeString}`;
       this.emailService.sendEmail(
-        SchedulingService.TEMP_ADMIN_EMAIL,
+        getAdminEmail(),
         subject,
         emailBody,
       );

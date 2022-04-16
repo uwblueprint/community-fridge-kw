@@ -343,7 +343,7 @@ class CheckInService implements ICheckInService {
 
       let subject = `New: Fridge Check-in Shift for ${startDayString} at ${startTimeString}`;
       this.emailService.sendEmail(
-        CheckInService.TEMP_ADMIN_EMAIL,
+        getAdminEmail(),
         subject,
         emailBody,
       );
