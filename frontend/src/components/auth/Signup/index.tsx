@@ -69,9 +69,6 @@ const Signup = () => {
         />
       );
     case "volunteer questions":
-      if (formValues.role === Role.DONOR) {
-        navigation.next();
-      }
       return (
         <VolunteerQuestions
           formData={formValues}
