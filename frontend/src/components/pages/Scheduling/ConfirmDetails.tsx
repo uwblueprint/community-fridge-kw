@@ -114,10 +114,7 @@ const ConfirmDetails = ({
   };
 
   const getVolunteerData = async () => {
-    if (currentSchedule.volunteerId === null) {
-      return;
-    }
-    if (currentSchedule.volunteerId !== undefined) {
+    if (currentSchedule.volunteerId) {
       const volunteerResponse = await VolunteerAPIClient.getVolunteerById(
         currentSchedule.volunteerId.toString(),
       );
@@ -319,36 +316,31 @@ const ConfirmDetails = ({
                 Additional notes
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.notes === "" || currentSchedule.notes === null
-                  ? "-"
-                  : currentSchedule.notes}
+                {currentSchedule.notes}
               </Text>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Assigned volunteer
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.volunteerId === undefined ||
-                currentSchedule.volunteerId === null
-                  ? "-"
-                  : `${currentVolunteer.firstName} ${currentVolunteer.lastName}`}
+                {currentSchedule.volunteerId
+                  ? `${currentVolunteer.firstName} ${currentVolunteer.lastName}`
+                  : "-"}
               </Text>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Email
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.volunteerId === undefined ||
-                currentSchedule.volunteerId === null
-                  ? "-"
-                  : `${currentVolunteer.email}`}
+                {currentSchedule.volunteerId
+                  ? `${currentVolunteer.email}`
+                  : "-"}
               </Text>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Phone
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.volunteerId === undefined ||
-                currentSchedule.volunteerId === null
-                  ? "-"
-                  : `${currentVolunteer.phoneNumber}`}
+                {currentSchedule.volunteerId
+                  ? `${currentVolunteer.phoneNumber}`
+                  : "-"}
               </Text>
             </>
           )}
