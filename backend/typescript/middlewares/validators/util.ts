@@ -1,6 +1,12 @@
 import { Categories } from "../../types";
 
-type Type = "string" | "integer" | "boolean" | "Status" | "Date string";
+type Type =
+  | "string"
+  | "integer"
+  | "boolean"
+  | "Status"
+  | "Date string"
+  | "24 Hour Time String";
 
 const allowableContentTypes = new Set([
   "text/plain",
@@ -12,6 +18,11 @@ const allowableContentTypes = new Set([
 
 export const validateDate = (value: string): boolean => {
   return !!Date.parse(value);
+};
+
+export const validate24HourTime = (value: string): boolean => {
+  const regEx = new RegExp(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/);
+  return regEx.test(value);
 };
 
 export const validateRecurringDonationEndDate = (

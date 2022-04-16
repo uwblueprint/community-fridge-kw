@@ -23,10 +23,12 @@ import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
+import { downloadCSV } from "../../../utils/CSVUtils";
 import Calendar from "../../common/Calendar/Calendar";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
+import { getScheduleCSVData } from "./getCSVData";
 
 const ViewDonationsAndCheckIns = ({
   isAdminView,
@@ -81,9 +83,11 @@ const ViewDonationsAndCheckIns = ({
       const checkInResponse = await CheckInAPIClient.getAllCheckIns();
       setCheckIns(checkInResponse);
     };
-
-    getSchedules();
-    getCheckIns();
+    if (isCheckInView) {
+      getCheckIns();
+    } else {
+      getSchedules();
+    }
   }, []);
 
   // filter donations/schedules based on selected filter
@@ -127,6 +131,11 @@ const ViewDonationsAndCheckIns = ({
     ]);
   };
 
+  const handleCSVDownload = async () => {
+    const csvScheduleData = await getScheduleCSVData();
+    downloadCSV(csvScheduleData, "foodRescues");
+  };
+
   return (
     <Container alignContent="left" variant="calendarContainer">
       <Stack
@@ -147,6 +156,7 @@ const ViewDonationsAndCheckIns = ({
               variant={isMobile ? "exportMobile" : "export"}
               leftIcon={<DownloadIcon />}
               flex={1}
+              onClick={handleCSVDownload}
             >
               Export
             </Button>
