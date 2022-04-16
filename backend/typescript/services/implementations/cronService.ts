@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Op } from "sequelize";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import IEmailService from "../interfaces/emailService";
 import { UserDonorDTO } from "../../types";
 import logger from "../../utilities/logger";
@@ -15,6 +17,11 @@ import { emailHeader, emailFooter } from "../../utilities/emailUtils";
 const cron = require("node-cron");
 
 const Logger = logger(__filename);
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+dayjs.tz.setDefault("America/New_York");
 
 class CronService implements ICronService {
   emailService: IEmailService | null;
@@ -46,23 +53,10 @@ class CronService implements ICronService {
       const { firstName, email } = currDonor;
       const startTime = schedule.start_time;
       const endTime = schedule.end_time;
+      const startDayString: string = dayjs.tz(startTime).format("dddd, MMMM D");
 
-      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
-        timeZone: "EST",
-      });
-
-      const startDayString: string = dayjs(startTimeToLocalDate).format(
-        "dddd, MMMM D",
-      );
-
-      const startTimeString: string = dayjs(startTimeToLocalDate).format(
-        "h:mm A",
-      );
-      const endTimeString: string = dayjs(
-        endTime.toLocaleString("en-US", {
-          timeZone: "EST",
-        }),
-      ).format("h:mm A");
+      const startTimeString: string = dayjs.tz(startTime).format("h:mm A");
+      const endTimeString: string = dayjs.tz(endTime).format("h:mm A");
 
       dayjs.extend(customParseFormat);
 
