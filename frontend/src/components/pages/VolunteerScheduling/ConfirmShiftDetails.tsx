@@ -143,9 +143,15 @@ const ConfirmShiftDetails = ({
 
   return (
     <Container variant="responsiveContainer">
+      <BackButton
+        previous={
+          viewDetailsScreen
+            ? () => history.push(Routes.VOLUNTEER_DASHBOARD_PAGE)
+            : previous
+        }
+      />
       {!viewDetailsScreen && (
         <>
-          <BackButton previous={previous} />
           <Text
             textStyle="mobileHeader2"
             mt="1em"
