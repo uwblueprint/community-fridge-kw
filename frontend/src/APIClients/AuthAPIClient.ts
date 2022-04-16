@@ -63,11 +63,15 @@ const register = async (
   password: string,
   businessName: string,
   role: string,
+  cityQuestionResponse?: string,
+  intentionQuestionResponse?: string,
+  skillsQuestionResponse?: string,
 ): Promise<AuthenticatedUser> => {
   try {
     const { data } = await baseAPIClient.post(
       "/auth/register",
-      { firstName, lastName, email, phoneNumber, password, role, businessName },
+      { firstName, lastName, email, phoneNumber, password, role, businessName, cityQuestionResponse,
+        intentionQuestionResponse, skillsQuestionResponse },
       { withCredentials: true },
     );
     return data;

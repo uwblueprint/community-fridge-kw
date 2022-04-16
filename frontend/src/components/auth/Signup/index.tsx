@@ -1,9 +1,11 @@
 import React from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
+import { Role } from "../../../types/AuthTypes";
 
 import AccountDetails from "./AccountDetails";
 import AccountType from "./AccountType";
 import CreateAccount from "./CreateAccount";
+import VolunteerQuestions from "./VolunteerQuestions";
 import TermsConditions from "./TermsConditions";
 import VerificationPage from "./VerificationEmail";
 
@@ -11,6 +13,7 @@ const steps = [
   { id: "account type" },
   { id: "create account" },
   { id: "account details" },
+  { id: "volunteer questions" },
   { id: "terms conditions" },
   { id: "email verification" },
 ];
@@ -32,10 +35,15 @@ const Signup = () => {
     businessName: "",
     role: "",
     acceptedTerms: false,
+    cityQuestionResponse: "",
+    intentionQuestionResponse: "",
+    skillsQuestionResponse: ""
   });
 
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
   const { id } = step;
+
+  console.log(formValues, step);
 
   switch (id) {
     case "account type":
@@ -47,6 +55,7 @@ const Signup = () => {
         />
       );
     case "create account":
+      console.log(formValues);
       return (
         <CreateAccount
           formData={formValues}
@@ -55,9 +64,21 @@ const Signup = () => {
         />
       );
     case "account details":
+      console.log(formValues);
       return (
         <AccountDetails
           formValues={formValues}
+          setForm={setForm}
+          navigation={navigation}
+        />
+      );
+    case "volunteer questions":
+      if (formValues.role === Role.DONOR) {
+        navigation.next();
+      }
+      return (
+        <VolunteerQuestions
+          formData={formValues}
           setForm={setForm}
           navigation={navigation}
         />

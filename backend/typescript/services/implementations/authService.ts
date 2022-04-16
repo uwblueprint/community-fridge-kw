@@ -272,6 +272,7 @@ class AuthService implements IAuthService {
   async sendAdminVolunteerSignUpEmail(
     email: string,
     fullName: string,
+    volunteerResponses: string[]
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
