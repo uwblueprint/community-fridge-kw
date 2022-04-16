@@ -314,6 +314,48 @@ class AuthService implements IAuthService {
     }
   }
 
+  async sendVolunteerApprovedEmail(
+    email: string,
+    firstName: string,
+  ): Promise<boolean> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerApprovedEmail but this instance of AuthService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const emailBody = `
+      <html>
+      ${emailHeader}
+      <body>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName},</h2>
+        <p>Welcome to the Community Fridge KW volunteer team! We are excited to have you on board. Your account status is APPROVED. 
+        You can now access our volunteer shifts and begin signing up for shifts here.<br /><br />
+        If you’re on Facebook, consider joining our CFKW Volunteers group! This is a great way to stay in the loop and also connect 
+        with fellow volunteers. We encourage you to look for the posts highlighted under the “Featured” section for critical 
+        announcements like hamper deliveries, as well as instructions to sign up for a fridge check in and/or food rescue.<br /><br />
+        In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
+        </p>
+       ${emailFooter}
+      </body>
+    </html>
+      `;
+
+      this.emailService.sendEmail(
+        email,
+        "APPROVED: Volunteer Account Status",
+        emailBody,
+      );
+      return true;
+    } catch (error) {
+      Logger.error(
+        `Failed to generate admin email for new volunteer sign up for volunteer with email ${email}`,
+      );
+      return false;
+    }
+  }
+
   async isAuthorizedByRole(
     accessToken: string,
     roles: Set<Role>,

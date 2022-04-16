@@ -18,6 +18,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
+import AuthAPIClient from "../../../APIClients/AuthAPIClient";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import UserAPIClient from "../../../APIClients/UserAPIClient";
@@ -55,6 +56,7 @@ const UserManagementPage = (): JSX.Element => {
       mergedUsers.push({
         userId: volunteer.userId,
         id: volunteer.id,
+        firstName: volunteer.firstName,
         pointOfContact: `${volunteer.firstName} ${volunteer.lastName}`,
         company: "",
         email: volunteer.email,
@@ -68,6 +70,7 @@ const UserManagementPage = (): JSX.Element => {
       mergedUsers.push({
         userId: donor.userId,
         id: donor.id,
+        firstName: donor.firstName,
         pointOfContact: `${donor.firstName} ${donor.lastName}`,
         company: donor.businessName,
         email: donor.email,
@@ -138,6 +141,7 @@ const UserManagementPage = (): JSX.Element => {
         }
         return u;
       });
+      await AuthAPIClient.sendVolunteerApprovedEmail(user.email, user.firstName);
       setUsers(newUsers);
     }
   };
