@@ -28,12 +28,14 @@ const VolunteerShiftCard = ({
   shift,
   navigation,
   isSignUp,
-  setShiftDetails,
+  setSelectedVolunteerShift,
 }: {
   shift: CheckInWithShiftType | ScheduleWithShiftType;
   navigation?: NavigationProps;
   isSignUp?: boolean;
-  setShiftDetails?: (shiftId: string, isFoodRescue: boolean) => void;
+  setSelectedVolunteerShift?: (
+    shift: ScheduleWithShiftType | CheckInWithShiftType,
+  ) => void;
 }): JSX.Element => {
   const {
     id,
@@ -79,8 +81,8 @@ const VolunteerShiftCard = ({
   };
 
   const onSubmitClick = async () => {
-    if (setShiftDetails) {
-      setShiftDetails(id, type === ShiftType.SCHEDULING);
+    if (setSelectedVolunteerShift) {
+      setSelectedVolunteerShift(shift);
       next();
     }
   };
@@ -92,9 +94,6 @@ const VolunteerShiftCard = ({
         setBusinessName(donor.businessName);
       }
     };
-    if (setShiftDetails) {
-      setShiftDetails(id, !!startTime);
-    }
     getBusinessName();
   }, []);
 

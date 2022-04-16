@@ -28,19 +28,9 @@ interface UseStepType {
 }
 
 const VolunteerScheduling = () => {
-  const [shiftId, setShiftId] = useState<string>("1");
-  const [shiftType, setShiftType] = useState<ShiftType>(ShiftType.CHECKIN);
   const [selectedShift, setSelectedShift] = useState<
     CheckInWithShiftType | ScheduleWithShiftType
   >({} as CheckInWithShiftType | ScheduleWithShiftType);
-
-  const setShiftDetails = useCallback(
-    (id: string, isFoodRescue: boolean) => {
-      setShiftId(id);
-      setShiftType(isFoodRescue ? ShiftType.SCHEDULING : ShiftType.CHECKIN);
-    },
-    [shiftId, shiftType],
-  );
 
   const setSelectedVolunteerShift = useCallback(
     (shift: CheckInWithShiftType | ScheduleWithShiftType) =>
@@ -59,16 +49,14 @@ const VolunteerScheduling = () => {
       return (
         <VolunteerShiftsTabs
           navigation={navigation}
-          setShiftDetails={setShiftDetails}
+          setSelectedVolunteerShift={setSelectedVolunteerShift}
         />
       );
     case "confirm shift sign up":
       return (
         <ConfirmShiftDetails
           navigation={navigation}
-          shiftId={shiftId}
-          shiftType={shiftType}
-          setSelectedVolunteerShift={setSelectedVolunteerShift}
+          shift={selectedShift}
         />
       );
     case "thank you page":

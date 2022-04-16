@@ -13,7 +13,7 @@ import { ShiftProps } from "./CheckIns";
 
 const FoodRescues = ({
   navigation,
-  setShiftDetails,
+  setSelectedVolunteerShift,
 }: ShiftProps): JSX.Element => {
   const [foodRescues, setFoodRescues] = useState<ScheduleWithShiftType[]>([]);
 
@@ -48,7 +48,7 @@ const FoodRescues = ({
           <ShiftCard
             key={id}
             shift={scheduleObject}
-            setShiftDetails={setShiftDetails}
+            setSelectedVolunteerShift={setSelectedVolunteerShift}
             navigation={navigation}
             isSignUp
           />

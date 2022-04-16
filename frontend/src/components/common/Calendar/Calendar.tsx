@@ -4,6 +4,7 @@ import { NavigationProps } from "react-hooks-helper";
 
 import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
+import { ScheduleWithShiftType, CheckInWithShiftType } from "../../../types/VolunteerTypes";
 import CheckInInfoCard from "../../pages/AdminDashboard/components/CheckInInfoCard";
 import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import ShiftCard from "../../pages/VolunteerDashboard/ShiftCard";
@@ -16,7 +17,9 @@ type CalendarProps = {
   isCheckInView: boolean;
   isCheckInShiftView?: boolean;
   navigation?: NavigationProps;
-  setShiftDetails?: (shiftId: string, isFoodRescue: boolean) => void;
+  setSelectedVolunteerShift?: (
+    shift: ScheduleWithShiftType | CheckInWithShiftType,
+  ) => void;
   deleteCheckIn?: any;
 };
 
@@ -27,7 +30,7 @@ const Calendar = ({
   isCheckInView = false,
   isCheckInShiftView = false,
   navigation,
-  setShiftDetails,
+  setSelectedVolunteerShift,
   deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
   const getCheckInCard = (item: any, index: number) => {
@@ -39,7 +42,7 @@ const Calendar = ({
             shift={item}
             navigation={navigation}
             isSignUp
-            setShiftDetails={setShiftDetails}
+            setSelectedVolunteerShift={setSelectedVolunteerShift}
           />
           {index < items.length - 1 && <Divider pt="0.5rem" />}
         </>
