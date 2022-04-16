@@ -16,11 +16,9 @@ import IEmailService from "../interfaces/emailService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
 import IVolunteerService from "../interfaces/volunteerService";
 import VolunteerService from "./volunteerService";
-import IUserService from "../interfaces/userService";
-import UserService from "./userService";
-import IDonorService from "../interfaces/donorService";
-import DonorService from "./donorService";
-import { emailFooter, emailHeader } from "../../utilities/emailUtils";
+import ContentService from "./contentService";
+import { emailFooter, emailHeader, getCheckInShiftInformation, getVolunteerContactInformation } from "../../utilities/emailUtils";
+import IContentService from "../interfaces/contentService";
 
 const Logger = logger(__filename);
 
@@ -191,13 +189,14 @@ class CheckInService implements ICheckInService {
     }
     try {
       const volunteerService: IVolunteerService = new VolunteerService();
-      const userService: IUserService = new UserService();
-      const donorService: IDonorService = new DonorService();
+      const contentService: IContentService = new ContentService();
       const {
         firstName,
         lastName,
         email,
+        phoneNumber,
       } = await volunteerService.getVolunteerById(volunteerId);
+      const { checkinUrl } = await contentService.getContent();
       const startTimeToLocalDate = checkIn.startDate.toLocaleString("en-US", {
         timeZone: "EST",
       });
@@ -207,28 +206,16 @@ class CheckInService implements ICheckInService {
       const startTimeString: string = dayjs(startTimeToLocalDate).format(
         "h:mm A",
       );
-      const endTimeString: string = dayjs(
-        checkIn.endDate.toLocaleString("en-US", {
-          timeZone: "EST",
-        }),
-      ).format("h:mm A");
       const emailBody = `<html>
         ${emailHeader}
         <body>
           <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
           <p>Thank you for volunteering with us!<br /><br />
           Here is a summary of your upcoming shift: <br /> <br />
-          Food Check-In Instructions: [LINK] 
+          Food Check-In Instructions: <a href="${checkinUrl}">here</a>
           </p>
-          <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-          Shift Information:
-          </h2>
-          <p>
-            <b>Date:</b> ${startDayString} <br/>
-            <b>Time:</b> ${startTimeString} - ${startTimeString} <br/>
-            <b>Additional Notes:</b> <br/>
-            $${checkIn.notes} 
-          </p>
+          ${getVolunteerContactInformation(firstName, lastName,phoneNumber, email)}
+          ${getCheckInShiftInformation(checkIn)}
           <p>
             If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
           </p>
