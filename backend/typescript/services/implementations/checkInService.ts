@@ -17,7 +17,12 @@ import { toSnakeCase } from "../../utilities/servicesUtils";
 import IVolunteerService from "../interfaces/volunteerService";
 import VolunteerService from "./volunteerService";
 import ContentService from "./contentService";
-import { emailFooter, emailHeader, getCheckInShiftInformation, getVolunteerContactInformation } from "../../utilities/emailUtils";
+import {
+  emailFooter,
+  emailHeader,
+  formatShiftInformation,
+  formatVolunteerContactInformation,
+} from "../../utilities/emailUtils";
 import IContentService from "../interfaces/contentService";
 
 const Logger = logger(__filename);
@@ -206,6 +211,11 @@ class CheckInService implements ICheckInService {
       const startTimeString: string = dayjs(startTimeToLocalDate).format(
         "h:mm A",
       );
+      const endTimeString: string = dayjs(
+        checkIn.endDate.toLocaleString("en-US", {
+          timeZone: "EST",
+        }),
+      ).format("h:mm A");
       const emailBody = `<html>
         ${emailHeader}
         <body>
@@ -214,8 +224,18 @@ class CheckInService implements ICheckInService {
           Here is a summary of your upcoming shift: <br /> <br />
           Food Check-In Instructions: <a href="${checkinUrl}">here</a>
           </p>
-          ${getVolunteerContactInformation(firstName, lastName,phoneNumber, email)}
-          ${getCheckInShiftInformation(checkIn)}
+          ${formatVolunteerContactInformation(
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+          )}
+          ${formatShiftInformation(
+            startDayString,
+            startTimeString,
+            endTimeString,
+            checkIn.notes ?? "",
+          )}
           <p>
             If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
           </p>

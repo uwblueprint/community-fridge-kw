@@ -1,8 +1,3 @@
-import IVolunteerService from "../services/interfaces/volunteerService";
-import VolunteerService from "../services/implementations/volunteerService";
-import dayjs from "dayjs";
-
-import { CheckInDTO } from "../types";
 export const emailHeader = `
   <head>
     <link
@@ -57,47 +52,61 @@ export const cancellationEmail = (mainLine: string, name: string): string => {
     `;
 };
 
-export const getVolunteerContactInformation = (firstName: string, lastName: string, phoneNumber: string, email: string) => {
-    return `
-    <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-          Volunteer Contact Information:
-    </h2>
-          <p>
-            <b>Name:</b> ${firstName} ${lastName} <br/>
-            <b>Phone Number:</b> ${phoneNumber} <br/>
-            <b>Email:</b>${email} <br/>
-          </p>
-    `;
-};
-
-export const getCheckInShiftInformation = (checkIn: CheckInDTO) => {
-  const { startDate, endDate, notes } = checkIn;
-  const startTimeToLocalDate = startDate.toLocaleString("en-US", {
-    timeZone: "EST",
-  });
-  const startDayString: string = dayjs(startTimeToLocalDate).format(
-    "dddd, MMMM D",
-  );
-  const startTimeString: string = dayjs(startTimeToLocalDate).format("h:mm A");
-  const endTimeString: string = dayjs(
-    endDate.toLocaleString("en-US", {
-      timeZone: "EST",
-    }),
-  ).format("h:mm A");
-
+export const formatShiftInformation = (
+  startDay: string,
+  startTime: string,
+  endTime: string,
+  notes: string,
+) => {
   return `
   <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
   Shift Information:
   </h2>
   <p>
-    <b>Date:</b> ${startDayString} <br/>
-    <b>Time:</b> ${startTimeString} - ${endTimeString} <br/>
+    <b>Date:</b> ${startDay} <br/>
+    <b>Time:</b> ${startTime} - ${endTime} <br/>
     <b>Additional Notes:</b> <br/>
     ${notes} 
   </p>
   `;
 };
 
+export const formatVolunteerContactInformation = (
+  firstName: string,
+  lastName: string,
+  phoneNumber: string,
+  email: string,
+) => {
+  return `
+  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+        Volunteer Contact Information:
+  </h2>
+        <p>
+          <b>Name:</b> ${firstName} ${lastName} <br/>
+          <b>Phone Number:</b> ${phoneNumber} <br/>
+          <b>Email:</b>${email} <br/>
+        </p>
+  `;
+};
+
+export const formatDonorContactInformation = (
+  firstName: string,
+  lastName: string,
+  phoneNumber: string,
+  email: string,
+) => {
+  return `
+  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+  Donor Contact Information:
+  </h2>
+  <p>
+    <b>Name:</b> ${firstName} ${lastName} <br/>
+    <b>Email:</b> ${email} <br/>
+    <b>Phone Number:</b> ${phoneNumber}
+  </p>
+  
+  `;
+};
 export const getAdminEmail = (): string => {
   return process.env.NODE_ENV === "production"
     ? "communityfridgekw@gmail.com"

@@ -24,13 +24,14 @@ import {
   getAdminEmail,
   emailHeader,
   emailFooter,
+  formatVolunteerContactInformation,
+  formatDonorContactInformation,
+  formatShiftInformation,
 } from "../../utilities/emailUtils";
 import IVolunteerService from "../interfaces/volunteerService";
 import VolunteerService from "./volunteerService";
-import ICheckInService from "../interfaces/checkInService";
-import CheckInService from "./checkInService";
-import IUserService from "../interfaces/userService";
-import UserService from "./userService";
+import IContentService from "../interfaces/contentService";
+import ContentService from "./contentService";
 
 const Logger = logger(__filename);
 
@@ -38,8 +39,6 @@ class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
 
   donorService: IDonorService;
-
-  static TEMP_ADMIN_EMAIL = "linnaluo@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -796,14 +795,15 @@ class SchedulingService implements ISchedulingService {
     }
     try {
       const volunteerService: IVolunteerService = new VolunteerService();
-      const userService: IUserService = new UserService();
+      const contentService: IContentService = new ContentService();
+      const { foodRescueUrl } = await contentService.getContent();
       const {
         firstName,
         lastName,
+        phoneNumber,
         email,
       } = await volunteerService.getVolunteerById(volunteerId);
       const donor = await this.donorService.getDonorById(scheduling.donorId);
-      const { phoneNumber } = await userService.getUserById(donor.userId);
       const startTimeToLocalDate = scheduling.startTime.toLocaleString(
         "en-US",
         {
@@ -827,25 +827,26 @@ class SchedulingService implements ISchedulingService {
           <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
           <p>Thank you for volunteering with us!<br /><br />
           Here is a summary of your upcoming shift: <br /> <br />
-          Food Rescue Instructions: [LINK] 
+          Food Rescue Instructions:  <a href="${foodRescueUrl}">here</a>
           </p>
-          <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-          Shift Information:
-          </h2>
-          <p>
-            <b>Date:</b> ${startDayString} <br/>
-            <b>Time:</b> ${startTimeString} - ${startTimeString} <br/>
-            <b>Additional Notes:</b> <br/>
-            ${scheduling.notes} 
-          </p>
-          <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
-          Donor Contact Information:
-          </h2>
-          <p>
-            <b>Name:</b> ${donor.firstName} ${donor.lastName} <br/>
-            <b>Email:</b> ${donor.email} <br/>
-            <b>Phone Number:</b> ${phoneNumber}
-          </p>
+         ${formatShiftInformation(
+           startDayString,
+           startTimeString,
+           endTimeString,
+           scheduling.notes ?? "",
+         )}
+          ${formatVolunteerContactInformation(
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+          )}
+          ${formatDonorContactInformation(
+            donor.firstName,
+            donor.lastName,
+            donor.phoneNumber,
+            donor.email,
+          )}
           <p>
             If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
           </p>
