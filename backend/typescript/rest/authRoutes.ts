@@ -189,4 +189,20 @@ authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
   }
 });
 
+authRouter.post("/approveVolunteer/:email?", async (req, res) => {
+  const { firstName } = req.query;
+
+  try {
+    const response = await authService.sendVolunteerApprovedEmail(
+      req.params.email,
+      firstName as string,
+    );
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
 export default authRouter;
