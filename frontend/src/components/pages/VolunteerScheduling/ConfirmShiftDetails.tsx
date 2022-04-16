@@ -20,11 +20,18 @@ import { DonationSizes } from "../Scheduling/types";
 const ConfirmShiftDetails = ({
   navigation,
   shift,
+  viewDetailsScreen = false,
 }: {
-  navigation: NavigationProps;
+  navigation?: NavigationProps;
   shift: ScheduleWithShiftType | CheckInWithShiftType;
+  viewDetailsScreen?: boolean;
 }) => {
-  const { previous, next } = navigation;
+  let previous: (() => void) | undefined;
+  let next: () => void;
+  if (navigation) {
+    previous = navigation.previous;
+    next = navigation.next;
+  }
   const { authenticatedUser } = useContext(AuthContext);
   const { volunteerId } = useContext(VolunteerContext);
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
@@ -91,29 +98,34 @@ const ConfirmShiftDetails = ({
 
   return (
     <Container variant="responsiveContainer">
-      <BackButton previous={previous} />
-      <Text
-        textStyle="mobileHeader2"
-        mt="1em"
-        direction="row"
-        display={{ md: "flex" }}
-        mb="1em"
-      >
-        Confirm shift sign-up &nbsp;&nbsp;&nbsp;
-      </Text>
-      <HStack>
-        <Flex justify="flex-end">
-          <Button onClick={onSubmitClick} variant="navigation">
-            Confirm shift sign-up
-          </Button>
-        </Flex>
-      </HStack>
-
+      {!viewDetailsScreen && (
+        <>
+          <BackButton previous={previous} />
+          <Text
+            textStyle="mobileHeader2"
+            mt="1em"
+            direction="row"
+            display={{ md: "flex" }}
+            mb="1em"
+          >
+            Confirm shift sign-up &nbsp;&nbsp;&nbsp;
+          </Text>
+          <HStack>
+            <Flex justify="flex-end">
+              <Button onClick={onSubmitClick} variant="navigation">
+                Confirm shift sign-up
+              </Button>
+            </Flex>
+          </HStack>
+        </>
+      )}
       <Box m="3em 0" pl="0" align="left">
         <Text textStyle="mobileHeader3">Shift details</Text>
         <Text textStyle="mobileBody" color="hubbard.100" pt="1.4em">
-          You are signing up to volunteer for the following shift. Please note
-          your contact information will be shared with the donor.
+          {viewDetailsScreen
+            ? `Please ensure you are at the meetup location at the specified volunteer arrival time.`
+            : `You are signing up to volunteer for the following shift. Please note
+            your contact information will be shared with the donor.`}
         </Text>
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Volunteer shift type
@@ -174,9 +186,9 @@ const ConfirmShiftDetails = ({
 
             <Text textStyle="mobileBody">{dateText(shift.startTime)}</Text>
             <Text textStyle="mobileBody">
-              {`${startAndEndTimeLocal(shift.startTime)} - ${startAndEndTimeLocal(
-                shift.endTime,
-              )}`}
+              {`${startAndEndTimeLocal(
+                shift.startTime,
+              )} - ${startAndEndTimeLocal(shift.endTime)}`}
             </Text>
             <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
               Size

@@ -2,7 +2,8 @@ import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { NavigationProps } from "react-hooks-helper";
-
+import { useHistory } from "react-router-dom";
+import * as Routes from "../../../constants/Routes";
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import {
   CheckInWithShiftType,
@@ -37,6 +38,7 @@ const VolunteerShiftCard = ({
     shift: ScheduleWithShiftType | CheckInWithShiftType,
   ) => void;
 }): JSX.Element => {
+  const history = useHistory();
   const {
     id,
     donorId,
@@ -81,9 +83,11 @@ const VolunteerShiftCard = ({
   };
 
   const onSubmitClick = async () => {
-    if (setSelectedVolunteerShift) {
+    if (isSignUp && setSelectedVolunteerShift) {
       setSelectedVolunteerShift(shift);
       next();
+    } else {
+      history.push(`${Routes.VOLUNTEER_SHIFTS_PAGE}/${id}/${shift.type}`);
     }
   };
 
