@@ -43,8 +43,6 @@ const Signup = () => {
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
   const { id } = step;
 
-  console.log(formValues, step);
-
   switch (id) {
     case "account type":
       return (
