@@ -106,14 +106,14 @@ class CronService implements ICronService {
   }
 
   async checkReminders(): Promise<void> {
-    const today: Date = dayjs().toDate();
+    const tomorrow: Date = dayjs().add(1, "days").toDate();
     const dayAfterTomorrow: Date = dayjs().add(2, "days").toDate();
 
     try {
       const schedules: Array<Schedule> = await Schedule.findAll({
         where: {
           start_time: {
-            [Op.and]: [{ [Op.gte]: today }, { [Op.lte]: dayAfterTomorrow }],
+            [Op.and]: [{ [Op.gte]: tomorrow }, { [Op.lte]: dayAfterTomorrow }],
           },
         },
       });
