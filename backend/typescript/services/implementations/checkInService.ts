@@ -269,6 +269,69 @@ class CheckInService implements ICheckInService {
     }
   }
 
+  async sendVolunteerCancelCheckInEmail(
+    volunteerId: string,
+    checkIn: CheckInDTO,
+    isAdmin: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerCancelCheckInEmail but this instance of CheckInService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const {
+        firstName,
+        lastName,
+        email,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const startDayString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("dddd, MMMM D");
+      const startTimeString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("h:mm A");
+      const endTimeString: string = dayjs.tz(checkIn.endDate).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+          ${
+            isAdmin
+              ? `
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has cancelled their Fridge Check-in Shift scheduled for 
+        ${startDayString} from ${startTimeString} to ${endTimeString}</h2>`
+              : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+          <p>You have successfully cancelled your Food Rescue volunteer shift scheduled for ${startDayString} from ${startTimeString} to ${endTimeString}<br /><br />`
+          }
+         ${
+           !isAdmin
+             ? ` <p>
+           We hope to see you back at the fridge soon! <br/>
+           If this cancellation was made in error, please reschedule or contact the CFKW admin team. 
+          </p>
+         ${emailFooter}`
+             : ""
+         }
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        isAdmin ? getAdminEmail() : email,
+        `${
+          !isAdmin ? "Confirmation: " : ""
+        }Cancelled Fridge Check-in Volunteer Shift for ${startDayString} at ${startTimeString}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm volunteer cancellation for check-in shift for volunteer with id ${volunteerId}`,
+      );
+      throw error;
+    }
+  }
+
   async updateCheckInById(
     checkInId: string,
     checkIn: UpdateCheckInDTO,
@@ -278,6 +341,7 @@ class CheckInService implements ICheckInService {
       Object.entries(checkIn).forEach(([key, value]) => {
         updatesSnakeCase[snakeCase(key)] = value;
       });
+      const oldCheckIn = await CheckIn.findOne({ where: { id: checkInId } });
       const updateResult = await CheckIn.update(updatesSnakeCase, {
         where: { id: Number(checkInId) },
         limit: 1,
@@ -298,8 +362,12 @@ class CheckInService implements ICheckInService {
         notes: updatedCheckIn.notes,
         isAdmin: updatedCheckIn.is_admin,
       };
+
       // send volunteer confirmation email
-      if (Object.prototype.hasOwnProperty.call(checkIn, "volunteerId")) {
+      if (
+        Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
+        updatedCheckIn.volunteer_id !== null
+      ) {
         this.sendVolunteerCheckInSignUpConfirmationEmail(
           checkIn.volunteerId!,
           updatedCheckInDTO,
@@ -310,8 +378,21 @@ class CheckInService implements ICheckInService {
           updatedCheckInDTO,
           true,
         );
+      } else if (
+        Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
+        updatedCheckIn.volunteer_id === null
+      ) {
+        this.sendVolunteerCancelCheckInEmail(
+          String(oldCheckIn?.volunteer_id),
+          updatedCheckInDTO,
+          false,
+        );
+        this.sendVolunteerCancelCheckInEmail(
+          String(oldCheckIn?.volunteer_id),
+          updatedCheckInDTO,
+          true,
+        );
       }
-
       return updatedCheckInDTO;
     } catch (error) {
       Logger.error(
