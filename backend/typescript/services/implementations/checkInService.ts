@@ -14,6 +14,13 @@ import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
+import IVolunteerService from "../interfaces/volunteerService";
+import VolunteerService from "./volunteerService";
+import IUserService from "../interfaces/userService";
+import UserService from "./userService";
+import IDonorService from "../interfaces/donorService";
+import DonorService from "./donorService";
+import { emailFooter, emailHeader } from "../../utilities/emailUtils";
 
 const Logger = logger(__filename);
 
@@ -169,6 +176,76 @@ class CheckInService implements ICheckInService {
     return checkInDtos;
   }
 
+  async sendVolunteerCheckInSignUpConfirmationEmail(
+    volunteerId: string,
+    checkIn: CheckInDTO,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerCheckInSignUpConfirmationEmail but this instance of CheckInService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const userService: IUserService = new UserService();
+      const donorService: IDonorService = new DonorService();
+      const {
+        firstName,
+        lastName,
+        email,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const startTimeToLocalDate = checkIn.startDate.toLocaleString("en-US", {
+        timeZone: "EST",
+      });
+      const startDayString: string = dayjs(startTimeToLocalDate).format(
+        "dddd, MMMM D",
+      );
+      const startTimeString: string = dayjs(startTimeToLocalDate).format(
+        "h:mm A",
+      );
+      const endTimeString: string = dayjs(
+        checkIn.endDate.toLocaleString("en-US", {
+          timeZone: "EST",
+        }),
+      ).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+          <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+          <p>Thank you for volunteering with us!<br /><br />
+          Here is a summary of your upcoming shift: <br /> <br />
+          Food Check-In Instructions: [LINK] 
+          </p>
+          <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+          Shift Information:
+          </h2>
+          <p>
+            <b>Date:</b> ${startDayString} <br/>
+            <b>Time:</b> ${startTimeString} - ${startTimeString} <br/>
+            <b>Additional Notes:</b> <br/>
+            $${checkIn.notes} 
+          </p>
+          <p>
+            If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
+          </p>
+         ${emailFooter}
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        email,
+        `Confirmation: Food Check-In Shift for ${startDayString} at ${startTimeString}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm volunteer sign up for check-in shift for volunteer with id ${volunteerId}`,
+      );
+      throw error;
+    }
+  }
+
   async updateCheckInById(
     checkInId: string,
     checkIn: UpdateCheckInDTO,
@@ -198,6 +275,14 @@ class CheckInService implements ICheckInService {
         notes: updatedCheckIn.notes,
         isAdmin: updatedCheckIn.is_admin,
       };
+      // send volunteer confirmation email
+      if (checkIn.hasOwnProperty("volunteerId")) {
+        this.sendVolunteerCheckInSignUpConfirmationEmail(
+          checkIn.volunteerId!,
+          updatedCheckInDTO,
+        );
+      }
+
       return updatedCheckInDTO;
     } catch (error) {
       Logger.error(

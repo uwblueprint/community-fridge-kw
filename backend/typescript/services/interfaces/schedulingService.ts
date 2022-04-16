@@ -89,6 +89,17 @@ interface ISchedulingService {
   ): Promise<void>;
 
   /**
+   * Generate a confirmation email with food rescue donation information for volunteer who signed up for the shift
+   * @param volunteerId of volunteer who signed up for shift
+   * @param scheduling object that contains food rescue donation information
+   * @throws Error if unable to send email
+   */
+  sendVolunteerSchedulingSignUpConfirmationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
+  ): Promise<void>;
+
+  /**
    * Create scheduling
    * @param scheduling CreateSchedulingDTO object containing scheduling info
    * @returns a SchedulingDTO with the created scheduling information

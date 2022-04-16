@@ -25,6 +25,12 @@ import {
   emailHeader,
   emailFooter,
 } from "../../utilities/emailUtils";
+import IVolunteerService from "../interfaces/volunteerService";
+import VolunteerService from "./volunteerService";
+import ICheckInService from "../interfaces/checkInService";
+import CheckInService from "./checkInService";
+import IUserService from "../interfaces/userService";
+import UserService from "./userService";
 
 const Logger = logger(__filename);
 
@@ -684,7 +690,13 @@ class SchedulingService implements ISchedulingService {
         notes: updatedScheduling.notes,
         volunteerId: String(updatedScheduling.volunteer_id),
       };
-
+      // send volunteer email confirmation if signed up for food rescue
+      if (scheduling.hasOwnProperty("volunteerId")) {
+        this.sendVolunteerSchedulingSignUpConfirmationEmail(
+          scheduling.volunteerId!,
+          updatedSchedulingDTO,
+        );
+      }
       return updatedSchedulingDTO;
     } catch (error) {
       Logger.error(
@@ -767,6 +779,88 @@ class SchedulingService implements ISchedulingService {
       const donor = await this.donorService.getDonorById(schedule.donorId);
       Logger.error(
         `Failed to generate email to confirm donation cancellation of donation scheduled by ${donor.email}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendVolunteerSchedulingSignUpConfirmationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerSchedulingSignUpConfirmationEmail but this instance of SchedulingService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const userService: IUserService = new UserService();
+      const {
+        firstName,
+        lastName,
+        email,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const donor = await this.donorService.getDonorById(scheduling.donorId);
+      const { phoneNumber } = await userService.getUserById(donor.userId);
+      const startTimeToLocalDate = scheduling.startTime.toLocaleString(
+        "en-US",
+        {
+          timeZone: "EST",
+        },
+      );
+      const startDayString: string = dayjs(startTimeToLocalDate).format(
+        "dddd, MMMM D",
+      );
+      const startTimeString: string = dayjs(startTimeToLocalDate).format(
+        "h:mm A",
+      );
+      const endTimeString: string = dayjs(
+        scheduling.endTime.toLocaleString("en-US", {
+          timeZone: "EST",
+        }),
+      ).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+          <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+          <p>Thank you for volunteering with us!<br /><br />
+          Here is a summary of your upcoming shift: <br /> <br />
+          Food Rescue Instructions: [LINK] 
+          </p>
+          <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+          Shift Information:
+          </h2>
+          <p>
+            <b>Date:</b> ${startDayString} <br/>
+            <b>Time:</b> ${startTimeString} - ${startTimeString} <br/>
+            <b>Additional Notes:</b> <br/>
+            ${scheduling.notes} 
+          </p>
+          <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+          Donor Contact Information:
+          </h2>
+          <p>
+            <b>Name:</b> ${donor.firstName} ${donor.lastName} <br/>
+            <b>Email:</b> ${donor.email} <br/>
+            <b>Phone Number:</b> ${phoneNumber}
+          </p>
+          <p>
+            If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
+          </p>
+         ${emailFooter}
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        email,
+        `Confirmation: Food Rescue Shift for ${startDayString} at ${startTimeString}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm volunteer sign up for food rescue shift for volunteer with id ${volunteerId}`,
       );
       throw error;
     }
