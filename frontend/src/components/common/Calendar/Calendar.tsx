@@ -7,7 +7,7 @@ import { Schedule } from "../../../types/SchedulingTypes";
 import CheckInInfoCard from "../../pages/AdminDashboard/components/CheckInInfoCard";
 import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
 import ShiftCard from "../../pages/VolunteerDashboard/ShiftCard";
-import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
+import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar"; /*  */
 
 type CalendarProps = {
   selectedDay: Date;
@@ -30,6 +30,7 @@ const Calendar = ({
   setShiftDetails,
   deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
+  console.log("calendar's day: ", selectedDay);
   const getCheckInCard = (item: any, index: number) => {
     if (isCheckInShiftView) {
       return (
