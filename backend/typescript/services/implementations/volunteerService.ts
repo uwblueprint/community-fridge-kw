@@ -24,6 +24,8 @@ import SchedulingService from "./schedulingService";
 import nodemailerConfig from "../../nodemailer.config";
 import IEmailService from "../interfaces/emailService";
 import EmailService from "./emailService";
+import IContentService from "../interfaces/contentService";
+import ContentService from "./contentService";
 
 const Logger = logger(__filename);
 
@@ -169,10 +171,14 @@ class VolunteerService implements IVolunteerService {
   ): Promise<(CheckInDTOWithShiftType | SchedulingDTOWithShiftType)[]> {
     const donorService: IDonorService = new DonorService();
     const emailService: IEmailService = new EmailService(nodemailerConfig);
-    const checkInService: ICheckInService = new CheckInService();
+    const contentService: IContentService = new ContentService();
+    const checkInService: ICheckInService = new CheckInService(emailService, this, contentService);
+
     const schedulingService: ISchedulingService = new SchedulingService(
       emailService,
+      this,
       donorService,
+      contentService
     );
     const checkIns: CheckInDTOWithShiftType[] = await (
       await checkInService.getCheckInsByVolunteerId(volunteerId)

@@ -14,6 +14,10 @@ import { sendResponseByMimeType } from "../utilities/responseUtil";
 import getErrorMessage from "../utilities/errorMessageUtil";
 import IDonorService from "../services/interfaces/donorService";
 import DonorService from "../services/implementations/donorService";
+import IVolunteerService from "../services/interfaces/volunteerService";
+import VolunteerService from "../services/implementations/volunteerService";
+import IContentService from "../services/interfaces/contentService";
+import ContentService from "../services/implementations/contentService";
 
 const schedulingRouter: Router = Router();
 
@@ -21,10 +25,15 @@ const schedulingRouter: Router = Router();
 // schedulingRouter.use(isAuthorizedByRole(new Set(["Admin"])));
 
 const emailService: IEmailService = new EmailService(nodemailerConfig);
+const volunteerService: IVolunteerService = new VolunteerService();
 const donorService: IDonorService = new DonorService();
+const contentService: IContentService = new ContentService();
+
 const schedulingService: ISchedulingService = new SchedulingService(
   emailService,
+  volunteerService,
   donorService,
+  contentService
 );
 
 schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {

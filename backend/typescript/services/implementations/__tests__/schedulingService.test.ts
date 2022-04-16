@@ -23,6 +23,10 @@ import EmailService from "../emailService";
 import IDonorService from "../../interfaces/donorService";
 import DonorService from "../donorService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
+import IVolunteerService from "../../interfaces/volunteerService";
+import VolunteerService from "../volunteerService";
+import IContentService from "../../interfaces/contentService";
+import ContentService from "../contentService";
 
 const schedules = testSchedules.map((schedule) => {
   return toSnakeCase(schedule);
@@ -42,7 +46,10 @@ describe("pg schedulingService", () => {
     await testSql.sync({ force: true });
     const emailService: IEmailService = new EmailService(nodemailerConfig);
     const donorService: IDonorService = new DonorService();
-    schedulingService = new SchedulingService(emailService, donorService);
+    const volunteerService: IVolunteerService = new VolunteerService();
+    const contentService: IContentService = new ContentService();
+    
+    schedulingService = new SchedulingService(emailService, volunteerService, donorService, contentService);
     await User.bulkCreate(testUsersDb);
     await Donor.bulkCreate(testDonorsDb);
     await Volunteer.bulkCreate(testVolunteersDb);

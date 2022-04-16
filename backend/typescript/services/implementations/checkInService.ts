@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import { snakeCase } from "lodash";
+import { snakeCase, update } from "lodash";
 import dayjs from "dayjs";
 import { Op } from "sequelize";
 import ICheckInService from "../interfaces/checkInService";
@@ -8,20 +8,31 @@ import {
   CreateCheckInDTO,
   UpdateCheckInDTO,
   DTOTypes,
+  UserVolunteerDTO,
 } from "../../types";
 import logger from "../../utilities/logger";
 import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
+import IVolunteerService from "../interfaces/volunteerService";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { emailFooter, emailHeader, getAdminEmail } from "../../utilities/emailUtils";
+import IContentService from "../interfaces/contentService";
 
 const Logger = logger(__filename);
 
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
+  volunteerService: IVolunteerService;
+  contentService: IContentService;
 
-  constructor(emailService: IEmailService | null = null) {
+  static TEMP_ADMIN_EMAIL = "dorasu@uwblueprint.org";
+
+  constructor(emailService: IEmailService | null = null, volunteerService: IVolunteerService, contentService: IContentService) {
     this.emailService = emailService;
+    this.volunteerService = volunteerService;
+    this.contentService = contentService;
   }
 
   async createCheckIn(checkIn: CreateCheckInDTO): Promise<Array<CheckInDTO>> {
@@ -174,6 +185,9 @@ class CheckInService implements ICheckInService {
     checkIn: UpdateCheckInDTO,
   ): Promise<CheckInDTO> {
     try {
+      const prevCheckIn: CheckInDTO = await this.getCheckInsById(checkInId);
+      const prevVolunteerId = prevCheckIn.volunteerId;
+
       const updatesSnakeCase: Record<string, unknown> = {};
       Object.entries(checkIn).forEach(([key, value]) => {
         updatesSnakeCase[snakeCase(key)] = value;
@@ -198,6 +212,11 @@ class CheckInService implements ICheckInService {
         notes: updatedCheckIn.notes,
         isAdmin: updatedCheckIn.is_admin,
       };
+
+      if (checkIn.volunteerId && !prevVolunteerId) {
+        this.sendCheckInSignUpAdminEmail(updatedCheckInDTO);
+      }
+      
       return updatedCheckInDTO;
     } catch (error) {
       Logger.error(
@@ -251,6 +270,87 @@ class CheckInService implements ICheckInService {
         `Failed to delete checkins by start and end date range. Reason = ${getErrorMessage(
           error,
         )}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendCheckInSignUpAdminEmail(
+    checkIn: CheckInDTO,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to send email regarding volunteer signing up for a check in but this instance of CheckInService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const volunteer: UserVolunteerDTO = await this.volunteerService.getVolunteerById(
+      String(checkIn.volunteerId),
+    );
+
+    const instructionsLink: string = (await this.contentService.getContent()).checkinUrl;
+    // Proposed drop off info
+
+    try {
+      const { firstName, lastName, email, phoneNumber } = volunteer;
+      const { startDate, endDate } = checkIn;
+
+      const startTimeToLocalDate = startDate.toLocaleString("en-US", { timeZone: "EST", });
+
+      const startDayString: string = dayjs(startTimeToLocalDate).format(
+        "dddd, MMMM D",
+      );
+
+      const startTimeString: string = dayjs(startTimeToLocalDate).format(
+        "h:mm A",
+      );
+      const endTimeString: string = dayjs(endDate.toLocaleString("en-US", { timeZone: "EST", }),).format("h:mm A");
+
+      dayjs.extend(customParseFormat);
+
+      const emailBody = `
+      <html>
+      ${emailHeader}
+      <body>
+         <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;" >
+            ${firstName} ${lastName} has signed up for a Check-in Shift for <strong>${startDayString} at ${startTimeString}!</strong>
+            <br />
+            <br />
+            Here is a shift summary:
+            <br />
+            <br />
+            Fridge Check-in Instructions: <a href=${instructionsLink}>todo</a >
+            <br />
+            <br />
+            Shift Information:
+            <br />
+            Volunteer arrival time: ${startDayString} ${startTimeString} - ${endTimeString}
+            <br />
+            Additional Notes: ${checkIn.notes}
+            <br />
+            <br />
+            Volunteer Contact Information:
+            <br />
+            Name: ${firstName} ${lastName}
+            <br />
+            Email: ${email}
+            <br />
+            Phone Number: ${phoneNumber}
+         </p>
+         </body>
+         </html>`;
+
+      let subject = `New: Fridge Check-in Shift for ${startDayString} at ${startTimeString}`;
+      this.emailService.sendEmail(
+        CheckInService.TEMP_ADMIN_EMAIL,
+        subject,
+        emailBody,
+      );
+    } catch (error) {
+      const volunteer = await this.volunteerService.getVolunteerById(String(checkIn.volunteerId));
+      Logger.error(
+        `Failed to generate email to confirm volunteer sign-up for check-in shift for volunteer ${volunteer.firstName} ${volunteer.lastName}`,
       );
       throw error;
     }

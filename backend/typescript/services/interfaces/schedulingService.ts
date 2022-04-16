@@ -138,6 +138,15 @@ interface ISchedulingService {
     current_date: string,
     role: string,
   ): Promise<void>;
+
+  /**
+   * Generate an email with food rescue shift info to admin after a volunteer signs up
+   * @param schedule object that contains information on schedule/food rescue
+   * @throws Error if unable to send email
+  */
+  sendFoodRescueSignUpAdminEmail(
+    schedule: SchedulingDTO,
+  ): Promise<void>;
 }
 
 export default ISchedulingService;

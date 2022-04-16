@@ -51,6 +51,15 @@ interface ICheckInService {
    * @param endDate end date of the range
    */
   deleteCheckInsByDateRange(startDate: string, endDate: string): Promise<void>;
+
+  /**
+   * Generate an email with checkin info to admin after a volunteer signs up
+   * @param checkIn object that contains information on checkin
+   * @throws Error if unable to send email
+  */
+  sendCheckInSignUpAdminEmail(
+    checkIn: CheckInDTO,
+  ): Promise<void>;
 }
 
 export default ICheckInService;

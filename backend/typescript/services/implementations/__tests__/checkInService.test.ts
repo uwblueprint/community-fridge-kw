@@ -14,6 +14,10 @@ import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";
 import CheckInService from "../checkInService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
+import IVolunteerService from "../../interfaces/volunteerService";
+import VolunteerService from "../volunteerService";
+import IContentService from "../../interfaces/contentService";
+import ContentService from "../contentService";
 
 const checkIns = testCheckIns.map((checkIn) => {
   return toSnakeCase(checkIn);
@@ -32,7 +36,9 @@ describe("pg checkInService", () => {
   beforeEach(async () => {
     await testSql.sync({ force: true });
     const emailService: IEmailService = new EmailService(nodemailerConfig);
-    checkInService = new CheckInService(emailService);
+    const volunteerService: IVolunteerService = new VolunteerService();
+    const contentService: IContentService = new ContentService();
+    checkInService = new CheckInService(emailService, volunteerService, contentService);
     await User.bulkCreate(testUsersDb);
     await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);
