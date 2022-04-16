@@ -8,12 +8,14 @@ import {
   testUpdatedCheckIns,
   testVolunteersDb,
   testUsersDb,
+  testContent,
 } from "../../../testUtils/checkInService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";
 import EmailService from "../emailService";
 import CheckInService from "../checkInService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
+import Content from "../../../models/content.model";
 
 const checkIns = testCheckIns.map((checkIn) => {
   return toSnakeCase(checkIn);
@@ -36,6 +38,7 @@ describe("pg checkInService", () => {
     await User.bulkCreate(testUsersDb);
     await Volunteer.bulkCreate(testVolunteersDb);
     await CheckIn.bulkCreate(checkIns);
+    await Content.bulkCreate(testContent);
   });
 
   afterAll(async () => {
