@@ -22,7 +22,10 @@ import cronRouter from "./rest/cronRoutes";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
 if (process.env.NODE_ENV === "production") {
-  CORS_ALLOW_LIST.push("https://communityfridgekw.web.app");
+  CORS_ALLOW_LIST.push(
+    "https://communityfridgekw.web.app",
+    "https://schedule.communityfridgekw.ca",
+  );
 } else if (process.env.NODE_ENV === "staging") {
   const clientHost = new RegExp(
     "https://communityfridgekw-staging(--([A-Za-z0-9-])+-[A-Za-z0-9]+)?.web.app",

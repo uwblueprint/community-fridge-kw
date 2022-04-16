@@ -135,7 +135,11 @@ describe("pg checkInService", () => {
       (volunteerId ?? "").toString(),
     );
     expect(res).toMatchObject(
-      testCheckIns.filter((checkIn) => checkIn.volunteerId === volunteerId),
+      testCheckIns.filter(
+        (checkIn) =>
+          checkIn.volunteerId === volunteerId &&
+          checkIn.startDate >= new Date(),
+      ),
     );
   });
 

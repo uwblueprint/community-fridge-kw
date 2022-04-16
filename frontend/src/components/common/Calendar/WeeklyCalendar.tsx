@@ -75,6 +75,7 @@ const DayButton = ({ day }: DayButtonProps) => {
 type RenderItemProps<EventItem> = {
   item: Schedule | CheckIn;
   showingFullWeek: boolean;
+  index: number;
 };
 
 type WeeklyBodyProps<EventItem> = {
@@ -118,7 +119,7 @@ export function WeeklyBody<EventItem>({
                 }}
               />
 
-              {(items as Array<Schedule | CheckIn>).map((item) => {
+              {(items as Array<Schedule | CheckIn>).map((item, index) => {
                 const currentDate = setDay(week, selectedDay.getDay() + i, {
                   locale,
                 });
@@ -140,6 +141,7 @@ export function WeeklyBody<EventItem>({
                 return renderItem({
                   item,
                   showingFullWeek: selectedDay === undefined,
+                  index,
                 });
               })}
             </VStack>
