@@ -142,6 +142,9 @@ class CheckInService implements ICheckInService {
       checkIns = await CheckIn.findAll({
         where: {
           volunteer_id: Number(volunteerId),
+          start_date: {
+            [Op.gte]: new Date(),
+          },
         },
         order: [["start_date", "ASC"]],
       });
