@@ -28,6 +28,8 @@ import {
 import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import BackButton from "../Scheduling/BackButton";
 import { DonationSizes } from "../Scheduling/types";
+import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
+import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 
 const ConfirmShiftDetails = ({
   navigation,
@@ -98,7 +100,7 @@ const ConfirmShiftDetails = ({
       shift.type === ShiftType.SCHEDULING
         ? await SchedulingAPIClient.updateSchedule(shift.id, {
             ...shift,
-            volunteerId: undefined,
+            volunteerId: null,
           })
         : await CheckInAPIClient.updateCheckInById(shift.id, {
             ...shift,
@@ -150,6 +152,12 @@ const ConfirmShiftDetails = ({
             : previous
         }
       />
+      {viewDetailsScreen &&
+        shift.type === ShiftType.CHECKIN &&
+        <FridgeCheckInDescription/>}
+      {viewDetailsScreen &&
+        shift.type === ShiftType.SCHEDULING &&
+        <FridgeFoodRescueDescription/>}
       {!viewDetailsScreen && (
         <>
           <Text
