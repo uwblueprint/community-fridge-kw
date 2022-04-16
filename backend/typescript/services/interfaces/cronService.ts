@@ -9,10 +9,16 @@ interface ICronService {
   sendScheduledDonationEmail(schedule: Schedule): Promise<void>;
 
   /**
-   * Cron job that sends reminder email
+   * Sends donor reminder email
    * @throws Error if email was not sent successfully
    */
-  checkReminders(): Promise<void>;
+  checkScheduleReminders(): Promise<void>;
+
+  /**
+   * Sends volunteer reminder email
+   * @throws Error if email was not sent successfully
+   */
+  checkCheckInReminders(): Promise<void>;
 }
 
 export default ICronService;

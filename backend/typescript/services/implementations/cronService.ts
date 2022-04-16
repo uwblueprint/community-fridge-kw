@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Op } from "sequelize";
 import IEmailService from "../interfaces/emailService";
-import { UserDonorDTO } from "../../types";
+import { UserDonorDTO, VolunteerDTO } from "../../types";
 import logger from "../../utilities/logger";
 import Schedule from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
@@ -10,6 +10,8 @@ import ICronService from "../interfaces/cronService";
 import IDonorService from "../interfaces/donorService";
 import Donor from "../../models/donor.model";
 import { emailHeader, emailFooter } from "../../utilities/emailUtils";
+import Volunteer from "../../models/volunteer.model";
+import IVolunteerService from "../interfaces/volunteerService";
 
 // eslint-disable-next-line
 const cron = require("node-cron");
@@ -21,12 +23,16 @@ class CronService implements ICronService {
 
   donorService: IDonorService;
 
+  volunteerService: IVolunteerService;
+
   constructor(
     emailService: IEmailService | null = null,
     donorService: IDonorService,
+    volunteerService: IVolunteerService,
   ) {
     this.emailService = emailService;
     this.donorService = donorService;
+    this.volunteerService = volunteerService;
   }
 
   async sendScheduledDonationEmail(schedule: Schedule): Promise<void> {
@@ -105,7 +111,46 @@ class CronService implements ICronService {
     }
   }
 
-  async checkReminders(): Promise<void> {
+  async checkScheduleReminders(): Promise<void> {
+    const tomorrow: Date = dayjs().add(1, "days").toDate();
+    const dayAfterTomorrow: Date = dayjs().add(2, "days").toDate();
+
+    try {
+      const schedules: Array<Schedule> = await Schedule.findAll({
+        where: {
+          start_time: {
+            [Op.and]: [{ [Op.gte]: tomorrow }, { [Op.lte]: dayAfterTomorrow }],
+          },
+        },
+      });
+
+      schedules.forEach(async (schedule: Schedule) => {
+        const donor: Donor | null = await Donor.findByPk(
+          Number(schedule.donor_id),
+        );
+
+        if (!donor) {
+          throw new Error(`donorId ${schedule.donor_id} not found.`);
+        }
+
+        try {
+          this.sendScheduledDonationEmail(schedule);
+        } catch (error) {
+          Logger.error(
+            `Failed to send reminder email. Reason = ${getErrorMessage(error)}`,
+          );
+          throw error;
+        }
+      });
+    } catch (error) {
+      Logger.error(
+        `Failed to send reminders. Reason = ${getErrorMessage(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  async checkCheckInReminders(): Promise<void> {
     const tomorrow: Date = dayjs().add(1, "days").toDate();
     const dayAfterTomorrow: Date = dayjs().add(2, "days").toDate();
 
