@@ -1,7 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { NavigationProps, Step, useStep } from "react-hooks-helper";
 
-import { ShiftType } from "../../../types/VolunteerTypes";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+  ShiftType,
+} from "../../../types/VolunteerTypes";
 import ConfirmShiftDetails from "./ConfirmShiftDetails";
 import ThankYouVolunteer from "./ThankYouVolunteer";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
@@ -26,6 +30,9 @@ interface UseStepType {
 const VolunteerScheduling = () => {
   const [shiftId, setShiftId] = useState<string>("1");
   const [shiftType, setShiftType] = useState<ShiftType>(ShiftType.CHECKIN);
+  const [selectedShift, setSelectedShift] = useState<
+    CheckInWithShiftType | ScheduleWithShiftType
+  >({} as CheckInWithShiftType | ScheduleWithShiftType);
 
   const setShiftDetails = useCallback(
     (id: string, isFoodRescue: boolean) => {
@@ -33,6 +40,12 @@ const VolunteerScheduling = () => {
       setShiftType(isFoodRescue ? ShiftType.SCHEDULING : ShiftType.CHECKIN);
     },
     [shiftId, shiftType],
+  );
+
+  const setSelectedVolunteerShift = useCallback(
+    (shift: CheckInWithShiftType | ScheduleWithShiftType) =>
+      setSelectedShift(shift),
+    [setSelectedShift],
   );
 
   const { step, navigation }: UseStepType = useStep({
@@ -55,10 +68,11 @@ const VolunteerScheduling = () => {
           navigation={navigation}
           shiftId={shiftId}
           shiftType={shiftType}
+          setSelectedVolunteerShift={setSelectedVolunteerShift}
         />
       );
     case "thank you page":
-      return <ThankYouVolunteer shiftId={shiftId} shiftType={shiftType} />;
+      return <ThankYouVolunteer shift={selectedShift} />;
     default:
       return <></>;
   }

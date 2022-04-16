@@ -1,61 +1,22 @@
 import { Button, Container, HStack, Img, Text } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 
-import CheckInAPIClient from "../../../APIClients/CheckInAPIClient";
-import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
 import ThankYouPageFridge from "../../../assets/ThankYouPageFridge.png";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import { CheckIn } from "../../../types/CheckInTypes";
-import { Schedule } from "../../../types/SchedulingTypes";
-import { ShiftType } from "../../../types/VolunteerTypes";
-
-const schedulingDefaultData = ({
-  id: "",
-  donorId: "",
-  categories: [],
-  size: "",
-  dayPart: "",
-  startTime: "",
-  endTime: "",
-  frequency: "",
-  notes: "",
-  volunteerTime: "",
-} as unknown) as Schedule;
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+  ShiftType,
+} from "../../../types/VolunteerTypes";
 
 const ThankYouVolunteer = ({
-  shiftId,
-  shiftType,
+  shift,
 }: {
-  shiftId: string;
-  shiftType: ShiftType;
+  shift: ScheduleWithShiftType | CheckInWithShiftType;
 }) => {
-  const [currentFoodRescue, setCurrentFoodRescue] = useState<Schedule>(
-    schedulingDefaultData,
-  );
-  const [currentCheckIn, setCurrentCheckIn] = useState<CheckIn>({} as CheckIn);
-
-  const getFoodRescueData = async () => {
-    const foodRescueResponse = await SchedulingAPIClient.getScheduleById(
-      shiftId,
-    );
-    setCurrentFoodRescue(foodRescueResponse);
-  };
-  const getCheckInData = async () => {
-    const checkInResponse = await CheckInAPIClient.getCheckInsById(shiftId);
-    setCurrentCheckIn(checkInResponse);
-  };
-
-  useEffect(() => {
-    if (shiftType === ShiftType.SCHEDULING) {
-      getFoodRescueData();
-    } else {
-      getCheckInData();
-    }
-  }, []);
-
   const { authenticatedUser } = useContext(AuthContext);
   const history = useHistory();
   return (
@@ -66,37 +27,29 @@ const ThankYouVolunteer = ({
       >
         Thank you for volunteering with CFKW!
       </Text>
-      {shiftType === ShiftType.SCHEDULING && (
+      {shift.type === ShiftType.SCHEDULING && (
         <Text textStyle="mobileBody" mt="1em" color="hubbard.100">
           {`We can't wait to see you at the fridge on ${
-            currentFoodRescue.startTime
-              ? format(
-                  new Date(currentFoodRescue.startTime),
-                  "eeee MMMM d, yyyy",
-                )
+            shift.startTime
+              ? format(new Date(shift.startTime), "eeee MMMM d, yyyy")
               : ""
           } at
         ${
-          currentFoodRescue.volunteerTime
-            ? format(
-                parse(currentFoodRescue.volunteerTime, "kk:mm", new Date()),
-                "h:mm a",
-              )
+          shift.volunteerTime
+            ? format(parse(shift.volunteerTime, "kk:mm", new Date()), "h:mm a")
             : ""
         } `}
         </Text>
       )}
-      {shiftType === ShiftType.CHECKIN && (
+      {shift.type === ShiftType.CHECKIN && (
         <Text textStyle="mobileBody" mt="1em" color="hubbard.100">
           {`We can't wait to see you at the fridge on ${
-            currentCheckIn.startDate
-              ? format(new Date(currentCheckIn.startDate), "eeee MMMM d, yyyy")
+            shift.startDate
+              ? format(new Date(shift.startDate), "eeee MMMM d, yyyy")
               : ""
           } at
         ${
-          currentCheckIn.startDate
-            ? format(new Date(currentCheckIn.startDate), "h:mm aa")
-            : ""
+          shift.startDate ? format(new Date(shift.startDate), "h:mm aa") : ""
         } `}
         </Text>
       )}

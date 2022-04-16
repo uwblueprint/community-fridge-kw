@@ -11,7 +11,11 @@ import VolunteerContext from "../../../contexts/VolunteerContext";
 import { CheckIn } from "../../../types/CheckInTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import { ShiftType } from "../../../types/VolunteerTypes";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+  ShiftType,
+} from "../../../types/VolunteerTypes";
 import BackButton from "../Scheduling/BackButton";
 import { DonationSizes } from "../Scheduling/types";
 
@@ -29,31 +33,35 @@ const schedulingDefaultData = ({
   volunteerId: "",
 } as unknown) as Schedule;
 
-const donorDefaultData = ({
+const donorDefaultData = {
   id: "",
   businessName: "",
   email: "",
   firstName: "",
   lastName: "",
   phoneNumber: "",
-} as unknown) as DonorResponse;
+} as DonorResponse;
 
-const checkInDefaultData = ({
+const checkInDefaultData = {
   id: "",
   volunteerId: "",
   startDate: "",
   endDate: "",
   notes: "",
-} as unknown) as CheckIn;
+} as CheckIn;
 
 const ConfirmShiftDetails = ({
   navigation,
   shiftId,
   shiftType,
+  setSelectedVolunteerShift,
 }: {
   navigation: NavigationProps;
   shiftId: string;
   shiftType: ShiftType;
+  setSelectedVolunteerShift: (
+    shift: ScheduleWithShiftType | CheckInWithShiftType,
+  ) => void;
 }) => {
   const { previous, next } = navigation;
   const { authenticatedUser } = useContext(AuthContext);
@@ -98,11 +106,19 @@ const ConfirmShiftDetails = ({
     );
     setCurrentDonor(donorResponse);
     setCurrentFoodRescue(foodRescueResponse);
+    setSelectedVolunteerShift({
+      ...foodRescueResponse,
+      type: ShiftType.SCHEDULING,
+    });
   };
 
   const getCheckInData = async () => {
     const checkInResponse = await CheckInAPIClient.getCheckInsById(shiftId);
     setCurrentCheckIn(checkInResponse);
+    setSelectedVolunteerShift({
+      ...checkInResponse,
+      type: ShiftType.CHECKIN,
+    });
   };
 
   const getDescription = () => {
