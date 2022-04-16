@@ -89,6 +89,11 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       await authService.sendAdminVolunteerSignUpEmail(
         req.body.email,
         `${req.body.firstName} ${req.body.lastName}`,
+        [
+          req.body.cityQuestionResponse,
+          req.body.intentionQuestionResponse,
+          req.body.skillsQuestionResponse,
+        ],
       );
     }
 

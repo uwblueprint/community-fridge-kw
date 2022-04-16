@@ -272,6 +272,7 @@ class AuthService implements IAuthService {
   async sendAdminVolunteerSignUpEmail(
     email: string,
     fullName: string,
+    volunteerResponses: string[],
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -287,13 +288,34 @@ class AuthService implements IAuthService {
         <p>${fullName} is interested in becoming a volunteer.
           <br />
           <br />
-          Please approve this volunteer (${email}) for the Community Fridge KW volunteer by clicking "Approve"
+          Below are their responses to the application questions:
+          <br />
+          <br />
+          What city do you currently live in?
+          <br />
+          ${volunteerResponses[0]}
+          <br />
+          <br />
+          Why do you want to join us?
+          <br />
+          ${volunteerResponses[1]}
+          <br />
+          <br />
+          What skills/traits would you like to share and/or develop as a volunteer with CFKW?
+          <br />
+          ${volunteerResponses[2]}
+          <br />
+          <br />
+          Note that this email is the only record of the application questions.
+          <br />
+          <br />
+          To approve this volunteer (${email}) on the platform, please click below.
         </p>
          <table cellspacing="0" cellpadding="0"> <tr> 
       <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
         <a href="https://schedule.communityfridgekw.ca/user-management" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
         <span style="color: #FAFCFE;">
-          Approve
+          Approve Volunteer On Platform
         </span>
         </a>
       </td> 
