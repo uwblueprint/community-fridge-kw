@@ -52,7 +52,7 @@ export const cancellationEmail = (mainLine: string, name: string): string => {
     `;
 };
 
-export const formatShiftInformation = (
+export const formatCheckinShiftInformation = (
   startDay: string,
   startTime: string,
   endTime: string,
@@ -65,6 +65,29 @@ export const formatShiftInformation = (
   <p>
     <b>Date:</b> ${startDay} <br/>
     <b>Time:</b> ${startTime} - ${endTime} <br/>
+    <b>Additional Notes:</b> <br/>
+    ${notes} 
+  </p>
+  `;
+};
+
+export const formatFoodRescueShiftInformation = (
+  isPickup: boolean,
+  address: string,
+  startDay: string,
+  volunteerStartTime: string,
+  notes: string,
+) => {
+  return `
+  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+  Shift Information:
+  </h2>
+  <p>
+    <b>Volunteer shift type:</b> ${
+      isPickup ? "Food rescue pickup" : "Food rescue unloading"
+    }<br/>
+    <b>Volunteer arrival time:</b> ${startDay} at ${volunteerStartTime}<br/>
+    <b>Address</b> ${isPickup ? address : "Community Fridge KW"}<br/>
     <b>Additional Notes:</b> <br/>
     ${notes} 
   </p>

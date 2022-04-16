@@ -26,7 +26,7 @@ import {
   emailFooter,
   formatVolunteerContactInformation,
   formatDonorContactInformation,
-  formatShiftInformation,
+  formatFoodRescueShiftInformation,
 } from "../../utilities/emailUtils";
 import IVolunteerService from "../interfaces/volunteerService";
 import VolunteerService from "./volunteerService";
@@ -690,10 +690,16 @@ class SchedulingService implements ISchedulingService {
         volunteerId: String(updatedScheduling.volunteer_id),
       };
       // send volunteer email confirmation if signed up for food rescue
-      if (scheduling.hasOwnProperty("volunteerId")) {
+      if (Object.prototype.hasOwnProperty.call(scheduling, "volunteerId")) {
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
           scheduling.volunteerId!,
           updatedSchedulingDTO,
+          true,
+        );
+        this.sendVolunteerSchedulingSignUpConfirmationEmail(
+          scheduling.volunteerId!,
+          updatedSchedulingDTO,
+          false,
         );
       }
       return updatedSchedulingDTO;
@@ -786,6 +792,7 @@ class SchedulingService implements ISchedulingService {
   async sendVolunteerSchedulingSignUpConfirmationEmail(
     volunteerId: string,
     scheduling: SchedulingDTO,
+    isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -804,6 +811,7 @@ class SchedulingService implements ISchedulingService {
         email,
       } = await volunteerService.getVolunteerById(volunteerId);
       const donor = await this.donorService.getDonorById(scheduling.donorId);
+      dayjs.extend(customParseFormat);
       const startTimeToLocalDate = scheduling.startTime.toLocaleString(
         "en-US",
         {
@@ -813,26 +821,29 @@ class SchedulingService implements ISchedulingService {
       const startDayString: string = dayjs(startTimeToLocalDate).format(
         "dddd, MMMM D",
       );
-      const startTimeString: string = dayjs(startTimeToLocalDate).format(
-        "h:mm A",
-      );
-      const endTimeString: string = dayjs(
-        scheduling.endTime.toLocaleString("en-US", {
-          timeZone: "EST",
-        }),
+      const volunteerStartTime: string = dayjs(
+        scheduling.volunteerTime,
+        "HH:mm",
       ).format("h:mm A");
       const emailBody = `<html>
         ${emailHeader}
         <body>
-          <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
-          <p>Thank you for volunteering with us!<br /><br />
+        ${
+          isAdmin
+            ? `
+      <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has signed up for a Food Rescue shift for 
+      ${startDayString} at ${volunteerStartTime}</h2>`
+            : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+        <p>Thank you for volunteering with us!<br /><br />`
+        }
           Here is a summary of your upcoming shift: <br /> <br />
           Food Rescue Instructions:  <a href="${foodRescueUrl}">here</a>
           </p>
-         ${formatShiftInformation(
+         ${formatFoodRescueShiftInformation(
+           scheduling.isPickup,
+           scheduling.pickupLocation ?? "",
            startDayString,
-           startTimeString,
-           endTimeString,
+           volunteerStartTime,
            scheduling.notes ?? "",
          )}
           ${formatVolunteerContactInformation(
@@ -847,16 +858,20 @@ class SchedulingService implements ISchedulingService {
             donor.phoneNumber,
             donor.email,
           )}
-          <p>
+         ${
+           !isAdmin
+             ? ` <p>
             If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
           </p>
-         ${emailFooter}
+         ${emailFooter}`
+             : ""
+         }
         </body>
       </html>
         `;
       this.emailService.sendEmail(
-        email,
-        `Confirmation: Food Rescue Shift for ${startDayString} at ${startTimeString}`,
+        isAdmin ? getAdminEmail() : email,
+        `Confirmation: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
         emailBody,
       );
     } catch (error) {

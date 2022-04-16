@@ -20,7 +20,7 @@ import ContentService from "./contentService";
 import {
   emailFooter,
   emailHeader,
-  formatShiftInformation,
+  formatCheckinShiftInformation,
   formatVolunteerContactInformation,
   getAdminEmail,
 } from "../../utilities/emailUtils";
@@ -238,7 +238,7 @@ class CheckInService implements ICheckInService {
             phoneNumber,
             email,
           )}
-          ${formatShiftInformation(
+          ${formatCheckinShiftInformation(
             startDayString,
             startTimeString,
             endTimeString,
@@ -298,7 +298,7 @@ class CheckInService implements ICheckInService {
         isAdmin: updatedCheckIn.is_admin,
       };
       // send volunteer confirmation email
-      if (checkIn.hasOwnProperty("volunteerId")) {
+      if (Object.prototype.hasOwnProperty.call(checkIn, "volunteerId")) {
         this.sendVolunteerCheckInSignUpConfirmationEmail(
           checkIn.volunteerId!,
           updatedCheckInDTO,
