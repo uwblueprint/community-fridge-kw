@@ -2,6 +2,8 @@
 import { snakeCase } from "lodash";
 import dayjs from "dayjs";
 import { Op } from "sequelize";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import ICheckInService from "../interfaces/checkInService";
 import {
   CheckInDTO,
@@ -28,6 +30,11 @@ import {
 import IContentService from "../interfaces/contentService";
 
 const Logger = logger(__filename);
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+dayjs.tz.setDefault("America/New_York");
 
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
@@ -205,20 +212,13 @@ class CheckInService implements ICheckInService {
         phoneNumber,
       } = await volunteerService.getVolunteerById(volunteerId);
       const { checkinUrl } = await contentService.getContent();
-      const startTimeToLocalDate = checkIn.startDate.toLocaleString("en-US", {
-        timeZone: "EST",
-      });
-      const startDayString: string = dayjs(startTimeToLocalDate).format(
-        "dddd, MMMM D",
-      );
-      const startTimeString: string = dayjs(startTimeToLocalDate).format(
-        "h:mm A",
-      );
-      const endTimeString: string = dayjs(
-        checkIn.endDate.toLocaleString("en-US", {
-          timeZone: "EST",
-        }),
-      ).format("h:mm A");
+      const startDayString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("dddd, MMMM D");
+      const startTimeString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("h:mm A");
+      const endTimeString: string = dayjs.tz(checkIn.endDate).format("h:mm A");
       const emailBody = `<html>
         ${emailHeader}
         <body>

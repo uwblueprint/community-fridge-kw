@@ -4,6 +4,8 @@ import { Op } from "sequelize";
 import dayjs from "dayjs";
 import ordinal from "ordinal";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
@@ -35,6 +37,11 @@ import IContentService from "../interfaces/contentService";
 import ContentService from "./contentService";
 
 const Logger = logger(__filename);
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+dayjs.tz.setDefault("America/New_York");
 
 class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
@@ -317,22 +324,10 @@ class SchedulingService implements ISchedulingService {
       const { firstName, lastName, email } = currDonor;
       const { startTime, endTime } = schedule;
 
-      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
-        timeZone: "EST",
-      });
+      const startDayString: string = dayjs.tz(startTime).format("dddd, MMMM D");
 
-      const startDayString: string = dayjs(startTimeToLocalDate).format(
-        "dddd, MMMM D",
-      );
-
-      const startTimeString: string = dayjs(startTimeToLocalDate).format(
-        "h:mm A",
-      );
-      const endTimeString: string = dayjs(
-        endTime.toLocaleString("en-US", {
-          timeZone: "EST",
-        }),
-      ).format("h:mm A");
+      const startTimeString: string = dayjs.tz(startTime).format("h:mm A");
+      const endTimeString: string = dayjs.tz(endTime).format("h:mm A");
 
       // frequency string
       // e.g. Weekly on <day of week> until <recurringDonationEndDate>
@@ -341,12 +336,10 @@ class SchedulingService implements ISchedulingService {
         if (schedule.frequency === Frequency.DAILY) {
           frequencyString = `Daily`;
         } else if (schedule.frequency === Frequency.WEEKLY) {
-          frequencyString = `Weekly on ${dayjs(startTimeToLocalDate).format(
-            "dddd",
-          )}`;
+          frequencyString = `Weekly on ${dayjs.tz(startTime).format("dddd")}`;
         } else {
           frequencyString = `Monthly on the ${ordinal(
-            Number(dayjs(startTimeToLocalDate).format("D")),
+            Number(dayjs.tz(startTime).format("D")),
           )}`;
         }
       }
@@ -726,17 +719,9 @@ class SchedulingService implements ISchedulingService {
     try {
       const { startTime, donorId } = schedule;
       const donor = await this.donorService.getDonorById(donorId);
-      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
-        timeZone: "EST",
-      });
+      const startDayString: string = dayjs.tz(startTime).format("dddd, MMMM D");
 
-      const startDayString: string = dayjs(startTimeToLocalDate).format(
-        "dddd, MMMM D",
-      );
-
-      const startTimeString: string = dayjs(startTimeToLocalDate).format(
-        "h:mm A",
-      );
+      const startTimeString: string = dayjs.tz(startTime).format("h:mm A");
 
       // if admin deleted on behalf of donor
       if (isAdminDeleted) {
@@ -813,15 +798,9 @@ class SchedulingService implements ISchedulingService {
       } = await volunteerService.getVolunteerById(volunteerId);
       const donor = await this.donorService.getDonorById(scheduling.donorId);
       dayjs.extend(customParseFormat);
-      const startTimeToLocalDate = scheduling.startTime.toLocaleString(
-        "en-US",
-        {
-          timeZone: "EST",
-        },
-      );
-      const startDayString: string = dayjs(startTimeToLocalDate).format(
-        "dddd, MMMM D",
-      );
+      const startDayString: string = dayjs
+        .tz(scheduling.startTime)
+        .format("dddd, MMMM D");
       const volunteerStartTime: string = dayjs(
         scheduling.volunteerTime,
         "HH:mm",
