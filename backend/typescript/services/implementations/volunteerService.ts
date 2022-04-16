@@ -19,7 +19,9 @@ import IVolunteerService from "../interfaces/volunteerService";
 import { getDateWithVolunteerTime } from "../../utilities/servicesUtils";
 import IDonorService from "../interfaces/donorService";
 import DonorService from "./donorService";
+// eslint-disable-next-line
 import CheckInService from "./checkInService";
+// eslint-disable-next-line
 import SchedulingService from "./schedulingService";
 import nodemailerConfig from "../../nodemailer.config";
 import IEmailService from "../interfaces/emailService";

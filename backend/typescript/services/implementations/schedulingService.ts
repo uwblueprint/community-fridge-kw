@@ -29,6 +29,7 @@ import {
   formatFoodRescueShiftInformation,
 } from "../../utilities/emailUtils";
 import IVolunteerService from "../interfaces/volunteerService";
+// eslint-disable-next-line
 import VolunteerService from "./volunteerService";
 import IContentService from "../interfaces/contentService";
 import ContentService from "./contentService";

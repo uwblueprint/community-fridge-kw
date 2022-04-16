@@ -15,6 +15,7 @@ import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
 import IVolunteerService from "../interfaces/volunteerService";
+// eslint-disable-next-line
 import VolunteerService from "./volunteerService";
 import ContentService from "./contentService";
 import {
