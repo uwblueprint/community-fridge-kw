@@ -10,15 +10,14 @@ import Schedule from "../../models/scheduling.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import ICronService from "../interfaces/cronService";
 import IDonorService from "../interfaces/donorService";
-import Donor from "../../models/donor.model";
 import {
   emailHeader,
   emailFooter,
   formatDonorContactInformation,
   formatFoodRescueShiftInformation,
   formatVolunteerContactInformation,
-  getAdminEmail,
   formatCheckinShiftInformation,
+  getAdminEmail,
 } from "../../utilities/emailUtils";
 import IVolunteerService from "../interfaces/volunteerService";
 import IContentService from "../interfaces/contentService";
@@ -92,8 +91,10 @@ class CronService implements ICronService {
 
             <p style="margin: 0.5em 0 1.5em 0; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
               ${
-                schedule.volunteer_needed
-                  ? `Please meet the volunteer you requested at ${volunteerTimeString} at ${schedule.pickup_location}. <br />`
+                schedule.volunteer_needed && schedule.volunteer_id
+                  ? `Please meet the volunteer you requested at ${volunteerTimeString}${
+                      schedule.is_pickup ? `at ${schedule.pickup_location}` : ""
+                    }. <br />`
                   : ``
               }
             </p>
@@ -104,7 +105,7 @@ class CronService implements ICronService {
 
       this.emailService.sendEmail(
         email,
-        `REMINDER: Scheduled Donation to Community Fridge KW`,
+        `Reminder: Scheduled Donation for ${startDayString} between ${startTimeString} - ${endTimeString}`,
         emailBody,
       );
     } catch (error) {
@@ -117,7 +118,8 @@ class CronService implements ICronService {
 
   async sendVolunteerSchedulingReminderEmail(
     schedule: Schedule,
-    volunteer: UserVolunteerDTO,
+    volunteer: UserVolunteerDTO | null,
+    isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -143,7 +145,11 @@ class CronService implements ICronService {
         ${emailHeader}
         <body>
         
-          <p>This is a friendly reminder of your upcoming shift!<br /><br />
+          <p>${
+            isAdmin
+              ? `No Volunteer has signed up for this shift`
+              : `This is a friendly reminder of your upcoming shift!`
+          }<br /><br />
         
           Here is a shift summary: <br /> <br />
           Food Rescue Instructions:  <a href="${foodRescueUrl}">here</a>
@@ -155,12 +161,16 @@ class CronService implements ICronService {
            volunteerStartTime,
            schedule.notes ?? "",
          )}
-          ${formatVolunteerContactInformation(
-            volunteer.firstName,
-            volunteer.lastName,
-            volunteer.phoneNumber,
-            volunteer.email,
-          )}
+          ${
+            !isAdmin && volunteer
+              ? formatVolunteerContactInformation(
+                  volunteer.firstName,
+                  volunteer.lastName,
+                  volunteer.phoneNumber,
+                  volunteer.email,
+                )
+              : ""
+          }
           ${formatDonorContactInformation(
             donor.firstName,
             donor.lastName,
@@ -173,14 +183,12 @@ class CronService implements ICronService {
       </html>
         `;
       this.emailService.sendEmail(
-        volunteer.email,
-        `Confirmation: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
+        isAdmin ? getAdminEmail() : volunteer!.email,
+        `Reminder: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
         emailBody,
       );
     } catch (error) {
-      Logger.error(
-        `Failed to generate email for food rescue shift reminder for volunteer with id ${volunteer.id}`,
-      );
+      Logger.error(`Failed to generate email for food rescue shift reminder`);
       throw error;
     }
   }
@@ -204,7 +212,9 @@ class CronService implements ICronService {
           const volunteer: UserVolunteerDTO = await this.volunteerService.getVolunteerById(
             String(schedule.volunteer_id),
           );
-          this.sendVolunteerSchedulingReminderEmail(schedule, volunteer);
+          this.sendVolunteerSchedulingReminderEmail(schedule, volunteer, false);
+        } else {
+          this.sendVolunteerSchedulingReminderEmail(schedule, null, true);
         }
       });
     } catch (error) {
@@ -222,7 +232,7 @@ class CronService implements ICronService {
     try {
       const checkIns: Array<CheckIn> = await CheckIn.findAll({
         where: {
-          start_time: {
+          start_date: {
             [Op.and]: [{ [Op.gte]: tomorrow }, { [Op.lte]: dayAfterTomorrow }],
           },
         },
@@ -234,6 +244,8 @@ class CronService implements ICronService {
             String(checkIn.volunteer_id),
           );
           this.sendVolunteerCheckInReminderEmail(checkIn, volunteer, false);
+        } else {
+          this.sendVolunteerCheckInReminderEmail(checkIn, null, true);
         }
       });
     } catch (error) {
@@ -246,7 +258,7 @@ class CronService implements ICronService {
 
   async sendVolunteerCheckInReminderEmail(
     checkIn: CheckIn,
-    volunteer: UserVolunteerDTO,
+    volunteer: UserVolunteerDTO | null,
     isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
@@ -268,18 +280,26 @@ class CronService implements ICronService {
       const emailBody = `<html>
         ${emailHeader}
         <body>
-        <p>This is a friendly reminder of your upcoming shift!<br /><br />
+        <p>${
+          isAdmin
+            ? `No Volunteer has signed up for this shift`
+            : `This is a friendly reminder of your upcoming shift!`
+        }<br /><br />
         
         Here is a shift summary: <br /> <br />
         Food Check-In Instructions: <a href="${checkinUrl}">here</a>
         </p>
           
-          ${formatVolunteerContactInformation(
-            volunteer.firstName,
-            volunteer.lastName,
-            volunteer.phoneNumber,
-            volunteer.email,
-          )}
+          ${
+            !isAdmin && volunteer
+              ? formatVolunteerContactInformation(
+                  volunteer.firstName,
+                  volunteer.lastName,
+                  volunteer.phoneNumber,
+                  volunteer.email,
+                )
+              : ""
+          }
           ${formatCheckinShiftInformation(
             startDayString,
             startTimeString,
@@ -291,14 +311,12 @@ class CronService implements ICronService {
       </html>
         `;
       this.emailService.sendEmail(
-        volunteer.email,
-        `Confirmation: Food Check-In Shift for ${startDayString} at ${startTimeString}`,
+        isAdmin ? getAdminEmail() : volunteer!.email,
+        `Reminder: Food Checkin Shift for ${startDayString} at ${startTimeString}`,
         emailBody,
       );
     } catch (error) {
-      Logger.error(
-        `Failed to generate email for food checkin shift reminder for volunteer with id ${volunteer.id}`,
-      );
+      Logger.error(`Failed to generate email for food checkin shift reminder`);
       throw error;
     }
   }
