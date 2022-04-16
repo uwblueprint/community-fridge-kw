@@ -1,13 +1,13 @@
 import React from "react";
 import { NavigationProps, Step, useForm, useStep } from "react-hooks-helper";
-import { Role } from "../../../types/AuthTypes";
 
+import { Role } from "../../../types/AuthTypes";
 import AccountDetails from "./AccountDetails";
 import AccountType from "./AccountType";
 import CreateAccount from "./CreateAccount";
-import VolunteerQuestions from "./VolunteerQuestions";
 import TermsConditions from "./TermsConditions";
 import VerificationPage from "./VerificationEmail";
+import VolunteerQuestions from "./VolunteerQuestions";
 
 const steps = [
   { id: "account type" },
@@ -37,7 +37,7 @@ const Signup = () => {
     acceptedTerms: false,
     cityQuestionResponse: "",
     intentionQuestionResponse: "",
-    skillsQuestionResponse: ""
+    skillsQuestionResponse: "",
   });
 
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });

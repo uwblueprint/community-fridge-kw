@@ -91,7 +91,7 @@ const TermsConditions = ({
       role,
       cityQuestionResponse,
       intentionQuestionResponse,
-      skillsQuestionResponse
+      skillsQuestionResponse,
     );
     if (!user) {
       onOpen();
@@ -108,7 +108,7 @@ const TermsConditions = ({
         go("volunteer questions");
       }
     }
-  }
+  };
 
   return (
     <Container pl="42px" pr="42px" pt="0.5rem">

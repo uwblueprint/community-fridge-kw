@@ -5,7 +5,6 @@ import {
   Container,
   FormControl,
   FormErrorMessage,
-  Grid,
   IconButton,
   Input,
   Textarea,
@@ -16,7 +15,6 @@ import { useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
-import { Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
@@ -32,7 +30,13 @@ const VolunteerQuestions = ({
 }) => {
   const { previous, next } = navigation;
   const history = useHistory();
-  const { role, firstName, cityQuestionResponse, intentionQuestionResponse, skillsQuestionResponse } = formData;
+  const {
+    role,
+    firstName,
+    cityQuestionResponse,
+    intentionQuestionResponse,
+    skillsQuestionResponse,
+  } = formData;
 
   const { isDesktop } = useViewport();
 
@@ -45,9 +49,9 @@ const VolunteerQuestions = ({
 
   const validateForm = () => {
     const newErrors = {
-        cityQuestion: "",
-        intentionsQuestion: "",
-        skillsQuestion: "",
+      cityQuestion: "",
+      intentionsQuestion: "",
+      skillsQuestion: "",
     };
     let valid = true;
 
@@ -61,7 +65,8 @@ const VolunteerQuestions = ({
     }
     if (!skillsQuestionResponse) {
       valid = false;
-      newErrors.skillsQuestion = "Please enter skills or traits you would like to share or develop as a volunteer.";
+      newErrors.skillsQuestion =
+        "Please enter skills or traits you would like to share or develop as a volunteer.";
     }
     setFormErrors(newErrors);
     return valid;
@@ -97,8 +102,8 @@ const VolunteerQuestions = ({
       <HeaderLabel text="Volunteer Information" />
       <FormControl mt="2rem" isRequired>
         <Box>
-        <MandatoryInputDescription label="What city do you currently live in?" />
-        <FormControl isRequired isInvalid={!!formErrors.cityQuestion}>
+          <MandatoryInputDescription label="What city do you currently live in?" />
+          <FormControl isRequired isInvalid={!!formErrors.cityQuestion}>
             <Input
               validate="Required"
               mt="2"
@@ -108,11 +113,11 @@ const VolunteerQuestions = ({
               placeholder="Enter location"
             />
             <FormErrorMessage>{formErrors.cityQuestion}</FormErrorMessage>
-        </FormControl>
+          </FormControl>
         </Box>
         <Box mt="1.5rem">
-        <MandatoryInputDescription label="Why do you want to join us?" />
-        <FormControl isRequired isInvalid={!!formErrors.intentionsQuestion}>
+          <MandatoryInputDescription label="Why do you want to join us?" />
+          <FormControl isRequired isInvalid={!!formErrors.intentionsQuestion}>
             <Textarea
               validate="Required"
               mt="2"
@@ -122,11 +127,11 @@ const VolunteerQuestions = ({
               placeholder="Type answer here"
             />
             <FormErrorMessage>{formErrors.intentionsQuestion}</FormErrorMessage>
-        </FormControl>
+          </FormControl>
         </Box>
         <Box mt="1.5rem">
-        <MandatoryInputDescription label="What skills/traits would you like to share and/or develop as a volunteer with CFKW?" />
-        <FormControl isRequired isInvalid={!!formErrors.skillsQuestion}>
+          <MandatoryInputDescription label="What skills/traits would you like to share and/or develop as a volunteer with CFKW?" />
+          <FormControl isRequired isInvalid={!!formErrors.skillsQuestion}>
             <Textarea
               validate="Required"
               mt="2"
@@ -136,7 +141,7 @@ const VolunteerQuestions = ({
               placeholder="Type answer here"
             />
             <FormErrorMessage>{formErrors.skillsQuestion}</FormErrorMessage>
-        </FormControl>
+          </FormControl>
         </Box>
         <Box mt="2.5rem">
           <Button mt="2" variant="navigation" onClick={handleNext} width="100%">
