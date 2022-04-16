@@ -20,7 +20,7 @@ import authAPIClient from "../../../APIClients/AuthAPIClient";
 import { SignupErrorMessage } from "../../../constants/AuthConstants";
 import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
-import { AuthenticatedUser } from "../../../types/AuthTypes";
+import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
 import SignUpFailedModal from "./ReturnToLoginModal";
 import { SignUpFormProps } from "./types";
@@ -34,7 +34,7 @@ const TermsConditions = ({
   setForm: SetForm;
   navigation: NavigationProps;
 }) => {
-  const { previous, next } = navigation;
+  const { go, next } = navigation;
   const history = useHistory();
 
   const { isDesktop } = useViewport();
@@ -47,6 +47,9 @@ const TermsConditions = ({
     businessName,
     password,
     acceptedTerms,
+    cityQuestionResponse,
+    intentionQuestionResponse,
+    skillsQuestionResponse,
   } = formData;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -86,12 +89,25 @@ const TermsConditions = ({
       password,
       businessName,
       role,
+      cityQuestionResponse,
+      intentionQuestionResponse,
+      skillsQuestionResponse,
     );
     if (!user) {
       onOpen();
       return false;
     }
     return next();
+  };
+
+  const handlePrev = () => {
+    if (go) {
+      if (role === Role.DONOR) {
+        go("account type");
+      } else {
+        go("volunteer questions");
+      }
+    }
   };
 
   return (
@@ -101,7 +117,7 @@ const TermsConditions = ({
         float="left"
         backgroundColor="transparent"
         aria-label="go back"
-        onClick={previous}
+        onClick={handlePrev}
       >
         <ArrowBackIcon width="24px" height="24px" />
       </IconButton>

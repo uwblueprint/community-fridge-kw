@@ -272,6 +272,7 @@ class AuthService implements IAuthService {
   async sendAdminVolunteerSignUpEmail(
     email: string,
     fullName: string,
+    volunteerResponses: string[],
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -287,13 +288,34 @@ class AuthService implements IAuthService {
         <p>${fullName} is interested in becoming a volunteer.
           <br />
           <br />
-          Please approve this volunteer (${email}) for the Community Fridge KW volunteer by clicking "Approve"
+          Below are their responses to the application questions:
+          <br />
+          <br />
+          What city do you currently live in?
+          <br />
+          ${volunteerResponses[0]}
+          <br />
+          <br />
+          Why do you want to join us?
+          <br />
+          ${volunteerResponses[1]}
+          <br />
+          <br />
+          What skills/traits would you like to share and/or develop as a volunteer with CFKW?
+          <br />
+          ${volunteerResponses[2]}
+          <br />
+          <br />
+          Note that this email is the only record of the application questions.
+          <br />
+          <br />
+          To approve this volunteer (${email}) on the platform, please click below.
         </p>
          <table cellspacing="0" cellpadding="0"> <tr> 
       <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
         <a href="https://schedule.communityfridgekw.ca/user-management" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
         <span style="color: #FAFCFE;">
-          Approve
+          Approve Volunteer On Platform
         </span>
         </a>
       </td> 
@@ -311,6 +333,48 @@ class AuthService implements IAuthService {
         `Failed to generate admin email for new volunteer sign up for volunteer with email ${email}`,
       );
       throw error;
+    }
+  }
+
+  async sendVolunteerApprovedEmail(
+    email: string,
+    firstName: string,
+  ): Promise<boolean> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerApprovedEmail but this instance of AuthService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const emailBody = `
+      <html>
+      ${emailHeader}
+      <body>
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName},</h2>
+        <p>Welcome to the Community Fridge KW volunteer team! We are excited to have you on board. Your account status is APPROVED. 
+        You can now access our volunteer shifts and begin signing up for shifts here.<br /><br />
+        If you’re on Facebook, consider joining our CFKW Volunteers group! This is a great way to stay in the loop and also connect 
+        with fellow volunteers. We encourage you to look for the posts highlighted under the “Featured” section for critical 
+        announcements like hamper deliveries, as well as instructions to sign up for a fridge check in and/or food rescue.<br /><br />
+        In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
+        </p>
+       ${emailFooter}
+      </body>
+    </html>
+      `;
+
+      this.emailService.sendEmail(
+        email,
+        "APPROVED: Volunteer Account Status",
+        emailBody,
+      );
+      return true;
+    } catch (error) {
+      Logger.error(
+        `Failed to generate admin email for new volunteer sign up for volunteer with email ${email}`,
+      );
+      return false;
     }
   }
 

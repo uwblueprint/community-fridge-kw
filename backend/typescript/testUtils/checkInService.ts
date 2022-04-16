@@ -34,6 +34,15 @@ export const testUpdatedCheckIns = [
   },
 ];
 
+export const testContent = [
+  {
+    food_rescue_description: "test food rescue description",
+    food_rescue_url: "https://www.google.com",
+    checkin_description: "test checkin description",
+    checkin_url: "https://www.google.com",
+  },
+];
+
 export const testUsersDb = [
   {
     first_name: "Test",

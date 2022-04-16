@@ -89,6 +89,11 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
       await authService.sendAdminVolunteerSignUpEmail(
         req.body.email,
         `${req.body.firstName} ${req.body.lastName}`,
+        [
+          req.body.cityQuestionResponse,
+          req.body.intentionQuestionResponse,
+          req.body.skillsQuestionResponse,
+        ],
       );
     }
 
@@ -180,6 +185,22 @@ authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
     const response = await authService.confirmPasswordReset(
       req.params.newPassword!,
       oobCode as string,
+    );
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/approveVolunteer/:email?", async (req, res) => {
+  const { firstName } = req.query;
+
+  try {
+    const response = await authService.sendVolunteerApprovedEmail(
+      req.params.email,
+      firstName as string,
     );
     if (response) {
       res.status(204).send();

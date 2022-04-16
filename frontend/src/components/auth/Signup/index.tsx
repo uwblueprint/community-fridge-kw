@@ -6,11 +6,13 @@ import AccountType from "./AccountType";
 import CreateAccount from "./CreateAccount";
 import TermsConditions from "./TermsConditions";
 import VerificationPage from "./VerificationEmail";
+import VolunteerQuestions from "./VolunteerQuestions";
 
 const steps = [
   { id: "account type" },
   { id: "create account" },
   { id: "account details" },
+  { id: "volunteer questions" },
   { id: "terms conditions" },
   { id: "email verification" },
 ];
@@ -32,6 +34,9 @@ const Signup = () => {
     businessName: "",
     role: "",
     acceptedTerms: false,
+    cityQuestionResponse: "",
+    intentionQuestionResponse: "",
+    skillsQuestionResponse: "",
   });
 
   const { step, navigation }: UseStepType = useStep({ steps, initialStep: 0 });
@@ -58,6 +63,14 @@ const Signup = () => {
       return (
         <AccountDetails
           formValues={formValues}
+          setForm={setForm}
+          navigation={navigation}
+        />
+      );
+    case "volunteer questions":
+      return (
+        <VolunteerQuestions
+          formData={formValues}
           setForm={setForm}
           navigation={navigation}
         />
