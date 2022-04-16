@@ -55,7 +55,11 @@ interface IAuthService {
    * @param fullName of volunteer
    * @throws Error if unable to send email
    */
-  sendAdminVolunteerSignUpEmail(email: string, fullName: string, volunteerResponses: string[]): Promise<void>;
+  sendAdminVolunteerSignUpEmail(
+    email: string,
+    fullName: string,
+    volunteerResponses: string[],
+  ): Promise<void>;
 
   /**
    * Determine if the provided access token is valid and authorized for at least

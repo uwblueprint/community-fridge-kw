@@ -31,8 +31,6 @@ const VolunteerQuestions = ({
   const { previous, next } = navigation;
   const history = useHistory();
   const {
-    role,
-    firstName,
     cityQuestionResponse,
     intentionQuestionResponse,
     skillsQuestionResponse,

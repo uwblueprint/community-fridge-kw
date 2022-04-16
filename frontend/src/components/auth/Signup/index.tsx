@@ -55,7 +55,6 @@ const Signup = () => {
         />
       );
     case "create account":
-      console.log(formValues);
       return (
         <CreateAccount
           formData={formValues}
@@ -64,7 +63,6 @@ const Signup = () => {
         />
       );
     case "account details":
-      console.log(formValues);
       return (
         <AccountDetails
           formValues={formValues}
