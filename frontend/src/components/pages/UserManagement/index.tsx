@@ -18,8 +18,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
-import AuthAPIClient from "../../../APIClients/AuthAPIClient";
 
+import AuthAPIClient from "../../../APIClients/AuthAPIClient";
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import UserAPIClient from "../../../APIClients/UserAPIClient";
 import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
@@ -141,7 +141,10 @@ const UserManagementPage = (): JSX.Element => {
         }
         return u;
       });
-      await AuthAPIClient.sendVolunteerApprovedEmail(user.email, user.firstName);
+      await AuthAPIClient.sendVolunteerApprovedEmail(
+        user.email,
+        user.firstName,
+      );
       setUsers(newUsers);
     }
   };
