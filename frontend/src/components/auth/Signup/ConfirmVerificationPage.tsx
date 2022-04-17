@@ -17,7 +17,11 @@ const ConfirmVerificationPage = () => {
           src={confirmVerificationImage}
           alt="Verification email image"
         />
-        <Text mt={["2rem", "2.25rem"]} textAlign="center" textStyle="mobileHeader1">
+        <Text
+          mt={["2rem", "2.25rem"]}
+          textAlign="center"
+          textStyle="mobileHeader1"
+        >
           Thank you for verifying your email address!
         </Text>
         <Text

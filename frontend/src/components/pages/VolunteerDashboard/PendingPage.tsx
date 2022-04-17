@@ -1,4 +1,4 @@
-import { Image, Container, Text } from "@chakra-ui/react";
+import { Container, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 

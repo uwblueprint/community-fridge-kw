@@ -46,14 +46,21 @@ const ChangePassword = ({
 
   return (
     <Container pl="42px" pr="42px" pt={["3rem", "0.5rem"]}>
-      <Text mt="67px" textStyle="mobileHeader1">
+      <Text mt="67px" textStyle={["mobileHeader3", "desktopHeader3"]}>
         Change Password
       </Text>
-      <Text textStyle="mobileSmall" color="hubbard.100">
+      <Text
+        textStyle={["mobileSmall", "desktopSmall"]}
+        color="hubbard.100"
+        mt="1rem"
+      >
         Enter the email you registered with to send a password change request.
       </Text>
 
-      <FormControl mt="2rem" isInvalid={!email && interaction.email}>
+      <FormControl
+        mt={["2rem", "2.75rem"]}
+        isInvalid={!email && interaction.email}
+      >
         <Box>
           <MandatoryInputDescription label="Enter the email address you registered with" />
           <Input
@@ -70,7 +77,7 @@ const ChangePassword = ({
             Please enter a valid email address.
           </FormErrorMessage>
         </Box>
-        <Box mt="3rem">
+        <Box mt={["3rem", "3.5rem"]}>
           <Button
             mt="2"
             variant="navigation"

@@ -103,12 +103,17 @@ const Login = (): React.ReactElement => {
             placeholder="Enter password"
           />
         </Box>
-        <Text mt="1rem" color="hubbard.100" textStyle="mobileSmall">
+        <Text
+          mt="1rem"
+          color="hubbard.100"
+          textStyle="mobileSmall"
+          textDecoration="underline"
+        >
           <Link to={Routes.FORGET_PASSWORD}> Forgot password? </Link>
         </Text>
         {isIncorrectLoginCredentails && (
           <Text
-            my="48px"
+            my="24px"
             textStyle={["mobileSmall", "desktopSmall"]}
             color="tomato.100"
           >
