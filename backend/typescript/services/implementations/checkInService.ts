@@ -332,6 +332,56 @@ class CheckInService implements ICheckInService {
     }
   }
 
+  async sendVolunteerAdminCancelCheckInEmail(
+    volunteerId: string,
+    checkIn: CheckInDTO,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerAdminCancelCheckInEmail but this instance of CheckInService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const {
+        firstName,
+        lastName,
+        email,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const startDayString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("dddd, MMMM D");
+      const startTimeString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("h:mm A");
+      const endTimeString: string = dayjs.tz(checkIn.endDate).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+          <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+          <p>Your scheduled shift for ${startDayString} from ${startTimeString} to ${endTimeString} has been cancelled<br /><br />
+          
+          <p>
+           We apologize for the cancellation but would love to stay connected! If you are interested and available for another shift, please sign up here.
+          </p>
+         ${emailFooter}
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        email,
+        `Cancellation Notice: Fridge Check-in for ${startDayString} at ${startTimeString}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm volunteer cancellation by admin for check-in shift for volunteer with id ${volunteerId}`,
+      );
+      throw error;
+    }
+  }
+
   async updateCheckInById(
     checkInId: string,
     checkIn: UpdateCheckInDTO,
@@ -362,33 +412,50 @@ class CheckInService implements ICheckInService {
         notes: updatedCheckIn.notes,
         isAdmin: updatedCheckIn.is_admin,
       };
-
       // send volunteer confirmation email
       if (
         Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
-        updatedCheckIn.volunteer_id !== null
+        updatedCheckIn.volunteer_id
       ) {
+        // Volunteer signing up case
         this.sendVolunteerCheckInSignUpConfirmationEmail(
-          checkIn.volunteerId!,
+          String(updatedCheckIn.volunteer_id),
           updatedCheckInDTO,
           false,
         );
         this.sendVolunteerCheckInSignUpConfirmationEmail(
-          checkIn.volunteerId!,
+          String(updatedCheckIn.volunteer_id),
           updatedCheckInDTO,
           true,
         );
       } else if (
+        Object.prototype.hasOwnProperty.call(checkIn, "isAdmin") &&
         Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
-        updatedCheckIn.volunteer_id === null
+        !updatedCheckIn.volunteer_id &&
+        !updatedCheckIn.is_admin &&
+        oldCheckIn &&
+        oldCheckIn.volunteer_id
       ) {
+        // Admin removing volunteer case
+        this.sendVolunteerAdminCancelCheckInEmail(
+          String(oldCheckIn.volunteer_id),
+          updatedCheckInDTO,
+        );
+      } else if (
+        Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
+        !updatedCheckIn.volunteer_id &&
+        !updatedCheckIn.is_admin &&
+        oldCheckIn &&
+        oldCheckIn.volunteer_id
+      ) {
+        // Volunteer removing themselves
         this.sendVolunteerCancelCheckInEmail(
-          String(oldCheckIn?.volunteer_id),
+          String(oldCheckIn.volunteer_id),
           updatedCheckInDTO,
           false,
         );
         this.sendVolunteerCancelCheckInEmail(
-          String(oldCheckIn?.volunteer_id),
+          String(oldCheckIn.volunteer_id),
           updatedCheckInDTO,
           true,
         );

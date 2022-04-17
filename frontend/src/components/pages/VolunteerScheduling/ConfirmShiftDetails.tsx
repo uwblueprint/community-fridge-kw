@@ -99,11 +99,9 @@ const ConfirmShiftDetails = ({
     const res =
       shift.type === ShiftType.SCHEDULING
         ? await SchedulingAPIClient.updateSchedule(shift.id, {
-            ...shift,
             volunteerId: null,
           })
         : await CheckInAPIClient.updateCheckInById(shift.id, {
-            ...shift,
             volunteerId: null,
           });
 
