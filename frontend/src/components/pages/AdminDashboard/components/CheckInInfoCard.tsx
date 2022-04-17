@@ -192,7 +192,7 @@ const CheckInInfoCard = ({
       <Stack
         direction="column"
         display={["default", "flex"]}
-        spacing={["18px", "8px"]}
+        spacing={["18px", "12px"]}
         alignItems="left"
       >
         <Flex direction="row" alignItems="center" display="flex">
