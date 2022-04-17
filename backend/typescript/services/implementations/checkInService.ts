@@ -2,6 +2,8 @@
 import { snakeCase } from "lodash";
 import dayjs from "dayjs";
 import { Op } from "sequelize";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import ICheckInService from "../interfaces/checkInService";
 import {
   CheckInDTO,
@@ -14,8 +16,25 @@ import CheckIn from "../../models/checkIn.model";
 import getErrorMessage from "../../utilities/errorMessageUtil";
 import IEmailService from "../interfaces/emailService";
 import { toSnakeCase } from "../../utilities/servicesUtils";
+import IVolunteerService from "../interfaces/volunteerService";
+// eslint-disable-next-line
+import VolunteerService from "./volunteerService";
+import ContentService from "./contentService";
+import {
+  emailFooter,
+  emailHeader,
+  formatCheckinShiftInformation,
+  formatVolunteerContactInformation,
+  getAdminEmail,
+} from "../../utilities/emailUtils";
+import IContentService from "../interfaces/contentService";
 
 const Logger = logger(__filename);
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+dayjs.tz.setDefault("America/New_York");
 
 class CheckInService implements ICheckInService {
   emailService: IEmailService | null;
@@ -142,6 +161,9 @@ class CheckInService implements ICheckInService {
       checkIns = await CheckIn.findAll({
         where: {
           volunteer_id: Number(volunteerId),
+          start_date: {
+            [Op.gte]: new Date(),
+          },
         },
         order: [["start_date", "ASC"]],
       });
@@ -169,6 +191,147 @@ class CheckInService implements ICheckInService {
     return checkInDtos;
   }
 
+  async sendVolunteerCheckInSignUpConfirmationEmail(
+    volunteerId: string,
+    checkIn: CheckInDTO,
+    isAdmin: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerCheckInSignUpConfirmationEmail but this instance of CheckInService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const contentService: IContentService = new ContentService();
+      const {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const { checkinUrl } = await contentService.getContent();
+      const startDayString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("dddd, MMMM D");
+      const startTimeString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("h:mm A");
+      const endTimeString: string = dayjs.tz(checkIn.endDate).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+          ${
+            isAdmin
+              ? `
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has signed up for a Fridge Check-in Shift for 
+        ${startDayString} from ${startTimeString} to ${endTimeString}</h2>`
+              : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+          <p>Thank you for volunteering with us!<br /><br />`
+          }
+          Here is a shift summary: <br /> <br />
+          Food Check-In Instructions: <a href="${checkinUrl}">here</a>
+          </p>
+          ${formatVolunteerContactInformation(
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+          )}
+          ${formatCheckinShiftInformation(
+            startDayString,
+            startTimeString,
+            endTimeString,
+            checkIn.notes ?? "",
+          )}
+         ${
+           !isAdmin
+             ? ` <p>
+            If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
+          </p>
+         ${emailFooter}`
+             : ""
+         }
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        isAdmin ? getAdminEmail() : email,
+        `Confirmation: Food Check-In Shift for ${startDayString} at ${startTimeString}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm volunteer sign up for check-in shift for volunteer with id ${volunteerId}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendVolunteerCancelCheckInEmail(
+    volunteerId: string,
+    checkIn: CheckInDTO,
+    isAdmin: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerCancelCheckInEmail but this instance of CheckInService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const {
+        firstName,
+        lastName,
+        email,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const startDayString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("dddd, MMMM D");
+      const startTimeString: string = dayjs
+        .tz(checkIn.startDate)
+        .format("h:mm A");
+      const endTimeString: string = dayjs.tz(checkIn.endDate).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+          ${
+            isAdmin
+              ? `
+        <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has cancelled their Fridge Check-in Shift scheduled for 
+        ${startDayString} from ${startTimeString} to ${endTimeString}</h2>`
+              : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+          <p>You have successfully cancelled your Food Rescue volunteer shift scheduled for ${startDayString} from ${startTimeString} to ${endTimeString}<br /><br />`
+          }
+         ${
+           !isAdmin
+             ? ` <p>
+           We hope to see you back at the fridge soon! <br/>
+           If this cancellation was made in error, please reschedule or contact the CFKW admin team. 
+          </p>
+         ${emailFooter}`
+             : ""
+         }
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        isAdmin ? getAdminEmail() : email,
+        `${
+          !isAdmin ? "Confirmation: " : ""
+        }Cancelled Fridge Check-in Volunteer Shift for ${startDayString} at ${startTimeString}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm volunteer cancellation for check-in shift for volunteer with id ${volunteerId}`,
+      );
+      throw error;
+    }
+  }
+
   async updateCheckInById(
     checkInId: string,
     checkIn: UpdateCheckInDTO,
@@ -178,6 +341,7 @@ class CheckInService implements ICheckInService {
       Object.entries(checkIn).forEach(([key, value]) => {
         updatesSnakeCase[snakeCase(key)] = value;
       });
+      const oldCheckIn = await CheckIn.findOne({ where: { id: checkInId } });
       const updateResult = await CheckIn.update(updatesSnakeCase, {
         where: { id: Number(checkInId) },
         limit: 1,
@@ -198,6 +362,37 @@ class CheckInService implements ICheckInService {
         notes: updatedCheckIn.notes,
         isAdmin: updatedCheckIn.is_admin,
       };
+
+      // send volunteer confirmation email
+      if (
+        Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
+        updatedCheckIn.volunteer_id !== null
+      ) {
+        this.sendVolunteerCheckInSignUpConfirmationEmail(
+          checkIn.volunteerId!,
+          updatedCheckInDTO,
+          false,
+        );
+        this.sendVolunteerCheckInSignUpConfirmationEmail(
+          checkIn.volunteerId!,
+          updatedCheckInDTO,
+          true,
+        );
+      } else if (
+        Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
+        updatedCheckIn.volunteer_id === null
+      ) {
+        this.sendVolunteerCancelCheckInEmail(
+          String(oldCheckIn?.volunteer_id),
+          updatedCheckInDTO,
+          false,
+        );
+        this.sendVolunteerCancelCheckInEmail(
+          String(oldCheckIn?.volunteer_id),
+          updatedCheckInDTO,
+          true,
+        );
+      }
       return updatedCheckInDTO;
     } catch (error) {
       Logger.error(

@@ -164,6 +164,22 @@ const confirmPasswordReset = async (
   }
 };
 
+const sendVolunteerApprovedEmail = async (
+  email: string,
+  firstName: string,
+): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/approveVolunteer/${email}?firstName=${firstName}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   confirmEmailVerification,
   verifyPasswordResetCode,
@@ -174,4 +190,5 @@ export default {
   register,
   resetPassword,
   refresh,
+  sendVolunteerApprovedEmail,
 };

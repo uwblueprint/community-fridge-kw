@@ -25,6 +25,8 @@ import NotFound from "./components/pages/NotFound";
 import Scheduling from "./components/pages/Scheduling";
 import UserManagement from "./components/pages/UserManagement";
 import VolunteerDashboard from "./components/pages/VolunteerDashboard";
+import VolunteerShiftDetailsPage from "./components/pages/VolunteerDashboard/ShiftDetails";
+import VolunteerScheduling from "./components/pages/VolunteerScheduling";
 import {
   AUTHENTICATED_USER_KEY,
   AUTHENTICATED_VOLUNTEER_CONTEXT_KEY,
@@ -89,6 +91,18 @@ const App = (): React.ReactElement => {
                   volunteerOnly
                   exact
                   path={Routes.VOLUNTEER_SHIFTS_PAGE}
+                  component={VolunteerScheduling as React.FC}
+                />
+                <PrivateRoute
+                  volunteerOnly
+                  exact
+                  path={Routes.VOLUNTEER_SHIFT_DETAILS_PAGE}
+                  component={VolunteerShiftDetailsPage}
+                />
+                <PrivateRoute
+                  volunteerOnly
+                  exact
+                  path={Routes.VOLUNTEER_DASHBOARD_PAGE}
                   component={VolunteerDashboard}
                 />
                 <PrivateRoute

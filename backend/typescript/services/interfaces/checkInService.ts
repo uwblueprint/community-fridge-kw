@@ -19,6 +19,33 @@ interface ICheckInService {
   updateCheckInById(id: string, checkIn: UpdateCheckInDTO): Promise<CheckInDTO>;
 
   /**
+   * Generate a confirmation email with check-in shift information for volunteer who signed up for the shift
+   * @param volunteerId of volunteer who signed up for shift
+   * @param checkIn object that contains check-in information
+   * @param isAdmin boolean for if the email is to be sent to an admin or volunteer
+   * @throws Error if unable to send email
+   */
+  sendVolunteerCheckInSignUpConfirmationEmail(
+    volunteerId: string,
+    checkIn: CheckInDTO,
+    isAdmin: boolean,
+  ): Promise<void>;
+
+  /**
+   *
+   * Generate a confirmation email when a volunteer cancels a check-in shift
+   * @param volunteerId of volunteer who cancelled the shift
+   * @param checkIn object that contains the check-in information
+   * @param isAdmin boolean for if the email is to be sent to an admin or volunteer
+   * @throws Error if unable to send email
+   */
+  sendVolunteerCancelCheckInEmail(
+    volunteerId: string,
+    checkIn: CheckInDTO,
+    isAdmin: boolean,
+  ): Promise<void>;
+
+  /**
    * Gets all checkins from table
    * @throws Error if retrieving checkins fail
    */

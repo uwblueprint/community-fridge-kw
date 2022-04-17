@@ -1,8 +1,11 @@
 import { Box, Button, Stack, Text } from "@chakra-ui/react";
 import { format, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
+import { NavigationProps } from "react-hooks-helper";
+import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
+import * as Routes from "../../../constants/Routes";
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
@@ -25,9 +28,18 @@ interface CheckInOrScheduleProps {
 }
 const VolunteerShiftCard = ({
   shift,
+  navigation,
+  isSignUp,
+  setSelectedVolunteerShift,
 }: {
   shift: CheckInWithShiftType | ScheduleWithShiftType;
+  navigation?: NavigationProps;
+  isSignUp?: boolean;
+  setSelectedVolunteerShift?: (
+    shift: ScheduleWithShiftType | CheckInWithShiftType,
+  ) => void;
 }): JSX.Element => {
+  const history = useHistory();
   const {
     id,
     donorId,
@@ -41,6 +53,11 @@ const VolunteerShiftCard = ({
     type,
   } = shift as CheckInOrScheduleProps;
   const [businessName, setBusinessName] = useState<string>("");
+  let next: () => void;
+
+  if (navigation) {
+    next = navigation.next;
+  }
 
   const dateLocal = () => {
     if (startDate) {
@@ -66,6 +83,15 @@ const VolunteerShiftCard = ({
     );
   };
 
+  const onSubmitClick = async () => {
+    if (isSignUp && setSelectedVolunteerShift) {
+      setSelectedVolunteerShift(shift);
+      next();
+    } else {
+      history.push(`${Routes.VOLUNTEER_SHIFTS_PAGE}/${id}/${shift.type}`);
+    }
+  };
+
   useEffect(() => {
     const getBusinessName = async () => {
       if (donorId) {
@@ -73,7 +99,6 @@ const VolunteerShiftCard = ({
         setBusinessName(donor.businessName);
       }
     };
-
     getBusinessName();
   }, []);
 
@@ -89,17 +114,18 @@ const VolunteerShiftCard = ({
           <Text minWidth="125px" textStyle="mobileSmall" color="hubbard.100">
             {type === ShiftType.CHECKIN && "Fridge check-in"}
             {type === ShiftType.SCHEDULING &&
-              (isPickup ? "Pickup assistance" : "Unloading assistance")}
+              (isPickup ? "Food rescue pickup" : "Food rescue unloading")}
           </Text>
         </Text>
         <Button
           float="right"
           mt="1.5rem"
           size="lg"
-          width={["50%", "20%"]}
-          variant="viewDetails"
+          width={isSignUp ? ["55%", "32%"] : ["50%", "20%"]}
+          variant={isSignUp ? "navigation" : "viewDetails"}
+          onClick={onSubmitClick}
         >
-          View Details
+          {isSignUp ? "Volunteer for shift" : "View Details"}
         </Button>
       </Stack>
       <Box
