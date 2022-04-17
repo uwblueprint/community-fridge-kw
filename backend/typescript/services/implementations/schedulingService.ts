@@ -689,15 +689,15 @@ class SchedulingService implements ISchedulingService {
       // send volunteer email confirmation if signed up for food rescue
       if (
         Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
-        updatedScheduling.volunteer_id !== null
+        scheduling.volunteerId
       ) {
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
-          scheduling.volunteerId!,
+          scheduling.volunteerId,
           updatedSchedulingDTO,
           true,
         );
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
-          scheduling.volunteerId!,
+          scheduling.volunteerId,
           updatedSchedulingDTO,
           false,
         );
@@ -705,15 +705,16 @@ class SchedulingService implements ISchedulingService {
       // send cancellation email if volunteer has cancelled
       if (
         Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
-        updatedScheduling.volunteer_id === null
+        updatedScheduling.volunteer_id === null &&
+        oldScheduling?.volunteer_id
       ) {
         this.sendFoodRescueCancellationEmail(
-          String(oldScheduling!.volunteer_id),
+          String(oldScheduling.volunteer_id),
           updatedSchedulingDTO,
           true,
         );
         this.sendFoodRescueCancellationEmail(
-          String(oldScheduling!.volunteer_id),
+          String(oldScheduling.volunteer_id),
           updatedSchedulingDTO,
           false,
         );
