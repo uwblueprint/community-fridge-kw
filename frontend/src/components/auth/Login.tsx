@@ -76,7 +76,7 @@ const Login = (): React.ReactElement => {
 
   return (
     <Container p={{ base: "30px", md: "2rem 1rem" }}>
-      <HeaderLabel text="Log in to start scheduling" />
+      <HeaderLabel text="Log in to account" />
       <FormControl mt="2rem">
         <Box>
           <Text textStyle="mobileBodyBold" color="black.100">
