@@ -13,7 +13,6 @@ import {
   getAssistanceType,
 } from "../../../../utils/DashboardUtils";
 import CardSubInformation from "../../../common/Card";
-import { DonationFrequency } from "../../Scheduling/types";
 
 const DropoffCard = ({
   schedule,
@@ -103,13 +102,8 @@ const DropoffCard = ({
           />
           <CardSubInformation
             description="Frequency"
-            value={
-              frequency === DonationFrequency.ONE_TIME
-                ? ` Donation`
-                : ` Recurring Donation`
-            }
+            value={frequency}
             isFrequencyBlock
-            frequency={frequency}
             frequencyColorScheme={frequencyColorScheme}
           />
           {isPublicView ? (
