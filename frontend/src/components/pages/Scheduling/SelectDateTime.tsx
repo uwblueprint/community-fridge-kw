@@ -139,7 +139,10 @@ const SelectDateTime = ({
     const iconsPerTimeSlot = [0, 0, 0, 0, 0] as number[];
     schedules.forEach((schedule) => {
       if (schedule) {
-        if (new Date(schedule.startTime).getDate() === selectedDate.getDate()) {
+        if (
+          new Date(schedule.startTime).toDateString() ===
+          selectedDate.toDateString()
+        ) {
           if (schedule.dayPart === selectedDayPart) {
             const timeSlots = getTimeSlot(schedule.dayPart);
             if (timeSlots) {
