@@ -710,7 +710,8 @@ class SchedulingService implements ISchedulingService {
       if (
         Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
         updatedScheduling.volunteer_id === null &&
-        oldScheduling?.volunteer_id
+        oldScheduling &&
+        oldScheduling.volunteer_id
       ) {
         this.sendVolunteerShiftCancellationEmail(
           String(oldScheduling.volunteer_id),
