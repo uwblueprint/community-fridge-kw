@@ -655,9 +655,6 @@ class SchedulingService implements ISchedulingService {
       Object.entries(scheduling).forEach(([key, value]) => {
         updatesSnakeCase[snakeCase(key)] = value;
       });
-      const oldScheduling = await Scheduling.findOne({
-        where: { id: schedulingId },
-      });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
         returning: true,
@@ -687,10 +684,7 @@ class SchedulingService implements ISchedulingService {
         volunteerId: String(updatedScheduling.volunteer_id),
       };
       // send volunteer email confirmation if signed up for food rescue
-      if (
-        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
-        updatedScheduling.volunteer_id !== null
-      ) {
+      if (Object.prototype.hasOwnProperty.call(scheduling, "volunteerId")) {
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
           scheduling.volunteerId!,
           updatedSchedulingDTO,
@@ -698,22 +692,6 @@ class SchedulingService implements ISchedulingService {
         );
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
           scheduling.volunteerId!,
-          updatedSchedulingDTO,
-          false,
-        );
-      }
-      // send cancellation email if volunteer has cancelled
-      if (
-        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
-        updatedScheduling.volunteer_id === null
-      ) {
-        this.sendFoodRescueCancellationEmail(
-          String(oldScheduling!.volunteer_id),
-          updatedSchedulingDTO,
-          true,
-        );
-        this.sendFoodRescueCancellationEmail(
-          String(oldScheduling!.volunteer_id),
           updatedSchedulingDTO,
           false,
         );
@@ -1077,71 +1055,6 @@ class SchedulingService implements ISchedulingService {
     }
 
     return schedulingDtos;
-  }
-
-  async sendFoodRescueCancellationEmail(
-    volunteerId: string,
-    scheduling: SchedulingDTO,
-    isAdmin: boolean,
-  ): Promise<void> {
-    if (!this.emailService) {
-      const errorMessage =
-        "Attempted to call sendFoodRescueCancellationEmail but this instance of SchedulingService does not have an EmailService instance";
-      Logger.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-    try {
-      const volunteerService: IVolunteerService = new VolunteerService();
-      const {
-        firstName,
-        lastName,
-        email,
-      } = await volunteerService.getVolunteerById(volunteerId);
-      const donor = await this.donorService.getDonorById(scheduling.donorId);
-      dayjs.extend(customParseFormat);
-      const startDayString: string = dayjs
-        .tz(scheduling.startTime)
-        .format("dddd, MMMM D");
-      const volunteerStartTime: string = dayjs(
-        scheduling.volunteerTime,
-        "HH:mm",
-      ).format("h:mm A");
-      const emailBody = `<html>
-        ${emailHeader}
-        <body>
-        ${
-          isAdmin
-            ? `
-      <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has cancelled their Food Rescue volunteer shift scheduled for
-      ${startDayString} at ${volunteerStartTime} with ${donor.businessName}</h2>`
-            : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
-            <p>You have successfully cancelled your Food Rescue volunteer shift scheduled for ${startDayString} at ${volunteerStartTime} with ${donor.businessName}<br /><br />`
-        }
-        ${
-          !isAdmin
-            ? ` <p>
-          We hope to see you back at the fridge soon! <br/>
-          If this cancellation was made in error, please reschedule or contact the CFKW admin team. 
-         </p>
-        ${emailFooter}`
-            : ""
-        }
-        </body>
-      </html>
-        `;
-      this.emailService.sendEmail(
-        isAdmin ? getAdminEmail() : email,
-        isAdmin
-          ? `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`
-          : `Confirmation: Cancelled Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
-        emailBody,
-      );
-    } catch (error) {
-      Logger.error(
-        `Failed to generate email to notify volunteer cancellation for food rescue shift for volunteer with id ${volunteerId}`,
-      );
-      throw error;
-    }
   }
 }
 

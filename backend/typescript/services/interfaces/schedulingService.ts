@@ -151,20 +151,6 @@ interface ISchedulingService {
     current_date: string,
     role: string,
   ): Promise<void>;
-
-  /**
-   *
-   * Generate a confirmation email when a volunteer cancels a food rescue shift
-   * @param volunteerId of volunteer who cancelled the shift
-   * @param scheduling object that contains the food rescue information
-   * @param isAdmin boolean for if the email is to be sent to an admin or volunteer
-   * @throws Error if unable to send email
-   */
-  sendFoodRescueCancellationEmail(
-    volunteerId: string,
-    scheduling: SchedulingDTO,
-    isAdmin: boolean,
-  ): Promise<void>;
 }
 
 export default ISchedulingService;
