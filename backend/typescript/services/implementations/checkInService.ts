@@ -334,7 +334,7 @@ class CheckInService implements ICheckInService {
 
   async sendVolunteerAdminCancelCheckInEmail(
     volunteerId: string,
-    checkIn: CheckInDTO,
+    checkIn: CheckIn,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
@@ -350,12 +350,12 @@ class CheckInService implements ICheckInService {
         email,
       } = await volunteerService.getVolunteerById(volunteerId);
       const startDayString: string = dayjs
-        .tz(checkIn.startDate)
+        .tz(checkIn.start_date)
         .format("dddd, MMMM D");
       const startTimeString: string = dayjs
-        .tz(checkIn.startDate)
+        .tz(checkIn.start_date)
         .format("h:mm A");
-      const endTimeString: string = dayjs.tz(checkIn.endDate).format("h:mm A");
+      const endTimeString: string = dayjs.tz(checkIn.end_date).format("h:mm A");
       const emailBody = `<html>
         ${emailHeader}
         <body>
@@ -439,7 +439,7 @@ class CheckInService implements ICheckInService {
         // Admin removing volunteer case
         this.sendVolunteerAdminCancelCheckInEmail(
           String(oldCheckIn.volunteer_id),
-          updatedCheckInDTO,
+          oldCheckIn,
         );
       } else if (
         Object.prototype.hasOwnProperty.call(checkIn, "volunteerId") &&
@@ -471,11 +471,21 @@ class CheckInService implements ICheckInService {
 
   async deleteCheckInById(id: string): Promise<void> {
     try {
+      const oldCheckIn = await CheckIn.findOne({ where: { id } });
+      if (!oldCheckIn) {
+        throw new Error(`checkIn with id ${id} not found.`);
+      }
       const numDestroyed = await CheckIn.destroy({
         where: { id: Number(id) },
       });
       if (numDestroyed <= 0) {
         throw new Error(`checkin with id ${id} was not deleted.`);
+      }
+      if (oldCheckIn.volunteer_id) {
+        this.sendVolunteerAdminCancelCheckInEmail(
+          String(oldCheckIn.volunteer_id),
+          oldCheckIn,
+        );
       }
     } catch (error) {
       Logger.error(
