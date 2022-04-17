@@ -503,6 +503,16 @@ class CheckInService implements ICheckInService {
     const endDateRange = new Date(endDate);
 
     try {
+      const oldDestroyedCheckIns = await CheckIn.findAll({
+        where: {
+          start_date: {
+            [Op.gte]: startDateRange,
+          },
+          end_date: {
+            [Op.lte]: endDateRange,
+          },
+        },
+      });
       const numsDestroyed = await CheckIn.destroy({
         where: {
           start_date: {
@@ -518,6 +528,14 @@ class CheckInService implements ICheckInService {
           `checkins between start date ${startDate} and end date ${endDate} were not deleted.`,
         );
       }
+      oldDestroyedCheckIns.forEach((oldCheckIn) => {
+        if (oldCheckIn.volunteer_id) {
+          this.sendVolunteerAdminCancelCheckInEmail(
+            String(oldCheckIn.volunteer_id),
+            oldCheckIn,
+          );
+        }
+      });
     } catch (error) {
       Logger.error(
         `Failed to delete checkins by start and end date range. Reason = ${getErrorMessage(
