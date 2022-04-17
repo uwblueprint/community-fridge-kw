@@ -119,7 +119,7 @@ const CheckInInfoCard = ({
 
   const RemoveVolunteerButton = () => (
     <Button
-      variant="changePassword"
+      variant="outlined"
       fontSize="14px"
       lineHeight="20px"
       fontWeight="700"

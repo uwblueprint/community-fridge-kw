@@ -54,14 +54,8 @@ const CalendarToggle = ({
       </IconButton>
     </HStack>
   ) : (
-    <Flex pt="4rem" pb="2.5rem" width="inherit" alignItems="center">
+    <Flex pb="2.5rem" width="inherit" alignItems="center">
       <HStack alignSelf="center">
-        <Text textStyle="desktopHeader" whiteSpace="nowrap">
-          {currentDate?.toLocaleString(undefined, {
-            year: "numeric",
-            month: "long",
-          })}
-        </Text>
         <DatePicker
           value={currentDate}
           onChange={(e: DateObject) => {
@@ -77,14 +71,14 @@ const CalendarToggle = ({
           aria-label="previous day"
           onClick={() => handleDateChange(-1)}
         >
-          <ChevronLeftIcon />
+          <ChevronLeftIcon w={8} h={8} />
         </IconButton>
         <IconButton
           backgroundColor="transparent"
           aria-label="next day"
           onClick={() => handleDateChange(+1)}
         >
-          <ChevronRightIcon />
+          <ChevronRightIcon w={8} h={8} />
         </IconButton>
       </HStack>
     </Flex>

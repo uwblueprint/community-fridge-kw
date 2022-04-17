@@ -28,7 +28,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return authenticatedUser?.role === Role.ADMIN ? (
       <Route path={path} exact={exact} component={component} />
     ) : (
-      <Redirect to={Routes.LANDING_PAGE} />
+      <Redirect to={Routes.LOGIN_PAGE} />
     );
   }
 
@@ -36,7 +36,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return authenticatedUser?.role === Role.DONOR ? (
       <Route path={path} exact={exact} component={component} />
     ) : (
-      <Redirect to={Routes.LANDING_PAGE} />
+      <Redirect to={Routes.LOGIN_PAGE} />
     );
   }
 
@@ -44,7 +44,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return authenticatedUser?.role === Role.VOLUNTEER ? (
       <Route path={path} exact={exact} component={component} />
     ) : (
-      <Redirect to={Routes.LANDING_PAGE} />
+      <Redirect to={Routes.LOGIN_PAGE} />
     );
   }
 

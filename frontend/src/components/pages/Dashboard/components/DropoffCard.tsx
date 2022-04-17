@@ -41,8 +41,8 @@ const DropoffCard = ({
   const [volunteerAssigned, setVolunteerAssigned] = React.useState("");
   const [donorName, setDonorName] = React.useState("");
   const startDateLocal = new Date(startTime);
-  const startTimeLocal = format(new Date(startTime), "h:mm aa");
-  const endTimeLocal = format(new Date(endTime), "h:mm aa");
+  const startTimeLocal = format(new Date(startTime), "h:mmaa");
+  const endTimeLocal = format(new Date(endTime), "h:mmaa");
 
   React.useEffect(() => {
     const getVolunteerName = async () => {
@@ -66,12 +66,11 @@ const DropoffCard = ({
 
   return (
     <Box
-      pb="50px"
-      pt="32px"
-      px="30px"
+      p="30px 30px 40px 30px"
       mb="24px"
+      border="1px solid"
+      borderColor="dorian.100"
       borderLeft={`7px solid ${getFrequencyColor(frequency)}`}
-      boxShadow="2px 2px 12px rgba(0, 0, 0, 0.08)"
       width="100%"
       overflow="hidden"
     >
@@ -79,7 +78,7 @@ const DropoffCard = ({
         <Stack
           direction={["column", "row"]}
           spacing={["4px", "24px"]}
-          mb={["4px", "21px"]}
+          mb={["4px", "10px"]}
         >
           <Text textStyle="mobileHeader4" whiteSpace="nowrap">
             {isDonorView ? dateHeadingText(startDateLocal) : donorName}

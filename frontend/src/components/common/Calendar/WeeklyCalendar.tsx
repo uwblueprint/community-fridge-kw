@@ -61,11 +61,11 @@ const DayButton = ({ day }: DayButtonProps) => {
   const currentDate = setDay(week, day.day, { locale });
 
   return (
-    <Box align="left" width="100%" pb="2rem">
+    <Box align="left" width="100%" pb="1rem">
       <HStack>
-        <Text textStyle="desktopHeader">{day.label.substr(0, 3)} </Text>
-        <Text textStyle="desktopHeader" color="hubbard.100">
-          {format(currentDate, "do", { locale }).slice(0, -2)}
+        <Text textStyle="desktopSubtitle">{format(currentDate, "E")} </Text>
+        <Text textStyle="desktopSubtitle" color="hubbard.100">
+          {format(currentDate, "MMM d")}
         </Text>
       </HStack>
     </Box>
