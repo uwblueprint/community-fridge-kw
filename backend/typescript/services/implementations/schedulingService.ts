@@ -1208,10 +1208,10 @@ class SchedulingService implements ISchedulingService {
         scheduling.volunteerTime,
         "HH:mm",
       ).format("h:mm A");
-      const volunteerMainLine = `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`;
+      const volunteerMainLine = `Your scheduled shift for ${startDayString} at ${volunteerStartTime} has been cancelled.`;
       this.emailService.sendEmail(
         email,
-        volunteerMainLine,
+        `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
         cancellationEmail(volunteerMainLine, firstName, true),
       );
     } catch (error) {
