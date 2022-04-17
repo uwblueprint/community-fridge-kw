@@ -712,12 +712,12 @@ class SchedulingService implements ISchedulingService {
         updatedScheduling.volunteer_id === null &&
         oldScheduling?.volunteer_id
       ) {
-        this.sendFoodRescueCancellationEmail(
+        this.sendVolunteerFoodRescueCancellationEmail(
           String(oldScheduling.volunteer_id),
           updatedSchedulingDTO,
           true,
         );
-        this.sendFoodRescueCancellationEmail(
+        this.sendVolunteerFoodRescueCancellationEmail(
           String(oldScheduling.volunteer_id),
           updatedSchedulingDTO,
           false,
@@ -954,8 +954,20 @@ class SchedulingService implements ISchedulingService {
       }
       if (role === "Admin") {
         this.sendSchedulingCancellationEmail(schedule, false, true);
+        if (schedule.volunteerId)
+          this.sendVolunteerFoodRescueCancellationEmail(
+            schedule.volunteerId,
+            schedule,
+            true,
+          );
       } else {
         this.sendSchedulingCancellationEmail(schedule, false, false);
+        if (schedule.volunteerId)
+          this.sendVolunteerFoodRescueCancellationEmail(
+            schedule.volunteerId,
+            schedule,
+            false,
+          );
       }
     } catch (error) {
       Logger.error(
@@ -979,28 +991,37 @@ class SchedulingService implements ISchedulingService {
           start_time: deletionPastDate,
         },
       });
+      const allRecurringSchedulesToDelete = await Scheduling.findAll({
+        where: {
+          recurring_donation_id,
+        },
+      });
+      console.log(
+        "allRecurringSchedulesToDelete",
+        allRecurringSchedulesToDelete,
+      );
       if (scheduleRet == null) {
         throw new Error(
           `scheduling with recurring_donation_id ${recurring_donation_id} with start time ${deletionPastDate} does not exist.`,
         );
       } else {
         schedule = {
-          id: String(scheduleRet!.id),
-          donorId: String(scheduleRet!.donor_id),
-          categories: scheduleRet!.categories,
-          size: scheduleRet!.size,
-          isPickup: scheduleRet!.is_pickup,
-          pickupLocation: scheduleRet!.pickup_location,
-          dayPart: scheduleRet!.day_part,
-          startTime: scheduleRet!.start_time,
-          endTime: scheduleRet!.end_time,
-          status: scheduleRet!.status,
-          volunteerNeeded: scheduleRet!.volunteer_needed,
-          volunteerTime: scheduleRet!.volunteer_time,
-          frequency: scheduleRet!.frequency,
-          recurringDonationId: String(scheduleRet!.recurring_donation_id),
-          recurringDonationEndDate: scheduleRet!.recurring_donation_end_date,
-          notes: scheduleRet!.notes,
+          id: String(scheduleRet.id),
+          donorId: String(scheduleRet.donor_id),
+          categories: scheduleRet.categories,
+          size: scheduleRet.size,
+          isPickup: scheduleRet.is_pickup,
+          pickupLocation: scheduleRet.pickup_location,
+          dayPart: scheduleRet.day_part,
+          startTime: scheduleRet.start_time,
+          endTime: scheduleRet.end_time,
+          status: scheduleRet.status,
+          volunteerNeeded: scheduleRet.volunteer_needed,
+          volunteerTime: scheduleRet.volunteer_time,
+          frequency: scheduleRet.frequency,
+          recurringDonationId: String(scheduleRet.recurring_donation_id),
+          recurringDonationEndDate: scheduleRet.recurring_donation_end_date,
+          notes: scheduleRet.notes,
         };
       }
       const numsDestroyed = await Scheduling.destroy({
@@ -1015,11 +1036,45 @@ class SchedulingService implements ISchedulingService {
         throw new Error(
           `scheduling with recurring_donation_id ${recurring_donation_id} was not deleted.`,
         );
-      }
-      if (role === "Admin") {
-        this.sendSchedulingCancellationEmail(schedule, true, true);
       } else {
-        this.sendSchedulingCancellationEmail(schedule, true, false);
+        allRecurringSchedulesToDelete.forEach((s) => {
+          schedule = {
+            id: String(s.id),
+            donorId: String(s.donor_id),
+            categories: s.categories,
+            size: s.size,
+            isPickup: s.is_pickup,
+            pickupLocation: s.pickup_location,
+            dayPart: s.day_part,
+            startTime: s.start_time,
+            endTime: s.end_time,
+            status: s.status,
+            volunteerNeeded: s.volunteer_needed,
+            volunteerTime: s.volunteer_time,
+            frequency: s.frequency,
+            recurringDonationId: String(s.recurring_donation_id),
+            recurringDonationEndDate: s.recurring_donation_end_date,
+            notes: s.notes,
+          };
+
+          if (role === "Admin") {
+            this.sendSchedulingCancellationEmail(schedule, true, true);
+            if (s.volunteer_id)
+              this.sendVolunteerFoodRescueCancellationEmail(
+                String(s.volunteer_id),
+                schedule,
+                true,
+              );
+          } else {
+            this.sendSchedulingCancellationEmail(schedule, true, false);
+            if (s.volunteer_id)
+              this.sendVolunteerFoodRescueCancellationEmail(
+                String(s.volunteer_id),
+                schedule,
+                false,
+              );
+          }
+        });
       }
     } catch (error) {
       Logger.error(
@@ -1100,14 +1155,14 @@ class SchedulingService implements ISchedulingService {
     return schedulingDtos;
   }
 
-  async sendFoodRescueCancellationEmail(
+  async sendVolunteerFoodRescueCancellationEmail(
     volunteerId: string,
     scheduling: SchedulingDTO,
     isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
-        "Attempted to call sendFoodRescueCancellationEmail but this instance of SchedulingService does not have an EmailService instance";
+        "Attempted to call sendVolunteerFoodRescueCancellationEmail but this instance of SchedulingService does not have an EmailService instance";
       Logger.error(errorMessage);
       throw new Error(errorMessage);
     }

@@ -160,7 +160,7 @@ interface ISchedulingService {
    * @param isAdmin boolean for if the email is to be sent to an admin or volunteer
    * @throws Error if unable to send email
    */
-  sendFoodRescueCancellationEmail(
+  sendVolunteerFoodRescueCancellationEmail(
     volunteerId: string,
     scheduling: SchedulingDTO,
     isAdmin: boolean,
