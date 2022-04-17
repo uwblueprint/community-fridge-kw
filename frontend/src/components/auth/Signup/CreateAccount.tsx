@@ -34,8 +34,6 @@ const CreateAccount = ({
   const history = useHistory();
   const { role, firstName, lastName, businessName, phoneNumber } = formData;
 
-  const { isDesktop } = useViewport();
-
   const errorMessages = {
     businessName: "",
     firstName: "",
@@ -80,26 +78,11 @@ const CreateAccount = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      <IconButton
-        marginLeft="-12px"
-        float="left"
-        backgroundColor="transparent"
-        aria-label="go back"
-        onClick={previous}
-      >
-        <ArrowBackIcon width="24px" height="24px" />
-      </IconButton>
-      {!isDesktop && (
-        <IconButton
-          float="right"
-          aria-label="close sign up"
-          onClick={() => history.push(Routes.LOGIN_PAGE)}
-          backgroundColor="transparent"
-        >
-          <CloseIcon color="black.100" />
-        </IconButton>
-      )}
+    <Container pl="42px" pr="42px" pt={["2.75rem","4rem"]}>
+      <Button leftIcon={<ArrowBackIcon width="24px" height="24px" />}
+      variant="back"
+      onClick={previous}
+      >Back</Button>
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Account information can be edited in the My Account section of the

@@ -77,27 +77,12 @@ const VolunteerQuestions = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      <IconButton
-        marginLeft="-12px"
-        float="left"
-        backgroundColor="transparent"
-        aria-label="go back"
+    <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
+      <Button leftIcon={<ArrowBackIcon width="24px" height="24px" />}
+        variant="back"
         onClick={previous}
-      >
-        <ArrowBackIcon width="24px" height="24px" />
-      </IconButton>
-      {!isDesktop && (
-        <IconButton
-          float="right"
-          aria-label="close sign up"
-          onClick={() => history.push(Routes.LOGIN_PAGE)}
-          backgroundColor="transparent"
-        >
-          <CloseIcon color="black.100" />
-        </IconButton>
-      )}
-      <HeaderLabel text="Volunteer Information" />
+      >Back</Button>
+      <HeaderLabel text="Volunteer information" />
       <FormControl mt="2rem" isRequired>
         <Box>
           <MandatoryInputDescription label="What city do you currently live in?" />

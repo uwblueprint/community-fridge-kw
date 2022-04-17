@@ -48,17 +48,7 @@ const ChangePassword = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      {!isDesktop && (
-        <IconButton
-          float="right"
-          aria-label="close sign up"
-          onClick={() => history.push(Routes.LOGIN_PAGE)}
-          backgroundColor="transparent"
-        >
-          <CloseIcon color="black.100" />
-        </IconButton>
-      )}
+    <Container pl="42px" pr="42px" pt={["3rem", "0.5rem"]}>
       <Text mt="67px" textStyle="mobileHeader1">
         Change Password
       </Text>

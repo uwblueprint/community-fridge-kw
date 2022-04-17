@@ -44,9 +44,7 @@ const AccountDetails = ({
   formValues: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const history = useHistory();
   const { previous, go } = navigation;
-  const { isDesktop } = useViewport();
   const {
     role,
     firstName,
@@ -125,30 +123,11 @@ const AccountDetails = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      <IconButton
-        marginLeft="-12px"
-        float="left"
-        backgroundColor="transparent"
-        aria-label="go back"
-        onClick={previous}
-      >
-        <ArrowBackIcon width="24px" height="24px" />
-      </IconButton>
-
-      {!isDesktop && (
-        <>
-          <IconButton
-            float="right"
-            marginRight="-12px"
-            aria-label="close sign up"
-            onClick={() => history.push(Routes.LANDING_PAGE)}
-            backgroundColor="transparent"
-          >
-            <CloseIcon color="black.100" />
-          </IconButton>
-        </>
-      )}
+    <Container pl="42px" pr="42px" pt={["2.75rem","4rem"]}>
+      <Button leftIcon={<ArrowBackIcon width="24px" height="24px" />}
+      variant="back"
+      onClick={previous}
+      >Back</Button>
       <HeaderLabel text="Account details" />
       <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>

@@ -111,6 +111,16 @@ const Button = {
       px: "53px",
       lineHeight: "20px",
     },
+    back: {
+      background: "transparent",
+      color: "black",
+      border: "none",
+      fontSize: "16px",
+      lineHeight: "24px",
+      fontWeight: "400",
+      paddingLeft: "0",
+      marginLeft: "-3.5px"
+    },
   },
 };
 
