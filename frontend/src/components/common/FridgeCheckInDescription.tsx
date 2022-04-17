@@ -5,10 +5,13 @@ import { useHistory } from "react-router-dom";
 
 import ContentAPIClient from "../../APIClients/ContentAPIClient";
 import * as Routes from "../../constants/Routes";
+import AuthContext from "../../contexts/AuthContext";
+import { Role } from "../../types/AuthTypes";
 import { Content } from "../../types/ContentTypes";
 
 const FridgeCheckInDescription = () => {
   const [content, setContent] = useState<Content>();
+  const { authenticatedUser } = React.useContext(AuthContext);
 
   const history = useHistory();
   const navigateToEditPage = () => {
@@ -28,11 +31,13 @@ const FridgeCheckInDescription = () => {
     <>
       <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
         Fridge check-in description
-        <Button
-          variant="editInfo"
-          rightIcon={<EditIcon size={24} />}
-          onClick={navigateToEditPage}
-        />
+        {authenticatedUser?.role === Role.ADMIN && (
+          <Button
+            variant="editInfo"
+            rightIcon={<EditIcon size={24} />}
+            onClick={navigateToEditPage}
+          />
+        )}
       </Text>
       {content?.checkinDescription && (
         <Text textStyle={["mobileBody", "desktopBody"]} pt="2rem">

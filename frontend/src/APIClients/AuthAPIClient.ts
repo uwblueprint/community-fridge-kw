@@ -63,11 +63,25 @@ const register = async (
   password: string,
   businessName: string,
   role: string,
+  cityQuestionResponse?: string,
+  intentionQuestionResponse?: string,
+  skillsQuestionResponse?: string,
 ): Promise<AuthenticatedUser> => {
   try {
     const { data } = await baseAPIClient.post(
       "/auth/register",
-      { firstName, lastName, email, phoneNumber, password, role, businessName },
+      {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        role,
+        businessName,
+        cityQuestionResponse,
+        intentionQuestionResponse,
+        skillsQuestionResponse,
+      },
       { withCredentials: true },
     );
     return data;
@@ -150,6 +164,22 @@ const confirmPasswordReset = async (
   }
 };
 
+const sendVolunteerApprovedEmail = async (
+  email: string,
+  firstName: string,
+): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/approveVolunteer/${email}?firstName=${firstName}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   confirmEmailVerification,
   verifyPasswordResetCode,
@@ -160,4 +190,5 @@ export default {
   register,
   resetPassword,
   refresh,
+  sendVolunteerApprovedEmail,
 };

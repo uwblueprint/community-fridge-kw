@@ -59,7 +59,7 @@ const ScheduledVolunteerShiftsPage = () => {
           size="lg"
           width={{ lg: "30%", base: "100%" }}
           variant="navigation"
-          onClick={() => history.push(Routes.SCHEDULING_PAGE)}
+          onClick={() => history.push(Routes.VOLUNTEER_SHIFTS_PAGE)}
         >
           Volunteer for a shift
         </Button>

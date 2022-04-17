@@ -16,6 +16,7 @@ import {
   expectedDailySchedulingResponse,
   expectedWeeklySchedulingResponse,
   expectedMonthlySchedulingResponse,
+  testContentDb,
 } from "../../../testUtils/schedulingService";
 import nodemailerConfig from "../../../nodemailer.config";
 import IEmailService from "../../interfaces/emailService";
@@ -25,6 +26,7 @@ import DonorService from "../donorService";
 import { toSnakeCase } from "../../../utilities/servicesUtils";
 import IVolunteerService from "../../interfaces/volunteerService";
 import VolunteerService from "../volunteerService";
+import Content from "../../../models/content.model";
 
 const schedules = testSchedules.map((schedule) => {
   return toSnakeCase(schedule);
@@ -53,6 +55,7 @@ describe("pg schedulingService", () => {
     await User.bulkCreate(testUsersDb);
     await Donor.bulkCreate(testDonorsDb);
     await Volunteer.bulkCreate(testVolunteersDb);
+    await Content.bulkCreate(testContentDb);
   });
 
   afterAll(async () => {
@@ -123,7 +126,11 @@ describe("pg schedulingService", () => {
       (volunteerId ?? "").toString(),
     );
     expect(res).toMatchObject(
-      testSchedules.filter((schedule) => schedule.volunteerId === volunteerId),
+      testSchedules.filter(
+        (schedule) =>
+          schedule.volunteerId === volunteerId &&
+          schedule.startTime >= new Date(),
+      ),
     );
   });
 

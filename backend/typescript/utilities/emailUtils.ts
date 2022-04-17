@@ -64,6 +64,84 @@ export const cancellationEmail = (
     `;
 };
 
+export const formatCheckinShiftInformation = (
+  startDay: string,
+  startTime: string,
+  endTime: string,
+  notes: string,
+) => {
+  return `
+  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+  Shift Information:
+  </h2>
+  <p>
+    <b>Date:</b> ${startDay} <br/>
+    <b>Time:</b> ${startTime} - ${endTime} <br/>
+    <b>Additional Notes:</b> <br/>
+    ${notes} 
+  </p>
+  `;
+};
+
+export const formatFoodRescueShiftInformation = (
+  isPickup: boolean,
+  address: string,
+  startDay: string,
+  volunteerStartTime: string,
+  notes: string,
+) => {
+  return `
+  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+  Shift Information:
+  </h2>
+  <p>
+    <b>Volunteer shift type:</b> ${
+      isPickup ? "Food rescue pickup" : "Food rescue unloading"
+    }<br/>
+    <b>Volunteer arrival time:</b> ${startDay} at ${volunteerStartTime}<br/>
+    <b>Address</b> ${isPickup ? address : "Community Fridge KW"}<br/>
+    <b>Additional Notes:</b> <br/>
+    ${notes} 
+  </p>
+  `;
+};
+
+export const formatVolunteerContactInformation = (
+  firstName: string,
+  lastName: string,
+  phoneNumber: string,
+  email: string,
+) => {
+  return `
+  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+        Volunteer Contact Information:
+  </h2>
+        <p>
+          <b>Name:</b> ${firstName} ${lastName} <br/>
+          <b>Phone Number:</b> ${phoneNumber} <br/>
+          <b>Email:</b>${email} <br/>
+        </p>
+  `;
+};
+
+export const formatDonorContactInformation = (
+  firstName: string,
+  lastName: string,
+  phoneNumber: string,
+  email: string,
+) => {
+  return `
+  <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
+  Donor Contact Information:
+  </h2>
+  <p>
+    <b>Name:</b> ${firstName} ${lastName} <br/>
+    <b>Email:</b> ${email} <br/>
+    <b>Phone Number:</b> ${phoneNumber}
+  </p>
+  
+  `;
+};
 export const getAdminEmail = (): string => {
   return process.env.NODE_ENV === "production"
     ? "communityfridgekw@gmail.com"

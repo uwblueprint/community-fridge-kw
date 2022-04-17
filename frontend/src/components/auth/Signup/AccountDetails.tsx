@@ -106,7 +106,7 @@ const AccountDetails = ({
     return (
       go &&
       (role === Role.VOLUNTEER
-        ? go("terms conditions")
+        ? go("volunteer questions")
         : go("email verification"))
     );
   };

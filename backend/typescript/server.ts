@@ -18,10 +18,14 @@ import CronService from "./services/implementations/cronService";
 import DonorService from "./services/implementations/donorService";
 import checkInRouter from "./rest/checkInRoutes";
 import contentRouter from "./rest/contentRoutes";
+import cronRouter from "./rest/cronRoutes";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
 if (process.env.NODE_ENV === "production") {
-  CORS_ALLOW_LIST.push("https://communityfridgekw.web.app");
+  CORS_ALLOW_LIST.push(
+    "https://communityfridgekw.web.app",
+    "https://schedule.communityfridgekw.ca",
+  );
 } else if (process.env.NODE_ENV === "staging") {
   const clientHost = new RegExp(
     "https://communityfridgekw-staging(--([A-Za-z0-9-])+-[A-Za-z0-9]+)?.web.app",
@@ -49,6 +53,7 @@ app.use("/volunteers", volunteerRouter);
 app.use("/scheduling", schedulingRouter);
 app.use("/checkin", checkInRouter);
 app.use("/content", contentRouter);
+app.use("/email-reminders", cronRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const eraseDatabaseOnSync = false;
@@ -57,18 +62,6 @@ sequelize.sync({ force: eraseDatabaseOnSync });
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.applicationDefault(),
 });
-
-if (
-  process.env.NODE_ENV === "production" ||
-  process.env.NODE_ENV === "staging"
-) {
-  const cronService: ICronService = new CronService(
-    new EmailService(nodemailerConfig),
-    new DonorService(),
-  );
-
-  // cronService.checkReminders();
-}
 
 const PORT = process.env.PORT || 5000;
 app.listen({ port: PORT }, () => {

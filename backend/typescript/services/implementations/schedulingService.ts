@@ -4,6 +4,8 @@ import { Op } from "sequelize";
 import dayjs from "dayjs";
 import ordinal from "ordinal";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
@@ -25,9 +27,21 @@ import {
   getAdminEmail,
   emailHeader,
   emailFooter,
+  formatVolunteerContactInformation,
+  formatDonorContactInformation,
+  formatFoodRescueShiftInformation,
 } from "../../utilities/emailUtils";
+// eslint-disable-next-line
+import VolunteerService from "./volunteerService";
+import IContentService from "../interfaces/contentService";
+import ContentService from "./contentService";
 
 const Logger = logger(__filename);
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+dayjs.tz.setDefault("America/New_York");
 
 class SchedulingService implements ISchedulingService {
   emailService: IEmailService | null;
@@ -35,8 +49,6 @@ class SchedulingService implements ISchedulingService {
   donorService: IDonorService;
 
   volunteerService: IVolunteerService;
-
-  static TEMP_ADMIN_EMAIL = "linnaluo@uwblueprint.org";
 
   constructor(
     emailService: IEmailService | null = null,
@@ -316,22 +328,10 @@ class SchedulingService implements ISchedulingService {
       const { firstName, lastName, email } = currDonor;
       const { startTime, endTime } = schedule;
 
-      const startTimeToLocalDate = startTime.toLocaleString("en-US", {
-        timeZone: "EST",
-      });
+      const startDayString: string = dayjs.tz(startTime).format("dddd, MMMM D");
 
-      const startDayString: string = dayjs(startTimeToLocalDate).format(
-        "dddd, MMMM D",
-      );
-
-      const startTimeString: string = dayjs(startTimeToLocalDate).format(
-        "h:mm A",
-      );
-      const endTimeString: string = dayjs(
-        endTime.toLocaleString("en-US", {
-          timeZone: "EST",
-        }),
-      ).format("h:mm A");
+      const startTimeString: string = dayjs.tz(startTime).format("h:mm A");
+      const endTimeString: string = dayjs.tz(endTime).format("h:mm A");
 
       // frequency string
       // e.g. Weekly on <day of week> until <recurringDonationEndDate>
@@ -340,12 +340,10 @@ class SchedulingService implements ISchedulingService {
         if (schedule.frequency === Frequency.DAILY) {
           frequencyString = `Daily`;
         } else if (schedule.frequency === Frequency.WEEKLY) {
-          frequencyString = `Weekly on ${dayjs(startTimeToLocalDate).format(
-            "dddd",
-          )}`;
+          frequencyString = `Weekly on ${dayjs.tz(startTime).format("dddd")}`;
         } else {
           frequencyString = `Monthly on the ${ordinal(
-            Number(dayjs(startTimeToLocalDate).format("D")),
+            Number(dayjs.tz(startTime).format("D")),
           )}`;
         }
       }
@@ -661,6 +659,9 @@ class SchedulingService implements ISchedulingService {
       Object.entries(scheduling).forEach(([key, value]) => {
         updatesSnakeCase[snakeCase(key)] = value;
       });
+      const oldScheduling = await Scheduling.findOne({
+        where: { id: schedulingId },
+      });
       const updateResult = await Scheduling.update(updatesSnakeCase, {
         where: { id: Number(schedulingId) },
         returning: true,
@@ -689,7 +690,39 @@ class SchedulingService implements ISchedulingService {
         notes: updatedScheduling.notes,
         volunteerId: String(updatedScheduling.volunteer_id),
       };
-
+      // send volunteer email confirmation if signed up for food rescue
+      if (
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        scheduling.volunteerId
+      ) {
+        this.sendVolunteerSchedulingSignUpConfirmationEmail(
+          scheduling.volunteerId,
+          updatedSchedulingDTO,
+          true,
+        );
+        this.sendVolunteerSchedulingSignUpConfirmationEmail(
+          scheduling.volunteerId,
+          updatedSchedulingDTO,
+          false,
+        );
+      }
+      // send cancellation email if volunteer has cancelled
+      if (
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        updatedScheduling.volunteer_id === null &&
+        oldScheduling?.volunteer_id
+      ) {
+        this.sendFoodRescueCancellationEmail(
+          String(oldScheduling.volunteer_id),
+          updatedSchedulingDTO,
+          true,
+        );
+        this.sendFoodRescueCancellationEmail(
+          String(oldScheduling.volunteer_id),
+          updatedSchedulingDTO,
+          false,
+        );
+      }
       return updatedSchedulingDTO;
     } catch (error) {
       Logger.error(
@@ -719,14 +752,9 @@ class SchedulingService implements ISchedulingService {
       const startTimeToLocalDate = startTime.toLocaleString("en-US", {
         timeZone: "EST",
       });
+      const startDayString: string = dayjs.tz(startTime).format("dddd, MMMM D");
 
-      const startDayString: string = dayjs(startTimeToLocalDate).format(
-        "dddd, MMMM D",
-      );
-
-      const startTimeString: string = dayjs(startTimeToLocalDate).format(
-        "h:mm A",
-      );
+      const startTimeString: string = dayjs.tz(startTime).format("h:mm A");
 
       // if admin deleted on behalf of donor
       if (isAdminDeleted) {
@@ -785,6 +813,93 @@ class SchedulingService implements ISchedulingService {
       const donor = await this.donorService.getDonorById(schedule.donorId);
       Logger.error(
         `Failed to generate email to confirm donation cancellation of donation scheduled by ${donor.email}`,
+      );
+      throw error;
+    }
+  }
+
+  async sendVolunteerSchedulingSignUpConfirmationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
+    isAdmin: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerSchedulingSignUpConfirmationEmail but this instance of SchedulingService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const contentService: IContentService = new ContentService();
+      const { foodRescueUrl } = await contentService.getContent();
+      const {
+        firstName,
+        lastName,
+        phoneNumber,
+        email,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const donor = await this.donorService.getDonorById(scheduling.donorId);
+      dayjs.extend(customParseFormat);
+      const startDayString: string = dayjs
+        .tz(scheduling.startTime)
+        .format("dddd, MMMM D");
+      const volunteerStartTime: string = dayjs(
+        scheduling.volunteerTime,
+        "HH:mm",
+      ).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+        ${
+          isAdmin
+            ? `
+      <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has signed up for a Food Rescue shift for 
+      ${startDayString} at ${volunteerStartTime}</h2>`
+            : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+        <p>Thank you for volunteering with us!<br /><br />`
+        }
+          Here is a summary of your upcoming shift: <br /> <br />
+          Food Rescue Instructions:  <a href="${foodRescueUrl}">here</a>
+          </p>
+         ${formatFoodRescueShiftInformation(
+           scheduling.isPickup,
+           scheduling.pickupLocation ?? "",
+           startDayString,
+           volunteerStartTime,
+           scheduling.notes ?? "",
+         )}
+          ${formatVolunteerContactInformation(
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+          )}
+          ${formatDonorContactInformation(
+            donor.firstName,
+            donor.lastName,
+            donor.phoneNumber,
+            donor.email,
+          )}
+         ${
+           !isAdmin
+             ? ` <p>
+            If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
+          </p>
+         ${emailFooter}`
+             : ""
+         }
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        isAdmin ? getAdminEmail() : email,
+        `Confirmation: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to confirm volunteer sign up for food rescue shift for volunteer with id ${volunteerId}`,
       );
       throw error;
     }
@@ -945,6 +1060,9 @@ class SchedulingService implements ISchedulingService {
         where: {
           volunteer_id: Number(volunteerId),
           volunteer_needed: true,
+          start_time: {
+            [Op.gte]: new Date(),
+          },
         },
         order: [["start_time", "ASC"]],
       });
@@ -980,6 +1098,71 @@ class SchedulingService implements ISchedulingService {
     }
 
     return schedulingDtos;
+  }
+
+  async sendFoodRescueCancellationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
+    isAdmin: boolean,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendFoodRescueCancellationEmail but this instance of SchedulingService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const {
+        firstName,
+        lastName,
+        email,
+      } = await volunteerService.getVolunteerById(volunteerId);
+      const donor = await this.donorService.getDonorById(scheduling.donorId);
+      dayjs.extend(customParseFormat);
+      const startDayString: string = dayjs
+        .tz(scheduling.startTime)
+        .format("dddd, MMMM D");
+      const volunteerStartTime: string = dayjs(
+        scheduling.volunteerTime,
+        "HH:mm",
+      ).format("h:mm A");
+      const emailBody = `<html>
+        ${emailHeader}
+        <body>
+        ${
+          isAdmin
+            ? `
+      <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has cancelled their Food Rescue volunteer shift scheduled for
+      ${startDayString} at ${volunteerStartTime} with ${donor.businessName}</h2>`
+            : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+            <p>You have successfully cancelled your Food Rescue volunteer shift scheduled for ${startDayString} at ${volunteerStartTime} with ${donor.businessName}<br /><br />`
+        }
+        ${
+          !isAdmin
+            ? ` <p>
+          We hope to see you back at the fridge soon! <br/>
+          If this cancellation was made in error, please reschedule or contact the CFKW admin team. 
+         </p>
+        ${emailFooter}`
+            : ""
+        }
+        </body>
+      </html>
+        `;
+      this.emailService.sendEmail(
+        isAdmin ? getAdminEmail() : email,
+        isAdmin
+          ? `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`
+          : `Confirmation: Cancelled Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
+        emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to notify volunteer cancellation for food rescue shift for volunteer with id ${volunteerId}`,
+      );
+      throw error;
+    }
   }
 }
 
