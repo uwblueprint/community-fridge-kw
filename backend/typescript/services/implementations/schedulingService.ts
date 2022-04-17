@@ -684,14 +684,17 @@ class SchedulingService implements ISchedulingService {
         volunteerId: String(updatedScheduling.volunteer_id),
       };
       // send volunteer email confirmation if signed up for food rescue
-      if (Object.prototype.hasOwnProperty.call(scheduling, "volunteerId")) {
+      if (
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        scheduling.volunteerId
+      ) {
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
-          scheduling.volunteerId!,
+          scheduling.volunteerId,
           updatedSchedulingDTO,
           true,
         );
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
-          scheduling.volunteerId!,
+          scheduling.volunteerId,
           updatedSchedulingDTO,
           false,
         );
