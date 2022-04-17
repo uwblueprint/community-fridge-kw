@@ -119,7 +119,7 @@ const Button = {
       lineHeight: "24px",
       fontWeight: "400",
       paddingLeft: "0",
-      marginLeft: "-3.5px"
+      marginLeft: "-3.5px",
     },
   },
 };

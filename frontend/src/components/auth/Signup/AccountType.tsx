@@ -1,18 +1,11 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  Container,
-  FormControl,
-  IconButton,
-  Text,
-} from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { Button, Container, FormControl, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { Redirect, useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import useViewport from "../../../hooks/useViewport";
 import { Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
@@ -28,7 +21,7 @@ const AccountType = ({
   setForm: SetForm;
 }) => {
   const { next } = navigation;
-  
+
   const history = useHistory();
   const { role } = formData;
   const { authenticatedUser } = useContext(AuthContext);
@@ -72,10 +65,13 @@ const AccountType = ({
   }
   return (
     <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
-      <Button leftIcon={<ArrowBackIcon width="24px" height="24px" />}
+      <Button
+        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
         variant="back"
         onClick={() => history.push(Routes.LOGIN_PAGE)}
-      >Back</Button>
+      >
+        Back
+      </Button>
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Thank you for your interest in helping out Community Fridge KW!
@@ -102,7 +98,12 @@ const AccountType = ({
           }}
           horizontalOnly
         />
-        <Button mt="3rem" variant="navigation" onClick={handleNext} width="100%">
+        <Button
+          mt="3rem"
+          variant="navigation"
+          onClick={handleNext}
+          width="100%"
+        >
           Next
         </Button>
       </FormControl>

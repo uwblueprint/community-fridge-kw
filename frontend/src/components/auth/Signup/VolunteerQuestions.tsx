@@ -1,11 +1,10 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
-  IconButton,
   Input,
   Textarea,
 } from "@chakra-ui/react";
@@ -13,7 +12,6 @@ import React, { useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
-import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
 import HeaderLabel from "../../common/HeaderLabel";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
@@ -78,10 +76,13 @@ const VolunteerQuestions = ({
 
   return (
     <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
-      <Button leftIcon={<ArrowBackIcon width="24px" height="24px" />}
+      <Button
+        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
         variant="back"
         onClick={previous}
-      >Back</Button>
+      >
+        Back
+      </Button>
       <HeaderLabel text="Volunteer information" />
       <FormControl mt="2rem" isRequired>
         <Box>

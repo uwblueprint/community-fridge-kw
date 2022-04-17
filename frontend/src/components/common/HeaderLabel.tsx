@@ -6,7 +6,11 @@ interface HeaderLabelProps {
 }
 
 const HeaderLabel = ({ text }: HeaderLabelProps) => (
-  <Text mt={["28px", "48px"]} textStyle={["mobileHeader3","mobileHeader1"]} textAlign={["inherit", "center"]}>
+  <Text
+    mt={["28px", "48px"]}
+    textStyle={["mobileHeader3", "mobileHeader1"]}
+    textAlign={["inherit", "center"]}
+  >
     {text}
   </Text>
 );

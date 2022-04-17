@@ -1,11 +1,9 @@
-import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
-  IconButton,
   Input,
   Text,
 } from "@chakra-ui/react";
@@ -14,7 +12,6 @@ import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
-import * as Routes from "../../../constants/Routes";
 import useViewport from "../../../hooks/useViewport";
 import MandatoryInputDescription from "../Signup/components/MandatoryInputDescription";
 import { RequestPasswordChangeFormProps } from "./types";

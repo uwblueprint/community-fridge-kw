@@ -1,11 +1,10 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -15,12 +14,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import { SignupErrorMessage } from "../../../constants/AuthConstants";
-import * as Routes from "../../../constants/Routes";
-import useViewport from "../../../hooks/useViewport";
 import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
 import {
@@ -123,11 +119,14 @@ const AccountDetails = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt={["2.75rem","4rem"]}>
-      <Button leftIcon={<ArrowBackIcon width="24px" height="24px" />}
-      variant="back"
-      onClick={previous}
-      >Back</Button>
+    <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
+      <Button
+        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
+        variant="back"
+        onClick={previous}
+      >
+        Back
+      </Button>
       <HeaderLabel text="Account details" />
       <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>

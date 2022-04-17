@@ -1,4 +1,4 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,7 +6,6 @@ import {
   FormControl,
   FormErrorMessage,
   Grid,
-  IconButton,
   Input,
   Text,
 } from "@chakra-ui/react";
@@ -14,8 +13,6 @@ import React from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
-import * as Routes from "../../../constants/Routes";
-import useViewport from "../../../hooks/useViewport";
 import { Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
@@ -78,11 +75,14 @@ const CreateAccount = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt={["2.75rem","4rem"]}>
-      <Button leftIcon={<ArrowBackIcon width="24px" height="24px" />}
-      variant="back"
-      onClick={previous}
-      >Back</Button>
+    <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
+      <Button
+        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
+        variant="back"
+        onClick={previous}
+      >
+        Back
+      </Button>
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Account information can be edited in the My Account section of the
