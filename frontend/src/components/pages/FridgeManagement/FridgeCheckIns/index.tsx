@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  CloseButton,
   Container,
   FormControl,
   FormErrorMessage,
@@ -111,9 +113,10 @@ const CreateCheckIn = () => {
 
   return (
     <Container variant="responsiveContainer">
-      <Text textStyle="mobileHeader2" mt="2em">
-        Create new shifts
-      </Text>
+      <Box display="flex" justifyContent="right">
+        <CloseButton onClick={() => history.push(Routes.ADMIN_CHECK_INS)} />
+      </Box>
+      <Text textStyle="mobileHeader2">Create new shifts</Text>
       <FormControl isRequired isInvalid={!!formErrors.timeRange} m="3em 0">
         <FormLabel fontWeight="600">Select time range</FormLabel>
         <HStack maxW="740px" spacing="1rem">
