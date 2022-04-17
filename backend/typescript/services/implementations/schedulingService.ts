@@ -707,7 +707,7 @@ class SchedulingService implements ISchedulingService {
         );
       }
       // send cancellation email if volunteer has cancelled
-      if (
+      else if (
         Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
         updatedScheduling.volunteer_id === null &&
         oldScheduling &&
