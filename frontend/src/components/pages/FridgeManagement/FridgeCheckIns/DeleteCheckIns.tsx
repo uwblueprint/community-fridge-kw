@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  CloseButton,
   Container,
   FormControl,
   FormErrorMessage,
@@ -78,6 +80,9 @@ const DeleteCheckInsPage = () => {
 
   return (
     <Container variant="responsiveContainer">
+      <Box display="flex" justifyContent="right">
+        <CloseButton onClick={() => history.push(Routes.ADMIN_CHECK_INS)} />
+      </Box>
       <Text textStyle="mobileHeader2" mt="2em">
         Delete shifts
       </Text>
