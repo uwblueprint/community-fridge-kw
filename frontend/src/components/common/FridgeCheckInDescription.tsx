@@ -29,8 +29,8 @@ const FridgeCheckInDescription = () => {
 
   return (
     <>
-      <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
-        Fridge check-in description
+      <Text textStyle={["mobileHeader3", "desktopSubtitle"]} pt="2rem">
+        Fridge check-in shifts
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
             variant="editInfo"
@@ -40,7 +40,7 @@ const FridgeCheckInDescription = () => {
         )}
       </Text>
       {content?.checkinDescription && (
-        <Text textStyle={["mobileBody", "desktopBody"]} pt="2rem">
+        <Text textStyle={["mobileBody", "desktopBody"]} pt="1rem">
           {content?.checkinDescription}
         </Text>
       )}

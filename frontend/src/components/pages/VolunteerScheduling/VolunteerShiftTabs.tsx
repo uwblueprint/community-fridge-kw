@@ -31,7 +31,7 @@ const VolunteerShiftsTabs = ({
   return (
     <Container variant="baseContainer">
       <VStack alignItems="left">
-        <Text color="black.100" textStyle="mobileHeader1">
+        <Text color="black.100" textStyle="mobileHeader1" pb="1rem">
           Volunteer Shifts
         </Text>
         <Tabs
