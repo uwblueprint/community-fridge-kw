@@ -114,7 +114,7 @@ const ViewDonationsAndCheckIns = ({
     const res = CheckInAPIClient.deleteCheckInById(checkInId);
     if (!res) {
       toast({
-        title: "There are no check-ins in this date range.",
+        title: "There was an error deleting this check-in",
         status: "error",
         duration: 7000,
         isClosable: true,
