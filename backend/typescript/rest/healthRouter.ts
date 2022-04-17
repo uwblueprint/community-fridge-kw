@@ -3,9 +3,8 @@ import getErrorMessage from "../utilities/errorMessageUtil";
 
 const healthRouter: Router = Router();
 
-/* Get all volunteers and optionally filter by:
-  - volunteerId, through URI (ex. /volunteer/1)
-  - userId, through query param (ex. /volunteer/?userId=1)
+/*
+Health endpoint for the pinger to hit to keep the server running
 */
 healthRouter.get("/", async (req, res) => {
   try {
