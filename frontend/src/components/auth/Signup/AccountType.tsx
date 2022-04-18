@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Button, Container, FormControl, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
@@ -9,6 +8,7 @@ import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
+import BackButton from "../../pages/Scheduling/BackButton";
 import { SignUpFormProps } from "./types";
 
 const AccountType = ({
@@ -65,13 +65,7 @@ const AccountType = ({
   }
   return (
     <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
-      <Button
-        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
-        variant="back"
-        onClick={() => history.push(Routes.LOGIN_PAGE)}
-      >
-        Back
-      </Button>
+      <BackButton previous={() => history.push(Routes.LOGIN_PAGE)} />
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Thank you for your interest in helping out Community Fridge KW!

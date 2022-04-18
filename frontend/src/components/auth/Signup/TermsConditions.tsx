@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -18,6 +17,7 @@ import authAPIClient from "../../../APIClients/AuthAPIClient";
 import { SignupErrorMessage } from "../../../constants/AuthConstants";
 import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
+import BackButton from "../../pages/Scheduling/BackButton";
 import SignUpFailedModal from "./ReturnToLoginModal";
 import { SignUpFormProps } from "./types";
 
@@ -106,13 +106,7 @@ const TermsConditions = ({
 
   return (
     <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
-      <Button
-        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
-        variant="back"
-        onClick={handlePrev}
-      >
-        Back
-      </Button>
+      <BackButton previous={handlePrev} />
       <HeaderLabel text="Statement of Values & Principles" />
       <Text mt="1.5rem">
         Please read and accept Community Fridge KW’s terms and conditions before

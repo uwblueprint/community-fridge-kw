@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -14,6 +13,7 @@ import { useHistory } from "react-router-dom";
 
 import useViewport from "../../../hooks/useViewport";
 import HeaderLabel from "../../common/HeaderLabel";
+import BackButton from "../../pages/Scheduling/BackButton";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -76,13 +76,7 @@ const VolunteerQuestions = ({
 
   return (
     <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
-      <Button
-        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
-        variant="back"
-        onClick={previous}
-      >
-        Back
-      </Button>
+      <BackButton previous={previous} />
       <HeaderLabel text="Volunteer information" />
       <FormControl mt="2rem" isRequired>
         <Box>

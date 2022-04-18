@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -15,6 +14,7 @@ import { useHistory } from "react-router-dom";
 
 import { Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
+import BackButton from "../../pages/Scheduling/BackButton";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -76,13 +76,7 @@ const CreateAccount = ({
 
   return (
     <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
-      <Button
-        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
-        variant="back"
-        onClick={previous}
-      >
-        Back
-      </Button>
+      <BackButton previous={previous} />
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Account information can be edited in the My Account section of the

@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -19,6 +18,7 @@ import authAPIClient from "../../../APIClients/AuthAPIClient";
 import { SignupErrorMessage } from "../../../constants/AuthConstants";
 import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
+import BackButton from "../../pages/Scheduling/BackButton";
 import {
   checkForLowerCase,
   checkForNumbers,
@@ -120,13 +120,7 @@ const AccountDetails = ({
 
   return (
     <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
-      <Button
-        leftIcon={<ArrowBackIcon width="24px" height="24px" />}
-        variant="back"
-        onClick={previous}
-      >
-        Back
-      </Button>
+      <BackButton previous={previous} />
       <HeaderLabel text="Account details" />
       <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>
