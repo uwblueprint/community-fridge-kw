@@ -1,11 +1,11 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
-  Badge,
   Box,
   Button,
   Container,
   Flex,
   HStack,
+  Spacer,
   Text,
   useDisclosure,
   useToast,
@@ -169,19 +169,6 @@ const ConfirmDetails = ({
         mb="1em"
       >
         {isBeingEdited ? "Donation details" : "Confirm donation details"}
-        &nbsp;&nbsp;&nbsp;
-        <Badge
-          borderRadius="11px"
-          px="18px"
-          py="-5px"
-          ml={{ md: "5px" }}
-          color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
-          backgroundColor={`${
-            (colorMap as any)[currentSchedule?.frequency]
-          }.50`}
-        >
-          {currentSchedule?.frequency}
-        </Badge>
       </Text>
       <Box
         pl="0"
@@ -192,14 +179,18 @@ const ConfirmDetails = ({
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
-        <Button
-          pl="0"
-          variant="edit"
-          color="hubbard.100"
-          onClick={() => go && go("date and time")}
-        >
-          Edit
-        </Button>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <Button
+            pl="0"
+            variant="edit"
+            color="hubbard.100"
+            onClick={() => go && go("date and time")}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Spacer />
+        )}
         <Box>
           <Text textStyle="mobileHeader3">Date and time</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
@@ -236,14 +227,18 @@ const ConfirmDetails = ({
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
-        <Button
-          pl="0"
-          variant="edit"
-          color="hubbard.100"
-          onClick={() => go && go("donation information")}
-        >
-          Edit
-        </Button>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <Button
+            pl="0"
+            variant="edit"
+            color="hubbard.100"
+            onClick={() => go && go("donation information")}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Spacer />
+        )}
         <Box>
           <Text textStyle="mobileHeader3">Donation information</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
@@ -267,14 +262,18 @@ const ConfirmDetails = ({
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
-        <Button
-          pl="0"
-          variant="edit"
-          color="hubbard.100"
-          onClick={() => go && go("volunteer information")}
-        >
-          Edit
-        </Button>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <Button
+            pl="0"
+            variant="edit"
+            color="hubbard.100"
+            onClick={() => go && go("volunteer information")}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Spacer />
+        )}
         <Box>
           <Text textStyle="mobileHeader3">Volunteer information</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">

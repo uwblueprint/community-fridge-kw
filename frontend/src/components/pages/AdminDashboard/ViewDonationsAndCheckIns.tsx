@@ -6,6 +6,7 @@ import {
   Select,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { DateObject } from "react-multi-date-picker";
@@ -32,6 +33,7 @@ const ViewDonationsAndCheckIns = ({
   const [selectedDay, setSelectedDay] = useState<Date | DateObject | null>(
     new Date(),
   );
+  const toast = useToast();
 
   const { isMobile } = useViewport();
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -108,7 +110,22 @@ const ViewDonationsAndCheckIns = ({
   };
 
   const deleteCheckIn = (checkInId: string) => {
-    CheckInAPIClient.deleteCheckInById(checkInId);
+    const res = CheckInAPIClient.deleteCheckInById(checkInId);
+    if (!res) {
+      toast({
+        title: "There was an error deleting this check-in",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    toast({
+      title: "Check-ins have been successfully deleted",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
     setCheckIns([
       ...checkIns.filter((checkIn: CheckIn) => checkIn.id !== checkInId),
     ]);

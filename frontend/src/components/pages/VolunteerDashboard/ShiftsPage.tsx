@@ -57,7 +57,7 @@ const ScheduledVolunteerShiftsPage = () => {
         <Button
           float="right"
           size="lg"
-          width={{ lg: "30%", base: "100%" }}
+          width={{ lg: "20%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.VOLUNTEER_SHIFTS_PAGE)}
         >
@@ -76,17 +76,19 @@ const ScheduledVolunteerShiftsPage = () => {
             ),
           )}
         {!shifts.length && (
-          <Flex paddingTop="1.5rem">
+          <Flex paddingTop="1.5rem" width="100%">
             <Box
               display={{ lg: "flex" }}
               width={{ base: "default", md: "100%" }}
               backgroundColor="squash.100"
               padding={{ base: "0px", md: "3rem" }}
+              textAlign="center"
             >
               <Text
                 p={{ base: "28px", md: "0px" }}
                 color="black.500"
                 textStyle="mobileBody"
+                ml="auto"
               >
                 You currently have no upcoming shifts scheduled! &nbsp;
               </Text>
@@ -95,6 +97,8 @@ const ScheduledVolunteerShiftsPage = () => {
                 px={{ base: "28px", md: "0px" }}
                 color="black.500"
                 textStyle="mobileBody"
+                pb={{ base: "28px", md: "0px" }}
+                mr="auto"
               >
                 Schedule a shift today to start giving back.
               </Text>

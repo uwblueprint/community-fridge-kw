@@ -11,13 +11,9 @@ import donorRouter from "./rest/donorRoutes";
 import userRouter from "./rest/userRoutes";
 import volunteerRouter from "./rest/volunteerRoutes";
 import schedulingRouter from "./rest/schedulingRoutes";
-import EmailService from "./services/implementations/emailService";
-import nodemailerConfig from "./nodemailer.config";
-import ICronService from "./services/interfaces/cronService";
-import CronService from "./services/implementations/cronService";
-import DonorService from "./services/implementations/donorService";
 import checkInRouter from "./rest/checkInRoutes";
 import contentRouter from "./rest/contentRoutes";
+import healthRouter from "./rest/healthRouter";
 import cronRouter from "./rest/cronRoutes";
 
 const CORS_ALLOW_LIST: (string | RegExp)[] = ["http://localhost:3000"];
@@ -53,6 +49,7 @@ app.use("/volunteers", volunteerRouter);
 app.use("/scheduling", schedulingRouter);
 app.use("/checkin", checkInRouter);
 app.use("/content", contentRouter);
+app.use("/health", healthRouter);
 app.use("/email-reminders", cronRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

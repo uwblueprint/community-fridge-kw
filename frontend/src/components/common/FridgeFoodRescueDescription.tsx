@@ -29,8 +29,8 @@ const FridgeFoodRescueDescription = () => {
 
   return (
     <Box mb="4rem">
-      <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="1rem">
-        Food rescue shifts
+      <Text textStyle={["mobileHeader4", "mobileHeader3"]} pt="1rem">
+        Food rescue description
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
             variant="editInfo"

@@ -153,10 +153,30 @@ const ConfirmShiftDetails = ({
         }
       />
       {viewDetailsScreen && shift.type === ShiftType.CHECKIN && (
-        <FridgeCheckInDescription />
+        <>
+          <Text
+            textStyle="mobileHeader2"
+            mt="1em"
+            direction="row"
+            display={{ md: "flex" }}
+          >
+            Fridge check-in shift details
+          </Text>
+          <FridgeCheckInDescription />
+        </>
       )}
       {viewDetailsScreen && shift.type === ShiftType.SCHEDULING && (
-        <FridgeFoodRescueDescription />
+        <>
+          <Text
+            textStyle="mobileHeader2"
+            mt="1em"
+            direction="row"
+            display={{ md: "flex" }}
+          >
+            Food rescue shift details
+          </Text>
+          <FridgeFoodRescueDescription />
+        </>
       )}
       {!viewDetailsScreen && (
         <>
@@ -212,14 +232,18 @@ const ConfirmShiftDetails = ({
             ? volunteerTimeLocal(shift.volunteerTime)
             : startAndEndTimeLocal(shift.startDate)}
         </Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Address
-        </Text>
-        <Text textStyle="mobileBody">{`${
-          (shift as ScheduleWithShiftType).isPickup
-            ? `${(shift as ScheduleWithShiftType).pickupLocation}`
-            : "Community Fridge"
-        }`}</Text>
+        {shift.type === ShiftType.SCHEDULING && (
+          <>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Address
+            </Text>
+            <Text textStyle="mobileBody">{`${
+              (shift as ScheduleWithShiftType).isPickup
+                ? `${(shift as ScheduleWithShiftType).pickupLocation}`
+                : "Community Fridge"
+            }`}</Text>
+          </>
+        )}
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Additional notes
         </Text>

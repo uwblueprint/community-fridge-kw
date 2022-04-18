@@ -13,7 +13,7 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
   const { authenticatedUser } = useContext(AuthContext);
   const history = useHistory();
   return (
-    <Container variant="responsiveContainer">
+    <Container variant="responsiveContainer" textAlign="center">
       <Text
         textStyle={{ base: "mobileHeader2", md: "desktopHeader2" }}
         mt="2em"
@@ -41,8 +41,11 @@ const ThankYou = ({ formValues }: SchedulingStepProps) => {
         mb="3em"
         width="100%"
         maxWidth="600px"
+        display="block"
+        ml="auto"
+        mr="auto"
       />
-      <HStack>
+      <HStack mr="auto" ml="auto" display="block">
         <Button
           onClick={() => history.push(Routes.DASHBOARD_PAGE)}
           variant="navigation"

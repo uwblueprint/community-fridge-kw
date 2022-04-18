@@ -29,7 +29,7 @@ const FridgeCheckInDescription = () => {
 
   return (
     <Box mb="4rem">
-      <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="1rem">
+      <Text textStyle={["mobileHeader4", "mobileHeader3"]} pt="1rem">
         Fridge check-in description
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
