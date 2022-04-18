@@ -29,16 +29,20 @@ const Home = (): JSX.Element => {
   const onScheduleClick = () => {
     if (authenticatedUser?.role === Role.ADMIN) {
       onOpen();
-    } else {
+    } else if (authenticatedUser) {
       history.push(Routes.SCHEDULING_PAGE);
+    } else {
+      history.push(Routes.LOGIN_PAGE);
     }
   };
 
   const onVolunteerClick = () => {
     if (authenticatedUser?.role === Role.ADMIN) {
       onOpen();
-    } else {
+    } else if (authenticatedUser) {
       history.push(Routes.VOLUNTEER_SHIFTS_PAGE);
+    } else {
+      history.push(Routes.LOGIN_PAGE);
     }
   };
 
