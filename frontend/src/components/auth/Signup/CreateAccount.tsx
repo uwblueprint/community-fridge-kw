@@ -1,4 +1,3 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -6,7 +5,6 @@ import {
   FormControl,
   FormErrorMessage,
   Grid,
-  IconButton,
   Input,
   Text,
 } from "@chakra-ui/react";
@@ -14,10 +12,9 @@ import React from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
-import * as Routes from "../../../constants/Routes";
-import useViewport from "../../../hooks/useViewport";
 import { Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
+import BackButton from "../../pages/Scheduling/BackButton";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import { SignUpFormProps } from "./types";
 
@@ -33,8 +30,6 @@ const CreateAccount = ({
   const { previous, next } = navigation;
   const history = useHistory();
   const { role, firstName, lastName, businessName, phoneNumber } = formData;
-
-  const { isDesktop } = useViewport();
 
   const errorMessages = {
     businessName: "",
@@ -80,26 +75,8 @@ const CreateAccount = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      <IconButton
-        marginLeft="-12px"
-        float="left"
-        backgroundColor="transparent"
-        aria-label="go back"
-        onClick={previous}
-      >
-        <ArrowBackIcon width="24px" height="24px" />
-      </IconButton>
-      {!isDesktop && (
-        <IconButton
-          float="right"
-          aria-label="close sign up"
-          onClick={() => history.push(Routes.LOGIN_PAGE)}
-          backgroundColor="transparent"
-        >
-          <CloseIcon color="black.100" />
-        </IconButton>
-      )}
+    <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
+      <BackButton previous={previous} />
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Account information can be edited in the My Account section of the
