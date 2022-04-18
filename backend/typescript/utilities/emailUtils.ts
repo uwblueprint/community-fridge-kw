@@ -37,7 +37,7 @@ export const cancellationEmail = (mainLine: string, name: string): string => {
         <table cellspacing="0" cellpadding="0">
             <tr>
               <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
-                  <a href="https://communityfridgekw.web.app/" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
+                  <a href="https://schedule.communityfridgekw.ca" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
                   <span style="color: #FAFCFE;">
                   View Dashboard
                   </span>
