@@ -1,10 +1,13 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { NavigationProps, Step, useStep } from "react-hooks-helper";
+import VolunteerContext from "../../../contexts/VolunteerContext";
+import { Status } from "../../../types/AuthTypes";
 
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
 } from "../../../types/VolunteerTypes";
+import PendingPage from "../VolunteerDashboard/PendingPage";
 import ConfirmShiftDetails from "./ConfirmShiftDetails";
 import ThankYouVolunteer from "./ThankYouVolunteer";
 import VolunteerShiftsTabs from "./VolunteerShiftTabs";
@@ -27,6 +30,7 @@ interface UseStepType {
 }
 
 const VolunteerScheduling = () => {
+  const { volunteerStatus } = useContext(VolunteerContext);
   const [selectedShift, setSelectedShift] = useState<
     CheckInWithShiftType | ScheduleWithShiftType
   >({} as CheckInWithShiftType | ScheduleWithShiftType);
@@ -46,10 +50,15 @@ const VolunteerScheduling = () => {
   switch (id) {
     case "shifts tab":
       return (
-        <VolunteerShiftsTabs
-          navigation={navigation}
-          setSelectedVolunteerShift={setSelectedVolunteerShift}
-        />
+        <>
+          {volunteerStatus !== Status.PENDING && <PendingPage />}
+          {volunteerStatus === Status.APPROVED && (
+            <VolunteerShiftsTabs
+              navigation={navigation}
+              setSelectedVolunteerShift={setSelectedVolunteerShift}
+            />
+          )}
+        </>
       );
     case "confirm shift sign up":
       return (
