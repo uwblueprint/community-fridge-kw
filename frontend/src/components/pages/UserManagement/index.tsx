@@ -186,7 +186,7 @@ const UserManagementPage = (): JSX.Element => {
       });
     } else {
       toast({
-        description: "The volunteer cannot be deleted. Please try again.",
+        description: "The user cannot be deleted. Please try again.",
         status: "error",
         duration: 7000,
         isClosable: true,
