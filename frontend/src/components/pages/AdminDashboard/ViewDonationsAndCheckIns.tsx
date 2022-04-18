@@ -120,7 +120,7 @@ const ViewDonationsAndCheckIns = ({
   };
 
   return (
-    <Container alignContent="left" variant="calendarContainer">
+    <Container alignContent="left" variant="calendarContainer" mt="2rem">
       <Stack
         direction={isMobile ? "column" : "row"}
         width="100%"

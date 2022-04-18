@@ -45,15 +45,6 @@ const Home = (): JSX.Element => {
   return (
     <>
       <Container variant="baseContainer">
-        <Image
-          src="drawer-logo.png"
-          alt="Community Fridge logo"
-          borderRadius="100px"
-          marginRight="50%"
-          maxWidth="145px"
-          maxHeight="145px"
-          display={{ base: "inline", md: "none" }}
-        />
         <Flex>
           <Box width="100%" mt="1rem">
             <Text align="left" marginBottom="13px" textStyle="mobileHeader1">

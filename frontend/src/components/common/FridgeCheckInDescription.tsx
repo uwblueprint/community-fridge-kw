@@ -1,5 +1,5 @@
 import { EditIcon } from "@chakra-ui/icons";
-import { Button, Link, Text } from "@chakra-ui/react";
+import { Box, Button, Link, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -28,8 +28,8 @@ const FridgeCheckInDescription = () => {
   }, []);
 
   return (
-    <>
-      <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="2rem">
+    <Box mb="4rem">
+      <Text textStyle={["mobileHeader4", "desktopSubtitle"]} pt="1rem">
         Fridge check-in description
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
@@ -40,22 +40,24 @@ const FridgeCheckInDescription = () => {
         )}
       </Text>
       {content?.checkinDescription && (
-        <Text textStyle={["mobileBody", "desktopBody"]} pt="2rem">
+        <Text textStyle={["mobileBody", "desktopBody"]} pt="1rem">
           {content?.checkinDescription}
         </Text>
       )}
       {content?.checkinUrl && (
-        <Link
-          pt="1.5rem"
-          color="#498FB6"
-          textStyle={["mobileLink", "desktopLink"]}
-          href={content?.checkinUrl}
-          isExternal
-        >
-          Link to instructions
-        </Link>
+        <>
+          <br />
+          <Link
+            color="#498FB6"
+            textStyle={["mobileLink", "desktopLink"]}
+            href={content?.checkinUrl}
+            isExternal
+          >
+            Link to instructions
+          </Link>
+        </>
       )}
-    </>
+    </Box>
   );
 };
 export default FridgeCheckInDescription;

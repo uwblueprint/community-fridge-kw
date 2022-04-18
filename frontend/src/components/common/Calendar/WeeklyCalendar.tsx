@@ -67,10 +67,10 @@ const DayButton = ({ day }: DayButtonProps) => {
   const currentDate = setDay(week, day.day, { locale });
 
   return (
-    <Box align="left" width="100%">
+    <Box align="left">
       <HStack>
         <Text textStyle="desktopSubtitle">{format(currentDate, "E")} </Text>
-        <Text textStyle="desktopSubtitle" color="hubbard.100">
+        <Text textStyle="desktopSubtitle" color="hubbard.100" isTruncated>
           {format(currentDate, "MMM d")}
         </Text>
       </HStack>
@@ -117,36 +117,42 @@ export function WeeklyBody<EventItem>({
     <>
       {[...Array(isMobile ? 1 : 3)].map((_, i) => {
         return (
-          <VStack key={i} pb="3rem">
+          <VStack key={i} pb="3rem" spacing="24px">
             <HStack
-              justifyItems="space-between"
+              justifyContent="space-between"
               alignContent="start"
               width="100%"
             >
-              {i === 0 && (
-                <DatePicker
-                  value={calendarDate}
-                  onChange={(e: DateObject) => {
-                    setSelectedDay(e?.toDate?.());
-                  }}
-                  render={(
-                    value: string,
-                    openCalendar: React.MouseEventHandler<SVGElement>,
-                  ) => {
-                    return (
-                      <CalendarIcon onClick={openCalendar} value={value} />
-                    );
+              <HStack>
+                {i === 0 && (
+                  <DatePicker
+                    value={calendarDate}
+                    onChange={(e: DateObject) => {
+                      setSelectedDay(e?.toDate?.());
+                    }}
+                    render={(
+                      value: string,
+                      openCalendar: React.MouseEventHandler<SVGElement>,
+                    ) => {
+                      return (
+                        <CalendarIcon
+                          onClick={openCalendar}
+                          value={value}
+                          mr="0.5rem"
+                        />
+                      );
+                    }}
+                  />
+                )}
+                <DayButton
+                  day={{
+                    day: selectedDay.getDay() + i,
+                    label: getDay(selectedDay, i),
                   }}
                 />
-              )}
-              <DayButton
-                day={{
-                  day: selectedDay.getDay() + i,
-                  label: getDay(selectedDay, i),
-                }}
-              />
+              </HStack>
               {i === 0 && (
-                <>
+                <HStack>
                   <IconButton
                     backgroundColor="transparent"
                     aria-label="previous day"
@@ -161,7 +167,7 @@ export function WeeklyBody<EventItem>({
                   >
                     <ChevronRightIcon w={[5, 8]} h={[5, 8]} />
                   </IconButton>
-                </>
+                </HStack>
               )}
             </HStack>
             {(items as Array<Schedule | CheckIn>).map((item, index) => {

@@ -108,7 +108,6 @@ const textStyles = {
   },
   desktopLink: {
     fontSize: "16px",
-    decoration: "underline",
   },
   popupTitleText: {
     fontWeight: 500,
