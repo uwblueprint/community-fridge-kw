@@ -27,7 +27,7 @@ const Home = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onScheduleClick = () => {
-    if (authenticatedUser?.role === Role.ADMIN) {
+    if (authenticatedUser?.role !== Role.DONOR) {
       onOpen();
     } else if (authenticatedUser) {
       history.push(Routes.SCHEDULING_PAGE);
@@ -37,7 +37,7 @@ const Home = (): JSX.Element => {
   };
 
   const onVolunteerClick = () => {
-    if (authenticatedUser?.role === Role.ADMIN) {
+    if (authenticatedUser?.role !== Role.VOLUNTEER) {
       onOpen();
     } else if (authenticatedUser) {
       history.push(Routes.VOLUNTEER_SHIFTS_PAGE);
