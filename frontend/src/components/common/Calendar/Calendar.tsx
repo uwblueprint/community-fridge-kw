@@ -64,9 +64,13 @@ const Calendar = ({
       <WeeklyBody
         selectedDay={selectedDay}
         items={items}
-        renderItem={({ item, index }) =>
-          isCheckInView ? (
-            getCheckInCard(item, index)
+        renderItem={({ item, index, emptyState }) => {
+          if (isCheckInView) {
+            return getCheckInCard(item, index as number);
+          }
+
+          return emptyState ? (
+            <p>There are no upcoming scheduled donations.</p>
           ) : (
             <DropoffCard
               key={JSON.stringify(item)}
@@ -74,8 +78,8 @@ const Calendar = ({
               isDonorView={false}
               isPublicView={!isAdminView}
             />
-          )
-        }
+          );
+        }}
       />
     </WeeklyCalendar>
   );

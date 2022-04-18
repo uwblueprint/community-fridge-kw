@@ -72,23 +72,65 @@ const DayButton = ({ day }: DayButtonProps) => {
   );
 };
 
-type RenderItemProps<EventItem> = {
-  item: Schedule | CheckIn;
-  showingFullWeek: boolean;
-  index: number;
+type RenderItemProps = {
+  item?: Schedule | CheckIn;
+  showingFullWeek?: boolean;
+  index?: number;
+  emptyState: boolean;
 };
 
-type WeeklyBodyProps<EventItem> = {
+type WeeklyBodyProps = {
   selectedDay: Date;
   items: Schedule[] | CheckIn[];
-  renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
+  renderItem: (item: RenderItemProps) => ReactNode;
 };
 
-export function WeeklyBody<EventItem>({
+const getFilteredDays = (
+  items: Array<Schedule | CheckIn>,
+  selectedDay: Date,
+  i: number,
+  renderItem: (item: RenderItemProps) => ReactNode,
+  week: Date,
+  locale?: Locale,
+) => {
+  const shiftsArr = items.filter((item) => {
+    const currentDate = setDay(week, selectedDay.getDay() + i, {
+      locale,
+    });
+    const scheduledDate =
+      "startTime" in item
+        ? new Date(item?.startTime as string)
+        : new Date(item?.startDate as string);
+    if (
+      item === null ||
+      scheduledDate === null ||
+      scheduledDate.getDate() !== currentDate.getDate() ||
+      scheduledDate.getMonth() !== currentDate.getMonth() ||
+      scheduledDate.getFullYear() !== currentDate.getFullYear()
+    ) {
+      return false;
+    }
+
+    return true;
+  });
+
+  return !shiftsArr.length
+    ? renderItem({ emptyState: true })
+    : shiftsArr.map((item, index) => {
+        return renderItem({
+          item,
+          showingFullWeek: selectedDay === undefined,
+          index,
+          emptyState: false,
+        });
+      });
+};
+
+export function WeeklyBody({
   selectedDay,
   items,
   renderItem,
-}: WeeklyBodyProps<EventItem>) {
+}: WeeklyBodyProps) {
   const { isMobile } = useViewport();
   const { locale, week } = useWeeklyCalendar();
 
@@ -118,32 +160,14 @@ export function WeeklyBody<EventItem>({
                   label: getDay(selectedDay, i),
                 }}
               />
-
-              {(items as Array<Schedule | CheckIn>).map((item, index) => {
-                const currentDate = setDay(week, selectedDay.getDay() + i, {
-                  locale,
-                });
-                const scheduledDate =
-                  "startTime" in item
-                    ? new Date(item?.startTime as string)
-                    : new Date(item?.startDate as string);
-
-                if (
-                  item === null ||
-                  scheduledDate === null ||
-                  scheduledDate.getDate() !== currentDate.getDate() ||
-                  scheduledDate.getMonth() !== currentDate.getMonth() ||
-                  scheduledDate.getFullYear() !== currentDate.getFullYear()
-                ) {
-                  return null;
-                }
-
-                return renderItem({
-                  item,
-                  showingFullWeek: selectedDay === undefined,
-                  index,
-                });
-              })}
+              {getFilteredDays(
+                items as Array<Schedule | CheckIn>,
+                selectedDay,
+                i,
+                renderItem,
+                week,
+                locale,
+              )}
             </VStack>
           </div>
         );
