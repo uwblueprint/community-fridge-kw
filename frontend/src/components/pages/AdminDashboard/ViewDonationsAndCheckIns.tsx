@@ -148,7 +148,7 @@ const ViewDonationsAndCheckIns = ({
           pt="2rem"
           pb="30px"
         >
-          {isCheckInView ? "Fridge check-ins" : "Upcoming scheduled donations"}
+          {isCheckInView ? "Fridge check-ins" : "Scheduled donations"}
         </Text>
         {isAdminView && (
           <HStack spacing="15px" justifyContent="flex-end">
