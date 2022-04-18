@@ -39,7 +39,7 @@ const FoodRescues = ({
   return (
     <>
       <FridgeFoodRescueDescription />
-      <Divider mt="1rem" />
+      <Divider mt="1.5rem" />
       <VStack
         divider={<StackDivider borderColor="gray.200" />}
         marginTop={["10px", "40px"]}

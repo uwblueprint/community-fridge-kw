@@ -44,7 +44,7 @@ const CheckIns = ({
   return (
     <>
       <FridgeCheckInDescription />
-      <Divider mt="1rem" />
+      <Divider mt="1.5rem" />
       <CheckInCalendar
         checkIns={checkIns}
         navigation={navigation}

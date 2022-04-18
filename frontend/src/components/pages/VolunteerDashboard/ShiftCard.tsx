@@ -111,7 +111,12 @@ const VolunteerShiftCard = ({
       >
         <Text textStyle="mobileHeader4" whiteSpace="nowrap" minWidth="225px">
           {`${dateLocal()}`}
-          <Text minWidth="125px" textStyle="mobileSmall" color="hubbard.100">
+          <Text
+            minWidth="125px"
+            textStyle="mobileSmall"
+            color="hubbard.100"
+            pb={["0.5rem", "0rem"]}
+          >
             {type === ShiftType.CHECKIN && "Fridge check-in"}
             {type === ShiftType.SCHEDULING &&
               (isPickup ? "Food rescue pickup" : "Food rescue unloading")}
@@ -121,7 +126,8 @@ const VolunteerShiftCard = ({
           float="right"
           mt="1.5rem"
           size="lg"
-          width={isSignUp ? ["55%", "32%"] : ["50%", "20%"]}
+          width={isSignUp ? ["66%", "14%"] : ["50%", "11%"]}
+          height={isSignUp ? ["1.5rem", "2.6rem"] : ["2.2rem", "default"]}
           variant={isSignUp ? "navigation" : "viewDetails"}
           onClick={onSubmitClick}
         >

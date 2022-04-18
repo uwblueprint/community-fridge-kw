@@ -62,9 +62,12 @@ const Button = {
       borderColor: "raddish.100",
       color: "raddish.100",
       fontSize: "16px",
+      height: "38px",
+      width: "153px",
       py: "12px",
       px: "53px",
     },
+
     approve: {
       background: "raddish.100",
       color: "squash.100",

@@ -364,14 +364,12 @@ class SchedulingService implements ISchedulingService {
                     </p>`
                   : ``
               }
-
               ${
                 isAdmin
                   ? `${firstName} ${lastName} has scheduled a donation for <strong> ${startDayString} at ${startTimeString}!</strong></p>	
                     <br />`
                   : ``
               }
-
               ${
                 !updated && !isAdmin
                   ? `<strong>Hey there ${firstName}!</strong>
