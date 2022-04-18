@@ -1,21 +1,14 @@
-import { CloseIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  Container,
-  FormControl,
-  IconButton,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Container, FormControl, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
 import { Redirect, useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
-import useViewport from "../../../hooks/useViewport";
 import { Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
 import RadioSelectGroup from "../../common/RadioSelectGroup";
+import BackButton from "../../pages/Scheduling/BackButton";
 import { SignUpFormProps } from "./types";
 
 const AccountType = ({
@@ -28,11 +21,10 @@ const AccountType = ({
   setForm: SetForm;
 }) => {
   const { next } = navigation;
+
   const history = useHistory();
   const { role } = formData;
   const { authenticatedUser } = useContext(AuthContext);
-
-  const { isDesktop } = useViewport();
 
   const errorMessages = {
     role: "",
@@ -72,30 +64,21 @@ const AccountType = ({
     return <Redirect to={Routes.DASHBOARD_PAGE} />;
   }
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      {!isDesktop && (
-        <IconButton
-          float="right"
-          aria-label="close sign up"
-          onClick={() => history.push(Routes.LOGIN_PAGE)}
-          backgroundColor="transparent"
-        >
-          <CloseIcon color="black.100" />
-        </IconButton>
-      )}
+    <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
+      <BackButton previous={() => history.push(Routes.LOGIN_PAGE)} />
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
         Thank you for your interest in helping out Community Fridge KW!
       </Text>
 
-      <FormControl mt="3rem" isRequired>
+      <FormControl mt="2rem" isRequired>
         <Text
           mt="2rem"
-          mb="0.5rem"
+          mb="1.5rem"
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Account Type
+          Account type
         </Text>
         <RadioSelectGroup
           name="role"
@@ -109,7 +92,12 @@ const AccountType = ({
           }}
           horizontalOnly
         />
-        <Button mt="2" variant="navigation" onClick={handleNext} width="100%">
+        <Button
+          mt="3rem"
+          variant="navigation"
+          onClick={handleNext}
+          width="100%"
+        >
           Next
         </Button>
       </FormControl>
