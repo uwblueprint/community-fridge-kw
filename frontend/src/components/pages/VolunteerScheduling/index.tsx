@@ -51,13 +51,12 @@ const VolunteerScheduling = () => {
     case "shifts tab":
       return (
         <>
-          {volunteerStatus !== Status.PENDING && <PendingPage />}
-          {volunteerStatus === Status.APPROVED && (
+          {volunteerStatus === Status.APPROVED ? (
             <VolunteerShiftsTabs
               navigation={navigation}
               setSelectedVolunteerShift={setSelectedVolunteerShift}
             />
-          )}
+          ) : <PendingPage />}
         </>
       );
     case "confirm shift sign up":
