@@ -1,6 +1,12 @@
-import { Box, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
+import { Box, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 
 import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
@@ -61,7 +67,7 @@ const DayButton = ({ day }: DayButtonProps) => {
   const currentDate = setDay(week, day.day, { locale });
 
   return (
-    <Box align="left" width="100%" pb="1rem">
+    <Box align="left" width="100%">
       <HStack>
         <Text textStyle="desktopSubtitle">{format(currentDate, "E")} </Text>
         <Text textStyle="desktopSubtitle" color="hubbard.100">
@@ -82,12 +88,18 @@ type WeeklyBodyProps<EventItem> = {
   selectedDay: Date;
   items: Schedule[] | CheckIn[];
   renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
+  handleDateChange: (days: number) => void;
+  setSelectedDay: (date: Date) => void;
+  calendarDate: Date;
 };
 
 export function WeeklyBody<EventItem>({
   selectedDay,
   items,
   renderItem,
+  handleDateChange,
+  setSelectedDay,
+  calendarDate,
 }: WeeklyBodyProps<EventItem>) {
   const { isMobile } = useViewport();
   const { locale, week } = useWeeklyCalendar();
@@ -105,47 +117,79 @@ export function WeeklyBody<EventItem>({
     <>
       {[...Array(isMobile ? 1 : 3)].map((_, i) => {
         return (
-          <div key={i}>
-            <VStack
-              justifyItems="flex-start"
+          <VStack key={i} pb="3rem">
+            <HStack
+              justifyItems="space-between"
               alignContent="start"
-              pb="3rem"
               width="100%"
             >
+              {i === 0 && (
+                <DatePicker
+                  value={calendarDate}
+                  onChange={(e: DateObject) => {
+                    setSelectedDay(e?.toDate?.());
+                  }}
+                  render={(
+                    value: string,
+                    openCalendar: React.MouseEventHandler<SVGElement>,
+                  ) => {
+                    return (
+                      <CalendarIcon onClick={openCalendar} value={value} />
+                    );
+                  }}
+                />
+              )}
               <DayButton
                 day={{
                   day: selectedDay.getDay() + i,
                   label: getDay(selectedDay, i),
                 }}
               />
+              {i === 0 && (
+                <>
+                  <IconButton
+                    backgroundColor="transparent"
+                    aria-label="previous day"
+                    onClick={() => handleDateChange(-1)}
+                  >
+                    <ChevronLeftIcon w={[5, 8]} h={[5, 8]} />
+                  </IconButton>
+                  <IconButton
+                    backgroundColor="transparent"
+                    aria-label="next day"
+                    onClick={() => handleDateChange(+1)}
+                  >
+                    <ChevronRightIcon w={[5, 8]} h={[5, 8]} />
+                  </IconButton>
+                </>
+              )}
+            </HStack>
+            {(items as Array<Schedule | CheckIn>).map((item, index) => {
+              const currentDate = setDay(week, selectedDay.getDay() + i, {
+                locale,
+              });
+              const scheduledDate =
+                "startTime" in item
+                  ? new Date(item?.startTime as string)
+                  : new Date(item?.startDate as string);
 
-              {(items as Array<Schedule | CheckIn>).map((item, index) => {
-                const currentDate = setDay(week, selectedDay.getDay() + i, {
-                  locale,
-                });
-                const scheduledDate =
-                  "startTime" in item
-                    ? new Date(item?.startTime as string)
-                    : new Date(item?.startDate as string);
+              if (
+                item === null ||
+                scheduledDate === null ||
+                scheduledDate.getDate() !== currentDate.getDate() ||
+                scheduledDate.getMonth() !== currentDate.getMonth() ||
+                scheduledDate.getFullYear() !== currentDate.getFullYear()
+              ) {
+                return null;
+              }
 
-                if (
-                  item === null ||
-                  scheduledDate === null ||
-                  scheduledDate.getDate() !== currentDate.getDate() ||
-                  scheduledDate.getMonth() !== currentDate.getMonth() ||
-                  scheduledDate.getFullYear() !== currentDate.getFullYear()
-                ) {
-                  return null;
-                }
-
-                return renderItem({
-                  item,
-                  showingFullWeek: selectedDay === undefined,
-                  index,
-                });
-              })}
-            </VStack>
-          </div>
+              return renderItem({
+                item,
+                showingFullWeek: selectedDay === undefined,
+                index,
+              });
+            })}
+          </VStack>
         );
       })}
     </>

@@ -30,8 +30,8 @@ const DonationStep = ({
     >
       {isDesktop ? (
         <Image
-          objectFit="fill"
-          height="200px"
+          objectFit="cover"
+          height="120px"
           src={stepImages[stepNumber - 1]}
           alt="Size image"
           display="inline"
