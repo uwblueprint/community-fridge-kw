@@ -119,7 +119,11 @@ const Header = (): JSX.Element => {
                   >
                     Home
                   </Link>
-                  <Link as={ReactLink} to={Routes.VOLUNTEER_DASHBOARD_PAGE} isTruncated>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.VOLUNTEER_DASHBOARD_PAGE}
+                    isTruncated
+                  >
                     My volunteer shifts
                   </Link>
                 </>
@@ -180,7 +184,11 @@ const Header = (): JSX.Element => {
                       </>
                     )}
                   </Menu>
-                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE} isTruncated>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.USER_MANAGEMENT_PAGE}
+                    isTruncated
+                  >
                     User management
                   </Link>
                 </>

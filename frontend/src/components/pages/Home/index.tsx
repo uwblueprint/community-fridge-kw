@@ -31,7 +31,9 @@ const Home = (): JSX.Element => {
       history.push(Routes.LOGIN_PAGE);
     }
 
-    return authenticatedUser?.role === Role.DONOR ? history.push(Routes.SCHEDULING_PAGE) : onOpen();
+    return authenticatedUser?.role === Role.DONOR
+      ? history.push(Routes.SCHEDULING_PAGE)
+      : onOpen();
   };
 
   const onVolunteerClick = () => {
@@ -39,7 +41,9 @@ const Home = (): JSX.Element => {
       history.push(Routes.LOGIN_PAGE);
     }
 
-    return authenticatedUser?.role === Role.VOLUNTEER ? history.push(Routes.VOLUNTEER_SHIFTS_PAGE) : onOpen();
+    return authenticatedUser?.role === Role.VOLUNTEER
+      ? history.push(Routes.VOLUNTEER_SHIFTS_PAGE)
+      : onOpen();
   };
 
   return (

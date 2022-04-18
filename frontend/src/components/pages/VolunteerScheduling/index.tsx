@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useState } from "react";
 import { NavigationProps, Step, useStep } from "react-hooks-helper";
+
 import VolunteerContext from "../../../contexts/VolunteerContext";
 import { Status } from "../../../types/AuthTypes";
-
 import {
   CheckInWithShiftType,
   ScheduleWithShiftType,
@@ -56,7 +56,9 @@ const VolunteerScheduling = () => {
               navigation={navigation}
               setSelectedVolunteerShift={setSelectedVolunteerShift}
             />
-          ) : <PendingPage />}
+          ) : (
+            <PendingPage />
+          )}
         </>
       );
     case "confirm shift sign up":

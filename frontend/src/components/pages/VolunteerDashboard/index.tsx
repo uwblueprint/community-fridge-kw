@@ -10,7 +10,11 @@ const VolunteerDashboard = () => {
 
   return (
     <>
-      {volunteerStatus === Status.APPROVED ? <ScheduledVolunteerShiftsPage /> : <PendingPage />}
+      {volunteerStatus === Status.APPROVED ? (
+        <ScheduledVolunteerShiftsPage />
+      ) : (
+        <PendingPage />
+      )}
     </>
   );
 };
