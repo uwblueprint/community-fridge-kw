@@ -27,23 +27,19 @@ const Home = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onScheduleClick = () => {
-    if (authenticatedUser?.role !== Role.DONOR) {
-      onOpen();
-    } else if (authenticatedUser) {
-      history.push(Routes.SCHEDULING_PAGE);
-    } else {
+    if (!authenticatedUser) {
       history.push(Routes.LOGIN_PAGE);
     }
+
+    return authenticatedUser?.role === Role.DONOR ? history.push(Routes.SCHEDULING_PAGE) : onOpen();
   };
 
   const onVolunteerClick = () => {
-    if (authenticatedUser?.role !== Role.VOLUNTEER) {
-      onOpen();
-    } else if (authenticatedUser) {
-      history.push(Routes.VOLUNTEER_SHIFTS_PAGE);
-    } else {
+    if (!authenticatedUser) {
       history.push(Routes.LOGIN_PAGE);
     }
+
+    return authenticatedUser?.role === Role.VOLUNTEER ? history.push(Routes.VOLUNTEER_SHIFTS_PAGE) : onOpen();
   };
 
   return (
