@@ -132,7 +132,7 @@ const ConfirmShiftDetails = ({
   }, []);
 
   const dateText = (date: string) => {
-    return date ? format(new Date(date), "eeee, MMMM d, yyyy") : "";
+    return date ? format(new Date(date), "eeee MMMM d, yyyy") : "";
   };
 
   const startAndEndTimeLocal = (date: string) => {
@@ -215,7 +215,7 @@ const ConfirmShiftDetails = ({
           }`}</Text>
         )}
         {shift.type === ShiftType.CHECKIN && (
-          <Text textStyle="mobileBody">Fridge check in</Text>
+          <Text textStyle="mobileBody">Fridge check-in</Text>
         )}
 
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
@@ -330,9 +330,10 @@ const ConfirmShiftDetails = ({
       </Box>
       {viewDetailsScreen && (
         <Button
-          mt="1.5rem"
-          size="lg"
-          width={{ lg: "30%", base: "100%" }}
+          mt="1.0rem"
+          size="md"
+          width={{ md: "20%", base: "100%" }}
+          minWidth="210px"
           variant="deleteDonation"
           onClick={onOpen}
         >

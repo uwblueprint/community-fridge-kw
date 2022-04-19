@@ -18,11 +18,11 @@ export const emailHeader = `
   `;
 
 export const emailFooter = `
-  <footer>
-    <p style="margin-top: 50px; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Sincerely,</p>
-    <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">Community Fridge KW</p>
-    <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;"><a href="mailto: info@communityfridgekw.ca">info@communityfridgekw.ca</a></p>
-    <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;"><a href="https://www.facebook.com/CommunityFridgeKW/" target="_blank">Facebook</a> | <a href="https://www.instagram.com/communityfridgekw/" target="_blank">Instagram</a></p>
+  <footer style="margin-top: 10px">
+    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;">Sincerely,</p>
+    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;">Community Fridge KW</p>
+    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;"><a href="mailto: info@communityfridgekw.ca">info@communityfridgekw.ca</a></p>
+    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;"><a href="https://www.facebook.com/CommunityFridgeKW/" target="_blank">Facebook</a> | <a href="https://www.instagram.com/communityfridgekw/" target="_blank">Instagram</a></p>
   </footer>
   `;
 
@@ -107,7 +107,7 @@ export const formatVolunteerContactInformation = (
         <p>
           <b>Name:</b> ${firstName} ${lastName} <br/>
           <b>Phone Number:</b> ${phoneNumber} <br/>
-          <b>Email:</b>${email} <br/>
+          <b>Email:</b> ${email} <br/>
         </p>
   `;
 };
@@ -122,11 +122,11 @@ export const formatDonorContactInformation = (
   <h2 style="margin: 0; font-weight: 600; font-size: 18px; line-height: 28px; color: #171717;">
   Donor Contact Information:
   </h2>
-  <p>
-    <b>Name:</b> ${firstName} ${lastName} <br/>
-    <b>Email:</b> ${email} <br/>
-    <b>Phone Number:</b> ${phoneNumber}
-  </p>
+        <p>
+          <b>Name:</b> ${firstName} ${lastName} <br/>
+          <b>Phone Number:</b> ${phoneNumber} <br/>
+          <b>Email:</b> ${email} <br/>
+        </p>
   
   `;
 };
