@@ -19,10 +19,10 @@ export const emailHeader = `
 
 export const emailFooter = `
   <footer style="margin-top: 10px">
-    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;">Sincerely,</p>
-    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;">Community Fridge KW</p>
-    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;"><a href="mailto: info@communityfridgekw.ca">info@communityfridgekw.ca</a></p>
-    <p style="margin: 0; font-size: 13px; line-height: 28px; color: #171717;"><a href="https://www.facebook.com/CommunityFridgeKW/" target="_blank">Facebook</a> | <a href="https://www.instagram.com/communityfridgekw/" target="_blank">Instagram</a></p>
+    <p>Sincerely,</p>
+    <p>Community Fridge KW</p>
+    <p><a href="mailto: info@communityfridgekw.ca">info@communityfridgekw.ca</a></p>
+    <p><a href="https://www.facebook.com/CommunityFridgeKW/" target="_blank">Facebook</a> | <a href="https://www.instagram.com/communityfridgekw/" target="_blank">Instagram</a></p>
   </footer>
   `;
 
