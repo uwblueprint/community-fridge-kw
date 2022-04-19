@@ -316,7 +316,9 @@ class CronService implements ICronService {
         emailBody,
       );
     } catch (error) {
-      Logger.error(`Failed to generate email for fridge check-in shift reminder`);
+      Logger.error(
+        `Failed to generate email for fridge check-in shift reminder`,
+      );
       throw error;
     }
   }
