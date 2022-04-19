@@ -76,7 +76,7 @@ const ThankYouVolunteer = ({
           variant="navigation"
           w="100%"
           maxWidth="500px"
-          size="lg"
+          size="md"
         >
           Finish
         </Button>
