@@ -199,7 +199,6 @@ const CheckInInfoCard = ({
           <Box>
             <Text
               textStyle="mobileHeader4"
-              whiteSpace="nowrap"
               minWidth="225px"
             >
               {`${startTimeLocal}-${endTimeLocal}`}

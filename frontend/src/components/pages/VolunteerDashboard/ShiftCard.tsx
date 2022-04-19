@@ -109,7 +109,7 @@ const VolunteerShiftCard = ({
         display="flex"
         justify="space-between"
       >
-        <Text textStyle="mobileHeader4" whiteSpace="nowrap" minWidth="225px">
+        <Text textStyle="mobileHeader4" minWidth="225px">
           {`${dateLocal()}`}
           <Text
             minWidth="125px"

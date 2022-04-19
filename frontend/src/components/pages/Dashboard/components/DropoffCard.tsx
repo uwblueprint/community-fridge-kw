@@ -79,7 +79,7 @@ const DropoffCard = ({
           spacing={["4px", "24px"]}
           mb={["4px", "10px"]}
         >
-          <Text textStyle="mobileHeader4" whiteSpace="nowrap">
+          <Text textStyle="mobileHeader4">
             {isDonorView ? dateHeadingText(startDateLocal) : donorName}
           </Text>
           {!isPublicView && (
