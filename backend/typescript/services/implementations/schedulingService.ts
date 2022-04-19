@@ -862,6 +862,9 @@ class SchedulingService implements ISchedulingService {
          ${
            !isAdmin
              ? ` <p>
+            You will receive a reminder email a day before your shift! Please check your dashbooard for any shift updates.
+          </p>
+          <p>
             If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
           </p>
          ${emailFooter}`

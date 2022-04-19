@@ -73,6 +73,7 @@ const Header = (): JSX.Element => {
           w="24px"
           h="24px"
           flex="1"
+          textAlign="left"
           aria-label="menu options"
           onClick={onOpen}
           backgroundColor="transparent"
