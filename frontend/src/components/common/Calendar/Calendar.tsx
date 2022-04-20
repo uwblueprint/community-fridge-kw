@@ -89,7 +89,7 @@ const Calendar = ({
               isPublicView={!isAdminView}
             />
           )
-        }
+        }}
         calendarDate={currentDate}
         setSelectedDay={setSelectedDay}
         handleDateChange={handleDateChange}
