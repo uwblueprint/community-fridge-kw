@@ -102,6 +102,7 @@ const CheckInInfoCard = ({
       currentCheckIn.id,
       {
         isAdmin: true,
+        volunteerId: null,
       },
     );
 
