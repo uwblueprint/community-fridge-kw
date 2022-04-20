@@ -197,10 +197,7 @@ const CheckInInfoCard = ({
       >
         <Flex direction="row" alignItems="center" display="flex">
           <Box>
-            <Text
-              textStyle="mobileHeader4"
-              minWidth="225px"
-            >
+            <Text textStyle="mobileHeader4" minWidth="225px">
               {`${startTimeLocal}-${endTimeLocal}`}
             </Text>
           </Box>

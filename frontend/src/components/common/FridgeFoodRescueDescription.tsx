@@ -46,7 +46,6 @@ const FridgeFoodRescueDescription = () => {
       )}
       {content?.foodRescueUrl && (
         <>
-          <br />
           <Link
             pt="1.5rem"
             color="#498FB6"

@@ -46,7 +46,6 @@ const FridgeCheckInDescription = () => {
       )}
       {content?.checkinUrl && (
         <>
-          <br />
           <Link
             color="#498FB6"
             textStyle={["mobileLink", "desktopLink"]}

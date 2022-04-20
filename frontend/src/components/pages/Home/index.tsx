@@ -7,7 +7,7 @@ import {
   Image,
   Stack,
   Text,
-  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -16,7 +16,6 @@ import communityFrigeLandingPageImage from "../../../assets/home_page_fridge.png
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
-import GeneralErrorModal from "../../common/GeneralErrorModal";
 import ViewDonations from "../AdminDashboard/ViewDonationsAndCheckIns";
 import DonationProcess from "./DonationProcess";
 import VolunteerRoles from "./VolunteerRoles";
@@ -24,7 +23,7 @@ import VolunteerRoles from "./VolunteerRoles";
 const Home = (): JSX.Element => {
   const history = useHistory();
   const { authenticatedUser } = React.useContext(AuthContext);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const onScheduleClick = () => {
     if (!authenticatedUser) {
@@ -33,7 +32,12 @@ const Home = (): JSX.Element => {
 
     return authenticatedUser?.role === Role.DONOR
       ? history.push(Routes.SCHEDULING_PAGE)
-      : onOpen();
+      : toast({
+          title: "Please make a donor account to access",
+          status: "error",
+          duration: 7000,
+          isClosable: true,
+        });
   };
 
   const onVolunteerClick = () => {
@@ -43,7 +47,12 @@ const Home = (): JSX.Element => {
 
     return authenticatedUser?.role === Role.VOLUNTEER
       ? history.push(Routes.VOLUNTEER_SHIFTS_PAGE)
-      : onOpen();
+      : toast({
+          title: "Please make a volunteer account to access",
+          status: "error",
+          duration: 7000,
+          isClosable: true,
+        });
   };
 
   return (
@@ -85,12 +94,6 @@ const Home = (): JSX.Element => {
         </Box>
         <DonationProcess />
         <VolunteerRoles />
-        <GeneralErrorModal
-          isOpen={isOpen}
-          onClose={onClose}
-          headerText="Access Error"
-          bodyText="You do not have access to this function, please create a donor account to schedule a donation."
-        />
       </Container>
     </>
   );
