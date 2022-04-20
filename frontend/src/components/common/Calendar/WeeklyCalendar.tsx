@@ -213,13 +213,13 @@ export function WeeklyBody({
               )}
             </HStack>
             {getFilteredDays(
-                items as Array<Schedule | CheckIn>,
-                selectedDay,
-                i,
-                renderItem,
-                week,
-                locale,
-              )}
+              items as Array<Schedule | CheckIn>,
+              selectedDay,
+              i,
+              renderItem,
+              week,
+              locale,
+            )}
           </VStack>
         );
       })}

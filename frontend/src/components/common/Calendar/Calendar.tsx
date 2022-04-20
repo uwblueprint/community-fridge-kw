@@ -88,7 +88,7 @@ const Calendar = ({
               isDonorView={false}
               isPublicView={!isAdminView}
             />
-          )
+          );
         }}
         calendarDate={currentDate}
         setSelectedDay={setSelectedDay}
