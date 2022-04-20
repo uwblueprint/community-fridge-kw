@@ -76,7 +76,7 @@ const Login = (): React.ReactElement => {
 
   return (
     <Container p={{ base: "30px", md: "2rem 1rem" }}>
-      <HeaderLabel text="Log in to start scheduling" />
+      <HeaderLabel text="Log in to account" />
       <FormControl mt="2rem">
         <Box>
           <Text textStyle="mobileBodyBold" color="black.100">
@@ -103,12 +103,17 @@ const Login = (): React.ReactElement => {
             placeholder="Enter password"
           />
         </Box>
-        <Text mt="1rem" color="hubbard.100" textStyle="mobileSmall">
+        <Text
+          mt="1rem"
+          color="hubbard.100"
+          textStyle="mobileSmall"
+          textDecoration="underline"
+        >
           <Link to={Routes.FORGET_PASSWORD}> Forgot password? </Link>
         </Text>
         {isIncorrectLoginCredentails && (
           <Text
-            my="48px"
+            my="24px"
             textStyle={["mobileSmall", "desktopSmall"]}
             color="tomato.100"
           >

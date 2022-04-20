@@ -224,7 +224,7 @@ const VolunteerInformation = ({
       >
         <Text textStyle="mobileHeader4">Proposed drop-off time</Text>
         <Text textStyle="mobileBody">
-          {format(new Date(startTime), "EEEE, MMMM d")}
+          {format(new Date(startTime), "EEEE MMMM d")}
         </Text>
         <Text textStyle="mobileBody">
           {format(new Date(startTime), "h:mm aa")}-

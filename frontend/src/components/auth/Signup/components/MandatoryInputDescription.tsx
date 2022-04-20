@@ -9,9 +9,10 @@ const MandatoryInputDescription = ({
   <Box display="inline">
     <Text display="inline-block" textStyle="mobileBody" color="black.100">
       {label}
-    </Text>{" "}
-    <Text textStyle="mobileBody" display="inline-block" color="tomato.100">
-      *
+      <Box as="span" color="tomato.100">
+        {" "}
+        *
+      </Box>
     </Text>
   </Box>
 );
