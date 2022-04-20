@@ -160,10 +160,22 @@ interface ISchedulingService {
    * @param isAdmin boolean for if the email is to be sent to an admin or volunteer
    * @throws Error if unable to send email
    */
-  sendFoodRescueCancellationEmail(
+  sendVolunteerShiftCancellationEmail(
     volunteerId: string,
     scheduling: SchedulingDTO,
     isAdmin: boolean,
+  ): Promise<void>;
+
+  /**
+   *
+   * Generate a canceellation email to volunteer when a donor/admin cancels a food rescue shift
+   * @param volunteerId of volunteer assigned to the cancelled shift
+   * @param scheduling object that contains the food rescue information
+   * @throws Error if unable to send email
+   */
+  sendVolunteerFoodRescueCancellationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
   ): Promise<void>;
 }
 

@@ -9,6 +9,7 @@ import timezone from "dayjs/plugin/timezone";
 import ISchedulingService from "../interfaces/schedulingService";
 import IEmailService from "../interfaces/emailService";
 import IDonorService from "../interfaces/donorService";
+import IVolunteerService from "../interfaces/volunteerService";
 import {
   SchedulingDTO,
   CreateSchedulingDTO,
@@ -30,7 +31,6 @@ import {
   formatDonorContactInformation,
   formatFoodRescueShiftInformation,
 } from "../../utilities/emailUtils";
-import IVolunteerService from "../interfaces/volunteerService";
 // eslint-disable-next-line
 import VolunteerService from "./volunteerService";
 import IContentService from "../interfaces/contentService";
@@ -48,12 +48,16 @@ class SchedulingService implements ISchedulingService {
 
   donorService: IDonorService;
 
+  volunteerService: IVolunteerService;
+
   constructor(
     emailService: IEmailService | null = null,
     donorService: IDonorService,
+    volunteerService: IVolunteerService,
   ) {
     this.emailService = emailService;
     this.donorService = donorService;
+    this.volunteerService = volunteerService;
   }
 
   async getSchedulingById(id: string): Promise<SchedulingDTO> {
@@ -687,6 +691,7 @@ class SchedulingService implements ISchedulingService {
       // send volunteer email confirmation if signed up for food rescue
       if (
         Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        !Object.prototype.hasOwnProperty.call(scheduling, "volunteerNeeded") &&
         scheduling.volunteerId
       ) {
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
@@ -700,18 +705,36 @@ class SchedulingService implements ISchedulingService {
           false,
         );
       }
+      // send cancellation email when donor edits donation to no volunteer needed
+      else if (
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerNeeded") &&
+        !updatedScheduling.volunteer_needed &&
+        !updatedScheduling.volunteer_id &&
+        oldScheduling &&
+        oldScheduling.volunteer_id
+      ) {
+        this.sendVolunteerFoodRescueCancellationEmail(
+          String(oldScheduling.volunteer_id),
+          {
+            ...updatedSchedulingDTO,
+            volunteerTime: oldScheduling.volunteer_time,
+          },
+        );
+      }
       // send cancellation email if volunteer has cancelled
-      if (
+      else if (
         Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
         updatedScheduling.volunteer_id === null &&
-        oldScheduling?.volunteer_id
+        oldScheduling &&
+        oldScheduling.volunteer_id
       ) {
-        this.sendFoodRescueCancellationEmail(
+        this.sendVolunteerShiftCancellationEmail(
           String(oldScheduling.volunteer_id),
           updatedSchedulingDTO,
           true,
         );
-        this.sendFoodRescueCancellationEmail(
+        this.sendVolunteerShiftCancellationEmail(
           String(oldScheduling.volunteer_id),
           updatedSchedulingDTO,
           false,
@@ -741,7 +764,6 @@ class SchedulingService implements ISchedulingService {
       const { startTime, donorId } = schedule;
       const donor = await this.donorService.getDonorById(donorId);
       const startDayString: string = dayjs.tz(startTime).format("dddd, MMMM D");
-
       const startTimeString: string = dayjs.tz(startTime).format("h:mm A");
 
       // if admin deleted on behalf of donor
@@ -752,7 +774,7 @@ class SchedulingService implements ISchedulingService {
         const adminMainLine = `The scheduled donation by ${
           donor.businessName
         } for ${startDayString} at ${startTimeString}${
-          isRecurringDonation ? " and all following donations " : ""
+          isRecurringDonation ? " and all following donations" : ""
         } has been cancelled.`;
 
         this.emailService.sendEmail(
@@ -773,7 +795,7 @@ class SchedulingService implements ISchedulingService {
         const adminMainLine = `${
           donor.businessName
         } has cancelled their scheduled donation for ${startDayString} at ${startTimeString}${
-          isRecurringDonation ? " and all following donations " : ""
+          isRecurringDonation ? " and all following donations" : ""
         }!`;
 
         this.emailService.sendEmail(
@@ -938,6 +960,11 @@ class SchedulingService implements ISchedulingService {
       } else {
         this.sendSchedulingCancellationEmail(schedule, false, false);
       }
+      if (schedule.volunteerId)
+        this.sendVolunteerFoodRescueCancellationEmail(
+          schedule.volunteerId,
+          schedule,
+        );
     } catch (error) {
       Logger.error(
         `Failed to delete scheduling. Reason = ${getErrorMessage(error)}`,
@@ -960,28 +987,33 @@ class SchedulingService implements ISchedulingService {
           start_time: deletionPastDate,
         },
       });
+      const allRecurringSchedulesToDelete = await Scheduling.findAll({
+        where: {
+          recurring_donation_id,
+        },
+      });
       if (scheduleRet == null) {
         throw new Error(
           `scheduling with recurring_donation_id ${recurring_donation_id} with start time ${deletionPastDate} does not exist.`,
         );
       } else {
         schedule = {
-          id: String(scheduleRet!.id),
-          donorId: String(scheduleRet!.donor_id),
-          categories: scheduleRet!.categories,
-          size: scheduleRet!.size,
-          isPickup: scheduleRet!.is_pickup,
-          pickupLocation: scheduleRet!.pickup_location,
-          dayPart: scheduleRet!.day_part,
-          startTime: scheduleRet!.start_time,
-          endTime: scheduleRet!.end_time,
-          status: scheduleRet!.status,
-          volunteerNeeded: scheduleRet!.volunteer_needed,
-          volunteerTime: scheduleRet!.volunteer_time,
-          frequency: scheduleRet!.frequency,
-          recurringDonationId: String(scheduleRet!.recurring_donation_id),
-          recurringDonationEndDate: scheduleRet!.recurring_donation_end_date,
-          notes: scheduleRet!.notes,
+          id: String(scheduleRet.id),
+          donorId: String(scheduleRet.donor_id),
+          categories: scheduleRet.categories,
+          size: scheduleRet.size,
+          isPickup: scheduleRet.is_pickup,
+          pickupLocation: scheduleRet.pickup_location,
+          dayPart: scheduleRet.day_part,
+          startTime: scheduleRet.start_time,
+          endTime: scheduleRet.end_time,
+          status: scheduleRet.status,
+          volunteerNeeded: scheduleRet.volunteer_needed,
+          volunteerTime: scheduleRet.volunteer_time,
+          frequency: scheduleRet.frequency,
+          recurringDonationId: String(scheduleRet.recurring_donation_id),
+          recurringDonationEndDate: scheduleRet.recurring_donation_end_date,
+          notes: scheduleRet.notes,
         };
       }
       const numsDestroyed = await Scheduling.destroy({
@@ -1002,6 +1034,31 @@ class SchedulingService implements ISchedulingService {
       } else {
         this.sendSchedulingCancellationEmail(schedule, true, false);
       }
+      allRecurringSchedulesToDelete.forEach((s) => {
+        schedule = {
+          id: String(s.id),
+          donorId: String(s.donor_id),
+          categories: s.categories,
+          size: s.size,
+          isPickup: s.is_pickup,
+          pickupLocation: s.pickup_location,
+          dayPart: s.day_part,
+          startTime: s.start_time,
+          endTime: s.end_time,
+          status: s.status,
+          volunteerNeeded: s.volunteer_needed,
+          volunteerTime: s.volunteer_time,
+          frequency: s.frequency,
+          recurringDonationId: String(s.recurring_donation_id),
+          recurringDonationEndDate: s.recurring_donation_end_date,
+          notes: s.notes,
+        };
+        if (s.volunteer_id)
+          this.sendVolunteerFoodRescueCancellationEmail(
+            String(s.volunteer_id),
+            schedule,
+          );
+      });
     } catch (error) {
       Logger.error(
         `Failed to delete scheduling. Reason = ${getErrorMessage(error)}`,
@@ -1081,14 +1138,15 @@ class SchedulingService implements ISchedulingService {
     return schedulingDtos;
   }
 
-  async sendFoodRescueCancellationEmail(
+  // send email to admin and volunteer when volunteer has cancelled their own shift
+  async sendVolunteerShiftCancellationEmail(
     volunteerId: string,
     scheduling: SchedulingDTO,
     isAdmin: boolean,
   ): Promise<void> {
     if (!this.emailService) {
       const errorMessage =
-        "Attempted to call sendFoodRescueCancellationEmail but this instance of SchedulingService does not have an EmailService instance";
+        "Attempted to call sendVolunteerShiftCancellationEmail but this instance of SchedulingService does not have an EmailService instance";
       Logger.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -1116,7 +1174,7 @@ class SchedulingService implements ISchedulingService {
             ? `
       <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has cancelled their Food Rescue volunteer shift scheduled for
       ${startDayString} at ${volunteerStartTime} with ${donor.businessName}</h2>`
-            : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
+            : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName},</h2>
             <p>You have successfully cancelled your Food Rescue volunteer shift scheduled for ${startDayString} at ${volunteerStartTime} with ${donor.businessName}<br /><br />`
         }
         ${
@@ -1137,6 +1195,44 @@ class SchedulingService implements ISchedulingService {
           ? `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`
           : `Confirmation: Cancelled Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
         emailBody,
+      );
+    } catch (error) {
+      Logger.error(
+        `Failed to generate email to notify volunteer cancellation for food rescue shift for volunteer with id ${volunteerId}`,
+      );
+      throw error;
+    }
+  }
+
+  // send email to volunteer when admin/donor has cancelled food rescue
+  async sendVolunteerFoodRescueCancellationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
+  ): Promise<void> {
+    if (!this.emailService) {
+      const errorMessage =
+        "Attempted to call sendVolunteerFoodRescueCancellationEmail but this instance of SchedulingService does not have an EmailService instance";
+      Logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    try {
+      const volunteerService: IVolunteerService = new VolunteerService();
+      const { firstName, email } = await volunteerService.getVolunteerById(
+        volunteerId,
+      );
+      dayjs.extend(customParseFormat);
+      const startDayString: string = dayjs
+        .tz(scheduling.startTime)
+        .format("dddd, MMMM D");
+      const volunteerStartTime: string = dayjs(
+        scheduling.volunteerTime,
+        "HH:mm",
+      ).format("h:mm A");
+      const volunteerMainLine = `Your scheduled shift for ${startDayString} at ${volunteerStartTime} has been cancelled.`;
+      this.emailService.sendEmail(
+        email,
+        `Cancellation Notice: Food Rescue Shift for ${startDayString} at ${volunteerStartTime}`,
+        cancellationEmail(volunteerMainLine, firstName, true),
       );
     } catch (error) {
       Logger.error(
