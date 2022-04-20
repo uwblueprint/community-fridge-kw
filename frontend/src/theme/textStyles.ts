@@ -2,13 +2,13 @@
 const textStyles = {
   mobileHeader1: {
     fontWeight: 700,
-    lineHeight: "38px",
-    fontSize: "28px",
+    fontSize: "24px",
+    lineHeight: "32px",
     letterSpacing: "-0.01rem",
   },
   mobileHeader2: {
-    fontSize: "24px",
-    lineHeight: "32px",
+    fontSize: "22px",
+    lineHeight: "30px",
     fontWeight: 700,
     letterSpacing: "-0.01rem",
   },
@@ -24,7 +24,7 @@ const textStyles = {
   },
   mobileBody: {
     fontSize: "16px",
-    lineHeight: "28px",
+    lineHeight: "24px",
   },
   mobileBodyBold: {
     fontWeight: 700,
@@ -57,7 +57,7 @@ const textStyles = {
   },
   desktopSmall: {
     fontSize: "14px",
-    lineHeight: "16px",
+    lineHeight: "20px",
   },
   desktopBody: {
     fontSize: "16px",
@@ -77,29 +77,29 @@ const textStyles = {
   },
   desktopHeader: {
     fontWeight: 700,
-    fontSize: "24px",
-    lineHeight: "34px",
+    fontSize: "32px",
+    lineHeight: "42px",
     color: "black",
   },
   desktopHeader2: {
-    fontSize: "28px",
+    fontSize: "24px",
     fontWeight: 700,
-    lineHeight: "38px",
+    lineHeight: "32px",
   },
   desktopHeader3: {
     fontWeight: 700,
-    fontSize: "32px",
-    lineHeight: "42px",
+    fontSize: "22px",
+    lineHeight: "30px",
   },
   desktopHeader3Medium: {
     fontWeight: 500,
-    fontSize: "28px",
-    lineHeight: "38px",
+    fontSize: "22px",
+    lineHeight: "30px",
   },
   desktopHeader4: {
-    fontSize: "24px",
+    fontSize: "20px",
     fontWeight: 600,
-    lineHeight: "34px",
+    lineHeight: "28px",
   },
   desktopSubtitle: {
     fontWeight: 700,

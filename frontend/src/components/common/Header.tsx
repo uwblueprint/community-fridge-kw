@@ -83,10 +83,11 @@ const Header = (): JSX.Element => {
         </IconButton>
         <Link as={ReactLink} to={Routes.LANDING_PAGE}>
           <Image
-            objectFit="none"
+            objectFit="fill"
             src="header-logo.png"
             alt="Community Fridge logo"
             display="inline"
+            minWidth="200px"
           />
         </Link>
         <Stack
@@ -105,7 +106,7 @@ const Header = (): JSX.Element => {
                   >
                     Home
                   </Link>
-                  <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
+                  <Link as={ReactLink} to={Routes.DASHBOARD_PAGE} isTruncated>
                     My scheduled donations
                   </Link>
                 </>
@@ -119,7 +120,11 @@ const Header = (): JSX.Element => {
                   >
                     Home
                   </Link>
-                  <Link as={ReactLink} to={Routes.VOLUNTEER_DASHBOARD_PAGE}>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.VOLUNTEER_DASHBOARD_PAGE}
+                    isTruncated
+                  >
                     My volunteer shifts
                   </Link>
                 </>
@@ -129,7 +134,7 @@ const Header = (): JSX.Element => {
                   <Menu closeOnBlur>
                     {({ isOpen: isNavDropdownOpen }) => (
                       <>
-                        <MenuButton isActive={isNavDropdownOpen}>
+                        <MenuButton isActive={isNavDropdownOpen} isTruncated>
                           Fridge management{" "}
                           {isNavDropdownOpen ? (
                             <ChevronUpIcon />
@@ -153,6 +158,7 @@ const Header = (): JSX.Element => {
                               bg: "raddish.50",
                             }}
                             onClick={() => setHoveredItem("checkIns")}
+                            isTruncated
                           >
                             Fridge check-ins
                           </MenuItem>
@@ -171,6 +177,7 @@ const Header = (): JSX.Element => {
                               bg: "raddish.50",
                             }}
                             onClick={() => setHoveredItem("scheduledDonations")}
+                            isTruncated
                           >
                             Scheduled donations
                           </MenuItem>
@@ -178,12 +185,16 @@ const Header = (): JSX.Element => {
                       </>
                     )}
                   </Menu>
-                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.USER_MANAGEMENT_PAGE}
+                    isTruncated
+                  >
                     User management
                   </Link>
                 </>
               )}
-              <Link as={ReactLink} to={Routes.ACCOUNT_PAGE}>
+              <Link as={ReactLink} to={Routes.ACCOUNT_PAGE} isTruncated>
                 My account
               </Link>
               <Button
@@ -201,6 +212,7 @@ const Header = (): JSX.Element => {
                 as={ReactLink}
                 to={Routes.LANDING_PAGE}
                 style={{ lineHeight: "2.5" }}
+                isTruncated
               >
                 Home
               </Link>

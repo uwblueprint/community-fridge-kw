@@ -5,7 +5,7 @@ const Button = {
       color: "squash.100",
       fontSize: "16px",
       py: "20px",
-      px: "53px",
+      px: "35px",
       _disabled: {
         background: "hubbard.100",
       },
@@ -43,7 +43,7 @@ const Button = {
       background: "tomato.100",
       color: "squash.100",
     },
-    changePassword: {
+    outlined: {
       border: "1px",
       borderColor: "raddish.100",
       color: "raddish.100",
@@ -57,17 +57,6 @@ const Button = {
       fontWeight: 300,
       textDecoration: "underline",
     },
-    viewDetails: {
-      border: "1px",
-      borderColor: "raddish.100",
-      color: "raddish.100",
-      fontSize: "16px",
-      height: "38px",
-      width: "153px",
-      py: "12px",
-      px: "53px",
-    },
-
     approve: {
       background: "raddish.100",
       color: "squash.100",

@@ -8,7 +8,7 @@ const Container = {
     baseContainer: {
       maxWidth: { base: "default", md: "70%" },
       px: { base: "42px", md: "0px" },
-      pt: ["55px", "121px"],
+      pt: "55px",
     },
     calendarContainer: {
       px: "0px",

@@ -18,7 +18,6 @@ import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import { downloadCSV } from "../../../utils/CSVUtils";
 import Calendar from "../../common/Calendar/Calendar";
-import CalendarToggle from "../../common/Calendar/CalendarToggle";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
@@ -138,7 +137,7 @@ const ViewDonationsAndCheckIns = ({
   };
 
   return (
-    <Container alignContent="left" variant="calendarContainer">
+    <Container alignContent="left" variant="calendarContainer" mt="2rem">
       <Stack
         direction={isMobile ? "column" : "row"}
         width="100%"
@@ -185,14 +184,10 @@ const ViewDonationsAndCheckIns = ({
       </Stack>
       {isAdminView && <FridgeFoodRescueDescription />}
       {isCheckInView && <FridgeCheckInDescription />}
-
-      <CalendarToggle
-        selectedDay={selectedDay}
-        setSelectedDay={(day) => setSelectedDay(day)}
-      />
       <Calendar
         key={selectedDay?.toString()}
         selectedDay={selectedDay as Date}
+        setSelectedDay={(day) => setSelectedDay(day)}
         items={isCheckInView ? checkIns : filteredSchedules}
         isAdminView={isAdminView}
         isCheckInView={isCheckInView}

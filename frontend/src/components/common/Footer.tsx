@@ -5,9 +5,10 @@ import { Email, Facebook, Instagram } from "./icons";
 
 const Footer = (): JSX.Element => (
   <>
-    <Divider pt={{ base: "79px", md: "117px" }} />
+    <Divider pt={{ base: "0px", md: "79px" }} />
     <Container
-      py="4rem"
+      pt="4rem"
+      pb="6rem"
       display={{ md: "flex" }}
       justifyContent="space-between"
       variant="baseContainer"
@@ -17,7 +18,7 @@ const Footer = (): JSX.Element => (
         align={{ md: "left" }}
         mr={{ base: "0px", md: "10%" }}
       >
-        <Text textStyle="mobileHeader1">Community Fridge KW</Text>
+        <Text textStyle="desktopHeader3">Community Fridge KW</Text>
         <Text mt={{ base: 4 }}>Take what you need, leave what you can.</Text>
       </VStack>
 
@@ -26,10 +27,10 @@ const Footer = (): JSX.Element => (
         align={{ md: "left" }}
         mr={{ base: "0%", md: "10%" }}
       >
-        <Text color="raddish.100" textStyle="mobileHeader3">
+        <Text color="raddish.100" textStyle="desktopSubtitle">
           Location
         </Text>
-        <Text mt={{ base: 4 }}>
+        <Text mt={{ base: 4 }} textStyle="desktopBody">
           Kitchener Market: <br />
           300 King Street East, <br />
           Kitchener, ON N2H 2V5 <br />
@@ -38,7 +39,7 @@ const Footer = (): JSX.Element => (
       </VStack>
 
       <VStack mt={{ base: "48px", md: 0 }} align={{ md: "left" }}>
-        <Text color="raddish.100" textStyle="mobileHeader3">
+        <Text color="raddish.100" textStyle="desktopSubtitle">
           Contact Us
         </Text>
         <Flex mt={{ base: 4 }}>

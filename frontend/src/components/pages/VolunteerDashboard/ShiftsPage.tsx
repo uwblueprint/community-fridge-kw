@@ -56,8 +56,8 @@ const ScheduledVolunteerShiftsPage = () => {
         </VStack>
         <Button
           float="right"
-          size="md"
-          width={{ md: "20%", base: "100%" }}
+          size="lg"
+          width={{ lg: "25%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.VOLUNTEER_SHIFTS_PAGE)}
         >

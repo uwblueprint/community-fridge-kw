@@ -1,5 +1,5 @@
 import { EditIcon } from "@chakra-ui/icons";
-import { Button, Link, Text } from "@chakra-ui/react";
+import { Box, Button, Link, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -28,9 +28,9 @@ const FridgeFoodRescueDescription = () => {
   }, []);
 
   return (
-    <>
-      <Text textStyle={["mobileHeader3", "desktopSubtitle"]} pt="2rem">
-        Food rescue shifts
+    <Box mb="4rem">
+      <Text textStyle={["mobileHeader4", "mobileHeader3"]} pt="1rem">
+        Food rescue description
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
             variant="editInfo"
@@ -45,17 +45,19 @@ const FridgeFoodRescueDescription = () => {
         </Text>
       )}
       {content?.foodRescueUrl && (
-        <Link
-          pt="1.5rem"
-          color="#498FB6"
-          textStyle={["mobileLink", "desktopLink"]}
-          href={content?.foodRescueUrl}
-          isExternal
-        >
-          Link to instructions
-        </Link>
+        <>
+          <Link
+            pt="1.5rem"
+            color="#498FB6"
+            textStyle={["mobileLink", "desktopLink"]}
+            href={content?.foodRescueUrl}
+            isExternal
+          >
+            Link to instructions
+          </Link>
+        </>
       )}
-    </>
+    </Box>
   );
 };
 export default FridgeFoodRescueDescription;
