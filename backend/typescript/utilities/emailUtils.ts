@@ -42,12 +42,12 @@ export const cancellationEmail = (
           isVolunteer
             ? `<div style=" display:in-line-block;" ><p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717; display:in-line-block;">
         We apologize for the cancellation but would love to stay connected! If you are interested and available for another shift, 
-        <a href="https://communityfridgekw.web.app/volunteer-shifts"  style=" color: #C31887; font-size:16px; font-family:sans-serif; text-decoration: underline; line-height:24px; display:inline-block"> please sign up here. </a>
+        <a href="https://schedule.communityfridgekw.ca/volunteer-shifts"  style=" color: #C31887; font-size:16px; font-family:sans-serif; text-decoration: underline; line-height:24px; display:inline-block"> please sign up here. </a>
         </p></div>`
             : `<table cellspacing="0" cellpadding="0">
         <tr>
           <td align="center" width="255" height="44" bgcolor="#C31887" style="-webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; color: #ffffff; display: block;">
-              <a href="https://communityfridgekw.web.app/" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
+              <a href="https://schedule.communityfridgekw.ca/" style="font-size:14px; font-weight: bold; font-family:sans-serif; text-decoration: none; line-height:40px; width:100%; display:inline-block">
               <span style="color: #FAFCFE;">
               View Dashboard
               </span>
