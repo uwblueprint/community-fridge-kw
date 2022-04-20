@@ -14,6 +14,8 @@ import { sendResponseByMimeType } from "../utilities/responseUtil";
 import getErrorMessage from "../utilities/errorMessageUtil";
 import IDonorService from "../services/interfaces/donorService";
 import DonorService from "../services/implementations/donorService";
+import IVolunteerService from "../services/interfaces/volunteerService";
+import VolunteerService from "../services/implementations/volunteerService";
 
 const schedulingRouter: Router = Router();
 
@@ -22,9 +24,11 @@ const schedulingRouter: Router = Router();
 
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const donorService: IDonorService = new DonorService();
+const volunteerService: IVolunteerService = new VolunteerService();
 const schedulingService: ISchedulingService = new SchedulingService(
   emailService,
   donorService,
+  volunteerService,
 );
 
 schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {

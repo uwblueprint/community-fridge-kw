@@ -130,7 +130,7 @@ const ConfirmShiftDetails = ({
   }, []);
 
   const dateText = (date: string) => {
-    return date ? format(new Date(date), "eeee, MMMM d, yyyy") : "";
+    return date ? format(new Date(date), "eeee MMMM d, yyyy") : "";
   };
 
   const startAndEndTimeLocal = (date: string) => {
@@ -151,10 +151,30 @@ const ConfirmShiftDetails = ({
         }
       />
       {viewDetailsScreen && shift.type === ShiftType.CHECKIN && (
-        <FridgeCheckInDescription />
+        <>
+          <Text
+            textStyle="mobileHeader2"
+            mt="1em"
+            direction="row"
+            display={{ md: "flex" }}
+          >
+            Fridge check-in shift details
+          </Text>
+          <FridgeCheckInDescription />
+        </>
       )}
       {viewDetailsScreen && shift.type === ShiftType.SCHEDULING && (
-        <FridgeFoodRescueDescription />
+        <>
+          <Text
+            textStyle="mobileHeader2"
+            mt="1em"
+            direction="row"
+            display={{ md: "flex" }}
+          >
+            Food rescue shift details
+          </Text>
+          <FridgeFoodRescueDescription />
+        </>
       )}
       {!viewDetailsScreen && (
         <>
@@ -193,7 +213,7 @@ const ConfirmShiftDetails = ({
           }`}</Text>
         )}
         {shift.type === ShiftType.CHECKIN && (
-          <Text textStyle="mobileBody">Fridge check in</Text>
+          <Text textStyle="mobileBody">Fridge check-in</Text>
         )}
 
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
@@ -210,14 +230,18 @@ const ConfirmShiftDetails = ({
             ? volunteerTimeLocal(shift.volunteerTime)
             : startAndEndTimeLocal(shift.startDate)}
         </Text>
-        <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-          Address
-        </Text>
-        <Text textStyle="mobileBody">{`${
-          (shift as ScheduleWithShiftType).isPickup
-            ? `${(shift as ScheduleWithShiftType).pickupLocation}`
-            : "Community Fridge"
-        }`}</Text>
+        {shift.type === ShiftType.SCHEDULING && (
+          <>
+            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+              Address
+            </Text>
+            <Text textStyle="mobileBody">{`${
+              (shift as ScheduleWithShiftType).isPickup
+                ? `${(shift as ScheduleWithShiftType).pickupLocation}`
+                : "Community Fridge"
+            }`}</Text>
+          </>
+        )}
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Additional notes
         </Text>
@@ -304,9 +328,10 @@ const ConfirmShiftDetails = ({
       </Box>
       {viewDetailsScreen && (
         <Button
-          mt="1.5rem"
-          size="lg"
-          width={{ lg: "30%", base: "100%" }}
+          mt="1.0rem"
+          size="md"
+          width={{ md: "20%", base: "100%" }}
+          minWidth="210px"
           variant="deleteDonation"
           onClick={onOpen}
         >

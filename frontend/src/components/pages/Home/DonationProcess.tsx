@@ -1,9 +1,10 @@
-import { Box, Button, Flex, Stack, Text } from "@chakra-ui/react";
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { Box, Image, Stack, Text } from "@chakra-ui/react";
+import React from "react";
 
-import * as Routes from "../../../constants/Routes";
-import AuthContext from "../../../contexts/AuthContext";
+import donationStep1 from "../../../assets/donation-process/DonationStep1.png";
+import donationStep2 from "../../../assets/donation-process/DonationStep2.png";
+import donationStep3 from "../../../assets/donation-process/DonationStep3.png";
+import useViewport from "../../../hooks/useViewport";
 
 interface DonationStepProps {
   title: string;
@@ -15,6 +16,9 @@ const DonationStep = ({
   description,
   stepNumber,
 }: DonationStepProps): JSX.Element => {
+  const { isDesktop } = useViewport();
+  const stepImages = [donationStep1, donationStep2, donationStep3];
+
   return (
     <Stack
       paddingBottom="1.5rem"
@@ -24,44 +28,61 @@ const DonationStep = ({
       alignItems="center"
       direction={{ base: "row", md: "column" }}
     >
-      <Text
-        width={{ base: "22px", md: "70px" }}
-        height={{ base: "22px", md: "70px" }}
-        lineHeight={{ base: "22px", md: "70px" }}
-        borderRadius="100%"
-        backgroundColor="cottonCandy.100"
-        textStyle={{ base: "mobileSmall", md: "desktopIconNumber" }}
-        color="hubbard.100"
-        textAlign="center"
-        marginRight="12px"
-        verticalAlign="top"
-        marginBottom="12px"
-      >
-        {stepNumber}
-      </Text>
+      {isDesktop ? (
+        <Image
+          objectFit="cover"
+          height="120px"
+          src={stepImages[stepNumber - 1]}
+          alt="Size image"
+          display="inline"
+        />
+      ) : (
+        <Text
+          width={{ base: "22px", md: "70px" }}
+          height={{ base: "22px", md: "70px" }}
+          lineHeight={{ base: "22px", md: "70px" }}
+          borderRadius="100%"
+          backgroundColor="cottonCandy.100"
+          textStyle={["mobileSmall", "desktopIconNumber"]}
+          color="hubbard.100"
+          textAlign="center"
+          marginRight="12px"
+          verticalAlign="top"
+          marginBottom="12px"
+        >
+          {stepNumber}
+        </Text>
+      )}
       <Box flex="10">
-        <Text color="black.100" textStyle="mobileHeader4">
+        <Text color="black.100" textStyle={["mobileHeader4", "desktopHeader4"]}>
           {title}
         </Text>
-        <Text textStyle="mobileSmall">{description}</Text>
+        <Text color="hubbard.100" textStyle={["mobileSmall", "desktopBody"]}>
+          {description}
+        </Text>
       </Box>
     </Stack>
   );
 };
 
 const DonationProcess = (): JSX.Element => {
-  const history = useHistory();
-  const { authenticatedUser } = useContext(AuthContext);
-
   return (
-    <Box mt="57px">
-      <Text color="hubbard.100" textStyle="mobilePretitleBold" mb="1rem">
+    <Box mt="30px">
+      <Text
+        color="hubbard.100"
+        textStyle={["mobilePretitleBold", "desktopSubtitle"]}
+        mb="1rem"
+      >
         For donors
       </Text>
-      <Text mb="1.5rem" color="black.100" textStyle="mobileHeader2">
+      <Text
+        color="black.100"
+        textStyle={["mobileHeader2", "desktopHeader2"]}
+        mb="1.5rem"
+      >
         The Donation Process
       </Text>
-      <Flex direction={{ base: "column", md: "row" }}>
+      <Stack direction={["column", "row"]} gap="1rem">
         <DonationStep
           stepNumber={1}
           title="Create an account"
@@ -77,22 +98,7 @@ const DonationProcess = (): JSX.Element => {
           title="Complete your donation"
           description="Complete your donation and feel good about redistributing food in our community."
         />
-      </Flex>
-
-      <Button
-        width="100%"
-        variant="navigation"
-        height="100%"
-        size="lg"
-        display={{ md: "none" }}
-        onClick={() =>
-          history.push(
-            authenticatedUser ? Routes.SCHEDULING_PAGE : Routes.LOGIN_PAGE,
-          )
-        }
-      >
-        Start now
-      </Button>
+      </Stack>
     </Box>
   );
 };

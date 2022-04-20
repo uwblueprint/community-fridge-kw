@@ -1,4 +1,5 @@
 import { Divider } from "@chakra-ui/react";
+import { add } from "date-fns";
 import React from "react";
 import { NavigationProps } from "react-hooks-helper";
 
@@ -15,6 +16,7 @@ import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar"; /*  */
 
 type CalendarProps = {
   selectedDay: Date;
+  setSelectedDay: (date: Date) => void;
   items: Schedule[] | CheckIn[];
   isAdminView: boolean;
   isCheckInView: boolean;
@@ -28,6 +30,7 @@ type CalendarProps = {
 
 const Calendar = ({
   selectedDay,
+  setSelectedDay,
   items,
   isAdminView = false,
   isCheckInView = false,
@@ -36,6 +39,13 @@ const Calendar = ({
   setSelectedVolunteerShift,
   deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
+  const [currentDate, setCurrentDate] = React.useState(selectedDay);
+
+  const handleDateChange = (days: number) => {
+    setSelectedDay(add(currentDate as Date, { days }));
+    setCurrentDate(add(currentDate as Date, { days }));
+  };
+
   const getCheckInCard = (item: any, index: number) => {
     if (isCheckInShiftView) {
       return (
@@ -76,6 +86,9 @@ const Calendar = ({
             />
           )
         }
+        calendarDate={currentDate}
+        setSelectedDay={setSelectedDay}
+        handleDateChange={handleDateChange}
       />
     </WeeklyCalendar>
   );

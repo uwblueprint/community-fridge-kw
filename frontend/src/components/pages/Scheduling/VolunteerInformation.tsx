@@ -41,6 +41,7 @@ const VolunteerInformation = ({
     frequency,
     volunteerNeeded,
     volunteerTime,
+    volunteerId,
     pickupLocation,
     isPickup,
     notes,
@@ -165,11 +166,13 @@ const VolunteerInformation = ({
     const editedFields = {
       volunteerNeeded,
       volunteerTime: volunteerNeeded ? volunteerTime : null,
+      volunteerId: volunteerNeeded ? volunteerId : null,
       pickupLocation: volunteerNeeded && isPickup ? pickupLocation : null,
       isPickup: volunteerNeeded ? isPickup : null,
       notes,
       startTime,
     };
+
     const res = isOneTimeEvent
       ? await SchedulingAPIClient.updateSchedule(id, editedFields)
       : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
@@ -224,7 +227,7 @@ const VolunteerInformation = ({
       >
         <Text textStyle="mobileHeader4">Proposed drop-off time</Text>
         <Text textStyle="mobileBody">
-          {format(new Date(startTime), "EEEE, MMMM d")}
+          {format(new Date(startTime), "EEEE MMMM d")}
         </Text>
         <Text textStyle="mobileBody">
           {format(new Date(startTime), "h:mm aa")}-

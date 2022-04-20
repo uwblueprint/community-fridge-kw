@@ -119,7 +119,7 @@ const CheckInInfoCard = ({
 
   const RemoveVolunteerButton = () => (
     <Button
-      variant="changePassword"
+      variant="outlined"
       fontSize="14px"
       lineHeight="20px"
       fontWeight="700"
@@ -192,16 +192,12 @@ const CheckInInfoCard = ({
       <Stack
         direction="column"
         display={["default", "flex"]}
-        spacing={["30px", "21px"]}
+        spacing={["18px", "12px"]}
         alignItems="left"
       >
         <Flex direction="row" alignItems="center" display="flex">
           <Box>
-            <Text
-              textStyle="mobileHeader4"
-              whiteSpace="nowrap"
-              minWidth="225px"
-            >
+            <Text textStyle="mobileHeader4" minWidth="225px">
               {`${startTimeLocal}-${endTimeLocal}`}
             </Text>
           </Box>
@@ -249,11 +245,10 @@ const CheckInInfoCard = ({
         <Stack
           align="left"
           direction={["column", "row"]}
-          spacing={["25px", "40px"]}
-          pb={["0px", "27px"]}
+          spacing={["14px", "40px"]}
         >
           <VStack align="left">
-            <Text textStyle="mobileBody" lineHeight="22px" color="hubbard.100">
+            <Text textStyle="mobileSmall" color="hubbard.100">
               VOLUNTEER ASSIGNED
             </Text>
             {Object.keys(volunteer).length === 0 && !currentCheckIn.isAdmin ? (
@@ -262,7 +257,6 @@ const CheckInInfoCard = ({
               <Text
                 textStyle="mobileBody"
                 as={currentCheckIn.isAdmin ? "i" : undefined}
-                lineHeight="22px"
               >
                 {currentCheckIn.isAdmin
                   ? "Admin"

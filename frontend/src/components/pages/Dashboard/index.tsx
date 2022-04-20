@@ -78,17 +78,19 @@ const Dashboard = (): JSX.Element => {
             <DropoffCard key={id} schedule={scheduleObject!} isDonorView />
           ))
         ) : (
-          <Flex paddingTop="1.5rem">
+          <Flex paddingTop="1.5rem" width="100%">
             <Box
               display={{ lg: "flex" }}
               width={{ base: "default", md: "100%" }}
               backgroundColor="squash.100"
               padding={{ base: "0px", md: "3rem" }}
+              textAlign="center"
             >
               <Text
                 p={{ base: "28px", md: "0px" }}
                 color="black.500"
                 textStyle="mobileBody"
+                ml="auto"
               >
                 You currently have no upcoming donations scheduled! &nbsp;
               </Text>
@@ -97,6 +99,8 @@ const Dashboard = (): JSX.Element => {
                 px={{ base: "28px", md: "0px" }}
                 color="black.500"
                 textStyle="mobileBody"
+                pb={{ base: "28px", md: "0px" }}
+                mr="auto"
               >
                 Schedule a donation today to start giving back.
               </Text>
