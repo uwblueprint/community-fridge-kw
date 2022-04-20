@@ -41,6 +41,7 @@ const VolunteerInformation = ({
     frequency,
     volunteerNeeded,
     volunteerTime,
+    volunteerId,
     pickupLocation,
     isPickup,
     notes,
@@ -165,11 +166,13 @@ const VolunteerInformation = ({
     const editedFields = {
       volunteerNeeded,
       volunteerTime: volunteerNeeded ? volunteerTime : null,
+      volunteerId: volunteerNeeded ? volunteerId : null,
       pickupLocation: volunteerNeeded && isPickup ? pickupLocation : null,
       isPickup: volunteerNeeded ? isPickup : null,
       notes,
       startTime,
     };
+
     const res = isOneTimeEvent
       ? await SchedulingAPIClient.updateSchedule(id, editedFields)
       : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(
