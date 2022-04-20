@@ -57,7 +57,7 @@ const ScheduledVolunteerShiftsPage = () => {
         <Button
           float="right"
           size="lg"
-          width={{ lg: "20%", base: "100%" }}
+          width={{ lg: "25%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.VOLUNTEER_SHIFTS_PAGE)}
         >

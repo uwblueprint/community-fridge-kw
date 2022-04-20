@@ -1,6 +1,12 @@
-import { Box, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
+import { Box, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 
 import useViewport from "../../../hooks/useViewport";
 import { CheckIn } from "../../../types/CheckInTypes";
@@ -61,11 +67,11 @@ const DayButton = ({ day }: DayButtonProps) => {
   const currentDate = setDay(week, day.day, { locale });
 
   return (
-    <Box align="left" width="100%" pb="2rem">
+    <Box align="left">
       <HStack>
-        <Text textStyle="desktopHeader">{day.label.substr(0, 3)} </Text>
-        <Text textStyle="desktopHeader" color="hubbard.100">
-          {format(currentDate, "do", { locale }).slice(0, -2)}
+        <Text textStyle="desktopSubtitle">{format(currentDate, "E")} </Text>
+        <Text textStyle="desktopSubtitle" color="hubbard.100" isTruncated>
+          {format(currentDate, "MMM d")}
         </Text>
       </HStack>
     </Box>
@@ -83,6 +89,9 @@ type WeeklyBodyProps = {
   selectedDay: Date;
   items: Schedule[] | CheckIn[];
   renderItem: (item: RenderItemProps) => ReactNode;
+  handleDateChange: (days: number) => void;
+  setSelectedDay: (date: Date) => void;
+  calendarDate: Date;
 };
 
 const getFilteredDays = (
@@ -130,6 +139,9 @@ export function WeeklyBody({
   selectedDay,
   items,
   renderItem,
+  handleDateChange,
+  setSelectedDay,
+  calendarDate,
 }: WeeklyBodyProps) {
   const { isMobile } = useViewport();
   const { locale, week } = useWeeklyCalendar();
@@ -147,20 +159,60 @@ export function WeeklyBody({
     <>
       {[...Array(isMobile ? 1 : 3)].map((_, i) => {
         return (
-          <div key={i}>
-            <VStack
-              justifyItems="flex-start"
+          <VStack key={i} pb="3rem" spacing="24px">
+            <HStack
+              justifyContent="space-between"
               alignContent="start"
-              pb="3rem"
               width="100%"
             >
-              <DayButton
-                day={{
-                  day: selectedDay.getDay() + i,
-                  label: getDay(selectedDay, i),
-                }}
-              />
-              {getFilteredDays(
+              <HStack>
+                {i === 0 && (
+                  <DatePicker
+                    value={calendarDate}
+                    onChange={(e: DateObject) => {
+                      setSelectedDay(e?.toDate?.());
+                    }}
+                    render={(
+                      value: string,
+                      openCalendar: React.MouseEventHandler<SVGElement>,
+                    ) => {
+                      return (
+                        <CalendarIcon
+                          onClick={openCalendar}
+                          value={value}
+                          mr="0.5rem"
+                        />
+                      );
+                    }}
+                  />
+                )}
+                <DayButton
+                  day={{
+                    day: selectedDay.getDay() + i,
+                    label: getDay(selectedDay, i),
+                  }}
+                />
+              </HStack>
+              {i === 0 && (
+                <HStack>
+                  <IconButton
+                    backgroundColor="transparent"
+                    aria-label="previous day"
+                    onClick={() => handleDateChange(-1)}
+                  >
+                    <ChevronLeftIcon w={[5, 8]} h={[5, 8]} />
+                  </IconButton>
+                  <IconButton
+                    backgroundColor="transparent"
+                    aria-label="next day"
+                    onClick={() => handleDateChange(+1)}
+                  >
+                    <ChevronRightIcon w={[5, 8]} h={[5, 8]} />
+                  </IconButton>
+                </HStack>
+              )}
+            </HStack>
+            {getFilteredDays(
                 items as Array<Schedule | CheckIn>,
                 selectedDay,
                 i,
@@ -168,8 +220,7 @@ export function WeeklyBody({
                 week,
                 locale,
               )}
-            </VStack>
-          </div>
+          </VStack>
         );
       })}
     </>

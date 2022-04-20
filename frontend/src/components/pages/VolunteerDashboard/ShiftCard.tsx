@@ -109,7 +109,7 @@ const VolunteerShiftCard = ({
         display="flex"
         justify="space-between"
       >
-        <Text textStyle="mobileHeader4" whiteSpace="nowrap" minWidth="225px">
+        <Text textStyle="mobileHeader4" minWidth="225px">
           {`${dateLocal()}`}
           <Text
             minWidth="125px"
@@ -126,9 +126,9 @@ const VolunteerShiftCard = ({
           float="right"
           mt="1.5rem"
           size="lg"
-          width={isSignUp ? ["66%", "14%"] : ["50%", "11%"]}
+          width={isSignUp ? ["66%", "20%"] : ["50%", "20%"]}
           height={isSignUp ? ["1.5rem", "2.6rem"] : ["2.2rem", "default"]}
-          variant={isSignUp ? "navigation" : "viewDetails"}
+          variant={isSignUp ? "navigation" : "outlined"}
           onClick={onSubmitClick}
         >
           {isSignUp ? "Volunteer for shift" : "View Details"}

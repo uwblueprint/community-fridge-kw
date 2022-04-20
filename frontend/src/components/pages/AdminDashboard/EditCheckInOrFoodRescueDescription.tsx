@@ -73,7 +73,7 @@ const EditCheckInOrFoodRescueDescription = ({
           <CloseButton onClick={navigateToViewPage} />
         </Box>
         <Text textStyle="desktopHeader4" color="black.100">{`Edit ${
-          isCheckInView ? `check in` : `food rescue`
+          isCheckInView ? `check-in` : `food rescue`
         } description`}</Text>
 
         <Text

@@ -119,7 +119,7 @@ const CheckInInfoCard = ({
 
   const RemoveVolunteerButton = () => (
     <Button
-      variant="changePassword"
+      variant="outlined"
       fontSize="14px"
       lineHeight="20px"
       fontWeight="700"
@@ -197,11 +197,7 @@ const CheckInInfoCard = ({
       >
         <Flex direction="row" alignItems="center" display="flex">
           <Box>
-            <Text
-              textStyle="mobileHeader4"
-              whiteSpace="nowrap"
-              minWidth="225px"
-            >
+            <Text textStyle="mobileHeader4" minWidth="225px">
               {`${startTimeLocal}-${endTimeLocal}`}
             </Text>
           </Box>

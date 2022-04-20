@@ -8,7 +8,6 @@ import {
   ScheduleWithShiftType,
 } from "../../../types/VolunteerTypes";
 import Calendar from "../../common/Calendar/Calendar";
-import CalendarToggle from "../../common/Calendar/CalendarToggle";
 
 const CheckInCalendar = ({
   isAdminView = false,
@@ -35,13 +34,10 @@ const CheckInCalendar = ({
         justifyContent="space-between"
         display={{ base: "inline", md: "flex" }}
       >
-        <CalendarToggle
-          selectedDay={selectedDay}
-          setSelectedDay={(day) => setSelectedDay(day)}
-        />
         <Calendar
           key={selectedDay?.toString()}
           selectedDay={selectedDay as Date}
+          setSelectedDay={(day) => setSelectedDay(day)}
           items={checkIns}
           isAdminView={isAdminView}
           isCheckInView

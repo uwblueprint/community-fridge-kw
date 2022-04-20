@@ -113,7 +113,7 @@ const EditCheckInPage = (): JSX.Element => {
       </Flex>
       <Text textStyle="mobileHeader2">Edit shift</Text>
       <Text textStyle="mobileSmall" pt="1em">
-        {format(new Date(date), "EEEE, MMMM d, yyyy")}
+        {format(new Date(date), "EEEE MMMM d, yyyy")}
       </Text>
       <FormControl isRequired isInvalid={!!timeRangeError} m="3em 0">
         <FormLabel fontWeight="600">Edit time range</FormLabel>
