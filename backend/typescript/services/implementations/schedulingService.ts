@@ -691,6 +691,7 @@ class SchedulingService implements ISchedulingService {
       // send volunteer email confirmation if signed up for food rescue
       if (
         Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        !Object.prototype.hasOwnProperty.call(scheduling, "volunteerNeeded") &&
         scheduling.volunteerId
       ) {
         this.sendVolunteerSchedulingSignUpConfirmationEmail(
@@ -702,6 +703,23 @@ class SchedulingService implements ISchedulingService {
           scheduling.volunteerId,
           updatedSchedulingDTO,
           false,
+        );
+      }
+      // send cancellation email when donor edits donation to no volunteer needed
+      else if (
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerId") &&
+        Object.prototype.hasOwnProperty.call(scheduling, "volunteerNeeded") &&
+        !updatedScheduling.volunteer_needed &&
+        !updatedScheduling.volunteer_id &&
+        oldScheduling &&
+        oldScheduling.volunteer_id
+      ) {
+        this.sendVolunteerFoodRescueCancellationEmail(
+          String(oldScheduling.volunteer_id),
+          {
+            ...updatedSchedulingDTO,
+            volunteerTime: oldScheduling.volunteer_time,
+          },
         );
       }
       // send cancellation email if volunteer has cancelled
@@ -743,7 +761,7 @@ class SchedulingService implements ISchedulingService {
       throw new Error(errorMessage);
     }
     try {
-      const { startTime, donorId, volunteerId } = schedule;
+      const { startTime, donorId } = schedule;
       const donor = await this.donorService.getDonorById(donorId);
       const startDayString: string = dayjs.tz(startTime).format("dddd, MMMM D");
       const startTimeString: string = dayjs.tz(startTime).format("h:mm A");
