@@ -1,4 +1,4 @@
-import { Divider } from "@chakra-ui/react";
+import { Box, Divider, Flex, Text } from "@chakra-ui/react";
 import { add } from "date-fns";
 import React from "react";
 import { NavigationProps } from "react-hooks-helper";
@@ -80,7 +80,20 @@ const Calendar = ({
           }
 
           return emptyState ? (
-            <p>There are no upcoming scheduled donations.</p>
+              <Box
+                width="100%"
+                backgroundColor="squash.100"
+                padding={{ base: "0px", md: "3rem" }}
+                textAlign="center"
+              >
+                <Text
+                  p={{ base: "28px", md: "0px" }}
+                  color="black.500"
+                  textStyle="mobileBody"
+                >
+                  No shifts scheduled.
+                </Text>
+              </Box>
           ) : (
             <DropoffCard
               key={JSON.stringify(item)}
