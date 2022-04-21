@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { NavigationProps, Step, useStep } from "react-hooks-helper";
 
 import VolunteerContext from "../../../contexts/VolunteerContext";
@@ -46,6 +46,10 @@ const VolunteerScheduling = () => {
     initialStep: 0,
   });
   const { id } = step;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   switch (id) {
     case "shifts tab":

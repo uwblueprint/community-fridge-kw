@@ -171,10 +171,12 @@ class VolunteerService implements IVolunteerService {
   ): Promise<(CheckInDTOWithShiftType | SchedulingDTOWithShiftType)[]> {
     const donorService: IDonorService = new DonorService();
     const emailService: IEmailService = new EmailService(nodemailerConfig);
+    const volunteerService: IVolunteerService = new VolunteerService();
     const checkInService: ICheckInService = new CheckInService();
     const schedulingService: ISchedulingService = new SchedulingService(
       emailService,
       donorService,
+      volunteerService,
     );
     const checkIns: CheckInDTOWithShiftType[] = await (
       await checkInService.getCheckInsByVolunteerId(volunteerId)
