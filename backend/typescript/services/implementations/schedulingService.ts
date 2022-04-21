@@ -686,7 +686,9 @@ class SchedulingService implements ISchedulingService {
         recurringDonationId: String(updatedScheduling.recurring_donation_id),
         recurringDonationEndDate: updatedScheduling.recurring_donation_end_date,
         notes: updatedScheduling.notes,
-        volunteerId: String(updatedScheduling.volunteer_id),
+        volunteerId: updatedScheduling.volunteer_id
+          ? String(updatedScheduling.volunteer_id)
+          : null,
       };
       // send volunteer email confirmation if signed up for food rescue
       if (
