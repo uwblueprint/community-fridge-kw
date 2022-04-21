@@ -6,6 +6,7 @@ import {
   Select,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { DateObject } from "react-multi-date-picker";
@@ -17,7 +18,6 @@ import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 import { downloadCSV } from "../../../utils/CSVUtils";
 import Calendar from "../../common/Calendar/Calendar";
-import CalendarToggle from "../../common/Calendar/CalendarToggle";
 import FridgeCheckInDescription from "../../common/FridgeCheckInDescription";
 import FridgeFoodRescueDescription from "../../common/FridgeFoodRescueDescription";
 import CheckInAdminButtons from "./components/CheckInAdminButtons";
@@ -33,6 +33,7 @@ const ViewDonationsAndCheckIns = ({
   const [selectedDay, setSelectedDay] = useState<Date | DateObject | null>(
     new Date(),
   );
+  const toast = useToast();
 
   const { isMobile } = useViewport();
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -109,7 +110,22 @@ const ViewDonationsAndCheckIns = ({
   };
 
   const deleteCheckIn = (checkInId: string) => {
-    CheckInAPIClient.deleteCheckInById(checkInId);
+    const res = CheckInAPIClient.deleteCheckInById(checkInId);
+    if (!res) {
+      toast({
+        title: "There was an error deleting this check-in",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
+      return;
+    }
+    toast({
+      title: "Check-ins have been successfully deleted",
+      status: "success",
+      duration: 7000,
+      isClosable: true,
+    });
     setCheckIns([
       ...checkIns.filter((checkIn: CheckIn) => checkIn.id !== checkInId),
     ]);
@@ -121,7 +137,7 @@ const ViewDonationsAndCheckIns = ({
   };
 
   return (
-    <Container alignContent="left" variant="calendarContainer">
+    <Container alignContent="left" variant="calendarContainer" mt="2rem">
       <Stack
         direction={isMobile ? "column" : "row"}
         width="100%"
@@ -168,14 +184,10 @@ const ViewDonationsAndCheckIns = ({
       </Stack>
       {isAdminView && <FridgeFoodRescueDescription />}
       {isCheckInView && <FridgeCheckInDescription />}
-
-      <CalendarToggle
-        selectedDay={selectedDay}
-        setSelectedDay={(day) => setSelectedDay(day)}
-      />
       <Calendar
         key={selectedDay?.toString()}
         selectedDay={selectedDay as Date}
+        setSelectedDay={(day) => setSelectedDay(day)}
         items={isCheckInView ? checkIns : filteredSchedules}
         isAdminView={isAdminView}
         isCheckInView={isCheckInView}

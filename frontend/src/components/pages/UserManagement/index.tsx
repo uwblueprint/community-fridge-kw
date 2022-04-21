@@ -1,4 +1,4 @@
-import { DeleteIcon, SearchIcon } from "@chakra-ui/icons";
+import { CheckIcon, DeleteIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   Button,
   Container,
@@ -16,6 +16,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -127,6 +128,8 @@ const UserManagementPage = (): JSX.Element => {
     );
   }, [search, selectedFilter, users]);
 
+  const toast = useToast();
+
   // Sets volunteer status to Approved
   const handleApprove = async (user: UserMgmtTableRecord) => {
     const newVolunteerData = { status: Status.APPROVED };
@@ -135,6 +138,13 @@ const UserManagementPage = (): JSX.Element => {
       newVolunteerData,
     );
     if (updatedVolunteerResponse) {
+      toast({
+        description:
+          "The volunteer has been approved and they will be notified.",
+        status: "success",
+        duration: 7000,
+        isClosable: true,
+      });
       const newUsers: UserMgmtTableRecord[] = await users.map((u) => {
         if (u.id === updatedVolunteerResponse.id) {
           return { ...u, approvalStatus: Status.APPROVED };
@@ -146,6 +156,13 @@ const UserManagementPage = (): JSX.Element => {
         user.firstName,
       );
       setUsers(newUsers);
+    } else {
+      toast({
+        description: "The volunteer cannot be approved. Please try again.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
     }
   };
 
@@ -161,6 +178,19 @@ const UserManagementPage = (): JSX.Element => {
     onClose();
     if (deleteUserResponse) {
       setUsers(users.filter((u) => u.id !== user!.id));
+      toast({
+        description: "The user has been deleted successfully.",
+        status: "success",
+        duration: 7000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        description: "The user cannot be deleted. Please try again.",
+        status: "error",
+        duration: 7000,
+        isClosable: true,
+      });
     }
     setUserToDelete(null);
   };
@@ -168,6 +198,25 @@ const UserManagementPage = (): JSX.Element => {
   // Selects a filter
   const handleSelectFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedFilter(e.target.value.toString());
+  };
+
+  const getCompanyColumn = (user: UserMgmtTableRecord) => {
+    if (user.company === "") return "-";
+    return user.company;
+  };
+
+  const getApprovalsColumn = (user: UserMgmtTableRecord): JSX.Element => {
+    if (user.accountType === Role.VOLUNTEER) {
+      if (user.approvalStatus !== Status.APPROVED) {
+        return (
+          <Button variant="approve" onClick={() => handleApprove(user)}>
+            Approve
+          </Button>
+        );
+      }
+      return <CheckIcon />;
+    }
+    return <Text>-</Text>;
   };
 
   return (
@@ -235,23 +284,11 @@ const UserManagementPage = (): JSX.Element => {
               {tableData.map((user, key) => (
                 <Tr key={key}>
                   <Td>{user.pointOfContact}</Td>
-                  <Td>{user.company}</Td>
+                  <Td>{getCompanyColumn(user)}</Td>
                   <Td>{user.email}</Td>
                   <Td>{user.phoneNumber}</Td>
                   <Td>{user.accountType}</Td>
-                  <Td>
-                    {user.accountType === Role.VOLUNTEER &&
-                    user.approvalStatus !== Status.APPROVED ? (
-                      <Button
-                        variant="approve"
-                        onClick={() => handleApprove(user)}
-                      >
-                        Approve
-                      </Button>
-                    ) : (
-                      ""
-                    )}
-                  </Td>
+                  <Td>{getApprovalsColumn(user)}</Td>
                   <Td>
                     <IconButton
                       backgroundColor="transparent"

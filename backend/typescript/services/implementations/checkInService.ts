@@ -232,7 +232,7 @@ class CheckInService implements ICheckInService {
           <p>Thank you for volunteering with us!<br /><br />`
           }
           Here is a shift summary: <br /> <br />
-          Food Check-In Instructions: <a href="${checkinUrl}">here</a>
+          Fridge Check-in Instructions: <a href="${checkinUrl}">here</a>
           </p>
           ${formatVolunteerContactInformation(
             firstName,
@@ -249,6 +249,9 @@ class CheckInService implements ICheckInService {
          ${
            !isAdmin
              ? ` <p>
+            You will receive a reminder email a day before your shift! Please check your dashbooard for any shift updates.
+          </p>
+          <p>
             If you need to cancel your shift, please cancel via your volunteer dashboard here at least 48 hours in advance.
           </p>
          ${emailFooter}`
@@ -259,7 +262,7 @@ class CheckInService implements ICheckInService {
         `;
       this.emailService.sendEmail(
         isAdmin ? getAdminEmail() : email,
-        `Confirmation: Food Check-In Shift for ${startDayString} at ${startTimeString}`,
+        `Confirmation: Fridge Check-in Shift for ${startDayString} at ${startTimeString}`,
         emailBody,
       );
     } catch (error) {
@@ -304,7 +307,7 @@ class CheckInService implements ICheckInService {
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">${firstName} ${lastName} has cancelled their Fridge Check-in Shift scheduled for 
         ${startDayString} from ${startTimeString} to ${endTimeString}</h2>`
               : `<h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
-          <p>You have successfully cancelled your Food Rescue volunteer shift scheduled for ${startDayString} from ${startTimeString} to ${endTimeString}<br /><br />`
+          <p>You have successfully cancelled your Fridge Check-in volunteer shift scheduled for ${startDayString} from ${startTimeString} to ${endTimeString}<br /><br />`
           }
          ${
            !isAdmin

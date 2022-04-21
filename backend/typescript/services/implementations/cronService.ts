@@ -287,7 +287,7 @@ class CronService implements ICronService {
         }<br /><br />
         
         Here is a shift summary: <br /> <br />
-        Food Check-In Instructions: <a href="${checkinUrl}">here</a>
+        Fridge Check-in Instructions: <a href="${checkinUrl}">here</a>
         </p>
           
           ${
@@ -312,11 +312,13 @@ class CronService implements ICronService {
         `;
       this.emailService.sendEmail(
         isAdmin ? getAdminEmail() : volunteer!.email,
-        `Reminder: Food Checkin Shift for ${startDayString} at ${startTimeString}`,
+        `Reminder: Fridge Check-in Shift for ${startDayString} at ${startTimeString}`,
         emailBody,
       );
     } catch (error) {
-      Logger.error(`Failed to generate email for food checkin shift reminder`);
+      Logger.error(
+        `Failed to generate email for fridge check-in shift reminder`,
+      );
       throw error;
     }
   }

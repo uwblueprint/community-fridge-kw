@@ -1,11 +1,9 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
@@ -15,14 +13,12 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
 import { SignupErrorMessage } from "../../../constants/AuthConstants";
-import * as Routes from "../../../constants/Routes";
-import useViewport from "../../../hooks/useViewport";
 import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
 import HeaderLabel from "../../common/HeaderLabel";
+import BackButton from "../../pages/Scheduling/BackButton";
 import {
   checkForLowerCase,
   checkForNumbers,
@@ -44,9 +40,7 @@ const AccountDetails = ({
   formValues: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const history = useHistory();
   const { previous, go } = navigation;
-  const { isDesktop } = useViewport();
   const {
     role,
     firstName,
@@ -125,30 +119,8 @@ const AccountDetails = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      <IconButton
-        marginLeft="-12px"
-        float="left"
-        backgroundColor="transparent"
-        aria-label="go back"
-        onClick={previous}
-      >
-        <ArrowBackIcon width="24px" height="24px" />
-      </IconButton>
-
-      {!isDesktop && (
-        <>
-          <IconButton
-            float="right"
-            marginRight="-12px"
-            aria-label="close sign up"
-            onClick={() => history.push(Routes.LANDING_PAGE)}
-            backgroundColor="transparent"
-          >
-            <CloseIcon color="black.100" />
-          </IconButton>
-        </>
-      )}
+    <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
+      <BackButton previous={previous} />
       <HeaderLabel text="Account details" />
       <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>
