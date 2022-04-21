@@ -362,7 +362,7 @@ class CheckInService implements ICheckInService {
       this.emailService.sendEmail(
         email,
         `Cancellation Notice: Fridge Check-in for ${startDayString} at ${startTimeString}`,
-        cancellationEmail(volunteerMainLine, firstName),
+        cancellationEmail(volunteerMainLine, firstName, true),
       );
     } catch (error) {
       Logger.error(
