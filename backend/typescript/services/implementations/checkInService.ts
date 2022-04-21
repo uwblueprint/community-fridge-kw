@@ -21,6 +21,7 @@ import IVolunteerService from "../interfaces/volunteerService";
 import VolunteerService from "./volunteerService";
 import ContentService from "./contentService";
 import {
+  cancellationEmail,
   emailFooter,
   emailHeader,
   formatCheckinShiftInformation,
@@ -344,11 +345,9 @@ class CheckInService implements ICheckInService {
     }
     try {
       const volunteerService: IVolunteerService = new VolunteerService();
-      const {
-        firstName,
-        lastName,
-        email,
-      } = await volunteerService.getVolunteerById(volunteerId);
+      const { firstName, email } = await volunteerService.getVolunteerById(
+        volunteerId,
+      );
       const startDayString: string = dayjs
         .tz(checkIn.start_date)
         .format("dddd, MMMM D");
@@ -356,23 +355,11 @@ class CheckInService implements ICheckInService {
         .tz(checkIn.start_date)
         .format("h:mm A");
       const endTimeString: string = dayjs.tz(checkIn.end_date).format("h:mm A");
-      const emailBody = `<html>
-        ${emailHeader}
-        <body>
-          <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName} ${lastName},</h2>
-          <p>Your scheduled shift for ${startDayString} from ${startTimeString} to ${endTimeString} has been cancelled<br /><br />
-          
-          <p>
-           We apologize for the cancellation but would love to stay connected! If you are interested and available for another shift, please sign up here.
-          </p>
-         ${emailFooter}
-        </body>
-      </html>
-        `;
+      const volunteerMainLine = `Your scheduled shift for ${startDayString} from ${startTimeString} to ${endTimeString} has been cancelled.`;
       this.emailService.sendEmail(
         email,
         `Cancellation Notice: Fridge Check-in for ${startDayString} at ${startTimeString}`,
-        emailBody,
+        cancellationEmail(volunteerMainLine, firstName),
       );
     } catch (error) {
       Logger.error(
