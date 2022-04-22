@@ -125,9 +125,8 @@ const VolunteerShiftCard = ({
         <Button
           float="right"
           mt="1.5rem"
-          size="lg"
-          width={isSignUp ? ["66%", "20%"] : ["50%", "20%"]}
-          height={isSignUp ? ["1.5rem", "2.6rem"] : ["2.2rem", "default"]}
+          size="md"
+          width={isSignUp ? ["100%", "15%"] : ["100%", "15%"]}
           variant={isSignUp ? "navigation" : "outlined"}
           onClick={onSubmitClick}
         >
