@@ -228,7 +228,9 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileBody">
           {shift.type === ShiftType.SCHEDULING
             ? volunteerTimeLocal(shift.volunteerTime)
-            : startAndEndTimeLocal(shift.startDate)}
+            : `${startAndEndTimeLocal(shift.startDate)}-${startAndEndTimeLocal(
+                shift.endDate,
+              )}`}
         </Text>
         {shift.type === ShiftType.SCHEDULING && (
           <>
