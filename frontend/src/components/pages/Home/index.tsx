@@ -69,11 +69,11 @@ const Home = (): JSX.Element => {
               public repositories of fresh food and essential items in
               Kitchener-Waterloo that anyone can take from for free, anytime.
             </Text>
-            <Stack direction={["column", "row"]} width="90%">
-              <Button size="lg" onClick={onScheduleClick} variant="navigation">
+            <Stack direction={["column", "row"]} width="100%">
+              <Button size="md" onClick={onScheduleClick} variant="navigation">
                 Schedule a food donation
               </Button>
-              <Button size="lg" onClick={onVolunteerClick} variant="outlined">
+              <Button size="md" onClick={onVolunteerClick} variant="outlined">
                 Volunteer for the fridge
               </Button>
             </Stack>

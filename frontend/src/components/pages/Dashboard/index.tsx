@@ -59,8 +59,8 @@ const Dashboard = (): JSX.Element => {
         <Button
           float="right"
           mt="1.5rem"
-          size="lg"
-          width={{ lg: "30%", base: "100%" }}
+          size="md"
+          width={{ lg: "20%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.SCHEDULING_PAGE)}
         >
