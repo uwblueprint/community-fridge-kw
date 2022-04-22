@@ -3,9 +3,9 @@ import { Container, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import VerificationPageImage from "../../../assets/Verification-Email-Image.png";
 import * as Routes from "../../../constants/Routes";
 import { RequestPasswordChangeFormProps } from "./types";
-import VerificationPageImage from "../../../assets/Verification-Email-Image.png";
 
 interface VerificationPageProps {
   formValues: RequestPasswordChangeFormProps;

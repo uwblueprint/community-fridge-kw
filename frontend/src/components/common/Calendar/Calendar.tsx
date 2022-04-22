@@ -83,10 +83,7 @@ const Calendar = ({
                 padding="2.5rem"
                 textAlign="center"
               >
-                <Text
-                  color="black.500"
-                  textStyle="mobileBody"
-                >
+                <Text color="black.500" textStyle="mobileBody">
                   No shifts scheduled.
                 </Text>
               </Box>

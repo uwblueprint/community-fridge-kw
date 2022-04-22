@@ -98,7 +98,7 @@ const getFilteredDays = (
   selectedDay: Date,
   i: number,
   renderItem: (item: RenderItemProps) => ReactNode,
-  week: Date, 
+  week: Date,
   locale?: Locale,
 ) => {
   const shiftsArr = items.filter((item) => {
