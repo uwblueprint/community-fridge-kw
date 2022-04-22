@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import * as Routes from "../../../constants/Routes";
 import { RequestPasswordChangeFormProps } from "./types";
+import CommunityFridgeLogo from "../../../assets/header-logo.png";
 
 interface VerificationPageProps {
   formValues: RequestPasswordChangeFormProps;
@@ -27,8 +28,8 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
       <Container centerContent>
         {/* todo: replace image */}
         <Image
-          objectFit="none"
-          src="header-logo.png"
+          objectFit="cover"
+          src={CommunityFridgeLogo}
           alt="Community Fridge logo"
           display="inline"
         />
