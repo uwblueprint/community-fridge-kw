@@ -80,7 +80,6 @@ const DayButton = ({ day }: DayButtonProps) => {
 
 type RenderItemProps = {
   item?: Schedule | CheckIn;
-  showingFullWeek?: boolean;
   index?: number;
   emptyState: boolean;
 };
@@ -128,7 +127,6 @@ const getFilteredDays = (
     : shiftsArr.map((item, index) => {
         return renderItem({
           item,
-          showingFullWeek: selectedDay === undefined,
           index,
           emptyState: false,
         });

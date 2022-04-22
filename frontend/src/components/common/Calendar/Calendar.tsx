@@ -75,12 +75,9 @@ const Calendar = ({
         selectedDay={selectedDay}
         items={items}
         renderItem={({ item, index, emptyState }) => {
-          if (isCheckInView) {
-            getCheckInCard(item, index as number);
-          }
-
-          return emptyState ? (
-            <Box
+          if (emptyState) {
+            return (
+              <Box
               width="100%"
               backgroundColor="squash.100"
               padding={{ base: "0px", md: "3rem" }}
@@ -94,6 +91,11 @@ const Calendar = ({
                 No shifts scheduled.
               </Text>
             </Box>
+            )
+          }
+
+          return isCheckInView ? (
+            getCheckInCard(item, index as number)
           ) : (
             <DropoffCard
               key={JSON.stringify(item)}
