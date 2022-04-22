@@ -26,6 +26,8 @@ import React, { useContext, useState } from "react";
 import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
+import CommunityFridgeDrawer from "../../assets/drawer-logo.png";
+import CommunityFridgeHeader from "../../assets/header-logo.png";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
@@ -81,13 +83,14 @@ const Header = (): JSX.Element => {
         >
           <HamburgerIcon color="black.100" />
         </IconButton>
-        <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+        <Link as={ReactLink} to={Routes.LANDING_PAGE} mr="2rem">
           <Image
-            objectFit="fill"
-            src="header-logo.png"
+            objectFit="cover"
+            src={CommunityFridgeHeader}
             alt="Community Fridge logo"
             display="inline"
             minWidth="200px"
+            width="300px"
           />
         </Link>
         <Stack
@@ -249,7 +252,7 @@ const Header = (): JSX.Element => {
               mt="70px"
               ml="20px"
               mb="30px"
-              src="drawer-logo.png"
+              src={CommunityFridgeDrawer}
               alt="Community Fridge logo"
             />
             <Stack spacing="1rem" ml="20px">
