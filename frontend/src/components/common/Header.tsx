@@ -24,10 +24,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import { Link as ReactLink, useHistory } from "react-router-dom";
-import CommunityFridgeHeader from "../../assets/header-logo.png";
-import CommunityFridgeDrawer from "../../assets/drawer-logo.png";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
+import CommunityFridgeDrawer from "../../assets/drawer-logo.png";
+import CommunityFridgeHeader from "../../assets/header-logo.png";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";

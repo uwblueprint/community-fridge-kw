@@ -3,9 +3,9 @@ import { Container, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
+import CommunityFridgeLogo from "../../../assets/header-logo.png";
 import * as Routes from "../../../constants/Routes";
 import { RequestPasswordChangeFormProps } from "./types";
-import CommunityFridgeLogo from "../../../assets/header-logo.png";
 
 interface VerificationPageProps {
   formValues: RequestPasswordChangeFormProps;
