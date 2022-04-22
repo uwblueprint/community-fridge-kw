@@ -79,7 +79,7 @@ const CreateAccount = ({
       <BackButton previous={previous} />
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
-        Account information can be edited in the{" "}
+        Account information can be edited later via the{" "}
         <Text as="span" textStyle="mobileBodyBold">
           My Account
         </Text>{" "}
