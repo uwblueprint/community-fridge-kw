@@ -30,7 +30,7 @@ const CheckIns = ({
         await CheckInAPIClient.getAllCheckIns()
       ).map((checkin) => ({ ...checkin, type: ShiftType.CHECKIN }));
       const needVolunteerCheckIns = checkInResponse.filter(
-        (checkin) => !checkin.volunteerId,
+        (checkin) => !checkin.volunteerId && !checkin.isAdmin,
       );
       setCheckIns(needVolunteerCheckIns);
     };
