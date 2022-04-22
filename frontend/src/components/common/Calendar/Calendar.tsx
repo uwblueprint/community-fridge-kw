@@ -76,7 +76,7 @@ const Calendar = ({
         items={items}
         renderItem={({ item, index, emptyState }) => {
           if (isCheckInView) {
-            return getCheckInCard(item, index as number);
+            getCheckInCard(item, index as number);
           }
 
           return emptyState ? (
