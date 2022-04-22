@@ -93,14 +93,13 @@ type WeeklyBodyProps = {
   calendarDate: Date;
 };
 
-const getFilteredDays = (
+const GetFilteredDays = (
   items: Array<Schedule | CheckIn>,
   selectedDay: Date,
   i: number,
   renderItem: (item: RenderItemProps) => ReactNode,
-  week: Date,
-  locale?: Locale,
 ) => {
+  const { locale, week } = useWeeklyCalendar();
   const shiftsArr = items.filter((item) => {
     const currentDate = setDay(week, selectedDay.getDay() + i, {
       locale,
@@ -206,13 +205,11 @@ export function WeeklyBody({
                 </HStack>
               )}
             </HStack>
-            {getFilteredDays(
+            {GetFilteredDays(
               items as Array<Schedule | CheckIn>,
               selectedDay,
               i,
               renderItem,
-              week,
-              locale,
             )}
           </VStack>
         );
