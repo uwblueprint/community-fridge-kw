@@ -80,11 +80,10 @@ const Calendar = ({
               <Box
                 width="100%"
                 backgroundColor="squash.100"
-                padding={{ base: "0px", md: "3rem" }}
+                padding="2.5rem"
                 textAlign="center"
               >
                 <Text
-                  p={{ base: "28px", md: "0px" }}
                   color="black.500"
                   textStyle="mobileBody"
                 >
