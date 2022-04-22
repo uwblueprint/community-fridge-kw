@@ -113,11 +113,10 @@ const TermsConditions = ({
         signing up for an account.
       </Text>
       <Text mt="2rem" textStyle="mobileSmall" color="hubbard.100">
-        At the heart of Community Fridge KW are its volunteers. Welcome to our
-        community of organizers. CFKW volunteers maintain community fridge
-        locations through daily check-ins; deliver food to community members in
-        need; rescue food from local businesses and farms for the fridge;
-        support in outreach and marketing and much more.
+        At the heart of Community Fridge KW are its volunteers. CFKW volunteers
+        maintain community fridge locations through daily check-ins; deliver
+        food to community members in need; rescue food from local businesses and
+        farms for the fridge; support in outreach and marketing and much more.
         <br />
         <br />
         <Box as="span" fontStyle="italic" fontWeight="700">
