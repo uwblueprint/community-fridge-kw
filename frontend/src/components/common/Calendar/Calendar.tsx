@@ -78,20 +78,20 @@ const Calendar = ({
           if (emptyState) {
             return (
               <Box
-              width="100%"
-              backgroundColor="squash.100"
-              padding={{ base: "0px", md: "3rem" }}
-              textAlign="center"
-            >
-              <Text
-                p={{ base: "28px", md: "0px" }}
-                color="black.500"
-                textStyle="mobileBody"
+                width="100%"
+                backgroundColor="squash.100"
+                padding={{ base: "0px", md: "3rem" }}
+                textAlign="center"
               >
-                No shifts scheduled.
-              </Text>
-            </Box>
-            )
+                <Text
+                  p={{ base: "28px", md: "0px" }}
+                  color="black.500"
+                  textStyle="mobileBody"
+                >
+                  No shifts scheduled.
+                </Text>
+              </Box>
+            );
           }
 
           return isCheckInView ? (
