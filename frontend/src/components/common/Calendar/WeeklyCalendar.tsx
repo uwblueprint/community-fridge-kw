@@ -19,15 +19,37 @@ type State = {
   changeSelectedDay: (day?: Date) => any;
 };
 
-const WeeklyContext = React.createContext<State>({} as State);
-
-export const useWeeklyCalendar = () => useContext(WeeklyContext);
-
 type WeeklyCalendarProps = {
   week: Date;
   children: ReactNode;
   locale?: Locale;
 };
+
+type DayButtonProps = {
+  day: {
+    day: number;
+    label: string;
+  };
+};
+
+type RenderItemProps = {
+  item?: Schedule | CheckIn;
+  index?: number;
+  emptyState: boolean;
+};
+
+type WeeklyBodyProps = {
+  selectedDay: Date;
+  items: Schedule[] | CheckIn[];
+  renderItem: (item: RenderItemProps) => ReactNode;
+  handleDateChange: (days: number) => void;
+  setSelectedDay: (date: Date) => void;
+  calendarDate: Date;
+};
+
+const WeeklyContext = React.createContext<State>({} as State);
+
+export const useWeeklyCalendar = () => useContext(WeeklyContext);
 
 export const WeeklyCalendar = ({
   locale,
@@ -54,13 +76,6 @@ export const WeeklyCalendar = ({
   );
 };
 
-type DayButtonProps = {
-  day: {
-    day: number;
-    label: string;
-  };
-};
-
 const DayButton = ({ day }: DayButtonProps) => {
   const { locale, week } = useWeeklyCalendar();
 
@@ -78,28 +93,14 @@ const DayButton = ({ day }: DayButtonProps) => {
   );
 };
 
-type RenderItemProps = {
-  item?: Schedule | CheckIn;
-  index?: number;
-  emptyState: boolean;
-};
-
-type WeeklyBodyProps = {
-  selectedDay: Date;
-  items: Schedule[] | CheckIn[];
-  renderItem: (item: RenderItemProps) => ReactNode;
-  handleDateChange: (days: number) => void;
-  setSelectedDay: (date: Date) => void;
-  calendarDate: Date;
-};
-
-const GetFilteredDays = (
+const getFilteredDays = (
   items: Array<Schedule | CheckIn>,
   selectedDay: Date,
   i: number,
   renderItem: (item: RenderItemProps) => ReactNode,
+  week: Date, 
+  locale?: Locale,
 ) => {
-  const { locale, week } = useWeeklyCalendar();
   const shiftsArr = items.filter((item) => {
     const currentDate = setDay(week, selectedDay.getDay() + i, {
       locale,
@@ -205,11 +206,13 @@ export function WeeklyBody({
                 </HStack>
               )}
             </HStack>
-            {GetFilteredDays(
+            {getFilteredDays(
               items as Array<Schedule | CheckIn>,
               selectedDay,
               i,
               renderItem,
+              week,
+              locale,
             )}
           </VStack>
         );
