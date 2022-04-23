@@ -27,9 +27,10 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
       </IconButton>
       <Container centerContent>
         <Image
-          objectFit="none"
+          objectFit="cover"
+          height="234px"
           src={VerificationPageImage}
-          alt="Community Fridge logo"
+          alt="Verification page image"
           display="inline"
         />
         <Text mt="2rem" textAlign="center" textStyle="mobileHeader1">
