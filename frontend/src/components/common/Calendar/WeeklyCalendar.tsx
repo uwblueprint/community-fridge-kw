@@ -109,12 +109,12 @@ const getFilteredDays = (
       "startTime" in item
         ? new Date(item?.startTime as string)
         : new Date(item?.startDate as string);
-    return !(
-      item === null ||
-      scheduledDate === null ||
-      scheduledDate.getDate() !== currentDate.getDate() ||
-      scheduledDate.getMonth() !== currentDate.getMonth() ||
-      scheduledDate.getFullYear() !== currentDate.getFullYear()
+    return (
+      item !== null &&
+      scheduledDate !== null &&
+      scheduledDate.getDate() === currentDate.getDate() &&
+      scheduledDate.getMonth() === currentDate.getMonth() &&
+      scheduledDate.getFullYear() === currentDate.getFullYear()
     );
   });
 
