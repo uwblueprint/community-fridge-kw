@@ -400,7 +400,7 @@ const SelectDateTime = ({
   };
 
   return (
-    <Container variant="responsiveContainer">
+    <Container variant="responsiveContainer" pb={{ lg: "0px", base: "100px" }}>
       {isBeingEdited ? (
         <CancelButton discardChanges={discardChanges} />
       ) : (

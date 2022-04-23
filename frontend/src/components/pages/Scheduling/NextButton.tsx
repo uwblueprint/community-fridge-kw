@@ -5,8 +5,13 @@ import { ButtonProps } from "./types";
 
 export default function NextButton({ canSubmit, handleNext }: ButtonProps) {
   return (
-    <Flex justify="flex-end">
-      <Button isDisabled={!canSubmit} onClick={handleNext} variant="navigation">
+    <Flex justify="flex-start">
+      <Button
+        isDisabled={!canSubmit}
+        onClick={handleNext}
+        w={{ lg: "18%", base: "100%" }}
+        variant="navigation"
+      >
         Next
       </Button>
     </Flex>

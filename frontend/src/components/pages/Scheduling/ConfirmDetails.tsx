@@ -138,7 +138,7 @@ const ConfirmDetails = ({
     getVolunteerData();
   }, [currentSchedule.id]);
   return (
-    <Container variant="responsiveContainer">
+    <Container variant="responsiveContainer" pb={{ lg: "0px", base: "100px" }}>
       {isBeingEdited ? (
         <Box mt={10}>
           <Button
@@ -399,8 +399,12 @@ const ConfirmDetails = ({
       )}
       {!isBeingEdited && (
         <HStack>
-          <Flex justify="flex-end">
-            <Button onClick={onSubmitClick} variant="navigation">
+          <Flex justify="flex-start" w={{ lg: "default", base: "100%" }}>
+            <Button
+              onClick={onSubmitClick}
+              variant="navigation"
+              w={{ lg: "18%", base: "100%" }}
+            >
               Submit
             </Button>
           </Flex>
