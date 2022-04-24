@@ -47,6 +47,7 @@ const VolunteerRoles = () => (
     mt="57px"
     p={["73px 42px 73px 42px", "0"]}
     mx={["-42px", "0"]}
+    mb={["-79px", "0"]}
   >
     <Text
       color="hubbard.100"
