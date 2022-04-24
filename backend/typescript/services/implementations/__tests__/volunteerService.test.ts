@@ -4,8 +4,11 @@ import testSql from "../../../testUtils/testDb";
 import {
   testUsers,
   testVolunteers,
-  testUserVolunteers,
   testUpdatedUserVolunteers,
+  testUserVolunteers,
+  testSchedules,
+  testCheckIns,
+  expectedCheckInsAndSchedules,
 } from "../../../testUtils/volunteerService";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
@@ -15,15 +18,7 @@ import CheckIn from "../../../models/checkIn.model";
 import IDonorService from "../../interfaces/donorService";
 import DonorService from "../donorService";
 import { testDonorsDb } from "../../../testUtils/schedulingService";
-import {
-  testUsers,
-  testVolunteers,
-  testUserVolunteers,
-  testUpdatedUserVolunteers,
-  testSchedules,
-  testCheckIns,
-  expectedCheckInsAndSchedules,
-} from "../../../testUtils/volunteerService";
+
 import { toSnakeCase } from "../../../utilities/servicesUtils";
 
 // translate frontend camel case into backend snake case format
