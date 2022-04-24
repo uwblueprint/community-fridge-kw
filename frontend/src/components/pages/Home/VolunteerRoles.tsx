@@ -70,7 +70,7 @@ const VolunteerRoles = () => (
       <Spacer />
       <VolunteerRoleStep
         title="Assist with food rescue"
-        description="Support a donation from a local business, organization or individual by making a pickup or assisting with donation unloading and stocking at the fridge."
+        description="Support a donation from a local business, organization, or individual by making a pickup or assisting with donation unloading and stocking at the fridge."
       />
     </Stack>
   </Box>

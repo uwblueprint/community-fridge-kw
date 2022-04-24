@@ -201,8 +201,7 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileBody" color="hubbard.100" pt="1.4em">
           {viewDetailsScreen
             ? `Please ensure you are at the meetup location at the specified volunteer arrival time.`
-            : `You are signing up to volunteer for the following shift. Please note
-            your contact information will be shared with the donor.`}
+            : `You are signing up to volunteer for the following shift.`}
         </Text>
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Volunteer shift type

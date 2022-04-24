@@ -113,11 +113,10 @@ const TermsConditions = ({
         signing up for an account.
       </Text>
       <Text mt="2rem" textStyle="mobileSmall" color="hubbard.100">
-        At the heart of Community Fridge KW are its volunteers. Welcome to our
-        community of organizers. CFKW volunteers maintain community fridge
-        locations through daily check-ins; deliver food to community members in
-        need; rescue food from local businesses and farms for the fridge;
-        support in outreach and marketing and much more.
+        At the heart of Community Fridge KW are its volunteers. CFKW volunteers
+        maintain community fridge locations through daily check-ins; deliver
+        food to community members in need; rescue food from local businesses and
+        farms for the fridge; support in outreach and marketing and much more.
         <br />
         <br />
         <Box as="span" fontStyle="italic" fontWeight="700">
@@ -133,11 +132,13 @@ const TermsConditions = ({
             We do not uphold or practice a hierarchy, power indifferences, or
             claim to know what’s best for any person.
           </ListItem>
+          <br />
           <ListItem>
             We recognize the vulnerability of those we seek to serve and we
             strive to offer a source of fresh free food without judgement,
             surveillance, data collection, confrontation, or question.
           </ListItem>
+          <br />
           <ListItem>
             The relationships we build and participate in with our community are
             the lifelines of our work. As volunteers, we have the privilege of
@@ -145,11 +146,13 @@ const TermsConditions = ({
             donors, supporters and hosts with just as much respect, dignity, and
             agency as the neighbours we seek to serve.
           </ListItem>
+          <br />
           <ListItem>
             We consider ourselves stewards to the community fridge and its sites
             of service. Thus, we are eager to maintain compliance with the
             expectations of both public health and our generous hosts.
           </ListItem>
+          <br />
           <ListItem>
             The work we do is disruptive to traditional resource distribution
             approaches and often challenges our own personal beliefs and values.
