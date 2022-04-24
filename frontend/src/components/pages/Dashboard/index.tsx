@@ -50,7 +50,7 @@ const Dashboard = (): JSX.Element => {
       <Stack direction={["column", "row"]} justifyContent="space-between">
         <VStack alignItems="left">
           <Text color="black.100" textStyle="mobileHeader1">
-            My Scheduled Donations
+            My scheduled donations
           </Text>
           <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
             Thank you for supporting your local community fridge!{" "}
@@ -59,8 +59,8 @@ const Dashboard = (): JSX.Element => {
         <Button
           float="right"
           mt="1.5rem"
-          size="lg"
-          width={{ lg: "30%", base: "100%" }}
+          size="md"
+          width={{ lg: "20%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.SCHEDULING_PAGE)}
         >
@@ -75,20 +75,22 @@ const Dashboard = (): JSX.Element => {
       >
         {schedules.length > 0 ? (
           schedules.map((scheduleObject: Schedule, id) => (
-            <DropoffCard key={id} schedule={scheduleObject!} />
+            <DropoffCard key={id} schedule={scheduleObject!} isDonorView />
           ))
         ) : (
-          <Flex paddingTop="1.5rem">
+          <Flex paddingTop="1.5rem" width="100%">
             <Box
               display={{ lg: "flex" }}
               width={{ base: "default", md: "100%" }}
               backgroundColor="squash.100"
               padding={{ base: "0px", md: "3rem" }}
+              textAlign="center"
             >
               <Text
                 p={{ base: "28px", md: "0px" }}
                 color="black.500"
                 textStyle="mobileBody"
+                ml="auto"
               >
                 You currently have no upcoming donations scheduled! &nbsp;
               </Text>
@@ -97,6 +99,8 @@ const Dashboard = (): JSX.Element => {
                 px={{ base: "28px", md: "0px" }}
                 color="black.500"
                 textStyle="mobileBody"
+                pb={{ base: "28px", md: "0px" }}
+                mr="auto"
               >
                 Schedule a donation today to start giving back.
               </Text>

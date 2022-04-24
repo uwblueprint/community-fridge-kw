@@ -10,15 +10,19 @@ export default function SaveButton({ onSaveClick }: ButtonProps) {
   return (
     <>
       {isDesktop ? (
-        <Flex justify="flex-end">
-          <Button onClick={onSaveClick} variant="navigation">
-            Save Changes
+        <Flex justify="flex-start">
+          <Button
+            onClick={onSaveClick}
+            variant="navigation"
+            w={{ lg: "16%", base: "100%" }}
+          >
+            Save changes
           </Button>
         </Flex>
       ) : (
         <Flex justifyContent="center">
           <Button onClick={onSaveClick} variant="navigation">
-            Save Changes
+            Save changes
           </Button>
         </Flex>
       )}

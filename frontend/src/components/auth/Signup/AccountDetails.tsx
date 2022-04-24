@@ -1,33 +1,24 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
   FormControl,
   FormErrorMessage,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { NavigationProps, SetForm } from "react-hooks-helper";
-import { useHistory } from "react-router-dom";
 
 import authAPIClient from "../../../APIClients/AuthAPIClient";
-import * as Routes from "../../../constants/Routes";
-import useViewport from "../../../hooks/useViewport";
+import { SignupErrorMessage } from "../../../constants/AuthConstants";
 import { AuthenticatedUser, Role } from "../../../types/AuthTypes";
+import HeaderLabel from "../../common/HeaderLabel";
+import BackButton from "../../pages/Scheduling/BackButton";
 import {
   checkForLowerCase,
   checkForNumbers,
@@ -37,6 +28,7 @@ import {
 } from "../utilities";
 import MandatoryInputDescription from "./components/MandatoryInputDescription";
 import PasswordRequirement from "./components/PasswordRequirement";
+import FailedModal from "./ReturnToLoginModal";
 import { SignUpFormProps } from "./types";
 
 const AccountDetails = ({
@@ -48,10 +40,9 @@ const AccountDetails = ({
   formValues: SignUpFormProps;
   setForm: SetForm;
 }) => {
-  const history = useHistory();
-  const { previous, next } = navigation;
-  const { isDesktop } = useViewport();
+  const { previous, go } = navigation;
   const {
+    role,
     firstName,
     lastName,
     email,
@@ -76,7 +67,7 @@ const AccountDetails = ({
     ) {
       return Role.ADMIN;
     }
-    return Role.DONOR;
+    return role;
   };
 
   const onSignupClick = async () => {
@@ -89,21 +80,29 @@ const AccountDetails = ({
     if (!password || !email || password !== confirmPassword) {
       return false;
     }
-    const role = await getSignupRole(email);
-    const user: AuthenticatedUser = await authAPIClient.register(
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      password,
-      businessName,
-      role,
-    );
-    if (!user) {
-      onOpen();
-      return false;
+    const updatedRole = await getSignupRole(email);
+
+    if (updatedRole !== Role.VOLUNTEER) {
+      const user: AuthenticatedUser = await authAPIClient.register(
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        businessName,
+        updatedRole,
+      );
+      if (!user) {
+        onOpen();
+        return false;
+      }
     }
-    return next();
+    return (
+      go &&
+      (role === Role.VOLUNTEER
+        ? go("volunteer questions")
+        : go("email verification"))
+    );
   };
 
   const verifyPassword = (input: string) => {
@@ -120,37 +119,12 @@ const AccountDetails = ({
   };
 
   return (
-    <Container pl="42px" pr="42px" pt="0.5rem">
-      <IconButton
-        marginLeft="-12px"
-        float="left"
-        backgroundColor="transparent"
-        aria-label="go back"
-        onClick={previous}
-      >
-        <ArrowBackIcon width="24px" height="24px" />
-      </IconButton>
-
-      {!isDesktop && (
-        <>
-          <IconButton
-            float="right"
-            marginRight="-12px"
-            aria-label="close sign up"
-            onClick={() => history.push(Routes.LANDING_PAGE)}
-            backgroundColor="transparent"
-          >
-            <CloseIcon color="black.100" />
-          </IconButton>
-        </>
-      )}
-
-      <Text mt="67px" textStyle="mobileHeader1">
-        Account details
-      </Text>
+    <Container pl="42px" pr="42px" pt={["2.75rem", "4rem"]}>
+      <BackButton previous={previous} />
+      <HeaderLabel text="Account details" />
       <FormControl mt="2rem" isInvalid={!email && interaction.email}>
         <Box>
-          <MandatoryInputDescription label="Email Address" />
+          <MandatoryInputDescription label="Email address" />
           <Input
             mt="2"
             value={email}
@@ -170,7 +144,7 @@ const AccountDetails = ({
       </FormControl>
 
       <Box mt="1rem">
-        <MandatoryInputDescription label="Password" />
+        <MandatoryInputDescription label="New password" />
 
         <FormControl isInvalid={!tempPassword && interaction.password}>
           <InputGroup size="md">
@@ -206,15 +180,15 @@ const AccountDetails = ({
             <Stack alignItems="start" spacing="0">
               <PasswordRequirement
                 state={checkLength(tempPassword)}
-                label="minimum of 12 characters as string"
+                label="minimum of 12 characters"
               />
               <PasswordRequirement
                 state={checkForUpperCase(tempPassword)}
-                label="at least 1 uppercase letter"
+                label="at least 1 upper case letter"
               />
               <PasswordRequirement
                 state={checkForLowerCase(tempPassword)}
-                label="at least 1 lowercase letter"
+                label="at least 1 lower case letter"
               />
               <PasswordRequirement
                 state={checkForNumbers(tempPassword)}
@@ -253,29 +227,12 @@ const AccountDetails = ({
           </Button>
         </Box>
       </FormControl>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Sign up failed</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody textStyle="mobileBody">
-            Sorry, something went wrong. Please try again later and check all
-            fields have correct formatting.
-          </ModalBody>
-
-          <ModalFooter>
-            <Button
-              width="100%"
-              color="squash.100"
-              backgroundColor="raddish.100"
-              mr={3}
-              onClick={() => history.push(Routes.LOGIN_PAGE)}
-            >
-              Return to Log In
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <FailedModal
+        errorHeader={SignupErrorMessage.HEADER}
+        errorMessage={SignupErrorMessage.BODY}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </Container>
   );
 };

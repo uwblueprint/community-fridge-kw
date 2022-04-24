@@ -1,4 +1,9 @@
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CloseIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import {
   Button,
   Container,
@@ -10,13 +15,19 @@ import {
   IconButton,
   Image,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Stack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link as ReactLink, useHistory } from "react-router-dom";
 
 import authAPIClient from "../../APIClients/AuthAPIClient";
+import CommunityFridgeDrawer from "../../assets/drawer-logo.png";
+import CommunityFridgeHeader from "../../assets/header-logo.png";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
@@ -24,14 +35,30 @@ import { Role } from "../../types/AuthTypes";
 const Header = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext);
+  const [hoveredItem, setHoveredItem] = useState("");
   const history = useHistory();
 
   const onLogOutClick = async () => {
     const success = await authAPIClient.logout(authenticatedUser?.id);
     if (success) {
+      history.push(Routes.LANDING_PAGE);
       setAuthenticatedUser(null);
     }
     onClose();
+  };
+
+  const menuItemStyle = {
+    borderRadius: "0.4rem",
+    margin: "auto",
+    width: "95%",
+  };
+
+  const hoverMenuItemStyle = {
+    borderRadius: "0.4rem",
+    margin: "auto",
+    width: "95%",
+    backgroundColor: "#C24A84",
+    color: "white",
   };
 
   return (
@@ -48,6 +75,7 @@ const Header = (): JSX.Element => {
           w="24px"
           h="24px"
           flex="1"
+          textAlign="left"
           aria-label="menu options"
           onClick={onOpen}
           backgroundColor="transparent"
@@ -55,12 +83,14 @@ const Header = (): JSX.Element => {
         >
           <HamburgerIcon color="black.100" />
         </IconButton>
-        <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+        <Link as={ReactLink} to={Routes.LANDING_PAGE} mr="2rem">
           <Image
-            objectFit="none"
-            src="header-logo.png"
+            objectFit="cover"
+            src={CommunityFridgeHeader}
             alt="Community Fridge logo"
             display="inline"
+            minWidth="200px"
+            width="300px"
           />
         </Link>
         <Stack
@@ -79,8 +109,8 @@ const Header = (): JSX.Element => {
                   >
                     Home
                   </Link>
-                  <Link as={ReactLink} to={Routes.DASHBOARD_PAGE}>
-                    My Scheduled Donations
+                  <Link as={ReactLink} to={Routes.DASHBOARD_PAGE} isTruncated>
+                    My scheduled donations
                   </Link>
                 </>
               )}
@@ -93,23 +123,85 @@ const Header = (): JSX.Element => {
                   >
                     Home
                   </Link>
-                  <Link as={ReactLink} to={Routes.VOLUNTEER_SHIFTS_PAGE}>
-                    My Volunteer Shifts
+                  <Link
+                    as={ReactLink}
+                    to={Routes.VOLUNTEER_DASHBOARD_PAGE}
+                    isTruncated
+                  >
+                    My volunteer shifts
                   </Link>
                 </>
               )}
               {authenticatedUser.role === Role.ADMIN && (
                 <>
-                  <Link as={ReactLink} to={Routes.VIEW_DONATIONS}>
-                    View Donations
+                  <Menu closeOnBlur>
+                    {({ isOpen: isNavDropdownOpen }) => (
+                      <>
+                        <MenuButton isActive={isNavDropdownOpen} isTruncated>
+                          Fridge management{" "}
+                          {isNavDropdownOpen ? (
+                            <ChevronUpIcon />
+                          ) : (
+                            <ChevronDownIcon />
+                          )}
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            as={ReactLink}
+                            to={Routes.ADMIN_CHECK_INS}
+                            style={
+                              hoveredItem === "checkIns"
+                                ? hoverMenuItemStyle
+                                : menuItemStyle
+                            }
+                            _focus={{
+                              bg: "raddish.50",
+                            }}
+                            _active={{
+                              bg: "raddish.50",
+                            }}
+                            onClick={() => setHoveredItem("checkIns")}
+                            isTruncated
+                          >
+                            Fridge check-ins
+                          </MenuItem>
+                          <MenuItem
+                            as={ReactLink}
+                            to={Routes.ADMIN_VIEW_DONATIONS}
+                            style={
+                              hoveredItem === "scheduledDonations"
+                                ? hoverMenuItemStyle
+                                : menuItemStyle
+                            }
+                            _focus={{
+                              bg: "raddish.50",
+                            }}
+                            _active={{
+                              bg: "raddish.50",
+                            }}
+                            onClick={() => setHoveredItem("scheduledDonations")}
+                            isTruncated
+                          >
+                            Scheduled donations
+                          </MenuItem>
+                        </MenuList>
+                      </>
+                    )}
+                  </Menu>
+                  <Link
+                    as={ReactLink}
+                    to={Routes.USER_MANAGEMENT_PAGE}
+                    isTruncated
+                  >
+                    User management
                   </Link>
                   <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
                     User Management
                   </Link>
                 </>
               )}
-              <Link as={ReactLink} to={Routes.ACCOUNT_PAGE}>
-                My Account
+              <Link as={ReactLink} to={Routes.ACCOUNT_PAGE} isTruncated>
+                My account
               </Link>
               <Button
                 onClick={onLogOutClick}
@@ -117,12 +209,17 @@ const Header = (): JSX.Element => {
                 color="black"
                 fontWeight="400"
               >
-                Log Out
+                Log out
               </Button>
             </>
           ) : (
             <>
-              <Link as={ReactLink} to={Routes.LANDING_PAGE}>
+              <Link
+                as={ReactLink}
+                to={Routes.LANDING_PAGE}
+                style={{ lineHeight: "2.5" }}
+                isTruncated
+              >
                 Home
               </Link>
               <Button
@@ -132,7 +229,7 @@ const Header = (): JSX.Element => {
                   onClose();
                 }}
               >
-                Sign In
+                Sign in
               </Button>
             </>
           )}
@@ -158,7 +255,7 @@ const Header = (): JSX.Element => {
               mt="70px"
               ml="20px"
               mb="30px"
-              src="drawer-logo.png"
+              src={CommunityFridgeDrawer}
               alt="Community Fridge logo"
             />
             <Stack spacing="1rem" ml="20px">
@@ -178,7 +275,7 @@ const Header = (): JSX.Element => {
                         to={Routes.DASHBOARD_PAGE}
                         onClick={onClose}
                       >
-                        My Scheduled Donations
+                        My scheduled donations
                       </Link>
                     </>
                   )}
@@ -193,21 +290,35 @@ const Header = (): JSX.Element => {
                       </Link>
                       <Link
                         as={ReactLink}
-                        to={Routes.VOLUNTEER_SHIFTS_PAGE}
+                        to={Routes.VOLUNTEER_DASHBOARD_PAGE}
                         onClick={onClose}
                       >
-                        My Volunteer Shifts
+                        My volunteer shifts
                       </Link>
                     </>
                   )}
-                  {authenticatedUser.role === Role.ADMIN && (
+                  {authenticatedUser.role === Role.VOLUNTEER && (
                     <>
                       <Link
                         as={ReactLink}
-                        to={Routes.VIEW_DONATIONS}
+                        to={Routes.ADMIN_CHECK_INS}
                         onClick={onClose}
                       >
-                        View Donations
+                        Fridge check-ins
+                      </Link>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.ADMIN_VIEW_DONATIONS}
+                        onClick={onClose}
+                      >
+                        Scheduled donations
+                      </Link>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.USER_MANAGEMENT_PAGE}
+                        onClick={onClose}
+                      >
+                        User management
                       </Link>
                       <Link
                         as={ReactLink}
@@ -223,7 +334,7 @@ const Header = (): JSX.Element => {
                     to={Routes.ACCOUNT_PAGE}
                     onClick={onClose}
                   >
-                    My Account
+                    My account
                   </Link>
                   <Button
                     onClick={onLogOutClick}
@@ -233,7 +344,7 @@ const Header = (): JSX.Element => {
                     color="black"
                     fontWeight="400"
                   >
-                    Log Out
+                    Log out
                   </Button>
                 </>
               ) : (
@@ -252,7 +363,7 @@ const Header = (): JSX.Element => {
                       onClose();
                     }}
                   >
-                    Sign In
+                    Sign in
                   </Button>
                 </>
               )}

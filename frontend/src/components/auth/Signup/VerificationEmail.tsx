@@ -32,17 +32,24 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
           src={verificationEmailImage}
           alt="Verification email image"
         />
-        <Text mt="2rem" textAlign="center" textStyle="mobileHeader1">
+        <Text
+          mt={["2rem", "2.25rem"]}
+          textAlign="center"
+          textStyle="mobileHeader1"
+        >
           Please verify your email address!
         </Text>
         <Text
-          mt="1rem"
+          mt={["2rem", "2.25rem"]}
           textAlign="center"
           textStyle="mobileBody"
           color="hubbard.100"
         >
-          We sent a verification email to {email}. Please check your email to
-          begin scheduling your first dropoff!
+          We sent a verification email to {email}.
+          <br />
+          <br />
+          If you don’t see an email within a few minutes, please check your junk
+          folders and add us to your Trusted Senders!
         </Text>
         <Text textAlign="center" textStyle="mobileBodyBold" mt="1rem">
           Please verify your email within the hour or you will need to contact

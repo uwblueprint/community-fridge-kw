@@ -1,8 +1,15 @@
-import { Box, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
+import { Box, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import { format, setDay, startOfWeek } from "date-fns";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
+import DatePicker, { DateObject } from "react-multi-date-picker";
 
 import useViewport from "../../../hooks/useViewport";
+import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
 
 type State = {
@@ -60,11 +67,11 @@ const DayButton = ({ day }: DayButtonProps) => {
   const currentDate = setDay(week, day.day, { locale });
 
   return (
-    <Box align="left" width="100%" pb="2rem">
+    <Box align="left">
       <HStack>
-        <Text textStyle="desktopHeader">{day.label.substr(0, 3)} </Text>
-        <Text textStyle="desktopHeader" color="hubbard.100">
-          {format(currentDate, "do", { locale }).slice(0, -2)}
+        <Text textStyle="desktopSubtitle">{format(currentDate, "E")} </Text>
+        <Text textStyle="desktopSubtitle" color="hubbard.100" isTruncated>
+          {format(currentDate, "MMM d")}
         </Text>
       </HStack>
     </Box>
@@ -72,20 +79,27 @@ const DayButton = ({ day }: DayButtonProps) => {
 };
 
 type RenderItemProps<EventItem> = {
-  schedule: Schedule;
+  item: Schedule | CheckIn;
   showingFullWeek: boolean;
+  index: number;
 };
 
 type WeeklyBodyProps<EventItem> = {
   selectedDay: Date;
-  schedules: Schedule[];
+  items: Schedule[] | CheckIn[];
   renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
+  handleDateChange: (days: number) => void;
+  setSelectedDay: (date: Date) => void;
+  calendarDate: Date;
 };
 
 export function WeeklyBody<EventItem>({
   selectedDay,
-  schedules,
+  items,
   renderItem,
+  handleDateChange,
+  setSelectedDay,
+  calendarDate,
 }: WeeklyBodyProps<EventItem>) {
   const { isMobile } = useViewport();
   const { locale, week } = useWeeklyCalendar();
@@ -103,53 +117,87 @@ export function WeeklyBody<EventItem>({
     <>
       {[...Array(isMobile ? 1 : 3)].map((_, i) => {
         return (
-          <div key={i}>
-            <VStack
-              justifyItems="flex-start"
+          <VStack key={i} pb="3rem" spacing="24px">
+            <HStack
+              justifyContent="space-between"
               alignContent="start"
-              pb="3rem"
               width="100%"
             >
-              <DayButton
-                day={{
-                  day: selectedDay.getDay() + i,
-                  label: getDay(selectedDay, i),
-                }}
-              />
+              <HStack>
+                {i === 0 && (
+                  <DatePicker
+                    value={calendarDate}
+                    onChange={(e: DateObject) => {
+                      setSelectedDay(e?.toDate?.());
+                    }}
+                    render={(
+                      value: string,
+                      openCalendar: React.MouseEventHandler<SVGElement>,
+                    ) => {
+                      return (
+                        <CalendarIcon
+                          onClick={openCalendar}
+                          value={value}
+                          mr="0.5rem"
+                        />
+                      );
+                    }}
+                  />
+                )}
+                <DayButton
+                  day={{
+                    day: selectedDay.getDay() + i,
+                    label: getDay(selectedDay, i),
+                  }}
+                />
+              </HStack>
+              {i === 0 && (
+                <HStack>
+                  <IconButton
+                    backgroundColor="transparent"
+                    aria-label="previous day"
+                    onClick={() => handleDateChange(-1)}
+                  >
+                    <ChevronLeftIcon w={[5, 8]} h={[5, 8]} />
+                  </IconButton>
+                  <IconButton
+                    backgroundColor="transparent"
+                    aria-label="next day"
+                    onClick={() => handleDateChange(+1)}
+                  >
+                    <ChevronRightIcon w={[5, 8]} h={[5, 8]} />
+                  </IconButton>
+                </HStack>
+              )}
+            </HStack>
+            {(items as Array<Schedule | CheckIn>).map((item, index) => {
+              const currentDate = setDay(week, selectedDay.getDay() + i, {
+                locale,
+              });
+              const scheduledDate =
+                "startTime" in item
+                  ? new Date(item?.startTime as string)
+                  : new Date(item?.startDate as string);
 
-              {schedules.map((schedule) => {
-                const currentDate = setDay(week, selectedDay.getDay() + i, {
-                  locale,
-                });
-                const scheduledDate = new Date(schedule?.startTime as string);
+              if (
+                item === null ||
+                scheduledDate === null ||
+                scheduledDate.getDate() !== currentDate.getDate() ||
+                scheduledDate.getMonth() !== currentDate.getMonth() ||
+                scheduledDate.getFullYear() !== currentDate.getFullYear()
+              ) {
+                return null;
+              }
 
-                if (
-                  schedule === null ||
-                  scheduledDate === null ||
-                  scheduledDate.getDate() !== currentDate.getDate() ||
-                  scheduledDate.getMonth() !== currentDate.getMonth() ||
-                  scheduledDate.getFullYear() !== currentDate.getFullYear()
-                ) {
-                  return null;
-                }
-
-                return renderItem({
-                  schedule,
-                  showingFullWeek: selectedDay === undefined,
-                });
-              })}
-            </VStack>
-          </div>
+              return renderItem({
+                item,
+                showingFullWeek: selectedDay === undefined,
+                index,
+              });
+            })}
+          </VStack>
         );
       })}
     </>
   );
 }
-
-export const WeeklyResponsiveContainer = ({
-  children,
-}: {
-  children: ReactNode;
-}) => {
-  return <div>{children}</div>;
-};

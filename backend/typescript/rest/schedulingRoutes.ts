@@ -1,17 +1,12 @@
 import { Router } from "express";
 
-import { isAuthorizedByRole } from "../middlewares/auth";
 import {
   createSchedulingDtoValidator,
   updateSchedulingDtoValidator,
 } from "../middlewares/validators/schedulingValidators";
 import nodemailerConfig from "../nodemailer.config";
-import AuthService from "../services/implementations/authService";
 import EmailService from "../services/implementations/emailService";
-import UserService from "../services/implementations/userService";
 import SchedulingService from "../services/implementations/schedulingService";
-import IUserService from "../services/interfaces/userService";
-import IAuthService from "../services/interfaces/authService";
 import IEmailService from "../services/interfaces/emailService";
 import ISchedulingService from "../services/interfaces/schedulingService";
 import { SchedulingDTO } from "../types";
@@ -19,6 +14,8 @@ import { sendResponseByMimeType } from "../utilities/responseUtil";
 import getErrorMessage from "../utilities/errorMessageUtil";
 import IDonorService from "../services/interfaces/donorService";
 import DonorService from "../services/implementations/donorService";
+import IVolunteerService from "../services/interfaces/volunteerService";
+import VolunteerService from "../services/implementations/volunteerService";
 
 const schedulingRouter: Router = Router();
 
@@ -27,9 +24,11 @@ const schedulingRouter: Router = Router();
 
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const donorService: IDonorService = new DonorService();
+const volunteerService: IVolunteerService = new VolunteerService();
 const schedulingService: ISchedulingService = new SchedulingService(
   emailService,
   donorService,
+  volunteerService,
 );
 
 schedulingRouter.get("/volunteers/:volunteerId?", async (req, res) => {
@@ -259,7 +258,7 @@ schedulingRouter.put(
 */
 schedulingRouter.delete("/:id?", async (req, res) => {
   const { id } = req.params;
-  const { recurringDonationId, currentDate } = req.query;
+  const { recurringDonationId, currentDate, role } = req.query;
   const contentType = req.headers["content-type"];
 
   if (id && recurringDonationId) {
@@ -275,6 +274,7 @@ schedulingRouter.delete("/:id?", async (req, res) => {
       await schedulingService.deleteSchedulingByRecurringDonationId(
         recurringDonationId as string,
         currentDate as string,
+        role as string,
       );
       res.status(204).send();
     } catch (error: unknown) {
@@ -282,7 +282,7 @@ schedulingRouter.delete("/:id?", async (req, res) => {
     }
   } else if (id) {
     try {
-      await schedulingService.deleteSchedulingById(id);
+      await schedulingService.deleteSchedulingById(id, role as string);
       res.status(204).send();
     } catch (error: unknown) {
       res.status(500).json({ error: getErrorMessage(error) });

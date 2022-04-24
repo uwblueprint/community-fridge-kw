@@ -1,5 +1,4 @@
-import { CloseIcon } from "@chakra-ui/icons";
-import { Button, Container, IconButton, Image, Text } from "@chakra-ui/react";
+import { Button, Container, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
@@ -18,11 +17,15 @@ const ConfirmVerificationPage = () => {
           src={confirmVerificationImage}
           alt="Verification email image"
         />
-        <Text mt="1rem" textAlign="center" textStyle="mobileHeader1">
+        <Text
+          mt={["2rem", "2.25rem"]}
+          textAlign="center"
+          textStyle="mobileHeader1"
+        >
           Thank you for verifying your email address!
         </Text>
         <Text
-          mt="1rem"
+          mt={["2rem", "2.25rem"]}
           textAlign="center"
           textStyle="mobileBody"
           color="hubbard.100"

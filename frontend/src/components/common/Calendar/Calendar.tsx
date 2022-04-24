@@ -1,32 +1,94 @@
+import { Divider } from "@chakra-ui/react";
+import { add } from "date-fns";
 import React from "react";
+import { NavigationProps } from "react-hooks-helper";
 
+import { CheckIn } from "../../../types/CheckInTypes";
 import { Schedule } from "../../../types/SchedulingTypes";
-import CalendarInfoCard from "./CalendarInfoCard";
-import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar";
+import {
+  CheckInWithShiftType,
+  ScheduleWithShiftType,
+} from "../../../types/VolunteerTypes";
+import CheckInInfoCard from "../../pages/AdminDashboard/components/CheckInInfoCard";
+import DropoffCard from "../../pages/Dashboard/components/DropoffCard";
+import ShiftCard from "../../pages/VolunteerDashboard/ShiftCard";
+import { WeeklyBody, WeeklyCalendar } from "./WeeklyCalendar"; /*  */
 
 type CalendarProps = {
   selectedDay: Date;
-  schedules: Schedule[];
+  setSelectedDay: (date: Date) => void;
+  items: Schedule[] | CheckIn[];
   isAdminView: boolean;
+  isCheckInView: boolean;
+  isCheckInShiftView?: boolean;
+  navigation?: NavigationProps;
+  setSelectedVolunteerShift?: (
+    shift: ScheduleWithShiftType | CheckInWithShiftType,
+  ) => void;
+  deleteCheckIn?: any;
 };
 
 const Calendar = ({
   selectedDay,
-  schedules,
-  isAdminView,
+  setSelectedDay,
+  items,
+  isAdminView = false,
+  isCheckInView = false,
+  isCheckInShiftView = false,
+  navigation,
+  setSelectedVolunteerShift,
+  deleteCheckIn,
 }: CalendarProps): React.ReactElement => {
+  const [currentDate, setCurrentDate] = React.useState(selectedDay);
+
+  const handleDateChange = (days: number) => {
+    setSelectedDay(add(currentDate as Date, { days }));
+    setCurrentDate(add(currentDate as Date, { days }));
+  };
+
+  const getCheckInCard = (item: any, index: number) => {
+    if (isCheckInShiftView) {
+      return (
+        <>
+          <ShiftCard
+            key={JSON.stringify(item)}
+            shift={item}
+            navigation={navigation}
+            isSignUp
+            setSelectedVolunteerShift={setSelectedVolunteerShift}
+          />
+          {index < items.length - 1 && <Divider pt="0.5rem" />}
+        </>
+      );
+    }
+    return (
+      <CheckInInfoCard
+        key={JSON.stringify(item)}
+        checkIn={item as CheckIn}
+        deleteCheckIn={deleteCheckIn}
+      />
+    );
+  };
   return (
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
         selectedDay={selectedDay}
-        schedules={schedules}
-        renderItem={({ schedule }) => (
-          <CalendarInfoCard
-            key={JSON.stringify(schedule)}
-            schedule={schedule}
-            isAdminView={isAdminView}
-          />
-        )}
+        items={items}
+        renderItem={({ item, index }) =>
+          isCheckInView ? (
+            getCheckInCard(item, index)
+          ) : (
+            <DropoffCard
+              key={JSON.stringify(item)}
+              schedule={item as Schedule}
+              isDonorView={false}
+              isPublicView={!isAdminView}
+            />
+          )
+        }
+        calendarDate={currentDate}
+        setSelectedDay={setSelectedDay}
+        handleDateChange={handleDateChange}
       />
     </WeeklyCalendar>
   );

@@ -2,6 +2,8 @@ import {
   VolunteerDTO,
   UserVolunteerDTO,
   UpdateVolunteerDTO,
+  CheckInDTO,
+  SchedulingDTO,
 } from "../../types";
 
 interface IVolunteerService {
@@ -37,12 +39,25 @@ interface IVolunteerService {
   getVolunteers(): Promise<Array<UserVolunteerDTO>>;
 
   /**
+   * Get all checkins and schedulings sorted by most recent to least recent
+   * @param volunteerId id associated with volunteer
+   * @returns all checkins and schedulings sorted by most recent to least recent
+   * @throws Error if scheduling or checkin retrieval fails
+   */
+  getCheckInsAndSchedules(
+    volunteerId: string,
+  ): Promise<Array<CheckInDTO | SchedulingDTO>>;
+
+  /**
    * Update a volunteer by volunteerId.
    * @param id volunteer's id
    * @param volunteer the volunteer to be updated
    * @throws Error if volunteer update fails
    */
-  updateVolunteerById(id: string, volunteer: UpdateVolunteerDTO): Promise<void>;
+  updateVolunteerById(
+    id: string,
+    volunteer: UpdateVolunteerDTO,
+  ): Promise<VolunteerDTO>;
 
   /**
    * Update a volunteer by userId.
@@ -53,7 +68,7 @@ interface IVolunteerService {
   updateVolunteerByUserId(
     userId: string,
     volunteer: UpdateVolunteerDTO,
-  ): Promise<void>;
+  ): Promise<VolunteerDTO>;
 
   /**
    * Delete a volunteer by id
