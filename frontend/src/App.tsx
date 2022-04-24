@@ -7,6 +7,7 @@ import Login from "./components/auth/Login";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import ResetPassword from "./components/auth/ResetPassword/index";
 import Signup from "./components/auth/Signup";
+import FeedbackBanner from "./components/common/Banner";
 import Footer from "./components/common/Footer";
 import Header from "./components/common/Header";
 import Account from "./components/pages/Account";

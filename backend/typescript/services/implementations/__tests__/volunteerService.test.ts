@@ -1,6 +1,12 @@
 import User from "../../../models/user.model";
 import { ShiftType, Status, VolunteerDTO } from "../../../types";
 import testSql from "../../../testUtils/testDb";
+import {
+  testUsers,
+  testVolunteers,
+  testUserVolunteers,
+  testUpdatedUserVolunteers,
+} from "../../../testUtils/volunteerService";
 import VolunteerService from "../volunteerService";
 import Volunteer from "../../../models/volunteer.model";
 import Scheduling from "../../../models/scheduling.model";

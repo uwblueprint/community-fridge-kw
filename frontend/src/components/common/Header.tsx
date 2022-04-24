@@ -195,6 +195,9 @@ const Header = (): JSX.Element => {
                   >
                     User management
                   </Link>
+                  <Link as={ReactLink} to={Routes.USER_MANAGEMENT_PAGE}>
+                    User Management
+                  </Link>
                 </>
               )}
               <Link as={ReactLink} to={Routes.ACCOUNT_PAGE} isTruncated>
@@ -294,7 +297,7 @@ const Header = (): JSX.Element => {
                       </Link>
                     </>
                   )}
-                  {authenticatedUser.role === Role.ADMIN && (
+                  {authenticatedUser.role === Role.VOLUNTEER && (
                     <>
                       <Link
                         as={ReactLink}
@@ -316,6 +319,13 @@ const Header = (): JSX.Element => {
                         onClick={onClose}
                       >
                         User management
+                      </Link>
+                      <Link
+                        as={ReactLink}
+                        to={Routes.USER_MANAGEMENT_PAGE}
+                        onClick={onClose}
+                      >
+                        User Management
                       </Link>
                     </>
                   )}

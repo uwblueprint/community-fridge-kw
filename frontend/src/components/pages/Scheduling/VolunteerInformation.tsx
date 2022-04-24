@@ -172,7 +172,6 @@ const VolunteerInformation = ({
       notes,
       startTime,
     };
-
     const res = isOneTimeEvent
       ? await SchedulingAPIClient.updateSchedule(id, editedFields)
       : await SchedulingAPIClient.updateSchedulesByRecurringDonationId(

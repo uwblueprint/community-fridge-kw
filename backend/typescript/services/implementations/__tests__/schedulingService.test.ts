@@ -4,6 +4,7 @@ import User from "../../../models/user.model";
 import Donor from "../../../models/donor.model";
 import Volunteer from "../../../models/volunteer.model";
 import SchedulingService from "../schedulingService";
+import Volunteer from "../../../models/volunteer.model";
 
 import testSql from "../../../testUtils/testDb";
 import {
