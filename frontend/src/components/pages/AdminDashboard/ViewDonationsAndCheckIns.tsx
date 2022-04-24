@@ -162,9 +162,9 @@ const ViewDonationsAndCheckIns = ({
             </Button>
             <Select
               color="hubbard.100"
-              background={["dorian.100", "none"]}
-              border={["none", "1px"]}
-              borderColor={["none", "dorian.100"]}
+              background={["none", "none"]}
+              border={["1px", "1px"]}
+              borderColor={["dorian.100", "dorian.100"]}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 handleSelectFilter(e);
               }}

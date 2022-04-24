@@ -33,10 +33,13 @@ const FridgeFoodRescueDescription = () => {
         Food rescue description
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
-            variant="editInfo"
-            rightIcon={<EditIcon size={24} />}
+            pl="8px"
+            variant="edit"
+            color="hubbard.100"
             onClick={navigateToEditPage}
-          />
+          >
+            Edit
+          </Button>
         )}
       </Text>
       {content?.foodRescueDescription && (

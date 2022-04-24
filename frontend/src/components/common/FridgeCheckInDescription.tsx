@@ -33,10 +33,13 @@ const FridgeCheckInDescription = () => {
         Fridge check-in description
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
-            variant="editInfo"
-            rightIcon={<EditIcon size={24} />}
+            pl="8px"
+            variant="edit"
+            color="hubbard.100"
             onClick={navigateToEditPage}
-          />
+          >
+            Edit
+          </Button>
         )}
       </Text>
       {content?.checkinDescription && (
@@ -50,6 +53,7 @@ const FridgeCheckInDescription = () => {
             color="#498FB6"
             textStyle={["mobileLink", "desktopLink"]}
             href={content?.checkinUrl}
+            pb="2px"
             isExternal
           >
             Link to instructions
