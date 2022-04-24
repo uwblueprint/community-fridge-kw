@@ -94,12 +94,6 @@ const Home = (): JSX.Element => {
         </Box>
         <DonationProcess />
         <VolunteerRoles />
-        <GeneralErrorModal
-          isOpen={isOpen}
-          onClose={onClose}
-          headerText="Access Error"
-          bodyText="You do not have access to this function, please create a donor account to schedule a donation."
-        />
       </Container>
     </>
   );
