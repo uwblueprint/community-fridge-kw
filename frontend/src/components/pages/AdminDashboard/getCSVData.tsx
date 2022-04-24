@@ -41,6 +41,8 @@ export const getScheduleCSVData = async () => {
         donorEmail: donor.email,
         donorBusinessName: donor.businessName,
         donorPhoneNumber: donor.phoneNumber,
+        isPickup: schedule.isPickup ? schedule.isPickup : "",
+        volunteerNeeded: schedule.volunteerNeeded ? schedule.volunteerNeeded : "",
       };
     }),
   );
