@@ -52,7 +52,12 @@ const Dashboard = (): JSX.Element => {
           <Text color="black.100" textStyle="mobileHeader1">
             My scheduled donations
           </Text>
-          <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
+          <Text
+            pt="0.8rem"
+            textStyle="mobileBody"
+            color="hubbard.100"
+            paddingBottom={["8px", "0px"]}
+          >
             Thank you for supporting your local community fridge!{" "}
           </Text>
         </VStack>

@@ -36,6 +36,7 @@ const FridgeCheckInDescription = () => {
             pl="8px"
             variant="edit"
             color="hubbard.100"
+            float={["right", "initial"]}
             onClick={navigateToEditPage}
           >
             Edit
@@ -43,7 +44,7 @@ const FridgeCheckInDescription = () => {
         )}
       </Text>
       {content?.checkinDescription && (
-        <Text textStyle={["mobileBody", "desktopBody"]} pt="1rem">
+        <Text textStyle={["mobileBody", "desktopBody"]} pt="1rem" pb="0.25rem">
           {content?.checkinDescription}
         </Text>
       )}
@@ -54,6 +55,7 @@ const FridgeCheckInDescription = () => {
             textStyle={["mobileLink", "desktopLink"]}
             href={content?.checkinUrl}
             pb="2px"
+            textDecoration="underline"
             isExternal
           >
             Link to instructions
