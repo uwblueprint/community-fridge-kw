@@ -69,6 +69,7 @@ const Calendar = ({
       />
     );
   };
+
   return (
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
@@ -84,7 +85,9 @@ const Calendar = ({
                 textAlign="center"
               >
                 <Text color="black.500" textStyle="mobileBody">
-                  No shifts scheduled.
+                  {isCheckInView
+                    ? "No shifts scheduled."
+                    : "No scheduled donations."}
                 </Text>
               </Box>
             );
