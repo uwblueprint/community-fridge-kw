@@ -146,6 +146,24 @@ authRouter.post(
   },
 );
 
+authRouter.get("/isEmailVerified/:email", async (req, res) => {
+  try {
+    await authService.isEmailVerifiedByFirebase(req.params.email);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/resendEmailVerification/:email", async (req, res) => {
+  try {
+    await authService.sendEmailVerificationLink(req.params.email);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
 /* Emails a password reset link to the user with the specified email */
 authRouter.post("/resetPassword/:email", async (req, res) => {
   try {
