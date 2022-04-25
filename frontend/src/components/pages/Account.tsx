@@ -8,7 +8,6 @@ import {
   FormLabel,
   HStack,
   IconButton,
-  Img,
   Input,
   Spacer,
   Spinner,
@@ -22,7 +21,6 @@ import { useHistory } from "react-router-dom";
 import AuthAPIClient from "../../APIClients/AuthAPIClient";
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import UserAPIClient from "../../APIClients/UserAPIClient";
-import pencilIcon from "../../assets/pencilIcon.svg";
 import { AUTHENTICATED_USER_KEY } from "../../constants/AuthConstants";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";

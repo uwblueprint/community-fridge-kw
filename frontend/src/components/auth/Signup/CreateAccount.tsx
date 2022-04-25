@@ -83,9 +83,14 @@ const CreateAccount = ({
         <Text as="span" textStyle="mobileBodyBold">
           My Account
         </Text>{" "}
-        section of the platform. Please note there will be a few screening
-        questions on the following pages, and your account will need to be
-        accepted by CFKW Admin before you are able to sign up for shifts.
+        section of the platform.
+        {role === Role.VOLUNTEER && (
+          <Text>
+            Please note there will be a few screening questions on the following
+            pages, and your account will need to be accepted by CFKW Admin
+            before you are able to sign up for shifts.
+          </Text>
+        )}
       </Text>
 
       <FormControl mt="2rem" isRequired>

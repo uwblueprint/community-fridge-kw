@@ -1,4 +1,3 @@
-import { EditIcon } from "@chakra-ui/icons";
 import { Box, Button, Link, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
