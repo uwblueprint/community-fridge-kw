@@ -25,7 +25,7 @@
 
 .rmdp-day.rmdp-today span {
   color: #000 !important;
-  background-color: transparent !important;
+  background-color: #ffe5f9 !important;
 }
 
 .rmdp-day.rmdp-selected span, .rmdp-day.rmdp-selected.rmdp-today span, .rmdp-day.rmdp-range.start span, .rmdp-day.rmdp-range.end span {
