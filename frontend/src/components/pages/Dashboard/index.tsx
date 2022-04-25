@@ -52,7 +52,12 @@ const Dashboard = (): JSX.Element => {
           <Text color="black.100" textStyle="mobileHeader1">
             My scheduled donations
           </Text>
-          <Text pt="0.8rem" textStyle="mobileBody" color="hubbard.100">
+          <Text
+            pt="0.8rem"
+            textStyle="mobileBody"
+            color="hubbard.100"
+            paddingBottom={["8px", "0px"]}
+          >
             Thank you for supporting your local community fridge!{" "}
           </Text>
         </VStack>
@@ -60,7 +65,7 @@ const Dashboard = (): JSX.Element => {
           float="right"
           mt="1.5rem"
           size="md"
-          width={{ lg: "20%", base: "100%" }}
+          width={{ lg: "25%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.SCHEDULING_PAGE)}
         >

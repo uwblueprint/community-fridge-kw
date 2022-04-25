@@ -30,6 +30,7 @@ const Button = {
       width: "28px",
       background: "none",
       marginBottom: "10px",
+      textDecoration: "underline",
     },
     cancelEditInfo: {
       border: "none",
@@ -84,8 +85,9 @@ const Button = {
       fontWeight: "400",
     },
     exportMobile: {
-      background: "dorian.100",
-      border: "none",
+      background: "none",
+      border: "1px",
+      borderColor: "dorian.100",
       color: "hubbard.100",
       fontSize: "14px",
       py: "20px",

@@ -57,7 +57,11 @@ const DonationStep = ({
         <Text color="black.100" textStyle={["mobileHeader4", "desktopHeader4"]}>
           {title}
         </Text>
-        <Text color="hubbard.100" textStyle={["mobileSmall", "desktopBody"]}>
+        <Text
+          color="hubbard.100"
+          textStyle={["mobileSmall", "desktopBody"]}
+          pt="2px"
+        >
           {description}
         </Text>
       </Box>

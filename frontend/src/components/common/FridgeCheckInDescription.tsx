@@ -33,14 +33,19 @@ const FridgeCheckInDescription = () => {
         Fridge check-in description
         {authenticatedUser?.role === Role.ADMIN && (
           <Button
-            variant="editInfo"
-            rightIcon={<EditIcon size={24} />}
+            pl="8px"
+            variant="edit"
+            color="hubbard.100"
+            float={["right", "initial"]}
             onClick={navigateToEditPage}
-          />
+            paddingBottom={["0.5em", "0px"]}
+          >
+            Edit
+          </Button>
         )}
       </Text>
       {content?.checkinDescription && (
-        <Text textStyle={["mobileBody", "desktopBody"]} pt="1rem">
+        <Text textStyle={["mobileBody", "desktopBody"]} pt="1rem" pb="0.25rem">
           {content?.checkinDescription}
         </Text>
       )}
@@ -50,6 +55,8 @@ const FridgeCheckInDescription = () => {
             color="#498FB6"
             textStyle={["mobileLink", "desktopLink"]}
             href={content?.checkinUrl}
+            pb="2px"
+            textDecoration="underline"
             isExternal
           >
             Link to instructions
