@@ -65,7 +65,7 @@ const Dashboard = (): JSX.Element => {
           float="right"
           mt="1.5rem"
           size="md"
-          width={{ lg: "20%", base: "100%" }}
+          width={{ lg: "25%", base: "100%" }}
           variant="navigation"
           onClick={() => history.push(Routes.SCHEDULING_PAGE)}
         >
