@@ -5,7 +5,7 @@ import { Email, Facebook, Instagram } from "./icons";
 
 const Footer = (): JSX.Element => (
   <>
-    <Divider pt={{ base: "0px", md: "79px" }} />
+    <Divider pt={{ base: "79px", md: "117px" }} />
     <Container
       pt="4rem"
       pb="6rem"
