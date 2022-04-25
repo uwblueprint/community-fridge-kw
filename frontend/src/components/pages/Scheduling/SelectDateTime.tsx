@@ -12,8 +12,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format } from "date-fns";
-import moment from "moment";
+import { endOfDay, format, isAfter, parse } from "date-fns";
 import React, { useContext, useState } from "react";
 import DatePicker, { Calendar, DateObject } from "react-multi-date-picker";
 
@@ -70,7 +69,10 @@ const SelectDateTime = ({
 
   const get12HTimeString = (time: string) => {
     const time24Hour = `${new Date(time).getHours().toString()}:00`;
-    return moment(time24Hour, "HH:mm").format("h:mm A");
+    if (time24Hour === "NaN:00") {
+      return "";
+    }
+    return format(parse(time24Hour, "HH:mm", new Date()), "h:mm a");
   };
 
   const getSubmitState = () => {
@@ -137,7 +139,10 @@ const SelectDateTime = ({
     const iconsPerTimeSlot = [0, 0, 0, 0, 0] as number[];
     schedules.forEach((schedule) => {
       if (schedule) {
-        if (new Date(schedule.startTime).getDate() === selectedDate.getDate()) {
+        if (
+          new Date(schedule.startTime).toDateString() ===
+          selectedDate.toDateString()
+        ) {
           if (schedule.dayPart === selectedDayPart) {
             const timeSlots = getTimeSlot(schedule.dayPart);
             if (timeSlots) {
@@ -190,8 +195,14 @@ const SelectDateTime = ({
     const tokens = timeRangeSelected.split(" - ");
 
     // convert start and end time to 24h values
-    const convertedStartTime = moment(tokens[0], "hh:mm A").format("HH:mm");
-    const convertedEndTime = moment(tokens[1], "hh:mm A").format("HH:mm");
+    const convertedStartTime = format(
+      parse(tokens[0], "h:mm a", new Date()),
+      "HH:mm",
+    );
+    const convertedEndTime = format(
+      parse(tokens[1], "h:mm a", new Date()),
+      "HH:mm",
+    );
 
     const newStartTime = new Date(`11/11/1970 ${convertedStartTime}`);
     const newEndTime = new Date(`11/11/1970 ${convertedEndTime}`);
@@ -239,8 +250,7 @@ const SelectDateTime = ({
   const handleChangeRecurringDate = (selectedDate: DateObject) => {
     const selectedDateObj = selectedDate.toDate();
     setRecurringEndDate(selectedDateObj);
-
-    const recurringDate = new Date(selectedDateObj);
+    const recurringDate = endOfDay(new Date(selectedDateObj));
     setForm({
       target: {
         name: "recurringDonationEndDate",
@@ -304,11 +314,11 @@ const SelectDateTime = ({
         recurringEndDateVal.setHours(23);
         recurringEndDateVal.setMinutes(59);
 
-        if (startDateVal > recurringEndDateVal) {
+        if (isAfter(startDateVal, recurringEndDateVal)) {
           valid = false;
           newErrors.recurringDonationEndDate =
             ErrorMessages.recurringEndDateAfterStartDate;
-        } else if (recurringEndDateVal > maxRecurringEndDateVal) {
+        } else if (isAfter(recurringEndDateVal, maxRecurringEndDateVal)) {
           valid = false;
           newErrors.recurringDonationEndDate =
             ErrorMessages.recurringDonationEndDateWithinSixMonths;
@@ -366,7 +376,7 @@ const SelectDateTime = ({
       const res = await SchedulingAPIClient.updateSchedule(id, editedFields);
       if (!res) {
         toast({
-          title: "Drop-off Information could not be updated. Please try again",
+          title: "Drop-off information could not be updated. Please try again",
           status: "error",
           duration: 7000,
           isClosable: true,
@@ -375,7 +385,7 @@ const SelectDateTime = ({
       }
     }
     toast({
-      title: "Drop-off Information updated successfully",
+      title: "Drop-off information updated successfully",
       status: "success",
       duration: 7000,
       isClosable: true,
@@ -390,7 +400,7 @@ const SelectDateTime = ({
   };
 
   return (
-    <Container variant="responsiveContainer">
+    <Container variant="responsiveContainer" pb={{ lg: "0px", base: "100px" }}>
       {isBeingEdited ? (
         <CancelButton discardChanges={discardChanges} />
       ) : (
@@ -400,7 +410,7 @@ const SelectDateTime = ({
         </>
       )}
       <Text textStyle="mobileHeader2" mt="2em" mb="1em">
-        {isDesktop ? "Drop-off date and time" : "Date and Time"}
+        Date and time
       </Text>
       <FormControl isRequired isInvalid={!!formErrors.date}>
         <FormLabel fontWeight="600">Select date</FormLabel>

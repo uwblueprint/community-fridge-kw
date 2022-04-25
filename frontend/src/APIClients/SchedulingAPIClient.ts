@@ -137,9 +137,12 @@ const updateSchedulesByRecurringDonationId = async (
   }
 };
 
-const deleteSchedule = async (scheduleId: string): Promise<boolean> => {
+const deleteSchedule = async (
+  scheduleId: string,
+  userRole: string,
+): Promise<boolean> => {
   try {
-    await baseAPIClient.delete(`/scheduling/${scheduleId}`, {
+    await baseAPIClient.delete(`/scheduling/${scheduleId}?role=${userRole}`, {
       headers: { Authorization: BEARER_TOKEN },
     });
     return true;
@@ -151,10 +154,11 @@ const deleteSchedule = async (scheduleId: string): Promise<boolean> => {
 const deleteScheduleByRecurringId = async (
   recurringDonationId: string,
   currentDate: string,
+  userRole: string,
 ): Promise<boolean> => {
   try {
     await baseAPIClient.delete(
-      `/scheduling?recurringDonationId=${recurringDonationId}&currentDate=${currentDate}`,
+      `/scheduling?recurringDonationId=${recurringDonationId}&currentDate=${currentDate}&role=${userRole}`,
       {
         headers: { Authorization: BEARER_TOKEN },
       },

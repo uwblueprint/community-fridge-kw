@@ -25,7 +25,7 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
   ],
-  plugins: ["simple-import-sort"],
+  plugins: ["simple-import-sort", "unused-imports"],
   rules: {
     "prettier/prettier": ["warn", { endOfLine: "auto" }],
     "react/require-default-props": "off",
@@ -35,5 +35,16 @@ module.exports = {
     "sort-imports": "off",
     "simple-import-sort/imports": "warn",
     "simple-import-sort/exports": "warn",
+    "no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        vars: "all",
+        varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+      },
+    ],
   },
 };

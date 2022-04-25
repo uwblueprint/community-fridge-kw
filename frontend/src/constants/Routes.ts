@@ -12,7 +12,7 @@ export const DASHBOARD_PAGE = "/dashboard";
 
 export const DASHBOARD_SCHEDULE_EDIT_PAGE = "/dashboard/:id";
 
-export const VIEW_DONATIONS = "/view-donations";
+export const ADMIN_VIEW_DONATIONS = "/admin/view-donations";
 
 export const ACCOUNT_PAGE = "/account";
 
@@ -22,4 +22,22 @@ export const USER_MANAGEMENT_PAGE = "/user-management";
 
 export const VOLUNTEER_SHIFTS_PAGE = "/volunteer-shifts";
 
+export const VOLUNTEER_SHIFT_DETAILS_PAGE = "/volunteer-shifts/:id/:type";
+
 export const FORGET_PASSWORD = "/forget-password";
+
+export const ADMIN_CHECK_INS = "/admin/check-ins";
+
+export const VOLUNTEER_DASHBOARD_PAGE = "/volunteer-dashboard";
+
+export const ADMIN_DELETE_CHECK_INS = "/admin/delete-check-ins";
+
+export const CREATE_CHECKIN = "/admin/create-checkin";
+
+export const ADMIN_CHECKIN_EDIT = "/admin/edit-checkin/:id";
+
+export const ADMIN_CHECK_IN_EDIT_DESCRIPTION_PAGE =
+  "/admin/edit-check-in-description";
+
+export const ADMIN_FOOD_RESCUE_EDIT_DESCRIPTION_PAGE =
+  "/admin/edit-food-rescue-description";

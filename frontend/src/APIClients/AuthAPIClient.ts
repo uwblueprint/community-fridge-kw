@@ -63,11 +63,25 @@ const register = async (
   password: string,
   businessName: string,
   role: string,
+  cityQuestionResponse?: string,
+  intentionQuestionResponse?: string,
+  skillsQuestionResponse?: string,
 ): Promise<AuthenticatedUser> => {
   try {
     const { data } = await baseAPIClient.post(
       "/auth/register",
-      { firstName, lastName, email, phoneNumber, password, role, businessName },
+      {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        role,
+        businessName,
+        cityQuestionResponse,
+        intentionQuestionResponse,
+        skillsQuestionResponse,
+      },
       { withCredentials: true },
     );
     return data;
@@ -77,15 +91,11 @@ const register = async (
 };
 
 const resetPassword = async (email: string | undefined): Promise<boolean> => {
-  const bearerToken = `Bearer ${getLocalStorageObjProperty(
-    AUTHENTICATED_USER_KEY,
-    "accessToken",
-  )}`;
   try {
     await baseAPIClient.post(
       `/auth/resetPassword/${email}`,
       {},
-      { headers: { Authorization: bearerToken } },
+      { withCredentials: true },
     );
     return true;
   } catch (error) {
@@ -125,12 +135,60 @@ const confirmEmailVerification = async (oobCode: string): Promise<boolean> => {
   }
 };
 
+const verifyPasswordResetCode = async (oobCode: string): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/verifyPasswordResetCode/${oobCode}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const confirmPasswordReset = async (
+  oobCode: string,
+  newPassword: string,
+): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/confirmPasswordReset/${newPassword}?oobCode=${oobCode}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const sendVolunteerApprovedEmail = async (
+  email: string,
+  firstName: string,
+): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/approveVolunteer/${email}?firstName=${firstName}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   confirmEmailVerification,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
   login,
   logout,
   loginWithGoogle,
   register,
   resetPassword,
   refresh,
+  sendVolunteerApprovedEmail,
 };

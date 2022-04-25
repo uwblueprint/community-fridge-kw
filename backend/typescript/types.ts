@@ -78,6 +78,14 @@ export type VolunteerDTO = {
   status: Status;
 };
 
+export type ContentDTO = {
+  id: string;
+  foodRescueDescription: string;
+  foodRescueUrl: string;
+  checkinDescription: string;
+  checkinUrl: string;
+};
+
 export type UserDonorDTO = UserDTO & DonorDTO;
 
 export type CreateDonorDTO = Omit<DonorDTO, "id">;
@@ -94,24 +102,28 @@ export type UserVolunteerDTO = UserDTO & VolunteerDTO;
 
 export type UpdateVolunteerDTO = Omit<VolunteerDTO, "id" | "userId">;
 
+export type CreateContentDTO = Omit<ContentDTO, "id">;
+
+export type UpdateContentDTO = CreateContentDTO;
+
 export type SchedulingDTO = {
   id: string;
   donorId: string;
   categories: string[];
   size?: string;
   isPickup: boolean;
-  pickupLocation?: string;
+  pickupLocation?: string | null;
   dayPart: DayPart;
   startTime: Date;
   endTime: Date;
   status: Status;
   frequency: Frequency;
-  recurringDonationId?: string;
-  recurringDonationEndDate?: Date;
+  recurringDonationId?: string | null;
+  recurringDonationEndDate?: Date | null;
   volunteerNeeded: boolean;
-  volunteerTime?: string;
+  volunteerTime?: string | null;
   notes?: string;
-  volunteerId?: string;
+  volunteerId?: string | null;
 };
 
 export type CreateSchedulingDTO = Omit<SchedulingDTO, "id">;
@@ -136,3 +148,31 @@ export type NodemailerConfig = {
 };
 
 export type SignUpMethod = "PASSWORD" | "GOOGLE";
+
+export type CheckInDTO = {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  notes?: string;
+  volunteerId?: string | null;
+  isAdmin?: boolean;
+};
+
+export type CreateCheckInDTO = Omit<CheckInDTO, "id">;
+
+export type UpdateCheckInDTO = Partial<Omit<CheckInDTO, "id">>;
+
+export enum ShiftType {
+  CHECKIN = "checkIn",
+  SCHEDULING = "scheduling",
+}
+
+export type SchedulingDTOWithShiftType = SchedulingDTO & {
+  type: ShiftType.SCHEDULING;
+};
+export type CheckInDTOWithShiftType = CheckInDTO & { type: ShiftType.CHECKIN };
+
+export type DTOTypes = Record<
+  string,
+  Date | string | string[] | boolean | number | null | undefined
+>;

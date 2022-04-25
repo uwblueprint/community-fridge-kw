@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { isAuthorizedByEmail, isAuthorizedByUserId } from "../middlewares/auth";
+import { isAuthorizedByUserId } from "../middlewares/auth";
 import {
   loginRequestValidator,
   registerRequestValidator,
@@ -23,16 +23,16 @@ const authRouter: Router = Router();
 const userService: IUserService = new UserService();
 const emailService: IEmailService = new EmailService(nodemailerConfig);
 const authService: IAuthService = new AuthService(userService, emailService);
-const volunteerService: IVolunteerService = new VolunteerService();
 const donorService: IDonorService = new DonorService();
+const volunteerService: IVolunteerService = new VolunteerService();
 
 /* Returns access token and user info in response body and sets refreshToken as an httpOnly cookie */
 authRouter.post("/login", loginRequestValidator, async (req, res) => {
   try {
-    const authDTO = req.body.idToken
-      ? // OAuth
-        await authService.generateTokenOAuth(req.body.idToken)
-      : await authService.generateToken(req.body.email, req.body.password);
+    const authDTO = await authService.generateToken(
+      req.body.email,
+      req.body.password,
+    );
 
     const { refreshToken, ...rest } = authDTO;
 
@@ -85,6 +85,18 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
 
     await authService.sendEmailVerificationLink(req.body.email);
 
+    if (req.body.role === Role.VOLUNTEER) {
+      await authService.sendAdminVolunteerSignUpEmail(
+        req.body.email,
+        `${req.body.firstName} ${req.body.lastName}`,
+        [
+          req.body.cityQuestionResponse,
+          req.body.intentionQuestionResponse,
+          req.body.skillsQuestionResponse,
+        ],
+      );
+    }
+
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -135,22 +147,61 @@ authRouter.post(
 );
 
 /* Emails a password reset link to the user with the specified email */
-authRouter.post(
-  "/resetPassword/:email",
-  isAuthorizedByEmail("email"),
-  async (req, res) => {
-    try {
-      await authService.resetPassword(req.params.email);
-      res.status(204).send();
-    } catch (error: unknown) {
-      res.status(500).json({ error: getErrorMessage(error) });
-    }
-  },
-);
+authRouter.post("/resetPassword/:email", async (req, res) => {
+  try {
+    await authService.resetPassword(req.params.email);
+    res.status(204).send();
+  } catch (error: unknown) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
 
 authRouter.post("/confirmEmailVerification/:oobCode", async (req, res) => {
   try {
     const response = await authService.verifyEmail(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/verifyPasswordResetCode/:oobCode", async (req, res) => {
+  try {
+    const response = await authService.verifyPasswordReset(req.params.oobCode);
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/confirmPasswordReset/:newPassword?", async (req, res) => {
+  const { oobCode } = req.query;
+
+  try {
+    const response = await authService.confirmPasswordReset(
+      req.params.newPassword!,
+      oobCode as string,
+    );
+    if (response) {
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: getErrorMessage(error) });
+  }
+});
+
+authRouter.post("/approveVolunteer/:email?", async (req, res) => {
+  const { firstName } = req.query;
+
+  try {
+    const response = await authService.sendVolunteerApprovedEmail(
+      req.params.email!,
+      firstName as string,
+    );
     if (response) {
       res.status(204).send();
     }

@@ -1,29 +1,31 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
-  Badge,
   Box,
   Button,
   Container,
   Flex,
   HStack,
+  Spacer,
   Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import DonorAPIClient from "../../../APIClients/DonorAPIClient";
 import SchedulingAPIClient from "../../../APIClients/SchedulingAPIClient";
+import VolunteerAPIClient from "../../../APIClients/VolunteerAPIClient";
 import { colorMap } from "../../../constants/DaysInWeek";
 import * as Routes from "../../../constants/Routes";
 import AuthContext from "../../../contexts/AuthContext";
 import { Role } from "../../../types/AuthTypes";
 import { DonorResponse } from "../../../types/DonorTypes";
+import { VolunteerResponse } from "../../../types/VolunteerTypes";
+import GeneralDeleteShiftModal from "../../common/GeneralDeleteShiftModal";
 import ErrorSchedulingModal from "../../common/GeneralErrorModal";
 import SchedulingProgressBar from "../../common/SchedulingProgressBar";
-import DeleteScheduleModal from "../Dashboard/components/DeleteScheduleModal";
 import ModifyRecurringModal from "../Dashboard/components/ModifyRecurringDonationModal";
 import BackButton from "./BackButton";
 import { DonationFrequency, DonationSizes, SchedulingStepProps } from "./types";
@@ -40,6 +42,9 @@ const ConfirmDetails = ({
 
   const [currentDonor, setCurrentDonor] = useState<DonorResponse>(
     {} as DonorResponse,
+  );
+  const [currentVolunteer, setCurrentVolunteer] = useState<VolunteerResponse>(
+    {} as VolunteerResponse,
   );
   const currentSchedule = formValues;
   const { description } = DonationSizes.filter(
@@ -67,10 +72,14 @@ const ConfirmDetails = ({
 
   const onDeleteClick = async (isOneTimeEvent = true) => {
     const res = isOneTimeEvent
-      ? await SchedulingAPIClient.deleteSchedule(currentSchedule.id)
+      ? await SchedulingAPIClient.deleteSchedule(
+          currentSchedule.id,
+          authenticatedUser!.role,
+        )
       : await SchedulingAPIClient.deleteScheduleByRecurringId(
           currentSchedule?.recurringDonationId,
           currentSchedule.startTime,
+          authenticatedUser!.role,
         );
     if (!res) {
       toast({
@@ -79,19 +88,20 @@ const ConfirmDetails = ({
         duration: 7000,
         isClosable: true,
       });
+    } else {
+      toast({
+        title: isOneTimeEvent
+          ? "Donation cancelled successfully"
+          : "Donations cancelled successfully",
+        status: "success",
+        duration: 7000,
+        isClosable: true,
+      });
     }
-    toast({
-      title: isOneTimeEvent
-        ? "Donation cancelled successfully"
-        : "Donations cancelled successfully",
-      status: "success",
-      duration: 7000,
-      isClosable: true,
-    });
     history.push(
-      authenticatedUser!.role === Role.DONOR
-        ? `${Routes.DASHBOARD_PAGE}`
-        : `${Routes.VIEW_DONATIONS}`,
+      authenticatedUser!.role === Role.ADMIN
+        ? Routes.ADMIN_VIEW_DONATIONS
+        : Routes.DASHBOARD_PAGE,
     );
   };
 
@@ -101,6 +111,15 @@ const ConfirmDetails = ({
       : await DonorAPIClient.getDonorByUserId(authenticatedUser!.id);
     setForm({ target: { name: "donorId", value: donorResponse.id } });
     setCurrentDonor(donorResponse);
+  };
+
+  const getVolunteerData = async () => {
+    if (currentSchedule.volunteerId) {
+      const volunteerResponse = await VolunteerAPIClient.getVolunteerById(
+        currentSchedule.volunteerId.toString(),
+      );
+      setCurrentVolunteer(volunteerResponse);
+    }
   };
 
   const startDateLocal = new Date(currentSchedule.startTime);
@@ -116,17 +135,18 @@ const ConfirmDetails = ({
 
   useEffect(() => {
     getDonorData();
+    getVolunteerData();
   }, [currentSchedule.id]);
   return (
-    <Container variant="responsiveContainer">
+    <Container variant="responsiveContainer" pb={{ lg: "0px", base: "100px" }}>
       {isBeingEdited ? (
         <Box mt={10}>
           <Button
             onClick={() =>
               history.push(
-                authenticatedUser?.role === Role.DONOR
-                  ? Routes.DASHBOARD_PAGE
-                  : Routes.VIEW_DONATIONS,
+                authenticatedUser?.role === Role.ADMIN
+                  ? Routes.ADMIN_VIEW_DONATIONS
+                  : Routes.DASHBOARD_PAGE,
               )
             }
             paddingLeft="0"
@@ -148,20 +168,7 @@ const ConfirmDetails = ({
         display={{ md: "flex" }}
         mb="1em"
       >
-        {isBeingEdited ? "Donation Details" : "Confirm Donation Details"}
-        &nbsp;&nbsp;&nbsp;
-        <Badge
-          borderRadius="11px"
-          px="18px"
-          py="-5px"
-          ml={{ md: "5px" }}
-          color={`${(colorMap as any)[currentSchedule?.frequency]}.100`}
-          backgroundColor={`${
-            (colorMap as any)[currentSchedule?.frequency]
-          }.50`}
-        >
-          {currentSchedule?.frequency}
-        </Badge>
+        {isBeingEdited ? "Donation details" : "Confirm donation details"}
       </Text>
       <Box
         pl="0"
@@ -172,18 +179,22 @@ const ConfirmDetails = ({
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
-        <Button
-          pl="0"
-          variant="edit"
-          color="hubbard.100"
-          onClick={() => go && go("date and time")}
-        >
-          Edit
-        </Button>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <Button
+            pl="0"
+            variant="edit"
+            color="hubbard.100"
+            onClick={() => go && go("date and time")}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Spacer />
+        )}
         <Box>
-          <Text textStyle="mobileHeader3">Drop-off Information</Text>
+          <Text textStyle="mobileHeader3">Date and time</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Proposed Drop-off Time
+            Proposed drop-off time
           </Text>
           <Text textStyle="mobileBody">{dateText(startDateLocal)}</Text>
           <Text textStyle="mobileBody">
@@ -216,22 +227,26 @@ const ConfirmDetails = ({
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
-        <Button
-          pl="0"
-          variant="edit"
-          color="hubbard.100"
-          onClick={() => go && go("donation information")}
-        >
-          Edit
-        </Button>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <Button
+            pl="0"
+            variant="edit"
+            color="hubbard.100"
+            onClick={() => go && go("donation information")}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Spacer />
+        )}
         <Box>
-          <Text textStyle="mobileHeader3">Donation Information</Text>
+          <Text textStyle="mobileHeader3">Donation information</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
             Size
           </Text>
           <Text textStyle="mobileBody">{`${currentSchedule.size} - ${description}`}</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Item Category
+            Item category
           </Text>
           <Text textStyle="mobileBody">
             {currentSchedule.categories.join(", ")}
@@ -247,18 +262,22 @@ const ConfirmDetails = ({
         justifyContent="space-between"
         flexDirection="row-reverse"
       >
-        <Button
-          pl="0"
-          variant="edit"
-          color="hubbard.100"
-          onClick={() => go && go("volunteer information")}
-        >
-          Edit
-        </Button>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <Button
+            pl="0"
+            variant="edit"
+            color="hubbard.100"
+            onClick={() => go && go("volunteer information")}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Spacer />
+        )}
         <Box>
-          <Text textStyle="mobileHeader3">Volunteer Information</Text>
+          <Text textStyle="mobileHeader3">Volunteer information</Text>
           <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-            Volunteer Needed
+            Volunteer required
           </Text>
           <Text textStyle="mobileBody">
             {currentSchedule.volunteerNeeded ? "Yes" : "No"}
@@ -266,35 +285,67 @@ const ConfirmDetails = ({
           {currentSchedule.volunteerNeeded && (
             <>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-                Pickup Needed
+                Assistance type
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.isPickup ? "Yes" : "No"}
+                Food rescue {currentSchedule.isPickup ? "pickup" : "unloading"}
               </Text>
-            </>
-          )}
 
-          {currentSchedule.volunteerNeeded && currentSchedule.isPickup && (
-            <Box>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Volunteer request time
+              </Text>
+              <Text textStyle="mobileBody">{dateText(startDateLocal)}</Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerTime
+                  ? format(
+                      parse(currentSchedule.volunteerTime, "HH:mm", new Date()),
+                      "h:mm aa",
+                    )
+                  : "-"}
+              </Text>
               <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
                 Address
               </Text>
               <Text textStyle="mobileBody">
-                {currentSchedule.pickupLocation}
+                {currentSchedule.isPickup
+                  ? `${currentSchedule.pickupLocation}`
+                  : "Community Fridge"}
               </Text>
-            </Box>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Additional notes
+              </Text>
+              <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Assigned volunteer
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerId
+                  ? `${currentVolunteer.firstName} ${currentVolunteer.lastName}`
+                  : "-"}
+              </Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Email
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerId
+                  ? `${currentVolunteer.email}`
+                  : "-"}
+              </Text>
+              <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
+                Phone
+              </Text>
+              <Text textStyle="mobileBody">
+                {currentSchedule.volunteerId
+                  ? `${currentVolunteer.phoneNumber}`
+                  : "-"}
+              </Text>
+            </>
           )}
-          <Box>
-            <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
-              Additional notes
-            </Text>
-            <Text textStyle="mobileBody">{currentSchedule.notes}</Text>
-          </Box>
         </Box>
       </Box>
 
       <Box m="3em 0" pl="0" align="left">
-        <Text textStyle="mobileHeader3">Donor Information</Text>
+        <Text textStyle="mobileHeader3">Donor information</Text>
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Name
         </Text>
@@ -318,15 +369,20 @@ const ConfirmDetails = ({
         <Box m="3em 0" pl="0" align="left">
           <Button
             mt="1.5rem"
-            size="lg"
-            width={{ lg: "30%", base: "100%" }}
+            size="md"
+            width={{ md: "20%", base: "100%" }}
+            minWidth="210px"
             variant="deleteDonation"
             onClick={onOpen}
           >
             Cancel donation
           </Button>
           {currentSchedule.recurringDonationId === "null" ? (
-            <DeleteScheduleModal
+            <GeneralDeleteShiftModal
+              title="Cancel one-time donation"
+              bodyText="Are you sure you want to cancel your donation? This will remove all
+              linked occurences and notify all respective parties, including CFKW."
+              buttonLabel="Cancel donation"
               isOpen={isOpen}
               onClose={onClose}
               onDelete={onDeleteClick}
@@ -343,8 +399,12 @@ const ConfirmDetails = ({
       )}
       {!isBeingEdited && (
         <HStack>
-          <Flex justify="flex-end">
-            <Button onClick={onSubmitClick} variant="navigation">
+          <Flex justify="flex-start" w={{ lg: "default", base: "100%" }}>
+            <Button
+              onClick={onSubmitClick}
+              variant="navigation"
+              w={{ lg: "18%", base: "100%" }}
+            >
               Submit
             </Button>
           </Flex>

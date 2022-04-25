@@ -6,6 +6,7 @@ import {
   validateDate,
   validateCategories,
   validateRecurringDonationEndDate,
+  validate24HourTime,
 } from "./util";
 
 export const createSchedulingDtoValidator = async (
@@ -68,6 +69,11 @@ export const createSchedulingDtoValidator = async (
     return res
       .status(400)
       .send(getApiValidationError("volunteerTime", "string"));
+  }
+  if (req.body.volunteerTime && !validate24HourTime(req.body.volunteerTime)) {
+    return res
+      .status(400)
+      .send(getApiValidationError("volunteerTime", "24 Hour Time String"));
   }
   if (!Object.values(Frequency).includes(req.body.frequency)) {
     return res.status(400).send(getApiValidationError("frequency", "string"));
@@ -189,6 +195,11 @@ export const updateSchedulingDtoValidator = async (
     return res
       .status(400)
       .send(getApiValidationError("volunteerTime", "string"));
+  }
+  if (req.body.volunteerTime && !validate24HourTime(req.body.volunteerTime)) {
+    return res
+      .status(400)
+      .send(getApiValidationError("volunteerTime", "24 Hour Time String"));
   }
   if (req.body.dayPart && !Object.values(DayPart).includes(req.body.dayPart)) {
     return res.status(400).send(getApiValidationError("dayPart", "string"));

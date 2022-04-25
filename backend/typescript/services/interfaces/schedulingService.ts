@@ -75,6 +75,33 @@ interface ISchedulingService {
   ): Promise<void>;
 
   /**
+   * Generate an email with donation information to be sent after user schedules
+   * a donation
+   * @param schedule object that contains information on cancelled donation
+   * @param isRecurringDonation false if the cancelled donation is a one-time donation, true otherwise
+   * @param isAdminDeleted false if donor that scheduled donation is cancelling donation, true otherwise
+   * @throws Error if unable to send email
+   */
+  sendSchedulingCancellationEmail(
+    schedule: SchedulingDTO,
+    isRecurringDonation: boolean,
+    isAdminDeleted: boolean,
+  ): Promise<void>;
+
+  /**
+   * Generate a confirmation email with food rescue donation information for volunteer who signed up for the shift
+   * @param volunteerId of volunteer who signed up for shift
+   * @param scheduling object that contains food rescue donation information
+   * @param isAdmin if email is directed to admin
+   * @throws Error if unable to send email
+   */
+  sendVolunteerSchedulingSignUpConfirmationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
+    isAdmin: boolean,
+  ): Promise<void>;
+
+  /**
    * Create scheduling
    * @param scheduling CreateSchedulingDTO object containing scheduling info
    * @returns a SchedulingDTO with the created scheduling information
@@ -96,7 +123,7 @@ interface ISchedulingService {
 
   /**
    * update schedulings by recurring_donation_id
-   * @param reucrring_donation_id recurring donation id
+   * @param recurring_donation_id recurring donation id
    * @throws Error if recurring donation update fails
    */
   updateSchedulingByRecurringDonationId(
@@ -107,19 +134,48 @@ interface ISchedulingService {
   /**
    * Delete a scheduling by id
    * @param id scheduling id
+   * @param role of user that is deleting the donation
    * @throws Error if scheduling deletion fails
    */
-  deleteSchedulingById(id: string): Promise<void>;
+  deleteSchedulingById(id: string, role: string): Promise<void>;
 
   /**
    * Delete a scheduling by recurring_donation_id
-   * @param reucrring_donation_id recurring donation id
+   * @param recurring_donation_id recurring donation id
    * @param current_date the current date of the recurrring donation
+   * @param role of user that is deleting the recurring donation
    * @throws Error if recurring donation deletion fails
    */
   deleteSchedulingByRecurringDonationId(
     recurring_donation_id: string,
     current_date: string,
+    role: string,
+  ): Promise<void>;
+
+  /**
+   *
+   * Generate a confirmation email when a volunteer cancels a food rescue shift
+   * @param volunteerId of volunteer who cancelled the shift
+   * @param scheduling object that contains the food rescue information
+   * @param isAdmin boolean for if the email is to be sent to an admin or volunteer
+   * @throws Error if unable to send email
+   */
+  sendVolunteerShiftCancellationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
+    isAdmin: boolean,
+  ): Promise<void>;
+
+  /**
+   *
+   * Generate a canceellation email to volunteer when a donor/admin cancels a food rescue shift
+   * @param volunteerId of volunteer assigned to the cancelled shift
+   * @param scheduling object that contains the food rescue information
+   * @throws Error if unable to send email
+   */
+  sendVolunteerFoodRescueCancellationEmail(
+    volunteerId: string,
+    scheduling: SchedulingDTO,
   ): Promise<void>;
 }
 

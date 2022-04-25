@@ -72,6 +72,25 @@ volunteerRouter.get("/:volunteerId?", async (req, res) => {
   }
 });
 
+volunteerRouter.get("/shifts/:volunteerId", async (req, res) => {
+  const { volunteerId } = req.params;
+  if (volunteerId) {
+    try {
+      if (typeof volunteerId !== "string") {
+        res
+          .status(400)
+          .json({ error: "volunteerId query parameter must be a string" });
+      }
+      const shifts = await volunteerService.getCheckInsAndSchedules(
+        volunteerId,
+      );
+      res.status(200).json(shifts);
+    } catch (error) {
+      res.status(500).json({ error: getErrorMessage(error) });
+    }
+  }
+});
+
 /* Update volunteer status by:
   - id, through URI (ex. /volunteers/1)
   - userId, through query param (ex. /volunteers/?userId=1)
@@ -94,21 +113,27 @@ volunteerRouter.put(
     }
     if (volunteerId) {
       try {
-        await volunteerService.updateVolunteerById(volunteerId, {
-          status: req.body.status,
-        });
+        const updatedVolunteer = await volunteerService.updateVolunteerById(
+          volunteerId,
+          {
+            status: req.body.status,
+          },
+        );
 
-        res.status(201).send();
+        res.status(200).send(updatedVolunteer);
       } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }
     } else if (userId) {
       try {
-        await volunteerService.updateVolunteerByUserId(userId as string, {
-          status: req.body.status,
-        });
+        const updatedVolunteer = await volunteerService.updateVolunteerByUserId(
+          userId as string,
+          {
+            status: req.body.status,
+          },
+        );
 
-        res.status(201).send();
+        res.status(200).send(updatedVolunteer);
       } catch (error) {
         res.status(500).json({ error: getErrorMessage(error) });
       }

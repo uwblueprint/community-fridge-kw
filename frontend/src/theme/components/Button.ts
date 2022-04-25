@@ -5,7 +5,7 @@ const Button = {
       color: "squash.100",
       fontSize: "16px",
       py: "20px",
-      px: "53px",
+      px: "35px",
       _disabled: {
         background: "hubbard.100",
       },
@@ -30,6 +30,7 @@ const Button = {
       width: "28px",
       background: "none",
       marginBottom: "10px",
+      textDecoration: "underline",
     },
     cancelEditInfo: {
       border: "none",
@@ -42,6 +43,11 @@ const Button = {
     deleteDonation: {
       background: "tomato.100",
       color: "squash.100",
+    },
+    outlined: {
+      border: "1px",
+      borderColor: "raddish.100",
+      color: "raddish.100",
       fontSize: "16px",
       py: "12px",
       px: "53px",
@@ -51,6 +57,53 @@ const Button = {
       fontSize: "16px",
       fontWeight: 300,
       textDecoration: "underline",
+    },
+    approve: {
+      background: "raddish.100",
+      color: "squash.100",
+      fontSize: "14px",
+      py: "12px",
+      px: "16px",
+      _disabled: {
+        background: "hubbard.100",
+      },
+      _hover: {
+        _disabled: {
+          background: "hubbard.100",
+        },
+      },
+    },
+    export: {
+      background: "none",
+      border: "1px",
+      borderColor: "dorian.100",
+      color: "hubbard.100",
+      fontSize: "14px",
+      py: "20px",
+      px: "20px",
+      lineHeight: "20px",
+      fontWeight: "400",
+    },
+    exportMobile: {
+      background: "none",
+      border: "1px",
+      borderColor: "dorian.100",
+      color: "hubbard.100",
+      fontSize: "14px",
+      py: "20px",
+      px: "20px",
+      lineHeight: "20px",
+      fontWeight: "400",
+    },
+    create: {
+      background: "raddish.100",
+      color: "white",
+      border: "1px",
+      borderColor: "champagne.100",
+      fontSize: "14px",
+      py: "20px",
+      px: "53px",
+      lineHeight: "20px",
     },
   },
 };

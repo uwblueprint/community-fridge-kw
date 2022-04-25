@@ -120,7 +120,12 @@ cd backend/typescript
 $ docker exec -it community-fridge-kw_ts-backend_1 /bin/bash
 ```
 
-5. Run the following command to seed with sample data. Ensure the tables are empty, otherwise you will get key violation errors. The user that is being seeded is already been created in firebase and has the following credentials: `email`: `"test@test.org"` and `password`: `"password123"`
+5. Run the following command to seed with sample data. Ensure the tables are empty, otherwise you will get key violation errors. 
+Three users have been created in firebase with the following emails:
+* admin-cfkw@uwblueprint.org
+* donor-cfkw@uwblueprint.org
+* volunteer-cfkw@uwblueprint.org
+All of the passwords are `password`: `"Testpassword123*"`
 ```bash
 node seed up
 ```

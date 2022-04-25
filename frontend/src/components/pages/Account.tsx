@@ -1,15 +1,13 @@
-import { ArrowBackIcon, CloseIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Center,
   Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
   HStack,
   IconButton,
-  Img,
   Input,
   Spacer,
   Spinner,
@@ -20,16 +18,16 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hooks-helper";
 import { useHistory } from "react-router-dom";
 
+import AuthAPIClient from "../../APIClients/AuthAPIClient";
 import DonorAPIClient from "../../APIClients/DonorAPIClient";
 import UserAPIClient from "../../APIClients/UserAPIClient";
-import pencilIcon from "../../assets/pencilIcon.svg";
 import { AUTHENTICATED_USER_KEY } from "../../constants/AuthConstants";
 import * as Routes from "../../constants/Routes";
 import AuthContext from "../../contexts/AuthContext";
 import { Role } from "../../types/AuthTypes";
 import { DonorResponse } from "../../types/DonorTypes";
 import { setLocalStorageObjProperty } from "../../utils/LocalStorageUtils";
-import ConfirmCancelEditModal from "../common/UserManagement/ConfirmCancelEditModal";
+import EditAccountModal from "../common/UserManagement/EditAccountModal";
 import ErrorMessages from "./Scheduling/ErrorMessages";
 
 const Account = (): JSX.Element => {
@@ -39,6 +37,7 @@ const Account = (): JSX.Element => {
   const [businessName, setBusinessName] = useState("");
   const [donor, setDonor] = useState<DonorResponse>();
   const [isSavingData, setIsSavingData] = useState(false);
+  const [isTouched, setIsTouched] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   React.useEffect(() => {
@@ -73,9 +72,13 @@ const Account = (): JSX.Element => {
         );
       }
       setDonor(donorResponse);
-      setBusinessName(donorResponse.businessName);
+      setBusinessName(
+        authenticatedUser?.role !== Role.VOLUNTEER
+          ? donorResponse.businessName
+          : "",
+      );
     };
-    getDonor();
+    if (authenticatedUser?.role !== Role.VOLUNTEER) getDonor();
   }, [authenticatedUser]);
 
   const accountData = {
@@ -100,10 +103,18 @@ const Account = (): JSX.Element => {
 
   const navigateToDashboard = () => {
     history.push(
-      authenticatedUser!.role === Role.DONOR
-        ? Routes.DASHBOARD_PAGE
-        : Routes.VIEW_DONATIONS,
+      authenticatedUser!.role === Role.ADMIN
+        ? Routes.ADMIN_CHECK_INS
+        : Routes.DASHBOARD_PAGE,
     );
+  };
+
+  const onResetPasswordClick = async () => {
+    const success = await AuthAPIClient.logout(authenticatedUser?.id);
+    if (success) {
+      setAuthenticatedUser(null);
+    }
+    history.push(Routes.FORGET_PASSWORD);
   };
 
   const changeEditMode = () => {
@@ -119,6 +130,7 @@ const Account = (): JSX.Element => {
     if (name === "businessName") {
       setBusinessName(e.toString());
     }
+    setIsTouched(true);
   };
 
   const discardChanges = () => {
@@ -127,7 +139,9 @@ const Account = (): JSX.Element => {
     formValues.firstName = authenticatedUser!.firstName;
     formValues.lastName = authenticatedUser!.lastName;
     formValues.phoneNumber = authenticatedUser!.phoneNumber;
-    setBusinessName(donor!.businessName);
+    if (authenticatedUser?.role !== Role.VOLUNTEER)
+      setBusinessName(donor!.businessName);
+    else setBusinessName("");
     setIsEditing(false);
     onClose();
     setFormErrors({
@@ -136,6 +150,7 @@ const Account = (): JSX.Element => {
       lastName: "",
       phoneNumber: "",
     });
+    setIsTouched(false);
   };
 
   const validateForm = () => {
@@ -148,7 +163,7 @@ const Account = (): JSX.Element => {
 
     let isValid = true;
 
-    if (!businessName) {
+    if (!businessName && authenticatedUser?.role !== Role.VOLUNTEER) {
       isValid = false;
       newErrors.businessName = ErrorMessages.requiredField;
     }
@@ -181,6 +196,8 @@ const Account = (): JSX.Element => {
       ...formValues,
     };
 
+    let updatedDonor = null;
+
     // update user values
     const updatedUser = await UserAPIClient.updateUserById(
       authenticatedUser!.id,
@@ -189,10 +206,12 @@ const Account = (): JSX.Element => {
       },
     );
 
-    // update donor values
-    const updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
-      businessName,
-    });
+    if (authenticatedUser?.role === Role.DONOR) {
+      // update donor values
+      updatedDonor = await DonorAPIClient.updateDonorById(donor!.id, {
+        businessName,
+      });
+    }
 
     // update authenticatedUser and local storage to reflect changes
     const user = {
@@ -214,27 +233,16 @@ const Account = (): JSX.Element => {
     }
 
     // handle loading spinner state
-    if (updatedUser && updatedDonor) {
+    if (updatedUser) {
       setIsSavingData(false);
     }
     setIsEditing(false);
+    setIsTouched(false);
   };
 
   const EditInfoButton = () => {
     return !isEditing ? (
-      <Button
-        variant="editInfo"
-        isDisabled={authenticatedUser?.role === Role.ADMIN}
-        rightIcon={
-          <Img
-            src={pencilIcon}
-            alt="pencil icon"
-            width="12px"
-            display="inline"
-          />
-        }
-        onClick={changeEditMode}
-      >
+      <Button variant="editInfo" onClick={changeEditMode}>
         Edit
       </Button>
     ) : (
@@ -247,70 +255,55 @@ const Account = (): JSX.Element => {
     );
   };
 
-  if (!donor) {
-    return (
-      <Center>
-        <Spinner />
-      </Center>
-    );
-  }
   return (
     <Container centerContent variant="responsiveContainer">
-      <ConfirmCancelEditModal
+      <EditAccountModal
         isOpen={isOpen}
         onClose={onClose}
         discardChanges={discardChanges}
       />
-      <Box>
-        {!isEditing ? (
-          <Box mt={10}>
-            <Button
-              onClick={navigateToDashboard}
-              paddingLeft="0"
-              backgroundColor="transparent"
-            >
-              <ArrowBackIcon w={8} h={5} /> Back
-            </Button>
-          </Box>
-        ) : null}
-
+      <Box pt="24px">
         <HStack align="flex-end">
           <Text mt="1em" textStyle="mobileHeader1">
-            My Account
+            My account
           </Text>
           <Spacer />
-          <EditInfoButton />
+          {authenticatedUser?.role !== Role.ADMIN ? <EditInfoButton /> : null}
         </HStack>
         <Text textStyle="mobileSmall" color="hubbard.100" mt="1em" mb="2em">
           Edit any account information here.
         </Text>
+        {authenticatedUser?.role === Role.DONOR ? (
+          <FormControl
+            isRequired
+            isReadOnly={!isEditing}
+            isInvalid={!!formErrors.businessName}
+          >
+            <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
+              Organization
+            </Text>
 
-        <Text mb="1em" textStyle="mobileBodyBold" color="hubbard.100">
-          Organization
-        </Text>
-        <FormControl
-          isRequired
-          isReadOnly={!isEditing}
-          isInvalid={!!formErrors.businessName}
-        >
-          <FormLabel>Name of business</FormLabel>
-          <Input
-            mt="2"
-            value={businessName}
-            name="businessName"
-            placeholder="Enter name of business"
-            variant={isEditing ? "customFilled" : "unstyled"}
-            onChange={(e) => handleChange(e.target.value, "businessName")}
-          />
-          <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
-        </FormControl>
+            <FormLabel>Name of business</FormLabel>
+            <Input
+              mt="2"
+              value={businessName}
+              name="businessName"
+              placeholder="Enter name of business"
+              variant={isEditing ? "customFilled" : "unstyled"}
+              onChange={(e) => handleChange(e.target.value, "businessName")}
+            />
+            <FormErrorMessage>{formErrors.businessName}</FormErrorMessage>
+          </FormControl>
+        ) : null}
         <Text
           mt={{ base: "40px", md: "54px" }}
           mb="1em"
           textStyle="mobileBodyBold"
           color="hubbard.100"
         >
-          Point of Contact
+          {authenticatedUser?.role === Role.VOLUNTEER
+            ? "Volunteer information"
+            : "Point of contact"}
         </Text>
         <HStack spacing={{ base: "16px" }} alignItems="start">
           <Box>
@@ -392,7 +385,7 @@ const Account = (): JSX.Element => {
               mt="2"
               variant="navigation"
               onClick={onSubmitClick}
-              isDisabled={isSavingData}
+              isDisabled={isSavingData || !isTouched}
             >
               {isSavingData ? <Spinner /> : "Save Changes"}
             </Button>
@@ -400,13 +393,13 @@ const Account = (): JSX.Element => {
         ) : (
           <Box mt={{ base: "66px", md: "56px" }}>
             <Button
-              isDisabled
               width="100%"
               size="lg"
               mt="2"
               variant="navigation"
+              onClick={onResetPasswordClick}
             >
-              Change Password
+              Change password
             </Button>
           </Box>
         )}

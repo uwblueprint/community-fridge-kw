@@ -8,7 +8,7 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
   const { next } = navigation;
 
   return (
-    <Container variant="baseContainer">
+    <Container variant="baseContainer" pb={{ lg: "0px", base: "60px" }}>
       <Text marginBottom="30px" textStyle="mobileHeader2">
         Schedule a donation drop-off
       </Text>
@@ -28,6 +28,7 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
+          paddingBottom: "50px",
         }}
       >
         <Img
@@ -41,8 +42,8 @@ const GetStarted = ({ navigation }: SchedulingStepProps) => {
           onClick={next}
           variant="navigation"
           w="100%"
-          maxWidth="500px"
-          size="lg"
+          maxWidth="380px"
+          size="md"
         >
           Get started
         </Button>
