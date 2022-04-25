@@ -134,11 +134,11 @@ const ConfirmShiftDetails = ({
   };
 
   const startAndEndTimeLocal = (date: string) => {
-    return date ? format(new Date(date), "h:mm aa") : "";
+    return date ? format(new Date(date), "h:mmaa") : "";
   };
 
   const volunteerTimeLocal = (date: string | null) => {
-    return date ? format(parse(date, "HH:mm", new Date()), "h:mm a") : "";
+    return date ? format(parse(date, "HH:mm", new Date()), "h:mma") : "";
   };
 
   return (
@@ -227,7 +227,9 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileBody">
           {shift.type === ShiftType.SCHEDULING
             ? volunteerTimeLocal(shift.volunteerTime)
-            : startAndEndTimeLocal(shift.startDate)}
+            : `${startAndEndTimeLocal(shift.startDate)}-${startAndEndTimeLocal(
+                shift.endDate,
+              )}`}
         </Text>
         {shift.type === ShiftType.SCHEDULING && (
           <>
