@@ -79,8 +79,13 @@ const CreateAccount = ({
       <BackButton previous={previous} />
       <HeaderLabel text="Create an account" />
       <Text mt="1rem" textStyle="mobileSmall" color="hubbard.100">
-        Account information can be edited in the My Account section of the
-        platform.
+        Account information can be edited later via the{" "}
+        <Text as="span" textStyle="mobileBodyBold">
+          My Account
+        </Text>{" "}
+        section of the platform. Please note there will be a few screening
+        questions on the following pages, and your account will need to be
+        accepted by CFKW Admin before you are able to sign up for shifts.
       </Text>
 
       <FormControl mt="2rem" isRequired>

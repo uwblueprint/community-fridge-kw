@@ -134,11 +134,11 @@ const ConfirmShiftDetails = ({
   };
 
   const startAndEndTimeLocal = (date: string) => {
-    return date ? format(new Date(date), "h:mm aa") : "";
+    return date ? format(new Date(date), "h:mmaa") : "";
   };
 
   const volunteerTimeLocal = (date: string | null) => {
-    return date ? format(parse(date, "HH:mm", new Date()), "h:mm a") : "";
+    return date ? format(parse(date, "HH:mm", new Date()), "h:mma") : "";
   };
 
   return (
@@ -201,8 +201,7 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileBody" color="hubbard.100" pt="1.4em">
           {viewDetailsScreen
             ? `Please ensure you are at the meetup location at the specified volunteer arrival time.`
-            : `You are signing up to volunteer for the following shift. Please note
-            your contact information will be shared with the donor.`}
+            : `You are signing up to volunteer for the following shift.`}
         </Text>
         <Text textStyle="mobileSmall" color="hubbard.100" pt="1.4em">
           Volunteer shift type
@@ -228,7 +227,9 @@ const ConfirmShiftDetails = ({
         <Text textStyle="mobileBody">
           {shift.type === ShiftType.SCHEDULING
             ? volunteerTimeLocal(shift.volunteerTime)
-            : startAndEndTimeLocal(shift.startDate)}
+            : `${startAndEndTimeLocal(shift.startDate)}-${startAndEndTimeLocal(
+                shift.endDate,
+              )}`}
         </Text>
         {shift.type === ShiftType.SCHEDULING && (
           <>
