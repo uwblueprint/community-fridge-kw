@@ -38,6 +38,7 @@ const FridgeFoodRescueDescription = () => {
             color="hubbard.100"
             float={["right", "initial"]}
             onClick={navigateToEditPage}
+            paddingBottom={["0.5em", "0px"]}
           >
             Edit
           </Button>
