@@ -19,15 +19,37 @@ type State = {
   changeSelectedDay: (day?: Date) => any;
 };
 
-const WeeklyContext = React.createContext<State>({} as State);
-
-export const useWeeklyCalendar = () => useContext(WeeklyContext);
-
 type WeeklyCalendarProps = {
   week: Date;
   children: ReactNode;
   locale?: Locale;
 };
+
+type DayButtonProps = {
+  day: {
+    day: number;
+    label: string;
+  };
+};
+
+type RenderItemProps = {
+  item?: Schedule | CheckIn;
+  index?: number;
+  emptyState: boolean;
+};
+
+type WeeklyBodyProps = {
+  selectedDay: Date;
+  items: Schedule[] | CheckIn[];
+  renderItem: (item: RenderItemProps) => ReactNode;
+  handleDateChange: (days: number) => void;
+  setSelectedDay: (date: Date) => void;
+  calendarDate: Date;
+};
+
+const WeeklyContext = React.createContext<State>({} as State);
+
+export const useWeeklyCalendar = () => useContext(WeeklyContext);
 
 export const WeeklyCalendar = ({
   locale,
@@ -54,13 +76,6 @@ export const WeeklyCalendar = ({
   );
 };
 
-type DayButtonProps = {
-  day: {
-    day: number;
-    label: string;
-  };
-};
-
 const DayButton = ({ day }: DayButtonProps) => {
   const { locale, week } = useWeeklyCalendar();
 
@@ -78,29 +93,50 @@ const DayButton = ({ day }: DayButtonProps) => {
   );
 };
 
-type RenderItemProps<EventItem> = {
-  item: Schedule | CheckIn;
-  showingFullWeek: boolean;
-  index: number;
+const getFilteredDays = (
+  items: Array<Schedule | CheckIn>,
+  selectedDay: Date,
+  i: number,
+  renderItem: (item: RenderItemProps) => ReactNode,
+  week: Date,
+  locale?: Locale,
+) => {
+  const shiftsArr = items.filter((item) => {
+    const currentDate = setDay(week, selectedDay.getDay() + i, {
+      locale,
+    });
+    const scheduledDate =
+      "startTime" in item
+        ? new Date(item?.startTime as string)
+        : new Date(item?.startDate as string);
+    return (
+      item !== null &&
+      scheduledDate !== null &&
+      scheduledDate.getDate() === currentDate.getDate() &&
+      scheduledDate.getMonth() === currentDate.getMonth() &&
+      scheduledDate.getFullYear() === currentDate.getFullYear()
+    );
+  });
+
+  return !shiftsArr.length
+    ? renderItem({ emptyState: true })
+    : shiftsArr.map((item, index) => {
+        return renderItem({
+          item,
+          index,
+          emptyState: false,
+        });
+      });
 };
 
-type WeeklyBodyProps<EventItem> = {
-  selectedDay: Date;
-  items: Schedule[] | CheckIn[];
-  renderItem: (item: RenderItemProps<EventItem>) => ReactNode;
-  handleDateChange: (days: number) => void;
-  setSelectedDay: (date: Date) => void;
-  calendarDate: Date;
-};
-
-export function WeeklyBody<EventItem>({
+export function WeeklyBody({
   selectedDay,
   items,
   renderItem,
   handleDateChange,
   setSelectedDay,
   calendarDate,
-}: WeeklyBodyProps<EventItem>) {
+}: WeeklyBodyProps) {
   const { isMobile } = useViewport();
   const { locale, week } = useWeeklyCalendar();
 
@@ -170,31 +206,14 @@ export function WeeklyBody<EventItem>({
                 </HStack>
               )}
             </HStack>
-            {(items as Array<Schedule | CheckIn>).map((item, index) => {
-              const currentDate = setDay(week, selectedDay.getDay() + i, {
-                locale,
-              });
-              const scheduledDate =
-                "startTime" in item
-                  ? new Date(item?.startTime as string)
-                  : new Date(item?.startDate as string);
-
-              if (
-                item === null ||
-                scheduledDate === null ||
-                scheduledDate.getDate() !== currentDate.getDate() ||
-                scheduledDate.getMonth() !== currentDate.getMonth() ||
-                scheduledDate.getFullYear() !== currentDate.getFullYear()
-              ) {
-                return null;
-              }
-
-              return renderItem({
-                item,
-                showingFullWeek: selectedDay === undefined,
-                index,
-              });
-            })}
+            {getFilteredDays(
+              items as Array<Schedule | CheckIn>,
+              selectedDay,
+              i,
+              renderItem,
+              week,
+              locale,
+            )}
           </VStack>
         );
       })}

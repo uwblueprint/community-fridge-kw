@@ -1,4 +1,4 @@
-import { Divider } from "@chakra-ui/react";
+import { Box, Divider, Text } from "@chakra-ui/react";
 import { add } from "date-fns";
 import React from "react";
 import { NavigationProps } from "react-hooks-helper";
@@ -69,14 +69,32 @@ const Calendar = ({
       />
     );
   };
+
   return (
     <WeeklyCalendar week={selectedDay}>
       <WeeklyBody
         selectedDay={selectedDay}
         items={items}
-        renderItem={({ item, index }) =>
-          isCheckInView ? (
-            getCheckInCard(item, index)
+        renderItem={({ item, index, emptyState }) => {
+          if (emptyState) {
+            return (
+              <Box
+                width="100%"
+                backgroundColor="squash.100"
+                padding="2.5rem"
+                textAlign="center"
+              >
+                <Text color="black.500" textStyle="mobileBody">
+                  {isCheckInView
+                    ? "No shifts scheduled."
+                    : "No scheduled donations."}
+                </Text>
+              </Box>
+            );
+          }
+
+          return isCheckInView ? (
+            getCheckInCard(item, index as number)
           ) : (
             <DropoffCard
               key={JSON.stringify(item)}
@@ -84,8 +102,8 @@ const Calendar = ({
               isDonorView={false}
               isPublicView={!isAdminView}
             />
-          )
-        }
+          );
+        }}
         calendarDate={currentDate}
         setSelectedDay={setSelectedDay}
         handleDateChange={handleDateChange}

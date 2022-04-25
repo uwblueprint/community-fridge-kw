@@ -3,7 +3,7 @@ import { Container, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import CommunityFridgeLogo from "../../../assets/header-logo.png";
+import VerificationPageImage from "../../../assets/Verification-Email-Image.png";
 import * as Routes from "../../../constants/Routes";
 import { RequestPasswordChangeFormProps } from "./types";
 
@@ -26,11 +26,11 @@ const VerificationPage = ({ formValues }: VerificationPageProps) => {
         <CloseIcon color="black.100" />
       </IconButton>
       <Container centerContent>
-        {/* todo: replace image */}
         <Image
           objectFit="cover"
-          src={CommunityFridgeLogo}
-          alt="Community Fridge logo"
+          height="234px"
+          src={VerificationPageImage}
+          alt="Verification page image"
           display="inline"
         />
         <Text mt="2rem" textAlign="center" textStyle="mobileHeader1">
