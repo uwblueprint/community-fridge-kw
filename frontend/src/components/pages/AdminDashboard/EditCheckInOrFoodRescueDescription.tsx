@@ -84,7 +84,7 @@ const EditCheckInOrFoodRescueDescription = ({
           Edit description
         </Text>
         <Textarea
-          mt={["17px", "42px"]}
+          mt={["17px", "16px"]}
           value={
             isCheckInView
               ? content.checkinDescription
@@ -121,7 +121,7 @@ const EditCheckInOrFoodRescueDescription = ({
         </Text>
 
         <Input
-          mt={["17px", "42px"]}
+          mt={["17px", "16px"]}
           name="url"
           value={isCheckInView ? content.checkinUrl : content?.foodRescueUrl}
           onChange={(e) => {

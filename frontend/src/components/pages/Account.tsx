@@ -244,19 +244,7 @@ const Account = (): JSX.Element => {
 
   const EditInfoButton = () => {
     return !isEditing ? (
-      <Button
-        variant="editInfo"
-        isDisabled={authenticatedUser?.role === Role.ADMIN}
-        rightIcon={
-          <Img
-            src={pencilIcon}
-            alt="pencil icon"
-            width="12px"
-            display="inline"
-          />
-        }
-        onClick={changeEditMode}
-      >
+      <Button variant="editInfo" onClick={changeEditMode}>
         Edit
       </Button>
     ) : (
@@ -276,13 +264,13 @@ const Account = (): JSX.Element => {
         onClose={onClose}
         discardChanges={discardChanges}
       />
-      <Box>
+      <Box pt="24px">
         <HStack align="flex-end">
           <Text mt="1em" textStyle="mobileHeader1">
             My account
           </Text>
           <Spacer />
-          <EditInfoButton />
+          {authenticatedUser?.role !== Role.ADMIN ? <EditInfoButton /> : null}
         </HStack>
         <Text textStyle="mobileSmall" color="hubbard.100" mt="1em" mb="2em">
           Edit any account information here.
