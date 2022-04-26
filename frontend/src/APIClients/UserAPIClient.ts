@@ -54,10 +54,8 @@ const deleteUserById = async (id: string): Promise<boolean> => {
     await baseAPIClient.delete(`/users?userId=${id}`, {
       headers: { Authorization: BEARER_TOKEN },
     });
-    console.log("TIRAMISU: Client received success")
     return true;
   } catch (error) {
-    console.log("TIRAMISU: Client received error")
     return false;
   }
 };
