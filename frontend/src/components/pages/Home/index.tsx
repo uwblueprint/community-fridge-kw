@@ -27,7 +27,7 @@ const Home = (): JSX.Element => {
 
   const onScheduleClick = () => {
     if (!authenticatedUser) {
-      history.push(Routes.LOGIN_PAGE);
+      return history.push(Routes.LOGIN_PAGE);
     }
 
     return authenticatedUser?.role === Role.DONOR
@@ -42,7 +42,7 @@ const Home = (): JSX.Element => {
 
   const onVolunteerClick = () => {
     if (!authenticatedUser) {
-      history.push(Routes.LOGIN_PAGE);
+      return history.push(Routes.LOGIN_PAGE);
     }
 
     return authenticatedUser?.role === Role.VOLUNTEER
