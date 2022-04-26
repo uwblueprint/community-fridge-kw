@@ -128,55 +128,49 @@ userRouter.put("/:userId", updateUserDtoValidator, async (req, res) => {
 });
 
 /* Delete a user by userId or email, specified through a query parameter */
-userRouter.delete(
-  "/",
-  isAuthorizedByRole(new Set([Role.ADMIN])),
-  async (req, res) => {
-    const { userId, email } = req.query;
+userRouter.delete("/", async (req, res) => {
+  const { userId, email } = req.query;
 
-    if (userId && email) {
+  if (userId && email) {
+    res.status(400).json({ error: "Cannot delete by both userId and email." });
+    return;
+  }
+
+  if (userId) {
+    if (typeof userId !== "string") {
       res
         .status(400)
-        .json({ error: "Cannot delete by both userId and email." });
-      return;
-    }
-
-    if (userId) {
-      if (typeof userId !== "string") {
-        res
-          .status(400)
-          .json({ error: "userId query parameter must be a string." });
-      } else {
-        try {
-          await userService.deleteUserById(userId);
-          res.status(204).send();
-        } catch (error: unknown) {
-          res.status(500).json({ error: getErrorMessage(error) });
-        }
+        .json({ error: "userId query parameter must be a string." });
+    } else {
+      try {
+        await userService.deleteUserById(userId);
+        res.status(204).send();
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
       }
-      return;
     }
+    return;
+  }
 
-    if (email) {
-      if (typeof email !== "string") {
-        res
-          .status(400)
-          .json({ error: "email query parameter must be a string." });
-      } else {
-        try {
-          await userService.deleteUserByEmail(email);
-          res.status(204).send();
-        } catch (error: unknown) {
-          res.status(500).json({ error: getErrorMessage(error) });
-        }
+  if (email) {
+    if (typeof email !== "string") {
+      res
+        .status(400)
+        .json({ error: "email query parameter must be a string." });
+    } else {
+      try {
+        await userService.deleteUserByEmail(email);
+        res.status(204).send();
+      } catch (error: unknown) {
+        res.status(500).json({ error: getErrorMessage(error) });
       }
-      return;
     }
+    return;
+  }
 
-    res.status(400).json({
-      error: "Must supply one of userId or email as query parameter.",
-    });
-  },
-);
+  res.status(400).json({
+    error: "Must supply one of userId or email as query parameter.",
+  });
+});
 
 export default userRouter;
