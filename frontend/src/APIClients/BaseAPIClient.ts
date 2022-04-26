@@ -28,7 +28,6 @@ baseAPIClient.interceptors.request.use(async (config: AxiosRequestConfig) => {
       window.location.reload();
     }
   }
-  
   return newConfig;
 });
 
