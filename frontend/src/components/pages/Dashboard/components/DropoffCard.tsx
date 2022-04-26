@@ -90,7 +90,7 @@ const DropoffCard = ({
               pb={["24px", "0px"]}
               cursor="pointer"
             >
-              View Details
+              View details
             </Text>
           )}
         </Stack>

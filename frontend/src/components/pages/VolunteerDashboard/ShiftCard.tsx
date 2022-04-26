@@ -130,7 +130,7 @@ const VolunteerShiftCard = ({
           variant={isSignUp ? "navigation" : "outlined"}
           onClick={onSubmitClick}
         >
-          {isSignUp ? "Volunteer for shift" : "View Details"}
+          {isSignUp ? "Volunteer for shift" : "View details"}
         </Button>
       </Stack>
       <Box
