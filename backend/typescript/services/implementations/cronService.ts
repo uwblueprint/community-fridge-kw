@@ -89,11 +89,6 @@ class CronService implements ICronService {
                 Tomorrow, ${startDayString}, between ${startTimeString} - ${endTimeString}.
             </p>
 
-            <p style="font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
-              If you requested a volunteer, please login on the <a href="https://schedule.communityfridgekw.ca">platform</a> 
-              and check your donation details for the volunteer contact information.
-            </p>
-
             <p style="margin: 0.5em 0 1.5em 0; font-weight: 400; font-size: 16px; line-height: 24px; color: #171717;">
               ${
                 schedule.volunteer_needed && schedule.volunteer_id
