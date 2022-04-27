@@ -50,11 +50,6 @@ class AuthService implements IAuthService {
         oobCode,
       );
       if (response.emailVerified) {
-        const user = await this.userService.getUserByEmail(response.email);
-
-        if (user.role === Role.VOLUNTEER) {
-          await this.sendEmailVolunteerPending(response.email);
-        }
         return true;
       }
       return false;
