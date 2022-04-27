@@ -21,7 +21,7 @@ export const emailFooter = `
   <footer style="margin-top: 10px">
     <p>Sincerely,</p>
     <p>Community Fridge KW</p>
-    <p><a href="mailto: info@communityfridgekw.ca">info@communityfridgekw.ca</a></p>
+    <p><a href="mailto:info@communityfridgekw.ca">info@communityfridgekw.ca</a></p>
     <p><a href="https://www.facebook.com/CommunityFridgeKW/" target="_blank">Facebook</a> | <a href="https://www.instagram.com/communityfridgekw/" target="_blank">Instagram</a></p>
   </footer>
   `;
