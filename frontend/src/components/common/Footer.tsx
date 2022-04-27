@@ -64,7 +64,7 @@ const Footer = (): JSX.Element => (
         </Flex>
         <Flex mt={{ base: 4 }}>
           <Link
-            href="mailto:communityfridgekw@gmail.com"
+            href="mailto:info@communityfridgekw.ca"
             display="flex"
             flexDirection="row"
           >
