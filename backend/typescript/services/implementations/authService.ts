@@ -162,7 +162,7 @@ class AuthService implements IAuthService {
         </p>
         <div style = "width: 100%">
           <div style= " float:left; color: #6C6C84">
-            Don't see a button above? 
+            Don't see a button above? &nbsp;
           </div>
           <a style=" color: #C31887" href=${resetLink}>Change your password here</a>
         </div>
@@ -220,7 +220,7 @@ class AuthService implements IAuthService {
         <p style="color:#6C6C84">This is a one-time URL that lets you confirm your
           identity that lasts for 1 hour.
         </p>
-       <div style="width: 100%"> <div style=" float:left; color: #6C6C84">Don't see a button above? </div><a style=" color: #C31887" href=${emailVerificationLink}> Verify yourself here</a></div>
+       <div style="width: 100%"> <div style=" float:left; color: #6C6C84">Don't see a button above? &nbsp;</div><a style=" color: #C31887" href=${emailVerificationLink}> Verify yourself here</a></div>
        <div> If you didn't request this verification
        link, you can safely ignore this email.</div>
        ${emailFooter} 
@@ -253,7 +253,7 @@ class AuthService implements IAuthService {
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hey there,</h2>
         <p>Thank you for your interest in volunteering with Community Fridge KW!<br /><br />
         Your account is <strong>pending approval</strong>. After an admin approves your account, you will be notified via email and will be able to start signing up for volunteer shifts!<br /><br />
-        In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
+        In the meantime, if you have any questions, please reach out at info@communityfridgekw.ca.
         </p>
        ${emailFooter}
       </body>
@@ -353,11 +353,10 @@ class AuthService implements IAuthService {
       <body>
         <h2 style="font-weight: 700; font-size: 16px; line-height: 22px; color: #171717">Hi ${firstName},</h2>
         <p>Welcome to the Community Fridge KW volunteer team! We are excited to have you on board. Your account status is APPROVED. 
-        You can now access our volunteer shifts and begin signing up for shifts here.<br /><br />
-        If you’re on Facebook, consider joining our CFKW Volunteers group! This is a great way to stay in the loop and also connect 
+        You can now access our volunteer shifts and begin signing up for shifts <a href="https://schedule.communityfridgekw.ca/volunteer-shifts">here</a>.<br /><br />
+        If you’re on Facebook, consider joining our <a href="https://www.facebook.com/groups/955203251650711">CFKW Volunteers</a> group! This is a great way to stay in the loop and also connect 
         with fellow volunteers. We encourage you to look for the posts highlighted under the “Featured” section for critical 
         announcements like hamper deliveries, as well as instructions to sign up for a fridge check in and/or food rescue.<br /><br />
-        In the meantime, if you have any questions, please reach out at communityfridge@uwblueprint.org.
         </p>
        ${emailFooter}
       </body>
