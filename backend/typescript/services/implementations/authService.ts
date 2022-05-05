@@ -29,14 +29,18 @@ class AuthService implements IAuthService {
   }
 
   /* eslint-disable class-methods-use-this */
-  async generateToken(email: string, password: string): Promise<AuthDTO> {
+  async generateToken(
+    email: string,
+    password: string,
+  ): Promise<AuthDTO & { isEmailVerified: boolean }> {
     try {
       const token = await FirebaseRestClient.signInWithPassword(
         email,
         password,
       );
       const user = await this.userService.getUserByEmail(email);
-      return { ...token, ...user };
+      const isEmailVerified = await this.isEmailVerifiedByFirebase(email);
+      return { ...token, ...user, isEmailVerified };
     } catch (error) {
       Logger.error(`Failed to generate token for user with email ${email}`);
       throw error;
@@ -68,6 +72,16 @@ class AuthService implements IAuthService {
         return true;
       }
       return false;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async isEmailVerifiedByFirebase(email: string): Promise<boolean> {
+    try {
+      const firebaseUser = await firebaseAdmin.auth().getUserByEmail(email);
+
+      return firebaseUser.emailVerified;
     } catch (error) {
       return false;
     }
