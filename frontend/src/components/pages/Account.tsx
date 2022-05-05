@@ -101,14 +101,6 @@ const Account = (): JSX.Element => {
     phoneNumber: "",
   });
 
-  const navigateToDashboard = () => {
-    history.push(
-      authenticatedUser!.role === Role.ADMIN
-        ? Routes.ADMIN_CHECK_INS
-        : Routes.DASHBOARD_PAGE,
-    );
-  };
-
   const onResetPasswordClick = async () => {
     const success = await AuthAPIClient.logout(authenticatedUser?.id);
     if (success) {
@@ -216,6 +208,7 @@ const Account = (): JSX.Element => {
     // update authenticatedUser and local storage to reflect changes
     const user = {
       accessToken: authenticatedUser!.accessToken,
+      isEmailVerified: true,
       ...updatedUser,
     };
     setAuthenticatedUser(user);
@@ -228,7 +221,11 @@ const Account = (): JSX.Element => {
         keys[i] === "lastName" ||
         keys[i] === "phoneNumber"
       ) {
-        setLocalStorageObjProperty(AUTHENTICATED_USER_KEY, keys[i], values[i]);
+        setLocalStorageObjProperty(
+          AUTHENTICATED_USER_KEY,
+          keys[i],
+          values[i].toString(),
+        );
       }
     }
 
