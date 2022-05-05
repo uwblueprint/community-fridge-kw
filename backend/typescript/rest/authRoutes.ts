@@ -95,6 +95,7 @@ authRouter.post("/register", registerRequestValidator, async (req, res) => {
           req.body.skillsQuestionResponse,
         ],
       );
+      await authService.sendEmailVolunteerPending(req.body.email);
     }
 
     res
