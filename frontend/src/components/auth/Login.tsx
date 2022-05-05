@@ -28,6 +28,7 @@ const Login = (): React.ReactElement => {
     isIncorrectLoginCredentails,
     setIsIncorrectLoginCredentails,
   ] = React.useState(false);
+  const [isEmailVerified, setIsEmailVerified] = React.useState(true);
 
   const setVolunteerContext = async function getVolunteerUser(
     user: AuthenticatedUser,
@@ -58,9 +59,22 @@ const Login = (): React.ReactElement => {
     const user: AuthenticatedUser = await authAPIClient.login(email, password);
     if (user === null) {
       setIsIncorrectLoginCredentails(true);
+    } else if (!user.isEmailVerified) {
+      setIsEmailVerified(false);
+      setIsIncorrectLoginCredentails(false);
+    } else {
+      setAuthenticatedUser(user);
+      setVolunteerContext(user);
     }
-    setAuthenticatedUser(user);
-    setVolunteerContext(user);
+  };
+
+  const handleResendEmailVerificationEmail = async () => {
+    const isResendSuccessful = await authAPIClient.resendEmailVerification(
+      email,
+    );
+    if (isResendSuccessful) {
+      setIsEmailVerified(true);
+    }
   };
 
   if (authenticatedUser) {
@@ -119,6 +133,24 @@ const Login = (): React.ReactElement => {
           >
             An incorrect email address or password was entered. Please try
             again!
+          </Text>
+        )}
+        {!isEmailVerified && (
+          <Text
+            my="24px"
+            textStyle={["mobileSmall", "desktopSmall"]}
+            color="tomato.100"
+          >
+            Your account has not been verified. Please click{" "}
+            <Text
+              cursor="pointer"
+              as="span"
+              onClick={handleResendEmailVerificationEmail}
+              textDecoration="underline"
+            >
+              here
+            </Text>{" "}
+            to resend the verification email.
           </Text>
         )}
         <Box mt="2.5rem">

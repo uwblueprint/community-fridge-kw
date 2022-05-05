@@ -125,6 +125,8 @@ interface IAuthService {
    * @returns true if new password change is successful, false otherwise
    */
   confirmPasswordReset(newPassword: string, oobCode: string): Promise<boolean>;
+
+  isEmailVerifiedByFirebase(email: string): Promise<boolean>;
 }
 
 export default IAuthService;

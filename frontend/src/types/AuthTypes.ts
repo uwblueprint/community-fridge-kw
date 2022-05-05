@@ -19,6 +19,7 @@ export type AuthenticatedUser = {
   role: Role;
   accessToken: string;
   phoneNumber: string;
+  isEmailVerified: boolean;
 } | null;
 
 export type AuthenticatedDonor = {

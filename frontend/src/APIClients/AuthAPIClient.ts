@@ -16,8 +16,9 @@ const login = async (
       { email, password },
       { withCredentials: true },
     );
-    localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(data));
-
+    if (data.isEmailVerified) {
+      localStorage.setItem(AUTHENTICATED_USER_KEY, JSON.stringify(data));
+    }
     return data;
   } catch (error) {
     return null;
@@ -136,6 +137,19 @@ const confirmEmailVerification = async (oobCode: string): Promise<boolean> => {
   }
 };
 
+const resendEmailVerification = async (email: string): Promise<boolean> => {
+  try {
+    await baseAPIClient.post(
+      `/auth/resendEmailVerification/${email}`,
+      {},
+      { withCredentials: true },
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 const verifyPasswordResetCode = async (oobCode: string): Promise<boolean> => {
   try {
     await baseAPIClient.post(
@@ -190,6 +204,7 @@ export default {
   loginWithGoogle,
   register,
   resetPassword,
+  resendEmailVerification,
   refresh,
   sendVolunteerApprovedEmail,
 };
