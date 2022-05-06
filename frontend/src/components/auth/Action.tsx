@@ -1,5 +1,5 @@
-import { Center, Spinner } from "@chakra-ui/react";
-import React from "react";
+import { Center, Spinner, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 
 import AuthAPIClient from "../../APIClients/AuthAPIClient";
 import NewPassword from "./ResetPassword/NewPassword";
@@ -15,54 +15,65 @@ const Action = () => {
   const mode = urlParams.get("mode");
   const oobCode = urlParams.get("oobCode");
 
-  const [emailVerified, setEmailVerified] = React.useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [passwordResetVerified, setPasswordResetVerified] = React.useState(
     false,
   );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const confirmEmailVerification = async () => {
-    const confirmEmailVerificationResponse = await AuthAPIClient.confirmEmailVerification(
-      oobCode ?? "",
-    );
-    if (confirmEmailVerificationResponse) {
-      setEmailVerified(true);
+  useEffect(() => {
+    const confirmEmailVerification = async () => {
+      const confirmEmailVerificationResponse = await AuthAPIClient.confirmEmailVerification(
+        oobCode ?? "",
+      );
+      if (confirmEmailVerificationResponse) {
+        setEmailVerified(true);
+      } else {
+        setError(true);
+      }
+      setLoading(false);
+    };
+
+    const confirmPasswordReset = async () => {
+      const confirmPasswordResetResponse = await AuthAPIClient.verifyPasswordResetCode(
+        oobCode ?? "",
+      );
+      if (confirmPasswordResetResponse) {
+        setPasswordResetVerified(true);
+      } else {
+        setError(true);
+      }
+      setLoading(false);
+    };
+    if (mode === ActionModes.EMAIL_VERIFICATION) {
+      confirmEmailVerification();
     }
-  };
-
-  const confirmPasswordReset = async () => {
-    const confirmPasswordResetResponse = await AuthAPIClient.verifyPasswordResetCode(
-      oobCode ?? "",
-    );
-    if (confirmPasswordResetResponse) {
-      setPasswordResetVerified(true);
+    if (mode === ActionModes.PASSWORD_RESET) {
+      confirmPasswordReset();
     }
-  };
+  }, [mode, oobCode]);
 
-  if (mode === ActionModes.EMAIL_VERIFICATION) {
-    confirmEmailVerification();
-    return emailVerified ? (
-      <ConfirmVerificationPage />
-    ) : (
-      <Center>
-        <Spinner />
-      </Center>
-    );
-  }
-  if (mode === ActionModes.PASSWORD_RESET) {
-    confirmPasswordReset();
-
-    return (
-      <Center>
-        {passwordResetVerified ? (
-          <NewPassword oobCode={oobCode ?? ""} />
-        ) : (
-          <Center>
-            <Spinner />
-          </Center>
-        )}
-      </Center>
-    );
-  }
-  return <></>;
+  return (
+    <>
+      {loading && (
+        <Center>
+          <Spinner />
+        </Center>
+      )}
+      {error && (
+        <Center>
+          <Text> Error Occured. Please try again!</Text>
+        </Center>
+      )}
+      {emailVerified && <ConfirmVerificationPage />}
+      {passwordResetVerified && (
+        <Center>
+          {" "}
+          <NewPassword oobCode={oobCode ?? ""} />{" "}
+        </Center>
+      )}
+    </>
+  );
 };
 export default Action;
